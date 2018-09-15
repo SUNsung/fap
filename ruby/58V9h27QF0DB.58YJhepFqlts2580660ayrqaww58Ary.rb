@@ -1,165 +1,144 @@
 
         
-                  if include_hidden
-            hidden = hidden_field_for_checkbox(options)
-            hidden + checkbox
-          else
-            checkbox
-          end
-        end
-    
-              def field_type
-            self.class.field_type
-          end
-      end
-    end
-  end
+        Badge.seed do |b|
+  b.id = Badge::FirstOnebox
+  b.name = 'First Onebox'
+  b.badge_type_id = BadgeType::Bronze
+  b.multiple_grant = false
+  b.target_posts = true
+  b.show_posts = true
+  b.query = nil
+  b.badge_grouping_id = BadgeGrouping::GettingStarted
+  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
+  b.trigger = Badge::Trigger::None
+  b.system = true
 end
-
     
-        # Tests if the index has the given UUID.
-    #
-    # @param [String] uuid
-    # @return [Boolean]
-    def include?(uuid)
-      @lock.synchronize do
-        with_index_lock do
-          unlocked_reload
-          return !!find_by_prefix(uuid)
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
+    
+          def local_variable_get(binding, name)
+        if binding.respond_to?(:local_variable_get)
+          binding.local_variable_get(name)
+        else
+          binding.eval(name.to_s)
         end
       end
+    
+          all_reviews
     end
     
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
-        #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
-        end
+    def du_upload_geojson_failure
+  stub_request(:post, 'https://du-itc.itunes.apple.com/upload/geo-json').
+    with(body: du_upload_invalid_geojson.bytes,
+           headers: { 'Accept' => 'application/json, text/plain, */*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Connection' => 'keep-alive', 'Content-Length' => du_upload_invalid_geojson.file_size, 'Content-Type' => 'application/json', 'Referrer' => 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/898536088',
+                     'X-Apple-Jingle-Correlation-Key' => 'iOS App:AdamId=898536088:Version=0.9.13', 'X-Apple-Upload-Appleid' => '898536088', 'X-Apple-Upload-Contentproviderid' => '1234567', 'X-Apple-Upload-Itctoken' => 'sso token for image',
+                     'X-Apple-Upload-Referrer' => 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/898536088', 'X-Original-Filename' => 'ftl_FAKEMD5_upload_invalid.GeoJSON' }).
+    to_return(status: 400, body: du_read_upload_geojson_response_failed, headers: { 'Content-Type' => 'application/json' })
+end
     
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                result.instance_variable_set(key, obj.instance_variable_get(key))
-              end
-            end
+          #   # First, stub a failing request
+      #   stub_request(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/1234/apps/898536088/platforms/ios/trains').
+      #     # to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains_operation_failed.json'), headers: { 'Content-Type' => 'application/json' }).times(2).
+      #     to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains.json'), headers: { 'Content-Type' => 'application/json' })
+    
+        # returns true if fastlane was installed via RubyGems
+    def self.rubygems?
+      !self.bundler? && !self.contained_fastlane? && !self.homebrew? && !self.mac_app?
+    end
+    
+          describe 'with scan option :include_simulator_logs set to false' do
+        it 'does not copy any device logs to the output directory', requires_xcodebuild: true do
+          # Circle CI is setting the SCAN_INCLUDE_SIMULATOR_LOGS env var, so just leaving
+          # the include_simulator_logs option out does not let it default to false
+          Scan.config = FastlaneCore::Configuration.create(Scan::Options.available_options, {
+            output_directory: '/tmp/scan_results',
+            project: './scan/examples/standard/app.xcodeproj',
+            include_simulator_logs: false
+          })
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
+  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+            context 'otherwise' do
+          it 'converts a floating point number in dd.dddd form' do
+            format('%#{f}', 0.0001).should == '0.0001'
+            format('%#{f}', -0.0001).should == '-0.0001'
+            format('%#{f}', 123456).should == '123456'
+            format('%#{f}', -123456).should == '-123456'
           end
     
-            # Sentinel value denoting that a value has not been set.
-        UNSET_VALUE = Object.new
-    
-              @commands = Registry.new
-          @configs = Hash.new { |h, k| h[k] = Registry.new }
-          @guests  = Registry.new
-          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @hosts   = Registry.new
-          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @providers = Registry.new
-          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @pushes = Registry.new
-          @synced_folders = Registry.new
-        end
-      end
-    end
-  end
-end
-
-    
-              nil
-        end
-    
-        Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
-    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
+      it 'accepts a negative seed' do
+    srand(-17)
+    srand.should == -17
   end
     
-          if new_email != @user.email
-        @user.update!(
-          unconfirmed_email: new_email,
-          # Regenerate the confirmation token:
-          confirmation_token: nil
-        )
-    
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
-        end
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
+      after :each do
+    $VERBOSE = @before_verbose
+    $/ = @before_separator
   end
-end
-
     
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
     
-        it 'generates a jasmine fixture', :fixture => true do
-      get :bookmarklet
-      save_fixture(html_for('body'), 'bookmarklet')
-    end
-    
-      describe '#index' do
-    before do
-      @message = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
-    end
-    
-        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
-    
-      # escape unicode
-  content.gsub!(/./) { |c| c.bytesize > 1 ? '\\u{#{c.codepoints.first.to_s(16)}}' : c }
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+              # Decodes the cipher from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Sting]
+          def decode_cipher(input)
+            input.value[0].value
           end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
+    
+          spec['version'] = Bootstrap::VERSION
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
       else
-        '#{quote}<footer>#{author}</footer>'
+        puts dark cyan s
       end
-      '<blockquote>#{blockquote}</blockquote>'
     end
     
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
+      namespace :release do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Release #{gem} as a package'
+      task gem => 'package:#{gem}' do
+        sh <<-SH
+          gem install #{package(gem, '.gem')} --local &&
+          gem push #{package(gem, '.gem')}
+        SH
+      end
     end
     
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
+          env['rack.errors'] = errors
     
-    require 'pathname'
-require './plugins/octopress_filters'
+          # Essentially the inverse of +mask_token+.
+      def unmask_token(masked_token)
+        # Split the token into the one-time pad and the encrypted
+        # value and decrypt it
+        token_length = masked_token.length / 2
+        one_time_pad = masked_token[0...token_length]
+        encrypted_token = masked_token[token_length..-1]
+        xor_byte_strings(one_time_pad, encrypted_token)
+      end
+    
+          def react_and_close(env, body)
+        reaction = react(env)
+    
+    desc 'Test the paperclip plugin.'
+RSpec::Core::RakeTask.new(:spec)
+    
+    When /^I rollback a migration$/ do
+  step %[I successfully run `rake db:rollback STEPS=1 --trace`]
+end
