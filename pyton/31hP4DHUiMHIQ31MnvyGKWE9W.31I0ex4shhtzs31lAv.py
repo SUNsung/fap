@@ -1,114 +1,112 @@
 
         
-            By default, it represents the actual environment.
-    All of the attributes can be overwritten though, which
-    is used by the test suite to simulate various scenarios.
+        
+class RFC3339FieldTest(unittest.TestCase):
+    '''Tests for acme.fields.RFC3339Field.'''
     
-        name = 'Digest HTTP auth'
-    auth_type = 'digest'
+        # Remove components from the end of file_path until it becomes valid
+    while not os.path.exists(file_path):
+        file_path, _, internal_path_part = file_path.rpartition('/')
+        internal_path.append(internal_path_part)
+    
+            for path in error_files:
+            # Check to see if it was an error resulting from the use of
+            # the httpd lens
+            lens_path = self.aug.get(path + '/lens')
+            # As aug.get may return null
+            if lens_path and lens in lens_path:
+                msg = (
+                    'There has been an error in parsing the file {0} on line {1}: '
+                    '{2}'.format(
+                    # Strip off /augeas/files and /error
+                    path[13:len(path) - 6],
+                    self.aug.get(path + '/line'),
+                    self.aug.get(path + '/message')))
+                raise errors.PluginError(msg)
+    
+        def test_revert_challenge_config(self):
+        mock_load = mock.Mock()
+        self.config.aug.load = mock_load
+    
+        def test_nonexistent_like(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                for like in entrypoint.OVERRIDE_CLASSES.keys():
+                    mock_like.return_value = [like]
+                    self.assertEqual(entrypoint.get_configurator(),
+                                     entrypoint.OVERRIDE_CLASSES[like])
+    
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+    
+            for i in self.tree.iterfind('video/quality'):
+            quality = i.attrib ['value']
+            url = i[0].attrib['playurl']
+            self.stream_types.append({'id': quality,
+                                      'video_profile': i.attrib ['desp']})
+            self.streams[quality] = {'url': url,
+                                     'video_profile': i.attrib ['desp']}
+            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
+    
+    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads CBS videos by URL.
+    '''
+    
+        return video_dict
     
     
-class PluginManager(object):
-    
-        if n == 1:
-        return '1 B'
-    
-    from utils import http, add_auth, HTTP_OK, MockEnvironment
-import httpie.input
-import httpie.cli
-    
-            def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
-    
-        def test_binary_stdin(self, httpbin):
-        with open(BIN_FILE_PATH, 'rb') as stdin:
-            env = MockEnvironment(
-                stdin=stdin,
-                stdin_isatty=False,
-                stdout_isatty=False
-            )
-            r = http('--print=B', 'POST', httpbin.url + '/post', env=env)
-            assert r == BIN_FILE_CONTENT
+class CNTV(VideoExtractor):
+    name = 'CNTV.com'
+    stream_types = [
+        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
+        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
+        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
+        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
+        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
+    ]
     
     
-class TestImplicitHTTPMethod:
-    def test_implicit_GET(self, httpbin):
-        r = http(httpbin.url + '/get')
-        assert HTTP_OK in r
+def write_loop_file(records_number, loop_file_path, file_name):
+    with open(loop_file_path, 'a') as file:
+        for i in range(records_number):
+            file.write('file '{}'\n'.format(file_name))
+    
+    def douban_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    html = get_html(url)
     
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+def fantasy_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'fantasy.tv' not in url:
+        raise Exception('Wrong place!')
     
-            # syntax error
-        pytest.raises(ContentRangeError, parse, 'beers 100-199/*', 100)
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    print('Counting to five...')
-for number in count_to_five():
-    print(number, end=' ')
-    
-        def prepare(self):
-        print('Reporter Class is preparing to report the results')
-        time.sleep(0.1)
-    
-        @property
-    def data(self):
-        return self._data
-    
-        def __init__(self, radio):
-        self.radio = radio
-        self.stations = ['81.3', '89.1', '103.9']
-        self.pos = 0
-        self.name = 'FM'
-    
-    ingredients = 'spam eggs apple'
-line = '-' * 10
-    
-        def show_pet(self):
-        '''Creates and shows a pet using the abstract factory'''
-    
-    class TimeDisplay(object):
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-        '''
-    
-        def run_loop(self):
-        while self.blackboard.common_state['progress'] < 100:
-            for expert in self.blackboard.experts:
-                if expert.is_eager_to_contribute:
-                    expert.contribute()
-        return self.blackboard.common_state['contributions']
-    
-        def find_path(self, start, end, path=None):
-        path = path or []
-    
-        for shape in shapes:
-        shape.scale(2.5)
-        shape.draw()
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+        for release in RangeQuerySetWrapperWithProgressBar(
+            orm.Release.objects.exclude(new_groups=0)
+        ):
+            projects = list(release.projects.values_list('id', flat=True))
+            if len(projects) > 1:
+                # do something fancy where we look at Group.first_release
+                # to calculate ReleaseProject.new_group
+                for p_id in projects:
+                    new_groups = orm.Group.objects.filter(
+                        first_release=release, project_id=p_id
+                    ).count()
+                    if not new_groups:
+                        continue
+                    orm.ReleaseProject.objects.filter(
+                        release_id=release.id, project_id=p_id
+                    ).update(new_groups=new_groups)
+            elif len(projects) == 1:
+                # copy Release.new_groups to ReleaseProject.new_group
+                orm.ReleaseProject.objects.filter(
+                    release_id=release.id, project_id=projects[0]
+                ).update(new_groups=release.new_groups)
