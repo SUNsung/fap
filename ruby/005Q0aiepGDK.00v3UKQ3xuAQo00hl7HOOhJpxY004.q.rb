@@ -1,98 +1,167 @@
 
         
-                def render(&block)
-          options = @options.stringify_keys
-          tag_value = options.delete('value')
-          name_and_id = options.dup
+            You can install it using Cask:
     
-          # Creates a _layout method to be called by _default_layout .
-      #
-      # If a layout is not explicitly mentioned then look for a layout with the controller's name.
-      # if nothing is found then try same procedure to find super class's layout.
-      def _write_layout_method # :nodoc:
-        silence_redefinition_of_method(:_layout)
-    
-          super
-    end
-    
-          open_dry_run_modal(formatting_agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('Line 1\nLine 2\nLine 3')
-      end
-      click_on('Dry Run')
-      expect(page).to have_text('Line 1,Line 2,Line 3')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+      def bash_completion_caveats
+    if keg && keg.completion_installed?(:bash) then <<-EOS.undent
+      Bash completion has been installed to:
+        #{HOMEBREW_PREFIX}/etc/bash_completion.d
+      EOS
     end
   end
     
-        it 'returns a correct icon tag for GitHub' do
-      icon = omniauth_provider_icon(:github)
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-github')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
-    
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
-    end
-    
-      it 'should propagate events' do
-    mock(Agent).receive!
-    stub.instance_of(IO).puts
-    @scheduler.send(:propagate!)
+      def internal_development_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
   end
     
-      describe 'migrating the 'make_message' format' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
-      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
-      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
-    end
+        @report
   end
     
-            # Defines an additionally available host implementation with
-        # the given key.
-        #
-        # @param [String] name Name of the host.
-        # @param [String] parent Name of the parent host (if any)
-        def self.host(name, parent=nil, &block)
-          components.hosts.register(name.to_sym) do
-            parent = parent.to_sym if parent
+      def self.bottle_sha1(*)
+  end
     
-            # This should return the state of the machine within this provider.
-        # The state must be an instance of {MachineState}. Please read the
-        # documentation of that class for more information.
-        #
-        # @return [MachineState]
-        def state
-          nil
+            sql = <<-SQL
+          UPDATE ci_stages SET status = (#{status_sql})
+            WHERE ci_stages.status IS NULL
+            AND ci_stages.id BETWEEN #{start_id.to_i} AND #{stop_id.to_i}
+        SQL
+    
+            def initialize(badge)
+          @entity = badge.entity
+          @status = badge.status
         end
     
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+            def entity
+          'pipeline'
+        end
+    
+              providers
+        end
+    
+              # Return the list if we don't have a block
+          return hooks if !block_given?
+    
+            # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
+        end
+      end
+    end
+  end
+end
 
     
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
-          end
-        end
-      end
-      rtn
+            # Merge another configuration object into this one. This assumes that
+        # the other object is the same class as this one. This should not
+        # mutate this object, but instead should return a new, merged object.
+        #
+        # The default implementation will simply iterate over the instance
+        # variables and merge them together, with this object overriding
+        # any conflicting instance variables of the older object. Instance
+        # variables starting with '__' (double underscores) will be ignored.
+        # This lets you set some sort of instance-specific state on your
+        # configuration keys without them being merged together later.
+        #
+        # @param [Object] other The other configuration object to merge from,
+        #   this must be the same type of object as this one.
+        # @return [Object] The merged object.
+        def merge(other)
+          result = self.class.new
+    
+    class FiltersController < ApplicationController
+  include Authorization
+    
+          if @account_moderation_note.save
+        redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.created_msg')
+      else
+        @account          = @account_moderation_note.target_account
+        @moderation_notes = @account.targeted_moderation_notes.latest
+    
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+          @user.resend_confirmation_instructions
+    
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
     end
   end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+          def cookie_paths(path)
+        path = '/' if path.to_s.empty?
+        paths = []
+        Pathname.new(path).descend { |p| paths << p.to_s }
+        paths
+      end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
+    
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
+    
+      desc 'Install all spree gems'
+  task install: :build do
+    for_each_gem do |gem_path|
+      Bundler.with_clean_env do
+        sh 'gem install #{gem_path}'
+      end
+    end
+  end
+    
+                if handler.error.present?
+              @coupon_message = handler.error
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
+              return true
+            end
+          end
+          false
+        end
+    
+            def update
+          authorize! :update, inventory_unit.order
+    
+            self.line_item_options = []
+    
+            def authorize
+          perform_payment_action(:authorize)
+        end
+    
+            private
+    
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
+          end
+        end
