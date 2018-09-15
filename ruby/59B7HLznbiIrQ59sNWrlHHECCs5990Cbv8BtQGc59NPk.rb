@@ -1,151 +1,84 @@
 
         
-              def initialize(request)
-        @request = request
-      end
+        describe GroupUser do
     
-          def route_authentication_setting
-        return {} unless respond_to?(:route_setting)
-    
-            def value_text
-          STATUS_RENAME[@status.to_s] || @status.to_s
-        end
-    
-      #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
-    end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
-    end
-    
-      #
-  # A hash that associated a file extension with a mime type for use as the
-  # content type of responses.
-  #
-  ExtensionMimeTypes =
-    {
-      'rhtml' => 'text/html',
-      'html'  => 'text/html',
-      'htm'   => 'text/htm',
-      'jpg'   => 'image/jpeg',
-      'jpeg'  => 'image/jpeg',
-      'gif'   => 'image/gif',
-      'png'   => 'image/png',
-      'bmp'   => 'image/bmp',
-      'txt'   => 'text/plain',
-      'css'   => 'text/css',
-      'ico'   => 'image/x-icon',
-    }
-    
-    require 'rex/proto/ipmi/utils'
-    
-    
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
-    
-              # Encodes the renew_time field
-          #
-          # @return [String]
-          def encode_renew_time
-            [renew_till].pack('N')
-          end
-    
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Decodes the srealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_srealm(input)
-            input.value[0].value
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
-    
-    require 'bundler/cli'
-require 'bundler/friendly_errors'
-    
-        # @return [String] major.minor ruby version, ex 1.9
-    def ruby_abi_version
-      RUBY_VERSION[/(\d+\.\d+)(\.\d+)*/, 1]
-    end
-    
-            if specs.size > 0
-          specs
-        else
-          raise LogStash::PluginManager::PluginNotFoundError, 'Cannot find plugins matching: `#{plugin_pattern}`'
-        end
-      end.flatten
-    end
-    
-        context 'without a username / password' do
-      let(:scheme) { 'myscheme' }
-      let(:user) { nil }
-      let(:password) { nil }
-      let(:hostname) { 'myhostname' }
-      let(:path) { '/my/path' }
-      let(:uri_str) { '#{scheme}://#{hostname}#{path}' }
-      let(:uri_hidden) { '#{scheme}://#{hostname}#{path}' }
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
-    end
-  end
-end
+    # def du_upload_video_preview_success
+#  stub_request(:post, 'https://du-itc.itunes.apple.com/upload/app-screenshot-image').
+#      with(body: 'trailer preview...',
+#           headers: {'Accept' => 'application/json, text/plain, */*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Connection' => 'keep-alive', 'Content-Length' => '12345', 'Content-Type' => 'image/joeg', 'Referrer' => 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/898536088',
+#                     'User-Agent' => 'spaceship', 'X-Apple-Jingle-Correlation-Key' => 'iOS App:AdamId=898536088:Version=0.9.13', 'X-Apple-Upload-Appleid' => '898536088', 'X-Apple-Upload-Contentproviderid' => '1234567', 'X-Apple-Upload-Itctoken' => 'the_sso_token_for_image',
+#                     'X-Apple-Upload-Referrer' => 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/898536088', 'X-Original-Filename' => 'ftl_FAKEMD5_trailer-en-US_preview.jpg'}).
+#      to_return(status: 201, body: du_read_upload_trailer_preview_response_success, headers: {'Content-Type' => 'application/json'})
+# end
 
     
-      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
+          #   # First, stub a failing request
+      #   stub_request(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/1234/apps/898536088/platforms/ios/trains').
+      #     # to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains_operation_failed.json'), headers: { 'Content-Type' => 'application/json' }).times(2).
+      #     to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains.json'), headers: { 'Content-Type' => 'application/json' })
     
-        context 'opening brace on same line as first element' do
-      it 'allows closing brace on different line from last element' do
-        expect_no_offenses(construct(false, true))
+              zip_build_products_path = Scan.cache[:zip_build_products_path]
+          Actions.lane_context[SharedValues::SCAN_ZIP_BUILD_PRODUCTS_PATH] = zip_build_products_path if zip_build_products_path
+    
+            mock_test_result_parser = Object.new
+        allow(Scan::TestResultParser).to receive(:new).and_return(mock_test_result_parser)
+        allow(mock_test_result_parser).to receive(:parse_result).and_return({ tests: 100, failures: 0 })
+    
+          def self.fetch_plugins(cache_path)
+        page = 1
+        plugins = []
+        loop do
+          url = 'https://rubygems.org/api/v1/search.json?query=fastlane-plugin-&page=#{page}'
+          puts('RubyGems API Request: #{url}')
+          results = JSON.parse(open(url).read)
+          break if results.count == 0
+    
+        def run
+      program :name, 'cert'
+      program :version, Fastlane::VERSION
+      program :description, 'CLI for \'cert\' - Create new iOS code signing certificates'
+      program :help, 'Author', 'Felix Krause <cert@krausefx.com>'
+      program :help, 'Website', 'https://fastlane.tools'
+      program :help, 'Documentation', 'https://docs.fastlane.tools/actions/cert/'
+      program :help_formatter, :compact
+    
+    (allow process-exec
+  (literal
+    '<%= pod_bin %>'
+    '<%= ruby_bin %>'
+  )
+  (regex
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
+    
+    module Pod
+  require 'pathname'
+  require 'tmpdir'
+    
+          def stack
+        UI::ErrorReport.stack
       end
     
-          # Returns the iteration variable of the `for` loop.
-      #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
+          def roles_array
+        roles.to_a
       end
     
-          # Checks whether any argument of the node is a splat
-      # argument, i.e. `*splat`.
-      #
-      # @return [Boolean] whether the node is a splat argument
-      def splat_argument?
-        arguments? &&
-          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
-      end
-      alias rest_argument? splat_argument?
+            value_to_evaluate = block || value
+    
+    team = ['Ryan Tomayko', 'Blake Mizerany', 'Simon Rozet', 'Konstantin Haase', 'Zachary Scott']
+desc 'list of contributors'
+task :thanks, ['release:all', :backports] do |t, a|
+  a.with_defaults :release => '#{prev_version}..HEAD',
+    :backports => '#{prev_feature}.0..#{prev_feature}.x'
+  included = `git log --format=format:'%aN\t%s' #{a.release}`.lines.map { |l| l.force_encoding('binary') }
+  excluded = `git log --format=format:'%aN\t%s' #{a.backports}`.lines.map { |l| l.force_encoding('binary') }
+  commits  = (included - excluded).group_by { |c| c[/^[^\t]+/] }
+  authors  = commits.keys.sort_by { |n| - commits[n].size } - team
+  puts authors[0..-2].join(', ') << ' and ' << authors.last,
+    '(based on commits included in #{a.release}, but not in #{a.backports})'
+end
+    
+          private
