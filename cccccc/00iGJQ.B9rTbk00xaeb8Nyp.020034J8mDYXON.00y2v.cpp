@@ -1,191 +1,223 @@
 
         
-        #define MAKE_TEMPLATE_TYPE_INFO(m_template, m_type, m_var_type) \
-	template <>                                                 \
-	struct GetTypeInfo<m_template<m_type> > {                   \
-		static const Variant::Type VARIANT_TYPE = m_var_type;   \
-		static inline PropertyInfo get_class_info() {           \
-			return PropertyInfo(VARIANT_TYPE, String());        \
-		}                                                       \
-	};                                                          \
-	template <>                                                 \
-	struct GetTypeInfo<const m_template<m_type> &> {            \
-		static const Variant::Type VARIANT_TYPE = m_var_type;   \
-		static inline PropertyInfo get_class_info() {           \
-			return PropertyInfo(VARIANT_TYPE, String());        \
-		}                                                       \
-	};
+        REGISTER_OP('A')
+    .Output('out: float32')
+    .SetShapeFn(shape_inference::UnknownShape);
     
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
+    // Unlike test_ops.cc, these are built with the 'require_shapes' option in the
+// BUILD file.
     
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta);
-    
-    
-    {    // Do it
-    std::string contents;
-    Status s = ReadFileToString(Env::Default(), fname, &contents);
-    ASSERT_TRUE(s.ok()) << s.ToString();
-    for (int i = 0; i < bytes_to_corrupt; i++) {
-      contents[i + offset] ^= 0x80;
-    }
-    s = WriteStringToFile(Env::Default(), contents, fname);
-    ASSERT_TRUE(s.ok()) << s.ToString();
-  }
-    
-    
-    {    if (!ok) {
-      thread->stats.AddMessage('(snappy failure)');
-    } else {
-      char buf[100];
-      snprintf(buf, sizeof(buf), '(output: %.1f%%)',
-               (produced * 100.0) / bytes);
-      thread->stats.AddMessage(buf);
-      thread->stats.AddBytes(bytes);
-    }
-  }
-    
-      // Implementations of the DB interface
-  virtual Status Put(const WriteOptions&, const Slice& key, const Slice& value);
-  virtual Status Delete(const WriteOptions&, const Slice& key);
-  virtual Status Write(const WriteOptions& options, WriteBatch* updates);
-  virtual Status Get(const ReadOptions& options,
-                     const Slice& key,
-                     std::string* value);
-  virtual Iterator* NewIterator(const ReadOptions&);
-  virtual const Snapshot* GetSnapshot();
-  virtual void ReleaseSnapshot(const Snapshot* snapshot);
-  virtual bool GetProperty(const Slice& property, std::string* value);
-  virtual void GetApproximateSizes(const Range* range, int n, uint64_t* sizes);
-  virtual void CompactRange(const Slice* begin, const Slice* end);
-    
-    
-    {}  // namespace leveldb
-    
-    bool Reader::SkipToInitialBlock() {
-  const size_t offset_in_block = initial_offset_ % kBlockSize;
-  uint64_t block_start_location = initial_offset_ - offset_in_block;
-    }
-    
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
-    
-    #include <stdint.h>
-#include 'db/log_format.h'
-#include 'leveldb/slice.h'
-#include 'leveldb/status.h'
-    
-    template<typename Key, class Comparator>
-inline void SkipList<Key,Comparator>::Iterator::SeekToFirst() {
-  node_ = list_->head_->Next(0);
+    Status CostAnalyzer::GenerateReport(std::ostream& os, bool per_node_report,
+                                    bool verbose) {
+  GatherCosts();
+  PreprocessCosts();
+  AnalyzeCosts();
+  PrintAnalysis(os, per_node_report, verbose);
+  return Status::OK();
 }
     
-    // Allegro
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#ifdef _WIN32
-#include <allegro5/allegro_windows.h>
-#endif
-#define ALLEGRO_HAS_CLIPBOARD   (ALLEGRO_VERSION_INT >= ((5 << 24) | (1 << 16) | (12 << 8)))    // Clipboard only supported from Allegro 5.1.12
     
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
         }
-    
-        glfwDestroyWindow(window);
-    glfwTerminate();
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-        // Enabling multiple validation layers grouped as LunarG standard validation
-        const char* layers[] = { 'VK_LAYER_LUNARG_standard_validation' };
-        create_info.enabledLayerCount = 1;
-        create_info.ppEnabledLayerNames = layers;
-    
-    
-    {    ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
-    if (imgui_cursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
-    {
-        // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
-        glfwSetInputMode(g_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+      }
     }
-    else
-    {
-        // Show OS mouse cursor
-        // FIXME-PLATFORM: Unfocused windows seems to fail changing the mouse cursor with GLFW 3.2, but 3.3 works here.
-        glfwSetCursor(g_Window, g_MouseCursors[imgui_cursor] ? g_MouseCursors[imgui_cursor] : g_MouseCursors[ImGuiMouseCursor_Arrow]);
-        glfwSetInputMode(g_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    }
+  }
 }
     
-        if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
-    {
-        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
-        D3D10_BUFFER_DESC desc;
-        memset(&desc, 0, sizeof(D3D10_BUFFER_DESC));
-        desc.Usage = D3D10_USAGE_DYNAMIC;
-        desc.ByteWidth = g_IndexBufferSize * sizeof(ImDrawIdx);
-        desc.BindFlags = D3D10_BIND_INDEX_BUFFER;
-        desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-        if (ctx->CreateBuffer(&desc, NULL, &g_pIB) < 0)
-            return;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+    
+    namespace tensorflow {
     }
     
-    void    ImGui_Marmalade_InvalidateDeviceObjects()
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
+  }
+}
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {}  // namespace detail
+    
+        void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
+    
+    /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
 {
-    if (g_ClipboardText)
-    {
-        delete[] g_ClipboardText;
-        g_ClipboardText = NULL;
-    }
+public:
     }
     
-        // We are using the OpenGL fixed pipeline to make the example code simpler to read!
-    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
-    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
-    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box); 
-    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_SCISSOR_TEST);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnable(GL_TEXTURE_2D);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    }
+    
+    
+static void secp256k1_rfc6979_hmac_sha256_initialize(secp256k1_rfc6979_hmac_sha256_t *rng, const unsigned char *key, size_t keylen) {
+    secp256k1_hmac_sha256_t hmac;
+    static const unsigned char zero[1] = {0x00};
+    static const unsigned char one[1] = {0x01};
+    }
+    
+            secp256k1_ecmult_const(&res, &pt, &s);
+        secp256k1_ge_set_gej(&pt, &res);
+        /* Compute a hash of the point in compressed form
+         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
+         * expect its output to be secret and has a timing sidechannel. */
+        secp256k1_fe_normalize(&pt.x);
+        secp256k1_fe_normalize(&pt.y);
+        secp256k1_fe_get_b32(x, &pt.x);
+        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
+}
+    
+        // Other valid inputs
+    CheckParseTorReplyMapping(
+        'Foo=Bar=Baz Spam=Eggs', {
+            {'Foo', 'Bar=Baz'},
+            {'Spam', 'Eggs'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar=Baz\'', {
+            {'Foo', 'Bar=Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar Baz\'', {
+            {'Foo', 'Bar Baz'},
+        });
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Cleanup
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+    
+        // Our state
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+    
+    {  if (static_cast<size_t>(*frame_num) != frames.size()) {
+    AERROR << 'frame num is incorrect.';
+    return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
+  }
+  for (size_t i = 0; i < frames.size(); ++i) {
+    ADEBUG << 'send frame i:' << i;
+    ADEBUG << frames[i].CanFrameString();
+    frame_info_ << frames[i].CanFrameString();
+  }
+  ++send_counter_;
+  return ErrorCode::OK;
+}
+    
+    /**
+ * @class SocketCanClientRaw
+ * @brief The class which defines a ESD CAN client which inherites CanClient.
+ */
+class SocketCanClientRaw : public CanClient {
+ public:
+  /**
+   * @brief Initialize the ESD CAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   * @return If the initialization is successful.
+   */
+  bool Init(const CANCardParameter &parameter) override;
+    }
+    
+    #include <cstdint>
+    
+    #include 'modules/common/adapters/adapter_manager.h'
+#include 'modules/common/adapters/proto/adapter_config.pb.h'
+#include 'modules/common/apollo_app.h'
+#include 'modules/common/macro.h'
+#include 'modules/common/monitor_log/monitor_log_buffer.h'
+#include 'modules/common/time/time.h'
+#include 'modules/common/util/util.h'
+#include 'modules/control/proto/control_cmd.pb.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
+#include 'modules/drivers/canbus/can_client/can_client_factory.h'
+#include 'modules/drivers/canbus/can_comm/can_receiver.h'
+#include 'modules/drivers/canbus/can_comm/message_manager.h'
+#include 'modules/drivers/canbus/sensor_gflags.h'
+#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+#include 'modules/drivers/canbus/proto/sensor_canbus_conf.pb.h'
