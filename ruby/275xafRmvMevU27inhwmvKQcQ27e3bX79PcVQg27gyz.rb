@@ -1,74 +1,67 @@
 
         
-              GivenDailyLike.increment_for(user.id)
-      expect(value_for(user.id, dt)).to eq(1)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    
-      UserOption.where(user_id: smoke_user.id).update_all(
-    email_direct: false,
-    email_digests: false,
-    email_private_messages: false,
-  )
-    
-          # Store the ID locally
-      @id = value.nil? ? nil : value.to_s
-    
-            # Upload a file to the remote machine.
-        #
-        # @param [String] from Path of the file locally to upload.
-        # @param [String] to Path of where to save the file on the remote
-        #   machine.
-        def upload(from, to)
-        end
-    
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
-    
-            # This method is expected to return a class that is used for
-        # configuring the provisioner. This return value is expected to be
-        # a subclass of {Config}.
-        #
-        # @return [Config]
-        def self.config_class
-        end
-    
-    desc 'Test the paperclip plugin under all supported Rails versions.'
-task :all do |t|
-  if ENV['BUNDLE_GEMFILE']
-    exec('rake spec && cucumber')
-  else
-    exec('rm -f gemfiles/*.lock')
-    Rake::Task['appraisal:gemfiles'].execute
-    Rake::Task['appraisal:install'].execute
-    exec('rake appraisal')
-  end
+        def custom_release_header_anchors(markdown)
+  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
+  section_regexp = %r!^### \w+ \w+$!
+  markdown.split(%r!^##\s!).map do |release_notes|
+    _, major, minor, patch = *release_notes.match(header_regexp)
+    release_notes
+      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
+      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
+  end.join('\n## ')
 end
     
-    When /^I append gems from Appraisal Gemfile$/ do
-  File.read(ENV['BUNDLE_GEMFILE']).split(/\n/).each do |line|
-    if line =~ /^gem '(?!rails|appraisal)/
-      append_to_gemfile line.strip
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+              # This is too noisy even for --verbose, but uncomment if you need it for
+          # a specific WebSockets issue.  Adding ?LR-verbose=true onto the URL will
+          # enable logging on the client side.
+          # em_opts[:debug] = true
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
     end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
+else
+  Pod::Command.run(ARGV)
 end
+
     
-        # Returns the scaling and cropping geometries (in string-based ImageMagick format)
-    # neccessary to transform this Geometry into the Geometry given. If crop is true,
-    # then it is assumed the destination Geometry will be the exact final resolution.
-    # In this case, the source Geometry is scaled so that an image containing the
-    # destination Geometry would be completely filled by the source image, and any
-    # overhanging image would be cropped. Useful for square thumbnail images. The cropping
-    # is weighted at the center of the Geometry.
-    def transformation_to dst, crop = false
-      if crop
-        ratio = Geometry.new( dst.width / self.width, dst.height / self.height )
-        scale_geometry, scale = scaling(dst, ratio)
-        crop_geometry         = cropping(dst, ratio, scale)
-      else
-        scale_geometry        = dst.to_s
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+            expect(new_source).to eq(<<-RUBY.strip_indent)
+          def func
+            for (a, b) in {a: 1, b: 2, c: 3} do
+              puts a, b
+            end
+          end
+        RUBY
       end
-    
-        private
+    end
