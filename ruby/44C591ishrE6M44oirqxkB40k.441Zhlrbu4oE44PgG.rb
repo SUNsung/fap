@@ -1,91 +1,65 @@
 
         
-                def initialize(object_name, method_name, template_object, options = {})
-          @object_name, @method_name = object_name.to_s.dup, method_name.to_s.dup
-          @template_object = template_object
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
-      end
-    end
-    
-      def internal_development_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
-  end
-    
-      def clang_build
-    @clang_build ||= MacOS.clang_build_version if MacOS.has_apple_developer_tools?
-  end
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-            end
-        it 'restarts dead workers' do
-          stub.instance_of(HuginnScheduler).thread { OpenStruct.new(alive?: false) }
-          mock.instance_of(HuginnScheduler).run!
-          @agent_runner.send(:restart_dead_workers)
+              @exceptions << exception
         end
+    
+    module Jekyll
+  module Commands
+    class Build < Command
+      class << self
+        # Create the Mercenary command for the Jekyll CLI for this Command
+        def init_with_program(prog)
+          prog.command(:build) do |c|
+            c.syntax      'build [options]'
+            c.description 'Build your site'
+            c.alias :b
+    
+        def self.cleanup_logs
+      return unless HOMEBREW_LOGS.directory?
+      HOMEBREW_LOGS.subdirs.each do |dir|
+        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
       end
     end
-  end
     
-      describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
-    end
-    
-      describe '#value_at' do
-    it 'returns the value at a JSON path' do
-      expect(Utils.value_at({ :foo => { :bar => :baz }}.to_json, 'foo.bar')).to eq('baz')
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar.bing')).to eq(2)
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar[?(@.bing == 2)].bing')).to eq(2)
-    end
-    
-    describe AgentLog do
-  describe 'validations' do
-    before do
-      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
-      expect(@log).to be_valid
-    end
-    
-      platform_is_not :windows do
-    it 'does not expand shell variables when given multiples arguments' do
-      lambda { @object.system('echo', @shell_var) }.should output_to_fd('#{@shell_var}\n')
-    end
-  end
-    
-      it 'returns the method name as symbol' do
-    eval(@code, TOPLEVEL_BINDING).should equal :boom
-  end
-end
-
-    
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-      def login_page
-    path_to 'the new user session page'
-  end
-    
-        # captcha needs to be filled out, because the field is required (HTML5)
-    # in test env, the captcha will always pass successfully
-    fill_in('user_captcha', with: '123456')
-  end
-    
-              If there is multiple cache for various versions of the requested pod,
-          you will be asked which one to clean. Use `--all` to clean them all.
-    
-          def keys
-        values.keys
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
       end
+    
+        # Unbrewed uses the PREFIX, which will exist
+    # Things below use the CELLAR, which doesn't until the first formula is installed.
+    unless HOMEBREW_CELLAR.exist?
+      raise NoSuchKegError.new(ARGV.named.first) if ARGV.named.any?
+      return
+    end
+    
+        def configure_sass
+      require 'sass'
+    
+        private
+    
+        # #gradient > { @mixin horizontal ... }
+    # to:
+    # @mixin gradient-horizontal
+    def flatten_mixins(file, container, prefix)
+      log_transform container, prefix
+      replace_rules file, Regexp.escape(container) do |mixins_css|
+        unindent unwrap_rule_block(mixins_css).gsub(/@mixin\s*([\w-]+)/, '@mixin #{prefix}-\\1')
+      end
+    end
