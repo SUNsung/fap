@@ -1,76 +1,154 @@
 
         
-            open_dry_run_modal(agent)
-    click_on('Dry Run')
-    expect(page).to have_text('Dry Run started')
-    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
-  end
-end
-
-    
-        describe 'with block' do
-      it 'returns a nav link with menu' do
-        stub(self).current_page?('/things') { false }
-        stub(self).current_page?('/things/stuff') { false }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
-      end
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-            end
-        it 'restarts dead workers' do
-          stub.instance_of(HuginnScheduler).thread { OpenStruct.new(alive?: false) }
-          mock.instance_of(HuginnScheduler).run!
-          @agent_runner.send(:restart_dead_workers)
+                # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
         end
-      end
+    
+              # Return the registry
+          data[:guests]
+        end
+    
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
+    
+              # This is a helper that gets a single machine with the proper
+          # provider. The 'proper provider' in this case depends on what was
+          # given:
+          #
+          #   * If a provider was explicitly specified, then use that provider.
+          #     But if an active machine exists with a DIFFERENT provider,
+          #     then throw an error (for now), since we don't yet support
+          #     bringing up machines with different providers.
+          #
+          #   * If no provider was specified, then use the active machine's
+          #     provider if it exists, otherwise use the default provider.
+          #
+          get_machine = lambda do |name|
+            # Check for an active machine with the same name
+            provider_to_use = options[:provider]
+            provider_to_use = provider_to_use.to_sym if provider_to_use
+    
+            # This contains all the registered provider capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :provider_capabilities
+    
+            # This method is called if the underlying machine ID changes. Providers
+        # can use this method to load in new data for the actual backing
+        # machine or to realize that the machine is now gone (the ID can
+        # become `nil`). No parameters are given, since the underlying machine
+        # is simply the machine instance given to this object. And no
+        # return value is necessary.
+        def machine_id_changed
+        end
+    
+    module Homebrew
+  module_function
+    
+        if PostRequests.include?(self.method)
+      return param_string
     end
+    ''
   end
     
-        it 'has a default when the result is empty' do
-      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
-    end
+    =begin
+   +-------------+---------------+-------------------------------------+
+   | VALUE       | Name          | Description                         |
+   +-------------+---------------+-------------------------------------+
+   | 0x01        | Hangup        | The call has been hungup at the     |
+   |             |               | remote end                          |
+   |             |               |                                     |
+   | 0x02        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
+   |             |               |                                     |
+   | 0x04        | Answer        | Remote end has answered             |
+   |             |               |                                     |
+   | 0x05        | Busy          | Remote end is busy                  |
+   |             |               |                                     |
+   | 0x06        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x07        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x08        | Congestion    | The call is congested               |
+   |             |               |                                     |
+   | 0x09        | Flash Hook    | Flash hook                          |
+   |             |               |                                     |
+   | 0x0a        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x0b        | Option        | Device-specific options are being   |
+   |             |               | transmitted                         |
+   |             |               |                                     |
+   | 0x0c        | Key Radio     | Key Radio                           |
+   |             |               |                                     |
+   | 0x0d        | Unkey Radio   | Unkey Radio                         |
+   |             |               |                                     |
+   | 0x0e        | Call Progress | Call is in progress                 |
+   |             |               |                                     |
+   | 0x0f        | Call          | Call is proceeding                  |
+   |             | Proceeding    |                                     |
+   |             |               |                                     |
+   | 0x10        | Hold          | Call is placed on hold              |
+   |             |               |                                     |
+   | 0x11        | Unhold        | Call is taken off hold              |
+   +-------------+---------------+-------------------------------------+
+=end
+    
+        head + [data.length].pack('v') + data
   end
     
-      describe 'migrating the 'make_message' format' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
-      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
-      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
-    end
+              # Encodes the end_time field
+          #
+          # @return [String]
+          def encode_end_time
+            [end_time].pack('N')
+          end
+    
+              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
+    
+              # Decodes the error_code field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_error_code(input)
+            input.value[0].value.to_i
+          end
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+        # Pulled from Rack::ShowExceptions in order to override TEMPLATE.
+    # If Rack provides another way to override, this could be removed
+    # in the future.
+    def pretty(env, exception)
+      req = Rack::Request.new(env)
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
     
-      it 'considers a location empty if either latitude or longitude is missing' do
-    expect(Location.new.empty?).to be_truthy
-    expect(Location.new(lat: 2, radius: 1).present?).to be_falsy
-    expect(Location.new(lng: 3, radius: 1).present?).to be_falsy
-  end
+          def accepts?(env)
+        session = session env
+        set_token(session)
     
-      #
-  # Dispatches the supplied request for a given connection.
-  #
-  def dispatch_request(cli, request)
-    # Is the client requesting keep-alive?
-    if ((request['Connection']) and
-       (request['Connection'].downcase == 'Keep-Alive'.downcase))
-      cli.keepalive = true
-    end
-    
-        FUNCTION_RE = /^@function\s*(#{Sass::SCSS::RX::IDENT})(.*)$/
-    def parse_function_directive(parent, line, root, value, offset)
-      name, arg_string = line.text.scan(FUNCTION_RE).first
-      raise SyntaxError.new('Invalid function definition \'#{line.text}\'.') if name.nil?
+            close_body(body) if reaction
