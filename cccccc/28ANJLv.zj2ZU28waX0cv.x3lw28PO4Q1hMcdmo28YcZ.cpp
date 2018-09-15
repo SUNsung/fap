@@ -1,402 +1,277 @@
 
         
-          vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
+          // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.currentWindowInternal.clearMenu', UNKNOWN)
     
-    namespace caffe {
-    }
+    #include 'base/basictypes.h'
+#include '../dispatcher_host.h'
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
     
-    namespace caffe {
-    }
-    
-      EltwiseParameter_EltwiseOp op_;
-  vector<Dtype> coeffs_;
-  Blob<int> max_idx_;
-    
-    /**
- * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
- *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
- *        and base @f$ \gamma @f$.
- */
-template <typename Dtype>
-class ExpLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ExpParameter exp_param,
-   *     with ExpLayer options:
-   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
-   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
-   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
-   *         the base @f$ \gamma @f$
-   */
-  explicit ExpLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    # else
-    
-    // To write value-parameterized tests, first you should define a fixture
-// class. It is usually derived from testing::TestWithParam<T> (see below for
-// another inheritance scheme that's sometimes useful in more complicated
-// class hierarchies), where the type of your parameter values.
-// TestWithParam<T> is itself derived from testing::Test. T can be any
-// copyable type. If it's a raw pointer, you are responsible for managing the
-// lifespan of the pointed values.
-    
-    template <typename T>
-void UniversalTersePrint(const T& value, ::std::ostream* os) {
-  UniversalTersePrinter<T>::Print(value, os);
+    {  RenderView* render_view = RenderView::FromWebView(view);
+  return render_view;
 }
     
-    // Then, use TYPED_TEST() instead of TEST_F() to define as many typed
-// tests for this test case as you want.
-TYPED_TEST(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
-  // Since we are inside a derived class template, C++ requires use to
-  // visit the members of FooTest via 'this'.
-  TypeParam n = this->value_;
-    }
-    
-    template <$for j, [[class Generator$j]]>
-class CartesianProductHolder$i {
- public:
-CartesianProductHolder$i($for j, [[const Generator$j& g$j]])
-      : $for j, [[g$(j)_(g$j)]] {}
-  template <$for j, [[typename T$j]]>
-  operator ParamGenerator< ::std::tr1::tuple<$for j, [[T$j]]> >() const {
-    return ParamGenerator< ::std::tr1::tuple<$for j, [[T$j]]> >(
-        new CartesianProductGenerator$i<$for j, [[T$j]]>(
-$for j,[[
-    }
-    }
-    
-    #if GTEST_OS_LINUX_ANDROID
-// Used to define __ANDROID_API__ matching the target NDK API level.
-#  include <android/api-level.h>  // NOLINT
-#endif
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
     
-    {  return result;
-}
-    
-      explicit WorkloadStats(State guardedState);
-  ~WorkloadStats();
-    
-    int64_t getCPUTimeNanos() {
-  return RuntimeOption::EvalJitTimer ? HPHP::Timer::GetThreadCPUTimeNanos() :
-         -1;
-}
-    
-    int64_t gettime_ns(clockid_t clock) {
-  if (clock != CLOCK_THREAD_CPUTIME_ID) {
-    return folly::chrono::clock_gettime_ns(clock);
-  }
-    }
-    
-    namespace HPHP { namespace jit {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    }
-    
-      if (file_reset(ms) == -1)
-    goto done;
-    
-    namespace HPHP { namespace jit {
-    }
-    }
-    
-      struct HandlerBundle {
-    HandlerBundle() = delete;
-    HandlerBundle(const Variant& handler,
-                  req::unique_ptr<CufIter>& cufIter) :
-      m_handler(handler) {
-      m_cufIter = std::move(cufIter);
-    }
-    Variant m_handler; // used to respond to f_spl_autoload_functions
-    req::unique_ptr<CufIter> m_cufIter; // used to invoke handlers
-  };
-    
-    Array createBacktrace(const BacktraceArgs& backtraceArgs);
-void addBacktraceToStructLog(const Array& bt, StructuredLogEntry& cols);
-int64_t createBacktraceHash();
-req::ptr<CompactTrace> createCompactBacktrace();
-    
-    void collectImpl(HeapImpl& heap, const char* phase, GCBits& mark_version) {
-  VMRegAnchor _;
-  if (t_eager_gc && RuntimeOption::EvalFilterGCPoints) {
-    t_eager_gc = false;
-    auto pc = vmpc();
-    if (t_surprise_filter.test(pc)) {
-      if (RuntimeOption::EvalGCForAPC) {
-        if (!APCGCManager::getInstance().excessedGCTriggerBar()) {
-          return;
-        }
-      } else {
-        return;
-      }
-    }
-    t_surprise_filter.insert(pc);
-    TRACE(2, 'eager gc %s at %p\n', phase, pc);
-    phase = 'eager';
-  } else {
-    TRACE(2, 'normal gc %s at %p\n', phase, vmpc());
-  }
-  if (t_gc_num == 0) {
-    t_enable_samples = StructuredLog::coinflip(RuntimeOption::EvalGCSampleRate);
-  }
-  t_pre_stats = tl_heap->getStatsCopy(); // don't check or trigger OOM
-  mark_version = (mark_version == MaxMark) ? MinMark :
-                 GCBits(uint8_t(mark_version) + 1);
-  Collector collector(
-    heap,
-    RuntimeOption::EvalGCForAPC ? &APCGCManager::getInstance() : nullptr,
-    mark_version
-  );
-  if (RuntimeOption::EvalGCForAPC) {
-    collector.collect<true>();
-  } else {
-    collector.collect<false>();
-  }
-  if (Trace::moduleEnabledRelease(Trace::gc, 1)) {
-    traceCollection(collector);
-  }
-  if (t_enable_samples) {
-    logCollection(phase, collector);
-  }
-  ++t_gc_num;
+    {  focus_manager_ = NULL;
 }
     
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-      shared_ptr<T> lock() const {
-    std::shared_ptr<T> r = Base::lock();
-    return shared_ptr<T>(r, sizeof(*r), type_scan::getIndexForScan<T>());
-  }
-  TYPE_SCAN_IGNORE_BASES(Base);
-  TYPE_SCAN_IGNORE_ALL;
-    
-    namespace HPHP {
-    }
-    
-    
-    {
-    {
-    {}  // namespace utils
-}  // namespace op
-}  // namespace mxnet
-    
-    /*! \brief the dispatch mode of the operator */
-enum class DispatchMode {
-  kUndefined = -1,
-  // dispatch on FCompute or FStatefulCompute
-  kFCompute,
-  // dispatch on FComputeEx or FStatefulComputeEx, if available
-  kFComputeEx,
-  // dispatch on FCompute or FStatefulCompute, and performs storage fallback
-  kFComputeFallback,
-  // special dispatch mode for variables
-  kVariable,
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
 };
     
-      auto write = [&](std::vector<AttrType> *vec, size_t size, const char *name) {
-      for (size_t i = 0; i < size; ++i) {
-        CHECK(assign(&(*vec)[i], dattr))
-          << 'Incompatible attr in node ' << attrs.name << ' at ' << i << '-th '
-          << name << ': ' << 'expected ' << attr_string(dattr)
-          << ', got ' << attr_string((*vec)[i]);
-      }
-    };
-  write(in_attrs, in_size, 'input');
-  write(out_attrs, out_size, 'output');
+    #include <vector>
     
-    bool ElementWiseSumForwardInferStorageType(const nnvm::NodeAttrs& attrs,
-                                           const int dev_mask,
-                                           DispatchMode* dispatch_mode,
-                                           std::vector<int> *in_attrs,
-                                           std::vector<int> *out_attrs) {
-  CHECK(!in_attrs->empty());
-  CHECK_EQ(out_attrs->size(), 1U);
-  bool ret = ElemwiseStorageAttr<false, true, false>(attrs, dev_mask, dispatch_mode,
-                                                     in_attrs, out_attrs);
-#if MXNET_USE_MKLDNN == 1
-  // We should always use FComputeEx.
-  if (dev_mask == mshadow::cpu::kDevMask
-      && common::ContainsOnlyStorage(*in_attrs, kDefaultStorage)
-      && out_attrs->at(0) == kDefaultStorage) {
-    *dispatch_mode = DispatchMode::kFComputeEx;
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+    }
+    
+    REGISTER_CPU_OPERATOR(
+    Exp,
+    UnaryElementwiseOp<TensorTypes<float>, CPUContext, ExpFunctor<CPUContext>>);
+    
+          CAFFE_ENFORCE(dims.front() >= 0, 'Dimension ids must be non-negative.');
+      CAFFE_ENFORCE_GE(
+          in[0].dims_size() + dims.size(),
+          dims.back() + 1,
+          'Input needs at least ',
+          (1 + dims.back() - dims.size()),
+          ' dimensions given `dims`.');
+    
+    REGISTER_CPU_OPERATOR(
+    MergeMultiScalarFeatureTensors,
+    MergeMultiScalarFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiScalarFeatureTensors)
+    .SetDoc(
+        'Merge given multi-feature tensors with scalar features into one.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
+    .NumOutputs(3)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_keys', '.keys')
+    .Input(2, 'in1_values', '.values')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values', '.values');
+    
+    op = core.CreateOperator(
+    'FindDuplicateElements',
+    ['data'],
+    ['indices'],
+)
+    
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
+    
+    // The RunFullyConnectedOpOnCUDADevice Function will use the pointer of current
+// op and the DoRunWithType will make sure to run the correct things.
+template <>
+bool FullyConnectedOp<CUDAContext>::RunOnDevice() {
+  return RunFullyConnectedOpOnCUDADevice(float16_compute_, this);
+}
+    
+    void ChannelArguments::SetResourceQuota(
+    const grpc::ResourceQuota& resource_quota) {
+  SetPointerWithVtable(GRPC_ARG_RESOURCE_QUOTA,
+                       resource_quota.c_resource_quota(),
+                       grpc_resource_quota_arg_vtable());
+}
+    
+    void CompletionQueue::Shutdown() {
+  g_gli_initializer.summon();
+  CompleteAvalanching();
+}
+    
+    size_t CoreCodegen::grpc_byte_buffer_length(grpc_byte_buffer* bb) {
+  return ::grpc_byte_buffer_length(bb);
+}
+    
+      bool IsPeerAuthenticated() const override;
+    
+    
+    {}  // namespace grpc
+    
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusClientCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusClientCallData : public CallData {
+ public:
+  // Maximum size of trace context is sent on the wire.
+  static constexpr uint32_t kMaxTraceContextLen = 64;
+  // Maximum size of tags that are sent on the wire.
+  static constexpr uint32_t kMaxTagsLen = 2048;
+    }
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
+    
+    
+    {    return bytes_read;
   }
-#endif
-  return ret;
+    
+    /*!
+ * \brief The result holder of storage type of each NodeEntry in the graph.
+ * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
+ *
+ * \code
+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
+ *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
+ *  // get storage type by entry id
+ *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
+ * \endcode
+ *
+ * \sa FInferStorageType
+ */
+using StorageTypeVector = std::vector<int>;
+    
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
 }
     
     
-namespace mxnet {
-namespace op {
-    }
-    }
-    
-        // file I/O
-    void write(FILE *f, const char *name) const
     {
-        fputTag(f, 'BMAT');
-        fputstring(f, name);
-        fputint(f, (int) this->numrows);
-        fputint(f, (int) this->numcols);
-        const auto &us = *this;
-        foreach_column (j, us)
-        {
-            auto column = ssematrixbase::col(j);
-            fwriteOrDie(column, f);
-        }
-        fputTag(f, 'EMAT');
-    }
-    
-        while (iter->Next()) {
-      page->Push(iter->Value());
-      if (page->MemCostBytes() >= kPageSize) {
-        bytes_write += page->MemCostBytes();
-        writer.PushWrite(std::move(page));
-        writer.Alloc(&page);
-        page->Clear();
-        double tdiff = dmlc::GetTime() - tstart;
-        LOG(CONSOLE) << 'Writing to ' << cache_info << ' in '
-                     << ((bytes_write >> 20UL) / tdiff) << ' MB/s, '
-                     << (bytes_write >> 20UL) << ' written';
-      }
-    }
-    if (page->data.size() != 0) {
-      writer.PushWrite(std::move(page));
-    }
-    
-    // tress
-#include '../src/tree/split_evaluator.cc'
-#include '../src/tree/tree_model.cc'
-#include '../src/tree/tree_updater.cc'
-#include '../src/tree/updater_colmaker.cc'
-#include '../src/tree/updater_fast_hist.cc'
-#include '../src/tree/updater_prune.cc'
-#include '../src/tree/updater_refresh.cc'
-#include '../src/tree/updater_sync.cc'
-#include '../src/tree/updater_histmaker.cc'
-#include '../src/tree/updater_skmaker.cc'
-    
-    /*!
- * \brief Macro to register gradient booster.
+    {/*! \brief typedef the factory function of data iterator */
+typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
+/*!
+ * \brief Registry entry for DataIterator factory functions.
+ */
+struct ImageAugmenterReg
+    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
+                                        ImageAugmenterFactory> {
+};
+//--------------------------------------------------------------
+// The following part are API Registration of Iterators
+//--------------------------------------------------------------
+/*!
+ * \brief Macro to register image augmenter
  *
  * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_GBM(GBTree, 'gbtree')
- * .describe('Boosting tree ensembles.')
+ * // example of registering a mnist iterator
+ * REGISTER_IMAGE_AUGMENTER(aug_default)
+ * .describe('default augmenter')
  * .set_body([]() {
- *     return new GradientBooster<TStats>();
+ *     return new DefaultAugmenter();
  *   });
  * \endcode
  */
-#define XGBOOST_REGISTER_GBM(UniqueId, Name)                            \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::GradientBoosterReg &          \
-  __make_ ## GradientBoosterReg ## _ ## UniqueId ## __ =                \
-      ::dmlc::Registry< ::xgboost::GradientBoosterReg>::Get()->__REGISTER__(Name)
+#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
+  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_USE_OPENCV
     
-    namespace xgboost {
+    namespace leveldb {
     }
     
-    TEST(Metric, Error) {
-  xgboost::Metric * metric = xgboost::Metric::Create('error');
-  ASSERT_STREQ(metric->Name(), 'error');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.5f, 0.001f);
+    TEST(DBTest, NonWritableFileSystem) {
+  Options options = CurrentOptions();
+  options.write_buffer_size = 1000;
+  options.env = env_;
+  Reopen(&options);
+  ASSERT_OK(Put('foo', 'v1'));
+  env_->non_writable_.Release_Store(env_);  // Force errors for new files
+  std::string big(100000, 'x');
+  int errors = 0;
+  for (int i = 0; i < 20; i++) {
+    fprintf(stderr, 'iter %d; errors %d\n', i, errors);
+    if (!Put('foo', big).ok()) {
+      errors++;
+      DelayMilliseconds(100);
     }
-    
-    #include <dmlc/omp.h>
-#include <xgboost/logging.h>
-#include <algorithm>
-#include '../common/math.h'
-    
-        // From SDL_ttf: Handy routines for converting from fixed point
-    #define FT_CEIL(X)  (((X + 63) & -64) / 64)
-    
-        // Setup style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-    
-        // Main loop
-    bool done = false;
-    while (!done)
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-                done = true;
-        }
-    }
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    
-    {    // Update mouse position
-    const ImVec2 mouse_pos_backup = io.MousePos;
-    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-#ifdef __EMSCRIPTEN__
-    const bool focused = true; // Emscripten
-#else
-    const bool focused = glfwGetWindowAttrib(g_Window, GLFW_FOCUSED) != 0;
-#endif
-    if (focused)
-    {
-        if (io.WantSetMousePos)
-        {
-            glfwSetCursorPos(g_Window, (double)mouse_pos_backup.x, (double)mouse_pos_backup.y);
-        }
-        else
-        {
-            double mouse_x, mouse_y;
-            glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
-            io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
-        }
-    }
+  }
+  ASSERT_GT(errors, 0);
+  env_->non_writable_.Release_Store(nullptr);
 }
     
-      if (args[1]->IsUndefined()) {
-    db_wrapper->status_ = db_wrapper->db_->Get(
-        rocksdb::ReadOptions(), key, &value);
-  } else if (db_wrapper->HasFamilyNamed(cf, db_wrapper)) {
-    db_wrapper->status_ = db_wrapper->db_->Get(
-        rocksdb::ReadOptions(), db_wrapper->columnFamilies_[cf], key, &value);
-  } else {
-    return scope.Close(Null());
-  }
     
-    //****************************
-// Advanced Hash Functions
-//****************************
+    {  // No copying allowed
+  LookupKey(const LookupKey&);
+  void operator=(const LookupKey&);
+};
+    
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+      kFullType = 1,
+    
+    namespace guetzli {
+    }
+    
+      int verbose = 0;
+  int quality = kDefaultJPEGQuality;
+  int memlimit_mb = kDefaultMemlimitMB;
+    
+      tmp0 = in[3 * stride];
+  tmp1 = kIDCTMatrix[ 3] * tmp0;
+  tmp2 = kIDCTMatrix[11] * tmp0;
+  tmp3 = kIDCTMatrix[19] * tmp0;
+  tmp4 = kIDCTMatrix[27] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+    
+    
+    {  // Bit length histogram.
+  std::vector<int> counts;
+  // Symbol values sorted by increasing bit lengths.
+  std::vector<int> values;
+  // The index of the Huffman code in the current set of Huffman codes. For AC
+  // component Huffman codes, 0x10 is added to the index.
+  int slot_id;
+  // Set to true if this Huffman code is the last one within its marker segment.
+  bool is_last;
+};
+    
+    // Single pixel rgb to 16-bit yuv conversion.
+// The returned yuv values are signed integers in the
+// range [-128, 127] inclusive.
+inline static void RGBToYUV16(const uint8_t* const rgb,
+                              coeff_t *out) {
+  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
+  const int r = rgb[0];
+  const int g = rgb[1];
+  const int b = rgb[2];
+  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
+  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
+  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
+}
+    
+      // Cluster AC histograms.
+  size_t num_ac_histo = ncomps;
+  int ac_histo_indexes[kMaxComponents];
+  ClusterHistograms(&histograms[num_dc_histo], &num_ac_histo, ac_histo_indexes,
+                    &depths[num_dc_histo * JpegHistogram::kSize]);
