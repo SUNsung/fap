@@ -1,97 +1,148 @@
 
         
-              GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    end
+        class ActivityPub::CollectionsController < Api::BaseController
+  include SignatureVerification
     
-        let(:coding_horror) { Fabricate(:coding_horror) }
-    
-    Badge.seed do |b|
-  b.id = Badge::Anniversary
-  b.name = 'Anniversary'
-  b.default_icon = 'fa-clock-o'
-  b.badge_type_id = BadgeType::Silver
-  b.default_badge_grouping_id = BadgeGrouping::Community
-  b.query = nil
-  b.trigger = Badge::Trigger::None
-  b.auto_revoke = false
-  b.system = true
-  b.multiple_grant = true
-end
-    
-    User.seed do |u|
-  u.id = -1
-  u.name = 'system'
-  u.username = 'system'
-  u.username_lower = 'system'
-  u.password = SecureRandom.hex
-  u.active = true
-  u.admin = true
-  u.moderator = true
-  u.approved = true
-  u.trust_level = TrustLevel[4]
-end
-    
-          open_dry_run_modal(formatting_agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('Line 1\nLine 2\nLine 3')
-      end
-      click_on('Dry Run')
-      expect(page).to have_text('Line 1,Line 2,Line 3')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+      def outbox_presenter
+    if page_requested?
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account, page_params),
+        type: :ordered,
+        part_of: account_outbox_url(@account),
+        prev: prev_page,
+        next: next_page,
+        items: @statuses
+      )
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account),
+        type: :ordered,
+        size: @account.statuses_count,
+        first: account_outbox_url(@account, page: true),
+        last: account_outbox_url(@account, page: true, min_id: 0)
+      )
     end
   end
     
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
+    module Admin
+  class InstancesController < BaseController
+    def index
+      authorize :instance, :index?
+      @instances = ordered_instances
+    end
     
-        describe 'with block' do
-      it 'returns a nav link with menu' do
-        stub(self).current_page?('/things') { false }
-        stub(self).current_page?('/things/stuff') { false }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
-      end
-    
-          context '#run_workers' do
-        it 'runs all the workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
         end
     
-        stub.any_instance_of(Agents::SchedulerAgent).second_precision_enabled { true }
-    
-      describe '#sort_tuples!' do
-    let(:tuples) {
-      time = Time.now
-      [
-        [2, 'a', time - 1],  # 0
-        [2, 'b', time - 1],  # 1
-        [1, 'b', time - 1],  # 2
-        [1, 'b', time],      # 3
-        [1, 'a', time],      # 4
-        [2, 'a', time + 1],  # 5
-        [2, 'a', time],      # 6
-      ]
-    }
-    
-      let :reverted_extract do
-    old_extract
+      def hub_secret
+    params['hub.secret']
   end
+    
+            # Sends a Kerberos Request over a tcp connection
+        #
+        # @param req [Rex::Proto::Kerberos::Model::KdcRequest] the request to send
+        # @return [Integer] the number of bytes sent
+        # @raise [RuntimeError] if the request can't be encoded
+        def send_request_tcp(req)
+          data = req.encode
+          length = [data.length].pack('N')
+          connection.put(length + data)
+        end
+    
+                components.each do |c|
+              encoded << [c.length].pack('N')
+              encoded << c
+            end
+    
+            end
+      end
+    end
+  end
+end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 1
+                self.pvno = decode_asn1_pvno(val)
+              when 2
+                self.msg_type = decode_asn1_msg_type(val)
+              when 3
+                self.pa_data  = decode_asn1_pa_data(val)
+              when 4
+                self.req_body = decode_asn1_req_body(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
+              end
+            end
+          end
+    
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
+          end
+    
+    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
+    
+    @@ layout
+<html>
+  <head>
+    <title>Super Simple Chat with Sinatra</title>
+    <meta charset='utf-8' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+  </head>
+  <body><%= yield %></body>
+</html>
+    
+          # Essentially the inverse of +mask_token+.
+      def unmask_token(masked_token)
+        # Split the token into the one-time pad and the encrypted
+        # value and decrypt it
+        token_length = masked_token.length / 2
+        one_time_pad = masked_token[0...token_length]
+        encrypted_token = masked_token[token_length..-1]
+        xor_byte_strings(one_time_pad, encrypted_token)
+      end
+    
+          def html?(headers)
+        return false unless header = headers.detect { |k,v| k.downcase == 'content-type' }
+        options[:html_types].include? header.last[/^\w+\/\w+/]
+      end
+    end
+  end
+end
+
+    
+          default_options :escape => :html,
+        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
+    
+          it 'autocorrects closing brace on different line from last element' do
+        new_source = autocorrect_source(construct(true, true))
+    
+          # The receiver of the method definition, if any.
+      #
+      # @return [Node, nil] the receiver of the method definition, or `nil`.
+      def receiver
+        node_parts[3]
+      end
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that are parameterized:
+    # `send`, `super`, `zsuper`, `def`, `defs`
+    module ParameterizedNode
+      # Checks whether this node's arguments are wrapped in parentheses.
+      #
+      # @return [Boolean] whether this node's arguments are
+      #                   wrapped in parentheses
+      def parenthesized?
+        loc.end && loc.end.is?(')')
+      end
