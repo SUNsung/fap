@@ -1,81 +1,127 @@
-module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
+
+        
+          p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-            def test_encoded_password
-          password = 'am@z1ng_p@ssw0rd#!'
-          encoded_password = URI.encode_www_form_component(password)
-          spec = resolve 'abstract://foo:#{encoded_password}@localhost/bar'
-          assert_equal password, spec['password']
+            # Get the first part of the email address (before @)
+        # In addtion in removes illegal characters
+        def generate_username(email)
+          email.match(/^[^@]*/)[0].mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/, '').to_s
         end
     
-      def test_values_cast_from_nil_are_persisted_as_nil
-    # This is required to fulfil the following contract, which must be universally
-    # true in Active Record:
-    #
-    # model.attribute = value
-    # assert_equal model.attribute, model.tap(&:save).reload.attribute
-    Topic.serialize(:content, Hash)
-    topic = Topic.create!(content: {})
-    topic2 = Topic.create!(content: nil)
-    
-      def test_deleting_updates_counter_cache_with_dependent_delete_all
-    post = posts(:welcome)
-    post.update_columns(taggings_with_delete_all_count: post.tags_count)
-    
-          broadcasting = 'test_queue'
-      message = { body: 'test message' }
-      server.broadcast(broadcasting, message)
-    
-      def tumblr
-    Tumblr.configure do |config|
-      config.consumer_key = tumblr_consumer_key
-      config.consumer_secret = tumblr_consumer_secret
-      config.oauth_token = tumblr_oauth_token
-      config.oauth_token_secret = tumblr_oauth_token_secret
-    end
-    
-    Tumblr::Client.new
-  end
-end
-    
-      included do
-    helper SortableTableHelper
-  end
-    
-            # A callback method used to deliver confirmation
-        # instructions on creation. This can be overridden
-        # in models to map to a nice sign up e-mail.
-        def send_on_create_confirmation_instructions
-          send_confirmation_instructions
-        end
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
-    
-      def translation_scope
-    'devise.sessions'
-  end
-    
-            # Unregisters a SIGINT handler.
-        def unregister(sig_callback)
-          @@mutex.synchronize do
-            registered.delete(sig_callback)
-    
-      # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
+            include ::EachBatch
       end
+    
+          def to_markdown
+        '[![#{title}](#{image_url})](#{link_url})'
+      end
+    
+      private
+    
+      def process_push_request
+    case hub_mode
+    when 'subscribe'
+      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
+    when 'unsubscribe'
+      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+    else
+      ['Unknown mode: #{hub_mode}', 422]
     end
   end
-end
+    
+      def lease_seconds_or_default
+    (params['hub.lease_seconds'] || 1.day).to_i.seconds
+  end
+    
+    # Ensure we know the appservers port
+Capybara.server_port = AppConfig.pod_uri.port
+Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
+Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
+    
+      # delete all cookies, destroying the current session
+  def logout
+    page.driver.clear_cookies
+  end
+    
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
+    end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
+    
+          def children(node)
+        node.children
+      end
+    
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '[' }
+    let(:close) { ']' }
+  end
+    
+      it 'ignores empty hashes' do
+    expect_no_offenses('{}')
+  end
+    
+          # Checks whether any of the key value pairs in the `hash` literal are on
+      # the same line.
+      #
+      # @note A multiline `pair` is considered to be on the same line if it
+      #       shares any of its lines with another `pair`
+      #
+      # @return [Boolean] whether any `pair` nodes are on the same line
+      def pairs_on_same_line?
+        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
+      end
+    
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
+      #
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
+      end
