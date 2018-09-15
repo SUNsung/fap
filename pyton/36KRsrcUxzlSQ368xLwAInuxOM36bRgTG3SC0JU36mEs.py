@@ -1,82 +1,114 @@
 
         
-                    {
-                'type': 'fs',
-                'path': '/var/app/images',
-                'base_url': 'http://img.website.com'
-            }
-    
-    
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+        
+if __name__ == '__main__':
+    main()
 
     
-    from .globals import request
-from ._compat import with_metaclass
+            Emit key value pairs of the form:
+    
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
+    
+            webpage = webpage.decode('utf8', 'replace')
+    
+    with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+
     
     
-def test_config_missing_json():
-    app = flask.Flask(__name__)
-    with pytest.raises(IOError) as e:
-        app.config.from_json('missing.json')
-    msg = str(e.value)
-    assert msg.startswith('[Errno 2] Unable to load configuration '
-                          'file (No such file or directory):')
-    assert msg.endswith('missing.json'')
-    assert not app.config.from_json('missing.json', silent=True)
+# find the correct sorting and add the required base classes so that sublcasses
+# can be correctly created
+classes = _ALL_CLASSES[:-1]
+ordered_cls = []
+while classes:
+    for c in classes[:]:
+        bases = set(c.__bases__) - set((object, InfoExtractor, SearchInfoExtractor))
+        stop = False
+        for b in bases:
+            if b not in classes and b not in ordered_cls:
+                if b.__name__ == 'GenericIE':
+                    exit()
+                classes.insert(0, b)
+                stop = True
+        if stop:
+            break
+        if all(b in ordered_cls for b in bases):
+            ordered_cls.append(c)
+            classes.remove(c)
+            break
+ordered_cls.append(_ALL_CLASSES[-1])
     
-        app = flask.Flask(__name__, instance_path=str(modules_tmpdir))
-    assert app.instance_path == str(modules_tmpdir)
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-    import os
-import unittest
     
-    autodoc_member_order = 'bysource'
-autodoc_default_flags = ['show-inheritance', 'private-members']
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
-            try:
-            domain_records = domain.get_records()
+            When a teardown function was called because of an unhandled exception
+        it will be passed an error object. If an :meth:`errorhandler` is
+        registered, it will handle the exception and the teardown will not
+        receive it.
     
-        def _test_error(self):
-        self.config.redirect = True
-        with test_util.patch_get_utility() as mock_gu:
-            self.assertRaises(
-                errors.PluginError, self._test_with_all_supported)
-        self.assertEqual(mock_gu().add_message.call_count, 1)
+        def register(self, app, options, first_registration=False):
+        '''Called by :meth:`Flask.register_blueprint` to register all views
+        and callbacks registered on the blueprint with the application. Creates
+        a :class:`.BlueprintSetupState` and calls each :meth:`record` callback
+        with it.
     
-        # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+            self.match_request()
     
-    # This is a very simple benchmark to give you an idea of how fast each step of face recognition will run on your system.
-# Notice that face detection gets very slow at large image sizes. So you might consider running face detection on a
-# scaled down version of your image and then running face encodings on the the full size image.
+        To replace the session interface on an application all you have to do
+    is to assign :attr:`flask.Flask.session_interface`::
     
-        # Loop through each person in the training set
-    for class_dir in os.listdir(train_dir):
-        if not os.path.isdir(os.path.join(train_dir, class_dir)):
-            continue
+        def flush(self):
+        '''
+        Remove the current session data from the database and regenerate the
+        key.
+        '''
+        self.clear()
+        self.delete()
+        self._session_key = None
     
-        if os.path.isdir(image_to_check):
-        if cpus == 1:
-            [test_image(image_file, model) for image_file in image_files_in_folder(image_to_check)]
-        else:
-            process_images_in_process_pool(image_files_in_folder(image_to_check), cpus, model)
-    else:
-        test_image(image_to_check, model)
+        def __init__(self, info_dict, priority=None, changefreq=None, protocol=None):
+        self.queryset = info_dict['queryset']
+        self.date_field = info_dict.get('date_field')
+        self.priority = priority
+        self.changefreq = changefreq
+        self.protocol = protocol
     
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+        y_train = np.reshape(y_train, (len(y_train), 1))
+    y_test = np.reshape(y_test, (len(y_test), 1))
+    
+    
+def test_cifar():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+    
+        #Merging all the documents into a single PDF
+    for doc in group:
+        for p in doc.pages:
+            ap.append(p)
