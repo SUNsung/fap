@@ -1,385 +1,297 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
-#define TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
+        Q_SIGNALS:
+    void valueChanged();
     
-    REGISTER_FILE_SYSTEM('test', TestFileSystem);
+        secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
+    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
     
-    // Negates a PyBfloat16.
-PyObject* PyBfloat16_Negative(PyObject* self) {
-  bfloat16 x = PyBfloat16_Bfloat16(self);
-  return PyBfloat16_FromBfloat16(-x).release();
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34>
+internal::ValueArray34<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5,
+    T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14,
+    T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22,
+    T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30,
+    T31 v31, T32 v32, T33 v33, T34 v34) {
+  return internal::ValueArray34<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34>(v1, v2, v3, v4, v5, v6, v7,
+      v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22,
+      v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34);
 }
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-
     
     
-    {}  // namespace tensorflow
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT4.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, v1, v2, v3, v4), \
+                on_failure)
     
+      // A helper class that aborts a death test when it's deleted.
+  class ReturnSentinel {
+   public:
+    explicit ReturnSentinel(DeathTest* test) : test_(test) { }
+    ~ReturnSentinel() { test_->Abort(TEST_ENCOUNTERED_RETURN_STATEMENT); }
+   private:
+    DeathTest* const test_;
+    GTEST_DISALLOW_COPY_AND_ASSIGN_(ReturnSentinel);
+  } GTEST_ATTRIBUTE_UNUSED_;
     
-    {}  // namespace tensorflow
-    
-    PyRecordReader* PyRecordReader::New(const string& filename, uint64 start_offset,
-                                    const string& compression_type_string,
-                                    TF_Status* out_status) {
-  std::unique_ptr<RandomAccessFile> file;
-  Status s = Env::Default()->NewRandomAccessFile(filename, &file);
-  if (!s.ok()) {
-    Set_TF_Status_from_Status(out_status, s);
-    return nullptr;
-  }
-  PyRecordReader* reader = new PyRecordReader;
-  reader->offset_ = start_offset;
-  reader->file_ = file.release();
-    }
-    
-    namespace stream_executor {
-namespace blas {
-    }
-    }
-    
-    // gflags 2.1 issue: namespace google was changed to gflags without warning.
-// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
-// 2.1. If yes, we will add a temporary solution to redirect the namespace.
-// TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
-// remove the following hack.
-#ifndef GFLAGS_GFLAGS_H_
-namespace gflags = google;
-#endif  // GFLAGS_GFLAGS_H_
-    
-    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
-template <typename Dtype>
-class GaussianFiller : public Filler<Dtype> {
+    // A simple Linear Congruential Generator for generating random
+// numbers with a uniform distribution.  Unlike rand() and srand(), it
+// doesn't use global state (and therefore can't interfere with user
+// code).  Unlike rand_r(), it's portable.  An LCG isn't very random,
+// but it's good enough for our purposes.
+class GTEST_API_ Random {
  public:
-  explicit GaussianFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    CHECK(blob->count());
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
-        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
-    int sparse = this->filler_param_.sparse();
-    CHECK_GE(sparse, -1);
-    if (sparse >= 0) {
-      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
-      // These have num == channels == 1; width is number of inputs; height is
-      // number of outputs.  The 'sparse' variable specifies the mean number
-      // of non-zero input weights for a given output.
-      CHECK_GE(blob->num_axes(), 1);
-      const int num_outputs = blob->shape(0);
-      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
-      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
-      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
-      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
-      for (int i = 0; i < blob->count(); ++i) {
-        data[i] *= mask[i];
-      }
-    }
-  }
+  static const UInt32 kMaxRange = 1u << 31;
     }
     
-      static vector<string> LayerTypeList() {
-    CreatorRegistry& registry = Registry();
-    vector<string> layer_types;
-    for (typename CreatorRegistry::iterator iter = registry.begin();
-         iter != registry.end(); ++iter) {
-      layer_types.push_back(iter->first);
-    }
-    return layer_types;
-  }
-    
-    /**
- * @brief Provides base for data layers that feed blobs to the Net.
- *
- * TODO(dox): thorough documentation for Forward and proto params.
- */
-template <typename Dtype>
-class BaseDataLayer : public Layer<Dtype> {
- public:
-  explicit BaseDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden except by the BasePrefetchingDataLayer.
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-  // Data layers have no bottoms, so reshaping is trivial.
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    }
-    
-    namespace caffe {
-    }
-    
-      int size_, pre_pad_;
-  Dtype alpha_, beta_, k_;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace leveldb
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
-    
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-    
-    {  // No copying allowed
-  Writer(const Writer&);
-  void operator=(const Writer&);
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9>
+struct Templates9 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates8<T2, T3, T4, T5, T6, T7, T8, T9> Tail;
 };
     
-       static bool BOOST_REGEX_CALL isctype(char, char_class_type);
-   static int BOOST_REGEX_CALL value(char, int);
+    // We don't want to require the users to write TypesN<...> directly,
+// as that would require them to count the length.  Types<...> is much
+// easier to write, but generates horrible messages when there is a
+// compiler error, as gcc insists on printing out each template
+// argument, even if it has the default value (this means Types<int>
+// will appear as Types<int, None, None, ..., None> in the compiler
+// errors).
+//
+// Our solution is to combine the best part of the two approaches: a
+// user would write Types<T1, ..., TN>, and Google Test will translate
+// that to TypesN<T1, ..., TN> internally to make error messages
+// readable.  The translation is done by the 'type' member of the
+// Types template.
     
-       const char* root()const { return _root; }
-   const char* path()const { return _path; }
-   const char* name()const { return ptr; }
-   _fi_find_data* data() { return &(ref->_data); }
-   void next();
-   directory_iterator& operator++() { next(); return *this; }
-   directory_iterator operator++(int);
-   const char* operator*() { return path(); }
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_end_line()
-{
-   if(position != last)
-   {
-      if(m_match_flags & match_single_line)
-         return false;
-      // we're not yet at the end so *first is always valid:
-      if(is_separator(*position))
-      {
-         if((position != backstop) || (m_match_flags & match_prev_avail))
-         {
-            // check that we're not in the middle of \r\n sequence
-            BidiIterator t(position);
-            --t;
-            if((*t == static_cast<char_type>('\r')) && (*position == static_cast<char_type>('\n')))
-            {
-               return false;
-            }
-         }
-         pstate = pstate->next.p;
-         return true;
-      }
-   }
-   else if((m_match_flags & match_not_eol) == 0)
-   {
-      pstate = pstate->next.p;
-      return true;
-   }
-   return false;
+    // This should fail when the --check_for_leaks command line flag is
+// specified.
+TEST(ListenersTest, LeaksWater) {
+  Water* water = new Water;
+  EXPECT_TRUE(water != NULL);
 }
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_then()
-{
-   pstate = pstate->next.p;
-   if(match_all_states())
-      return true;
-   m_can_backtrack = false;
-   m_have_then = true;
-   return false;
-}
+      // Applies a function/functor on each element of the queue, and
+  // returns the result in a new queue.  The original queue is not
+  // affected.
+  template <typename F>
+  Queue* Map(F function) const {
+    Queue* new_queue = new Queue();
+    for (const QueueNode<E>* node = head_; node != NULL; node = node->next_) {
+      new_queue->Enqueue(function(node->element()));
+    }
+    }
     
-    typedef regex_iterator<const char*> cregex_iterator;
-typedef regex_iterator<std::string::const_iterator> sregex_iterator;
-#ifndef BOOST_NO_WREGEX
-typedef regex_iterator<const wchar_t*> wcregex_iterator;
-typedef regex_iterator<std::wstring::const_iterator> wsregex_iterator;
+    namespace boost{
+    }
+    
+    class BOOST_REGEX_DECL mapfile
+{
+   typedef char* pointer;
+   std::FILE* hfile;
+   long int _size;
+   pointer* _first;
+   pointer* _last;
+   mutable std::list<pointer*> condemed;
+   enum sizes
+   {
+      buf_size = 4096
+   };
+   void lock(pointer* node)const;
+   void unlock(pointer* node)const;
+public:
+    }
+    
+    #  ifndef BOOST_REGEX_INSTANTIATE
+#     ifdef __GNUC__
+#        define template __extension__ extern template
+#     else
+#        if BOOST_MSVC > 1310
+#           define BOOST_REGEX_TEMPLATE_DECL
+#        endif
+#        define template extern template
+#     endif
+#  endif
+    
+    
+    {} // namespace boost
+    
+    #include <boost/shared_ptr.hpp>
+    
+    #ifdef BOOST_MSVC
+#pragma warning(pop)
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
     
-    //
-// proc regex_match
-// returns true if the specified regular expression matches
-// the whole of the input.  Fills in what matched in m.
-//
-template <class BidiIterator, class Allocator, class charT, class traits>
-bool regex_match(BidiIterator first, BidiIterator last, 
-                 match_results<BidiIterator, Allocator>& m, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   BOOST_REGEX_DETAIL_NS::perl_matcher<BidiIterator, Allocator, traits> matcher(first, last, m, e, flags, first);
-   return matcher.match();
-}
-template <class iterator, class charT, class traits>
-bool regex_match(iterator first, iterator last, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   match_results<iterator> m;
-   return regex_match(first, last, m, e, flags | regex_constants::match_any);
-}
-//
-// query_match convenience interfaces:
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-//
-// this isn't really a partial specialisation, but template function
-// overloading - if the compiler doesn't support partial specialisation
-// then it really won't support this either:
-template <class charT, class Allocator, class traits>
-inline bool regex_match(const charT* str, 
-                        match_results<const charT*, Allocator>& m, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + traits::length(str), m, e, flags);
-}
+    #include 'guetzli/stats.h'
     
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const charT* fmt, 
-                         match_flag_type flags = match_default)
-{
-   return regex_replace(out, first, last, e, fmt, flags);
-}
+    #include 'guetzli/jpeg_data.h'
     
-    
-namespace boost{
+    namespace guetzli {
     }
     
-    std::string Action::description() const
-{
-    return StringUtils::format('<Action | Tag = %d', _tag);
+    bool JPEGData::Is420() const {
+  return (components.size() == 3 &&
+          max_h_samp_factor == 2 &&
+          max_v_samp_factor == 2 &&
+          components[0].h_samp_factor == 2 &&
+          components[0].v_samp_factor == 2 &&
+          components[1].h_samp_factor == 1 &&
+          components[1].v_samp_factor == 1 &&
+          components[2].h_samp_factor == 1 &&
+          components[2].v_samp_factor == 1);
 }
     
-    
-    {    _radZ = (float)CC_DEGREES_TO_RADIANS(_angleZ);
-    _radX = (float)CC_DEGREES_TO_RADIANS(_angleX);
-}
-    
-        /** Initializes the action with a duration and an array of points.
-     *
-     * @param dt In seconds.
-     * @param points An PointArray.
-     */
-    bool initWithDuration(float dt, PointArray* points);
-    
-    
-    {    delete ret;
-    return nullptr;
-}
-    
-    
-    {    return ret;
-}
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-        void removeActionAtIndex(ssize_t index, struct _hashElement *element);
-    void deleteHashElement(struct _hashElement *element);
-    void actionAllocWithHashElement(struct _hashElement *element);
-    
-                p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
-}
-    
-    Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
-{
-    Animation *animation = new (std::nothrow) Animation();
-    animation->initWithSpriteFrames(frames, delay, loops);
-    animation->autorelease();
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
-    
-    
-NS_CC_END
-
-    
-    void AtlasNode::setQuadsToDraw(ssize_t quadsToDraw)
-{
-    _quadsToDraw = quadsToDraw;
-}
-    
-    
-    {};
-    
-    
-    { private:
-  DECLARE_SINGLETON(CanClientFactory);
-};
-    
-    #endif  // MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
-
-    
-      std::string can_name('can' + std::to_string(port_));
-  std::strncpy(ifr.ifr_name, can_name.c_str(), IFNAMSIZ);
-  if (ioctl(dev_handler_, SIOCGIFINDEX, &ifr) < 0) {
-    AERROR << 'ioctl error';
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
   }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
     
-    #include 'modules/drivers/canbus/can_client/socket/socket_can_client_raw.h'
+    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg) {
+  static const int quant[3 * kDCTBlockSize] = {
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  };
+  return EncodeRGBToJpeg(rgb, w, h, quant, jpg);
+}
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
+    namespace guetzli {
+    }
     
-    Byte::Byte(const Byte &value) : value_(value.value_) {}
+    // Reads the DRI marker and saved the restart interval into *jpg.
+bool ProcessDRI(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  if (jpg->restart_interval > 0) {
+    fprintf(stderr, 'Duplicate DRI marker.\n');
+    jpg->error = JPEG_DUPLICATE_DRI;
+    return false;
+  }
+  const size_t start_pos = *pos;
+  VERIFY_LEN(4);
+  size_t marker_len = ReadUint16(data, pos);
+  int restart_interval = ReadUint16(data, pos);
+  jpg->restart_interval = restart_interval;
+  VERIFY_MARKER_END();
+  return true;
+}
+    
+    void EncodeDCTBlockSequential(const coeff_t* coeffs,
+                              const HuffmanCodeTable& dc_huff,
+                              const HuffmanCodeTable& ac_huff,
+                              coeff_t* last_dc_coeff,
+                              BitWriter* bw) {
+  coeff_t temp2;
+  coeff_t temp;
+  temp2 = coeffs[0];
+  temp = temp2 - *last_dc_coeff;
+  *last_dc_coeff = temp2;
+  temp2 = temp;
+  if (temp < 0) {
+    temp = -temp;
+    temp2--;
+  }
+  int nbits = Log2Floor(temp) + 1;
+  bw->WriteBits(dc_huff.depth[nbits], dc_huff.code[nbits]);
+  if (nbits > 0) {
+    bw->WriteBits(nbits, temp2 & ((1 << nbits) - 1));
+  }
+  int r = 0;
+  for (int k = 1; k < 64; ++k) {
+    if ((temp = coeffs[kJPEGNaturalOrder[k]]) == 0) {
+      r++;
+      continue;
+    }
+    if (temp < 0) {
+      temp = -temp;
+      temp2 = ~temp;
+    } else {
+      temp2 = temp;
+    }
+    while (r > 15) {
+      bw->WriteBits(ac_huff.depth[0xf0], ac_huff.code[0xf0]);
+      r -= 16;
+    }
+    int nbits = Log2FloorNonZero(temp) + 1;
+    int symbol = (r << 4) + nbits;
+    bw->WriteBits(ac_huff.depth[symbol], ac_huff.code[symbol]);
+    bw->WriteBits(nbits, temp2 & ((1 << nbits) - 1));
+    r = 0;
+  }
+  if (r > 0) {
+    bw->WriteBits(ac_huff.depth[0], ac_huff.code[0]);
+  }
+}
+    
+      JpegHistogram() { Clear(); }
+  void Clear() {
+    memset(counts, 0, sizeof(counts));
+    counts[kSize - 1] = 1;
+  }
+  void Add(int symbol) {
+    counts[symbol] += 2;
+  }
+  void Add(int symbol, int weight) {
+    counts[symbol] += 2 * weight;
+  }
+  void AddHistogram(const JpegHistogram& other) {
+    for (int i = 0; i + 1 < kSize; ++i) {
+      counts[i] += other.counts[i];
+    }
+    counts[kSize - 1] = 1;
+  }
+  int NumSymbols() const {
+    int n = 0;
+    for (int i = 0; i + 1 < kSize; ++i) {
+      n += (counts[i] > 0 ? 1 : 0);
+    }
+    return n;
+  }
