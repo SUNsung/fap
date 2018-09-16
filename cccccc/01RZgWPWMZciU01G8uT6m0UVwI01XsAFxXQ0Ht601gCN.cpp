@@ -1,361 +1,525 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+            http://www.apache.org/licenses/LICENSE-2.0
     
-    // Convert an AttrValue with type `type` to the Python representation for
-// that value.
-string AttrValueToPython(const string& type, const AttrValue& value,
-                         const string& dtype_module = 'tf.');
+    REGISTER_OP('Add').Doc(R'doc(
+An op to test that duplicate registrations don't override previously
+registered ops.
+)doc');
     
-    PyArray_Descr NPyBfloat16_Descr = {
-    PyObject_HEAD_INIT(nullptr) & PyBfloat16_Type,  // typeobj
-    // We must register bfloat16 with a kind other than 'f', because numpy
-    // considers two types with the same kind and size to be equal, but
-    // float16 != bfloat16.
-    'V',  // kind
-    // TODO(phawkins): there doesn't seem to be a way of guaranteeing a type
-    // character is unique.
-    'E',                                                  // type
-    '=',                                                  // byteorder
-    NPY_NEEDS_PYAPI | NPY_USE_GETITEM | NPY_USE_SETITEM,  // hasobject
-    0,                                                    // type_num
-    sizeof(bfloat16),                                     // elsize
-    alignof(bfloat16),                                    // alignment
-    nullptr,                                              // subarray
-    nullptr,                                              // fields
-    nullptr,                                              // names
-    &NPyBfloat16_ArrFuncs,                                // f
-};
+      // Initializes the NumPy descriptor.
+  PyArray_InitArrFuncs(&NPyBfloat16_ArrFuncs);
+  NPyBfloat16_ArrFuncs.getitem = NPyBfloat16_GetItem;
+  NPyBfloat16_ArrFuncs.setitem = NPyBfloat16_SetItem;
+  NPyBfloat16_ArrFuncs.copyswapn = NPyBfloat16_CopySwapN;
+  NPyBfloat16_ArrFuncs.copyswap = NPyBfloat16_CopySwap;
+  NPyBfloat16_ArrFuncs.nonzero = NPyBfloat16_NonZero;
+  NPyBfloat16_ArrFuncs.fill = NPyBfloat16_Fill;
     
-    void ImportNumpy() {
-  import_array1();
+    namespace tensorflow {
+    }
+    
+    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
+  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
+  singleton_ = new PyExceptionRegistry;
+    }
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    ScopedActivateExecutorContext &&other)
+    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
+  other.driver_scoped_activate_context_ = nullptr;
 }
     
-    #include <Python.h>
+      if (!app_window) {
+    *error = 'cannot get current window; are you in background page/node context?';
+    return false;
+  }
+  //from app_window_api.cc
+  content::RenderFrameHost* created_frame =
+      app_window->web_contents()->GetMainFrame();
+  int frame_id = created_frame->GetRoutingID();
     
-    // Called by python code on initialization.
-//
-// 'trampoline' must represent a python function which has the
-// following signature:
-//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
-//     ndarray | list(ndarray) | python scalar |
-//     EagerTensor | list(EagerTensor) | None
-//
-// The trampoline takes two arguments, the first is a string token
-// used by the python frontend's dispatching logic; the second is a
-// list of numpy ndarrays or EagerTensor objects. It can return a
-// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
-// EagerTensor, a list of EagerTensors, or None.
-//
-// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
-// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
-// of EagerTensors, or None.
-//
-// The C++ runtime converts outputs back to Tensor objects.
-//
-// This function is called by script_ops.py during its module initialization.
-//
-// TODO(zhifengc): Support distributed runtime.
-void InitializePyTrampoline(PyObject* trampoline);
-    
-    #include <QMainWindow>
-#include <QObject>
-    
-    #endif // BITCOIN_QT_NETWORKSTYLE_H
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
 
     
-        /** Colorize an icon (given object) with the text color */
-    QIcon TextColorIcon(const QIcon& icon) const;
+    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
     
-    #include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
+      base::WaitableEvent done(false, false);
+  BrowserThread::PostTask(
+      BrowserThread::IO, FROM_HERE,
+      base::Bind(&SetProxyConfigCallback, &done,
+                 make_scoped_refptr(context_getter), config));
+  done.Wait();
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/common.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    
+    {}  // namespace remote
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+        bool Read(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return ReadText(data);
+        break;
+        case TYPE_HTML:
+        return ReadHTML(data);
+        break;
+        case TYPE_RTF:
+        return ReadRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return ReadImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;      
+    }
+    
+    #include 'extensions/browser/extension_function.h'
     
     
-template <typename Dtype>
-class LayerRegisterer {
- public:
-  LayerRegisterer(const string& type,
-                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
-    // LOG(INFO) << 'Registering layer type: ' << type;
-    LayerRegistry<Dtype>::AddCreator(type, creator);
-  }
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.allocateId', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjAllocateIdFunction);
 };
+    
+    
+    {  // Create temporary file
+  auto fd = mkstemp(&tmp[0]);
+  if (fd == -1) {
+    throw std::system_error(errno, std::system_category());
+  }
+  close(fd);
+  return std::string(tmp.data(), tmp.size());
+}
+    
+    namespace {
+    }
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+      // Get initial measurement of the space we will be reading.
+  const int64_t initial_size = Size(Key(0), Key(n));
+  const int64_t initial_other_size = Size(Key(n), Key(kCount));
+    
+    // A utility routine: write 'data' to the named file and Sync() it.
+Status WriteStringToFileSync(Env* env, const Slice& data,
+                             const std::string& fname);
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+      // Test that previous recovery produced recoverable state.
+  Open();
+  ASSERT_LE(1, NumTables());
+  ASSERT_EQ(1, NumLogs());
+  if (CanAppend()) {
+    ASSERT_EQ(new_log, FirstLogFile());
+  }
+  ASSERT_EQ('bar2', Get('foo'));
+  ASSERT_EQ('world', Get('hello'));
+  ASSERT_EQ('there', Get('hi'));
+    
+    
+    {    // Do not record a version edit for this conversion to a Table
+    // since ExtractMetaData() will also generate edits.
+    FileMetaData meta;
+    meta.number = next_file_number_++;
+    Iterator* iter = mem->NewIterator();
+    status = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
+    delete iter;
+    mem->Unref();
+    mem = nullptr;
+    if (status.ok()) {
+      if (meta.file_size > 0) {
+        table_numbers_.push_back(meta.number);
+      }
+    }
+    Log(options_.info_log, 'Log #%llu: %d ops saved to Table #%llu %s',
+        (unsigned long long) log,
+        counter,
+        (unsigned long long) meta.number,
+        status.ToString().c_str());
+    return status;
+  }
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    #include <new>
+#ifdef BOOST_HAS_THREADS
+#include <boost/regex/pending/static_mutex.hpp>
+#endif
+    
+       void extend_stack();
+   bool unwind(bool);
+   bool unwind_end(bool);
+   bool unwind_paren(bool);
+   bool unwind_recursion_stopper(bool);
+   bool unwind_assertion(bool);
+   bool unwind_alt(bool);
+   bool unwind_repeater_counter(bool);
+   bool unwind_extra_block(bool);
+   bool unwind_greedy_single_repeat(bool);
+   bool unwind_slow_dot_repeat(bool);
+   bool unwind_fast_dot_repeat(bool);
+   bool unwind_char_repeat(bool);
+   bool unwind_short_set_repeat(bool);
+   bool unwind_long_set_repeat(bool);
+   bool unwind_non_greedy_repeat(bool);
+   bool unwind_recursion(bool);
+   bool unwind_recursion_pop(bool);
+   bool unwind_commit(bool);
+   bool unwind_then(bool);
+   void destroy_single_repeat();
+   void push_matched_paren(int index, const sub_match<BidiIterator>& sub);
+   void push_recursion_stopper();
+   void push_assertion(const re_syntax_base* ps, bool positive);
+   void push_alt(const re_syntax_base* ps);
+   void push_repeater_count(int i, repeater_count<BidiIterator>** s);
+   void push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int state_id);
+   void push_non_greedy_repeat(const re_syntax_base* ps);
+   void push_recursion(int idx, const re_syntax_base* p, results_type* presults);
+   void push_recursion_pop();
+    
+    
+template <class traits, class charT>
+unsigned find_sort_syntax(const traits* pt, charT* delim)
+{
+   //
+   // compare 'a' with 'A' to see how similar they are,
+   // should really use a-accute but we can't portably do that,
+   //
+   typedef typename traits::string_type string_type;
+   typedef typename traits::char_type char_type;
+    }
+    
+    template <class BidirectionalIterator, 
+          class charT = BOOST_DEDUCED_TYPENAME BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::value_type,
+          class traits = regex_traits<charT> >
+class regex_iterator 
+#ifndef BOOST_NO_STD_ITERATOR
+   : public std::iterator<
+         std::forward_iterator_tag, 
+         match_results<BidirectionalIterator>,
+         typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::difference_type,
+         const match_results<BidirectionalIterator>*,
+         const match_results<BidirectionalIterator>& >         
+#endif
+{
+private:
+   typedef regex_iterator_implementation<BidirectionalIterator, charT, traits> impl;
+   typedef shared_ptr<impl> pimpl;
+public:
+   typedef          basic_regex<charT, traits>                   regex_type;
+   typedef          match_results<BidirectionalIterator>                    value_type;
+   typedef typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::difference_type 
+                                                                            difference_type;
+   typedef          const value_type*                                       pointer;
+   typedef          const value_type&                                       reference; 
+   typedef          std::forward_iterator_tag                               iterator_category;
+   
+   regex_iterator(){}
+   regex_iterator(BidirectionalIterator a, BidirectionalIterator b, 
+                  const regex_type& re, 
+                  match_flag_type m = match_default)
+                  : pdata(new impl(&re, b, m))
+   {
+      if(!pdata->init(a))
+      {
+         pdata.reset();
+      }
+   }
+   regex_iterator(const regex_iterator& that)
+      : pdata(that.pdata) {}
+   regex_iterator& operator=(const regex_iterator& that)
+   {
+      pdata = that.pdata;
+      return *this;
+   }
+   bool operator==(const regex_iterator& that)const
+   { 
+      if((pdata.get() == 0) || (that.pdata.get() == 0))
+         return pdata.get() == that.pdata.get();
+      return pdata->compare(*(that.pdata.get())); 
+   }
+   bool operator!=(const regex_iterator& that)const
+   { return !(*this == that); }
+   const value_type& operator*()const
+   { return pdata->get(); }
+   const value_type* operator->()const
+   { return &(pdata->get()); }
+   regex_iterator& operator++()
+   {
+      cow();
+      if(0 == pdata->next())
+      {
+         pdata.reset();
+      }
+      return *this;
+   }
+   regex_iterator operator++(int)
+   {
+      regex_iterator result(*this);
+      ++(*this);
+      return result;
+   }
+private:
+    }
+    
+    
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    
+    {} // namespace boost
+    
+    #ifndef BOOST_REGEX_CONFIG_HPP
+#include <boost/regex/config.hpp>
+#endif
+#ifndef BOOST_REGEX_WORKAROUND_HPP
+#include <boost/regex/v4/regex_workaround.hpp>
+#endif
+#ifndef BOOST_REGEX_SYNTAX_TYPE_HPP
+#include <boost/regex/v4/syntax_type.hpp>
+#endif
+#ifndef BOOST_REGEX_ERROR_TYPE_HPP
+#include <boost/regex/v4/error_type.hpp>
+#endif
+#ifndef BOOST_REGEX_TRAITS_DEFAULTS_HPP_INCLUDED
+#include <boost/regex/v4/regex_traits_defaults.hpp>
+#endif
+#ifndef BOOST_NO_STD_LOCALE
+#  ifndef BOOST_CPP_REGEX_TRAITS_HPP_INCLUDED
+#     include <boost/regex/v4/cpp_regex_traits.hpp>
+#  endif
+#endif
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x560)
+#  ifndef BOOST_C_REGEX_TRAITS_HPP_INCLUDED
+#     include <boost/regex/v4/c_regex_traits.hpp>
+#  endif
+#endif
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+#  ifndef BOOST_W32_REGEX_TRAITS_HPP_INCLUDED
+#     include <boost/regex/v4/w32_regex_traits.hpp>
+#  endif
+#endif
+#ifndef BOOST_REGEX_FWD_HPP_INCLUDED
+#include <boost/regex_fwd.hpp>
+#endif
+    
+      using DBImpl::Put;
+  virtual Status Put(const WriteOptions& /*options*/,
+                     ColumnFamilyHandle* /*column_family*/,
+                     const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Merge;
+  virtual Status Merge(const WriteOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/,
+                       const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Delete;
+  virtual Status Delete(const WriteOptions& /*options*/,
+                        ColumnFamilyHandle* /*column_family*/,
+                        const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status Write(const WriteOptions& /*options*/,
+                       WriteBatch* /*updates*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice* /*begin*/,
+                              const Slice* /*end*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+    
+      virtual bool Filter(int /*level*/, const Slice& /*key*/,
+                      const Slice& /*value*/, std::string* new_value,
+                      bool* value_changed) const override {
+    assert(new_value != nullptr);
+    *new_value = NEW_VALUE;
+    *value_changed = true;
+    return false;
+  }
+    
+    
+    {
+    {    if (data.ToString().find('foo567') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('v1.fetdq') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('bar123') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('v2.dfgkjdfghsd') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('dfgk') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+  }
+  if (encrypted_env_) {
+    ASSERT_EQ(hits, 0);
+  } else {
+    ASSERT_GE(hits, 4);
+  }
+}
+    
+    namespace rocksdb {
+    }
+    
+    std::unique_ptr<WriteControllerToken>
+WriteController::GetCompactionPressureToken() {
+  ++total_compaction_pressure_;
+  return std::unique_ptr<WriteControllerToken>(
+      new CompactionPressureToken(this));
+}
+    
+      friend class WriteControllerToken;
+  friend class StopWriteToken;
+  friend class DelayWriteToken;
+  friend class CompactionPressureToken;
+    
+      env.now_micros_ += 3000724u;  // sleep credit 100
+  // 6000 used, 4480 left.
+  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 6000u));
+    
+    // GetPrefixLength returns the length of the prefix that is added to every file
+// and used for storing encryption options.
+// For optimal performance, the prefix length should be a multiple of 
+// the page size.
+size_t CTREncryptionProvider::GetPrefixLength() {
+  return defaultPrefixLength;
+}
+    
+    namespace {
+    }
+    
+      virtual Status ReuseWritableFile(const std::string& fname,
+                                   const std::string& old_fname,
+                                   unique_ptr<WritableFile>* result,
+                                   const EnvOptions& options) override;
+    
+      FunctionRef<int(int)> fref = lambda;
+  EXPECT_EQ(1005, fref(5));
+  EXPECT_EQ(1011, fref(6));
+  EXPECT_EQ(1018, fref(7));
+    
+    // Check a traditional Unix return code (-1 and sets errno on error), throw
+// on error.
+template <class... Args>
+void checkUnixError(ssize_t ret, Args&&... args) {
+  if (UNLIKELY(ret == -1)) {
+    throwSystemError(std::forward<Args>(args)...);
+  }
+}
+    
+    #include <folly/Demangle.h>
+#include <folly/FBString.h>
+#include <folly/Portability.h>
+    
+      ts.tv_sec = 1;
+  ts.tv_nsec = 10;
+  EXPECT_EQ(1000000010ns, to<nanoseconds>(ts));
+  EXPECT_EQ(1000000us, to<microseconds>(ts));
+  EXPECT_EQ(1000ms, to<milliseconds>(ts));
+  EXPECT_EQ(1s, to<seconds>(ts));
+  EXPECT_EQ(
+      createTimePoint<system_clock>(1000000010ns),
+      to<system_clock::time_point>(ts));
+  EXPECT_EQ(
+      createTimePoint<steady_clock>(1000000010ns),
+      to<steady_clock::time_point>(ts));
+    
+    
+    {  bool initialized_{false};
+  folly::Function<folly::Function<void(double)>()> initialize_;
+  folly::Function<void(double)> increment_;
+};
+    
+      // Install a pointer to ourselves as the allocator.
+  *reinterpret_cast<SimpleAllocator**>(mem_) = this;
+  static_assert(max_align_v >= sizeof(SimpleAllocator*), 'alignment too small');
+  mem_ += std::min(sz_, max_align_v);
     
     /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
+ * @class CanReceiver
+ * @brief CAN receiver.
  */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
+template <typename SensorType>
+class CanReceiver {
  public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include <vector>
-    
-    
-    {  int count_;
-  int num_concats_;
-  int concat_input_size_;
-  int concat_axis_;
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    namespace CNTK
-{
-    class CompositeMinibatchSource final : public MinibatchSource
-    {
-        static const std::wstring PositionAttributeName;
-        static const std::wstring DistributedAfterSampleCountAttributeName;
-    }
-    }
-    
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
-#include 'TensorView.h'
-#include 'Matrix.h'
-#include 'CPUSparseMatrix.h'
-#include 'GPUSparseMatrix.h'
-#include <algorithm>
-#include 'TensorShape.h'
-    
-    namespace CNTK
-{
-    class ProgressWriter::Impl
-    {
-    public:
-        Impl(size_t updateWriteFrequency, size_t firstUpdatesToWrite)
-            : m_frequency(updateWriteFrequency), m_firstN(firstUpdatesToWrite),
-            m_totalUpdates(0), m_totalSummaries(0)
-        {
-            Reset();
-        }
-    }
-    }
-    
-            MinibatchInfo info{ arguments.empty(), sweepEnd, m_prevMinibatchNumSamples, trainingLoss, evalCriterion };
-        bool updated = m_parameterLearners->Update(gradients, info);
-    
-        void Value::GetSequenceStartsAndLengths(const NDMaskPtr& mask, std::vector<ptrdiff_t>& sequenceBeginIndices, std::vector<size_t>& sequenceLengths, size_t numDynamicAxes)
-    {
-        if (!mask)
-            return;
-    }
-    
-            template <typename ElementType>
-        std::pair<std::shared_ptr<const Microsoft::MSR::CNTK::Matrix<ElementType>>, std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>> PackedData()
-        {
-            if (!m_isPacked)
-                InvalidArgument('PackedValue::PackedData called on a Value object that has already been unpacked.');
-    }
-    
-    
-    {        m_dataFields->m_ownerFunction = ownerFunction;
-    }
-    
-    #include <cassert>
-#include <string>
-    
-    // some older code uses this namespace
-namespace DebugUtil
-{
-    void PrintCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-    }
-    
-        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
-    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
-    size_t currentseed;             // seed for current sequence
-    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
-                                    // special values (randomizeDisable)
-    void Invalidate()
-    {
-        currentseed = (size_t) -1;
-    }
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-            // determine all roots
-        deque<ComputationNodeBasePtr> roots;
-        // process 'special nodes'
-        // BUGBUG: This does not allow to unset tags. If special nodes are listed, they should completely override existing tags for the same node.
-        ProcessSpecialNodes(config, workList);
-        // then the original network
-        for (let& node : allNodes)
-            if (parents.find(node)->second.empty()) // no parents: it's a root
-                roots.push_back(node);
-        // also add new roots
-        for (let& node : additionalRoots)
-            roots.push_back(node);
-        if (TraceLevel() > 0)
-            fprintf(stderr, 'Edit: %d roots to construct the network from.\n', (int)roots.size());
-#ifdef _DEBUG
-        for (let& node : roots)
-            fprintf(stderr, '\t%ls = %ls()\n', node->NodeName().c_str(), node->OperationName().c_str());
-#endif
-        // The new network is now defined by roots.
-    
-    /*! \brief namespace of xgboost*/
-namespace xgboost {
-/*!
- * \brief unsigned integer type used in boost,
- *  used for feature index and row index.
- */
-using bst_uint = uint32_t;  // NOLINT
-using bst_int = int32_t;    // NOLINT
-/*! \brief long integers */
-typedef uint64_t bst_ulong;  // NOLINT(*)
-/*! \brief float type, used for storing statistics */
-using bst_float = float;  // NOLINT
+  /**
+   * @brief Constructor.
+   */
+  CanReceiver() = default;
     }
     
       /**
-   * \brief Map of matrices and associated cached predictions to facilitate
-   * storing and looking up predictions.
+   * @brief Get a one-byte unsigned integer representing the lower 4 bits.
+   * @return The one-byte unsigned integer representing the lower 4 bits.
    */
+  uint8_t get_byte_low_4_bits() const;
     
-     protected:
-  /*!
-   * \brief to be implemented by subclass,
-   * get next token, return EOF if end of file
-   */
-  virtual char GetChar() = 0;
-  /*! \brief to be implemented by child, check if end of stream */
-  virtual bool IsEnd() = 0;
     
-      dmlc::DataIter<SparsePage>* RowIterator() override {
-     auto iter = source_.get();
-    iter->BeforeFirst();
-    return iter;
+    {  if (data_trigger_running_) {
+    data_trigger_running_ = false;
+    if (thread_ != nullptr && thread_->joinable()) {
+      sensor_message_manager_->GetMutableCVar()->notify_all();
+      thread_->join();
+    }
+    thread_.reset();
   }
-    
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
+  AINFO << 'Data trigger stopped [ok].';
 }
     
-    Status DBImpl::EnableFileDeletions(bool force) {
-  // Job id == 0 means that this is not our background process, but rather
-  // user thread
-  JobContext job_context(0);
-  bool should_purge_files = false;
-  {
-    InstrumentedMutexLock l(&mutex_);
-    if (force) {
-      // if force, we need to enable file deletions right away
-      disable_delete_obsolete_files_ = 0;
-    } else if (disable_delete_obsolete_files_ > 0) {
-      --disable_delete_obsolete_files_;
-    }
-    if (disable_delete_obsolete_files_ == 0)  {
-      ROCKS_LOG_INFO(immutable_db_options_.info_log, 'File Deletions Enabled');
-      should_purge_files = true;
-      FindObsoleteFiles(&job_context, true);
-      bg_cv_.SignalAll();
-    } else {
-      ROCKS_LOG_WARN(
-          immutable_db_options_.info_log,
-          'File Deletions Enable, but not really enabled. Counter: %d',
-          disable_delete_obsolete_files_);
-    }
-  }
-  if (should_purge_files)  {
-    PurgeObsoleteFiles(job_context);
-  }
-  job_context.Clean();
-  LogFlush(immutable_db_options_.info_log);
-  return Status::OK();
-}
-    
-      uint64_t max_delayed_write_rate() const { return max_delayed_write_rate_; }
-    
-      env.now_micros_ += 200u;  // sleep credit 300
-  // One refill, credit 4480 balance + 3000 credit + 10240 refill
-  // Use 8000, 9720 left
-  ASSERT_EQ(static_cast<uint64_t>(1024u), controller.GetDelay(&env, 8000u));
-    
-      virtual Status GetChildren(const std::string& dir,
-                             std::vector<std::string>* result) override {
-    auto status_and_enc_path = EncodePath(dir);
-    if (!status_and_enc_path.first.ok()) {
-      return status_and_enc_path.first;
-    }
-    return EnvWrapper::GetChildren(status_and_enc_path.second, result);
-  }
-    
-      // close db
-  for (auto handle : handles) {
-    delete handle;
-  }
-  delete db;
-    
-    // This is an example interface of external-compaction algorithm.
-// Compaction algorithm can be implemented outside the core-RocksDB
-// code by using the pluggable compaction APIs that RocksDb provides.
-class Compactor : public EventListener {
- public:
-  // Picks and returns a compaction task given the specified DB
-  // and column family.  It is the caller's responsibility to
-  // destroy the returned CompactionTask.  Returns 'nullptr'
-  // if it cannot find a proper compaction task.
-  virtual CompactionTask* PickCompaction(
-      DB* db, const std::string& cf_name) = 0;
-    }
+    // System gflags
+DEFINE_string(sensor_node_name, '', 'Sensor node name.');
