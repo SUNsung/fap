@@ -1,86 +1,116 @@
 
         
-        def bottle_receipt_path(bottle_file)
-  Utils.popen_read('/usr/bin/tar', '-tzf', bottle_file, '*/*/INSTALL_RECEIPT.json').chomp
+          # True if a {Formula} is being built with {Formula.stable} instead of {Formula.devel} or {Formula.head}. This is the default.
+  # <pre>args << '--some-beta' if build.devel?</pre>
+  def stable?
+    !(head? || devel?)
+  end
+    
+        s = 'This formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX}.'
+    s << '\n\n#{f.keg_only_reason}'
+    if f.lib.directory? || f.include.directory?
+      s <<
+        <<-EOS.undent_________________________________________________________72
+    
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
 end
+
     
-      def std?
-    @settings.include? :std
-  end
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
     
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
-  end
-    
-          out = checks.send(method)
-      unless out.nil? || out.empty?
-        if first_warning
-          $stderr.puts <<-EOS.undent
-            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
-            with debugging if you file an issue. If everything you use Homebrew for is
-            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
-          EOS
+                # The current row includes screenshots for all device types
+            # so we need to enable scaling for both iOS and watchOS apps
+            device_language_details['scaled']['value'] = true if device_language_details['scaled']
+            device_language_details['messagesScaled']['value'] = true if device_language_details['messagesScaled']
+            # we unset `scaled` or `messagesScaled` as soon as we upload a
+            # screenshot for this device/language combination
+          end
         end
     
-    require 'formula_versions'
-require 'migrator'
-require 'formulary'
-require 'descriptions'
+            client.create_version!(apple_id, version_number, platform.nil? ? 'ios' : platform)
     
-      private
-    
-        def matching_username
-      Account.where(Account.arel_table[:username].lower.eq username.to_s.downcase)
-    end
-    
-      attributes :id, :type, :url, :preview_url,
-             :remote_url, :text_url, :meta,
-             :description
-    
-    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-      def scope
-    root_url
-  end
-    
-    def process_args
-  until ARGV.empty?
-    if ARGV.first =~ %r{^-+t(?:est)?$} && ARGV.length > 1
-      ARGV.shift
-      $opt_test = ARGV.shift
-    elsif ARGV.first =~ %r{^-+h(?:elp)?$}
-      puts usage
-      exit 0
-    else
-      puts usage
-      exit 1
-    end
-  end
+    def du_uploadtrailer_preview_correct_jpg
+  mock_jpg = double
+  allow(mock_jpg).to receive(:file_name).and_return('ftl_FAKEMD5_trailer-en-US_preview.jpg')
+  allow(mock_jpg).to receive(:file_size).and_return(12_345)
+  allow(mock_jpg).to receive(:content_type).and_return('image/jpg')
+  allow(mock_jpg).to receive(:bytes).and_return('trailer preview...')
+  mock_jpg
 end
+    
+      context '#post_tester_to_group' do
+    it 'executes the request' do
+      MockAPI::TestFlightServer.post('/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/testers') {}
+      tester = OpenStruct.new({ first_name: 'Josh', last_name: 'Taquitos', email: 'taquitos@google.com' })
+      subject.post_tester_to_group(app_id: app_id,
+                                    email: tester.email,
+                               first_name: tester.first_name,
+                                last_name: tester.last_name,
+                                 group_id: 'fake-group-id')
+      expect(WebMock).to have_requested(:post, 'https://appstoreconnect.apple.com/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/testers').
+        with(body: '[{'email':'taquitos@google.com','firstName':'Josh','lastName':'Taquitos'}]')
+    end
+  end
+    
+          it 'none' do
+        val = @v.raw_data['ratings']['nonBooleanDescriptors'].find do |a|
+          a['name'].include?('GAMBLING')
+        end
+        expect(val['level']).to eq('ITC.apps.ratings.level.NONE')
+      end
+    
+    # Contributors should always provide a changelog when submitting a PR
+if github.pr_body.length < 5
+  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
+end
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+        def handle_gist_redirecting(data)
+      redirected_url = data.header['Location']
+      if redirected_url.nil? || redirected_url.empty?
+        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
+      end
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
+    
+          def gateway_error(exception)
+        @order.errors.add(:base, exception.message)
+        invalid_resource!(@order)
+      end
+    
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+            private
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+          authorize! :read, @order, order_token
+        end
     
             def index
-          authorize! :read, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
-        end
+          if params[:ids]
+            @products = product_scope.where(id: params[:ids].split(',').flatten)
+          else
+            @products = product_scope.ransack(params[:q]).result
+          end
