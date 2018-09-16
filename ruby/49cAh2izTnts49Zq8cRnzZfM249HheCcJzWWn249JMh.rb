@@ -1,199 +1,207 @@
 
         
-        require 'action_view/helpers/tags/checkable'
+              def find_sessionless_user
+        find_user_from_access_token || find_user_from_feed_token
+      rescue Gitlab::Auth::AuthenticationError
+        nil
+      end
     
-            def render(&block)
-          render_collection_for(RadioButtonBuilder, &block)
+            def key_width
+          62
         end
     
-        To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
     
-      def fixopt(f)
-    path = if f.linked_keg.directory? && f.linked_keg.symlink?
-      f.linked_keg.resolved_path
-    elsif f.prefix.directory?
-      f.prefix
-    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
-      kids.first
-    else
-      raise
+# Codecs
+IAX_CODEC_G711_MULAW  = 0x00000004
+IAX_CODEC_G711_ALAW   = 0x00000008
+IAX_CODEC_LINEAR_PCM  = 0x00000040
+    
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+    
+  # open rmcpplus_request with cipherzero
+  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
+    
+                res = checksum + encrypted
+            res
+          end
+        end
+      end
     end
-    Keg.new(path).optlink
-  rescue StandardError
-    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
   end
 end
     
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          def decode_asn1(input)
+            seq_values = input.value
+            self.type = decode_type(seq_values[0])
+            self.value = decode_value(seq_values[1])
+          end
     
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
+              # Decodes the till field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_till(input)
+            input.value[0].value
+          end
     
-      def list_unbrewed
-    dirs  = HOMEBREW_PREFIX.subdirs.map { |dir| dir.basename.to_s }
-    dirs -= %w[Library Cellar .git]
+              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_pvno(input)
+            input.value[0].value.to_i
+          end
     
-    class Formula
-  include FormulaCompat
-  extend FormulaCompat
+              # Decodes the susec field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_susec(input)
+            input.value[0].value.to_i
+          end
     
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          def decode_asn1(input)
+            seq_values = input.value
+            self.type = decode_type(seq_values[0])
+            self.value = decode_value(seq_values[1])
+          end
     
-    2) You are testing a Devise controller bypassing the router.
-   If so, you can explicitly tell Devise which mapping to use:
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
+end
     
-          ROUTES[module_name] = key
-    end
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
-      end
-    
-            if is_navigational_format?
-          session.delete(session_key)
-        else
-          session[session_key]
-        end
-      end
-    
-          private
-    
-          if message.is_a?(Symbol)
-        options = {}
-        options[:resource_name] = scope
-        options[:scope] = 'devise.failure'
-        options[:default] = [message]
-        auth_keys = scope_class.authentication_keys
-        keys = (auth_keys.respond_to?(:keys) ? auth_keys.keys : auth_keys).map { |key| scope_class.human_attribute_name(key) }
-        options[:authentication_keys] = keys.join(I18n.translate(:'support.array.words_connector'))
-        options = i18n_options(options)
-    
-              opts.parse!(argv)
-          return argv
-        rescue OptionParser::InvalidOption, OptionParser::MissingArgument
-          raise Errors::CLIInvalidOptions, help: opts.help.chomp
-        end
-    
-            # This should return a hash of information that explains how to
-        # SSH into the machine. If the machine is not at a point where
-        # SSH is even possible, then `nil` should be returned.
-        #
-        # The general structure of this returned hash should be the
-        # following:
-        #
-        #     {
-        #       host: '1.2.3.4',
-        #       port: '22',
-        #       username: 'mitchellh',
-        #       private_key_path: '/path/to/my/key'
-        #     }
-        #
-        # **Note:** Vagrant only supports private key based authentication,
-        # mainly for the reason that there is no easy way to exec into an
-        # `ssh` prompt with a password, whereas we can pass a private key
-        # via commandline.
-        #
-        # @return [Hash] SSH information. For the structure of this hash
-        #   read the accompanying documentation for this method.
-        def ssh_info
-          nil
-        end
-    
-          # users should be able to set price when importing orders via api
-      def permitted_line_item_attributes
-        if @current_user_roles.include?('admin')
-          super + [:price, :variant_id, :sku]
-        else
-          super
-        end
+          def warn(env, message)
+        return unless options[:logging]
+        l = options[:logger] || env['rack.logger'] || ::Logger.new(env['rack.errors'])
+        l.warn(message)
       end
     
-            def load_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
-          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
-          @order.state = params[:state] if params[:state]
-          state_callback(:before)
-        end
-    
-            def prepare_event
-          return unless @event = params[:fire]
-    
-            def option_type_params
-          params.require(:option_type).permit(permitted_option_type_attributes)
-        end
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
       end
     end
   end
 end
 
     
-            def normalize_params
-          params[:order][:payments_attributes] = params[:order].delete(:payments) if params[:order][:payments]
-          params[:order][:shipments_attributes] = params[:order].delete(:shipments) if params[:order][:shipments]
-          params[:order][:line_items_attributes] = params[:order].delete(:line_items) if params[:order][:line_items]
-          params[:order][:ship_address_attributes] = params[:order].delete(:ship_address) if params[:order][:ship_address]
-          params[:order][:bill_address_attributes] = params[:order].delete(:bill_address) if params[:order][:bill_address]
-        end
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
     
-            def destroy
-          if @property
-            authorize! :destroy, @property
-            @property.destroy
-            respond_with(@property, status: 204)
-          else
-            invalid_resource!(@property)
-          end
-        end
+      class PostFilters < Octopress::Hooks::Post
+    def pre_render(post)
+      OctopressFilters::pre_filter(post)
+    end
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
     
-            def remove
-          quantity = if params.key?(:quantity)
-                       params[:quantity].to_i
-                     else
-                       @shipment.inventory_units_for(variant).sum(:quantity)
-                     end
+      require ARGV.shift
+  exit_status = LogStash::Runner.run('bin/logstash', ARGV)
+  exit(exit_status || 0)
+end
+
+    
+        signal_error('No plugins found') if filtered_specs.empty?
+    
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
+    
+      private
+    
+          subject do
+        plugin_class.new(
+          'oneString' => '${FunString:foo}',
+          'oneBoolean' => '${FunBool:false}',
+          'oneArray' => [ 'first array value', '${FunString:foo}' ],
+          'oneHash' => { 'key1' => '${FunString:foo}', 'key2' => '${FunString} is ${FunBool}', 'key3' => '${FunBool:false} or ${funbool:false}' },
+          'nestedHash' => { 'level1' => { 'key1' => 'http://${FunString}:8080/blah.txt' } },
+          'nestedArray' => { 'level1' => [{ 'key1' => 'http://${FunString}:8080/blah.txt' }, { 'key2' => 'http://${FunString}:8080/foo.txt' }] },
+          'deepHash' => { 'level1' => { 'level2' => {'level3' => { 'key1' => 'http://${FunString}:8080/blah.txt' } } } }
+        )
+      end
+    
+          it 'list the plugins with their versions' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
+        result.stdout.split('\n').each do |plugin|
+          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+        end
+      end
+    end
+    
+    desc 'Start an IRB session with all necessary files required.'
+task :shell do |t|
+  chdir File.dirname(__FILE__)
+  exec 'irb -I lib/ -I lib/paperclip -r rubygems -r active_record -r tempfile -r init'
+end
+    
+    When /^(?:|I )select '([^']*)' from '([^']*)'$/ do |value, field|
+  select(value, :from => field)
+end
+    
+        # Extracts the Geometry from a file (or path to a file)
+    def self.from_file(file)
+      GeometryDetector.new(file).make
+    end
+    
+        def make
+      geometry = GeometryParser.new(geometry_string.strip).make
+      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
+    end
