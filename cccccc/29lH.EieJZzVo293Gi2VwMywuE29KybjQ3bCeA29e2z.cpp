@@ -1,365 +1,320 @@
 
         
-        #if GTEST_OS_SYMBIAN
-  // These are needed as the Nokia Symbian Compiler cannot decide between
-  // const T& and const T* in a function template. The Nokia compiler _can_
-  // decide between class template specializations for T and T*, so a
-  // tr1::type_traits-like is_pointer works, and we can overload on that.
-  template <typename T>
-  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
-    }
+        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
+  if (LangOpts.Target.isMacOSX()) {
+    return (LangOpts.EnableAppExtensionRestrictions
+                ? PlatformKind::OSXApplicationExtension
+                : PlatformKind::OSX);
   }
-  template <typename T>
-  inline void StreamHelper(internal::false_type /*is_pointer*/,
-                           const T& value) {
-    // See the comments in Message& operator <<(const T&) above for why
-    // we need this using statement.
-    using ::operator <<;
-    *ss_ << value;
-  }
-#endif  // GTEST_OS_SYMBIAN
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16>
-internal::ValueArray16<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16) {
-  return internal::ValueArray16<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11,
-      v12, v13, v14, v15, v16);
-}
-    
-    #include <iosfwd>
-#include <vector>
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-string.h'
-    
-    // 5-ary predicate assertion macros.
-#define EXPECT_PRED_FORMAT5(pred_format, v1, v2, v3, v4, v5) \
-  GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, GTEST_NONFATAL_FAILURE_)
-#define EXPECT_PRED5(pred, v1, v2, v3, v4, v5) \
-  GTEST_PRED5_(pred, v1, v2, v3, v4, v5, GTEST_NONFATAL_FAILURE_)
-#define ASSERT_PRED_FORMAT5(pred_format, v1, v2, v3, v4, v5) \
-  GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, GTEST_FATAL_FAILURE_)
-#define ASSERT_PRED5(pred, v1, v2, v3, v4, v5) \
-  GTEST_PRED5_(pred, v1, v2, v3, v4, v5, GTEST_FATAL_FAILURE_)
-    
-    // FilePath - a class for file and directory pathname manipulation which
-// handles platform-specific conventions (like the pathname separator).
-// Used for helper functions for naming files in a directory for xml output.
-// Except for Set methods, all methods are const or static, which provides an
-// 'immutable value object' -- useful for peace of mind.
-// A FilePath with a value ending in a path separator ('like/this/') represents
-// a directory, otherwise it is assumed to represent a file. In either case,
-// it may or may not represent an actual file or directory in the file system.
-// Names are NOT checked for syntax correctness -- no checking for illegal
-// characters, malformed paths, etc.
-    
-      // Compares two C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike strcasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CaseInsensitiveCStringEquals(const char* lhs,
-                                           const char* rhs);
-    
-      // Search the nearest neighbor of part in one vertical direction as defined in
-  // search_bottom. It returns the neighbor found that major x overlap with it,
-  // or nullptr when not found.
-  ColPartition* SearchNNVertical(const bool search_bottom,
-                                 const ColPartition* part);
-    
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    inline TypedValue* APCLocalArray::localCache() const {
-  return const_cast<TypedValue*>(
-    reinterpret_cast<const TypedValue*>(this + 1)
-  );
-}
-    
-    
-struct Config {
-  /*
-   * Normalizes hdf string names to their ini counterparts
-   *
-   * We have special handling for a few hdf strings such as those containing
-   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
-   */
-  static std::string IniName(const Hdf& config,
-                             const bool prepend_hhvm = true);
-  static std::string IniName(const std::string& config,
-                             const bool prepend_hhvm = true);
     }
     
-    struct ResourceExceededException : FatalErrorException {
-  ResourceExceededException(const std::string& msg, const Array& backtrace)
-    : FatalErrorException(msg, backtrace)
-  {}
-  EXCEPTION_COMMON_IMPL(ResourceExceededException);
-};
+    using namespace swift;
     
-    
-    {    // updates
-    if ((sb1.st_mode & S_IFMT) == S_IFDIR) {
-      syncdir(fdest, fsrc);
-    } else if (sb1.st_size != sb2.st_size ||
-               !same(fsrc.c_str(), fdest.c_str())) {
-      todelete.insert(fdest);
-    }
-  }
-    
-      // Read until size drops significantly.
-  std::string limit_key = Key(n);
-  for (int read = 0; true; read++) {
-    ASSERT_LT(read, 100) << 'Taking too long to compact';
-    Iterator* iter = db_->NewIterator(ReadOptions());
-    for (iter->SeekToFirst();
-         iter->Valid() && iter->key().ToString() < limit_key;
-         iter->Next()) {
-      // Drop data
-    }
-    delete iter;
-    // Wait a little bit to allow any triggered compactions to complete.
-    Env::Default()->SleepForMicroseconds(1000000);
-    uint64_t size = Size(Key(0), Key(n));
-    fprintf(stderr, 'iter %3d => %7.3f MB [other %7.3f MB]\n',
-            read+1, size/1048576.0, Size(Key(n), Key(kCount))/1048576.0);
-    if (size <= initial_size/10) {
-      break;
-    }
-  }
-    
-    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
-#define STORAGE_LEVELDB_DB_BUILDER_H_
-    
-    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
-#define STORAGE_LEVELDB_DB_DB_ITER_H_
-    
-    
-    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
-}
-    
-      fname = InfoLogFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kInfoLogFile, type);
-    
-      typedef SkipList<const char*, KeyComparator> Table;
-    
-    
-    
-    //
-// note no include guard, we may include this multiple times:
-//
-#ifndef BOOST_REGEX_NO_EXTERNAL_TEMPLATES
-    
-    
-#ifndef BOOST_REGEX_ITERATOR_CATEGORY_HPP
-#define BOOST_REGEX_ITERATOR_CATEGORY_HPP
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_prefix()
-{
-   m_has_partial_match = false;
-   m_has_found_match = false;
-   pstate = re.get_first_state();
-   m_presult->set_first(position);
-   restart = position;
-   match_all_states();
-   if(!m_has_found_match && m_has_partial_match && (m_match_flags & match_partial))
-   {
-      m_has_found_match = true;
-      m_presult->set_second(last, 0, false);
-      position = last;
-      if((m_match_flags & match_posix) == match_posix)
-      {
-         m_result.maybe_assign(*m_presult);
-      }
-   }
-#ifdef BOOST_REGEX_MATCH_EXTRA
-   if(m_has_found_match && (match_extra & m_match_flags))
-   {
-      //
-      // we have a match, reverse the capture information:
-      //
-      for(unsigned i = 0; i < m_presult->size(); ++i)
-      {
-         typename sub_match<BidiIterator>::capture_sequence_type & seq = ((*m_presult)[i]).get_captures();
-         std::reverse(seq.begin(), seq.end());
-      }
-   }
-#endif
-   if(!m_has_found_match)
-      position = restart; // reset search postion
-#ifdef BOOST_REGEX_RECURSIVE
-   m_can_backtrack = true; // reset for further searches
-#endif
-   return m_has_found_match;
-}
-    
-    template <class BidiIterator, class Allocator, class traits>
-inline void perl_matcher<BidiIterator, Allocator, traits>::push_assertion(const re_syntax_base* ps, bool positive)
-{
-   saved_assertion<BidiIterator>* pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
-   --pmp;
-   if(pmp < m_stack_base)
-   {
-      extend_stack();
-      pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
-      --pmp;
-   }
-   (void) new (pmp)saved_assertion<BidiIterator>(positive, ps, position);
-   m_backup_state = pmp;
-}
-    
-    
-namespace boost{
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  llvm::SmallString<32> NameBuf(Name);
+  cache_attributes_t Attrs = {
+    CACHE_ATTRIBUTES_VERSION_2,
+    CBs.keyHashCB,
+    CBs.keyIsEqualCB,
+    nullptr,
+    CBs.keyDestroyCB,
+    CBs.valueReleaseCB,
+    nullptr,
+    nullptr,
+    CBs.UserData,
+    CBs.valueRetainCB,
+  };
     }
     
-    BENCHMARK(BENCHFUN(zzInitRNG)) {
-  srand(seed);
-}
-    
-    int main(int argc, char** argv) {
-  folly::init(&argc, &argv);
-  CHECK_GT(argc, 2);
-  folly::compareBenchmarkResults(argv[1], argv[2]);
-  return 0;
-}
+    #undef VERB
+#undef DIRECTIONAL_PREPOSITION
+#undef PREPOSITION
 
     
-    template <class RNG>
-struct SeedData {
-  SeedData() {
-    Random::secureRandom(seedData.data(), seedData.size() * sizeof(uint32_t));
+      static ProcessId Pid = 0;
+    
+    /// Maintain a set of known CF types.
+static bool isKnownCFTypeName(StringRef name) {
+  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
+                            name, SortByLengthComparator());
+}
+    
+    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
+ *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
+ */
+template <typename Dtype>
+class PositiveUnitballFiller : public Filler<Dtype> {
+ public:
+  explicit PositiveUnitballFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    DCHECK(blob->count());
+    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
+    // We expect the filler to not be called very frequently, so we will
+    // just use a simple implementation
+    int dim = blob->count() / blob->shape(0);
+    CHECK(dim);
+    for (int i = 0; i < blob->shape(0); ++i) {
+      Dtype sum = 0;
+      for (int j = 0; j < dim; ++j) {
+        sum += data[i * dim + j];
+      }
+      for (int j = 0; j < dim; ++j) {
+        data[i * dim + j] /= sum;
+      }
+    }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
   }
+};
+    
+      /**
+   * @brief Returns the exact number of bottom blobs required by the layer,
+   *        or -1 if no exact number is required.
+   *
+   * This method should be overridden to return a non-negative value if your
+   * layer expects some exact number of bottom blobs.
+   */
+  virtual inline int ExactNumBottomBlobs() const { return -1; }
+  /**
+   * @brief Returns the minimum number of bottom blobs required by the layer,
+   *        or -1 if no minimum number is required.
+   *
+   * This method should be overridden to return a non-negative value if your
+   * layer expects some minimum number of bottom blobs.
+   */
+  virtual inline int MinBottomBlobs() const { return -1; }
+  /**
+   * @brief Returns the maximum number of bottom blobs required by the layer,
+   *        or -1 if no maximum number is required.
+   *
+   * This method should be overridden to return a non-negative value if your
+   * layer expects some maximum number of bottom blobs.
+   */
+  virtual inline int MaxBottomBlobs() const { return -1; }
+  /**
+   * @brief Returns the exact number of top blobs required by the layer,
+   *        or -1 if no exact number is required.
+   *
+   * This method should be overridden to return a non-negative value if your
+   * layer expects some exact number of top blobs.
+   */
+  virtual inline int ExactNumTopBlobs() const { return -1; }
+  /**
+   * @brief Returns the minimum number of top blobs required by the layer,
+   *        or -1 if no minimum number is required.
+   *
+   * This method should be overridden to return a non-negative value if your
+   * layer expects some minimum number of top blobs.
+   */
+  virtual inline int MinTopBlobs() const { return -1; }
+  /**
+   * @brief Returns the maximum number of top blobs required by the layer,
+   *        or -1 if no maximum number is required.
+   *
+   * This method should be overridden to return a non-negative value if your
+   * layer expects some maximum number of top blobs.
+   */
+  virtual inline int MaxTopBlobs() const { return -1; }
+  /**
+   * @brief Returns true if the layer requires an equal number of bottom and
+   *        top blobs.
+   *
+   * This method should be overridden to return true if your layer expects an
+   * equal number of bottom and top blobs.
+   */
+  virtual inline bool EqualNumBottomTopBlobs() const { return false; }
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      // Test negative values
-  // When going to coarser grained types these should be rounded up towards 0.
-  ts.tv_sec = -5;
-  ts.tv_nsec = 123456;
-  EXPECT_EQ(-4999876544, to<nanoseconds>(ts).count());
-  EXPECT_EQ(-4999876544, duration_cast<nanoseconds>(-5s + 123456ns).count());
-  EXPECT_EQ(-4999876, to<microseconds>(ts).count());
-  EXPECT_EQ(-4999876, duration_cast<microseconds>(-5s + 123456ns).count());
-  EXPECT_EQ(-4999, to<milliseconds>(ts).count());
-  EXPECT_EQ(-4999, duration_cast<milliseconds>(-5s + 123456ns).count());
-  EXPECT_EQ(-4s, to<seconds>(ts));
-  EXPECT_EQ(-4, duration_cast<seconds>(-5s + 123456ns).count());
-  ts.tv_sec = -7200;
-  ts.tv_nsec = 123456;
-  EXPECT_EQ(-1h, to<hours>(ts));
-  EXPECT_EQ(
-      -1,
-      duration_cast<hours>(seconds{ts.tv_sec} + nanoseconds{ts.tv_nsec})
-          .count());
-  ts.tv_sec = -7000;
-  ts.tv_nsec = 123456;
-  EXPECT_EQ(-1h, to<hours>(ts));
-  EXPECT_EQ(
-      -1,
-      duration_cast<hours>(seconds{ts.tv_sec} + nanoseconds{ts.tv_nsec})
-          .count());
-  ts.tv_sec = -7201;
-  ts.tv_nsec = 123456;
-  EXPECT_EQ(-2h, to<hours>(ts));
-  EXPECT_EQ(
-      -2,
-      duration_cast<hours>(seconds{ts.tv_sec} + nanoseconds{ts.tv_nsec})
-          .count());
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-      /**
-   * @brief Create a pointer to a specified brand of CAN client. The brand is
-   *        set in the parameter.
-   * @param parameter The parameter to create the CAN client.
-   * @return A pointer to the created CAN client.
-   */
-  std::unique_ptr<CanClient> CreateCANClient(const CANCardParameter &parameter);
+    #include 'caffe/blob.hpp'
+#include 'caffe/data_transformer.hpp'
+#include 'caffe/internal_thread.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/blocking_queue.hpp'
     
-    bool EsdCanClient::Init(const CANCardParameter &parameter) {
-  if (!parameter.has_channel_id()) {
-    AERROR << 'Init CAN failed: parameter does not have channel id. The '
-              'parameter is '
-           << parameter.DebugString();
-    return false;
+    
+    {}  // namespace caffe
+    
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
+
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    namespace caffe {
+    }
+    
+    namespace caffe {
+    }
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
+    }
+    
+    #include <vector>
+    
+      SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
+    
+    std::shared_ptr<ChannelCredentials> InsecureChannelCredentials() {
+  return std::shared_ptr<ChannelCredentials>(
+      new InsecureChannelCredentialsImpl());
+}
+    
+    
+    { private:
+  grpc_call_credentials* const c_creds_;
+};
+    
+    #include <grpcpp/alarm.h>
+    
+    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
+    const grpc::string& name) const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
   }
-  port_ = parameter.channel_id();
-  return true;
+  grpc_auth_property_iterator iter =
+      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
+  const grpc_auth_property* property = nullptr;
+  std::vector<grpc::string_ref> values;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    values.push_back(grpc::string_ref(property->value, property->value_length));
+  }
+  return values;
 }
     
-    
-    {  is_started_ = true;
-  return ErrorCode::OK;
+    size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
+                              uint64_t* server_elapsed_time) {
+  return RpcServerStatsEncoding::Decode(absl::string_view(buf, buf_size),
+                                        server_elapsed_time);
 }
     
-    #include <memory>
-#include <set>
-    
-      /**
-   * @brief Reset some consecutive bits starting from a specified position with
-   *        a certain length of another one-byte unsigned integer.
-   * @param value The one-byte unsigned integer whose certain bits are used
-   *        to set this Byte.
-   * @param start_pos The starting position (from the lowest) of the bits.
-   * @param length The length of the consecutive bits.
-   */
-  void set_value(const uint8_t value, const int32_t start_pos,
-                 const int32_t length);
-    
-    TEST(ByteTest, SetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
+    void FilterInitialMetadata(grpc_metadata_batch* b,
+                           ServerMetadataElements* sml) {
+  if (b->idx.named.path != nullptr) {
+    sml->path = grpc_slice_ref_internal(GRPC_MDVALUE(b->idx.named.path->md));
+  }
+  if (b->idx.named.grpc_trace_bin != nullptr) {
+    sml->tracing_slice =
+        grpc_slice_ref_internal(GRPC_MDVALUE(b->idx.named.grpc_trace_bin->md));
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_trace_bin);
+  }
+  if (b->idx.named.grpc_tags_bin != nullptr) {
+    sml->census_proto =
+        grpc_slice_ref_internal(GRPC_MDVALUE(b->idx.named.grpc_tags_bin->md));
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_tags_bin);
+  }
 }
     
-    // data file
-DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
+    DEFINE_bool(populate_cache, false, 'Populate cache before operations');
+DEFINE_int32(insert_percent, 40,
+             'Ratio of insert to total workload (expressed as a percentage)');
+DEFINE_int32(lookup_percent, 50,
+             'Ratio of lookup to total workload (expressed as a percentage)');
+DEFINE_int32(erase_percent, 10,
+             'Ratio of erase to total workload (expressed as a percentage)');
+    
+      // State
+  //
+  // Points to a copy of the current compaction iterator output (current_key_)
+  // if valid_.
+  Slice key_;
+  // Points to the value in the underlying iterator that corresponds to the
+  // current output.
+  Slice value_;
+  // The status is OK unless compaction iterator encounters a merge operand
+  // while not having a merge operator defined.
+  Status status_;
+  // Stores the user key, sequence number and type of the current compaction
+  // iterator output (or current key in the underlying iterator during
+  // NextFromInput()).
+  ParsedInternalKey ikey_;
+  // Stores whether ikey_.user_key is valid. If set to false, the user key is
+  // not compared against the current key in the underlying iterator.
+  bool has_current_user_key_ = false;
+  bool at_next_ = false;  // If false, the iterator
+  // Holds a copy of the current compaction iterator output (or current key in
+  // the underlying iterator during NextFromInput()).
+  IterKey current_key_;
+  Slice current_user_key_;
+  SequenceNumber current_user_key_sequence_;
+  SequenceNumber current_user_key_snapshot_;
+    
+    #ifndef ROCKSDB_LITE
+    
+    #include <inttypes.h>
+#include <stdio.h>
+#include <string>
+#include <algorithm>
+#include <vector>
+    
+    #include 'rocksdb/slice.h'
+#include 'rocksdb/status.h'
+    
+      virtual Status RenameFile(const std::string& src,
+                            const std::string& target) override;
+    
+      // Write a key OUTSIDE of this transaction.
+  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
+  // here, the transaction would fail to commit.
+  s = db->Put(write_options, 'xyz', 'zzz');
