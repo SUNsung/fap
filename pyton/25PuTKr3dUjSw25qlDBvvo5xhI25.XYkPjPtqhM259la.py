@@ -1,115 +1,105 @@
 
         
-        
-httpie_info = packages.pop('httpie')
-print('''
-  url '{url}'
-  sha256 '{sha256}'
-'''.format(**httpie_info))
+                return view(**kwargs)
+    
+            :param name: Name of attribute to get.
+        :param: default: Value to set and return if the attribute is not
+            present.
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+def _lookup_req_object(name):
+    top = _request_ctx_stack.top
+    if top is None:
+        raise RuntimeError(_request_ctx_err_msg)
+    return getattr(top, name)
     
-    output_options.add_argument(
-    '--download', '-d',
-    action='store_true',
-    default=False,
-    help='''
-    Do not print the response body to stdout. Rather, download it and store it
-    in a file. The filename is guessed unless specified with --output
-    [filename]. This action is similar to the default behaviour of wget.
+        To integrate applications, :class:`Flask` has a hook to intercept URL build
+    errors through :attr:`Flask.url_build_error_handlers`.  The `url_for`
+    function results in a :exc:`~werkzeug.routing.BuildError` when the current
+    app does not have a URL for the given endpoint and values.  When it does, the
+    :data:`~flask.current_app` calls its :attr:`~Flask.url_build_error_handlers` if
+    it is not ``None``, which can return a string to use as the result of
+    `url_for` (instead of `url_for`'s default to raise the
+    :exc:`~werkzeug.routing.BuildError` exception) or re-raise the exception.
+    An example::
     
-        DEFAULTS = {
-        'default_options': []
-    }
+        If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
+    '''
+    return request.environ['wsgi.errors'] if request else sys.stderr
     
-        def __init__(self, *args, **kwargs):
-        kwargs['add_help'] = False
-        super(HTTPieArgumentParser, self).__init__(*args, **kwargs)
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
     
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
     
-ENTRY_POINT_NAMES = [
-    'httpie.plugins.auth.v1',
-    'httpie.plugins.formatter.v1',
-    'httpie.plugins.converter.v1',
-    'httpie.plugins.transport.v1',
-]
+        def _urls(self, page, protocol, domain):
+        urls = []
+        latest_lastmod = None
+        all_items_lastmod = True  # track if all items have a lastmod
+        for item in self.paginator.page(page).object_list:
+            loc = '%s://%s%s' % (protocol, domain, self.__get('location', item))
+            priority = self.__get('priority', item)
+            lastmod = self.__get('lastmod', item)
+            if all_items_lastmod:
+                all_items_lastmod = lastmod is not None
+                if (all_items_lastmod and
+                        (latest_lastmod is None or lastmod > latest_lastmod)):
+                    latest_lastmod = lastmod
+            url_info = {
+                'item': item,
+                'location': loc,
+                'lastmod': lastmod,
+                'changefreq': self.__get('changefreq', item),
+                'priority': str(priority if priority is not None else ''),
+            }
+            urls.append(url_info)
+        if all_items_lastmod and latest_lastmod:
+            self.latest_lastmod = latest_lastmod
+        return urls
     
-        parser.add_argument('--env',
-                        nargs=2,
-                        metavar=('KEY', 'VALUE'),
-                        action='append',
-                        help='environment variable to pass')
+        n_iter = 40
     
-        try:
-        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
-    except UnicodeDecodeError:
-        return json.dumps(result, sort_keys=True, indent=indent)
-
+        samples : array-like of ints (1d or 0d)
+        The number of samples to generate as input.
     
-            # global, resource
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertTrue('global' in actual)
-        self.assertTrue(actual['global'])
-        self.assertEquals('urlMaps', actual['resource_name'])
+                gc.collect()
+            print('- benchmarking RidgeRegression')
+            clf = Ridge(alpha=alpha, fit_intercept=False)
+            tstart = time()
+            clf.fit(X_train, y_train)
+            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                        y_test)
+            ridge_results[i, j, 1] = time() - tstart
     
+    print('='*80 + '\n#' + '    Text vectorizers benchmark' + '\n' + '='*80 + '\n')
+print('Using a subset of the 20 newsrgoups dataset ({} documents).'
+      .format(len(text)))
+print('This benchmarks runs in ~20 min ...')
     
-class TerminalModule(TerminalBase):
+        def _err(self, msg):
+        sys.stderr.write(msg + os.linesep)
+        self.exitcode = 1
     
-    
-def sort_groups(groups):
-    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
-    
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
-    
-    site_info = 'Mixcloud.com'
-download = mixcloud_download
-download_playlist = playlist_not_supported('mixcloud')
-
+    from w3lib.url import is_url
     
     
-def mtv81_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_content(url)
-    title = HTMLParser().unescape(
-        '|'.join(match1(html, r'<title>(.*?)</title>').split('|')[:-2]))
+class Command(ScrapyCommand):
     
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
+        def __init__(self, crawler):
+        self._crawler = crawler
+        self._schemes = {}  # stores acceptable schemes on instancing
+        self._handlers = {}  # stores instanced handlers for schemes
+        self._notconfigured = {}  # remembers failed handlers
+        handlers = without_none_values(
+            crawler.settings.getwithbase('DOWNLOAD_HANDLERS'))
+        for scheme, clspath in six.iteritems(handlers):
+            self._schemes[scheme] = clspath
