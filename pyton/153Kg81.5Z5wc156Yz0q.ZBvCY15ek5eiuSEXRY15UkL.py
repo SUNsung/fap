@@ -1,367 +1,261 @@
 
         
-        
-def create_app(test_config=None):
-    '''Create and configure an instance of the Flask application.'''
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        # a default secret that should be overridden by instance config
-        SECRET_KEY='dev',
-        # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+          - name: create WAF size condition
+    aws_waf_condition:
+      name: my_size_condition
+      filters:
+        - field_to_match: query_string
+          size: 300
+          comparison: GT
+      type: size
     
     
-def with_metaclass(meta, *bases):
-    '''Create a base class with a metaclass.'''
-    # This requires a bit of explanation: the basic idea is to make a
-    # dummy metaclass for one level of class instantiation that replaces
-    # itself with the actual metaclass.
-    class metaclass(type):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
+def create_rule_lookup(client, module):
+    try:
+        rules = list_rules_with_backoff(client)
+        return dict((rule['Name'], rule) for rule in rules)
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Could not list rules')
     
+        for stack_description in service_mgr.describe_stacks(module.params.get('stack_name')):
+        facts = {'stack_description': stack_description}
+        stack_name = stack_description.get('StackName')
     
-class _AppCtxGlobals(object):
-    '''A plain object. Used as a namespace for storing data during an
-    application context.
-    
-    
-def create_logger(app):
-    '''Get the ``'flask.app'`` logger and configure it if needed.
-    
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
-    
-        def __init__(self, ssl_version=None, **kwargs):
-        self._ssl_version = ssl_version
-        super(HTTPieHTTPAdapter, self).__init__(**kwargs)
-    
-        '''
-    is_windows = is_windows
-    config_dir = DEFAULT_CONFIG_DIR
-    stdin = sys.stdin
-    stdin_isatty = stdin.isatty()
-    stdin_encoding = None
-    stdout = sys.stdout
-    stdout_isatty = stdout.isatty()
-    stdout_encoding = None
-    stderr = sys.stderr
-    stderr_isatty = stderr.isatty()
-    colors = 256
-    if not is_windows:
-        if curses:
-            try:
-                curses.setupterm()
-                colors = curses.tigetnum('colors')
-            except curses.error:
-                pass
-    else:
-        # noinspection PyUnresolvedReferences
-        import colorama.initialise
-        stdout = colorama.initialise.wrap_stream(
-            stdout, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        stderr = colorama.initialise.wrap_stream(
-            stderr, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        del colorama
-    
-            headers = [
-            '%s: %s' % (
-                name,
-                value if isinstance(value, str) else value.decode('utf8')
-            )
-            for name, value in headers.items()
-        ]
-    
-        def get_lexer(self, mime, body):
-        return get_lexer(
-            mime=mime,
-            explicit_json=self.explicit_json,
-            body=body,
-        )
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-        # Output processing
-    def get_formatters(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, FormatterPlugin)]
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-        try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
-
-    
-        def test_format_option(self, httpbin):
-        env = MockEnvironment(colors=256)
-        r = http('--print=B', '--pretty=format',
-                 'GET', httpbin.url + '/get', 'a=b',
-                 env=env)
-        # Tests that the JSON data is formatted.
-        assert r.strip().count('\n') == 2
-        assert COLOR not in r
-    
-    This is better.
-    
-        assert not match(command)
-    
-    
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_match(brew_no_available_formula, brew_already_installed,
-               brew_install_no_argument):
-    assert match(Command('brew install elsticsearch',
-                         brew_no_available_formula))
-    assert not match(Command('brew install git',
-                             brew_already_installed))
-    assert not match(Command('brew install', brew_install_no_argument))
+        desc_log_group = describe_log_group(client=logs,
+                                        log_group_name=module.params['log_group_name'],
+                                        module=module)
+    final_log_group_snake = []
     
     RETURN = '''
-web_acl:
-  description: contents of the Web ACL
+images:
+  description: a list of images
   returned: always
   type: complex
   contains:
-    default_action:
-      description: Default action taken by the Web ACL if no rules match
-      returned: always
-      type: dict
-      sample:
-        type: BLOCK
-    metric_name:
-      description: Metric name used as an identifier
+    architecture:
+      description: The architecture of the image
       returned: always
       type: string
-      sample: mywebacl
-    name:
-      description: Friendly name of the Web ACL
-      returned: always
-      type: string
-      sample: my web acl
-    rules:
-      description: List of rules
+      sample: x86_64
+    block_device_mappings:
+      description: Any block device mapping entries
       returned: always
       type: complex
       contains:
-        action:
-          description: Action taken by the WAF when the rule matches
+        device_name:
+          description: The device name exposed to the instance
+          returned: always
+          type: string
+          sample: /dev/sda1
+        ebs:
+          description: EBS volumes
           returned: always
           type: complex
-          sample:
-            type: ALLOW
-        priority:
-          description: priority number of the rule (lower numbers are run first)
-          returned: always
-          type: int
-          sample: 2
-        rule_id:
-          description: Rule ID
-          returned: always
-          type: string
-          sample: a6fc7ab5-287b-479f-8004-7fd0399daf75
-        type:
-          description: Type of rule (either REGULAR or RATE_BASED)
-          returned: always
-          type: string
-          sample: REGULAR
-    web_acl_id:
-      description: Unique identifier of Web ACL
+    creation_date:
+      description: The date and time the image was created
       returned: always
       type: string
-      sample: 10fff965-4b6b-46e2-9d78-24f6d2e2d21c
-'''
-    
-        cwe_rule = CloudWatchEventRule(module,
-                                   client=get_cloudwatchevents_client(module),
-                                   **rule_data)
-    cwe_rule_manager = CloudWatchEventRuleManager(cwe_rule, targets)
-    
-    import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
-    
-    
-def pipeline_field(client, dp_id, field):
-    '''Return a pipeline field from the pipeline description.
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    
-DOCUMENTATION = '''
----
-module: ec2_customer_gateway
-short_description: Manage an AWS customer gateway
-description:
-    - Manage an AWS customer gateway
-version_added: '2.2'
-author: Michael Baydoun (@MichaelBaydoun)
-requirements: [ botocore, boto3 ]
-notes:
-    - You cannot create more than one customer gateway with the same IP address. If you run an identical request more than one time, the
-      first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent
-      requests do not create new customer gateway resources.
-    - Return values contain customer_gateway and customer_gateways keys which are identical dicts. You should use
-      customer_gateway. See U(https://github.com/ansible/ansible-modules-extras/issues/2773) for details.
-options:
-  bgp_asn:
+      sample: '2017-10-16T19:22:13.000Z'
     description:
-      - Border Gateway Protocol (BGP) Autonomous System Number (ASN), required when state=present.
-  ip_address:
-    description:
-      - Internet-routable IP address for customers gateway, must be a static address.
-    required: true
-  name:
-    description:
-      - Name of the customer gateway.
-    required: true
-  routing:
-    description:
-      - The type of routing.
-    choices: ['static', 'dynamic']
-    default: dynamic
-    version_added: '2.4'
-  state:
-    description:
-      - Create or terminate the Customer Gateway.
-    default: present
-    choices: [ 'present', 'absent' ]
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
-    
-        try:
-        result = json.loads(json.dumps(connection.describe_customer_gateways(**params), default=date_handler))
-    except (ClientError, BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Could not describe customer gateways')
-    snaked_customer_gateways = [camel_dict_to_snake_dict(gateway) for gateway in result['CustomerGateways']]
-    if snaked_customer_gateways:
-        for customer_gateway in snaked_customer_gateways:
-            customer_gateway['tags'] = boto3_tag_list_to_ansible_dict(customer_gateway.get('tags', []))
-            customer_gateway_name = customer_gateway['tags'].get('Name')
-            if customer_gateway_name:
-                customer_gateway['customer_gateway_name'] = customer_gateway_name
-    module.exit_json(changed=False, customer_gateways=snaked_customer_gateways)
-    
-    
-DOCUMENTATION = '''
----
-module: ec2_eip_facts
-short_description: List EC2 EIP details
-description:
-    - List details of EC2 Elastic IP addresses.
-version_added: '2.6'
-author: 'Brad Macpherson (@iiibrad)'
-options:
-  filters:
-    description:
-      - A set of filters to use. Each filter is a name:value pair. The value
-        may be a list or a single element.
-    required: false
-    default: {}
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
-    
-    EXAMPLES = '''
-# Note: These examples do not set authentication details, see the AWS Guide for details.
-    
-    
-RETURN = '''
-placement_group:
-  description: Placement group attributes
-  returned: when state != absent
-  type: complex
-  contains:
+      description: The description of the AMI
+      returned: always
+      type: string
+      sample: ''
+    ena_support:
+      description: whether enhanced networking with ENA is enabled
+      returned: always
+      type: bool
+      sample: true
+    hypervisor:
+      description: The hypervisor type of the image
+      returned: always
+      type: string
+      sample: xen
+    image_id:
+      description: The ID of the AMI
+      returned: always
+      type: string
+      sample: ami-5b466623
+    image_location:
+      description: The location of the AMI
+      returned: always
+      type: string
+      sample: 408466080000/Webapp
+    image_type:
+      description: The type of image
+      returned: always
+      type: string
+      sample: machine
+    launch_permissions:
+      description: launch permissions of the ami
+      returned: when image is owned by calling account and describe_image_attributes is yes
+      type: complex
+      sample: [{'group': 'all'}, {'user_id': '408466080000'}]
     name:
-      description: PG name
+      description: The name of the AMI that was provided during image creation
+      returned: always
       type: string
-      sample: my-cluster
+      sample: Webapp
+    owner_id:
+      description: The AWS account ID of the image owner
+      returned: always
+      type: string
+      sample: '408466080000'
+    public:
+      description: whether the image has public launch permissions
+      returned: always
+      type: bool
+      sample: true
+    root_device_name:
+      description: The device name of the root device
+      returned: always
+      type: string
+      sample: /dev/sda1
+    root_device_type:
+      description: The type of root device used by the AMI
+      returned: always
+      type: string
+      sample: ebs
+    sriov_net_support:
+      description: whether enhanced networking is enabled
+      returned: always
+      type: string
+      sample: simple
     state:
-      description: PG state
+      description: The current state of the AMI
+      returned: always
       type: string
-      sample: 'available'
-    strategy:
-      description: PG strategy
+      sample: available
+    tags:
+      description: Any tags assigned to the image
+      returned: always
+      type: complex
+    virtualization_type:
+      description: The type of virtualization of the AMI
+      returned: always
       type: string
-      sample: 'cluster'
+      sample: hvm
+'''
     
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
+    try:
+    import boto3
+    HAS_BOTO3 = True
+except ImportError:
+    HAS_BOTO3 = False
+    
+    # List all EIP addresses for several VMs.
+- ec2_eip_facts:
+    filters:
+       instance-id:
+         - i-123456789
+         - i-987654321
+  register: my_vms_eips
+    
+        interface_info = {'id': interface.id,
+                      'subnet_id': interface.subnet_id,
+                      'vpc_id': interface.vpc_id,
+                      'description': interface.description,
+                      'owner_id': interface.owner_id,
+                      'status': interface.status,
+                      'mac_address': interface.mac_address,
+                      'private_ip_address': interface.private_ip_address,
+                      'source_dest_check': interface.source_dest_check,
+                      'groups': dict((group.id, group.name) for group in interface.groups),
+                      'private_ip_addresses': private_addresses
+                      }
+    
+        key = find_key_pair(module, ec2_client, name)
+    if key:
+        if not module.check_mode:
+            try:
+                ec2_client.delete_key_pair(KeyName=name)
+            except ClientError as err:
+                module.fail_json_aws(err, msg='error deleting key')
+        if not finish_task:
+            return
+        module.exit_json(changed=True, key=None, msg='key deleted')
+    module.exit_json(key=None, msg='key did not exist')
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(dict(
+        region=dict(required=True, aliases=['aws_region', 'ec2_region']),
+        name_regex=dict(required=True),
+        sort_order=dict(required=False, default='ascending', choices=['ascending', 'descending']),
+        limit=dict(required=False, type='int'),
+    )
+    )
+    
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+    
+    def acfun_download_by_vid(vid, title, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''str, str, str, bool, bool ->None
+    
+    from ..common import *
+from ..extractor import VideoExtractor
+    
+    
+def get_title_and_urls(json_data):
+    title = legitimize(re.sub('[\s*]', '_', json_data['title']))
+    video_info = json_data['file_versions']['html5']['video']
+    if 'high' not in video_info:
+        if 'med' not in video_info:
+            video_url = video_info['low']['url']
+        else:
+            video_url = video_info['med']['url']
     else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
+        video_url = video_info['high']['url']
+    audio_info = json_data['file_versions']['html5']['audio']
+    if 'high' not in audio_info:
+        if 'med' not in audio_info:
+            audio_url = audio_info['low']['url']
+        else:
+            audio_url = audio_info['med']['url']
+    else:
+        audio_url = audio_info['high']['url']
+    return title, video_url, audio_url
     
-    import os
-import email
-import mimetypes
+        print_info(site_info, title, mime, size)
+    if not info_only:
+        download_urls([real_url], title, ext, size, output_dir=output_dir, merge=merge)
     
-            assert i == 9
-        print('\tGot ZeroDivisionError as expected from IMapIterator.next()')
-        print()
+            # here s the parser...
+        stream_types = dilidili_parser_data_to_stream_types(typ, vid, hd2, sign, tmsign, ulk)
+        
+        #get best
+        best_id = max([i['id'] for i in stream_types])
+        
+        parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = best_id, sign = sign, tmsign = tmsign, ulk = ulk)
+        
+        another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    self._response = self.PostDataToHandler( request_data,
+                                             'debug_info',
+                                             display_message = False )
+    
+    SYNTAX_ARGUMENT_REGEX = re.compile(
+  r'^\w+=.*$' )
+    
+    
+@patch( 'ycm.vimsupport.GetVariableValue',
+        GetVariableValue_CompleteItemIs( 'Test', user_data='0' ) )
+def GetCompletionsUserMayHaveCompleted_UseUserData0_test( *args ):
+  # Identical completions but we specify the first one via user_data.
+  completions = [
+    BuildCompletionNamespace( 'namespace1' ),
+    BuildCompletionNamespace( 'namespace2' )
+  ]
