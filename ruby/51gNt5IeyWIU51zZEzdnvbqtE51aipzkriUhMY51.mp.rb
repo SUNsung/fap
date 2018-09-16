@@ -1,115 +1,53 @@
 
         
-        Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
-    
-      all_files       = `git ls-files -z`.split('\x0')
-  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
-  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
-  s.bindir        = 'exe'
-  s.require_paths = ['lib']
-    
-      private
-    
-          flash[:notice] = I18n.t('admin.accounts.resend_confirmation.success')
-      redirect_to admin_accounts_path
-    end
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    When /^I try to sign in manually$/ do
-  manual_login
-end
-    
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
-    end
-    
-    MESSAGE
-      end
-    end
-  end
-end
-
-    
-          # Returns an array of source file location(s) where the given key was
-      # assigned (i.e. where `set` was called). If the key was never assigned,
-      # returns `nil`.
-      def source_locations(key)
-        locations[key]
-      end
-    
-      desc 'Install all spree gems'
-  task install: :build do
-    for_each_gem do |gem_path|
-      Bundler.with_clean_env do
-        sh 'gem install #{gem_path}'
-      end
-    end
-  end
-    
-            def order
-          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
-          authorize! :update, @order, order_token
-        end
-    
-            private
-    
-            private
-    
-            def ready
-          unless @shipment.ready?
-            if @shipment.can_ready?
-              @shipment.ready!
+                    case options[:default]
+            when nil
+              Time.current
+            when Date, Time
+              options[:default]
             else
-              render 'spree/api/v1/shipments/cannot_ready_shipment', status: 422 and return
-            end
-          end
-          respond_with(@shipment, default_template: :show)
-        end
+              default = options[:default].dup
     
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
-          else
-            State.accessible_by(current_ability, :read).order('name ASC')
-          end
-        end
+        include ActionView::Rendering
+    
+        group = Group.create!(name: 'bob')
+    group.add(moderator)
+    group.save
+    
+    # User for the smoke tests
+if ENV['SMOKE'] == '1'
+  UserEmail.seed do |ue|
+    ue.id = 0
+    ue.email = 'smoke_user@discourse.org'
+    ue.primary = true
+    ue.user_id = 0
+  end
+    
+        Category.transaction do
+      lounge.group_names = ['trust_level_3']
+      unless lounge.save
+        puts lounge.errors.full_messages
+        raise 'Failed to set permissions on trust level 3 lounge category!'
+      end
+    
+            # Reset topic count because we don't count the description topic
+        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
       end
     end
   end
 end
 
     
-    When /^(?:|I )uncheck '([^']*)'$/ do |field|
-  uncheck(field)
-end
+        def insert(index, *names)
+      @filters.insert assert_index(index), *filter_const(names)
+    end
+    
+        def parse_as_document
+      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
+      @title = document.at_css('title').try(:content)
+      document
+    end
+    
+        def html?
+      mime_type.include? 'html'
+    end
