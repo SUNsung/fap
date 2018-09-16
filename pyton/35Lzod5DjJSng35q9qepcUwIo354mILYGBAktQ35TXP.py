@@ -1,215 +1,211 @@
 
         
-        
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
+          Returns:
+    The model's prediction for the given instances.
+  '''
+    
+        Args:
+      zs: posterior z ~ q(z|x)
+      prior_zs: prior zs
     '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-
-    
-        def reraise(tp, value, tb=None):
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
-    
-            .. versionadded:: 0.11
-        '''
-        self.record_once(lambda s: s.app._register_error_handler(
-            self.name, code_or_exception, f))
-
-    
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
-    
-    # The namespace for code signals.  If you are not Flask code, do
-# not put signals in here.  Create your own namespace instead.
-_signals = Namespace()
-    
-            # Insert the import statement to setup.py if not present
-        with open(setup_path, 'a+') as setup:
-            setup.seek(0)
-            setup_content = setup.read()
-            if not 'import fastentrypoints' in setup_content:
-                setup.seek(0)
-                setup.truncate()
-                setup.write('import fastentrypoints\n' + setup_content)
+    # L = -KL + log p(x|z), to maximize bound on likelihood
+    # -L = KL - log p(x|z), to minimize bound on NLL
+    # so 'KL cost' is postive KL divergence
+    kl_b = 0.0
+    for z, prior_z in zip(zs, prior_zs):
+      assert isinstance(z, Gaussian)
+      assert isinstance(prior_z, Gaussian)
+      # ln(2pi) terms cancel
+      kl_b += 0.5 * tf.reduce_sum(
+          prior_z.logvar - z.logvar
+          + tf.exp(z.logvar - prior_z.logvar)
+          + tf.square((z.mean - prior_z.mean) / tf.exp(0.5 * prior_z.logvar))
+          - 1.0, [1])
     
     
-@pytest.fixture(autouse=True)
-def shell(mocker):
-    shell = mocker.patch('thefuck.entrypoints.not_configured.shell',
-                         new_callable=MagicMock)
-    shell.get_history.return_value = []
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=True)
-    return shell
-    
-        assert proc.expect([TIMEOUT, u'Aborted'])
-    
-    
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline('unset -f fuck')
-    how_to_configure(proc, TIMEOUT)
-
-    
-    
-@pytest.mark.parametrize('before, after', [
-    ('brew install sshfs',
-     'brew cask install osxfuse && brew install sshfs')])
-def test_get_new_command(before, after):
-    command = Command(before, output)
-    assert get_new_command(command) == after
-
-    
-    
-class CryptoExtension(CreateExtension):
-    
-    
-class RedirectFallbackMiddleware(MiddlewareMixin):
-    # Defined as class-level attributes to be subclassing-friendly.
-    response_gone_class = HttpResponseGone
-    response_redirect_class = HttpResponsePermanentRedirect
-    
-    
-class SessionStore(SessionBase):
-    '''
-    A cache-based session store.
-    '''
-    cache_key_prefix = KEY_PREFIX
-    
-        def items(self):
-        return []
-    
-        if section is not None:
-        if section not in sitemaps:
-            raise Http404('No sitemap available for section: %r' % section)
-        maps = [sitemaps[section]]
+def all_plot(d, full_name='', exclude='', nspaces=0):
+  '''Recursively plot all the LFADS model parameters in the nested
+  dictionary.'''
+  for k, v in d.iteritems():
+    this_name = full_name+'/'+k
+    if isinstance(v, dict):
+      all_plot(v, full_name=this_name, exclude=exclude, nspaces=nspaces+4)
     else:
-        maps = sitemaps.values()
-    page = request.GET.get('p', 1)
+      if exclude == '' or exclude not in this_name:
+        _plot_item(v, name=k, full_name=full_name+'/'+k, nspaces=nspaces+4)
     
-    # Check imported dependencies for compatibility.
-try:
-    check_compatibility(urllib3.__version__, chardet.__version__)
-except (AssertionError, ValueError):
-    warnings.warn('urllib3 ({0}) or chardet ({1}) doesn't match a supported '
-                  'version!'.format(urllib3.__version__, chardet.__version__),
-                  RequestsDependencyWarning)
     
-        builtin_str = str
-    bytes = str
-    str = unicode
-    basestring = basestring
-    numeric_types = (int, long, float)
-    integer_types = (int, long)
+# OPTIMIZATION
+flags.DEFINE_integer('batch_size', BATCH_SIZE,
+                     'Batch size to use during training.')
+flags.DEFINE_float('learning_rate_init', LEARNING_RATE_INIT,
+                   'Learning rate initial value')
+flags.DEFINE_float('learning_rate_decay_factor', LEARNING_RATE_DECAY_FACTOR,
+                   'Learning rate decay, decay by this fraction every so \
+                   often.')
+flags.DEFINE_float('learning_rate_stop', LEARNING_RATE_STOP,
+                   'The lr is adaptively reduced, stop training at this value.')
+# Rather put the learning rate on an exponentially decreasiong schedule,
+# the current algorithm pays attention to the learning rate, and if it
+# isn't regularly decreasing, it will decrease the learning rate.  So far,
+# it works fine, though it is not perfect.
+flags.DEFINE_integer('learning_rate_n_to_compare', LEARNING_RATE_N_TO_COMPARE,
+                     'Number of previous costs current cost has to be worse \
+                     than, to lower learning rate.')
     
-        # OPENSSL_VERSION_NUMBER doesn't exist in the Python 2.6 ssl module.
-    system_ssl = getattr(ssl, 'OPENSSL_VERSION_NUMBER', None)
-    system_ssl_info = {
-        'version': '%x' % system_ssl if system_ssl is not None else ''
-    }
+      print ('loading data from ' + data_path + ' with stem ' + data_fname_stem)
+  for fname in fnames:
+    if fname.startswith(data_fname_stem):
+      data_dict = read_data(os.path.join(data_path,fname))
+      idx = len(data_fname_stem) + 1
+      key = fname[idx:]
+      data_dict['data_dim'] = data_dict['train_data'].shape[2]
+      data_dict['num_steps'] = data_dict['train_data'].shape[1]
+      dataset_dict[key] = data_dict
     
-        def redirect_resp_handler(sock):
-        consume_socket_content(sock, timeout=0.5)
-        location = u'//{0}:{1}/{2}'.format(host, port, path)
-        sock.send(
-            b'HTTP/1.1 301 Moved Permanently\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: ' + location.encode('utf8') + b'\r\n'
-            b'\r\n'
-        )
-        redirect_request.append(consume_socket_content(sock, timeout=0.5))
-        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
+        if i > FLAGS.max_eval_steps:
+      break
     
-    import pytest
+    import tensorflow as tf
     
-        def __enter__(self):
-        self.start()
-        self.ready_event.wait(self.WAIT_EVENT_TIMEOUT)
-        return self.host, self.port
+      # Unstack Tensors into lists.
+  rewards_list = tf.unstack(rewards, axis=1)
+  log_probs_list = tf.unstack(log_probs, axis=1)
+  missing = 1. - tf.cast(present, tf.float32)
+  missing_list = tf.unstack(missing, axis=1)
     
-            :param request: The :class:`PreparedRequest <PreparedRequest>` being sent.
-        :param proxies: A dictionary of schemes or schemes and hosts to proxy URLs.
-        :rtype: str
+            # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
+    
+        @property
+    def encoding(self):
+        '''Return a `str` with the message's encoding, if known.'''
+        raise NotImplementedError()
+    
+    
+def is_valid_mime(mime):
+    return mime and MIME_RE.match(mime)
+    
         '''
-        proxy = select_proxy(request.url, proxies)
-        scheme = urlparse(request.url).scheme
+    CHUNK_SIZE = 1
     
-        result.pop('ResponseMetadata', None)
-    
-            if tags_to_add:
-            try:
-                connection.create_tags(Resources=[image_id], Tags=ansible_dict_to_boto3_tag_list(tags_to_add))
-                changed = True
-            except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-                module.fail_json_aws(e, msg='Error updating tags')
-    
-        module = AnsibleAWSModule(argument_spec=argument_spec,
-                              mutually_exclusive=[['customer_gateway_ids', 'filters']],
-                              supports_check_mode=True)
-    
-        raise EIPException('could not find instance' + device_id)
+        # The URL prefix the adapter should be mount to.
+    prefix = None
     
     
-if __name__ == '__main__':
-    main()
-
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
-        except WaiterError as we:
-        module.fail_json(msg='An error occurred waiting for the snapshot to become available. (%s)' % str(we), exception=traceback.format_exc())
-    except ClientError as ce:
-        module.fail_json(msg=str(ce), exception=traceback.format_exc(), **camel_dict_to_snake_dict(ce.response))
-    
-    
-def Main():
-  build_file = p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
-    
-    
-class ShutdownRequest( BaseRequest ):
-  def __init__( self ):
-    super( ShutdownRequest, self ).__init__()
-    
-      raise RuntimeError( 'Cannot find Python 2.7 or 3.4+. '
-                      'Set the 'g:ycm_server_python_interpreter' option '
-                      'to a Python interpreter path.' )
+    from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
     
     
-def OverlapLength_EmptyInput_test():
-  eq_( 0, base.OverlapLength( '', 'goobar' ) )
-  eq_( 0, base.OverlapLength( 'foobar', '' ) )
-  eq_( 0, base.OverlapLength( '', '' ) )
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
     
+        return inner
     
-# This file provides an UnsafeThreadPoolExecutor, which operates exactly like
-# the upstream Python version of ThreadPoolExecutor with one exception: it
-# doesn't wait for worker threads to finish before shutting down the Python
-# interpreter.
+        def test_implicit_POST_stdin(self, httpbin):
+        with open(FILE_PATH) as f:
+            env = MockEnvironment(stdin_isatty=False, stdin=f)
+            r = http('--form', httpbin.url + '/post', env=env)
+        assert HTTP_OK in r
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir))
+data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
+if not os.path.isdir(data_path):
+    data_path = current_path
+    
+        def handle_ra_packet(self, ipv6_pkt):
+        server_ip = socket.inet_ntoa(ipv6_pkt[76:80])
+        cone_flag = bytearray(ipv6_pkt)[32] >> 7 & 1
+        logger.debug('ipv6_pkt ; RA_cone = %s\nsrc:%s\ndst:%s' % (
+                cone_flag,
+                str2hex(ipv6_pkt[8:24]),
+                str2hex(ipv6_pkt[24:40])))
+        return server_ip, cone_flag
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    
+    # [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
 #
-# This is dangerous for many workloads, but fine for some (like when threads
-# only send network requests). The YCM workload is one of those workloads where
-# it's safe (the aforementioned network requests case).
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
     
-    face_detector = dlib.get_frontal_face_detector()
+    def getCharIndex(self):
+        '''What is the index of the current character of lookahead?'''
+        
+        return self.input.index()
     
-            if len(encodings) == 0:
-            click.echo('WARNING: No faces found in {}. Ignoring file.'.format(file))
-        else:
-            known_names.append(basename)
-            known_face_encodings.append(encodings[0])
+            raise NotImplementedError
     
-    Tests for `face_recognition` module.
-'''
+    def setCharPositionInLine(self, pos):
+        '''@brief Set the column of the tokens first character,
+    
+                elif opt in ('-l', '--playlist', '--playlists'):
+                # Download playlist whenever possible.
+                conf['playlist'] = True
+    
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
+    
+    def get_api_key(page):
+    match = match1(page, pattern_inline_api_key)
+    # this happens only when the url points to a gallery page
+    # that contains no inline api_key(and never makes xhr api calls)
+    # in fact this might be a better approch for getting a temporary api key
+    # since there's no place for a user to add custom infomation that may
+    # misguide the regex in the homepage
+    if not match:
+        return match1(get_html('https://flickr.com'), pattern_inline_api_key)
+    return match
