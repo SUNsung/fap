@@ -1,71 +1,101 @@
 
         
-        namespace tensorflow {
-TFE_TensorHandle* ConvertToEagerTensor(PyObject* value, PyObject* dtype);
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Get the python wrappers for a list of ops in a OpList.
-// `op_list_buf` should be a pointer to a buffer containing
-// the binary encoded OpList proto, and `op_list_len` should be the
-// length of that buffer.
-string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
-    
-    void CostAnalyzer::GatherCosts() {
-  CostGraphDef cost_graph_measured;
-  PredictCosts(&measure_estimator_, &cost_graph_measured,
-               &total_time_measured_);
-  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
-  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    namespace tensorflow {
-    }
+        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+
     
         http://www.apache.org/licenses/LICENSE-2.0
     
-    // Safe container for an owned PyObject. On destruction, the reference count of
-// the contained object will be decremented.
-using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
-Safe_PyObjectPtr make_safe(PyObject* o);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace tensorflow {
-namespace swig {
-    }
+    #include 'tensorflow/python/lib/core/py_exception_registry.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
+}
+    
+    
+    {    RawText = RawText.drop_front(Pos);
+    unsigned NewlineBytes = measureNewline(RawText);
+    RawText = RawText.drop_front(NewlineBytes);
+  }
+    
+    StringRef camel_case::dropPrefix(StringRef string) {
     }
     
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_filename) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
-    }
+    #include 'swift/Basic/TaskQueue.h'
     
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+    
+    {  memcpy(Value, &uuid, Size);
+#else
+  uuid_generate_time(Value);
 #endif
+}
+    
+      // Getters for boost rng, curand, and cublas handles
+  inline static RNG& rng_stream() {
+    if (!Get().random_generator_) {
+      Get().random_generator_.reset(new RNG());
+    }
+    return *(Get().random_generator_);
+  }
+#ifndef CPU_ONLY
+  inline static cublasHandle_t cublas_handle() { return Get().cublas_handle_; }
+  inline static curandGenerator_t curand_generator() {
+    return Get().curand_generator_;
+  }
+#endif
+    
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
+    
+      /**
+   * @brief Returns the layer parameter.
+   */
+  const LayerParameter& layer_param() const { return layer_param_; }
+    
+    #include <vector>
+    
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
     
     
     { private:
@@ -79,258 +109,308 @@ namespace swig {
                            const Dtype* ridx_data);
 };
     
-    #include <vector>
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
     
-    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
-
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    
-    {}  // namespace grpc
-
-    
-    std::shared_ptr<ChannelCredentials> InsecureChannelCredentials() {
-  return std::shared_ptr<ChannelCredentials>(
-      new InsecureChannelCredentialsImpl());
-}
-    
-    grpc::string SecureAuthContext::GetPeerIdentityPropertyName() const {
-  if (!ctx_) {
-    return '';
-  }
-  const char* name = grpc_auth_context_peer_identity_property_name(ctx_);
-  return name == nullptr ? '' : name;
-}
-    
-    #include <grpc/grpc_security.h>
-#include 'src/core/lib/channel/channel_args.h'
-    
-    size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
-                             char* tracing_buf, size_t tracing_buf_size) {
-  GrpcTraceContext trace_ctxt(context);
-  return TraceContextEncoding::Encode(trace_ctxt, tracing_buf,
-                                      tracing_buf_size);
-}
-    
-    #include <vector>
-#include <memory>
-    
-      private:
+    REGISTER_GRADIENT(Sub, GetSubGradient);
     
     
-    {  if (base64) {
-    decoded = string_base64_decode(data, data_len, true);
-    if (decoded.isNull()) {
-      raise_warning('unable to decode base64 data');
-      return nullptr;
-    }
-  } else {
-    decoded = url_decode(data, data_len);
-  }
-  return req::make<MemFile>(decoded.data(), decoded.size());
-}
-    
-    #include <folly/portability/Fcntl.h>
-#include <folly/portability/Stdlib.h>
-#include <folly/portability/Unistd.h>
-    
-        // skipping emacs leftovers
-    char last = ename[strlen(ename) - 1];
-    if (last == '~' || last == '#') {
-      continue;
-    }
-    
-    	if (hFile != INVALID_HANDLE_VALUE)
-	{
-		CloseHandle(hFile);
-		return true;
-	}
-    
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
-    
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta);
-    
-      // Record a sample of bytes read at the specified internal key.
-  // Samples are taken approximately once every config::kReadBytesPeriod
-  // bytes.
-  void RecordReadSample(Slice key);
-    
-    
-    {}  // namespace leveldb
-    
-      // Return the current option configuration.
-  Options CurrentOptions() {
-    Options options;
-    options.reuse_logs = false;
-    switch (option_config_) {
-      case kReuse:
-        options.reuse_logs = true;
-        break;
-      case kFilter:
-        options.filter_policy = filter_policy_;
-        break;
-      case kUncompressed:
-        options.compression = kNoCompression;
-        break;
-      default:
-        break;
-    }
-    return options;
-  }
-    
-    bool InternalFilterPolicy::KeyMayMatch(const Slice& key, const Slice& f) const {
-  return user_policy_->KeyMayMatch(ExtractUserKey(key), f);
-}
-    
-    class FormatTest { };
-    
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
-  }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
-  }
-  return s;
-}
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
-  }
-  return (ok ? 0 : 1);
-}
-
-    
-    namespace log {
-    }
-    
-     private:
-  MemTable::Table::Iterator iter_;
-  std::string tmp_;       // For passing to EncodeKey
-    
-    #include 'db/db_impl.h'
-#include 'db/filename.h'
-#include 'db/version_set.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/write_batch.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-    
-    {  x = NewNode(key, height);
-  for (int i = 0; i < height; i++) {
-    // NoBarrier_SetNext() suffices since we will add a barrier when
-    // we publish a pointer to 'x' in prev[i].
-    x->NoBarrier_SetNext(i, prev[i]->NoBarrier_Next(i));
-    prev[i]->SetNext(i, x);
-  }
-}
-    
-    #ifdef BOOST_REGEX_FI_WIN32_MAP // win32 mapfile
-    
-    template class BOOST_REGEX_TEMPLATE_DECL basic_regex< BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >;
-    
-    #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-template <class I>
-const bool is_random_access_iterator<I>::value;
-#endif
-    
-    
-    {
-    {}
-} // namespace boost
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    
-    {
-      basic = basic_syntax_group | collate | no_escape_in_lists,
-      extended = no_bk_refs | collate | no_perl_ex | no_escape_in_lists,
-      normal = 0,
-      emacs = basic_syntax_group | collate | emacs_ex | bk_vbar,
-      awk = no_bk_refs | collate | no_perl_ex,
-      grep = basic | newline_alt,
-      egrep = extended | newline_alt,
-      sed = basic,
-      perl = normal,
-      ECMAScript = normal,
-      JavaScript = normal,
-      JScript = normal
-   };
-   typedef unsigned int flag_type;
-    
-    template <class charT>
-class cpp_regex_traits;
-template <class charT>
-struct c_regex_traits;
-template <class charT>
-class w32_regex_traits;
-    
-    template <int N>
-struct padding3
-{
-   enum{
-      padding_size = 8,
-      padding_mask = 7
-   };
+    { private:
+  const int kNumTensorsPerInput = 3;
 };
     
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX11 sample code but remove this dependency you can: 
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
+    
+    {} // namespace caffe2
+    
+    REGISTER_CUDA_OPERATOR_WITH_ENGINE(
+    FCTransposed,
+    TENSORCORE,
+    FullyConnectedOp<
+        CUDAContext,
+        TensorCoreEngine,
+        false /* don't transpose weight */>);
+REGISTER_CUDA_OPERATOR_WITH_ENGINE(
+    FCTransposedGradient,
+    TENSORCORE,
+    FullyConnectedGradientOp<
+        CUDAContext,
+        TensorCoreEngine,
+        false /* don't transpose weight */>);
+#endif
+    
+    // Godot TO Bullet
+extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void G_TO_B(Transform const &inVal, btTransform &outVal);
+    
+    
+    {		owner->scratch();
+	}
+    
+    static ResourceFormatDDS *resource_loader_dds = NULL;
+    
+    
+    {		allocs[i].free_list = &allocs[i + 1];
+	}
+    
+    void FuncRef::set_instance(Object *p_obj) {
+    }
+    
+    
+    {
+    {			if (PathFileExists(szArgList[i + 1]))
+			{
+				cmderOptions.cmderStart = szArgList[i + 1];
+				i++;
+			}
+			else {
+				MessageBox(NULL, szArgList[i + 1], L'/START - Folder does not exist!', MB_OK);
+			}
+		}
+		else if (_wcsicmp(L'/task', szArgList[i]) == 0)
+		{
+			cmderOptions.cmderTask = szArgList[i + 1];
+			i++;
+		}
+		else if (_wcsicmp(L'/single', szArgList[i]) == 0)
+		{
+			cmderOptions.cmderSingle = true;
+		}
+		else if (_wcsicmp(L'/register', szArgList[i]) == 0)
+		{
+			cmderOptions.registerApp = true;
+			cmderOptions.unRegisterApp = false;
+			if (szArgList[i + 1] != NULL)
+			{
+				if (_wcsicmp(L'all', szArgList[i + 1]) == 0 || _wcsicmp(L'user', szArgList[i + 1]) == 0)
+				{
+					cmderOptions.cmderRegScope = szArgList[i + 1];
+					i++;
+				}
+			}
+		}
+		else if (_wcsicmp(L'/unregister', szArgList[i]) == 0)
+		{
+			cmderOptions.unRegisterApp = true;
+			cmderOptions.registerApp = false;
+			if (szArgList[i + 1] != NULL) 
+			{
+				if (_wcsicmp(L'all', szArgList[i + 1]) == 0 || _wcsicmp(L'user', szArgList[i + 1]) == 0)
+				{
+					cmderOptions.cmderRegScope = szArgList[i + 1];
+					i++;
+				}
+			}
+		}
+		else if (cmderOptions.cmderStart == L'')
+		{
+			int len = wcslen(szArgList[i]);
+			if (wcscmp(&szArgList[i][len - 1], L'\'') == 0)
+			{
+				szArgList[i][len - 1] = '\0';
+			}
+		
+			if (PathFileExists(szArgList[i]))
+			{
+				cmderOptions.cmderStart = szArgList[i];
+				i++;
+			}
+			else {
+				MessageBox(NULL, szArgList[i], L'Folder does not exist!', MB_OK);
+			}
+		}
+		else {
+			MessageBox(NULL, L'Unrecognized parameter.\n\nValid options:\n\n    /c [CMDER User Root Path]\n\n    /task [ConEmu Task Name]\n\n    [/start [Start in Path] | [Start in Path]]\n\n    /single\n\nor\n\n    /register [USER | ALL]\n\nor\n\n    /unregister [USER | ALL]\n', MB_TITLE, MB_OK);
+			cmderOptions.error = true;
+		}
+	}
+    
+        // Finish and check for file errors
+    if (s.ok()) {
+      s = file->Sync();
+    }
+    if (s.ok()) {
+      s = file->Close();
+    }
+    delete file;
+    file = nullptr;
+    
+      void Crc32c(ThreadState* thread) {
+    // Checksum about 500MB of data total
+    const int size = 4096;
+    const char* label = '(4K per op)';
+    std::string data(size, 'x');
+    int64_t bytes = 0;
+    uint32_t crc = 0;
+    while (bytes < 500 * 1048576) {
+      crc = crc32c::Value(data.data(), size);
+      thread->stats.FinishedSingleOp();
+      bytes += size;
+    }
+    // Print so result is not dead
+    fprintf(stderr, '... crc=0x%x\r', static_cast<unsigned int>(crc));
+    }
+    
+      // Replace immutable memtable with the generated Table
+  if (s.ok()) {
+    edit.SetPrevLogNumber(0);
+    edit.SetLogNumber(logfile_number_);  // Earlier logs no longer needed
+    s = versions_->LogAndApply(&edit, &mutex_);
+  }
+    
+      FillLevels('A', 'Z');
+    
+      ASSERT_TRUE(ParseInternalKey(in, &decoded));
+  ASSERT_EQ(key, decoded.user_key.ToString());
+  ASSERT_EQ(seq, decoded.sequence);
+  ASSERT_EQ(vt, decoded.type);
+    
+    std::string DescriptorFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/MANIFEST-%06llu',
+           static_cast<unsigned long long>(number));
+  return dbname + buf;
+}
+    
+      scratch->clear();
+  record->clear();
+  bool in_fragmented_record = false;
+  // Record offset of the logical record that we're reading
+  // 0 is a dummy value to make compilers happy
+  uint64_t prospective_record_offset = 0;
+    
+    TEST(LogTest, AlignedEof) {
+  const int n = kBlockSize - 2*kHeaderSize + 4;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('EOF', Read());
+}
+    
+      // Add an entry into memtable that maps key to value at the
+  // specified sequence number and with the specified type.
+  // Typically value will be empty if type==kTypeDeletion.
+  void Add(SequenceNumber seq, ValueType type,
+           const Slice& key,
+           const Slice& value);
+    
+      Status OpenWithStatus(Options* options = nullptr) {
+    Close();
+    Options opts;
+    if (options != nullptr) {
+      opts = *options;
+    } else {
+      opts.reuse_logs = true;  // TODO(sanjay): test both ways
+      opts.create_if_missing = true;
+    }
+    if (opts.env == nullptr) {
+      opts.env = env_;
+    }
+    return DB::Open(opts, dbname_, &db_);
+  }
+    
+    class Repairer {
+ public:
+  Repairer(const std::string& dbname, const Options& options)
+      : dbname_(dbname),
+        env_(options.env),
+        icmp_(options.comparator),
+        ipolicy_(options.filter_policy),
+        options_(SanitizeOptions(dbname, &icmp_, &ipolicy_, options)),
+        owns_info_log_(options_.info_log != options.info_log),
+        owns_cache_(options_.block_cache != options.block_cache),
+        next_file_number_(1) {
+    // TableCache can be small since we expect each table to be opened once.
+    table_cache_ = new TableCache(dbname_, options_, 10);
+  }
+    }
+    
+    template<typename Key, class Comparator>
+void SkipList<Key,Comparator>::Insert(const Key& key) {
+  // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
+  // here since Insert() is externally synchronized.
+  Node* prev[kMaxHeight];
+  Node* x = FindGreaterOrEqual(key, prev);
+    }
+    
+      for (int i = 0; i < R; i++) {
+    if (list.Contains(i)) {
+      ASSERT_EQ(keys.count(i), 1);
+    } else {
+      ASSERT_EQ(keys.count(i), 0);
+    }
+  }
+    
+    
+    {
+    {
+    { private:
+  /*! \brief input stream */
+  dmlc::Stream *strm_;
+  /*! \brief current buffer pointer */
+  size_t buffer_ptr_;
+  /*! \brief internal buffer */
+  std::string buffer_;
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_IO_H_
+
+    
+    
+    {
+    {#if XGBOOST_STRICT_R_MODE
+// check nan
+bool CheckNAN(double v);
+double LogGamma(double v);
+#else
+template<typename T>
+inline bool CheckNAN(T v) {
+#ifdef _MSC_VER
+  return (_isnan(v) != 0);
+#else
+  return std::isnan(v);
+#endif
+}
+template<typename T>
+inline T LogGamma(T v) {
+#ifdef _MSC_VER
+#if _MSC_VER >= 1800
+  return lgamma(v);
+#else
+#pragma message('Warning: lgamma function was not available until VS2013'\
+                ', poisson regression will be disabled')
+  utils::Error('lgamma function was not available until VS2013');
+  return static_cast<T>(1.0);
+#endif
+#else
+  return lgamma(v);
+#endif
+}
+#endif  // XGBOOST_STRICT_R_MODE_
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_MATH_H_
+
+    
+    #include <dmlc/omp.h>
+#include <xgboost/logging.h>
+#include <algorithm>
+#include '../common/math.h'
