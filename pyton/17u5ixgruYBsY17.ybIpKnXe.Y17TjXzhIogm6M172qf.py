@@ -1,131 +1,159 @@
 
         
-                .. versionadded:: 0.11
-        '''
-        rv = {}
-        for k, v in iteritems(self):
-            if not k.startswith(namespace):
-                continue
-            if trim_namespace:
-                key = k[len(namespace):]
-            else:
-                key = k
-            if lowercase:
-                key = key.lower()
-            rv[key] = v
-        return rv
+            request.addfinalizer(_reset_settings)
+    conf.settings.user_dir = Path('~/.thefuck')
+    return conf.settings
     
-        def __init__(self, request, key):
-        form_matches = request.form.getlist(key)
-        buf = ['You tried to access the file '%s' in the request.files '
-               'dictionary but it does not exist.  The mimetype for the request '
-               'is '%s' instead of 'multipart/form-data' which means that no '
-               'file contents were transmitted.  To fix this error you should '
-               'provide enctype='multipart/form-data' in your form.' %
-               (key, request.mimetype)]
-        if form_matches:
-            buf.append('\n\nThe browser instead transmitted some file names. '
-                       'This was submitted: %s' % ', '.join(''%s'' % x
-                            for x in form_matches))
-        self.msg = ''.join(buf)
     
-        def make_null_session(self, app):
-        '''Creates a null session which acts as a replacement object if the
-        real session support could not be loaded due to a configuration
-        error.  This mainly aids the user experience because the job of the
-        null session is to still support lookup without complaining but
-        modifications are answered with a helpful error message of what
-        failed.
+def test_when_cant_configure_automatically(shell_pid, shell, logs):
+    shell_pid.return_value = 12
+    shell.how_to_configure.return_value = ShellConfiguration(
+        content='eval $(thefuck --alias)',
+        path='/tmp/.bashrc',
+        reload='bash',
+        can_configure_automatically=False)
+    main()
+    logs.how_to_configure_alias.assert_called_once()
     
-        if version in tags:
-        fail('Version '%s' is already tagged', version)
     
-    from flask._compat import StringIO
-from flask.logging import default_handler, has_level_handler, \
-    wsgi_errors_stream
+@pytest.mark.parametrize('command, packages', [
+    (Command('vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
+     [('vim', 'main'), ('vim-tiny', 'main')])])
+def test_match(mocker, command, packages):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
+    apt-get is a simple command line interface for downloading and
+installing packages. The most frequently used commands are update
+and install.
+    
+    dynamodb                                 | dynamodbstreams
+ec2                                      | ecr
+    
+        def get_invalidation(self, distribution_id, caller_reference):
+        current_invalidation = {}
+        # find all invalidations for the distribution
         try:
-        rv = app.test_client().get('/')
-        assert rv.data == b'stuff'
+            paginator = self.client.get_paginator('list_invalidations')
+            invalidations = paginator.paginate(DistributionId=distribution_id).build_full_result().get('InvalidationList', {}).get('Items', [])
+            invalidation_ids = [inv['Id'] for inv in invalidations]
+        except (BotoCoreError, ClientError) as e:
+            self.module.fail_json_aws(e, msg='Error listing CloudFront invalidations.')
     
-        def process_options(self, args, opts):
-        try:
-            self.settings.setdict(arglist_to_dict(opts.set),
-                                  priority='cmdline')
-        except ValueError:
-            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+        if state == 'present':
+        if origin_access_identity_id is not None and e_tag is not None:
+            result, changed = service_mgr.update_origin_access_identity(caller_reference, comment, origin_access_identity_id, e_tag)
+        else:
+            result = service_mgr.create_origin_access_identity(caller_reference, comment)
+            changed = True
+    elif(state == 'absent' and origin_access_identity_id is not None and
+         e_tag is not None):
+        result = service_mgr.delete_origin_access_identity(origin_access_identity_id, e_tag)
+        changed = True
     
-    from twisted.internet import defer
+    - cloudwatchevent_rule:
+    name: MyCronTask
+    state: absent
+'''
     
-        def _add_middleware(self, mw):
-        super(SpiderMiddlewareManager, self)._add_middleware(mw)
-        if hasattr(mw, 'process_spider_input'):
-            self.methods['process_spider_input'].append(mw.process_spider_input)
-        if hasattr(mw, 'process_spider_output'):
-            self.methods['process_spider_output'].insert(0, mw.process_spider_output)
-        if hasattr(mw, 'process_spider_exception'):
-            self.methods['process_spider_exception'].insert(0, mw.process_spider_exception)
-        if hasattr(mw, 'process_start_requests'):
-            self.methods['process_start_requests'].insert(0, mw.process_start_requests)
+    RETURN = '''
+log_groups:
+    description: Return the list of complex objetcs representing log groups
+    returned: success
+    type: complex
+    contains:
+        log_group_name:
+            description: The name of the log group.
+            returned: always
+            type: string
+        creation_time:
+            description: The creation time of the log group.
+            returned: always
+            type: integer
+        retention_in_days:
+            description: The number of days to retain the log events in the specified log group.
+            returned: always
+            type: integer
+        metric_filter_count:
+            description: The number of metric filters.
+            returned: always
+            type: integer
+        arn:
+            description: The Amazon Resource Name (ARN) of the log group.
+            returned: always
+            type: string
+        stored_bytes:
+            description: The number of bytes stored.
+            returned: always
+            type: string
+        kms_key_id:
+            description: The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.
+            returned: always
+            type: string
+'''
     
-    define('port', default=8888, help='run on the given port', type=int)
-    
-        def on_close(self):
-        ChatSocketHandler.waiters.remove(self)
-    
-        def transform(self, node, results):
-        self.found_future_import = True
-        return self.new_future_import(node)
-    
-    try:
-    from urllib.parse import unquote
-except ImportError:
-    # Python 2.
-    from urllib import unquote
-    
-    
-class Application(tornado.web.Application):
-    def __init__(self):
-        handlers = [
-            (r'/', MainHandler),
-            (r'/auth/login', AuthLoginHandler),
-            (r'/auth/logout', AuthLogoutHandler),
-        ]
-        settings = dict(
-            cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
-            login_url='/auth/login',
-            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-            static_path=os.path.join(os.path.dirname(__file__), 'static'),
-            xsrf_cookies=True,
-            facebook_api_key=options.facebook_api_key,
-            facebook_secret=options.facebook_secret,
-            ui_modules={'Post': PostModule},
-            debug=True,
-            autoescape=None,
+        def ensure_cgw_present(self, bgp_asn, ip_address):
+        if not bgp_asn:
+            bgp_asn = 65000
+        response = self.ec2.create_customer_gateway(
+            DryRun=False,
+            Type='ipsec.1',
+            PublicIp=ip_address,
+            BgpAsn=bgp_asn,
         )
-        tornado.web.Application.__init__(self, handlers, **settings)
+        return response
     
-    import logging
-from tornado.curl_httpclient import CurlAsyncHTTPClient
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
+    # List all EIP addresses for a VM.
+- ec2_eip_facts:
+    filters:
+       instance-id: i-123456789
+  register: my_vm_eips
     
     
-def main():
-    parse_command_line()
-    if options.dump:
-        print(tmpl.code)
-        sys.exit(0)
-    t = Timer(render)
-    results = t.timeit(options.num) / options.num
-    print('%0.3f ms per iteration' % (results * 1000))
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
     
-    # On RTD we can't import sphinx_rtd_theme, but it will be applied by
-# default anyway.  This block will use the same theme when building locally
-# as on RTD.
-if not on_rtd:
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.ec2 import (AnsibleAWSError, HAS_BOTO, connect_to_aws, ec2_argument_spec,
+                                      get_aws_connection_info)
+    
+        if len(sys.argv) > 2:
+        top_domain = sys.argv[2]
+    else:
+        top_domain = None
+    
+    from homeassistant.core import callback
+from homeassistant.const import CONF_PLATFORM
+import homeassistant.helpers.config_validation as cv
+import homeassistant.util.dt as dt_util
+from homeassistant.helpers.event import track_point_in_utc_time
+    
+    SERVICE_BROWSE_URL_SCHEMA = vol.Schema({
+    # pylint: disable=no-value-for-parameter
+    vol.Required(ATTR_URL, default=ATTR_URL_DEFAULT): vol.Url(),
+})
+    
+    
+def get_scanner(hass, config):
+    '''Validate the configuration and return an Actiontec scanner.'''
+    scanner = ActiontecDeviceScanner(config[DOMAIN])
+    return scanner if scanner.success_init else None
+    
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Optional(CONF_HOST, default=CONF_DEFAULT_IP): cv.string,
+    vol.Optional(CONF_PASSWORD, default='admin'): cv.string,
+    vol.Optional(CONF_USERNAME, default=''): cv.string
+})
+    
+            hass.async_add_job(self.async_see(
+            dev_id=device,
+            gps=gps_location, battery=battery,
+            gps_accuracy=accuracy,
+            attributes=attrs
+        ))
