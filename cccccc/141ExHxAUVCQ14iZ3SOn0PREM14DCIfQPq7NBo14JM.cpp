@@ -1,263 +1,189 @@
 
         
-          // Calculate the depth at which the requirement's generic parameters
-  // appear in the synthetic signature.
-  unsigned depth = 0;
-  if (covariantSelf) {
-    depth++;
-  }
-  if (conformanceSig) {
-    depth += conformanceSig->getGenericParams().back()->getDepth() + 1;
-  }
+        #include <google/protobuf/compiler/annotation_test_util.h>
     
-    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
-  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
-                                 const_cast<void*>(Key), Value_out);
-  return Ret == 0;
-}
-    
-    %# Ignore the following admonition; it applies to the resulting .cpp file only
-//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
-//// Do Not Edit Directly!
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Swift.org open source project
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
-//===----------------------------------------------------------------------===//
-    
-    
-    {  return forInvalid();
-}
-    
-    
-    {  /* Used as a flag during the def's mutable stage.  Must be false unless
-   * it is currently being used by a function on the stack.  This allows
-   * us to easily determine which defs were passed into the function's
-   * current invocation. */
-  bool came_from_user;
-};
-    
-    bool RunProtoCompiler(const string& filename,
-                      const string& plugin_specific_args,
-                      CommandLineInterface* cli, FileDescriptorProto* file) {
-  cli->SetInputsAreProtoPathRelative(true);
+    TEST(MovableMessageTest, MoveConstructor) {
+  protobuf_unittest::TestAllTypes message1;
+  TestUtil::SetAllFields(&message1);
+  const auto* nested = &message1.optional_nested_message();
     }
     
-    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message) {
-    WriteDocCommentBody(printer, message);
+    void EnumOneofFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  // TODO(jonskeet): What about if we read the default value?
+  printer->Print(
+    variables_,
+    '$oneof_name$_ = input.ReadEnum();\n'
+    '$oneof_name$Case_ = $oneof_property_name$OneofCase.$property_name$;\n');
 }
     
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_GENERATOR_H__
+    class EnumFieldGenerator : public PrimitiveFieldGenerator {
+ public:
+  EnumFieldGenerator(const FieldDescriptor* descriptor,
+                     int fieldOrdinal,
+                     const Options *options);
+  ~EnumFieldGenerator();
+    }
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/mathlimits.h>
+#include <google/protobuf/stubs/strutil.h>
+#include <google/protobuf/wire_format.h>
+    
+    
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(PrimitiveFieldGenerator);
-};
-    
-    std::shared_ptr<Channel> CreateInsecureChannelFromFd(const grpc::string& target,
-                                                     int fd) {
-  internal::GrpcLibrary init_lib;
-  init_lib.init();
-  return CreateChannelInternal(
-      '', grpc_insecure_channel_create_from_fd(target.c_str(), fd, nullptr));
-}
-    
-    #include <grpc/grpc_cronet.h>
-#include <grpcpp/channel.h>
-#include <grpcpp/support/channel_arguments.h>
-#include 'src/cpp/client/create_channel_internal.h'
-    
-    // begin a call to a named method
-std::unique_ptr<GenericClientAsyncReaderWriter> GenericStub::Call(
-    ClientContext* context, const grpc::string& method, CompletionQueue* cq,
-    void* tag) {
-  return CallInternal(channel_.get(), context, method, cq, true, tag);
-}
-    
-    static internal::GrpcLibraryInitializer g_gli_initializer;
-    
-    #include 'src/cpp/ext/filters/census/context.h'
-    
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-    #include <grpc/support/port_platform.h>
-    
-    	szArgList = CommandLineToArgvW(GetCommandLine(), &argCount);
-    
-    Speed *Speed::reverse() const
-{
-    if (_innerAction)
-        return Speed::create(_innerAction->reverse(), _speed);
-    
-    return nullptr;
-}
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    ssize_t ActionManager::getNumberOfRunningActions() const
-{
-    ssize_t count = 0;
-    struct _hashElement* element = nullptr;
-    struct _hashElement* tmp = nullptr;
-    HASH_ITER(hh, _targets, element, tmp)
-    {
-        count += (element->actions ? element->actions->num : 0);
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
     }
-    return count;
-}
-    
-    GridBase* PageTurn3D::getGrid()
-{
-    auto result = Grid3D::create(_gridSize, _gridNodeTarget->getGridRect());
-    if (result)
-    {
-        result->setNeedDepthTestForBlit(true);
+    }
+    }
     }
     
-    return result;
+    void RepeatedEnumFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.WriteTo(output, _repeated_$name$_codec);\n');
 }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    void AnimationCache::destroyInstance()
-{
-    CC_SAFE_RELEASE_NULL(s_sharedAnimationCache);
-}
-    
-    bool AtlasNode::initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
-{
-    CCASSERT(tile.size() > 0, 'file size should not be empty');
-    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(tile);
-    return initWithTexture(texture, tileWidth, tileHeight, itemsToRender);
-}
-    
-    std::string DHTResponseMessage::toString() const
-{
-  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
-             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
-             getRemoteNode()->getIPAddress().c_str(),
-             getRemoteNode()->getPort(),
-             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
-             util::torrentPercentEncode(getVersion()).c_str(),
-             toStringOptional().c_str());
-}
-    
-    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->dropNode(node);
-}
-/*
-  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
-  {
-  getBucketFor(node)->moveToHead(node);
-  }
-*/
-void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->moveToTail(node);
-}
-    
-    #define WRITE_CHECK(fp, ptr, count)                                            \
-  if (fp.write((ptr), (count)) != (count)) {                                   \
-    throw DL_ABORT_EX(                                                         \
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));     \
-  }
-    
-    #endif // D_DHT_SETUP_H
+    #endif  // TESSERACT_ARCH_DOTPRODUCTSSE_H_
 
     
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
     
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
-    
-    const int CAN_RESULT_SUCC = 0;
-const int CAN_ERROR_BASE = 2000;
-const int CAN_ERROR_OPEN_DEVICE_FAILED = CAN_ERROR_BASE + 1;
-const int CAN_ERROR_FRAME_NUM = CAN_ERROR_BASE + 2;
-const int CAN_ERROR_SEND_FAILED = CAN_ERROR_BASE + 3;
-const int CAN_ERROR_RECV_FAILED = CAN_ERROR_BASE + 4;
-    
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
-    
-      /**
-   * @brief Start the ESD CAN client.
-   * @return The status of the start action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Start() override;
-    
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
+    {}  // namespace tesseract
+
     
     
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-    
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-    const uint8_t BIT_MASK_1[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-const uint8_t BIT_MASK_0[] = {0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F};
-const uint8_t RANG_MASK_1_L[] = {0x01, 0x03, 0x07, 0x0F,
-                                 0x1F, 0x3F, 0x7F, 0xFF};
-const uint8_t RANG_MASK_0_L[] = {0xFE, 0XFC, 0xF8, 0xF0,
-                                 0xE0, 0xC0, 0x80, 0x00};
-    
-      // Init can client
-  auto *can_factory = CanClientFactory::instance();
-  can_factory->RegisterCanClients();
-  can_client_ = can_factory->CreateCANClient(canbus_conf_.can_card_parameter());
-  if (!can_client_) {
-    return OnError('Failed to create can client.');
+    {  if (len > 4) {
+    dodgy_chars = 2 * tess_rejs + bad_char_count + isolated_digits +
+        isolated_alphas;
+    if (dodgy_chars > 5 || (dodgy_chars / (float) len) > 0.5)
+      return G_DODGY;
+    else
+      return G_OK;
+  } else {
+    dodgy_chars = 2 * tess_rejs + bad_char_count;
+    if ((len == 4 && dodgy_chars > 2) ||
+        (len == 3 && dodgy_chars > 2) || dodgy_chars >= len)
+      return G_DODGY;
+    else
+      return G_OK;
   }
-  AINFO << 'Can client is successfully created.';
+}
+    
+    #include 'bbgrid.h'
+#include 'classify.h'
+#include 'colpartition.h'
+#include 'colpartitiongrid.h'
+#include 'colpartitionset.h'
+#include 'helpers.h'
+#include 'ratngs.h'
+#include 'tesseractclass.h'
+    
+      // Compute the foreground pixel density for a tbox area.
+  float ComputeForegroundDensity(const TBOX& tbox);
+    
+    extern BLOCK_LIST *current_block_list;
+extern STRING_VAR_H (editor_image_win_name, 'EditorImage',
+'Editor image window name');
+extern INT_VAR_H (editor_image_xpos, 590, 'Editor image X Pos');
+extern INT_VAR_H (editor_image_ypos, 10, 'Editor image Y Pos');
+extern INT_VAR_H (editor_image_height, 680, 'Editor image height');
+extern INT_VAR_H (editor_image_width, 655, 'Editor image width');
+extern INT_VAR_H (editor_image_word_bb_color, BLUE,
+'Word bounding box colour');
+extern INT_VAR_H (editor_image_blob_bb_color, YELLOW,
+'Blob bounding box colour');
+extern INT_VAR_H (editor_image_text_color, WHITE, 'Correct text colour');
+extern STRING_VAR_H (editor_dbwin_name, 'EditorDBWin',
+'Editor debug window name');
+extern INT_VAR_H (editor_dbwin_xpos, 50, 'Editor debug window X Pos');
+extern INT_VAR_H (editor_dbwin_ypos, 500, 'Editor debug window Y Pos');
+extern INT_VAR_H (editor_dbwin_height, 24, 'Editor debug window height');
+extern INT_VAR_H (editor_dbwin_width, 80, 'Editor debug window width');
+extern STRING_VAR_H (editor_word_name, 'BlnWords',
+'BL normalised word window');
+extern INT_VAR_H (editor_word_xpos, 60, 'Word window X Pos');
+extern INT_VAR_H (editor_word_ypos, 510, 'Word window Y Pos');
+extern INT_VAR_H (editor_word_height, 240, 'Word window height');
+extern INT_VAR_H (editor_word_width, 655, 'Word window width');
+extern double_VAR_H (editor_smd_scale_factor, 1.0, 'Scaling for smd image');
+    
+    /*!
+ * \brief The result holder of storage type of each NodeEntry in the graph.
+ * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
+ *
+ * \code
+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
+ *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
+ *  // get storage type by entry id
+ *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
+ * \endcode
+ *
+ * \sa FInferStorageType
+ */
+using StorageTypeVector = std::vector<int>;
+    
+      std::map<std::string, std::string> GetParams() const override {
+    return param_.__DICT__();
+  }
+    
+      // Set up caffe op with real data
+  void CaffeOpSetup() {
+    if (!setup_) {
+      setup_ = true;
+      caffeOp_->SetUp(bot_, top_);
+    }
+  }
+    
+    /*!
+ * \brief Stream manager.
+ *
+ * Uses a basic round-robin algorithm to dispatch GPU streams. Returns default
+ * context on CPU.
+ */
+template <std::size_t kNumGpus, std::size_t kStreams>
+class StreamManager {
+ public:
+  StreamManager();
+  ~StreamManager() {
+    Finalize();
+  }
+  RunContext GetRunContext(Context const& ctx);
+  RunContext GetIORunContext(Context const& ctx);
+  void Finalize();
+ private:
+  std::mutex mutex_;
+#if MXNET_USE_CUDA
+  std::array<std::array<mshadow::Stream<gpu>*, kStreams>, kNumGpus>
+      gpu_streams_;
+  std::array<mshadow::Stream<gpu>*, kNumGpus> gpu_io_streams_;
+  std::array<int, kNumGpus> gpu_cnt_;
+#endif  // MXNET_USE_CUDA
+  DISALLOW_COPY_AND_ASSIGN(StreamManager);
+};  // class StreamManager
+    
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
