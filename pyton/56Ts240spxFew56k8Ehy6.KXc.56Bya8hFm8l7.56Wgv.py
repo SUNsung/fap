@@ -1,139 +1,98 @@
 
         
-                '''
-        r.headers['Authorization'] = type(self).make_header(
-            self.username, self.password).encode('latin1')
-        return r
+            def create_release(self, tag_name, name=None, body='', draft=False, prerelease=False):
+        data = {
+            'tag_name': tag_name,
+            'target_commitish': 'master',
+            'name': name,
+            'body': body,
+            'draft': draft,
+            'prerelease': prerelease,
+        }
+        req = sanitized_Request(self._API_URL, json.dumps(data).encode('utf-8'))
+        return self._call(req)
+    
+    now = datetime.datetime.now()
+now_iso = now.isoformat() + 'Z'
+    
+    README_FILE = 'README.md'
+helptext = sys.stdin.read()
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+if __name__ == '__main__':
+    main()
+
+    
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
+    
+                if b'\0' in line:
+                raise BinarySuppressedError()
+    
+            :param headers: The headers as text.
+    
+        def register(self, *plugins):
+        for plugin in plugins:
+            self._plugins.append(plugin)
+    
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
     
-@mock.patch('httpie.core.get_response')
-def test_error(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-        def test_verbose_implies_all(self, httpbin):
-        r = http('--verbose', '--follow', httpbin + '/redirect/1')
-        assert 'GET /redirect/1 HTTP/1.1' in r
-        assert 'HTTP/1.1 302 FOUND' in r
-        assert 'GET /get HTTP/1.1' in r
-        assert HTTP_OK in r
-    
-        def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
-    
-        def save(self, must_create=False):
         '''
-        Save the current session data to the database. If 'must_create' is
-        True, raise a database error if the saving operation doesn't create a
-        new entry (as opposed to possibly updating an existing entry).
-        '''
-        if self.session_key is None:
-            return self.create()
-        data = self._get_session(no_load=must_create)
-        obj = self.create_model_instance(data)
-        using = router.db_for_write(self.model, instance=obj)
-        try:
-            with transaction.atomic(using=using):
-                obj.save(force_insert=must_create, force_update=not must_create, using=using)
-        except IntegrityError:
-            if must_create:
-                raise CreateError
-            raise
-        except DatabaseError:
-            if not must_create:
-                raise UpdateError
-            raise
+    args = httpie.cli.parser.parse_args(args=[url], env=MockEnvironment())
+    assert args.auth
+    assert args.auth.username == 'username'
+    assert args.auth.password == ''
     
-        def exists(self, session_key=None):
-        '''
-        This method makes sense when you're talking to a shared resource, but
-        it doesn't matter when you're storing the information in the client's
-        cookie.
-        '''
-        return False
     
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
-    '''
-    objects = SessionManager()
+def test_version():
+    r = http('--version', error_exit_ok=True)
+    assert r.exit_status == httpie.ExitStatus.OK
+    # FIXME: py3 has version in stdout, py2 in stderr
+    assert httpie.__version__ == r.stderr.strip() + r.strip()
     
-            # Determine domain
-        if site is None:
-            if django_apps.is_installed('django.contrib.sites'):
-                Site = django_apps.get_model('sites.Site')
-                try:
-                    site = Site.objects.get_current()
-                except Site.DoesNotExist:
-                    pass
-            if site is None:
-                raise ImproperlyConfigured(
-                    'To use sitemaps, either enable the sites framework or pass '
-                    'a Site/RequestSite object in your view.'
-                )
-        domain = site.domain
+        def test_CRLF_headers_only(self, httpbin):
+        r = http('--headers', 'GET', httpbin.url + '/get')
+        body = self._validate_crlf(r)
+        assert not body, 'Garbage after headers: %r' % r
     
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
-    from collections import Callable, Mapping, MutableMapping
     
-    # TODO: response is the only one
-    
-        @pytest.mark.parametrize(
-        'other, result', (
-            ({'AccePT': 'application/json'}, True),
-            ({}, False),
-            (None, False)
-        )
-    )
-    def test_instance_equality(self, other, result):
-        assert (self.case_insensitive_dict == other) is result
-    
-                return self.server_sock.accept()[0]
-        except (select.error, socket.error):
-            return None
-    
-            :param url: The URL to connect to.
-        :param proxies: (optional) A Requests-style dictionary of proxies used on this request.
-        :rtype: urllib3.ConnectionPool
-        '''
-        proxy = select_proxy(url, proxies)
-    
-    def _init():
-    for code, titles in _codes.items():
-        for title in titles:
-            setattr(codes, title, code)
-            if not title.startswith(('\\', '/')):
-                setattr(codes, title.upper(), code)
-    
-        @property
-    def ok(self):
-        '''Returns True if :attr:`status_code` is less than 400, False if not.
-    
-            X_test = X[-n_test_samples:]
-        Y_test = Y[-n_test_samples:]
-        X = X[:(i * step)]
-        Y = Y[:(i * step)]
+DATASET_GENERATORS = {
+    'perturbed_logarithm': generate_perturbed_logarithm_dataset,
+    'logistic': generate_logistic_dataset,
+    'pathological': generate_pathological_dataset,
+}
     
     plt.xlim([-0.05, 1.05])
 plt.ylim([-0.05, 1.05])
@@ -144,97 +103,72 @@ plt.legend(loc='lower right')
 plt.show()
 
     
-        if args.metrics is None:
-        args.metrics = sorted(METRICS)
-    if args.formats is None:
-        args.formats = sorted(FORMATS)
     
-                tstart = time()
-            clf.fit(X_train, y_train)
-            asgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                       y_test)
-            asgd_results[i, j, 1] = time() - tstart
+@ignore_warnings
+def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
+              formats=tuple(v for k, v in sorted(FORMATS.items())),
+              samples=1000, classes=4, density=.2,
+              n_times=5):
+    '''Times metric calculations for a number of inputs
     
+            mbkmeans.fit(X)
+        delta = time() - tstart
+        print('Speed: %0.3fs' % delta)
+        print('Inertia: %0.3fs' % mbkmeans.inertia_)
+        print()
     
-def bench_scikit_tree_classifier(X, Y):
-    '''Benchmark with scikit-learn decision tree classifier'''
+                gc.collect()
+            print('benchmarking scikit-learn randomized_svd: n_iter=0')
+            tstart = time()
+            randomized_svd(X, rank, n_iter=0)
+            results['scikit-learn randomized_svd (n_iter=0)'].append(
+                time() - tstart)
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
     
-    del sys
-
+        # op.add_option('--random-seed',
+    #               dest='random_seed', default=13, type=int,
+    #               help='Seed used by the random number generators.')
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.contracts import ContractsManager
-from scrapy.utils.misc import load_object
-from scrapy.utils.conf import build_component_list
-    
-    from scrapy.utils.spider import iter_spider_classes
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.conf import arglist_to_dict
-from scrapy.utils.python import without_none_values
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
-        else:
-            print('Scrapy %s' % scrapy.__version__)
+    from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import (CountVectorizer, TfidfVectorizer,
+                                             HashingVectorizer)
     
     
-class ReturnsContract(Contract):
-    ''' Contract to check the output of a callback
-    
-      # These are classes and free functions.  The classes are always
-  # mentioned as std::*, but we only catch the free functions if
-  # they're not found by ADL.  They're alphabetical by header.
-  for top_name in (
-      # type_traits
-      'alignment_of',
-      'aligned_union',
-      ):
-    if Search(r'\bstd::%s\b' % top_name, line):
-      error(filename, linenum, 'build/c++11', 5,
-            ('std::%s is an unapproved C++11 class or function.  Send c-style '
-             'an example of where it would make your code more readable, and '
-             'they may let you use it.') % top_name)
-    
-        def restore():
-        obj.__dict__.clear()
-        obj.__dict__.update(state)
-    
-        @data.setter
-    def data(self, value):
-        self._data = value
-        self.notify()
-    
-    class ProductionCodeTimeProvider(object):
-    '''
-    Production code version of the time provider (just a wrapper for formatting
-    datetime for this example).
-    '''
-    
-        def __init__(self, delegate):
-        self.delegate = delegate
-    
-    ''
+FILEPATH = os.path.join(
+    os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'blns.txt')
+'''Path to the file'''
     
     
-class Unit(object):
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'EnvironmentProject'
+        db.create_table(
+            'sentry_environmentproject', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Environment']
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['EnvironmentProject'])
     
-    '''
-*What is this pattern about?
-The Adapter pattern provides a different interface for a class. We can
-think about it as a cable adapter that allows you to charge a phone
-somewhere that has outlets in a different shape. Following this idea,
-the Adapter pattern is useful to integrate classes that couldn't be
-integrated due to their incompatible interfaces.
+            # Adding unique constraint on 'UserOption', fields ['user', 'organization', 'key']
+        db.create_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
