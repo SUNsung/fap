@@ -1,219 +1,129 @@
 
         
-              https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
+            before do
+      stub(Agents::DotFoo).valid_type?('Agents::DotFoo') { true }
+      stub(Agents::DotBar).valid_type?('Agents::DotBar') { true }
     end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
     
-      def caveats
-    caveats = []
-    begin
-      build, f.build = f.build, Tab.for_formula(f)
-      s = f.caveats.to_s
-      caveats << s.chomp + '\n' if s.length > 0
-    ensure
-      f.build = build
+        it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
     end
-    caveats << keg_only_text
-    caveats << bash_completion_caveats
-    caveats << zsh_completion_caveats
-    caveats << fish_completion_caveats
-    caveats << plist_caveats
-    caveats << python_caveats
-    caveats << app_caveats
-    caveats << elisp_caveats
-    caveats.compact.join('\n')
+    
+        context 'when Bob imports Jane's scenario' do
+      let!(:existing_scenario) do
+        _existing_scenerio = users(:jane).scenarios.build(:name => 'an existing scenario', :description => 'something')
+        _existing_scenerio.guid = guid
+        _existing_scenerio.save!
+        _existing_scenerio
+      end
+    
+      def set_account
+    @account = Account.find_local!(params[:account_username])
   end
     
-      def describe_ruby
-    ruby = which 'ruby'
-    return 'N/A' if ruby.nil?
-    ruby_binary = Utils.popen_read ruby, '-rrbconfig', '-e', \
-      'include RbConfig;print'#{CONFIG['bindir']}/#{CONFIG['ruby_install_name']}#{CONFIG['EXEEXT']}''
-    ruby_binary = Pathname.new(ruby_binary).realpath
-    if ruby == ruby_binary
-      ruby
-    else
-      '#{ruby} => #{ruby_binary}'
+        def resend
+      authorize @user, :confirm?
+    
+        def new
+      authorize :domain_block, :create?
+      @domain_block = DomainBlock.new
     end
+    
+      private
+    
+    #
+# `CacheStore` provides methods to mutate and fetch data from a persistent
+# storage mechanism
+#
+class CacheStore
+  # @param  [CacheStoreDatabase] database
+  # @return [nil]
+  def initialize(database)
+    @database = database
   end
     
-      def filtered_list
-    names = if ARGV.named.empty?
-      Formula.racks
-    else
-      ARGV.named.map { |n| HOMEBREW_CELLAR+n }.select(&:exist?)
-    end
-    if ARGV.include? '--pinned'
-      pinned_versions = {}
-      names.each do |d|
-        keg_pin = (HOMEBREW_LIBRARY/'PinnedKegs'/d.basename.to_s)
-        if keg_pin.exist? || keg_pin.symlink?
-          pinned_versions[d] = keg_pin.readlink.basename.to_s
-        end
-      end
-      pinned_versions.each do |d, version|
-        puts '#{d.basename}'.concat(ARGV.include?('--versions') ? ' #{version}' : '')
-      end
-    else # --versions without --pinned
-      names.each do |d|
-        versions = d.subdirs.map { |pn| pn.basename.to_s }
-        next if ARGV.include?('--multiple') && versions.length < 2
-        puts '#{d.basename} #{versions*' '}'
-      end
-    end
-  end
-end
+        puts 'Fetching: #{bucket * ', '}' if bucket.size > 1
+    bucket.each do |f|
+      f.print_tap_action verb: 'Fetching'
     
-        names = @@remote_tap_formulae['#{user}/#{repo}']
-    user = user.downcase if user == 'Homebrew' # special handling for the Homebrew organization
-    names.select { |name| rx === name }.map { |name| '#{user}/#{repo}/#{name}' }
-  rescue GitHub::HTTPNotFoundError => e
-    opoo 'Failed to search tap: #{user}/#{repo}. Please run `brew update`'
-    []
-  rescue GitHub::Error => e
-    SEARCH_ERROR_QUEUE << e
-    []
-  end
+      def missing
+    return unless HOMEBREW_CELLAR.exist?
     
-          it 'with non-nil values' do
-        ary = [1, 2]
-        eval 'if (a, b = ary); ScratchPad.record [a, b]; end'
-        ScratchPad.recorded.should == [1, 2]
-      end
+      # add junk directories
+  attr_accessor :junk_directories
     
-      describe 'RTYPEDATA' do
-    it 'returns the struct data' do
-      a = @s.typed_wrap_struct(1024)
-      @s.typed_get_struct_rdata(a).should == 1024
-    end
+    =begin
+ +------+----------------+-------------------------------------------+
+   | HEX  | NAME           | DESCRIPTION                               |
+   +------+----------------+-------------------------------------------+
+   | HEX  | NAME           | DESCRIPTION                               |
+   | 0x01 | CALLED NUMBER  | Number/extension being called             |
+   | 0x02 | CALLING NUMBER | Calling number                            |
+   | 0x03 | CALLING ANI    | Calling number ANI for billing            |
+   | 0x04 | CALLING NAME   | Name of caller                            |
+   | 0x05 | CALLED CONTEXT | Context for number                        |
+   | 0x06 | USERNAME       | Username (peer or user) for               |
+   |      |                | authentication                            |
+   | 0x07 | PASSWORD       | Password for authentication               |
+   | 0x08 | CAPABILITY     | Actual CODEC capability                   |
+   | 0x09 | FORMAT         | Desired CODEC format                      |
+   | 0x0a | LANGUAGE       | Desired language                          |
+   | 0x0b | VERSION        | Protocol version                          |
+   | 0x0c | ADSICPE        | CPE ADSI capability                       |
+   | 0x0d | DNID           | Originally dialed DNID                    |
+   | 0x0e | AUTHMETHODS    | Authentication method(s)                  |
+   | 0x0f | CHALLENGE      | Challenge data for MD5/RSA                |
+   | 0x10 | MD5 RESULT     | MD5 challenge result                      |
+   | 0x11 | RSA RESULT     | RSA challenge result                      |
+   | 0x12 | APPARENT ADDR  | Apparent address of peer                  |
+   | 0x13 | REFRESH        | When to refresh registration              |
+   | 0x14 | DPSTATUS       | Dialplan status                           |
+   | 0x15 | CALLNO         | Call number of peer                       |
+   | 0x16 | CAUSE          | Cause                                     |
+   | 0x17 | IAX UNKNOWN    | Unknown IAX command                       |
+   | 0x18 | MSGCOUNT       | How many messages waiting                 |
+   | 0x19 | AUTOANSWER     | Request auto-answering                    |
+   | 0x1a | MUSICONHOLD    | Request musiconhold with QUELCH           |
+   | 0x1b | TRANSFERID     | Transfer Request Identifier               |
+   | 0x1c | RDNIS          | Referring DNIS                            |
+   | 0x1d | Reserved       | Reserved for future use                   |
+   | 0x1e | Reserved       | Reserved for future use                   |
+   | 0x1f | DATETIME       | Date/Time                                 |
+   | 0x20 | Reserved       | Reserved for future use                   |
+   | 0x21 | Reserved       | Reserved for future use                   |
+   | 0x22 | Reserved       | Reserved for future use                   |
+   | 0x23 | Reserved       | Reserved for future use                   |
+   | 0x24 | Reserved       | Reserved for future use                   |
+   | 0x25 | Reserved       | Reserved for future use                   |
+   | 0x26 | CALLINGPRES    | Calling presentation                      |
+   | 0x27 | CALLINGTON     | Calling type of number                    |
+   | 0x28 | CALLINGTNS     | Calling transit network select            |
+   | 0x29 | SAMPLINGRATE   | Supported sampling rates                  |
+   | 0x2a | CAUSECODE      | Hangup cause                              |
+   | 0x2b | ENCRYPTION     | Encryption format                         |
+   | 0x2c | ENCKEY         | Reserved for future Use                   |
+   | 0x2d | CODEC PREFS    | CODEC Negotiation                         |
+   | 0x2e | RR JITTER      | Received jitter, as in RFC 3550           |
+   | 0x2f | RR LOSS        | Received loss, as in RFC 3550             |
+   | 0x30 | RR PKTS        | Received frames                           |
+   | 0x31 | RR DELAY       | Max playout delay for received frames in  |
+   |      |                | ms                                        |
+   | 0x32 | RR DROPPED     | Dropped frames (presumably by jitter      |
+   |      |                | buffer)                                   |
+   | 0x33 | RR OOO         | Frames received Out of Order              |
+   | 0x34 | OSPTOKEN       | OSP Token Block                           |
+   +------+----------------+-------------------------------------------+
+=end
     
-        prefix = ''
-    if name.bytesize > 100 then
-      parts = name.split('/', -1) # parts are never empty here
-      name = parts.pop            # initially empty for names with a trailing slash ('foo/.../bar/')
-      prefix = parts.join('/')    # if empty, then it's impossible to split (parts is empty too)
-      while !parts.empty? && (prefix.bytesize > 155 || name.empty?)
-        name = parts.pop + '/' + name
-        prefix = parts.join('/')
-      end
-    
-    end
-    
-        Object.send :remove_const, :RUBY_ENGINE if defined?(RUBY_ENGINE)
-    Object.send :const_set,    :RUBY_ENGINE, 'vroom'
-    
-              http.request(post) do |res|
-            assert_equal('401', res.code, log.call)
-            res['www-authenticate'].scan(DIGESTRES_) do |key, quoted, token|
-              params[key.downcase] = token || quoted.delete('\\')
-            end
-             params['uri'] = 'http://#{addr}:#{port}#{path}'
+                encoded
           end
     
-          ##
-      # Creates a new BasicAuth instance.
-      #
-      # See WEBrick::Config::BasicAuth for default configuration entries
-      #
-      # You must supply the following configuration entries:
-      #
-      # :Realm:: The name of the realm being protected.
-      # :UserDB:: A database of usernames and passwords.
-      #           A WEBrick::HTTPAuth::Htpasswd instance should be used.
-    
-            if (gv | lv | iv | cv).include?(receiver) or /^[A-Z]/ =~ receiver && /\./ !~ receiver
-          # foo.func and foo is var. OR
-          # foo::func and foo is var. OR
-          # foo::Const and foo is var. OR
-          # Foo::Bar.func
-          begin
-            candidates = []
-            rec = eval(receiver, bind)
-            if sep == '::' and rec.kind_of?(Module)
-              candidates = rec.constants.collect{|m| m.to_s}
-            end
-            candidates |= rec.methods.collect{|m| m.to_s}
-          rescue Exception
-            candidates = []
-          end
-        else
-          # func1.func2
-          candidates = []
-          to_ignore = ignored_modules
-          ObjectSpace.each_object(Module){|m|
-            next if (to_ignore.include?(m) rescue true)
-            candidates.concat m.instance_methods(false).collect{|x| x.to_s}
-          }
-          candidates.sort!
-          candidates.uniq!
-        end
-        select_message(receiver, message, candidates, sep)
-    
-        def stylesheets_path
-      File.join assets_path, 'stylesheets'
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-    task default: :test
-
-    
-    class LogStash::PluginManager::Generate < LogStash::PluginManager::Command
-    
-        if as == :json
-      if api_error?(data)
-        data = generate_error_hash(data)
-      else
-        selected_fields = extract_fields(filter.to_s.strip)
-        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
-        unless options.include?(:exclude_default_metadata)
-          data = data.to_hash
-          if data.values.size == 0 && selected_fields.size > 0
-            raise LogStash::Api::NotFoundError
-          end
-          data = default_metadata.merge(data)
-        end
-      end
-    
-      module Array2
-    def _1
-      elements[1]
-    end
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
