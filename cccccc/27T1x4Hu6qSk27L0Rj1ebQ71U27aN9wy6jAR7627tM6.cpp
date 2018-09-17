@@ -1,372 +1,320 @@
 
         
         
-    {    fprintf(stderr,
-            'expected=%d..%d; got=%d; bad_keys=%d; bad_values=%d; missed=%d\n',
-            min_expected, max_expected, correct, bad_keys, bad_values, missed);
-    ASSERT_LE(min_expected, correct);
-    ASSERT_GE(max_expected, correct);
-  }
-    
-    
-    {  void HeapProfile() {
-    char fname[100];
-    snprintf(fname, sizeof(fname), '%s/heap-%04d', FLAGS_db, ++heap_counter_);
-    WritableFile* file;
-    Status s = g_env->NewWritableFile(fname, &file);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      return;
-    }
-    bool ok = port::GetHeapProfile(WriteToFile, file);
-    delete file;
-    if (!ok) {
-      fprintf(stderr, 'heap profiling not supported\n');
-      g_env->DeleteFile(fname);
-    }
-  }
-};
-    
-      void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  static void BGWork(void* db);
-  void BackgroundCall();
-  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  void CleanupCompaction(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  Status DoCompactionWork(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
+    {// TODO(nareshmodi): Move EagerCast and ReadVariableOp (which use the C API to
+// execute TFE Ops) to a separate common library.
+TFE_TensorHandle* EagerCast(TFE_Context* ctx, TFE_TensorHandle* handle,
+                            TF_DataType src_type_enum,
+                            TF_DataType dst_type_enum, TF_Status* out_status);
 }
     
-    bool GuessType(const std::string& fname, FileType* type) {
-  size_t pos = fname.rfind('/');
-  std::string basename;
-  if (pos == std::string::npos) {
-    basename = fname;
-  } else {
-    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
-  }
-  uint64_t ignored;
-  return ParseFileName(basename, &ignored, type);
+    
+    {  return Status::OK();
 }
     
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
+    #include 'tensorflow/core/platform/env.h'
+#include 'tensorflow/core/platform/null_file_system.h'
     
-      kFullType = 1,
+    REGISTER_OP('AttrBool')
+    .Attr('a: bool')
+    .SetShapeFn(shape_inference::UnknownShape);
     
-        SequenceNumber max_sequence = 0;
-    for (size_t i = 0; i < tables_.size(); i++) {
-      if (max_sequence < tables_[i].max_sequence) {
-        max_sequence = tables_[i].max_sequence;
-      }
+    namespace tensorflow {
     }
     
-    #ifndef BOOST_NO_WREGEX
-template<>
-class char_regex_traits_i<wchar_t> : public regex_traits<wchar_t>
-{
-public:
-   typedef wchar_t char_type;
-   typedef unsigned short uchar_type;
-   typedef unsigned int size_type;
-   typedef regex_traits<wchar_t> base_type;
+    #include <Python.h>
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace tensorflow {
+namespace detail {
+    }
     }
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    {   mapfile(){ hfile = hmap = 0; _first = _last = 0; }
-   mapfile(const char* file){ hfile = hmap = 0; _first = _last = 0; open(file); }
-   ~mapfile(){ close(); }
-   void open(const char* file);
-   void close();
-   const char* begin(){ return _first; }
-   const char* end(){ return _last; }
-   size_t size(){ return _last - _first; }
-   bool valid(){ return (hfile != 0) && (hfile != INVALID_HANDLE_VALUE); }
-};
-    
-    typedef enum _match_flags
-{
-   match_default = 0,
-   match_not_bol = 1,                                /* first is not start of line */
-   match_not_eol = match_not_bol << 1,               /* last is not end of line */
-   match_not_bob = match_not_eol << 1,               /* first is not start of buffer */
-   match_not_eob = match_not_bob << 1,               /* last is not end of buffer */
-   match_not_bow = match_not_eob << 1,               /* first is not start of word */
-   match_not_eow = match_not_bow << 1,               /* last is not end of word */
-   match_not_dot_newline = match_not_eow << 1,       /* \n is not matched by '.' */
-   match_not_dot_null = match_not_dot_newline << 1,  /* '\0' is not matched by '.' */
-   match_prev_avail = match_not_dot_null << 1,       /* *--first is a valid expression */
-   match_init = match_prev_avail << 1,               /* internal use */
-   match_any = match_init << 1,                      /* don't care what we match */
-   match_not_null = match_any << 1,                  /* string can't be null */
-   match_continuous = match_not_null << 1,           /* each grep match must continue from */
-                                                     /* uninterupted from the previous one */
-   match_partial = match_continuous << 1,            /* find partial matches */
-   
-   match_stop = match_partial << 1,                  /* stop after first match (grep) V3 only */
-   match_not_initial_null = match_stop,              /* don't match initial null, V4 only */
-   match_all = match_stop << 1,                      /* must find the whole of input even if match_any is set */
-   match_perl = match_all << 1,                      /* Use perl matching rules */
-   match_posix = match_perl << 1,                    /* Use POSIX matching rules */
-   match_nosubs = match_posix << 1,                  /* don't trap marked subs */
-   match_extra = match_nosubs << 1,                  /* include full capture information for repeated captures */
-   match_single_line = match_extra << 1,             /* treat text as single line and ignor any \n's when matching ^ and $. */
-   match_unused1 = match_single_line << 1,           /* unused */
-   match_unused2 = match_unused1 << 1,               /* unused */
-   match_unused3 = match_unused2 << 1,               /* unused */
-   match_max = match_unused3,
-    }
-    
-    struct mem_block_cache
-{
-   // this member has to be statically initialsed:
-   mem_block_node* next;
-   unsigned cached_blocks;
-#ifdef BOOST_HAS_THREADS
-   boost::static_mutex mut;
-#endif
-    }
-    
-    
-    
-          no_except = ::boost::regbase::no_except,
-      failbit = ::boost::regbase::failbit,
-      literal = ::boost::regbase::literal,
-      icase = ::boost::regbase::icase,
-      nocollate = ::boost::regbase::nocollate,
-      collate = ::boost::regbase::collate,
-      nosubs = ::boost::regbase::nosubs,
-      optimize = ::boost::regbase::optimize,
-      bk_plus_qm = ::boost::regbase::bk_plus_qm,
-      bk_vbar = ::boost::regbase::bk_vbar,
-      no_intervals = ::boost::regbase::no_intervals,
-      no_char_classes = ::boost::regbase::no_char_classes,
-      no_escape_in_lists = ::boost::regbase::no_escape_in_lists,
-      no_mod_m = ::boost::regbase::no_mod_m,
-      mod_x = ::boost::regbase::mod_x,
-      mod_s = ::boost::regbase::mod_s,
-      no_mod_s = ::boost::regbase::no_mod_s,
-      save_subexpression_location = ::boost::regbase::save_subexpression_location,
-      no_empty_expressions = ::boost::regbase::no_empty_expressions,
-    
-    template <class F, class M, class O>
-struct format_traits_imp
+    template <class I>
+struct is_random_access_iterator
 {
 private:
-   //
-   // F must be a pointer, a function, or a class with a function call operator:
-   //
-   BOOST_STATIC_ASSERT((::boost::is_pointer<F>::value || ::boost::is_function<F>::value || ::boost::is_class<F>::value));
-   static formatter_wrapper<typename unwrap_reference<F>::type> f;
-   static M m;
-   static O out;
-   static boost::regex_constants::match_flag_type flags;
+   typedef detail::is_random_imp_selector< ::boost::is_pointer<I>::value> selector;
+   typedef typename selector::template rebind<I> bound_type;
+   typedef typename bound_type::type answer;
 public:
-   BOOST_STATIC_CONSTANT(int, value = sizeof(check_is_formatter(f(m), f(m, out), f(m, out, flags))));
+   BOOST_STATIC_CONSTANT(bool, value = answer::value);
 };
     
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         mem_block_cache.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: memory block cache used by the non-recursive matcher.
+  */
     
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_jump()
+{
+   pstate = static_cast<const re_jump*>(pstate)->alt.p;
+   return true;
+}
     
-    //
-// regex_grep convenience interfaces:
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    namespace boost{
 //
-// this isn't really a partial specialisation, but template function
-// overloading - if the compiler doesn't support partial specialisation
-// then it really won't support this either:
-template <class Predicate, class charT, class traits>
-inline unsigned int regex_grep(Predicate foo, const charT* str, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
+// class regbase
+// handles error codes and flags
+//
+class BOOST_REGEX_DECL regbase
 {
-   return regex_grep(foo, str, str + traits::length(str), e, flags);
-}
-    
-    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
-inline std::size_t regex_split(OutputIterator out,
-                   std::basic_string<charT, Traits1, Alloc1>& s, 
-                   const basic_regex<charT, Traits2>& e,
-                   match_flag_type flags = match_default)
-{
-   return regex_split(out, s, e, flags, UINT_MAX);
-}
-    
-    /*!
- * \brief Macro to register linear updater.
- */
-#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
-      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
-          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
-              Name)
-    
-     protected:
-  char GetChar() override {
-    return fin_.get();
-  }
-  /*! \brief to be implemented by child, check if end of stream */
-  bool IsEnd() override {
-    return fin_.eof();
-  }
-    
-      /*! \brief return corresponding element set given the node_id */
-  inline const Elem& operator[](unsigned node_id) const {
-    const Elem& e = elem_of_each_node_[node_id];
-    CHECK(e.begin != nullptr)
-        << 'access element that is not in the set';
-    return e;
-  }
-  // clear up things
-  inline void Clear() {
-    row_indices_.clear();
-    elem_of_each_node_.clear();
-  }
-  // initialize node id 0->everything
-  inline void Init() {
-    CHECK_EQ(elem_of_each_node_.size(), 0U);
+public:
+   enum flag_type_
+   {
+      //
+      // Divide the flags up into logical groups:
+      // bits 0-7 indicate main synatx type.
+      // bits 8-15 indicate syntax subtype.
+      // bits 16-31 indicate options that are common to all
+      // regex syntaxes.
+      // In all cases the default is 0.
+      //
+      // Main synatx group:
+      //
+      perl_syntax_group = 0,                      // default
+      basic_syntax_group = 1,                     // POSIX basic
+      literal = 2,                                // all characters are literals
+      main_option_type = literal | basic_syntax_group | perl_syntax_group, // everything!
+      //
+      // options specific to perl group:
+      //
+      no_bk_refs = 1 << 8,                        // \d not allowed
+      no_perl_ex = 1 << 9,                        // disable perl extensions
+      no_mod_m = 1 << 10,                         // disable Perl m modifier
+      mod_x = 1 << 11,                            // Perl x modifier
+      mod_s = 1 << 12,                            // force s modifier on (overrides match_not_dot_newline)
+      no_mod_s = 1 << 13,                         // force s modifier off (overrides match_not_dot_newline)
+    }
+    }
     }
     
-    #include <xgboost/data.h>
-#include <dmlc/io.h>
+    template <class OutputIterator, class Results, class traits, class ForwardIter>
+void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format_escape()
+{
+   // skip the escape and check for trailing escape:
+   if(++m_position == m_end)
+   {
+      put(static_cast<char_type>('\\'));
+      return;
+   }
+   // now switch on the escape type:
+   switch(*m_position)
+   {
+   case 'a':
+      put(static_cast<char_type>('\a'));
+      ++m_position;
+      break;
+   case 'f':
+      put(static_cast<char_type>('\f'));
+      ++m_position;
+      break;
+   case 'n':
+      put(static_cast<char_type>('\n'));
+      ++m_position;
+      break;
+   case 'r':
+      put(static_cast<char_type>('\r'));
+      ++m_position;
+      break;
+   case 't':
+      put(static_cast<char_type>('\t'));
+      ++m_position;
+      break;
+   case 'v':
+      put(static_cast<char_type>('\v'));
+      ++m_position;
+      break;
+   case 'x':
+      if(++m_position == m_end)
+      {
+         put(static_cast<char_type>('x'));
+         return;
+      }
+      // maybe have \x{ddd}
+      if(*m_position == static_cast<char_type>('{'))
+      {
+         ++m_position;
+         int val = this->toi(m_position, m_end, 16);
+         if(val < 0)
+         {
+            // invalid value treat everything as literals:
+            put(static_cast<char_type>('x'));
+            put(static_cast<char_type>('{'));
+            return;
+         }
+         if((m_position == m_end) || (*m_position != static_cast<char_type>('}')))
+         {
+            --m_position;
+            while(*m_position != static_cast<char_type>('\\'))
+               --m_position;
+            ++m_position;
+            put(*m_position++);
+            return;
+         }
+         ++m_position;
+         put(static_cast<char_type>(val));
+         return;
+      }
+      else
+      {
+         std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
+         len = (std::min)(static_cast<std::ptrdiff_t>(2), len);
+         int val = this->toi(m_position, m_position + len, 16);
+         if(val < 0)
+         {
+            --m_position;
+            put(*m_position++);
+            return;
+         }
+         put(static_cast<char_type>(val));
+      }
+      break;
+   case 'c':
+      if(++m_position == m_end)
+      {
+         --m_position;
+         put(*m_position++);
+         return;
+      }
+      put(static_cast<char_type>(*m_position++ % 32));
+      break;
+   case 'e':
+      put(static_cast<char_type>(27));
+      ++m_position;
+      break;
+   default:
+      // see if we have a perl specific escape:
+      if((m_flags & boost::regex_constants::format_sed) == 0)
+      {
+         bool breakout = false;
+         switch(*m_position)
+         {
+         case 'l':
+            ++m_position;
+            m_restore_state = m_state;
+            m_state = output_next_lower;
+            breakout = true;
+            break;
+         case 'L':
+            ++m_position;
+            m_state = output_lower;
+            breakout = true;
+            break;
+         case 'u':
+            ++m_position;
+            m_restore_state = m_state;
+            m_state = output_next_upper;
+            breakout = true;
+            break;
+         case 'U':
+            ++m_position;
+            m_state = output_upper;
+            breakout = true;
+            break;
+         case 'E':
+            ++m_position;
+            m_state = output_copy;
+            breakout = true;
+            break;
+         }
+         if(breakout)
+            break;
+      }
+      // see if we have a \n sed style backreference:
+      std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
+      len = (std::min)(static_cast<std::ptrdiff_t>(1), len);
+      int v = this->toi(m_position, m_position+len, 10);
+      if((v > 0) || ((v == 0) && (m_flags & ::boost::regex_constants::format_sed)))
+      {
+         put(m_results[v]);
+         break;
+      }
+      else if(v == 0)
+      {
+         // octal ecape sequence:
+         --m_position;
+         len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
+         len = (std::min)(static_cast<std::ptrdiff_t>(4), len);
+         v = this->toi(m_position, m_position + len, 8);
+         BOOST_ASSERT(v >= 0);
+         put(static_cast<char_type>(v));
+         break;
+      }
+      // Otherwise output the character 'as is':
+      put(*m_position++);
+      break;
+   }
+}
+    }
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_grep.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides regex_grep implementation.
+  */
+    
+       match_results<BidirectionalIterator> what;  // current match
+   BidirectionalIterator                base;  // start of sequence
+   BidirectionalIterator                end;   // end of sequence
+   const regex_type                     re;   // the expression
+   match_flag_type                      flags; // flags for matching
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_search.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides regex_search implementation.
+  */
+    
+    #endif // include
+    
+    #pragma once
+#ifndef ROCKSDB_LITE
+#include 'db/db_impl.h'
 #include <vector>
-#include <algorithm>
-#include <cstring>
 #include <string>
-#include <utility>
-#include <memory>
-#include <functional>
     
-    /** Macro for inline definition of auxiliary actions */
-#define AUX_ACT(act)                          \
-  do {                                        \
-    AUX_THR(func_) = __func__;                \
-    AUX_THR(line_) = __LINE__;                \
-    AuxAct auxfn(                             \
-      [&](bool success) {                     \
-        if (success) {}                       \
-        if (true) {act}                       \
-      }                                       \
-    );                                        \
-    DeterministicSchedule::setAuxAct(auxfn);  \
-  } while (0)
-    
-    TEST(DiscriminatedPtr, Apply) {
-  struct Foo { };
-  struct Visitor {
-    std::string operator()(int* /* ptr */) { return 'int'; }
-    std::string operator()(const int* /* ptr */) { return 'const int'; }
-    std::string operator()(Foo* /* ptr */) { return 'Foo'; }
-    std::string operator()(const Foo* /* ptr */) { return 'const Foo'; }
-  };
-    }
-    
-    using namespace folly;
-    
-    TEST(Expected, CoroutineException) {
-  EXPECT_THROW(
-      ([]() -> Expected<int, Err> {
-        auto x = co_await throws();
-        ADD_FAILURE();
-        co_return x;
-      }()),
-      Exn);
-}
-    
-    #ifndef SKIP_RESERVE
-void BENCHFUN(reserve)(int iters, int size) {
-  auto const obj = randomObject<VECTOR::value_type>();
-  FOR_EACH_RANGE (i, 0, iters) {
-    VECTOR v(random(0U, 1U), obj);
-    v.reserve(size);
+      // Put about 28K to L0
+  for (int i = 0; i < 70; i++) {
+    ASSERT_OK(Put(Key(static_cast<int>(rnd.Uniform(kMaxKey))),
+                  RandomString(&rnd, 380)));
   }
+  ASSERT_OK(dbfull()->SetOptions({
+      {'disable_auto_compactions', 'false'},
+  }));
+  Flush();
+  dbfull()->TEST_WaitForCompact();
+  ASSERT_TRUE(db_->GetIntProperty('rocksdb.base-level', &int_prop));
+  ASSERT_EQ(4U, int_prop);
+    
+    
+    {}  // namespace rocksdb
+    
+    // Allocate scratch space which is passed to EncryptBlock/DecryptBlock.
+void CTRCipherStream::AllocateScratch(std::string& scratch) {
+  auto blockSize = cipher_.BlockSize();
+  scratch.reserve(blockSize);
 }
-BENCHMARK_PARAM(BENCHFUN(reserve), 16)
-BENCHMARK_PARAM(BENCHFUN(reserve), 128)
-BENCHMARK_PARAM(BENCHFUN(reserve), 1024)
-#endif
     
-    using namespace folly;
-    
-    
-    {  {
-    // Test that rvalues are moved.
-    auto fmt = format('{}', NoncopyableInt(1));
-    EXPECT_EQ(fmt.str(), '1');
-  }
-}
-
-    
-      EXPECT_TRUE(LOG_VALUE((has_test<Bar, int()>::value)));
-  EXPECT_FALSE(LOG_VALUE((has_test<Bar, int() const>::value)));
-  EXPECT_TRUE(LOG_VALUE((has_test<Bar, double(int, long)>::value)));
-  EXPECT_FALSE(LOG_VALUE((has_test<Bar, string(const string&) const>::value)));
-  EXPECT_TRUE(LOG_VALUE((has_test<Bar, long(int) const>::value)));
-  EXPECT_FALSE(LOG_VALUE((has_test<Bar, string(string) const>::value)));
-    
-    class DHTNode;
-class DHTRoutingTable;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTPeerAnnounceStorage;
-class DHTTokenTracker;
-class DHTMessageDispatcher;
-class DHTMessageReceiver;
-class DHTMessageFactory;
-    
-      std::shared_ptr<DHTNode> localNode_;
-    
-      ~DHTSetup();
-    
-    #endif // D_DHT_TASK_EXECUTOR_H
-
-    
-    
-    {  virtual std::shared_ptr<DHTTask>
-  createReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                        const std::shared_ptr<DHTNode>& newNode) = 0;
-};
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
-    
-    public:
-  DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                        std::chrono::seconds interval);
-    
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
-    
-    class DNSCache {
-private:
-  struct AddrEntry {
-    std::string addr_;
-    bool good_;
-    }
-    }
+      // Write a key in this transaction
+  txn->Put('abc', 'def');
