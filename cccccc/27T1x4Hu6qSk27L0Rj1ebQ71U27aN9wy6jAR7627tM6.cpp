@@ -1,320 +1,175 @@
 
         
-        
-    {// TODO(nareshmodi): Move EagerCast and ReadVariableOp (which use the C API to
-// execute TFE Ops) to a separate common library.
-TFE_TensorHandle* EagerCast(TFE_Context* ctx, TFE_TensorHandle* handle,
-                            TF_DataType src_type_enum,
-                            TF_DataType dst_type_enum, TF_Status* out_status);
+        template <class R, class P1, class P2, class P3Wrapper, class P3Wrapped,
+          R F(P1, P2, P3Wrapped)>
+R CastHandlerData3(void *c, const void *hd, P3Wrapper p3) {
+  return F(static_cast<P1>(c), static_cast<P2>(hd), p3);
 }
     
-    
-    {  return Status::OK();
+    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
+    WriteDocCommentBody(printer, enumDescriptor);
+}
+void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
+    WriteDocCommentBody(printer, value);
 }
     
-    #include 'tensorflow/core/platform/env.h'
-#include 'tensorflow/core/platform/null_file_system.h'
+      virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-    REGISTER_OP('AttrBool')
-    .Attr('a: bool')
-    .SetShapeFn(shape_inference::UnknownShape);
-    
-    namespace tensorflow {
-    }
-    
-    #include <Python.h>
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace tensorflow {
-namespace detail {
-    }
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    template <class I>
-struct is_random_access_iterator
-{
-private:
-   typedef detail::is_random_imp_selector< ::boost::is_pointer<I>::value> selector;
-   typedef typename selector::template rebind<I> bound_type;
-   typedef typename bound_type::type answer;
-public:
-   BOOST_STATIC_CONSTANT(bool, value = answer::value);
-};
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         mem_block_cache.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: memory block cache used by the non-recursive matcher.
-  */
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_jump()
-{
-   pstate = static_cast<const re_jump*>(pstate)->alt.p;
-   return true;
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-    namespace boost{
+    void MapFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.AddEntriesFrom(input, _map_$name$_codec);\n');
+}
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+    
+    void PrimitiveFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'if ($has_property_check$) {\n'
+    '  output.WriteRawTag($tag_bytes$);\n'
+    '  output.Write$capitalized_type_name$($property_name$);\n'
+    '}\n');
+}
+    
+     protected:
+  bool is_value_type;
+    
+    template <class Container>
+internal::ParamGenerator<typename Container::value_type> ValuesIn(
+    const Container& container) {
+  return ValuesIn(container.begin(), container.end());
+}
+    
+    // A set of macros for testing Google Test assertions or code that's expected
+// to generate Google Test fatal failures.  It verifies that the given
+// statement will cause exactly one fatal Google Test failure with 'substr'
+// being part of the failure message.
 //
-// class regbase
-// handles error codes and flags
+// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
 //
-class BOOST_REGEX_DECL regbase
-{
-public:
-   enum flag_type_
-   {
-      //
-      // Divide the flags up into logical groups:
-      // bits 0-7 indicate main synatx type.
-      // bits 8-15 indicate syntax subtype.
-      // bits 16-31 indicate options that are common to all
-      // regex syntaxes.
-      // In all cases the default is 0.
-      //
-      // Main synatx group:
-      //
-      perl_syntax_group = 0,                      // default
-      basic_syntax_group = 1,                     // POSIX basic
-      literal = 2,                                // all characters are literals
-      main_option_type = literal | basic_syntax_group | perl_syntax_group, // everything!
-      //
-      // options specific to perl group:
-      //
-      no_bk_refs = 1 << 8,                        // \d not allowed
-      no_perl_ex = 1 << 9,                        // disable perl extensions
-      no_mod_m = 1 << 10,                         // disable Perl m modifier
-      mod_x = 1 << 11,                            // Perl x modifier
-      mod_s = 1 << 12,                            // force s modifier on (overrides match_not_dot_newline)
-      no_mod_s = 1 << 13,                         // force s modifier off (overrides match_not_dot_newline)
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - 'statement' cannot reference local non-static variables or
+//     non-static members of the current object.
+//   - 'statement' cannot return a value.
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
+// gtest_unittest.cc will fail to compile if we do that.
+#define EXPECT_FATAL_FAILURE(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+      // Creates an empty UnitTest.
+  UnitTest();
+    
+    
+    {  const Generator1 g1_;
+  const Generator2 g2_;
+  const Generator3 g3_;
+  const Generator4 g4_;
+  const Generator5 g5_;
+  const Generator6 g6_;
+  const Generator7 g7_;
+  const Generator8 g8_;
+};  // class CartesianProductHolder8
+    
+      // Compares two C strings.  Returns true iff they have the same content.
+  //
+  // Unlike strcmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool CStringEquals(const char* lhs, const char* rhs);
+    
+        template <typename GradType, typename AccumType>
+    void LearnerAdaDelta::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue,
+        const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount)
+    {
+        const auto& gradientMatrix = GetWritableMatrix<GradType>(gradientValue);
+        const auto& smoothedGradientMatrix = GetWritableMatrix<AccumType>(smoothedGradientValue);
+        // parameter is accumulated to fp32 for fp16 gradient in the master copy (allocated in last part in smoothedGradient)
+        auto parameterMatrix = (std::is_same<GradType, half>::value) ?
+            smoothedGradientMatrix->ColumnSlice(smoothedGradientMatrix->GetNumCols() - gradientMatrix->GetNumCols(), gradientMatrix->GetNumCols()) :
+            GetWritableMatrix<AccumType>(parameter.Value())->ColumnSlice(0, gradientMatrix->GetNumCols());
+    }
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
     }
     }
     }
     
-    template <class OutputIterator, class Results, class traits, class ForwardIter>
-void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format_escape()
-{
-   // skip the escape and check for trailing escape:
-   if(++m_position == m_end)
-   {
-      put(static_cast<char_type>('\\'));
-      return;
-   }
-   // now switch on the escape type:
-   switch(*m_position)
-   {
-   case 'a':
-      put(static_cast<char_type>('\a'));
-      ++m_position;
-      break;
-   case 'f':
-      put(static_cast<char_type>('\f'));
-      ++m_position;
-      break;
-   case 'n':
-      put(static_cast<char_type>('\n'));
-      ++m_position;
-      break;
-   case 'r':
-      put(static_cast<char_type>('\r'));
-      ++m_position;
-      break;
-   case 't':
-      put(static_cast<char_type>('\t'));
-      ++m_position;
-      break;
-   case 'v':
-      put(static_cast<char_type>('\v'));
-      ++m_position;
-      break;
-   case 'x':
-      if(++m_position == m_end)
-      {
-         put(static_cast<char_type>('x'));
-         return;
-      }
-      // maybe have \x{ddd}
-      if(*m_position == static_cast<char_type>('{'))
-      {
-         ++m_position;
-         int val = this->toi(m_position, m_end, 16);
-         if(val < 0)
-         {
-            // invalid value treat everything as literals:
-            put(static_cast<char_type>('x'));
-            put(static_cast<char_type>('{'));
-            return;
-         }
-         if((m_position == m_end) || (*m_position != static_cast<char_type>('}')))
-         {
-            --m_position;
-            while(*m_position != static_cast<char_type>('\\'))
-               --m_position;
-            ++m_position;
-            put(*m_position++);
-            return;
-         }
-         ++m_position;
-         put(static_cast<char_type>(val));
-         return;
-      }
-      else
-      {
-         std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-         len = (std::min)(static_cast<std::ptrdiff_t>(2), len);
-         int val = this->toi(m_position, m_position + len, 16);
-         if(val < 0)
-         {
-            --m_position;
-            put(*m_position++);
-            return;
-         }
-         put(static_cast<char_type>(val));
-      }
-      break;
-   case 'c':
-      if(++m_position == m_end)
-      {
-         --m_position;
-         put(*m_position++);
-         return;
-      }
-      put(static_cast<char_type>(*m_position++ % 32));
-      break;
-   case 'e':
-      put(static_cast<char_type>(27));
-      ++m_position;
-      break;
-   default:
-      // see if we have a perl specific escape:
-      if((m_flags & boost::regex_constants::format_sed) == 0)
-      {
-         bool breakout = false;
-         switch(*m_position)
-         {
-         case 'l':
-            ++m_position;
-            m_restore_state = m_state;
-            m_state = output_next_lower;
-            breakout = true;
-            break;
-         case 'L':
-            ++m_position;
-            m_state = output_lower;
-            breakout = true;
-            break;
-         case 'u':
-            ++m_position;
-            m_restore_state = m_state;
-            m_state = output_next_upper;
-            breakout = true;
-            break;
-         case 'U':
-            ++m_position;
-            m_state = output_upper;
-            breakout = true;
-            break;
-         case 'E':
-            ++m_position;
-            m_state = output_copy;
-            breakout = true;
-            break;
-         }
-         if(breakout)
-            break;
-      }
-      // see if we have a \n sed style backreference:
-      std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-      len = (std::min)(static_cast<std::ptrdiff_t>(1), len);
-      int v = this->toi(m_position, m_position+len, 10);
-      if((v > 0) || ((v == 0) && (m_flags & ::boost::regex_constants::format_sed)))
-      {
-         put(m_results[v]);
-         break;
-      }
-      else if(v == 0)
-      {
-         // octal ecape sequence:
-         --m_position;
-         len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-         len = (std::min)(static_cast<std::ptrdiff_t>(4), len);
-         v = this->toi(m_position, m_position + len, 8);
-         BOOST_ASSERT(v >= 0);
-         put(static_cast<char_type>(v));
-         break;
-      }
-      // Otherwise output the character 'as is':
-      put(*m_position++);
-      break;
-   }
-}
+        EyeLikeNode(DEVICEID_TYPE deviceId, const wstring& name, bool isOutputSparse)
+        : Base(deviceId, name), m_isOutputSparse(isOutputSparse)
+    {
     }
     
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_grep.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Provides regex_grep implementation.
-  */
+        static BOOST_FORCEINLINE bool compare_exchange_strong(
+        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order success_order, memory_order failure_order) BOOST_NOEXCEPT
+    {
+        storage_type previous = expected, old_val;
+    }
     
-       match_results<BidirectionalIterator> what;  // current match
-   BidirectionalIterator                base;  // start of sequence
-   BidirectionalIterator                end;   // end of sequence
-   const regex_type                     re;   // the expression
-   match_flag_type                      flags; // flags for matching
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_search.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Provides regex_search implementation.
-  */
-    
-    #endif // include
-    
-    #pragma once
-#ifndef ROCKSDB_LITE
-#include 'db/db_impl.h'
-#include <vector>
-#include <string>
-    
-      // Put about 28K to L0
-  for (int i = 0; i < 70; i++) {
-    ASSERT_OK(Put(Key(static_cast<int>(rnd.Uniform(kMaxKey))),
-                  RandomString(&rnd, 380)));
-  }
-  ASSERT_OK(dbfull()->SetOptions({
-      {'disable_auto_compactions', 'false'},
-  }));
-  Flush();
-  dbfull()->TEST_WaitForCompact();
-  ASSERT_TRUE(db_->GetIntProperty('rocksdb.base-level', &int_prop));
-  ASSERT_EQ(4U, int_prop);
+        static BOOST_FORCEINLINE bool compare_exchange_strong(
+        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order success_order, memory_order) BOOST_NOEXCEPT
+    {
+        base_type::fence_before(success_order);
+        bool success;
+        __asm
+        {
+            mov esi, expected
+            mov edi, storage
+            movzx eax, byte ptr [esi]
+            movzx edx, desired
+            lock cmpxchg byte ptr [edi], dl
+            mov byte ptr [esi], al
+            sete success
+        };
+        // The success and failure fences are equivalent anyway
+        base_type::fence_after(success_order);
+        return success;
+    }
     
     
-    {}  // namespace rocksdb
-    
-    // Allocate scratch space which is passed to EncryptBlock/DecryptBlock.
-void CTRCipherStream::AllocateScratch(std::string& scratch) {
-  auto blockSize = cipher_.BlockSize();
-  scratch.reserve(blockSize);
-}
-    
-      // Write a key in this transaction
-  txn->Put('abc', 'def');
+    {} // namespace atomics
