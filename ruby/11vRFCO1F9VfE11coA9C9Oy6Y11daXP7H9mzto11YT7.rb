@@ -1,152 +1,101 @@
 
         
-        module Vagrant
-  module Util
-    class IO
-      # The chunk size for reading from subprocess IO.
-      READ_CHUNK_SIZE = 4096
+                # see http://www.w3.org/TR/html4/types.html#type-name
+        def sanitize_to_id(name)
+          name.to_s.delete(']').tr('^-a-zA-Z0-9:.', '_')
+        end
     
-          # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
+    module ActionView #:nodoc:
+  # = Action View Raw Output Helper
+  module Helpers #:nodoc:
+    module OutputSafetyHelper
+      # This method outputs without escaping a string. Since escaping tags is
+      # now default, this can be used when you don't want Rails to automatically
+      # escape tags. This is not recommended if the data is coming from the user's
+      # input.
+      #
+      # For example:
+      #
+      #  raw @user.name
+      #  # => 'Jimmy <alert>Tables</alert>'
+      def raw(stringish)
+        stringish.to_s.html_safe
       end
     
-            # Get the proper capability host to check
-        cap_host = nil
-        if type == :host
-          cap_host = @env.host
-        else
-          with_target_vms([]) do |vm|
-            cap_host = case type
-                       when :provider
-                         vm.provider
-                       when :guest
-                         vm.guest
-                       else
-                         raise Vagrant::Errors::CLIInvalidUsage,
-                           help: opts.help.chomp
-                       end
+              def hidden_field_for_checkbox(options)
+            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
+          end
+      end
+    end
+  end
+end
+
+    
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
           end
         end
     
-      def test_input_line_number_range
-    bug12947 = '[ruby-core:78162] [Bug #12947]'
-    ary = b1 = b2 = nil
-    EnvUtil.suppress_warning do
-      b1 = eval('proc {|i| i if 2..4}')
-      b2 = eval('proc {|i| if 2..4; i; end}')
-    end
-    IO.pipe {|r, w|
-      th = Thread.start {(1..5).each {|i| w.puts i};w.close}
-      ary = r.map {|i| b1.call(i.chomp)}
-      th.join
-    }
-    assert_equal([nil, '2', '3', '4', nil], ary, bug12947)
-    IO.pipe {|r, w|
-      th = Thread.start {(1..5).each {|i| w.puts i};w.close}
-      ary = r.map {|i| b2.call(i.chomp)}
-      th.join
-    }
-    assert_equal([nil, '2', '3', '4', nil], ary, bug12947)
-  end
-end
-
-    
-        assert_equal Gem::Security::HighSecurity, @cmd.options[:security_policy]
-  end
-    
-        dns = MiniTest::Mock.new
-    dns.expect :getresource, target, [String, Object]
-    
-        warning = /mswin|mingw/ =~ RUBY_PLATFORM ? [] : /shebang line ending with \\r/
-    assert_in_out_err([{'RUBYOPT' => nil}], '#!ruby -KU -Eutf-8\r\np \'\u3042\'\r\n',
-                      ['\'\u3042\''], warning,
-                      encoding: Encoding::UTF_8)
-    
-          AuthScheme = 'Basic' # :nodoc:
-    
-        def parse(uri) # :nodoc:
-      scheme, userinfo, host, port,
-        registry, path, opaque, query, fragment = self.split(uri)
-      scheme_list = URI.scheme_list
-      if scheme && scheme_list.include?(uc = scheme.upcase)
-        scheme_list[uc].new(scheme, userinfo, host, port,
-                            registry, path, opaque, query,
-                            fragment, self)
-      else
-        Generic.new(scheme, userinfo, host, port,
-                    registry, path, opaque, query,
-                    fragment, self)
-      end
-    end
-    
-      ## Hangul Algorithm
-  def self.hangul_decomp_one(target)
-    syllable_index = target.ord - SBASE
-    return target if syllable_index < 0 || syllable_index >= SCOUNT
-    l = LBASE + syllable_index / NCOUNT
-    v = VBASE + (syllable_index % NCOUNT) / TCOUNT
-    t = TBASE + syllable_index % TCOUNT
-    (t==TBASE ? [l, v] : [l, v, t]).pack('U*') + target[1..-1]
-  end
-    
-      has_one :icon, serializer: ActivityPub::ImageSerializer
-    
-      describe 'when signed in' do
-    let(:user) { Fabricate(:user) }
-    
-              @assignments = []
-          @references = []
-          @captured_by_block = false
-        end
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
-        end
-      end
-    end
-  end
-end
-
-    
-              new_source =
-            node.receiver.source + ' =~ ' + node.first_argument.source
-    
-            private
-    
-            def argument_positions(arguments)
-          optarg_positions = []
-          arg_positions = []
-    
-            # @param lines [Array<String>]
-        # @param annotations [Array<(Integer, String)>]
-        #   each entry is the annotated line number and the annotation text
+            # If no layout is supplied, look for a template named the return
+        # value of this method.
         #
-        # @note annotations are sorted so that reconstructing the annotation
-        #   text via {#to_s} is deterministic
-        def initialize(lines, annotations)
-          @lines       = lines.freeze
-          @annotations = annotations.sort.freeze
+        # ==== Returns
+        # * <tt>String</tt> - A template name
+        def _implied_layout_name
+          controller_path
         end
-    
-        def register(klass, attachment_name, attachment_options)
-      @attachments ||= {}
-      @attachments[klass] ||= {}
-      @attachments[klass][attachment_name] = attachment_options
     end
     
-          class ValidateAttachmentSizeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-        end
+            def self.find_by_email(email, adapter)
+          email_fields = adapter.config.attributes['email']
     
-          def validate_each(record, attribute, value)
-        base_attribute = attribute.to_sym
-        attribute = '#{attribute}_content_type'.to_sym
-        value = record.send :read_attribute_for_validation, attribute
+            def value_color
+          case @status
+          when 95..100 then STATUS_COLOR[:good]
+          when 90..95 then STATUS_COLOR[:acceptable]
+          when 75..90 then STATUS_COLOR[:medium]
+          when 0..75 then STATUS_COLOR[:low]
+          else
+            STATUS_COLOR[:unknown]
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+          spec['version'] = Bootstrap::VERSION
+    
+    # If you set this to false, any error raised from within your app will bubble
+# up to your step definition and out to cucumber unless you catch it somewhere
+# on the way. You can make Rails rescue errors and render error pages on a
+# per-scenario basis by tagging a scenario or feature with the @allow-rescue tag.
+#
+# If you set this to true, Rails will rescue all errors and render error
+# pages, more or less in the same way your application would behave in the
+# default production environment. It's not recommended to do this for all
+# of your scenarios, as this makes it hard to discover errors in your application.
+ActionController::Base.allow_rescue = false
+    
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
+    end
+  end
+    
+      # fill the password reset form
+  def fill_password_reset_form(new_pass, confirm_pass)
+    fill_in 'user_password', :with => new_pass
+    fill_in 'user_password_confirmation', :with => confirm_pass
+  end
+    
+        it 'returns a 404 for a post not visible to the user' do
+      sign_in eve
+      expect {
+        get :index, params: {post_id: @message.id}
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
