@@ -1,65 +1,169 @@
 
         
-        author: Willem van Ketwich (@wilvk)
-    
-            try:
-            # If the CallerReference is a value already sent in a previous identity request
-            # the returned value is that of the original request
-            result = self.client.update_cloud_front_origin_access_identity(
-                CloudFrontOriginAccessIdentityConfig=new_config,
-                Id=origin_access_identity_id,
-                IfMatch=e_tag,
-            )
-        except (ClientError, BotoCoreError) as e:
-            self.module.fail_json_aws(e, msg='Error updating Origin Access Identity.')
-    
-    import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
-    
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import ec2_argument_spec, get_aws_connection_info, boto3_conn, camel_dict_to_snake_dict
-from ansible.module_utils._text import to_text
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['stableinterface'],
-                    'supported_by': 'certified'}
-    
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            autoscaling_group_name=dict(required=True, type='str'),
-            lifecycle_hook_name=dict(required=True, type='str'),
-            transition=dict(type='str', choices=['autoscaling:EC2_INSTANCE_TERMINATING', 'autoscaling:EC2_INSTANCE_LAUNCHING']),
-            role_arn=dict(type='str'),
-            notification_target_arn=dict(type='str'),
-            notification_meta_data=dict(type='str'),
-            heartbeat_timeout=dict(type='int'),
-            default_result=dict(default='ABANDON', choices=['ABANDON', 'CONTINUE']),
-            state=dict(default='present', choices=['present', 'absent'])
+            def _get_session_key(self):
+        '''
+        Instead of generating a random string, generate a secure url-safe
+        base64-encoded string of data as our session key.
+        '''
+        return signing.dumps(
+            self._session, compress=True,
+            salt='django.contrib.sessions.backends.signed_cookies',
+            serializer=self.serializer,
         )
-    )
     
-            if domain == 'vpc':
-            unassociated_addresses = [a for a in all_addresses
-                                      if not a.association_id]
+        For complete documentation on using Sessions in your code, consult
+    the sessions documentation that is shipped with Django (also available
+    on the Django Web site).
+    '''
+    objects = SessionManager()
+    
+    # convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+    
+        with gzip.open(paths[3], 'rb') as imgpath:
+        x_test = np.frombuffer(imgpath.read(), np.uint8,
+                               offset=16).reshape(len(y_test), 28, 28)
+    
+        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
+                      output_shape=x.shape)(inputs)
+    model1 = Model(inputs, outputs1)
+    out1 = model1.predict(x[np.newaxis])[0]
+    x2 = np.transpose(x, (2, 0, 1))
+    inputs2 = Input(shape=x2.shape)
+    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
+                      output_shape=x2.shape)(inputs2)
+    model2 = Model(inputs2, outputs2)
+    out2 = model2.predict(x2[np.newaxis])[0]
+    assert_allclose(out1, out2.transpose(1, 2, 0))
+    
+    
+@keras_test
+def test_vector_regression():
+    '''
+    Perform float data prediction (regression) using 2 layer MLP
+    with tanh and sigmoid activations.
+    '''
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         output_shape=(num_classes,),
+                                                         classification=False)
+    
+    
+def test_serialization():
+    all_activations = ['max_norm', 'non_neg',
+                       'unit_norm', 'min_max_norm']
+    for name in all_activations:
+        fn = constraints.get(name)
+        ref_fn = getattr(constraints, name)()
+        assert fn.__class__ == ref_fn.__class__
+        config = constraints.serialize(fn)
+        fn = constraints.deserialize(config)
+        assert fn.__class__ == ref_fn.__class__
+    
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
+    
+        def process_options(self, args, opts):
+        try:
+            self.settings.setdict(arglist_to_dict(opts.set),
+                                  priority='cmdline')
+        except ValueError:
+            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+    
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
+    
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
         else:
-            unassociated_addresses = [a for a in all_addresses
-                                      if not a.instance_id]
-        if unassociated_addresses:
-            return unassociated_addresses[0], False
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
+
     
-        region, ec2_url, aws_connect_params = get_aws_connection_info(
-        module, boto3=True)
+            self.process_spider_arguments(opts)
+        self.process_request_meta(opts)
     
-            try:
-            if changed:
-                connection.create_scaling_policy(policy)
-                policy = connection.get_all_policies(as_group=asg_name, policy_names=[sp_name])[0]
-            module.exit_json(changed=changed, name=policy.name, arn=policy.policy_arn, as_name=policy.as_name, scaling_adjustment=policy.scaling_adjustment,
-                             cooldown=policy.cooldown, adjustment_type=policy.adjustment_type, min_adjustment_step=policy.min_adjustment_step)
-        except BotoServerError as e:
-            module.fail_json(msg=str(e))
+    
+def _import_file(filepath):
+    abspath = os.path.abspath(filepath)
+    dirname, file = os.path.split(abspath)
+    fname, fext = os.path.splitext(file)
+    if fext != '.py':
+        raise ValueError('Not a Python source file: %s' % abspath)
+    if dirname:
+        sys.path = [dirname] + sys.path
+    try:
+        module = import_module(fname)
+    finally:
+        if dirname:
+            sys.path.pop(0)
+    return module
+    
+        def syntax(self):
+        return '[options]'
+    
+        def update_vars(self, vars):
+        '''You can use this function to update the Scrapy objects that will be
+        available in the shell
+        '''
+        pass
+    
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.utils.versions import scrapy_components_versions
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
+    
+        # Hit 'q' on the keyboard to quit!
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+    
+    for face_location in face_locations:
+    
+    
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # Check if a valid image file was uploaded
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+    
+    frames = []
+frame_count = 0
+    
+    import os
+import warnings
+    
+        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
+                           lambda service:
+                           webbrowser.open(service.data[ATTR_URL]),
+                           schema=SERVICE_BROWSE_URL_SCHEMA)
+    
+    
+def _authenticate(cloud, email, password):
+    '''Log in and return an authenticated Cognito instance.'''
+    from botocore.exceptions import ClientError
+    from warrant.exceptions import ForceChangePasswordException
+    
+    
+def get_scanner(hass, config):
+    '''Validate the configuration and return an Actiontec scanner.'''
+    scanner = ActiontecDeviceScanner(config[DOMAIN])
+    return scanner if scanner.success_init else None
