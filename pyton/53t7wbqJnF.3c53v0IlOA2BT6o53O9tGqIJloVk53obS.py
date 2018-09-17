@@ -1,159 +1,115 @@
 
         
-        flags = tf.app.flags
-flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
-                    'Directory for saving data.')
-flags.DEFINE_string('datafile_name', 'thits_data',
-                    'Name of data file for input case.')
-flags.DEFINE_string('noise_type', 'poisson', 'Noise type for data.')
-flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
-flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
-flags.DEFINE_integer('C', 100, 'Number of conditions')
-flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
-flags.DEFINE_integer('S', 50, 'Number of sampled units from RNN')
-flags.DEFINE_integer('npcs', 10, 'Number of PCS for multi-session case.')
-flags.DEFINE_float('train_percentage', 4.0/5.0,
-                   'Percentage of train vs validation trials')
-flags.DEFINE_integer('nreplications', 40,
-                     'Number of noise replications of the same underlying rates.')
-flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
-flags.DEFINE_float('x0_std', 1.0,
-                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
-flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
-flags.DEFINE_float('dt', 0.010, 'Time bin')
-flags.DEFINE_float('input_magnitude', 20.0,
-                   'For the input case, what is the value of the input?')
-flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
-FLAGS = flags.FLAGS
-    
-      # Now for each dataset, we regress the channel data onto the top
-  # pcs, and this will be our alignment matrix for that dataset.
-  # |B - A*W|^2
-  for name, dataset in datasets.items():
-    cidx_s = channel_idxs[name][0]
-    cidx_f = channel_idxs[name][1]
-    all_data_zm_chxtc = all_data_zm_nxtc[cidx_s:cidx_f,:] # ch for channel
-    W_chxp, _, _, _ = \
-        np.linalg.lstsq(all_data_zm_chxtc.T, all_data_pca_pxtc.T)
-    dataset['alignment_matrix_cxf'] = W_chxp
-    alignment_bias_cx1 = all_data_mean_nx1[cidx_s:cidx_f]
-    dataset['alignment_bias_c'] = np.squeeze(alignment_bias_cx1, axis=1)
-    
-      # Note the use of get_variable vs. tf.Variable.  this is because get_variable
-  # does not allow the initialization of the variable with a value.
-  if normalized:
-    w_collections = [tf.GraphKeys.GLOBAL_VARIABLES, 'norm-variables']
-    if collections:
-      w_collections += collections
-    if mat_init_value is not None:
-      w = tf.Variable(mat_init_value, name=wname, collections=w_collections,
-                      trainable=trainable)
-    else:
-      w = tf.get_variable(wname, [in_size, out_size], initializer=mat_init,
-                          collections=w_collections, trainable=trainable)
-    w = tf.nn.l2_normalize(w, dim=0) # x W, so xW_j = \sum_i x_bi W_ij
-  else:
-    w_collections = [tf.GraphKeys.GLOBAL_VARIABLES]
-    if collections:
-      w_collections += collections
-    if mat_init_value is not None:
-      w = tf.Variable(mat_init_value, name=wname, collections=w_collections,
-                      trainable=trainable)
-    else:
-      w = tf.get_variable(wname, [in_size, out_size], initializer=mat_init,
-                          collections=w_collections, trainable=trainable)
-  b = None
-  if do_bias:
-    b_collections = [tf.GraphKeys.GLOBAL_VARIABLES]
-    if collections:
-      b_collections += collections
-    bname = (name + '/b') if name else '/b'
-    if bias_init_value is None:
-      b = tf.get_variable(bname, [1, out_size],
-                          initializer=tf.zeros_initializer(),
-                          collections=b_collections,
-                          trainable=trainable)
-    else:
-      b = tf.Variable(bias_init_value, name=bname,
-                      collections=b_collections,
-                      trainable=trainable)
+                # Insert the include statement to MANIFEST.in if not present
+        with open(manifest_path, 'a+') as manifest:
+            manifest.seek(0)
+            manifest_content = manifest.read()
+            if not 'include fastentrypoints.py' in manifest_content:
+                manifest.write(('\n' if manifest_content else '')
+                               + 'include fastentrypoints.py')
     
     
-def construct_ngrams_dict(ngrams_list):
-  '''Construct a ngram dictionary which maps an ngram tuple to the number
-  of times it appears in the text.'''
-  counts = {}
-    
-      if not FLAGS.seq2seq_share_embedding:
-    variable_mapping = {
-        str(model_str) + '/embedding':
-            encoder_embedding,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-            encoder_lstm_w_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-            encoder_lstm_b_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-            encoder_lstm_w_1,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-            encoder_lstm_b_1
-    }
-  else:
-    variable_mapping = {
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-            encoder_lstm_w_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-            encoder_lstm_b_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-            encoder_lstm_w_1,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-            encoder_lstm_b_1
-    }
-  return variable_mapping
-    
-        def test_server(self):
-    
-    # register the Foo class; make `g()` and `_h()` accessible via proxy
-MyManager.register('Foo2', Foo, exposed=('g', '_h'))
-    
-        def test_chunked(self):
-        self.check_url('/chunked')
-    
-    import tornado.ioloop
-import tornado.web
-from tornado import options
-    
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-    
-        # Start workers, then wait for the work queue to be empty.
-    workers = gen.multi([worker() for _ in range(concurrency)])
-    await q.join(timeout=timedelta(seconds=300))
-    assert fetching == fetched
-    print('Done in %d seconds, fetched %s URLs.' % (
-        time.time() - start, len(fetched)))
-    
-        def callback(response):
-        response.rethrow()
-        assert len(response.body) == (options.num_chunks * options.chunk_size)
-        logging.warning('fetch completed in %s seconds', response.request_time)
-        IOLoop.current().stop()
+def history_not_changed(proc, TIMEOUT):
+    '''Ensures that history not changed.'''
+    proc.send('\033[A')
+    assert proc.expect([TIMEOUT, u'fuck'])
     
     
-if __name__ == '__main__':
-    main()
+@pytest.mark.parametrize('command', [
+    Command('apt list --upgradable', no_match_output),
+    Command('sudo apt list --upgradable', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+    
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_match(brew_no_available_formula, brew_already_installed,
+               brew_install_no_argument):
+    assert match(Command('brew install elsticsearch',
+                         brew_no_available_formula))
+    assert not match(Command('brew install git',
+                             brew_already_installed))
+    assert not match(Command('brew install', brew_install_no_argument))
+    
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-    extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.coverage',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-]
+        # Returns
+        x (tensor): tensor as input to the next layer
+    '''
+    conv = Conv2D(num_filters,
+                  kernel_size=kernel_size,
+                  strides=strides,
+                  padding='same',
+                  kernel_initializer='he_normal',
+                  kernel_regularizer=l2(1e-4))
+    
+            self.kernel_constraint = constraints.get(kernel_constraint)
+        self.recurrent_constraint = constraints.get(recurrent_constraint)
+        self.bias_constraint = constraints.get(bias_constraint)
     
     
-@gen.coroutine
-def main():
-    args = parse_command_line()
+# Aliases.
+    
+        model.compile(loss='hinge', optimizer='adagrad')
+    history = model.fit(x_train, y_train, epochs=20, batch_size=16,
+                        validation_data=(x_test, y_test), verbose=0)
+    assert (history.history['val_loss'][-1] < 0.9)
+    
+    
+def test_serialization():
+    all_activations = ['softmax', 'relu', 'elu', 'tanh',
+                       'sigmoid', 'hard_sigmoid', 'linear',
+                       'softplus', 'softsign', 'selu']
+    for name in all_activations:
+        fn = activations.get(name)
+        ref_fn = getattr(activations, name)
+        assert fn == ref_fn
+        config = activations.serialize(fn)
+        fn = activations.deserialize(config)
+        assert fn == ref_fn
+    
+        np.random.seed(args.seed)
+    
+        n_features = 10
+    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
+                                            [n_features], precompute=True)
+    
+    import time
+    
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
+    
+        def __init__(self, resource_type, *args, **kwargs):
+        self.resource_type = resource_type
+        super(Resource, self).__init__(
+            'resource', default=resource_type, *args, **kwargs)
+    
+    REWRITE_HTTPS_ARGS_WITH_END = [
+    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,NE,R=permanent]']
+'''Apache version >= 2.3.9 rewrite rule arguments used for redirections to
+    https vhost'''
+    
+            :param addrs: Iterable Addresses
+        :type addrs: Iterable :class:~obj.Addr
+    
+            self.assertFalse(self.addr_defined.conflicts(self.addr1))
+        self.assertFalse(self.addr_defined.conflicts(self.addr2))
+        self.assertFalse(self.addr_defined.conflicts(self.addr))
+        self.assertFalse(self.addr_defined.conflicts(self.addr_default))
+    
+            # Create all of the challenge certs
+        for achall in self.achalls:
+            responses.append(self._setup_challenge_cert(achall))
