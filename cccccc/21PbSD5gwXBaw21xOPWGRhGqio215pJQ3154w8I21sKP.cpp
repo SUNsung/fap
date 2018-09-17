@@ -1,479 +1,388 @@
 
         
-          image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
+        namespace atom {
+    }
     
-      /**
-   * @brief Implements common layer setup functionality.
-   *
-   * @param bottom the preshaped input blobs
-   * @param top
-   *     the allocated but unshaped output blobs, to be shaped by Reshape
-   *
-   * Checks that the number of bottom and top blobs is correct.
-   * Calls LayerSetUp to do special layer setup for individual layer types,
-   * followed by Reshape to set up sizes of top blobs and internal buffers.
-   * Sets up the loss weight multiplier blobs for any non-zero loss weights.
-   * This method may not be overridden.
-   */
-  void SetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {
-    CheckBlobCounts(bottom, top);
-    LayerSetUp(bottom, top);
-    Reshape(bottom, top);
-    SetLossWeights(top);
+        uint8_t flags = 0;
+    bool width = false;
+    if (params.Get('width', &width) && width) {
+      flags |= atom::kAutoResizeWidth;
+    }
+    bool height = false;
+    if (params.Get('height', &height) && height) {
+      flags |= atom::kAutoResizeHeight;
+    }
+    
+    template <>
+struct Converter<file_dialog::DialogSettings> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     file_dialog::DialogSettings* out) {
+    mate::Dictionary dict;
+    if (!ConvertFromV8(isolate, val, &dict))
+      return false;
+    dict.Get('window', &(out->parent_window));
+    dict.Get('title', &(out->title));
+    dict.Get('message', &(out->message));
+    dict.Get('buttonLabel', &(out->button_label));
+    dict.Get('nameFieldLabel', &(out->name_field_label));
+    dict.Get('defaultPath', &(out->default_path));
+    dict.Get('filters', &(out->filters));
+    dict.Get('properties', &(out->properties));
+    dict.Get('showsTagField', &(out->shows_tag_field));
+#if defined(MAS_BUILD)
+    dict.Get('securityScopedBookmarks', &(out->security_scoped_bookmarks));
+#endif
+    return true;
   }
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the predictions @f$ x @f$, a Blob with values in
-   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
-   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
-   *      label @f$ \hat{l}_n @f$ given by its maximal index:
-   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the labels @f$ l @f$, an integer-valued Blob with values
-   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
-   *      indicating the correct class label among the @f$ K @f$ classes
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      the computed accuracy: @f$
-   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
-   *      @f$, where @f$
-   *      \delta\{\mathrm{condition}\} = \left\{
-   *         \begin{array}{lr}
-   *            1 & \mbox{if condition} \\
-   *            0 & \mbox{otherwise}
-   *         \end{array} \right.
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    /**
- * @brief Provides base for data layers that feed blobs to the Net.
- *
- * TODO(dox): thorough documentation for Forward and proto params.
- */
-template <typename Dtype>
-class BaseDataLayer : public Layer<Dtype> {
- public:
-  explicit BaseDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden except by the BasePrefetchingDataLayer.
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-  // Data layers have no bottoms, so reshaping is trivial.
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    }
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  ManagerSocket socket;
-  pid_t pid;
 };
     
-    ```
+    namespace atom {
+    }
+    
+      views::LayoutManager* layout_manager() const { return layout_manager_; }
+    
+    bool Menu::IsEnabledAt(int index) const {
+  return model_->IsEnabledAt(index);
+}
+    
+    #include <Python.h>
+    
+    static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+    
+    
+    {
+    {
+    {
+    {bool AnnotationMatchesSubstring(const string& file_content,
+                                const GeneratedCodeInfo::Annotation* annotation,
+                                const string& expected_text) {
+  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
+  annotations.push_back(annotation);
+  return AtLeastOneAnnotationMatchesSubstring(file_content, annotations,
+                                              expected_text);
+}
+}  // namespace annotation_test_util
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
     
     #include <string>
-#include <vector>
     
-    REGISTER_CPU_OPERATOR(
-    MergeMultiMapFeatureTensors,
-    MergeMultiMapFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiMapFeatureTensors)
-    .SetDoc(
-        'Merge given multi-feature tensors with map features into one.' + doc)
-    .NumInputs([](int n) { return n >= 5 && n % 5 == 0; })
-    .NumOutputs(5)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_keys', '.keys')
-    .Input(2, 'in1_values_lengths', '.values.lengths')
-    .Input(3, 'in1_values_keys', '.values.keys')
-    .Input(4, 'in1_values_values', '.values.values')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values_lengths', '.values_lengths')
-    .Output(3, 'out_values_keys', '.values.keys')
-    .Output(4, 'out_values_values', '.values.values');
+    // Groups are hacky:  The name of the field is just the lower-cased name
+// of the group type.  In C#, though, we would like to retain the original
+// capitalization of the type name.
+std::string GetFieldName(const FieldDescriptor* descriptor) {
+  if (descriptor->type() == FieldDescriptor::TYPE_GROUP) {
+    return descriptor->message_type()->name();
+  } else {
+    return descriptor->name();
+  }
+}
     
-    </details>
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
     
-      bool RunOnDevice() override {
-    auto& X = Input(0);
-    auto* Y = Output(0);
-    Y->ResizeLike(X);
+    void PrimitiveFieldGenerator::WriteHash(io::Printer* printer) {
+  const char *text = 'if ($has_property_check$) hash ^= $property_name$.GetHashCode();\n';
+  if (descriptor_->type() == FieldDescriptor::TYPE_FLOAT) {
+    text = 'if ($has_property_check$) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode($property_name$);\n';
+  } else if (descriptor_->type() == FieldDescriptor::TYPE_DOUBLE) {
+    text = 'if ($has_property_check$) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode($property_name$);\n';
+  }
+	printer->Print(variables_, text);
+}
+void PrimitiveFieldGenerator::WriteEquals(io::Printer* printer) {
+  const char *text = 'if ($property_name$ != other.$property_name$) return false;\n';
+  if (descriptor_->type() == FieldDescriptor::TYPE_FLOAT) {
+    text = 'if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals($property_name$, other.$property_name$)) return false;\n';
+  } else if (descriptor_->type() == FieldDescriptor::TYPE_DOUBLE) {
+    text = 'if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals($property_name$, other.$property_name$)) return false;\n';
+  }
+  printer->Print(variables_, text);
+}
+void PrimitiveFieldGenerator::WriteToString(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'PrintField(\'$descriptor_name$\', $has_property_check$, $property_name$, writer);\n');
+}
+    
+      virtual void GenerateCodecCode(io::Printer* printer);
+  virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    
+    {
+    {  if (!namespace_.empty()) {
+    printer->Outdent();
+    printer->Print('}\n');
+  }
+  printer->Print('\n');
+  printer->Print('#endregion Designer generated code\n');
+}
+    
+    std::shared_ptr<Channel> CreateChannelInternal(const grpc::string& host,
+                                               grpc_channel* c_channel);
+    
+    namespace internal {
+class AlarmImpl : public CompletionQueueTag {
+ public:
+  AlarmImpl() : cq_(nullptr), tag_(nullptr) {
+    gpr_ref_init(&refs_, 1);
+    grpc_timer_init_unset(&timer_);
+    GRPC_CLOSURE_INIT(&on_alarm_,
+                      [](void* arg, grpc_error* error) {
+                        // queue the op on the completion queue
+                        AlarmImpl* alarm = static_cast<AlarmImpl*>(arg);
+                        alarm->Ref();
+                        grpc_cq_end_op(
+                            alarm->cq_, alarm, error,
+                            [](void* arg, grpc_cq_completion* completion) {},
+                            arg, &alarm->completion_);
+                      },
+                      this, grpc_schedule_on_exec_ctx);
+  }
+  ~AlarmImpl() {
+    grpc_core::ExecCtx exec_ctx;
+    if (cq_ != nullptr) {
+      GRPC_CQ_INTERNAL_UNREF(cq_, 'alarm');
+    }
+  }
+  bool FinalizeResult(void** tag, bool* status) override {
+    *tag = tag_;
+    Unref();
+    return true;
+  }
+  void Set(CompletionQueue* cq, gpr_timespec deadline, void* tag) {
+    grpc_core::ExecCtx exec_ctx;
+    GRPC_CQ_INTERNAL_REF(cq->cq(), 'alarm');
+    cq_ = cq->cq();
+    tag_ = tag;
+    GPR_ASSERT(grpc_cq_begin_op(cq_, this));
+    grpc_timer_init(&timer_, grpc_timespec_to_millis_round_up(deadline),
+                    &on_alarm_);
+  }
+  void Cancel() {
+    grpc_core::ExecCtx exec_ctx;
+    grpc_timer_cancel(&timer_);
+  }
+  void Destroy() {
+    Cancel();
+    Unref();
+  }
+    }
     }
     
-    	while (to_read) {
+    AuthPropertyIterator::~AuthPropertyIterator() {}
+    
+    grpc::string SecureAuthContext::GetPeerIdentityPropertyName() const {
+  if (!ctx_) {
+    return '';
+  }
+  const char* name = grpc_auth_context_peer_identity_property_name(ctx_);
+  return name == nullptr ? '' : name;
+}
+    
+    #include <grpcpp/support/channel_arguments.h>
+    
+    namespace grpc {
     }
     
-    #ifdef WINDOWS_USE_MUTEX
-	return (WaitForSingleObject(mutex, 0) == WAIT_TIMEOUT) ? ERR_BUSY : OK;
-#else
+    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerServerLatency();
+::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
     
-    	static void make_default();
+    void CensusServerCallData::OnDoneRecvMessageCb(void* user_data,
+                                               grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusServerCallData* calld =
+      reinterpret_cast<CensusServerCallData*>(elem->call_data);
+  CensusChannelData* channeld =
+      reinterpret_cast<CensusChannelData*>(elem->channel_data);
+  GPR_ASSERT(calld != nullptr);
+  GPR_ASSERT(channeld != nullptr);
+  // Stream messages are no longer valid after receiving trailing metadata.
+  if ((*calld->recv_message_) != nullptr) {
+    ++calld->recv_message_count_;
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
+}
+    
+    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsCollision(body0, body1);
+}
     
     
-    {        template <typename ElementType>
-        void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const;
-    };
+    {#ifdef TOOLS_ENABLED
+	EditorPlugins::add_by_type<EditorPluginCSG>();
+#endif
+#endif
+}
     
-            const size_t m_frequency;
-        const size_t m_firstN;
+    class Camera;
     
-    #pragma once
+    NS_CC_BEGIN
+// implementation of GridAction
     
-    class CrossProcessMutex
+    #include '2d/CCAction.h'
+#include 'base/CCVector.h'
+#include 'base/CCRef.h'
+    
+    /*
+ * Update each tick
+ * Time is the percentage of the way through the duration
+ */
+void PageTurn3D::update(float time)
 {
-    // no-copying
-    CrossProcessMutex(const CrossProcessMutex&);
-    void operator=(const CrossProcessMutex&);
+    float tt = MAX(0, time - 0.25f);
+    float deltaAy = (tt * tt * 500);
+    float ay = -100 - deltaAy;
+    
+    float deltaTheta = sqrtf(time);
+    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
+    
+    float rotateByYAxis = (2-time)* M_PI;
+    
+    float sinTheta = sinf(theta);
+    float cosTheta = cosf(theta);
+    
+    for (int i = 0; i <= _gridSize.width; ++i)
+    {
+        for (int j = 0; j <= _gridSize.height; ++j)
+        {
+            // Get original vertex
+            Vec3 p = getOriginalVertex(Vec2(i ,j));
+            
+            p.x -= getGridRect().origin.x;
+            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
+            float r = R * sinTheta;
+            float alpha = asinf( p.x / R );
+            float beta = alpha / sinTheta;
+            float cosBeta = cosf( beta );
+            
+            // If beta > PI then we've wrapped around the cone
+            // Reduce the radius to stop these points interfering with others
+            if (beta <= M_PI)
+            {
+                p.x = ( r * sinf(beta));
+            }
+            else
+            {
+                // Force X = 0 to stop wrapped
+                // points
+                p.x = 0;
+            }
+    }
+    }
     }
     
-    template<class ElemType>
-class ComputationNetworkFromFile : public ComputationNetwork
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
 {
 public:
-    ComputationNetworkFromFile(const IConfigRecordPtr configp) :
-        ComputationNetwork()
-    {
-        let& config = *configp;
-    }
-    }
-    
-    #ifndef BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
-   //
-   // Augment error message with the regular expression text:
-   //
-   if(start_pos == position)
-      start_pos = (std::max)(static_cast<std::ptrdiff_t>(0), position - static_cast<std::ptrdiff_t>(10));
-   std::ptrdiff_t end_pos = (std::min)(position + static_cast<std::ptrdiff_t>(10), static_cast<std::ptrdiff_t>(m_end - m_base));
-   if(error_code != regex_constants::error_empty)
-   {
-      if((start_pos != 0) || (end_pos != (m_end - m_base)))
-         message += '  The error occurred while parsing the regular expression fragment: '';
-      else
-         message += '  The error occurred while parsing the regular expression: '';
-      if(start_pos != end_pos)
-      {
-         message += std::string(m_base + start_pos, m_base + position);
-         message += '>>>HERE>>>';
-         message += std::string(m_base + position, m_base + end_pos);
-      }
-      message += ''.';
-   }
-#endif
-    
-    //
-// note no include guard, we may include this multiple times:
-//
-#ifndef BOOST_REGEX_NO_EXTERNAL_TEMPLATES
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_match.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Iterator traits for selecting an iterator type as
-  *                an integral constant expression.
-  */
-    
-    #ifdef __cplusplus
-#  include <boost/cstdint.hpp>
-#endif
-    
-    #ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_prefix()
-{
-   m_has_partial_match = false;
-   m_has_found_match = false;
-   pstate = re.get_first_state();
-   m_presult->set_first(position);
-   restart = position;
-   match_all_states();
-   if(!m_has_found_match && m_has_partial_match && (m_match_flags & match_partial))
-   {
-      m_has_found_match = true;
-      m_presult->set_second(last, 0, false);
-      position = last;
-      if((m_match_flags & match_posix) == match_posix)
-      {
-         m_result.maybe_assign(*m_presult);
-      }
-   }
-#ifdef BOOST_REGEX_MATCH_EXTRA
-   if(m_has_found_match && (match_extra & m_match_flags))
-   {
-      //
-      // we have a match, reverse the capture information:
-      //
-      for(unsigned i = 0; i < m_presult->size(); ++i)
-      {
-         typename sub_match<BidiIterator>::capture_sequence_type & seq = ((*m_presult)[i]).get_captures();
-         std::reverse(seq.begin(), seq.end());
-      }
-   }
-#endif
-   if(!m_has_found_match)
-      position = restart; // reset search postion
-#ifdef BOOST_REGEX_RECURSIVE
-   m_can_backtrack = true; // reset for further searches
-#endif
-   return m_has_found_match;
-}
-    
-    
-    {   if(next_count->get_count() < rep->min)
-   {
-      // we must take the repeat:
-      if(take_first)
-      {
-         // increase the counter:
-         ++(*next_count);
-         pstate = rep->next.p;
-         return match_all_states();
-      }
-      return false;
-   }
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
-   if(greedy)
-   {
-      // try and take the repeat if we can:
-      if((next_count->get_count() < rep->max) && take_first)
-      {
-         // store position in case we fail:
-         BidiIterator pos = position;
-         // increase the counter:
-         ++(*next_count);
-         pstate = rep->next.p;
-         if(match_all_states())
-            return true;
-         if(!m_can_backtrack)
-            return false;
-         // failed repeat, reset posistion and fall through for alternative:
-         position = pos;
-      }
-      if(take_second)
-      {
-         pstate = rep->alt.p;
-         return true;
-      }
-      return false; // can't take anything, fail...
-   }
-   else // non-greedy
-   {
-      // try and skip the repeat if we can:
-      if(take_second)
-      {
-         // store position in case we fail:
-         BidiIterator pos = position;
-         pstate = rep->alt.p;
-         if(match_all_states())
-            return true;
-         if(!m_can_backtrack)
-            return false;
-         // failed alternative, reset posistion and fall through for repeat:
-         position = pos;
-      }
-      if((next_count->get_count() < rep->max) && take_first)
-      {
-         // increase the counter:
-         ++(*next_count);
-         pstate = rep->next.p;
-         return match_all_states();
-      }
-   }
-   return false;
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-}
-    
-    
-template <class traits, class charT>
-unsigned find_sort_syntax(const traits* pt, charT* delim)
-{
-   //
-   // compare 'a' with 'A' to see how similar they are,
-   // should really use a-accute but we can't portably do that,
-   //
-   typedef typename traits::string_type string_type;
-   typedef typename traits::char_type char_type;
+    /**
+     * @js NA 
+     */
+    virtual GridBase* getGrid() override;
     }
     
-    #ifndef BOOST_REGEX_FWD_HPP
-#include <boost/regex_fwd.hpp>
-#endif
-#ifndef BOOST_REGEX_TRAITS_HPP
-#include <boost/regex/regex_traits.hpp>
-#endif
-#ifndef BOOST_REGEX_RAW_BUFFER_HPP
-#include <boost/regex/v4/error_type.hpp>
-#endif
-#ifndef BOOST_REGEX_V4_MATCH_FLAGS
-#include <boost/regex/v4/match_flags.hpp>
-#endif
-#ifndef BOOST_REGEX_RAW_BUFFER_HPP
-#include <boost/regex/v4/regex_raw_buffer.hpp>
-#endif
-#ifndef BOOST_RE_PAT_EXCEPT_HPP
-#include <boost/regex/pattern_except.hpp>
-#endif
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
+  }
     
-    
-    {template <class OutputIterator, class Results, class traits, class ForwardIter>
-void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format_conditional()
-{
-   if(m_position == m_end)
-   {
-      // oops trailing '?':
-      put(static_cast<char_type>('?'));
-      return;
-   }
-   int v;
-   if(*m_position == '{')
-   {
-      ForwardIter base = m_position;
-      ++m_position;
-      v = this->toi(m_position, m_end, 10);
-      if(v < 0)
-      {
-         // Try a named subexpression:
-         while((m_position != m_end) && (*m_position != '}'))
-            ++m_position;
-         v = this->get_named_sub_index(base + 1, m_position);
-      }
-      if((v < 0) || (*m_position != '}'))
-      {
-         m_position = base;
-         // oops trailing '?':
-         put(static_cast<char_type>('?'));
-         return;
-      }
-      // Skip trailing '}':
-      ++m_position;
-   }
-   else
-   {
-      std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-      len = (std::min)(static_cast<std::ptrdiff_t>(2), len);
-      v = this->toi(m_position, m_position + len, 10);
-   }
-   if(v < 0)
-   {
-      // oops not a number:
-      put(static_cast<char_type>('?'));
-      return;
-   }
-    
-    //
-// regex_grep convenience interfaces:
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-//
-// this isn't really a partial specialisation, but template function
-// overloading - if the compiler doesn't support partial specialisation
-// then it really won't support this either:
-template <class Predicate, class charT, class traits>
-inline unsigned int regex_grep(Predicate foo, const charT* str, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_grep(foo, str, str + traits::length(str), e, flags);
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
 }
     
-    namespace boost{
+    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
+  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
+  jpg->quant.clear();
+  int num_tables = 0;
+  for (size_t i = 0; i < jpg->components.size(); ++i) {
+    JPEGComponent* comp = &jpg->components[i];
+    // Check if we have this quant table already.
+    bool found = false;
+    for (int j = 0; j < num_tables; ++j) {
+      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
+        comp->quant_idx = j;
+        found = true;
+        break;
+      }
     }
-    
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const charT* fmt, 
-                         match_flag_type flags = match_default)
-{
-   return regex_replace(out, first, last, e, fmt, flags);
+    if (!found) {
+      JPEGQuantTable table;
+      memcpy(&table.values[0], &q[i][0], kTableSize);
+      table.precision = 0;
+      for (int k = 0; k < kDCTBlockSize; ++k) {
+        assert(table.values[k] >= 0);
+        assert(table.values[k] < (1 << 16));
+        if (table.values[k] > 0xff) {
+          table.precision = 1;
+        }
+      }
+      table.index = num_tables;
+      comp->quant_idx = num_tables;
+      jpg->quant.push_back(table);
+      ++num_tables;
+    }
+  }
 }
     
-    #endif  // BOOST_REGEX_V4_REGEX_REPLACE_HPP
+    #include 'guetzli/jpeg_data_encoder.h'
     
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
+    
+    
+    {}  // namespace guetzli
