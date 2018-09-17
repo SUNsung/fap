@@ -1,134 +1,61 @@
 
         
-        # If your optimizations start 'NaN-ing out', reduce this value so that
-# the values of the network don't grow out of control.  Typically, once
-# this parameter is set to a reasonable value, one stops having numerical
-# problems.
-flags.DEFINE_float('cell_clip_value', CELL_CLIP_VALUE,
-                   'Max value recurrent cell can take before being clipped.')
+        
+def win_service_handler(stop_event, *args):
+    try:
+        raise ValueError('Handler called with args ' + repr(args))
+        TODO
+    except Exception as e:
+        tb = traceback.format_exc()
+        msg = str(e) + '\n' + tb
+        win_service_report_event(service_name, msg, is_error=True)
+        raise
     
+        params = {
+        'data_files': data_files,
+    }
+    if setuptools_available:
+        params['entry_points'] = {'console_scripts': ['youtube-dl = youtube_dl:main']}
+    else:
+        params['scripts'] = ['bin/youtube-dl']
     
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-u_rng = np.random.RandomState(seed=FLAGS.synth_data_seed+1)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N  # must be same N as in trained model (provided example is N = 50)
-nreplications = FLAGS.nreplications
-E = nreplications * C  # total number of trials
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
-batch_size = 1  # gives one example per ntrial
+    from test.helper import FakeYDL, expect_dict, expect_value
+from youtube_dl.compat import compat_etree_fromstring
+from youtube_dl.extractor.common import InfoExtractor
+from youtube_dl.extractor import YoutubeIE, get_info_extractor
+from youtube_dl.utils import encode_data_uri, strip_jsonp, ExtractorError, RegexNotFoundError
     
-        if len(word) > self.max_word_length - 2:
-      word = word[:self.max_word_length-2]
-    cur_word = self.bow_char + word + self.eow_char
-    for j in range(len(cur_word)):
-      code[j] = ord(cur_word[j])
-    return code
-    
-      def _score_patches(self, word_patches):
-    '''Score a 2D matrix of word_patches and stitch results together.'''
-    batch_size, num_timesteps = self.shape
-    nrow, ncol = len(word_patches), len(word_patches[0])
-    max_len = num_timesteps * ncol
-    probs = np.zeros([0, max_len])  # accumulate results into this.
-    
-      # Construct the vocab_size array.
-  new_arr = np.zeros(shape)
-    
-        def __init__(self):
-        self.name = 'btree_gin'
-    
+        @classmethod
+    def default_decoder(cls, value):
         try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
-    
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        try:
-            self.model.objects.get(session_key=session_key).delete()
-        except self.model.DoesNotExist:
-            pass
-    
-        def _get_session_key(self):
-        '''
-        Instead of generating a random string, generate a secure url-safe
-        base64-encoded string of data as our session key.
-        '''
-        return signing.dumps(
-            self._session, compress=True,
-            salt='django.contrib.sessions.backends.signed_cookies',
-            serializer=self.serializer,
-        )
+            return pyrfc3339.parse(value)
+        except ValueError as error:
+            raise jose.DeserializationError(error)
     
     
-class SitemapNotFound(Exception):
-    pass
+class Header(jose.Header):
+    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    '''
+    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
+    kid = jose.Field('kid', omitempty=True)
+    url = jose.Field('url', omitempty=True)
     
-      filename_cc = filename_cc.replace('/public/', '/')
-  filename_cc = filename_cc.replace('/internal/', '/')
+        def test_jwk_serialize(self):
+        from acme.jws import JWS
+        jws = JWS.sign(payload=b'foo', key=self.privkey,
+                       alg=jose.RS256, nonce=self.nonce,
+                       url=self.url)
+        self.assertEqual(jws.signature.combined.kid, None)
+        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
     
+        :param str vhost_path: Augeas virtual host path
     
-  def Done( self ):
-    return bool( self._response_future ) and self._response_future.done()
+        def test_nested(self):
+        self.assertEqual(len(self.parser.find_dir('NESTED_DIRECTIVE')), 3)
+        self.assertEqual(
+            len(self.parser.find_dir('INVALID_NESTED_DIRECTIVE')), 0)
     
-                for pattern in _ConvertDiagnosticToMatchPatterns( diag ):
-              # The id doesn't matter for matches that we may add.
-              match = vimsupport.DiagnosticMatch( 0, group, pattern )
-              try:
-                matches_to_remove.remove( match )
-              except ValueError:
-                vimsupport.AddDiagnosticMatch( match )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def HandlePollResponse_MultipleDiagnostics_test():
-  diagnostics_handler = ExtendedMock()
-  messages = [
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
-    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
-    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
-  ]
-  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
-               equal_to( True ) )
-  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
-    call( 'foo', [ 'PLACEHOLDER1' ] ),
-    call( 'bar', [ 'PLACEHOLDER2' ] ),
-    call( 'baz', [ 'PLACEHOLDER3' ] ),
-    call( 'foo', [ 'PLACEHOLDER4' ] )
-  ] )
-    
-      def _adjust_thread_count( self ):
-    # When the executor gets lost, the weakref callback will wake up
-    # the worker threads.
-    def weakref_cb( _, q=self._work_queue ):
-      q.put( None )
-    # TODO(bquinlan): Should avoid creating new threads if there are more
-    # idle threads than items in the work queue.
-    if len( self._threads ) < self._max_workers:
-      t = threading.Thread( target=_worker,
-                            args=( weakref.ref( self, weakref_cb ),
-                                   self._work_queue ) )
-      t.daemon = True
-      t.start()
-      self._threads.add( t )
+        @certbot_util.patch_get_utility()
+    def test_successful_choice(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 3)
+        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
