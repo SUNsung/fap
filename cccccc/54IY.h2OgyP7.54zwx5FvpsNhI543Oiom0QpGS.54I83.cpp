@@ -1,273 +1,323 @@
 
         
-        // Implements the part of the interface that caches and returns remote
-// device status attributes.
-class WorkerCachePartial : public WorkerCacheInterface {
- public:
-  bool GetDeviceLocalityNonBlocking(const string& device,
-                                    DeviceLocality* locality) override;
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
+    
+      int id() const { return id_; }
+  std::string extension_id_;
+  ObjectManager* object_manager() const { return object_manager_.get(); }
+    
+    namespace nwapi {
     }
     
-    
-    {}  // namespace arg_min_max
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      double PrimalLossDerivative(const double wx, const double label,
-                              const double example_weight) const final {
-    if (label * wx >= 1) {
-      return 0;
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
-    if (label * wx <= 1 - gamma) {
-      return -label;
     }
-    return (wx - label) / gamma;
-  }
     
-    #if TENSORFLOW_USE_SYCL
+     protected:
+  ~NwAppQuitFunction() override;
     
-    The input audio has one row of the tensor for each channel in the audio file.
-Each channel contains audio samples starting at the beginning of the audio and
-having `1/samples_per_second` time between them. The output file will contain
-all of the audio channels contained in the tensor.
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+    }
     
-    inline void AppendEscapedName(string *json, const string &name) {
-  StrAppend(json, '\'name\':', Json::valueToQuotedString(name.c_str()).c_str());
+    #if !defined(__AVX__)
+// Implementation for non-avx archs.
+    
+    namespace tesseract {
+double DotProductSSE(const double* u, const double* v, int n) {
+  fprintf(stderr, 'DotProductSSE can't be used on Android\n');
+  abort();
+}
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
+  fprintf(stderr, 'IntDotProductSSE can't be used on Android\n');
+  abort();
+}
+}  // namespace tesseract
+    
+    
+    {}  // namespace tesseract.
+    
+    #include 'platform.h'  // for TESS_API
+    
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
+    
+    #include <memory>
+    
+    #include <memory>
+    
+    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
+  return !operator==(rhs);
 }
     
-    TEST_CASE('cursor/non-const-to-const-conversion') {
-  torch::manual_seed(0);
-  auto first = std::make_shared<TestModule>(1);
-  auto second = std::make_shared<TestModule>(2);
-  Container model(first, second);
-    }
-    
-    TEST_CASE('Optim/ZeroGrad') {
-  torch::manual_seed(0);
-    }
-    
-        std::vector<int64_t> tensor2_expand_size(expand_batch_portion);
-    tensor2_expand_size.insert(tensor2_expand_size.end(), {m2, p});
-    
-    #include 'RPC-inl.hpp'
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
 
     
-    int main() {
-  THLongStorage *storage1 = THLongStorage_newWithSize(STORAGE_SIZE);
-  int64_t *data = storage1->data;
-  for (int64_t i = 0; i < STORAGE_SIZE; i++)
-    data[i] = i;
-  std::vector<int64_t> vec(VEC_SIZE, 7);  // VEC_SIZE sevens
-  std::unique_ptr<RPCMessage> msg_ptr =
-    packMessage(1, 1.0f, 100l, -12, LLONG_MAX, storage1, vec);
-  auto &msg = *msg_ptr;
+    void CensusServerCallData::OnDoneRecvInitialMetadataCb(void* user_data,
+                                                       grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusServerCallData* calld =
+      reinterpret_cast<CensusServerCallData*>(elem->call_data);
+  GPR_ASSERT(calld != nullptr);
+  if (error == GRPC_ERROR_NONE) {
+    grpc_metadata_batch* initial_metadata = calld->recv_initial_metadata_;
+    GPR_ASSERT(initial_metadata != nullptr);
+    ServerMetadataElements sml;
+    sml.path = grpc_empty_slice();
+    sml.tracing_slice = grpc_empty_slice();
+    sml.census_proto = grpc_empty_slice();
+    FilterInitialMetadata(initial_metadata, &sml);
+    calld->path_ = grpc_slice_ref_internal(sml.path);
+    calld->method_ = GetMethod(&calld->path_);
+    calld->qualified_method_ = StrCat('Recv.', calld->method_);
+    const char* tracing_str =
+        GRPC_SLICE_IS_EMPTY(sml.tracing_slice)
+            ? ''
+            : reinterpret_cast<const char*>(
+                  GRPC_SLICE_START_PTR(sml.tracing_slice));
+    size_t tracing_str_len = GRPC_SLICE_IS_EMPTY(sml.tracing_slice)
+                                 ? 0
+                                 : GRPC_SLICE_LENGTH(sml.tracing_slice);
+    const char* census_str = GRPC_SLICE_IS_EMPTY(sml.census_proto)
+                                 ? ''
+                                 : reinterpret_cast<const char*>(
+                                       GRPC_SLICE_START_PTR(sml.census_proto));
+    size_t census_str_len = GRPC_SLICE_IS_EMPTY(sml.census_proto)
+                                ? 0
+                                : GRPC_SLICE_LENGTH(sml.census_proto);
+    }
     }
     
-    /* Opaque object representing a Bidirectional stream creating engine. Created
- * and configured outside of this API to facilitate sharing with other
- * components */
-typedef struct stream_engine {
-  void* obj;
-  void* annotation;
-} stream_engine;
+      /**
+   * \fn  virtual void Predictor::Init(const std::vector<std::pair<std::string,
+   * std::string> >&cfg ,const std::vector<std::shared_ptr<DMatrix> > &cache);
+   *
+   * \brief Configure and register input matrices in prediction cache.
+   *
+   * \param cfg   The configuration.
+   * \param cache Vector of DMatrix's to be used in prediction.
+   */
     
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    static void RunServer() {
-  QpsWorker worker(FLAGS_driver_port, FLAGS_server_port, FLAGS_credential_type);
-    }
-    
-    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-    
-    namespace grpc {
-namespace {
-    }
-    }
-    
-    template <class T, class F>
-double sum(const T& container, F functor) {
-  double r = 0;
-  for (auto v = container.begin(); v != container.end(); v++) {
-    r += functor(*v);
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
   }
-  return r;
-}
     
-    	static void _bind_methods();
+        /** Returns a new action that performs the exact reverse of the action. 
+     *
+     * @return A new action that performs the exact reverse of the action.
+     * @js NA
+     */
+    virtual Action* reverse() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
     
-    			bus_index = AudioServer::get_singleton()->thread_find_bus_index(bus);
-    
-    	GodotRestInfoContactResultCallback(btCollisionObject *p_self_object, PhysicsDirectSpaceState::ShapeRestInfo *p_result, const Set<RID> *p_exclude) :
-			m_self_object(p_self_object),
-			m_result(p_result),
-			m_exclude(p_exclude),
-			m_collided(false),
-			m_min_distance(0) {}
-    
-    // Find a start of scan (SOS) marker.
-int jpeg_decoder::locate_sos_marker()
+    void ActionCamera::setCenter(const Vec3& center)
 {
-  int c;
-    }
-    
-            __inline long int float2int(float value)
-        {
-                return _mm_cvtss_si32(_mm_load_ss(&value));
-        }
-#elif (defined(_MSC_VER) && _MSC_VER >= 1400) && defined (_M_IX86)
-        #include <math.h>
-    
-        /* Compute residual by subtracting product of denominator and first approximation from one */
-    err_Q32 = silk_LSHIFT( ((opus_int32)1<<29) - silk_SMULWB(b32_nrm, b32_inv), 3 );        /* Q32                        */
-    
-        virtual void ForwardPass(const ValueRefs<ElemType>& inputs, ValueRefs<ElemType>& output, bool resetRNN) override;
-    
-    namespace rabit {
-namespace utils {
-extern 'C' {
-  void (*Printf)(const char *fmt, ...) = Rprintf;
-  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
-  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
-  void (*Error)(const char *fmt, ...) = error;
-}
-}
+    _center = center;
+    updateTransform();
 }
     
-      /*! \brief constructor */
-  SparsePage() {
-    this->Clear();
-  }
-  /*! \return number of instance in the page */
-  inline size_t Size() const {
-    return offset.size() - 1;
-  }
-  /*! \return estimation of memory cost of this page */
-  inline size_t MemCostBytes() const {
-    return offset.size() * sizeof(size_t) + data.size() * sizeof(Entry);
-  }
-  /*! \brief clear the page */
-  inline void Clear() {
-    base_rowid = 0;
-    offset.clear();
-    offset.push_back(0);
-    data.clear();
-  }
+        /** Creates an action with a Cardinal Spline array of points and tension.
+     * @param duration In seconds.
+     * @param points An PointArray.
+     * @param tension Goodness of fit.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * In js: var create(var t,var table)
+     * In lua: local create(local t, local table)
+     * @endcode
+     */
+    static CardinalSplineTo* create(float duration, PointArray* points, float tension);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~CardinalSplineTo();
+    /**
+     * @js ctor
+     * @lua NA
+     */
+    CardinalSplineTo();
     
-    class LogCallbackRegistry {
- public:
-  using Callback = void (*)(const char*);
-  LogCallbackRegistry()
-    : log_callback_([] (const char* msg) { std::cerr << msg << std::endl; }) {}
-  inline void Register(Callback log_callback) {
-    this->log_callback_ = log_callback;
-  }
-  inline Callback Get() const {
-    return log_callback_;
-  }
- private:
-  Callback log_callback_;
-};
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
-
-    
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-        // Count glyphs/ranges, initialize font
-    int total_glyphs_count = 0;
-    int total_ranges_count = 0;
-    for (int input_i = 0; input_i < atlas->ConfigData.Size; input_i++) 
-    {
-        ImFontConfig& cfg = atlas->ConfigData[input_i];
-        FreeTypeFont& font_face = fonts[input_i];
-        IM_ASSERT(cfg.DstFont && (!cfg.DstFont->IsLoaded() || cfg.DstFont->ContainerAtlas == atlas));
-    }
-    
-        // Setup orthographic projection matrix
-    // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
-    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
-    {
-        float L = draw_data->DisplayPos.x + 0.5f;
-        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
-        float T = draw_data->DisplayPos.y + 0.5f;
-        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
-        D3DMATRIX mat_identity = { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } };
-        D3DMATRIX mat_projection =
-        {
-            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
-            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
-            0.0f,         0.0f,         0.5f,  0.0f,
-            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f,
-        };
-        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
-    }
-    
-    static void check_vk_result(VkResult err)
+    StopGrid* StopGrid::clone() const
 {
-    if (g_CheckVkResultFn)
-        g_CheckVkResultFn(err);
+    return StopGrid::create();
 }
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
-//  2018-06-10: Inputs: Fixed handling of mouse wheel messages to support fine position messages (typically sent by track-pads).
-//  2018-06-08: Misc: Extracted imgui_impl_win32.cpp/.h away from the old combined DX9/DX10/DX11/DX12 examples.
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-02-06: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavMoveMouse is set).
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-08: Inputs: Added mapping for ImGuiKey_Insert.
-//  2018-01-05: Inputs: Added WM_LBUTTONDBLCLK double-click handlers for window classes with the CS_DBLCLKS flag.
-//  2017-10-23: Inputs: Added WM_SYSKEYDOWN / WM_SYSKEYUP handlers so e.g. the VK_MENU key can be read.
-//  2017-10-23: Inputs: Using Win32 ::SetCapture/::GetCapture() to retrieve mouse positions outside the client area when dragging. 
-//  2016-11-12: Inputs: Only call Win32 ::SetCursor(NULL) when io.MouseDrawCursor is set.
+    /** @class ActionInstant
+* @brief Instant actions are immediate actions. They don't have a duration like the IntervalAction actions.
+**/
+class CC_DLL ActionInstant : public FiniteTimeAction
+{
+public:
+    //
+    // Overrides
+    //
+    virtual ActionInstant* clone() const override
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
     
-            // Poll and handle inputs
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
+    virtual ActionInstant * reverse() const override
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
+    }
+    
+    
+    /** Pauses the target: all running actions and newly added actions will be paused.
+     *
+     * @param target    A certain target.
+     */
+    virtual void pauseTarget(Node *target);
+    
+    AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
+{
+    auto ret = new (std::nothrow) AnimationFrame();
+    if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
+    {
+        ret->autorelease();
+    }
+    else
+    {
+        CC_SAFE_DELETE(ret);
+    }
+    return ret;
+}
+    
+    void AtlasNode::updateAtlasValues()
+{
+    CCASSERT(false, 'CCAtlasNode:Abstract updateAtlasValue not overridden');
+}
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
                 ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
     
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
     
-    {    // Create SwapChain, RenderPass, Framebuffer, etc.
-    ImGui_ImplVulkanH_CreateWindowDataCommandBuffers(g_PhysicalDevice, g_Device, g_QueueFamily, wd, g_Allocator);
-    ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(g_PhysicalDevice, g_Device, wd, g_Allocator, width, height);
-}
+    // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
+// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
+// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#endif
+    
+    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
+    }
+    
+    // DirectX data
+static ID3D11Device*            g_pd3dDevice = NULL;
+static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+static IDXGIFactory*            g_pFactory = NULL;
+static ID3D11Buffer*            g_pVB = NULL;
+static ID3D11Buffer*            g_pIB = NULL;
+static ID3D10Blob*              g_pVertexShaderBlob = NULL;
+static ID3D11VertexShader*      g_pVertexShader = NULL;
+static ID3D11InputLayout*       g_pInputLayout = NULL;
+static ID3D11Buffer*            g_pVertexConstantBuffer = NULL;
+static ID3D10Blob*              g_pPixelShaderBlob = NULL;
+static ID3D11PixelShader*       g_pPixelShader = NULL;
+static ID3D11SamplerState*      g_pFontSampler = NULL;
+static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
+static ID3D11RasterizerState*   g_pRasterizerState = NULL;
+static ID3D11BlendState*        g_pBlendState = NULL;
+static ID3D11DepthStencilState* g_pDepthStencilState = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+    
+    void ImGui_ImplGlfw_NewFrame()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(io.Fonts->IsBuilt());     // Font atlas needs to be built, call renderer _NewFrame() function e.g. ImGui_ImplOpenGL3_NewFrame() 
+    }
