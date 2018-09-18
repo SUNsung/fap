@@ -1,404 +1,489 @@
 
         
-          /// This is the second time DebuggerClient is consulted:
-  /// after all names in external Modules are checked, the client
-  /// gets a chance to add names to the list of candidates that
-  /// have been found in the external module lookup.
+        // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
     
-    #endif
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    namespace tensorflow {
+namespace python_op_gen_internal {
+    }
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {  if (!register_ufunc('equal', CompareUFunc<Bfloat16EqFunctor>,
+                      compare_types)) {
+    return false;
+  }
+  if (!register_ufunc('not_equal', CompareUFunc<Bfloat16NeFunctor>,
+                      compare_types)) {
+    return false;
+  }
+  if (!register_ufunc('less', CompareUFunc<Bfloat16LtFunctor>, compare_types)) {
+    return false;
+  }
+  if (!register_ufunc('greater', CompareUFunc<Bfloat16GtFunctor>,
+                      compare_types)) {
+    return false;
+  }
+  if (!register_ufunc('less_equal', CompareUFunc<Bfloat16LeFunctor>,
+                      compare_types)) {
+    return false;
+  }
+  if (!register_ufunc('greater_equal', CompareUFunc<Bfloat16GeFunctor>,
+                      compare_types)) {
+    return false;
+  }
+  return true;
+}
+    
+    
+    {}  // end namespace tensorflow
+    
+    
+    {}  // namespace tensorflow
 
+    
+    struct TFTensorDeleter {
+  void operator()(TF_Tensor* p) const { TF_DeleteTensor(p); }
+};
+    
+    namespace tensorflow {
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    CUDAExecutor *cuda_exec):
+      driver_scoped_activate_context_(
+          new ScopedActivateContext{ExtractCudaContext(cuda_exec)}) { }
     
     
     {
-    {  bool didErrorOccur() {
-    return DidErrorOccur;
-  }
-};
-  
+    {}  // namespace cuda
+}  // namespace stream_executor
+    
+    #include <set>
+#include <string>
+#include <vector>
+    
+    void AutoUpdater::SetFeedURL(mate::Arguments* args) {
+  auto_updater::AutoUpdater::SetFeedURL(args);
 }
     
-    #include 'swift/Runtime/HeapObject.h'
-#include <mutex>
+    
+    {}  // namespace atom
+    
+      std::unique_ptr<NativeBrowserView> view_;
     
     
-    {} // end namespace swift
+    {}  // namespace atom
+
     
     
     { private:
-  App();
-  DISALLOW_COPY_AND_ASSIGN(App);
+  DISALLOW_COPY_AND_ASSIGN(Button);
 };
     
-    #include 'content/nw/src/api/base/base.h'
     
+    {}  // namespace mate
     
-namespace nwapi {
-    }
+      // TransactionObserver:
+  void OnTransactionsUpdated(
+      const std::vector<in_app_purchase::Transaction>& transactions) override;
     
-    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
- public:
-  MenuDelegate(ObjectManager* object_manager);
-  ~MenuDelegate() override;
-    }
-    
-    namespace nw {
-    }
-    
-        std::string label;
-    if (option.GetString('label', &label))
-      SetLabel(label);
-    
-    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    if (enable_shortcut_){
-      focus_manager->RegisterAccelerator(
-        accelerator_,
-        ui::AcceleratorManager::kHighPriority,
-        this);
-    }
-    if (submenu_ != NULL){
-      submenu_->UpdateKeys(focus_manager);
-    }
-  }
+    void SetProxyConfigCallback(
+    base::WaitableEvent* done,
+    net::URLRequestContextGetter* url_request_context_getter,
+    const net::ProxyConfig& proxy_config) {
+  net::ProxyService* proxy_service =
+      url_request_context_getter->GetURLRequestContext()->proxy_service();
+  proxy_service->ResetConfigService(
+      new net::ProxyConfigServiceFixed(proxy_config));
+  done->Signal();
 }
     
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_path, const string& db_backend) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
+    v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope handle_scope(isolate);
     }
     
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-    #endif  // CAFFE_BNLL_LAYER_HPP_
+    bool MenuDelegate::HasIcon(int command_id) {
+  if (command_id < 0)
+    return false;
+    }
+    
+    namespace nwapi {
+    }
+    
+    
+    
+    
+    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
+                           base::WaitableEvent::InitialState::NOT_SIGNALED);
+  content::BrowserThread::PostTask(
+      content::BrowserThread::IO, FROM_HERE,
+      base::Bind(&SetProxyConfigCallback, &done,
+                 base::WrapRefCounted(context_getter), config));
+  done.Wait();
+  return true;
+}
+    
+    
+    {  // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.closeAllWindows', UNKNOWN)
+};
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+};
+    
+    
+    {
+} // namespace extensions
 
     
-    #include <vector>
-    
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+    class Semaphore {
  public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
+  void post(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    n_ += n;
+    cv_.notify_all();
+  }
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    namespace caffe {
+    {
+    {OPERATOR_SCHEMA(ExtendTensor)
+    .NumInputs(2)
+    .NumOutputs(1)
+    .EnforceInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Extend input 0 if necessary based on max element in input 1.
+Input 0 must be the same as output, that is, it is required to be in-place.
+Input 0 may have to be re-allocated in order for accommodate to the new size.
+Currently, an exponential growth ratio is used in order to ensure amortized
+constant time complexity.
+All except the outer-most dimension must be the same between input 0 and 1.
+)DOC')
+    .Input(0, 'tensor', 'The tensor to be extended.')
+    .Input(
+        1,
+        'new_indices',
+        'The size of tensor will be extended based on max element in '
+        'new_indices.')
+    .Output(
+        0,
+        'extended_tensor',
+        'Same as input 0, representing the mutated tensor.');
+}
+} // namespace
+
+    
+        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
+         ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
+      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 2));
     }
+    input_blob_names.push_back(GO(2));
     
-    Variant HHVM_FUNCTION(xhprof_network_disable) {
-  return ServerStats::EndNetworkProfile();
-}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-      /* Second, try to get a magic file from Common Files */
-  if ((home = getenv('COMMONPROGRAMFILES')) != NULL) {
-    if (asprintf(&tmppath, '%s%s', home, hmagic) >= 0)
-      APPENDPATH();
-  }
+    <summary> <b>Example</b> </summary>
     
     
-    {    auto const need = nBytes - available();
-    auto const amt = std::min(std::max(m_size + need, 2 * m_size), m_maxGrow);
-    if (amt < m_size + need) return false;
-    if (!m_destBuf) {
-      m_destBuf.reset((Address)::malloc(amt));
-      ::memcpy(m_destBuf.get(), m_destBase, used());
-    } else {
-      m_destBuf.reset((Address)::realloc(m_destBuf.release(), amt));
-    }
-    if (!m_destBuf) reportMallocError(amt);
-    m_destBase = m_destBuf.get();
-    m_size = amt;
-    return true;
-  }
-    
-    folly::Optional<Type> usual_arith_conversions(Type t1, Type t2) {
-  /*
-   * TODO(#3577303): some of these could be nothrow, which is probably
-   * information we have want to propagate back out through the return
-   * value here (rather than bundling everything into the
-   * interpreter).
-   */
-  if (t1.subtypeOf(BInt) && t2.subtypeOf(BInt)) return TInt;
-  if (t1.subtypeOf(BInt) && t2.subtypeOf(BDbl)) return TDbl;
-  if (t1.subtypeOf(BDbl) && t2.subtypeOf(BInt)) return TDbl;
-  if (t1.subtypeOf(BDbl) && t2.subtypeOf(BDbl)) return TDbl;
-  if (t1.subtypeOf(BNum) && t2.subtypeOf(BNum)) return TNum;
-  return folly::none;
-}
-    
-      bool autoloadFunc(StringData* name);
-  bool autoloadConstant(StringData* name);
-  bool autoloadType(const String& name);
-  bool setMap(const Array& map, const String& root);
-  DECLARE_STATIC_REQUEST_LOCAL(AutoloadHandler, s_instance);
-    
-      /*
-   * Construct an unserializer, with an optional whitelist of classes to
-   * allow. In the whitelist, empty_array means 'allow no classes', while
-   * null_array means allow any classes.  We default to null_array since
-   * serialization is not limited inside the VM.
-   */
-  VariableUnserializer(
-    const char* str,
-    size_t len,
-    Type type,
-    bool allowUnknownSerializableClass = false,
-    const Array& options = null_array);
-    
-    bool EncodeMetadata(const JPEGData& jpg, bool strip_metadata, JPEGOutput out) {
-  if (strip_metadata) {
-    const uint8_t kApp0Data[] = {
-      0xff, 0xe0, 0x00, 0x10,        // APP0
-      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
-      0x01, 0x01,                    // v1.01
-      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
-      0x00, 0x00                     // thumbnail width/height
-    };
-    return JPEGWrite(out, kApp0Data, sizeof(kApp0Data));
-  }
-  bool ok = true;
-  for (size_t i = 0; i < jpg.app_data.size(); ++i) {
-    uint8_t data[1] = { 0xff };
-    ok = ok && JPEGWrite(out, data, sizeof(data));
-    ok = ok && JPEGWrite(out, jpg.app_data[i]);
-  }
-  for (size_t i = 0; i < jpg.com_data.size(); ++i) {
-    uint8_t data[2] = { 0xff, 0xfe };
-    ok = ok && JPEGWrite(out, data, sizeof(data));
-    ok = ok && JPEGWrite(out, jpg.com_data[i]);
-  }
-  return ok;
-}
-    
-    void OutputImageComponent::Reset(int factor_x, int factor_y) {
-  factor_x_ = factor_x;
-  factor_y_ = factor_y;
-  width_in_blocks_ = (width_ + 8 * factor_x_ - 1) / (8 * factor_x_);
-  height_in_blocks_ = (height_ + 8 * factor_y_ - 1) / (8 * factor_y_);
-  num_blocks_ = width_in_blocks_ * height_in_blocks_;
-  coeffs_ = std::vector<coeff_t>(num_blocks_ * kDCTBlockSize);
-  pixels_ = std::vector<uint16_t>(width_ * height_, 128 << 4);
-  for (int i = 0; i < kDCTBlockSize; ++i) quant_[i] = 1;
-}
-    
-    static const uint8_t kRangeLimitLut[4 * 256] = {
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
- 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
- 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
- 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
- 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
- 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
- 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
- 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
- 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
- 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    {  bool RunOnDevice() override;
 };
     
     
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
+    {  bool RunOnDevice() override {
+    for (Blob* output : OperatorBase::Outputs()) {
+      output->Reset();
     }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
+    return true;
   }
+};
+    
+    template <>
+bool FullyConnectedGradientOp<
+    CUDAContext,
+    TensorCoreEngine,
+    false /* don't transpose weight */>::RunOnDevice() {
+  return RunFullyConnectedGradientOpOnCUDADevice(
+      false /* float16_compute */, this);
 }
     
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
+    grpc_byte_buffer* CoreCodegen::grpc_raw_byte_buffer_create(grpc_slice* slice,
+                                                           size_t nslices) {
+  return ::grpc_raw_byte_buffer_create(slice, nslices);
+}
+    
+    #include <grpc/support/port_platform.h>
+    
+    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
+// field data. A 1 byte version ID is always encoded first. Tags are directly
+// serialized into the given grpc_slice.
+size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
+    
+    
+    {}  // namespace grpc
+
+    
+      // Serializes rpc server stats into the provided buffer.  It returns the
+  // number of bytes written to the buffer. If the buffer is smaller than
+  // kRpcServerStatsSize bytes it will return kEncodeDecodeFailure. Inlined for
+  // performance reasons.
+  static size_t Encode(uint64_t time, char* buf, size_t buf_size) {
+    if (buf_size < kRpcServerStatsSize) {
+      return kEncodeDecodeFailure;
+    }
+    }
+    
+    const ViewDescriptor& ServerReceivedMessagesPerRpcMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/server/received_messages_per_rpc/minute')
+          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+    #include <BulletDynamics/ConstraintSolver/btTypedConstraint.h>
+    
+    	virtual PhysicsServer::JointType get_type() const { return PhysicsServer::JOINT_HINGE; }
+    
+    class JointBullet : public ConstraintBullet {
+    }
+    
+    	{
+		MethodInfo mi;
+		mi.name = 'call_func';
+		Vector<Variant> defargs;
+		ClassDB::bind_vararg_method(METHOD_FLAGS_DEFAULT, 'call_func', &FuncRef::call_func, mi, defargs);
+	}
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         char_regex_traits.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares deprecated traits classes char_regex_traits<>.
+  */
+    
+    #undef BOOST_REGEX_TEMPLATE_DECL
+    
+    
+//
+// Unfortunately Rogue Waves standard library appears to have a bug
+// in std::basic_string::compare that results in eroneous answers
+// in some cases (tested with Borland C++ 5.1, Rogue Wave lib version
+// 0x020101) the test case was:
+// {39135,0} < {0xff,0}
+// which succeeds when it should not.
+//
+#ifndef _RWSTD_VER
+template <class C, class T, class A>
+inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
+{ 
+   if(0 == *p)
+   {
+      if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
+         return 0;
+   }
+   return s.compare(p); 
+}
 #else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
+template <class C, class T, class A>
+inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
+{ 
+   if(0 == *p)
+   {
+      if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
+         return 0;
+   }
+   return s.compare(p); 
+}
+inline int string_compare(const std::string& s, const char* p)
+{ return std::strcmp(s.c_str(), p); }
+# ifndef BOOST_NO_WREGEX
+inline int string_compare(const std::wstring& s, const wchar_t* p)
+{ return std::wcscmp(s.c_str(), p); }
 #endif
+#endif
+template <class Seq, class C>
+inline int string_compare(const Seq& s, const C* p)
+{
+   std::size_t i = 0;
+   while((i < s.size()) && (p[i] == s[i]))
+   {
+      ++i;
+   }
+   return (i == s.size()) ? -p[i] : s[i] - p[i];
+}
+# define STR_COMP(s,p) string_compare(s,p)
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::unwind_recursion_stopper(bool)
+{
+   boost::BOOST_REGEX_DETAIL_NS::inplace_destroy(m_backup_state++);
+   pstate = 0;   // nothing left to search
+   return false; // end of stack nothing more to search
 }
     
-    namespace guetzli {
-    }
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    bool IsZero(double n);
-    
-    namespace benchmark {
-// Parses 'str' for a 32-bit signed integer.  If successful, writes the result
-// to *value and returns true; otherwise leaves *value unchanged and returns
-// false.
-bool ParseInt32(const std::string& src_text, const char* str, int32_t* value);
-    }
-    
-      if (run.bytes_per_second > 0.0) {
-    Out << run.bytes_per_second;
-  }
-  Out << ',';
-  if (run.items_per_second > 0.0) {
-    Out << run.items_per_second;
-  }
-  Out << ',';
-  if (!run.report_label.empty()) {
-    // Field with embedded double-quote characters must be doubled and the field
-    // delimited with double-quotes.
-    std::string label = run.report_label;
-    ReplaceAll(&label, '\'', '\'\'');
-    Out << '\'' << label << '\'';
-  }
-  Out << ',,';  // for error_occurred and error_message
+    template <class T>
+class concrete_protected_call
+   : public abstract_protected_call
+{
+public:
+   typedef bool (T::*proc_type)();
+   concrete_protected_call(T* o, proc_type p)
+      : obj(o), proc(p) {}
+private:
+   virtual bool call()const;
+   T* obj;
+   proc_type proc;
+};
     
     
-    {#ifndef NDEBUG
-  Out << '***WARNING*** Library was built as DEBUG. Timings may be '
-         'affected.\n';
-#endif
+    {   template <class OutputIter>
+   OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits& t = Traits())
+   {
+      //typedef typename Match::char_type char_type;
+      return BOOST_REGEX_DETAIL_NS::regex_format_imp(i, m, func.begin(), func.end(), f, t);
+   }
+private:
+   const Container& func;
+   format_functor_container(const format_functor_container&);
+   format_functor_container& operator=(const format_functor_container&);
+};
+    
+    //
+// define BOOST_REGEX_NO_FWD if this
+// header doesn't work!
+//
+#ifdef BOOST_REGEX_NO_FWD
+#  ifndef BOOST_RE_REGEX_HPP
+#     include <boost/regex.hpp>
+#  endif
+#else
+    
+    template <class OutputIterator, class Iterator, class traits, class charT>
+inline OutputIterator regex_merge(OutputIterator out,
+                         Iterator first,
+                         Iterator last,
+                         const basic_regex<charT, traits>& e, 
+                         const charT* fmt, 
+                         match_flag_type flags = match_default)
+{
+   return regex_replace(out, first, last, e, fmt, flags);
 }
+    
+    protected:
+    
+    void AccelDeccelAmplitude::update(float time)
+{
+    float f = time * 2;
+    }
+    
+    Liquid* Liquid::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) Liquid();
+    a->initWithDuration(_duration, _gridSize, _waves, _amplitude);
+    a->autorelease();
+    return a;
+}
+    
+        virtual void startWithTarget(Node *target) override;
+    
+    virtual bool isDone() const override;
+    /**
+     * @param dt In seconds.
+     */
+    virtual void step(float dt) override;
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    /** ActionTween
+    
+    
+    {} // namespace aria2
+
+    
+    
+    {} // namespace aria2
+    
+      int numBucket_;
+    
+    #define WRITE_CHECK(fp, ptr, count)                                            \
+  if (fp.write((ptr), (count)) != (count)) {                                   \
+    throw DL_ABORT_EX(                                                         \
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));     \
+  }
+    
+    class DHTSetup {
+public:
+  DHTSetup();
+    }
+    
+    class DHTNode;
+class DHTRoutingTable;
+class DHTMessageDispatcher;
+class DHTMessageFactory;
+class DHTTaskQueue;
+class DHTAbstractTask;
+    
+    
+    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
+};
+    
+    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
+{
+  immediateTaskQueue_.addTask(task);
+}
+    
+    
+    {  virtual void
+  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+};
+    
+    #include 'common.h'
+#include <string>
+    
+      virtual void preProcess() CXX11_OVERRIDE;
+    
+    #ifndef BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
+#define BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
