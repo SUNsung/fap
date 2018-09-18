@@ -1,137 +1,90 @@
 
         
-                # For a description of the protocol see
-        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
-        def reload(pages)
-          pages.each do |p|
-            json_message = JSON.dump(
-              :command => 'reload',
-              :path    => p.url,
-              :liveCSS => true
-            )
-    
-          # `{{ site.related_posts }}` is how posts can get posts related to
-      # them, either through LSI if it's enabled, or through the most
-      # recent posts.
-      # We should remove this in 4.0 and switch to `{{ post.related_posts }}`.
-      def related_posts
-        return nil unless @current_document.is_a?(Jekyll::Document)
-        @current_document.related_posts
-      end
-      attr_writer :current_document
-    
-          def jekyll
-        JekyllDrop.global
+            context 'updating existing users' do
+      it 'follows the edit link' do
+        visit admin_users_path
+        click_on('bob')
+        expect(page).to have_text('Edit User')
       end
     
+      it 'allows to click on on the agent name in select2 tags' do
+    visit new_agent_path
+    select_agent_type('Website Agent scrapes')
+    select2('SF Weather', from: 'Sources')
+    click_on 'SF Weather'
+    expect(page).to have_content 'Editing your WeatherAgent'
+  end
+    
+        it 'sends escape characters correctly to the backend' do
+      emitter.events << Event.new(payload: {data: 'Line 1\nLine 2\nLine 3'})
+      formatting_agent.sources << emitter
+      formatting_agent.options.merge!('instructions' => {'data' => '{{data | newline_to_br | strip_newlines | split: '<br />' | join: ','}}'})
+      formatting_agent.save!
+    
+        it 'returns a correct icon tag for GitHub' do
+      icon = omniauth_provider_icon(:github)
+      expect(icon).to be_html_safe
+      elem = Nokogiri(icon).at('i.fa.fa-github')
+      expect(elem).to be_a Nokogiri::XML::Element
+    end
+    
+    describe DotHelper do
+  describe 'with example Agents' do
+    class Agents::DotFoo < Agent
+      default_schedule '2pm'
+    
+        it 'should work with nested arrays' do
+      @agent.options['array'] = ['one', '$.two']
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
+    
+      it 'provides hash-style access to its properties with both symbol and string keys' do
+    expect(location[:lat]).to be_a Float
+    expect(location[:lat]).to eq 2.0
+    expect(location['lat']).to be_a Float
+    expect(location['lat']).to eq 2.0
+  end
+    
+        it 'should revert extract and template options for an updated WebsiteAgent' do
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+      ConvertWebsiteAgentTemplateForMerge.new.down
+      agent.reload
+      expect(agent.options).to include('extract' => reverted_extract,
+                                       'template' => reverted_template)
+    end
+  end
+end
+
+    
+              # Decodes the cname field
           #
-      # Require a gem or file if it's present, otherwise silently fail.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_if_present(names)
-        Array(names).each do |name|
-          begin
-            require name
-          rescue LoadError
-            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
-            yield(name, version_constraint(name)) if block_given?
-            false
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_cname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_value(input)
+            input.value[0].value
           end
         end
       end
-    
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
-    
-    module Homebrew
-  def config
-    dump_verbose_config
-  end
-    
-        if ARGV.named.empty?
-      slow_checks = %w[
-        check_for_broken_symlinks
-        check_missing_deps
-        check_for_outdated_homebrew
-        check_for_linked_keg_only_brews
-      ]
-      methods = (checks.all.sort - slow_checks) + slow_checks
-    else
-      methods = ARGV.named
-    end
-    
-        current_revision_var = 'HOMEBREW_UPDATE_AFTER#{repo_var}'
-    @current_revision = ENV[current_revision_var].to_s
-    raise ReporterRevisionUnsetError, current_revision_var if @current_revision.empty?
-  end
-    
-          # Topic may be hard deleted due to spam, no point complaining
-      # we would have to look at the topics table id sequence to find cases
-      # where this was called with an invalid id, no point really
-      return unless topic.present?
-    
-          respond_to_on_destroy
-    end
-  end
-    
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-          protected
-    
-          if options[:skip_helpers] == true
-        @used_helpers = @used_routes
-      elsif skip = options[:skip_helpers]
-        @used_helpers = self.routes - Array(skip).map(&singularizer)
-      else
-        @used_helpers = self.routes
-      end
     end
   end
 end
-
     
-    # Silence warnings about this defaulting to true
-I18n.enforce_available_locales = true
-
+                platform = target.platform_name
+            case platform
+            when :osx
+              execute_command 'xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build'
+            when :ios
+              test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
     
-    input = ARGV.shift() || usage()
-    
-                inp.attributes.keys.each do |ikey|
-              if (ikey.downcase == 'value')
-                inp[ikey] = ''
-                next
-              end
-    
-    if (ip == nil || port == nil)
-  puts 'Syntax: test.rb <ip> [port]\n'
-  exit
-end
-    
-    			if temp[2].length == 2
-				self.block[-1][-1] << temp[2][0].ljust(8)
-				self.block[-1][-1] << temp[2][1]
-			elsif temp[2].length == 3
-				self.block[-1][-1] << temp[2][0].ljust(8)
-				self.block[-1][-1] << temp[2][1]
-				self.block[-1][-1] << ' '
-				self.block[-1][-1] << temp[2][2]
-			else
-				self.block[-1][-1] << temp[2].to_s
-			end
-		end
+        not_matching_pipeline = described_class.new(source, pipeline_id, [], settings)
+    expect(subject).not_to eq(not_matching_pipeline)
