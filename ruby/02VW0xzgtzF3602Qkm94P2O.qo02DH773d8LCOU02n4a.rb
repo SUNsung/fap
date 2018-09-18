@@ -1,145 +1,156 @@
 
         
-        group :app do
-  gem 'rack'
-  gem 'sinatra'
-  gem 'sinatra-contrib'
-  gem 'thin'
-  gem 'sprockets'
-  gem 'sprockets-helpers'
-  gem 'erubi'
-  gem 'browser'
-  gem 'sass'
-  gem 'coffee-script'
-end
+              # Creates the hidden UTF8 enforcer tag. Override this method in a helper
+      # to customize the tag.
+      def utf8_enforcer_tag
+        # Use raw HTML to ensure the value is written as an HTML entity; it
+        # needs to be the right character regardless of which encoding the
+        # browser infers.
+        '<input name='utf8' type='hidden' value='&#x2713;' />'.html_safe
+      end
+    
+            class << self
+          def select_type
+            @select_type ||= name.split('::').last.sub('Select', '').downcase
+          end
+        end
+    
+          def provider
+        oauth['provider']
+      end
+    
+              @pipeline = @project.pipelines.latest_successful_for(@ref)
+        end
+    
+            def initialize(badge)
+          @entity = badge.entity
+          @status = badge.status
+        end
+    
+            def key_width
+          62
+        end
+    
+      def passthru
+    render status: 404, plain: 'Not found. Authentication passthru.'
+  end
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
     
           private
     
-        private
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
     
-            @counter += 1
+      def self.generate_manifest
+    Manifest.new(store, all_versions).store
+  end
     
-        def merge(hash)
+        def root_path
+      context[:root_path]
+    end
+    
+        def parse_as_document
+      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
+      @title = document.at_css('title').try(:content)
+      document
+    end
+    
+        def mime_type
+      headers['Content-Type'] || 'text/plain'
+    end
+    
+        def merge!(hash)
       return super unless hash.is_a? Hash
-      dup.merge!(hash)
+      hash.assert_valid_keys URI::Generic::COMPONENT
+      hash.each_pair do |key, value|
+        send '#{key}=', value
+      end
+      self
     end
     
-            css('.l-sub-section', '.alert', '.banner').each do |node|
-          node.name = 'blockquote'
-        end
+              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
+          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
+          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
+          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
+          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
+          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
+          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
     
-              # Add the help option, which must be on every command.
-          opts.on_tail('-h', '--help', 'Print this help') do
-            safe_puts(opts.help)
-            return nil
-          end
+            css('.toc-close', '.naked-list').remove
+      end
     
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Hash] options Additional tweakable settings.
-        # @option options [Symbol] :provider The provider to back the
-        #   machines with. All machines will be backed with this
-        #   provider. If none is given, a sensible default is chosen.
-        # @option options [Boolean] :reverse If true, the resulting order
-        #   of machines is reversed.
-        # @option options [Boolean] :single_target If true, then an
-        #   exception will be raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          @logger.debug('Getting target VMs for command. Arguments:')
-          @logger.debug(' -- names: #{names.inspect}')
-          @logger.debug(' -- options: #{options.inspect}')
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
-    
-            # This returns all the registered provider capabilities.
-        #
-        # @return [Hash]
-        def provider_capabilities
-          results = Hash.new { |h, k| h[k] = Registry.new }
-    
-      it 'defaults number to a random value' do
-    lambda { srand }.should_not raise_error
-    srand.should_not == 0
-  end
-    
-    script_binding = binding
-    
-        false
-  end
-    
-        def path
-      @path ||= HOMEBREW_PREFIX.join('Caskroom')
-    end
-    
-        pod 'ObjCPod', path: 'ObjCPod'
-    pod 'SwiftPod', path: 'SwiftPod'
-    pod 'MixedPod', path: 'MixedPod'
-    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
-    
-        # Ensure that the master spec repo exists
-    #
-    # @return [void]
-    #
-    def ensure_master_spec_repo_exists!
-      unless config.sources_manager.master_repo_functional?
-        Setup.new(CLAide::ARGV.new([])).run
+          if @custom_emoji.save
+        log_action :create, @custom_emoji
+        redirect_to admin_custom_emojis_path, notice: I18n.t('admin.custom_emojis.created_msg')
+      else
+        render :new
       end
     end
+    
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
+      end
+    end
+    
+        def set_report
+      @report = Report.find(params[:report_id])
+    end
+  end
+end
+
+    
+      before_action :set_account
+  respond_to :txt
+    
+    end
+    
+      Xcodeproj::PlainInformative.send(:include, CLAide::InformativeError)
+    
+            def validate!
+          super
+          if @pod_name.nil? && !@wipe_all
+            # Security measure, to avoid removing the pod cache too agressively by mistake
+            help! 'You should either specify a pod name or use the --all flag'
+          end
+        end
     
             self.description = <<-DESC
           Shows the content of the pods cache as a YAML tree output, organized by pod.
           If `NAME` is given, only the caches for that pod will be included in the output.
         DESC
     
-    ```
-Executable Path: #{actual_path}
-```
-EOS
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
+        end
       end
-    
-    Before do
-  gemfile = ENV['BUNDLE_GEMFILE'].to_s
-  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
-  @framework_version = nil
-end
-    
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-        def clear
-      @attachments = Hash.new { |h,k| h[k] = {} }
-    end
-    
-        # scale to the requested geometry and preserve the aspect ratio
-    def scale_to(new_geometry)
-      scale = [new_geometry.width.to_f / self.width.to_f , new_geometry.height.to_f / self.height.to_f].min
-      Paperclip::Geometry.new((self.width * scale).round, (self.height * scale).round)
     end
   end
 end
-
     
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
-      end
-    end
+    module Jekyll
