@@ -1,70 +1,59 @@
 
         
-            for group in opt_parser.option_groups:
-        for option in group.option_list:
-            long_option = option.get_opt_string().strip('-')
-            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
-            if option._short_opts:
-                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
-            if option.help != optparse.SUPPRESS_HELP:
-                complete_cmd += ['--description', option.help]
-            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
-            commands.append(shell_quote(complete_cmd))
+            requires_project = True
+    default_settings = {'LOG_ENABLED': False}
     
-    r = openssl_encode('aes-128-cbc', key, iv)
-print('aes_cbc_decrypt')
-print(repr(r))
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--get', dest='get', metavar='SETTING',
+            help='print raw setting value')
+        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
+            help='print setting value, interpreted as a boolean')
+        parser.add_option('--getint', dest='getint', metavar='SETTING',
+            help='print setting value, interpreted as an integer')
+        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
+            help='print setting value, interpreted as a float')
+        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
+            help='print setting value, interpreted as a list')
     
+    The matching from server ftp command return codes to html response codes is defined in the
+CODE_MAPPING attribute of the handler class. The key 'default' is used for any code
+that is not explicitly present among the map keys. You may need to overwrite this
+mapping if want a different behaviour than default.
     
-if __name__ == '__main__':
-    main()
-
-    
-        for release in releases:
-        compat_print(release['name'])
-        for asset in release['assets']:
-            asset_name = asset['name']
-            total_bytes += asset['download_count'] * asset['size']
-            if all(not re.match(p, asset_name) for p in (
-                    r'^youtube-dl$',
-                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
-                    r'^youtube-dl\.exe$')):
-                continue
-            compat_print(
-                ' %s size: %s downloads: %d'
-                % (asset_name, format_size(asset['size']), asset['download_count']))
+        def revert_challenge_config(self):
+        '''Used to cleanup challenge configurations.
     
     
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main()  # pragma: no cover
 
     
-            #Creating directory title page for current directory
-        with open('dir_title.html', 'w') as os_html:
-            os_html.write(header + dir_title)
-        
-        group.append(HTML('dir_title.html').render())
+    for face_landmarks in face_landmarks_list:
+    pil_image = Image.fromarray(image)
+    d = ImageDraw.Draw(pil_image, 'RGBA')
     
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = __short_version__
-# The full version, including alpha/beta/rc tags.
-release = __version__
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
+
     
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/alexa/
-'''
-import asyncio
-import logging
+    2. Then, call the 'train' function with the appropriate parameters. Make sure to pass in the 'model_save_path' if you
+   want to save the model to disk so you can re-use the model without having to re-train it.
     
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
+            if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            return detect_faces_in_image(file)
     
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Required(CONF_USERNAME): cv.string
-})
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
+    
+        def test_fd_command_line_interface_hog_model(self):
+        target_string = 'obama.jpg'
+        runner = CliRunner()
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+    for face_landmarks in face_landmarks_list:
