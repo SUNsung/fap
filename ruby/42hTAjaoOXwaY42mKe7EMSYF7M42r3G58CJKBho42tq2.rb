@@ -1,68 +1,60 @@
 
         
-                # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
+        platforms :jruby do
+  gem 'activerecord-jdbc-adapter'
+  gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'jruby-openssl'
+end
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
         end
     
-            # Converts this configuration object to JSON.
-        def to_json(*a)
-          instance_variables_hash.to_json(*a)
-        end
-    
-            def initialize(env, config)
-          @env    = env
-          @config = config
-        end
-    
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
-        #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
-        end
-    
-              # Return the dummy object so that anything else works
-          ::Vagrant::Config::V2::DummyConfig.new
-        end
-    
-            # This returns all synced folder implementations.
-        #
-        # @return [Registry]
-        def synced_folders
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.synced_folders)
+                    raise Errors::VMNoMatchError if vms.empty?
+              else
+                # String name, just look for a specific VM
+                vms << @env.vms[name.to_sym]
+                raise Errors::VMNotFoundError, name: name if !vms[0]
+              end
             end
+          else
+            vms = @env.vms_ordered
           end
-        end
     
-          def requires_authentication?
-        Spree::Api::Config[:requires_authentication]
+              @registered.each do |plugin|
+            hosts.merge!(plugin.host.to_hash)
+          end
+    
+            # This contains all the command plugins by name, and returns
+        # the command class and options. The command class is wrapped
+        # in a Proc so that it can be lazy loaded.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        attr_reader :commands
+    
+          # Checks the client's masked token to see if it matches the
+      # session token.
+      def valid_token?(session, token)
+        return false if token.nil? || token.empty?
+    
+          def encrypt(value)
+        options[:encryptor].hexdigest value.to_s
       end
     
-            def new; end
+      it 'accepts post form requests with correct authenticity_token field' do
+    post('/', {'authenticity_token' => token}, 'rack.session' => session)
+    expect(last_response).to be_ok
+  end
     
-            def destroy
-          authorize! :destroy, @product_property
-          @product_property.destroy
-          respond_with(@product_property, status: 204)
-        end
-    
-            private
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
+    end
