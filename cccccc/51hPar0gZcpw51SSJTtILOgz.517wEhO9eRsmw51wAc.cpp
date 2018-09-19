@@ -1,293 +1,308 @@
 
         
-        class NwCurrentWindowInternalClearMenuFunction : public UIThreadExtensionFunction {
- public:
-  NwCurrentWindowInternalClearMenuFunction();
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    void CostAnalyzer::GatherCosts() {
+  CostGraphDef cost_graph_measured;
+  PredictCosts(&measure_estimator_, &cost_graph_measured,
+               &total_time_measured_);
+  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
+  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
     }
     
-    #include 'base/memory/weak_ptr.h'
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-     protected:
-  ResponseAction Run() override;
-  ~NwObjCallObjectMethodAsyncFunction() override;
-    
-      // Notify new head of write queue
-  if (!writers_.empty()) {
-    writers_.front()->cv.Signal();
-  }
-    
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
- public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
-  }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
-  }
-};
-    
-    namespace leveldb {
-namespace {
-    }
+    Status ModelAnalyzer::GenerateReport(bool debug, bool assume_valid_feeds,
+                                     std::ostream& os) {
+  GraphProperties properties(item_);
+  TF_RETURN_IF_ERROR(properties.InferStatically(assume_valid_feeds));
     }
     
-    Reader::Reader(SequentialFile* file, Reporter* reporter, bool checksum,
-               uint64_t initial_offset)
-    : file_(file),
-      reporter_(reporter),
-      checksum_(checksum),
-      backing_store_(new char[kBlockSize]),
-      buffer_(),
-      eof_(false),
-      last_record_offset_(0),
-      end_of_buffer_offset_(0),
-      initial_offset_(initial_offset),
-      resyncing_(initial_offset > 0) {
-}
+    // Returns the id number of the bfloat16 numpy type.
+int Bfloat16NumpyType();
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {    // Some corruption was detected.  'size' is the approximate number
-    // of bytes dropped due to the corruption.
-    virtual void Corruption(size_t bytes, const Status& status) = 0;
-  };
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      Status EmitPhysicalRecord(RecordType type, const char* ptr, size_t length);
-    
-      // Test that previous recovery produced recoverable state.
-  Open();
-  ASSERT_LE(1, NumTables());
-  ASSERT_EQ(1, NumLogs());
-  if (CanAppend()) {
-    ASSERT_EQ(new_log, FirstLogFile());
-  }
-  ASSERT_EQ('bar2', Get('foo'));
-  ASSERT_EQ('world', Get('hello'));
-  ASSERT_EQ('there', Get('hi'));
-    
-    // We want to make sure that with a single writer and multiple
-// concurrent readers (with no synchronization other than when a
-// reader's iterator is created), the reader always observes all the
-// data that was present in the skip list when the iterator was
-// constructor.  Because insertions are happening concurrently, we may
-// also observe new values that were inserted since the iterator was
-// constructed, but we should never miss any values that were present
-// at iterator construction time.
-//
-// We generate multi-part keys:
-//     <key,gen,hash>
-// where:
-//     key is in range [0..K-1]
-//     gen is a generation number for key
-//     hash is hash(key,gen)
-//
-// The insertion code picks a random key, sets gen to be 1 + the last
-// generation number inserted for that key, and sets hash to Hash(key,gen).
-//
-// At the beginning of a read, we snapshot the last inserted
-// generation number for each key.  We then iterate, including random
-// calls to Next() and Seek().  For every key we encounter, we
-// check that it is either expected given the initial snapshot or has
-// been concurrently added since the iterator started.
-class ConcurrentTest {
- private:
-  static const uint32_t K = 4;
-    }
-    
-      // Removes a SnapshotImpl from this list.
-  //
-  // The snapshot must have been created by calling New() on this list.
-  //
-  // The snapshot pointer should not be const, because its memory is
-  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
-  // which is in the API, and currently takes a const Snapshot.
-  void Delete(const SnapshotImpl* snapshot) {
-#if !defined(NDEBUG)
-    assert(snapshot->list_ == this);
-#endif  // !defined(NDEBUG)
-    snapshot->prev_->next_ = snapshot->next_;
-    snapshot->next_->prev_ = snapshot->prev_;
-    delete snapshot;
-  }
-    
-      // Implementations of the DB interface
-  using DB::Get;
-  virtual Status Get(const ReadOptions& options,
-                     ColumnFamilyHandle* column_family, const Slice& key,
-                     PinnableSlice* value) override;
-  using DB::MultiGet;
-  virtual std::vector<Status> MultiGet(
-      const ReadOptions& options,
-      const std::vector<ColumnFamilyHandle*>&,
-      const std::vector<Slice>& keys, std::vector<std::string>* values)
-    override;
-    
-    
-    {}  // namespace rocksdb
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
 
     
-    class CompactionPressureToken : public WriteControllerToken {
- public:
-  explicit CompactionPressureToken(WriteController* controller)
-      : WriteControllerToken(controller) {}
-  virtual ~CompactionPressureToken();
-};
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
+  }
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
     
-    TEST_F(WriteControllerTest, ChangeDelayRateTest) {
-  TimeSetEnv env;
-  WriteController controller(40000000u);  // also set max delayed rate
-  controller.set_delayed_write_rate(10000000u);
-  auto delay_token_0 =
-      controller.GetDelayToken(controller.delayed_write_rate());
-  ASSERT_EQ(static_cast<uint64_t>(2000000),
-            controller.GetDelay(&env, 20000000u));
-  auto delay_token_1 = controller.GetDelayToken(2000000u);
-  ASSERT_EQ(static_cast<uint64_t>(10000000),
-            controller.GetDelay(&env, 20000000u));
-  auto delay_token_2 = controller.GetDelayToken(1000000u);
-  ASSERT_EQ(static_cast<uint64_t>(20000000),
-            controller.GetDelay(&env, 20000000u));
-  auto delay_token_3 = controller.GetDelayToken(20000000u);
-  ASSERT_EQ(static_cast<uint64_t>(1000000),
-            controller.GetDelay(&env, 20000000u));
-  // This is more than max rate. Max delayed rate will be used.
-  auto delay_token_4 =
-      controller.GetDelayToken(controller.delayed_write_rate() * 3);
-  ASSERT_EQ(static_cast<uint64_t>(500000),
-            controller.GetDelay(&env, 20000000u));
+    // Functions for getting information about kernels registered in the binary.
+#ifndef TENSORFLOW_PYTHON_UTIL_KERNEL_REGISTRY_H_
+#define TENSORFLOW_PYTHON_UTIL_KERNEL_REGISTRY_H_
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    ScopedActivateExecutorContext &&other)
+    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
+  other.driver_scoped_activate_context_ = nullptr;
 }
     
-    Status HdfsEnv::CreateDirIfMissing(const std::string& name) {
-  const int value = hdfsExists(fileSys_, name.c_str());
-  //  Not atomic. state might change b/w hdfsExists and CreateDir.
-  switch (value) {
-    case HDFS_EXISTS:
+      // Check for input iterator errors
+  if (!iter->status().ok()) {
+    s = iter->status();
+  }
+    
+      ReadOptions ro;
+  ro.fill_cache = false;
+  Iterator* iter = table->NewIterator(ro);
+  std::string r;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    r.clear();
+    ParsedInternalKey key;
+    if (!ParseInternalKey(iter->key(), &key)) {
+      r = 'badkey '';
+      AppendEscapedStringTo(&r, iter->key());
+      r += '' => '';
+      AppendEscapedStringTo(&r, iter->value());
+      r += ''\n';
+      dst->Append(r);
+    } else {
+      r = ''';
+      AppendEscapedStringTo(&r, key.user_key);
+      r += '' @ ';
+      AppendNumberTo(&r, key.sequence);
+      r += ' : ';
+      if (key.type == kTypeDeletion) {
+        r += 'del';
+      } else if (key.type == kTypeValue) {
+        r += 'val';
+      } else {
+        AppendNumberTo(&r, key.type);
+      }
+      r += ' => '';
+      AppendEscapedStringTo(&r, iter->value());
+      r += ''\n';
+      dst->Append(r);
+    }
+  }
+  s = iter->status();
+  if (!s.ok()) {
+    dst->Append('iterator error: ' + s.ToString() + '\n');
+  }
+    
+    TEST(LogTest, ShortTrailer) {
+  const int n = kBlockSize - 2*kHeaderSize + 4;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
+  Write('');
+  Write('bar');
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('', Read());
+  ASSERT_EQ('bar', Read());
+  ASSERT_EQ('EOF', Read());
+}
+    
+        const size_t avail = kBlockSize - block_offset_ - kHeaderSize;
+    const size_t fragment_length = (left < avail) ? left : avail;
+    
+    // State shared by all concurrent executions of the same benchmark.
+class SharedState {
+ public:
+  explicit SharedState(CacheBench* cache_bench)
+      : cv_(&mu_),
+        num_threads_(FLAGS_threads),
+        num_initialized_(0),
+        start_(false),
+        num_done_(0),
+        cache_bench_(cache_bench) {
+  }
+    }
+    
+    
+    {  int level = vstorage->num_non_empty_levels() - 1;
+  if (vstorage->LevelFilesBrief(level).num_files > 0) {
+    files_ = vstorage->LevelFilesBrief(level);
     return Status::OK();
-    case HDFS_DOESNT_EXIST:
-    return CreateDir(name);
-    default:  // anything else should be an error
-      ROCKS_LOG_FATAL(mylog, 'CreateDirIfMissing hdfsExists call failed');
-      throw HdfsFatalException('hdfsExists call failed with error ' +
-                               ToString(value) + '.\n');
   }
-};
-    
-    
-    {  // Need to implement this so the file is truncated correctly
-  // with direct I/O
-  virtual Status Truncate(uint64_t size) override;
-  virtual Status Close() override;
-  virtual Status Append(const Slice& data) override;
-  virtual Status PositionedAppend(const Slice& data, uint64_t offset) override;
-  virtual Status Flush() override;
-  virtual Status Sync() override;
-  virtual Status Fsync() override;
-  virtual bool IsSyncThreadSafe() const override;
-  virtual bool use_direct_io() const override { return use_direct_io_; }
-  virtual void SetWriteLifeTimeHint(Env::WriteLifeTimeHint hint) override;
-  virtual uint64_t GetFileSize() override;
-  virtual Status InvalidateCache(size_t offset, size_t length) override;
-  virtual size_t GetRequiredBufferAlignment() const override {
-    return logical_sector_size_;
-  }
-#ifdef ROCKSDB_FALLOCATE_PRESENT
-  virtual Status Allocate(uint64_t offset, uint64_t len) override;
-#endif
-#ifdef ROCKSDB_RANGESYNC_PRESENT
-  virtual Status RangeSync(uint64_t offset, uint64_t nbytes) override;
-#endif
-#ifdef OS_LINUX
-  virtual size_t GetUniqueId(char* id, size_t max_size) const override;
-#endif
-};
-    
-    TEST_F(MockEnvTest, FakeSleeping) {
-  int64_t now = 0;
-  auto s = env_->GetCurrentTime(&now);
-  ASSERT_OK(s);
-  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
-  int64_t after_sleep = 0;
-  s = env_->GetCurrentTime(&after_sleep);
-  ASSERT_OK(s);
-  auto delta = after_sleep - now;
-  // this will be true unless test runs for 2 seconds
-  ASSERT_TRUE(delta == 3 || delta == 4);
+  return Status::NotSupported('no file exists');
 }
     
-      // create column family
-  ColumnFamilyHandle* cf;
-  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
-  assert(s.ok());
+      // Doesn't include records skipped because of
+  // CompactionFilter::Decision::kRemoveAndSkipUntil.
+  int64_t num_record_drop_user = 0;
     
-    class MyMerge : public rocksdb::MergeOperator {
- public:
-  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
-                           MergeOperationOutput* merge_out) const override {
-    merge_out->new_value.clear();
-    if (merge_in.existing_value != nullptr) {
-      merge_out->new_value.assign(merge_in.existing_value->data(),
-                                  merge_in.existing_value->size());
+      // Given a sequence number, return the sequence number of the
+  // earliest snapshot that this sequence number is visible in.
+  // The snapshots themselves are arranged in ascending order of
+  // sequence numbers.
+  // Employ a sequential search because the total number of
+  // snapshots are typically small.
+  inline SequenceNumber findEarliestVisibleSnapshot(
+      SequenceNumber in, SequenceNumber* prev_snapshot);
+    
+        uint64_t fileSize;
+    status = defaultEnv->GetFileSize(filePath, &fileSize);
+    ASSERT_OK(status);
+    
+    
+    {
+    {  // Get wal file in wal_dir
+  if (dbname.compare(options.wal_dir) != 0) {
+    if (!env->GetChildren(options.wal_dir, &files).ok()) {
+      Error(options.info_log,
+          'Error when reading %s dir\n',
+          options.wal_dir.c_str());
+      return;
     }
-    for (const rocksdb::Slice& m : merge_in.operand_list) {
-      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
-      // the compaction filter filters out bad values
-      assert(m.ToString() != 'bad');
-      merge_out->new_value.assign(m.data(), m.size());
+    wal_info.clear();
+    for (std::string file : files) {
+      if (ParseFileName(file, &number, &type)) {
+        if (type == kLogFile) {
+          env->GetFileSize(options.wal_dir + '/' + file, &file_size);
+          char str[16];
+          snprintf(str, sizeof(str), '%' PRIu64, file_size);
+          wal_info.append(file).append(' size: ').
+              append(str).append(' ; ');
+        }
+      }
     }
-    return true;
   }
-    }
-    
-    BENCHMARK_DRAW_LINE();
-    
-    
-    {  FLAGS_minloglevel = prev;
+  Header(options.info_log, 'Write Ahead Log file in %s: %s\n',
+         options.wal_dir.c_str(), wal_info.c_str());
 }
-    
-    #include <folly/Benchmark.h>
-#include <folly/FileUtil.h>
-#include <folly/init/Init.h>
-#include <folly/json.h>
-    
-    #define FOLLY_SDT_SEMAPHORE(provider, name)                                    \
-  folly_sdt_semaphore_##provider##_##name
-    
-    // Check a traditional Unix return code (-1 and sets errno on error), throw
-// on error.
-template <class... Args>
-void checkUnixError(ssize_t ret, Args&&... args) {
-  if (UNLIKELY(ret == -1)) {
-    throwSystemError(std::forward<Args>(args)...);
-  }
-}
-    
-    // Some utility routines relating to unicode.
-    
-    
-    {} // namespace std
+}  // namespace rocksdb
 
     
-      VirtualExecutor(const VirtualExecutor&) = delete;
-  VirtualExecutor& operator=(const VirtualExecutor&) = delete;
+    class ChrootEnv : public EnvWrapper {
+ public:
+  ChrootEnv(Env* base_env, const std::string& chroot_dir)
+      : EnvWrapper(base_env) {
+#if defined(OS_AIX)
+    char resolvedName[PATH_MAX];
+    char* real_chroot_dir = realpath(chroot_dir.c_str(), resolvedName);
+#else
+    char* real_chroot_dir = realpath(chroot_dir.c_str(), nullptr);
+#endif
+    // chroot_dir must exist so realpath() returns non-nullptr.
+    assert(real_chroot_dir != nullptr);
+    chroot_dir_ = real_chroot_dir;
+#if !defined(OS_AIX)
+    free(real_chroot_dir);
+#endif
+  }
+    }
+    
+    Status PosixMmapFile::Close() {
+  Status s;
+  size_t unused = limit_ - dst_;
+    }
+    
+        static BOOST_FORCEINLINE storage_type exchange(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+#if defined(__clang__)
+        // Clang cannot allocate eax:edx register pairs but it has sync intrinsics
+        storage_type old_val = storage;
+        while (true)
+        {
+            storage_type val = __sync_val_compare_and_swap(&storage, old_val, v);
+            if (val == old_val)
+                return val;
+            old_val = val;
+        }
+#elif !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %%eax, %%ebx\n\t'
+            'movl %%edx, %%ecx\n\t'
+            'movl %[dest], %%eax\n\t'
+            'movl 4+%[dest], %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b %[dest]\n\t'
+            'jne 1b\n\t'
+            'movl %[scratch], %%ebx\n\t'
+            : '+A' (v), [scratch] '=m' (scratch), [dest] '+o' (storage)
+            :
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
+        );
+        return v;
+#else // defined(__PIC__)
+        __asm__ __volatile__
+        (
+            'movl %[dest], %%eax\n\t'
+            'movl 4+%[dest], %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b %[dest]\n\t'
+            'jne 1b\n\t'
+            : '=A' (v), [dest] '+o' (storage)
+            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return v;
+#endif // defined(__PIC__)
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %%eax, %%ebx\n\t'
+            'movl %%edx, %%ecx\n\t'
+            'movl 0(%[dest]), %%eax\n\t'
+            'movl 4(%[dest]), %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            'movl %[scratch], %%ebx\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A' (v), [scratch] '=m,m' (scratch)
+            : [dest] 'D,S' (&storage)
+#else
+            : '+A' (v), [scratch] '=m' (scratch)
+            : [dest] 'D' (&storage)
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
+        );
+        return v;
+#else // defined(__PIC__)
+        __asm__ __volatile__
+        (
+            'movl 0(%[dest]), %%eax\n\t'
+            'movl 4(%[dest]), %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '=A,A' (v)
+            : 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
+#else
+            : '=A' (v)
+            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return v;
+#endif // defined(__PIC__)
+#endif
+    }
+    
+    template< bool Signed >
+struct operations< 4u, Signed > :
+    public msvc_arm_operations< typename make_storage_type< 4u, Signed >::type, operations< 4u, Signed > >
+{
+    typedef msvc_arm_operations< typename make_storage_type< 4u, Signed >::type, operations< 4u, Signed > > base_type;
+    typedef typename base_type::storage_type storage_type;
+    typedef typename make_storage_type< 4u, Signed >::aligned aligned_storage_type;
+    }
