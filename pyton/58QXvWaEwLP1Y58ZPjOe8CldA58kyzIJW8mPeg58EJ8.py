@@ -1,39 +1,21 @@
 
         
         
-__licence__ = 'BSD (3 clause)'
-    
-        try:
-        smart_home_config = config[CONF_SMART_HOME]
-    except KeyError:
-        pass
-    else:
-        smart_home_config = smart_home_config or SMART_HOME_SCHEMA({})
-        smart_home.async_setup(hass, smart_home_config)
-    
-        @callback
-    def get(self, request, briefing_id):
-        '''Handle Alexa Flash Briefing request.'''
-        _LOGGER.debug('Received Alexa flash briefing request for: %s',
-                      briefing_id)
-    
-    For more details about this automation rule, please refer to the documentation
-at https://home-assistant.io/docs/automation/trigger/#sun-trigger
-'''
-import asyncio
-from datetime import timedelta
-import logging
+def l1(l=0.01):
+    return L1L2(l1=l)
     
     
-class CloudForgotPasswordView(HomeAssistantView):
-    '''View to start Forgot Password flow..'''
-    
-        @asyncio.coroutine
-    def post(self, request):
-        '''Validate configuration and return results.'''
-        errors = yield from async_check_ha_config_file(request.app['hass'])
-    
-            for index, light_id in enumerate(light_ids):
-            async_track_point_in_utc_time(
-                hass, async_turn_on_factory(light_id),
-                start_point + index * LIGHT_TRANSITION_TIME)
+def test_cifar():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
