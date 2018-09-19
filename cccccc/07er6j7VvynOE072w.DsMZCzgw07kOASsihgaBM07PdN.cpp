@@ -1,203 +1,133 @@
 
         
-          AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
-  }
+        #include 'brightray/common/content_client.h'
     
+    namespace atom {
+    }
     
-    {  std::string tmp1, tmp2;
-  ASSERT_OK(db_->Put(WriteOptions(), Key(1000, &tmp1), Value(1000, &tmp2)));
-  std::string v;
-  ASSERT_OK(db_->Get(ReadOptions(), Key(1000, &tmp1), &v));
-  ASSERT_EQ(Value(1000, &tmp2).ToString(), v);
-  dbi->TEST_CompactMemTable();
-  ASSERT_OK(db_->Get(ReadOptions(), Key(1000, &tmp1), &v));
-  ASSERT_EQ(Value(1000, &tmp2).ToString(), v);
+    #include 'atom/browser/api/atom_api_browser_window.h'
+#include 'atom/browser/native_window.h'
+#include 'atom/browser/ui/certificate_trust.h'
+#include 'atom/browser/ui/file_dialog.h'
+#include 'atom/browser/ui/message_box.h'
+#include 'atom/common/native_mate_converters/callback.h'
+#include 'atom/common/native_mate_converters/file_path_converter.h'
+#include 'atom/common/native_mate_converters/image_converter.h'
+#include 'atom/common/native_mate_converters/net_converter.h'
+#include 'native_mate/dictionary.h'
+    
+    class DownloadItem : public mate::TrackableObject<DownloadItem>,
+                     public download::DownloadItem::Observer {
+ public:
+  static mate::Handle<DownloadItem> Create(v8::Isolate* isolate,
+                                           download::DownloadItem* item);
+    }
+    
+    #include 'atom/common/api/constructor.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'native_mate/dictionary.h'
+#include 'ui/views/controls/button/label_button.h'
+    
+    // static
+void Net::BuildPrototype(v8::Isolate* isolate,
+                         v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'Net'));
+  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
+      .SetProperty('URLRequest', &Net::URLRequest);
 }
     
-    std::string DescriptorFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/MANIFEST-%06llu',
-           static_cast<unsigned long long>(number));
-  return dbname + buf;
+    class NwCurrentWindowInternalCapturePageInternalFunction : public UIThreadExtensionFunction {
+ public:
+  NwCurrentWindowInternalCapturePageInternalFunction();
+    }
+    
+    // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
+    
+    
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
+      routing_id,
+      object_id,
+      type,
+      *static_cast<base::DictionaryValue*>(value_option.get())));
+  return v8::Undefined(isolate);
 }
     
-    
-    {}  // namespace leveldb
-    
-        if (!status.ok()) {
-      env_->DeleteFile(tmp);
-    } else {
-      // Discard older manifests
-      for (size_t i = 0; i < manifests_.size(); i++) {
-        ArchiveFile(dbname_ + '/' + manifests_[i]);
-      }
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
     }
-    
-      virtual Status DisableFileDeletions() override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  virtual Status EnableFileDeletions(bool /*force*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  virtual Status GetLiveFiles(std::vector<std::string>&,
-                              uint64_t* /*manifest_file_size*/,
-                              bool /*flush_memtable*/ = true) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::Flush;
-  virtual Status Flush(const FlushOptions& /*options*/,
-                       ColumnFamilyHandle* /*column_family*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DB::IngestExternalFile;
-  virtual Status IngestExternalFile(
-      ColumnFamilyHandle* /*column_family*/,
-      const std::vector<std::string>& /*external_files*/,
-      const IngestExternalFileOptions& /*ingestion_options*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
+    return NULL;
   }
     
-    struct CompactionIterationStats {
-  // Compaction statistics
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
     }
     
-      // this will produce empty file (delete compaction filter)
-  ASSERT_OK(db_->CompactRange(CompactRangeOptions(), nullptr, nullptr));
-  ASSERT_EQ(0U, CountLiveFiles());
-    
-      auto defaultEnv = Env::Default();
-  int hits = 0;
-  for (auto it = fileNames.begin() ; it != fileNames.end(); ++it) {
-    if ((*it == '..') || (*it == '.')) {
-      continue;
-    }
-    auto filePath = dbname_ + '/' + *it;
-    unique_ptr<SequentialFile> seqFile;
-    auto envOptions = EnvOptions(CurrentOptions());
-    status = defaultEnv->NewSequentialFile(filePath, &seqFile, envOptions);
-    ASSERT_OK(status);
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
     }
     
-      // these three metods are querying the state of the WriteController
-  bool IsStopped() const;
-  bool NeedsDelay() const { return total_delayed_.load() > 0; }
-  bool NeedSpeedupCompaction() const {
-    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
-  }
-  // return how many microseconds the caller needs to sleep after the call
-  // num_bytes: how many number of bytes to put into the DB.
-  // Prerequisite: DB mutex held.
-  uint64_t GetDelay(Env* env, uint64_t num_bytes);
-  void set_delayed_write_rate(uint64_t write_rate) {
-    // avoid divide 0
-    if (write_rate == 0) {
-      write_rate = 1u;
-    } else if (write_rate > max_delayed_write_rate()) {
-      write_rate = max_delayed_write_rate();
-    }
-    delayed_write_rate_ = write_rate;
-  }
-    
-          // Truncate to available space if necessary
-      if (p >= limit) {
-        if (iter == 0) {
-          continue;       // Try again with larger buffer
-        } else {
-          p = limit - 1;
-        }
-      }
-    
-    namespace aria2 {
+    namespace nw {
     }
     
-      std::vector<std::shared_ptr<DHTNode>> nodes;
-  // nodes
-  const int compactlen = bittorrent::getCompactLength(family_);
-  for (size_t i = 0; i < numNodes; ++i) {
-    // 1byte compact peer info length
-    uint8_t peerInfoLen;
-    READ_CHECK(fp, &peerInfoLen, sizeof(peerInfoLen));
-    if (peerInfoLen != compactlen) {
-      // skip this entry
-      readBytes(fp, buf, buf.size(), 7 + 48);
-      continue;
-    }
-    // 7bytes reserved
-    readBytes(fp, buf, buf.size(), 7);
-    // compactlen bytes compact peer info
-    readBytes(fp, buf, buf.size(), compactlen);
-    if (memcmp(zero, buf, compactlen) == 0) {
-      // skip this entry
-      readBytes(fp, buf, buf.size(), 48 - compactlen);
-      continue;
-    }
-    std::pair<std::string, uint16_t> peer =
-        bittorrent::unpackcompact(buf, family_);
-    if (peer.first.empty()) {
-      // skip this entry
-      readBytes(fp, buf, buf.size(), 48 - compactlen);
-      continue;
-    }
-    // 24-compactlen bytes reserved
-    readBytes(fp, buf, buf.size(), 24 - compactlen);
-    // node ID
-    readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
+    ExtensionFunction::ResponseAction
+NwAppCloseAllWindowsFunction::Run() {
+  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
+  if (!registry)
+    return RespondNow(Error(''));
+  base::MessageLoop::current()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
     }
     
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
-    const std::shared_ptr<DHTBucket>& bucket,
-    const std::shared_ptr<DHTNode>& newNode)
-{
-  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
+    namespace extensions {
+    }
     
-      virtual void addPeriodicTask2(const std::shared_ptr<DHTTask>& task) = 0;
-    
-    
-    {  virtual void
-  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-};
-    
-      // TODO handle exception thrown by this function.
-  std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port) const;
-    
-    #include <memory>
-    
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
-  }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
-  }
-}
-    
-    void DNSCache::markBad(const std::string& hostname, const std::string& ipaddr,
-                       uint16_t port)
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.find(target);
-  if (i != entries_.end()) {
-    (*i)->markBad(ipaddr);
-  }
-}
+    class NwObjCallObjectMethodFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjCallObjectMethodFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
