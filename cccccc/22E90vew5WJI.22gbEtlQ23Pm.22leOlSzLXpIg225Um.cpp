@@ -1,332 +1,324 @@
 
         
-        // Asserts that a given statement causes the program to exit, either by
-// explicitly exiting with a nonzero exit code or being killed by a
-// signal, and emitting error output that matches regex.
-# define ASSERT_DEATH(statement, regex) \
-    ASSERT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
+          // Return value from Code() is prelude_ + result_.
+  string prelude_;  // Code before function definition
+  string result_;   // Function definition
     
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    {}  // namespace internal
-    
-    #if 0
-    
-      explicit FilePath(const std::string& pathname) : pathname_(pathname) {
-    Normalize();
-  }
-    
-    // We cannot use std::numeric_limits<T>::max() as it clashes with the max()
-// macro defined by <windows.h>.
-template <>
-inline float FloatingPoint<float>::Max() { return FLT_MAX; }
-template <>
-inline double FloatingPoint<double>::Max() { return DBL_MAX; }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6>
-class ValueArray6 {
- public:
-  ValueArray6(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6) : v1_(v1), v2_(v2),
-      v3_(v3), v4_(v4), v5_(v5), v6_(v6) {}
+    namespace tensorflow {
     }
     
-      // Converts a wide C string to a String using the UTF-8 encoding.
-  // NULL will be converted to '(null)'.  If an error occurred during
-  // the conversion, '(failed to convert from wide string)' is
-  // returned.
-  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    #include 'tensorflow/stream_executor/cuda/cuda_activation.h'
+    
+    class CUDAExecutor;
+class ScopedActivateContext;
+    
+                v_srclo = vget_low_s16(v_src1);
+            v_srchi = vget_high_s16(v_src1);
+            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst1))),
+                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst1))));
     
     
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
-}
-    
-      // Copy c'tor
-  MyString(const MyString& string) : c_string_(NULL) {
-    Set(string.c_string_);
-  }
-    
-    bool IsUserOnly(std::wstring opt)
-{
-	bool userOnly;
-    }
-    
-    /*! \brief typedef the factory function of operator property */
-typedef std::function<OperatorProperty *()> OperatorPropertyFactory;
-/*!
- * \brief Registry entry for OperatorProperty factory functions.
- */
-struct OperatorPropertyReg
-    : public dmlc::FunctionRegEntryBase<OperatorPropertyReg,
-                                        OperatorPropertyFactory> {
-  /*!
-   * \brief Set key_var_num_args
-   *  When this is set, the API caller is required to pass in a
-   *  argument with key=key_num_args.c_str(), and value=num_args.
-   *  num_args is number of positional argument when calling the function.
-   *
-   *  This is used to pass in length of positional arguments
-   *  for operators that can take variable length of input.
-   *  Most operators do not need to set this property.
-   *
-   * \param key the key name to be set
-   */
-  inline OperatorPropertyReg& set_key_var_num_args(const std::string &key) {  // NOLINT(*)
-    this->key_var_num_args = key;
-    return *this;
-  }
-  /*!
-   * \brief Check if TypeString of the type matches the registered name
-   */
-  inline OperatorPropertyReg& check_name() {
-    OperatorProperty *p = this->body();
-    std::string type = p->TypeString();
-    delete p;
-    CHECK_EQ(this->name, type)
-        << 'Register Name and TypeString mismatch, name=\'' << this->name << '\','
-        << ' but TypeString=\'' << type <<'\'';
-    return *this;
-  }
-    }
-    
-    template <typename Dtype>
-void Deleter(::caffe::Layer<Dtype> *ptr) {
-}
-    
-    #include <caffe/util/io.hpp>
-namespace dmlc {
-namespace parameter {
-    }
-    }
-    
-    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
-.describe('Caffe loss layer')
-.add_arguments(CaffeLossParam::__FIELDS__());
-    
-    /*!
- *  Copyright (c) 2016 by Contributors
- * \file cv_api.h
- * \brief C API for opencv
- * \author Junyuan Xie
- */
-#include <dmlc/base.h>
-#include <mxnet/base.h>
-#include <mxnet/ndarray.h>
-#include <opencv2/opencv.hpp>
-#include 'cv_api.h'
-#include '../../src/c_api/c_api_common.h'
-    
-    template <std::size_t kNumGpus, std::size_t kStreams>
-StreamManager<kNumGpus, kStreams>::StreamManager() {
-#if MXNET_USE_CUDA
-  for (std::size_t i = 0; i < kNumGpus; ++i) {
-    gpu_cnt_.at(i) = -1;
-  }
-  for (auto&& i : gpu_io_streams_) {
-    i = nullptr;
-  }
-#endif  // MXNET_USE_CUDA
-}
-    
-      std::string shape_attr_key;
-  if (ret.attrs.count(attr_key_name) != 0) {
-    shape_attr_key = ret.GetAttr<std::string>(attr_key_name);
-    // erase the provided arguments
-    ret.attrs.erase(attr_key_name);
-  }
-    
-            const auto learningRate = float(LearningRate(trainingSampleCount));
-        const auto momentum = float(MomentumValueForMB(trainingSampleCount));
-        const auto unitGainFactor = UnitGainFactor<float>(trainingSampleCount);
-    
-    namespace CNTK
-{
-    const std::wstring versionKey = L'version';
-    const std::wstring typeKey = L'type';
-    const std::wstring uidKey = L'uid';
-    const std::wstring kindKey = L'kind';
-    const std::wstring dataTypeKey = L'data_type';
-    const std::wstring dynamicAxisKey = L'dynamic_axis';
-    const std::wstring isSparseKey = L'is_sparse';
-    const std::wstring nameKey = L'name';
-    const std::wstring needsGradientKey = L'needs_gradient';
-    const std::wstring shapeKey = L'shape';
-    const std::wstring valueKey = L'value';
-    const std::wstring opKey = L'op';
-    const std::wstring attributesKey = L'attributes';
-    const std::wstring inputsKey = L'inputs';
-    const std::wstring rootKey = L'root';
-    const std::wstring functionsKey = L'primitive_functions';
-    const std::wstring sampleCountKey = L'sample_count';
-    const std::wstring minibatchCountKey = L'minibatchCount'; // TODO: Python-style spelling
-    const std::wstring sweepCountKey = L'sweepCount';
-    const std::wstring unitKey = L'unit';
-    const std::wstring refMBSizeKey = L'ref_mb_size';
-    const std::wstring epochSizeKey = L'epoch_size';
-    const std::wstring scheduleKey = L'schedule';
-    const std::wstring learningRateScheduleKey = L'learnig_rate_schedule';
-    const std::wstring smoothedGradientsKey = L'smoothed_gradients';
-    const std::wstring noiseInjectionSeedKey = L'noise_injection_seed';
-    const std::wstring masterParameterUpdatedKey = L'master_parameter_updated';
-    const std::wstring smoothedCountKey = L'smoothed_count';
-    const std::wstring stateKey = L'state';
-    const std::wstring rngSeedKey = L'rng_seed';
-    const std::wstring rngOffsetKey = L'rng_offset';
-    const std::wstring blockFunctionCompositeKey = L'block_function_composite';
-    const std::wstring blockFunctionOpNameKey = L'block_function_op_name';
-    const std::wstring blockFunctionCompositeArgumentsMapKeysKey = L'block_function_composite_arguments_map_keys';
-    const std::wstring blockFunctionCompositeArgumentsMapValuesKey = L'block_function_composite_arguments_map_values';
-    const std::wstring internalWorkerStateKey = L'internal_worker_state';
-    const std::wstring externalWorkerStateKey = L'external_worker_state';
-    const std::wstring userDefinedStateKey = L'user_defined_state';
-    const std::wstring udfModuleNameKey = L'module';
-    const std::wstring udfFactoryMethodNameKey = L'deserialize_method';
-    const std::wstring nativeUDFKey = L'native';
-    }
-    
-        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
-    // function waits until mutex is released
-    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
-    bool Acquire(bool wait)
+    {    void operator() (const T * src0, const T * src1, T * dst) const
     {
-        assert(m_handle == NULL);
-        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
-        if (m_handle == NULL)
-        {
-            if (!wait)
-                return false;   // can't lock due to access permissions: lock already exists, consider not available
-            else
-                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
-        }
+        dst[0] = internal::saturate_cast<T>((WT)src0[0] + (WT)src1[0]);
     }
-    
-    // GetMinibatch - Get the next minibatch (features and labels)
-// matrices - [in] a map with named matrix types (i.e. 'features', 'labels') mapped to the corresponding matrix,
-//             [out] each matrix resized if necessary containing data.
-// returns - true if there are more minibatches, false if no more minibatches remain
-bool DataReader::GetMinibatch(StreamMinibatchInputs& matrices)
-{
-    /**
-    each reader reads data with number of columns as  nbr_utterances_per_minibatch * mbSize
-    notice that readers may differ in their actual mbsize, though it is supposedly to be nbr_utterances_per_minibatch * mbSize.
-    To handle with this, readers use their getminibatch function and then return their exact number of utterance in each minbatch.
-    This exact number, which is specified for the next reader, is passed to the next reader.
-    The next reader then returns the exact number of utterances per minibatch, after calling its getminibatch function.
-    Then this returned number is compared against the specified number. If these two numbers are not consistent, return with logic error.
-    The logic error can be avoided usually with an exchange of reading orders.
-    */
-    bool bRet = true;
-    //vector<size_t> vNbrSentences;
-    size_t nbr = 0;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-    {
-        if (nbr > 0)
-            m_dataReaders[m_ioNames[i]]->SetNumParallelSequences(nbr); // the first one determines the param of all others --TODO: This is flimsy.
-        bRet &= m_dataReaders[m_ioNames[i]]->GetMinibatch(matrices);
-        size_t thisNbr = m_dataReaders[m_ioNames[i]]->GetNumParallelSequencesForFixingBPTTMode();
-        if (nbr == 0)
-            nbr = thisNbr;
-        else if (thisNbr != nbr)
-            LogicError('DataReader::GetMinibatch: The specified number of utterances per minibatch is not consistent to the actual number of utterances per minibatch');
-    }
-    return bRet;
-}
-    
-    #include <functional>
-#include <stdexcept>
-    
-    template <typename TVector>
-inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
-{
-    foreach_index(currentLocation, v)
-    {
-        // Pick a random location and swap with current one
-        const size_t randomLocation = RandMT(0, v.size(), rng);
-        std::swap(v[currentLocation], v[randomLocation]);
-    }
-}
-    
-            // if dimension not specified we assume two operands' dimensions should match
-        Input(0)->ValidateInferInputDimsFrom(TensorShape(rows1));
-    
-        virtual void Save(File& fstream) const override
-    {
-        Base::Save(fstream);
-        size_t rowsDummy = 0; // compat with old file format
-        size_t colsDummy = 0;
-        fstream << rowsDummy << colsDummy;
-        m_sampleLayout.Save(fstream);
-    }
-    
-    void Speed::setInnerAction(ActionInterval *action)
-{
-    if (_innerAction != action)
-    {
-        CC_SAFE_RELEASE(_innerAction);
-        _innerAction = action;
-        CC_SAFE_RETAIN(_innerAction);
-    }
-}
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Sequence);
 };
     
-    class Action;
-    
-    /**
-@brief Progress to percentage.
-@details This action show the target node from current percentage to the specified percentage.
-        You should specify the destination percentage when creating the action.
-@since v0.99.1
-*/
-class CC_DLL ProgressTo : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes with a duration and a destination percentage.
-     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
-     * @param percent Specify the destination percentage.
-     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
-     */
-    static ProgressTo* create(float duration, float percent);
+        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
+                     uint8x16_t & v_dst) const
+    {
+        v_dst = veorq_u8(v_src0, v_src1);
     }
     
-        /** 
-    * @brief Initializes the action with grid size, random seed and duration.
-    * @param duration Specify the duration of the TurnOffTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @param seed Specify the random seed.
-    * @return If the Initialization success, return true; otherwise, return false.
-    */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
-    
-    /**
-@brief The delegate class for ActionTween.
-@details If you want to use ActionTween on a node.
-        You should implement the node follow these steps:
-        1. The node should be inherit from ActionTweenDelegate.
-        2. Override the virtual method updateTweenAction in the node.
-    
-            if ( frames.empty() )
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
         {
-            CCLOG('cocos2d: AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. Animation is not being added to the Animation Cache.', anim.first.c_str());
-            continue;
-        }
-        else if ( frames.size() != frameNameSize )
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
+    }
+    
+    
+    {
+    {        size_t dj = 0u, j = 0u;
+        for (; j < roiw16; dj += 64, j += 16)
         {
-            CCLOG('cocos2d: AnimationCache: An animation in your dictionary refers to a frame which is not in the SpriteFrameCache. Some or all of the frames for the animation '%s' may be missing.', anim.first.c_str());
+            internal::prefetch(uv + j);
+            internal::prefetch(y1 + j);
+            internal::prefetch(y2 + j);
+#if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+            CONVERTYUV420TORGB(4, d0, d1, q6, q5)
+#else
+            convertYUV420.ToRGB(y1 + j, y2 + j, uv + j, dst1 + dj, dst2 + dj);
+#endif
         }
+        for (; j + 2 <= size.width; j+=2, dj += 8)
+        {
+            convertYUV420ToRGB<4, 0, 1>(y1+j, y2+j, uv+j, dst1 + dj, dst2 + dj);
+        }
+    }
+#else
+    (void)size;
+    (void)yBase;
+    (void)yStride;
+    (void)uvBase;
+    (void)uvStride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+        q0 = vmaxq_s16(q0, vminq_s16(ak0, d0_7));
+    q1 = vminq_s16(q1, vmaxq_s16(bk0, d0_7));
+    
+        for (; j < size.width; ++j)
+        sqsum[j] = (prev += src[j]*src[j]);
+    
+    #if !defined(__AVX__)
+// Implementation for non-avx archs.
+    
+    // Computes part of matrix.vector v = Wu. Computes N=16 results.
+// For details see PartialMatrixDotVector64 with N=16.
+static void PartialMatrixDotVector16(const int8_t* wi, const double* scales,
+                                     const int8_t* u, int num_in, int num_out,
+                                     double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  __m256i result1 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
+    }
+  }
+  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  num_out -= kNumOutputsPerRegister;
+  ExtractResults(result1, shift_id, wi, scales,
+                 std::min(kNumOutputsPerRegister, num_out), v);
+}
+    
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
+    
+    // Setter for the value.
+void ParamContent::SetValue(const char* val) {
+// TODO (wanke) Test if the values actually are properly converted.
+// (Quickly visible impacts?)
+  changed_ = true;
+  if (param_type_ == VT_INTEGER) {
+    iIt->set_value(atoi(val));
+  } else if (param_type_ == VT_BOOLEAN) {
+    bIt->set_value(atoi(val));
+  } else if (param_type_ == VT_DOUBLE) {
+    dIt->set_value(strtod(val, nullptr));
+  } else if (param_type_ == VT_STRING) {
+    sIt->set_value(val);
+  }
+}
+    
+        for (auto &pfd: pollfds) {
+      if (pfd.revents & (POLLERR | POLLHUP)) {
+        // some process died
+        DEBUG('detaching process');
+        auto &session = client_sessions.at(pfd.fd);
+        DEBUG('%d has died', session.pid);
+        to_remove.push_back(pfd.fd);
+      } else if (pfd.revents & POLLIN) {
+        if (pfd.fd == srv_socket->socket_fd) {
+          // someone is joining
+          DEBUG('registered new client');
+          auto client = srv_socket->accept();
+          int fd = client.socket_fd;
+          to_add.push_back(fd);
+          client_sessions.emplace(fd, std::move(client));
+        } else {
+          // someone wants to register a segment
+          DEBUG('got alloc info');
+          auto &session = client_sessions.at(pfd.fd);
+          AllocInfo info = session.socket.receive();
+          session.pid = info.pid;
+          DEBUG('got alloc info: %d %d %s', (int)info.free, info.pid, info.filename);
+          if (info.free) {
+            free_used_object(info.filename);
+          } else {
+            used_objects.insert(info.filename);
+            DEBUG('registered object %s', info.filename);
+            session.socket.confirm();
+          }
+        }
+      }
+    }
+    
+    namespace {
+    }
+    
+      const auto& X = in[0];
+  const auto& W = in[1];
+  const auto& b = in[2];
+  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
+  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
+  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
+  const int canonical_axis_w =
+      canonical_axis_index_(axis_w, in[1].dims().size());
+  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+    
+    class GetFlattenGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'ResizeLike', '', vector<string>{GO(0), I(0)}, vector<string>{GI(0)});
+  }
+};
+    
+    
+    {
+    {    const float* Xdata = X.template data<float>();
+    float* Ydata = Y->template mutable_data<float>();
+    for (int i = 0; i < X.size(); ++i) {
+      Ydata[i] = std::floor(Xdata[i]);
+    }
+    return true;
+  }
+};
+    
+    namespace caffe2 {
+    }
+    
+    // The RunFullyConnectedOpOnCUDADevice Function will use the pointer of current
+// op and the DoRunWithType will make sure to run the correct things.
+template <>
+bool FullyConnectedOp<CUDAContext>::RunOnDevice() {
+  return RunFullyConnectedOpOnCUDADevice(float16_compute_, this);
+}
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    #endif
+
+    
+    struct PhpFileDoesNotExistException : ExtendedException {
+  explicit PhpFileDoesNotExistException(const char* file)
+      : ExtendedException('File could not be loaded: %s', file) {}
+  explicit PhpFileDoesNotExistException(const char* msg,
+                                        DEBUG_ONLY bool empty_file)
+      : ExtendedException('%s', msg) {
+    assertx(empty_file);
+  }
+  EXCEPTION_COMMON_IMPL(PhpFileDoesNotExistException);
+};
+    
+      DIR *dir = opendir(fullPath.c_str());
+  if (dir == nullptr) {
+    Logger::Error('FileUtil::find(): unable to open directory %s',
+                  fullPath.c_str());
+    return;
+  }
+    
+            auto flatBufferOffset = AsTensorShape(Shape()).Locate(startOffset);
+        auto sliceViewMatrixDims = GetMatrixDimensions(sliceViewShape);
+        assert((flatBufferOffset % sliceViewMatrixDims.first) == 0);
+        auto sliceMatrixColumnOffset = flatBufferOffset / sliceViewMatrixDims.first;
+        void* tensorView = nullptr;
+        switch (m_dataType)
+        {
+        case DataType::Float:
+        {
+            auto currentMatrix = GetMatrix<float>();
+            std::pair<size_t, size_t> currentMatrixDims = { currentMatrix->GetNumRows(), currentMatrix->GetNumCols() };
+            std::shared_ptr<Matrix<float>> slicedMatrixView;
+            if (sliceViewMatrixDims.first != currentMatrixDims.first)
+                slicedMatrixView = make_shared<Matrix<float>>(currentMatrix->Reshaped(1, currentMatrix->GetNumElements()).ColumnSlice(flatBufferOffset, sliceViewShape.TotalSize()));
+            else
+                slicedMatrixView = make_shared<Matrix<float>>(currentMatrix->ColumnSlice(sliceMatrixColumnOffset, sliceViewMatrixDims.second));
+    }
+    }
+    
+            static FunctionPtr Deserialize(const Dictionary& dictionary,
+            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
+            const CNTK::DeviceDescriptor& device);
+    
+        template <typename ElementType>
+    /*static*/ ValuePtr Value::CreateBatch(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/)
+    {
+        //TODO: avoid data copy.
+        std::vector<std::vector<size_t>> input(batchData.size());
+        for (size_t i = 0; i < batchData.size(); i++)
+        {
+            input[i] = {batchData[i]};
+        }
+        // Pass the empty seqStartFlags means all sequences have the start flag with true.
+        return Create<ElementType>(dimension, input, {}, device, readOnly);
+    }
+    
+    public:
+    DeclareConstructorFromConfigWithNumInputs(ConstantNode);
+    ConstantNode(DEVICEID_TYPE deviceId, const wstring& name)
+        : Base(deviceId, name)
+    {
+        m_fillValue = ElemType(0);
+    }
+    ConstantNode(DEVICEID_TYPE deviceId, const wstring& name, double fillValue)
+        : Base(deviceId, name)
+    {
+        m_fillValue = ElemType(fillValue);
+    }
+    
+    #include 'db/builder.h'
+    
+    Status DestroyDB(const std::string& dbname, const Options& options) {
+  Env* env = options.env;
+  std::vector<std::string> filenames;
+  Status result = env->GetChildren(dbname, &filenames);
+  if (!result.ok()) {
+    // Ignore error in case directory does not exist
+    return Status::OK();
+  }
+    }
+    
+      // Return an internal iterator over the current state of the database.
+  // The keys of this iterator are internal keys (see format.h).
+  // The returned iterator should be deleted when no longer needed.
+  Iterator* TEST_NewInternalIterator();
+    
+    
+    {}  // namespace leveldb
+    
+      // Return type, or one of the preceding special values
+  unsigned int ReadPhysicalRecord(Slice* result);
