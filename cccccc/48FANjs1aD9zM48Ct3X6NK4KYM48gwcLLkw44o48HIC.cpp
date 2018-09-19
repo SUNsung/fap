@@ -1,86 +1,155 @@
 
         
-            typedef int8_t   s8;
-    typedef uint8_t  u8;
-    typedef int16_t  s16;
-    typedef uint16_t u16;
-    typedef int32_t  s32;
-    typedef uint32_t u32;
-    typedef float    f32;
-    typedef int64_t  s64;
-    typedef uint64_t u64;
-    typedef double   f64;
+          std::vector<PyObject*> input_constant_tensor_values_v;
+  int cnt = PyList_Size(input_constant_tensor_values);
+  input_constant_tensor_values_v.reserve(cnt);
+  for (int i = 0; i < cnt; ++i) {
+    input_constant_tensor_values_v.push_back(
+        PyList_GetItem(input_constant_tensor_values, i));
+  }
+    
+    // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
     
     
-    {            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_src = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            int16x8_t v_dst = vld1q_s16(dst + j);
-            int16x4_t v_srclo = vget_low_s16(v_src), v_srchi = vget_high_s16(v_src);
-            v_dst = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst))),
-                                 vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst))));
-            vst1q_s16(dst + j, v_dst);
-        }
+    { private:
+  // Original parameter name.
+  string name_;
+  // API name for this parameter.
+  string rename_to_;
+};
     
+    // Converts the given numpy ndarray to a (safe) TF_Tensor. The returned
+// TF_Tensor in `out_tensor` may have its own Python reference to `ndarray`s
+// data. After `out_tensor` is destroyed, this reference must (eventually) be
+// decremented via ClearDecrefCache().
+//
+// `out_tensor` must be non-null. Caller retains ownership of `ndarray`.
+Status PyArrayToTF_Tensor(PyObject* ndarray, Safe_TF_TensorPtr* out_tensor);
     
-    {            vs1 = vqadd_s32(vs1, vnz1);
-            vs2 = vqadd_s32(vs2, vnz2);
-            vs3 = vqadd_s32(vs3, vnz3);
-            vs4 = vqadd_s32(vs4, vnz4);
-        }
+      // Form that takes a pImpl executor and extracts a CUDA implementation --
+  // fatal failure if it is not CUDA inside.
+  explicit ScopedActivateExecutorContext(StreamExecutor* stream_exec);
     
-    void div(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         u8 * dstBase, ptrdiff_t dstStride,
-         f32 scale,
-         CONVERT_POLICY cpolicy)
-{
-    div<u8>(size, src0Base, src0Stride, src1Base, src1Stride, dstBase, dstStride, scale, cpolicy);
+    SecureAuthContext::SecureAuthContext(grpc_auth_context* ctx,
+                                     bool take_ownership)
+    : ctx_(ctx), take_ownership_(take_ownership) {}
+    
+      bool IsPeerAuthenticated() const override;
+    
+    // This is needed because grpc has hardcoded CensusContext with a
+// forward declaration of 'struct census_context;'
+struct census_context;
+    
+    // Server
+MeasureDouble RpcServerSentBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerSentBytesPerRpcMeasureName,
+      'Total bytes sent across all messages per RPC', kUnitBytes);
+  return measure;
 }
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        //vertical convolution
-        ptrdiff_t idx_rm2 = internal::borderInterpolate(i - 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
+    
+    {} // namespace aria2
+
+    
+    #include 'DHTAbstractMessage.h'
+#include 'A2STR.h'
+#include 'ValueBase.h'
+    
+    namespace aria2 {
     }
     
-                uint32x2_t el2l = vadd_u32(vget_low_u32(el8shr01l), vget_high_u32(el8shr01l));
-            uint32x2_t el2hl = vadd_u32(vget_low_u32(el4h), vget_high_u32(el8shr01l));
-            uint32x2_t el2hh = vadd_u32(vget_low_u32(el4h), vget_high_u32(el4h));
+    #include <vector>
+#include <memory>
     
-    #include 'src/cpp/client/create_channel_internal.h'
+      virtual std::shared_ptr<DHTTask> createPeerLookupTask(
+      const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
+      const std::shared_ptr<PeerStorage>& peerStorage) CXX11_OVERRIDE;
+    
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
+}
+    
+      virtual ~DHTTokenUpdateCommand();
+    
+      /**
+   * @brief Initialize the CAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   * @return If the initialization is successful.
+   */
+  virtual bool Init(const CANCardParameter &parameter) = 0;
+    
+    /**
+ * @file
+ * @brief Defines the CanClientFactory class.
+ */
+    
+      // open device
+  // guss net is the device minor number, if one card is 0,1
+  // if more than one card, when install driver u can specify the minior id
+  // int32_t ret = canOpen(net, pCtx->mode, txbufsize, rxbufsize, 0, 0,
+  // &dev_handler_);
+  uint32_t mode = 0;
+  // mode |= NTCAN_MODE_NO_RTR;
+  if (port_ > MAX_CAN_PORT || port_ < 0) {
+    AERROR << 'can port number [' << port_ << '] is out of the range [0,'
+           << MAX_CAN_PORT << ']';
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+  int32_t ret = canOpen(port_, mode, NTCAN_MAX_TX_QUEUESIZE,
+                        NTCAN_MAX_RX_QUEUESIZE, 5, 5, &dev_handler_);
+  if (ret != NTCAN_SUCCESS) {
+    AERROR << 'open device error code [' << ret << ']: ' << GetErrorString(ret);
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
+    
+    bool FakeCanClient::Init(const CANCardParameter &param) { return true; }
+    
+    #include 'gflags/gflags.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    #include 'gtest/gtest.h'
+    
+      /**
+   * @brief get mutable protocol data by message id
+   * @param message_id the id of the message
+   * @return a pointer to the protocol data
+   */
+  ProtocolData<SensorType> *GetMutableProtocolDataById(
+      const uint32_t message_id);
+    
+    /**
+ * @namespace apollo::drivers::canbus
+ * @brief apollo::drivers::canbus
+ */
+namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
     
     
-    {}  // namespace grpc
-    
-    
-    {}  // namespace grpc
-    
-      // Must be called before any CompareBlock() calls can be called.
-  virtual void StartBlockComparisons() = 0;
-  // No more CompareBlock() calls can be called after this.
-  virtual void FinishBlockComparisons() = 0;
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg);
-    
-            // We don't care for comparison result here; the previous value will be stored into value anyway.
-        // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
-        __asm__ __volatile__
-        (
-            'movq %%rbx, %%rax\n\t'
-            'movq %%rcx, %%rdx\n\t'
-            'lock; cmpxchg16b %[storage]\n\t'
-            : '=&A' (value)
-            : [storage] 'm' (storage)
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
+    {  EXPECT_TRUE(value.is_bit_1(0));
+  EXPECT_TRUE(value.is_bit_1(1));
+  EXPECT_FALSE(value.is_bit_1(3));
+  EXPECT_TRUE(value.is_bit_1(6));
+  EXPECT_FALSE(value.is_bit_1(7));
+}
