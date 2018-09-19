@@ -1,120 +1,85 @@
 
         
-        if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
+                a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
+        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
+    
+          def process_response(response)
+        super.merge! response_url: response.url
+      end
+    end
   end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
 end
 
     
-      s.add_runtime_dependency('addressable',           '~> 2.4')
-  s.add_runtime_dependency('colorator',             '~> 1.0')
-  s.add_runtime_dependency('em-websocket',          '~> 0.5')
-  s.add_runtime_dependency('i18n',                  '>= 0.9.5', '< 2')
-  s.add_runtime_dependency('jekyll-sass-converter', '~> 1.0')
-  s.add_runtime_dependency('jekyll-watch',          '~> 2.0')
-  s.add_runtime_dependency('kramdown',              '~> 1.14')
-  s.add_runtime_dependency('liquid',                '~> 4.0')
-  s.add_runtime_dependency('mercenary',             '~> 0.3.3')
-  s.add_runtime_dependency('pathutil',              '~> 0.9')
-  s.add_runtime_dependency('rouge',                 '~> 3.0')
-  s.add_runtime_dependency('safe_yaml',             '~> 1.0')
-end
-
+        private
     
-                c.action do |_, options|
-              options['serving'] = false
-              process_with_graceful_fail(c, options, self)
+        # Tells optparse how to parse the arguments.
+    #
+    # @param opts [OptionParser]
+    def set_opts(opts)
+      opts.banner = <<END
+Usage: sass-convert [options] [INPUT] [OUTPUT]
+    
+        private
+    
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+          # @see Base#to_s
+      def to_s
+        @root
+      end
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
             end
           end
         end
     
-            def username
-          @username ||= username_and_email[:username].to_s
-        end
-    
-          private
-    
-          def to_html
-        link_to(image_tag(image_url, alt: title), link_url)
-      end
-    
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-    
-            # Upload a file to the remote machine.
-        #
-        # @param [String] from Path of the file locally to upload.
-        # @param [String] to Path of where to save the file on the remote
-        #   machine.
-        def upload(from, to)
-        end
-    
-                @logger.info('With machine: #{machine.name} (#{machine.provider.inspect})')
-            yield machine
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a provider for the V2 API. A provider
-      # is responsible for creating compute resources to match the needs
-      # of a Vagrant-configured system.
-      class Provider
-        include CapabilityHost
-    
-        describe '*' do
-      it 'uses the previous argument as the field width' do
-        format('%*b', 10, 10).should == '      1010'
-        format('%*B', 10, 10).should == '      1010'
-        format('%*d', 10, 112).should == '       112'
-        format('%*i', 10, 112).should == '       112'
-        format('%*o', 10, 87).should == '       127'
-        format('%*u', 10, 112).should == '       112'
-        format('%*x', 10, 196).should == '        c4'
-        format('%*X', 10, 196).should == '        C4'
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { sleep('2')   }.should raise_error(TypeError)
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
   end
     
-    # Declares a dependency to the git repo of CocoaPods gem. This declaration is
-# compatible with the local git repos feature of Bundler.
-#
-def cp_gem(name, repo_name, branch = 'master', path: false)
-  return gem name if SKIP_UNRELEASED_VERSIONS
-  opts = if path
-           { :path => '../#{repo_name}' }
-         else
-           url = 'https://github.com/CocoaPods/#{repo_name}.git'
-           { :git => url, :branch => branch }
-         end
-  gem name, opts
-end
+      def generate_migration
+    migration_template('paperclip_migration.rb.erb',
+                       'db/migrate/#{migration_file_name}',
+                       migration_version: migration_version)
+  end
     
-    require 'cocoapods'
+    # The base module that gets included in ActiveRecord::Base. See the
+# documentation for Paperclip::ClassMethods for more useful information.
+module Paperclip
+  extend Helpers
+  extend Logger
+  extend ProcessorHelpers
     
-      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
-  autoload :Command,                   'cocoapods/command'
-  autoload :Deintegrator,              'cocoapods_deintegrate'
-  autoload :Executable,                'cocoapods/executable'
-  autoload :ExternalSources,           'cocoapods/external_sources'
-  autoload :Installer,                 'cocoapods/installer'
-  autoload :HooksManager,              'cocoapods/hooks_manager'
-  autoload :PodTarget,                 'cocoapods/target/pod_target'
-  autoload :Project,                   'cocoapods/project'
-  autoload :Resolver,                  'cocoapods/resolver'
-  autoload :Sandbox,                   'cocoapods/sandbox'
-  autoload :Target,                    'cocoapods/target'
-  autoload :Validator,                 'cocoapods/validator'
+        alias :empty? :empty_file?
