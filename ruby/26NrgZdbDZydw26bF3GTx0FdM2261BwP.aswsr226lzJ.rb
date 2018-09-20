@@ -1,99 +1,119 @@
 
         
-          # body
-  xml.tag!('body') do
-    xml.tag!('outline', text: TITLE, title: TITLE) do
-      blogs.each do |blog|
-        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
-          xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
-      end
+            if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
-end
     
-      # DBM stores ruby objects as a ruby `String`. Hence, when fetching the data,
-  # to convert the ruby string back into a ruby `Hash`, the string is converted
-  # into a JSON compatible string in `ruby_hash_to_json_string`, where it may
-  # later be parsed by `JSON.parse` in the `json_string_to_ruby_hash` method
-  #
-  # @param  [Hash] ruby `Hash` to be converted to `JSON` string
-  # @return [String]
-  def ruby_hash_to_json_string(hash)
-    hash.to_json
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
+    
+    Rails.application.initialize!
+    
+      module Mailers
+    autoload :Helpers, 'devise/mailers/helpers'
   end
     
-        return unless download.file?
+      def prepend(*paths)
+    @paths = parse(*paths, *@paths)
+    self
+  end
     
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
-    end
-    dirs.delete 'etc'
-    dirs.delete 'var'
-    
-        def replace_vars(less)
-      less = less.dup
-      # skip header comment
-      less =~ %r(\A/\*(.*?)\*/)m
-      from           = $~ ? $~.to_s.length : 0
-      less[from..-1] = less[from..-1].
-          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
-          # variables that would be ignored by gsub above: e.g. @page-header-border-color
-          gsub(/@(page[\w-]+)/, '$\1')
-      less
-    end
-    
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-    
-    Cucumber::Rails::Database.autorun_database_cleaner = true
-Cucumber::Rails::World.use_transactional_tests = false
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        it 'does not let a user destroy other likes' do
-      like2 = eve.like!(@message)
-      like_count = Like.count
-    
-    # Declares a dependency to the git repo of CocoaPods gem. This declaration is
-# compatible with the local git repos feature of Bundler.
-#
-def cp_gem(name, repo_name, branch = 'master', path: false)
-  return gem name if SKIP_UNRELEASED_VERSIONS
-  opts = if path
-           { :path => '../#{repo_name}' }
-         else
-           url = 'https://github.com/CocoaPods/#{repo_name}.git'
-           { :git => url, :branch => branch }
-         end
-  gem name, opts
-end
-    
-                target 'Static' do
-                use_frameworks!(false)
-            end
-            target 'Dynamic' do
-                use_frameworks!(true)
-            end
-        end
-    end
-end
-    
-        def self.verify_xcode_license_approved!
-      if `/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?
-        raise Informative, 'You have not agreed to the Xcode license, which ' \
-          'you must do to use CocoaPods. Agree to the license by running: ' \
-          '`xcodebuild -license`.'
-      end
-    end
+        odie 'Unknown command: #{cmd}' unless path
+    puts path
   end
 end
 
     
-        def ask(key, default=nil, options={})
-      question = Question.new(key, default, options)
-      set(key, question)
+      # add junk params
+  attr_accessor :junk_params
+    
+    IAX_IE_CALLED_NUMBER  = 1
+IAX_IE_CALLING_NUMBER = 2
+IAX_IE_AUTH_METHODS   = 3
+IAX_IE_CALLING_NAME   = 4
+IAX_IE_USERNAME       = 6
+IAX_IE_DESIRED_CODEC  = 9
+IAX_IE_ORIGINAL_DID   = 10
+IAX_IE_ACTUAL_CODECS  = 8
+IAX_IE_PROTO_VERSION  = 11
+IAX_IE_REG_REFRESH    = 19
+IAX_IE_CHALLENGE_DATA = 15
+IAX_IE_CHALLENGE_RESP = 16
+IAX_IE_APPARENT_ADDR  = 18
+IAX_IE_REGREJ_CAUSE   = 22
+IAX_IE_HANGUP_CAUSE   = 42
+    
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+              sent = 0
+          case protocol
+          when 'tcp'
+            sent = send_request_tcp(req)
+          when 'udp'
+            sent = send_request_udp(req)
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Encodes the data
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_data(data)
+            OpenSSL::ASN1::OctetString.new(data)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
+    
+              # Decodes the end_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_end_time(input)
+            input.value[0].value
+          end
+    
+              # Decodes the cname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
+          def decode_cname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
+    
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
     end
