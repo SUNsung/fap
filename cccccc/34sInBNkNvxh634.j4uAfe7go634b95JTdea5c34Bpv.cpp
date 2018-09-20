@@ -1,121 +1,232 @@
 
         
         
-    {  // Assuming T is defined in namespace foo, in the next statement,
-  // the compiler will consider all of:
-  //
-  //   1. foo::operator<< (thanks to Koenig look-up),
-  //   2. ::operator<< (as the current namespace is enclosed in ::),
-  //   3. testing::internal2::operator<< (thanks to the using statement above).
-  //
-  // The operator<< whose type matches T best will be picked.
-  //
-  // We deliberately allow #2 to be a candidate, as sometimes it's
-  // impossible to define #1 (e.g. when foo is ::std, defining
-  // anything in it is undefined behavior unless you are a compiler
-  // vendor.).
-  *os << value;
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ScopedPythonPtr);
+};
+    
+    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
+    WriteDocCommentBody(printer, enumDescriptor);
+}
+void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
+    WriteDocCommentBody(printer, value);
 }
     
+    bool FieldGeneratorBase::is_nullable_type() {
+  switch (descriptor_->type()) {
+    case FieldDescriptor::TYPE_ENUM:
+    case FieldDescriptor::TYPE_DOUBLE:
+    case FieldDescriptor::TYPE_FLOAT:
+    case FieldDescriptor::TYPE_INT64:
+    case FieldDescriptor::TYPE_UINT64:
+    case FieldDescriptor::TYPE_INT32:
+    case FieldDescriptor::TYPE_FIXED64:
+    case FieldDescriptor::TYPE_FIXED32:
+    case FieldDescriptor::TYPE_BOOL:
+    case FieldDescriptor::TYPE_UINT32:
+    case FieldDescriptor::TYPE_SFIXED32:
+    case FieldDescriptor::TYPE_SFIXED64:
+    case FieldDescriptor::TYPE_SINT32:
+    case FieldDescriptor::TYPE_SINT64:
+      return false;
+    }
+    }
     
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2;
-}
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+namespace {
+    }
+    }
+    }
+    }
+    }
     
-      // Create the directory so that path exists. Returns true if successful or
-  // if the directory already exists; returns false if unable to create the
-  // directory for any reason, including if the parent directory does not
-  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
-  bool CreateFolder() const;
+    // Attempt to remove a prefix from a value, ignoring casing and skipping underscores.
+// (foo, foo_bar) => bar - underscore after prefix is skipped
+// (FOO, foo_bar) => bar - casing is ignored
+// (foo_bar, foobarbaz) => baz - underscore in prefix is ignored
+// (foobar, foo_barbaz) => baz - underscore in value is ignored
+// (foo, bar) => bar - prefix isn't matched; return original value
+std::string TryRemovePrefix(const std::string& prefix, const std::string& value) {
+  // First normalize to a lower-case no-underscores prefix to match against
+  std::string prefix_to_match = '';
+  for (size_t i = 0; i < prefix.size(); i++) {
+    if (prefix[i] != '_') {
+      prefix_to_match += ascii_tolower(prefix[i]);
+    }
+  }
+  
+  // This keeps track of how much of value we've consumed
+  size_t prefix_index, value_index;
+  for (prefix_index = 0, value_index = 0;
+      prefix_index < prefix_to_match.size() && value_index < value.size();
+      value_index++) {
+    // Skip over underscores in the value
+    if (value[value_index] == '_') {
+      continue;
+    }
+    if (ascii_tolower(value[value_index]) != prefix_to_match[prefix_index++]) {
+      // Failed to match the prefix - bail out early.
+      return value;
+    }
+  }
+    }
     
-    #include <algorithm>
     
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+    {  printer->Outdent();
+  printer->Print('}\n\n');
+    
+    
+    
+      // Oneofs
+  if (descriptor->oneof_decl_count() > 0) {
+      std::vector<std::string> oneofs;
+      for (int i = 0; i < descriptor->oneof_decl_count(); i++) {
+          oneofs.push_back(UnderscoresToCamelCase(descriptor->oneof_decl(i)->name(), true));
+      }
+      printer->Print('new[]{ \'$oneofs$\' }, ', 'oneofs', JoinStrings(oneofs, '\', \''));
+  }
+  else {
+      printer->Print('null, ');
+  }
+    
+    // We will use the boost shared_ptr instead of the new C++11 one mainly
+// because cuda does not work (at least now) well with C++11 features.
+using boost::shared_ptr;
+    
+      /* Should be tested when running loops to exit when requested. */
+  bool must_stop();
+    
+    #endif  // CAFFE_ABSVAL_LAYER_HPP_
 
     
-      // Gets the first element of the queue, or NULL if the queue is empty.
-  QueueNode<E>* Head() { return head_; }
-  const QueueNode<E>* Head() const { return head_; }
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-      /*
-   * @brief a variable tracking all of the paths we attempt to carve
-   *
-   * This is a globbed set of file paths that we're expecting will be
-   * carved.
-   */
-  std::set<boost::filesystem::path> carvePaths_;
+     protected:
+  // Helper functions that abstract away the column buffer and gemm arguments.
+  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
+  // we just called weight_cpu_gemm with the same input.
+  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_cpu_bias(Dtype* output, const Dtype* bias);
+  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output);
+  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
+      weights);
+  void backward_cpu_bias(Dtype* bias, const Dtype* input);
+    
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    X before running op:
+[[0.5821691  0.07719802 0.50159824]
+ [0.40952456 0.36788362 0.84887683]
+ [0.02472685 0.65730894 0.9066397 ]]
+X after running op:
+[[1.7899168 1.080256  1.6513585]
+ [1.5061016 1.4446739 2.3370204]
+ [1.0250351 1.9295927 2.4759884]]
+    
+    
+<details>
+    
+        const auto* data_ptr = data.template data<T>();
+    std::unordered_map<T, int64_t> dict;
+    std::vector<int64_t> dupIndices;
+    // i is the index of unique elements, j is the index of all elements
+    for (int64_t i = 0, j = 0; j < data.dims()[0]; ++i, ++j) {
+      bool retVal = dict.insert({data_ptr[j], i}).second;
+      if (!retVal) {
+        --i;
+        dupIndices.push_back(j);
+      }
+    }
+    
+    <details>
+    
+    /**
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ */
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+    }
     
     std::vector<std::string> KafkaTopicsConfigParserPlugin::keys() const {
   return {kKafkaTopicParserRootKey};
 }
     
+    namespace osquery {
+    }
     
-    {} // namespace osquery
-
+      // If a constraint list exists for a map key, normal constraints apply.
+  EXPECT_TRUE(cm['path'].matches('some'));
+  EXPECT_FALSE(cm['path'].matches('not_some'));
     
-    
-    {  QueryLogItem second_item;
-  getDecorations(second_item.decorations);
-  ASSERT_EQ(second_item.decorations.size(), 2U);
+    void Initializer::platformSetup() {
+  // Initialize the COM libraries utilized by Windows WMI calls.
+  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
+  if (ret != S_OK) {
+    ::CoUninitialize();
+  }
 }
     
-    Status serializeDistributedQueryResultJSON(const DistributedQueryResult& r,
-                                           std::string& json) {
-  auto doc = JSON::newObject();
-  auto s = serializeDistributedQueryResult(r, doc, doc.doc());
-  if (!s.ok()) {
-    return s;
+    Status INotifyEventPublisher::run() {
+  struct pollfd fds[1];
+  fds[0].fd = getHandle();
+  fds[0].events = POLLIN;
+  int selector = ::poll(fds, 1, 1000);
+  if (selector == -1) {
+    if (errno == EINTR) {
+      return Status(0, 'inotify poll interrupted');
+    }
+    LOG(WARNING) << 'Could not read inotify handle';
+    return Status(1, 'inotify poll failed');
   }
     }
     
-      status = EventFactory::deregisterEventPublisher(basic_pub->type());
-  EXPECT_TRUE(status.ok());
-  status = EventFactory::deregisterEventPublisher(fake_pub->type());
-  EXPECT_TRUE(status.ok());
-  status = EventFactory::deregisterEventPublisher(another_fake_pub->type());
-  EXPECT_TRUE(status.ok());
-    
-    #include <folly/portability/GTest.h>
-    
-    template <class String>
-void randomString(String* toFill, size_t size = 1000) {
-  assert(toFill);
-  toFill->resize(size);
-  FOR_EACH (i, *toFill) {
-    *i = random('a', 'z');
-  }
+    [[noreturn]] void exception_wrapper::onNoExceptionError(
+    char const* const name) {
+  std::ios_base::Init ioinit_; // ensure std::cerr is alive
+  std::cerr << 'Cannot use `' << name
+            << '` with an empty folly::exception_wrapper' << std::endl;
+  std::terminate();
 }
     
-      // Use our stubbed out fchmod() function to force a failure when setting up
-  // the temporary file.
-  //
-  // First try when creating the file for the first time.
-  {
-    FChmodFailure fail;
-    EXPECT_THROW(writeFileAtomic(path, 'foobar'), std::system_error);
+      template <typename ExecutorT>
+  static KeepAlive<ExecutorT> getKeepAliveToken(ExecutorT* executor) {
+    static_assert(
+        std::is_base_of<Executor, ExecutorT>::value,
+        'getKeepAliveToken only works for folly::Executor implementations.');
+    if (!executor) {
+      return {};
+    }
+    folly::Executor* executorPtr = executor;
+    if (executorPtr->keepAliveAcquire()) {
+      return makeKeepAlive<ExecutorT>(executor);
+    }
+    return makeKeepAliveDummy<ExecutorT>(executor);
   }
-  EXPECT_EQ(set<string>{}, listTmpDir());
     
-    TEST(FixedStringReplaceTest, RuntimeReplaceString) {
-  folly::FixedString<10> tmp{'abcdefghij'};
-  tmp.replace(1, 5, FS('XX'));
-  EXPECT_EQ(7u, tmp.size());
-  EXPECT_STREQ('aXXghij', tmp.c_str());
-}
-    
-      EXPECT_TRUE(LOG_VALUE((has_test<Bar, int()>::value)));
-  EXPECT_FALSE(LOG_VALUE((has_test<Bar, int() const>::value)));
-  EXPECT_TRUE(LOG_VALUE((has_test<Bar, double(int, long)>::value)));
-  EXPECT_FALSE(LOG_VALUE((has_test<Bar, string(const string&) const>::value)));
-  EXPECT_TRUE(LOG_VALUE((has_test<Bar, long(int) const>::value)));
-  EXPECT_FALSE(LOG_VALUE((has_test<Bar, string(string) const>::value)));
+    using UriTuple = std::tuple<
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    uint16_t,
+    const std::string&,
+    const std::string&,
+    const std::string&>;
