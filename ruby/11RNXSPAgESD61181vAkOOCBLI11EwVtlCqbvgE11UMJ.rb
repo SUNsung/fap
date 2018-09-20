@@ -1,151 +1,91 @@
 
         
-            To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
+        $LOAD_PATH.unshift File.expand_path('lib', __dir__)
+require 'jekyll/version'
     
-      def option_defined?(name)
-    @options.include? name
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    require 'erb'
+    
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+      # body
+  xml.tag!('body') do
+    xml.tag!('outline', text: TITLE, title: TITLE) do
+      blogs.each do |blog|
+        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
+          xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
+      end
+    end
   end
 end
-
     
-            def email
-          attribute_value(:email)
-        end
+    desc 'LESS to stdin -> Sass to stdout'
+task :less_to_scss, :branch do |t, args|
+  require './tasks/converter'
+  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
+end
     
-          def link
-        save if identity.new_record?
-      end
-    
-          def initialize(badge)
-        @badge = badge
-      end
-    
-      def failure_message
-    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
-    error   = exception.error_reason if exception.respond_to?(:error_reason)
-    error ||= exception.error        if exception.respond_to?(:error)
-    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
-    error.to_s.humanize if error
-  end
-    
-      def sign_in_params
-    devise_parameter_sanitizer.sanitize(:sign_in)
-  end
-    
-        login_as User.create!(email: 'test@test.com', password: 'test123456', password_confirmation: 'test123456')
-    
-      module Controllers
-    autoload :Helpers,        'devise/controllers/helpers'
-    autoload :Rememberable,   'devise/controllers/rememberable'
-    autoload :ScopedViews,    'devise/controllers/scoped_views'
-    autoload :SignInOut,      'devise/controllers/sign_in_out'
-    autoload :StoreLocation,  'devise/controllers/store_location'
-    autoload :UrlHelpers,     'devise/controllers/url_helpers'
-  end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
+          less.gsub /&:extend\((#{SELECTOR_RE})(?: all)?\)/ do
+        selector = $1
+        selector =~ /\.([\w-]+)/
+        mixin    = $1
+        if mixin && mixin_names.include?(mixin)
+          '@include #{mixin}'
         else
-          warden.set_user(resource, options.merge!(scope: scope))
+          '@extend #{selector}'
         end
       end
+    end
     
-      # The mode of any created files will be 0664 (that is, readable and writable
-  # by the owner and the group, and readable by everyone else). Files created
-  # will also be modified by the process' umask value at the time of creation:
-  #   https://docs.oracle.com/cd/E17276_01/html/api_reference/C/envopen.html
-  DATABASE_MODE = 0664
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
+    end
     
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
+    desc 'generate documentation'
+task :doc => 'doc:all'
+    
+          def instrument(env)
+        return unless i = options[:instrumenter]
+        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
+        i.instrument('rack.protection', env)
       end
-    end
     
-      def commands
-    if ARGV.include? '--quiet'
-      cmds = internal_commands
-      cmds += external_commands
-      cmds += internal_developer_commands
-      cmds += HOMEBREW_INTERNAL_COMMAND_ALIASES.keys if ARGV.include? '--include-aliases'
-      puts Formatter.columns(cmds.sort)
-      return
-    end
+          def csp_policy
+        directives = []
     
-        puts 'Your system is ready to brew.' unless Homebrew.failed?
-  end
-end
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+    ## -- Misc Configs -- ##
+    
+    run SinatraStaticServer
 
     
-      def gist_logs
-    raise FormulaUnspecifiedError if ARGV.resolved_formulae.length != 1
-    
-        ff.each do |f|
-      missing = f.missing_dependencies(hide: ARGV.values('hide'))
-      next if missing.empty?
-    
-        def pattern_path(path)
-      return ::File.join(LOGSTASH_HOME, 'patterns', path)
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
     end
-    
-        def initialize(plugins_to_package, target)
-      @plugins_to_package = Array(plugins_to_package)
-      @target = target
-    
-          def pack_uri(plugin_name)
-        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
-        URI.parse(url)
-      end
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
   end
-    
-    Gem::Specification.new do |gem|
-  gem.authors       = ['Elastic']
-  gem.email         = ['info@elastic.co']
-  gem.description   = %q{Logstash plugin API}
-  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
-  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
-  gem.license       = 'Apache License (2.0)'
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
+end
