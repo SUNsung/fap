@@ -1,162 +1,165 @@
 
         
-                def view_rendered?(view, expected_locals)
-          locals_for(view).any? do |actual_locals|
-            expected_locals.all? { |key, value| value == actual_locals[key] }
-          end
+              check_value =
+        case check_value
+        when Integer
+          check_value
+        when Symbol
+          record.public_send(check_value) # rubocop:disable GitlabSecurity/PublicSend
         end
+    
+          def initialize(current_user, oauth)
+        @current_user = current_user
+        @oauth = oauth
+        @changed = false
       end
     
-                    on.unsubscribe do |chan, count|
-                  if count == 0
-                    @subscription_lock.synchronize do
-                      @raw_client = nil
-                    end
-                  end
-                end
-              end
-            end
-          end
-    
-          # Checks to see if a column exists.
-      #
-      #  t.string(:name) unless t.column_exists?(:name, :string)
-      #
-      # See {connection.column_exists?}[rdoc-ref:SchemaStatements#column_exists?]
-      def column_exists?(column_name, type = nil, options = {})
-        @base.column_exists?(name, column_name, type, options)
+          def find_sessionless_user
+        find_user_from_access_token || find_user_from_feed_token
+      rescue Gitlab::Auth::AuthenticationError
+        nil
       end
     
-              def shutdown
-            @queue.push([:shutdown])
-            Thread.pass while @thread.alive?
-          end
+            def status
+          @coverage ||= raw_coverage
+          return unless @coverage
     
-        def engine(name)
-      dir = '#{app_path}/random/#{name}'
-      FileUtils.mkdir_p(dir)
+          def initialize(badge)
+        @badge = badge
+      end
     
-      test 'broadcasting_for with a string' do
-    assert_equal 'hello', ChatChannel.broadcasting_for('hello')
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
-end
-
     
-        assert mock.verify
-  end
-end
-
+      # The parent mailer all Devise mailers inherit from.
+  # Defaults to ActionMailer::Base. This should be set early
+  # in the initialization process and should be set to a string.
+  mattr_accessor :parent_mailer
+  @@parent_mailer = 'ActionMailer::Base'
     
-            pubsub.expect(:subscribe, nil, ['channel', Proc, Proc])
-        pubsub.expect(:unsubscribe, nil, ['channel', Proc])
+    require 'uri'
     
-      test 'unsubscribe command' do
-    run_in_eventmachine do
-      setup_connection
-      subscribe_to_chat_channel
+          private
     
-        def process(message)
-      @last_action = [ :process, message ]
+        # Try retrieving the URL options from the parent controller (usually
+    # ApplicationController). Instance methods are not supported at the moment,
+    # so only the class-level attribute is used.
+    def self.default_url_options(*args)
+      if defined?(Devise.parent_controller.constantize)
+        Devise.parent_controller.constantize.try(:default_url_options) || {}
+      else
+        {}
+      end
     end
     
-          Dir.chdir('fastlane') do # this is an assumption of fastlane, that we have to .. when shelling out
-        # Commit the changes
-        changes_to_commit = [plugin_scores_cache_path, actions_md_path, 'Gemfile.lock', plugins_path, yml_path] + action_docs + custom_assets
-        git_add(path: changes_to_commit)
-        git_commit(path: changes_to_commit,
-                message: 'Update docs for latest fastlane release (actions.md, available-plugins.md) 🚀')
-        # Push them to the git remote
-        push_to_git_remote
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
     
-        def handle_results(tests_exit_status)
-      result = TestResultParser.new.parse_result(test_results)
-      SlackPoster.new.run(result)
+            # Yields a VM for each target VM for the command.
+        #
+        # This is a convenience method for easily implementing methods that
+        # take a target VM (in the case of multi-VM) or every VM if no
+        # specific VM name is specified.
+        #
+        # @param [String] name The name of the VM. Nil if every VM.
+        # @param [Boolean] single_target If true, then an exception will be
+        #   raised if more than one target is found.
+        def with_target_vms(names=nil, options=nil)
+          # Using VMs requires a Vagrant environment to be properly setup
+          raise Errors::NoEnvironmentError if !@env.root_path
     
-          def gradle_path=(gradle_path)
-        @gradle_path = gradle_path
-        @escaped_gradle_path = gradle_path.shellescape
-      end
+            def initialize(argv, env)
+          @argv = argv
+          @env  = env
+          @logger = Log4r::Logger.new('vagrant::command::#{self.class.to_s.downcase}')
+        end
     
-            # This returns all registered provisioners.
+            # A default to_s implementation.
+        def to_s
+          self.class.to_s
+        end
+    
+            # This returns all the registered guests.
         #
         # @return [Hash]
-        def provisioners
+        def hosts
           Registry.new.tap do |result|
             @registered.each do |plugin|
-              result.merge!(plugin.provisioner)
+              result.merge!(plugin.components.hosts)
             end
           end
         end
     
-      def brief_build_info(f)
-    build_time_str = f.logs.ctime.strftime('%Y-%m-%d %H:%M:%S')
-    s = <<~EOS
-      Homebrew build logs for #{f.full_name} on #{OS_VERSION}
-    EOS
-    if ARGV.include?('--with-hostname')
-      hostname = Socket.gethostname
-      s << 'Host: #{hostname}\n'
-    end
-    s << 'Build date: #{build_time_str}\n'
-    s
-  end
-    
-                if url =~ %r{^https?://prdownloads\.}
-              problem <<~EOS.chomp
-                Don't use prdownloads in SourceForge urls (url is #{url}).
-                        See: http://librelist.com/browser/homebrew/2011/1/12/prdownloads-is-bad/
-              EOS
-            end
-    
-      entries = [{ template: deploy_rb, file: config_dir.join('deploy.rb') }]
-  entries += envs.split(',').map { |stage| { template: stage_rb, file: deploy_dir.join('#{stage}.rb') } }
-    
-        it 'sets the output verbosity' do
-      expect(config.output_verbosity).to eq 0
-    end
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-    module Jekyll
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
-    
-      # Removes trailing forward slash from a string for easily appending url segments
-  def strip_slash(input)
-    if input =~ /(.+)\/$|^\/$/
-      input = $1
-    end
-    input
-  end
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop check for uses of Object#freeze on immutable objects.
-      #
-      # @example
-      #   # bad
-      #   CONST = 1.freeze
-      #
-      #   # good
-      #   CONST = 1
-      class RedundantFreeze < Cop
-        include FrozenStringLiteral
-    
-              new(source, annotations)
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
         end
+    
+      def up
+    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
+         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
+    
+    class PolymorphicMentions < ActiveRecord::Migration[4.2]
+  def change
+    remove_index :mentions, column: %i(post_id)
+    remove_index :mentions, column: %i(person_id post_id), unique: true
+    rename_column :mentions, :post_id, :mentions_container_id
+    add_column :mentions, :mentions_container_type, :string
+    add_index :mentions,
+              %i(mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_mc_id_and_mc_type',
+              length: {mentions_container_type: 191}
+    add_index :mentions,
+              %i(person_id mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
+              length: {mentions_container_type: 191},
+              unique: true
+    
+    # If you set this to false, any error raised from within your app will bubble
+# up to your step definition and out to cucumber unless you catch it somewhere
+# on the way. You can make Rails rescue errors and render error pages on a
+# per-scenario basis by tagging a scenario or feature with the @allow-rescue tag.
+#
+# If you set this to true, Rails will rescue all errors and render error
+# pages, more or less in the same way your application would behave in the
+# default production environment. It's not recommended to do this for all
+# of your scenarios, as this makes it hard to discover errors in your application.
+ActionController::Base.allow_rescue = false
+    
+    module Pod
+  require 'pathname'
+  require 'tmpdir'
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
+  end
+end
