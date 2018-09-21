@@ -1,231 +1,189 @@
 
         
-                def set_default_disable_with(value, tag_options)
-          return unless ActionView::Base.automatically_disable_submit_tag
-          data = tag_options['data']
+          def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
     
-              def render_component(builder)
-            builder.radio_button + builder.label
+      end
+end
+    
+          private
+    
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
+        #
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
+        #
+        # @param [V2::Root] new
+        def upgrade(new)
+        end
+    
+            # Mounts a shared folder.
+        #
+        # This method should create, mount, and properly set permissions
+        # on the shared folder. This method should also properly
+        # adhere to any configuration values such as `shared_folder_uid`
+        # on `config.vm`.
+        #
+        # @param [String] name The name of the shared folder.
+        # @param [String] guestpath The path on the machine which the user
+        #   wants the folder mounted.
+        # @param [Hash] options Additional options for the shared folder
+        #   which can be honored.
+        def mount_shared_folder(name, guestpath, options)
+          raise BaseError, _key: :unsupported_shared_folder
+        end
+    
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
+    
+            # Parses the options given an OptionParser instance.
+        #
+        # This is a convenience method that properly handles duping the
+        # originally argv array so that it is not destroyed.
+        #
+        # This method will also automatically detect '-h' and '--help'
+        # and print help. And if any invalid options are detected, the help
+        # will be printed, as well.
+        #
+        # If this method returns `nil`, then you should assume that help
+        # was printed and parsing failed.
+        def parse_options(opts=nil)
+          # make sure optparse doesn't use POSIXLY_CORRECT parsing
+          ENV['POSIXLY_CORRECT'] = nil
+    
+            # Merge another configuration object into this one. This assumes that
+        # the other object is the same class as this one. This should not
+        # mutate this object, but instead should return a new, merged object.
+        #
+        # The default implementation will simply iterate over the instance
+        # variables and merge them together, with this object overriding
+        # any conflicting instance variables of the older object. Instance
+        # variables starting with '__' (double underscores) will be ignored.
+        # This lets you set some sort of instance-specific state on your
+        # configuration keys without them being merged together later.
+        #
+        # @param [Object] other The other configuration object to merge from,
+        #   this must be the same type of object as this one.
+        # @return [Object] The merged object.
+        def merge(other)
+          result = self.class.new
+    
+            # This returns all registered provisioners.
+        #
+        # @return [Hash]
+        def provisioners
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.provisioner)
+            end
           end
+        end
+    
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
+        end
       end
     end
   end
 end
 
     
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
-        end
-    
-            # If no layout is supplied, look for a template named the return
-        # value of this method.
-        #
-        # ==== Returns
-        # * <tt>String</tt> - A template name
-        def _implied_layout_name
-          controller_path
-        end
-    end
-    
-      [name, full_name]
+    desc 'Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom'
+task :update_style, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('sass.old')
+    puts 'removed existing sass.old directory'
+    rm_r 'sass.old', :secure=>true
+  end
+  mv 'sass', 'sass.old'
+  puts '## Moved styles into sass.old/'
+  cp_r '#{themes_dir}/'+theme+'/sass/', 'sass', :remove_destination=>true
+  cp_r 'sass.old/custom/.', 'sass/custom/', :remove_destination=>true
+  puts '## Updated Sass ##'
 end
     
-        root.children.sort.each do |pn|
-      if pn.directory?
-        dirs << pn
-      elsif block_given? && yield(pn)
-        puts pn
-        other = 'other '
-      else
-        remaining_root_files << pn unless pn.basename.to_s == '.DS_Store'
-      end
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
     end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-        def push(*names)
-      @filters.push *filter_const(names)
-    end
-    
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
-    end
-    
-            name.prepend '#{breadcrumbs.join('.')}#' if breadcrumbs.present? && breadcrumbs[0] != name
-        name << '()' if %w(Function Method Constructor).include?(subtitle)
-        name
-      end
-    
-            css('h1').each_with_index do |node, i|
-          next if i == 0
-          node.name = 'h2'
-        end
-    
-    task :permissions do
-  sh %{chmod -R a+rx bin}
-  sh %{chmod -R a+r .}
-  require 'shellwords'
-  Dir.glob('test/**/*_test.rb') do |file|
-    next if file =~ %r{^test/haml/spec/}
-    sh %{chmod a+rx #{file}}
   end
 end
     
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
-        end
-      rescue Errno::EACCES
-        # pass
-      end
-    
-        # Parses the CSS template and applies various transformations
-    #
-    # @return [Tree::Node] The root node of the parsed tree
-    def build_tree
-      root = Sass::SCSS::CssParser.new(@template, @options[:filename], nil).parse
-      parse_selectors(root)
-      expand_commas(root)
-      nest_seqs(root)
-      parent_ref_rules(root)
-      flatten_rules(root)
-      bubble_subject(root)
-      fold_commas(root)
-      dump_selectors(root)
-      root
     end
     
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
+    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
+# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
+# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
+# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
+if $0 == __FILE__
+  LogStash::Bundler.setup!({:without => [:build, :development]})
+  require_relative 'patches/jar_dependencies'
+    
+        # Construct the list of dependencies to add to the current gemfile
+    specs.each_with_object([]) do |spec, install_list|
+      dependencies = spec.dependencies
+        .select { |dep| dep.type == :development }
+        .map { |dep| [dep.name] + dep.requirement.as_list }
+    
+        class Main < Clamp::Command
+      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
+      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
+      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
+      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
+      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
+      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
+      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
+      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
+      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
     end
+  end
+end
     
-          # Get the publicly-visible URL for an imported file. This URL is used by
-      # source maps to link to the source stylesheet. This may return `nil` to
-      # indicate that no public URL is available; however, this will cause
-      # sourcemap generation to fail if any CSS is generated from files imported
-      # from this importer.
-      #
-      # If an absolute 'file:' URI can be produced for an imported file, that
-      # should be preferred to returning `nil`. However, a URL relative to
-      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param sourcemap_directory [String, NilClass] The absolute path to a
-      #   directory on disk where the sourcemap will be saved. If uri refers to
-      #   a file on disk that's accessible relative to sourcemap_directory, this
-      #   may return a relative URL. This may be `nil` if the sourcemap's
-      #   eventual location is unknown.
-      # @return [String?] The publicly-visible URL for this file, or `nil`
-      #   indicating that no publicly-visible URL exists. This should be
-      #   appropriately URL-escaped.
-      def public_url(uri, sourcemap_directory)
-        return if @public_url_warning_issued
-        @public_url_warning_issued = true
-        Sass::Util.sass_warn <<WARNING
-WARNING: #{self.class.name} should define the #public_url method.
-WARNING
-        nil
-      end
+    module LogStash module PluginManager module PackFetchStrategy
+  class Repository
+    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
+    PACK_EXTENSION = 'zip'
     
-          # A hash from file extensions to the syntaxes for those extensions.
-      # The syntaxes must be `:sass` or `:scss`.
-      #
-      # This can be overridden by subclasses that want normal filesystem importing
-      # with unusual extensions.
-      #
-      # @return [{String => Symbol}]
-      def extensions
-        {'sass' => :sass, 'scss' => :scss}
-      end
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
     
-      gem.required_ruby_version = '>= 2.0'
-  gem.add_dependency 'airbrussh', '>= 1.0.0'
-  gem.add_dependency 'i18n'
-  gem.add_dependency 'rake', '>= 10.0.0'
-  gem.add_dependency 'sshkit', '>= 1.9.0'
-    
-    module VagrantHelpers
-  extend self
-    
-    http://capistranorb.com/documentation/advanced-features/custom-scm
-    
-          def set(key, value=nil, &block)
-        @trusted_keys << key if trusted? && !@trusted_keys.include?(key)
-        remember_location(key)
-        values[key] = block || value
-        trace_set(key)
-        values[key]
-      end
-    
-          rescue_from ActionController::ParameterMissing, with: :error_during_processing
-      rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
-      rescue_from ActiveRecord::RecordNotFound, with: :not_found
-      rescue_from CanCan::AccessDenied, with: :unauthorized
-      rescue_from Spree::Core::GatewayError, with: :gateway_error
-    
-            def load_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
-          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
-          @order.state = params[:state] if params[:state]
-          state_callback(:before)
-        end
-    
-            def show
-          @inventory_unit = inventory_unit
-          respond_with(@inventory_unit)
-        end
-    
-            def show
-          respond_with(@product_property)
-        end
-    
-            def show
-          @state = scope.find(params[:id])
-          respond_with(@state)
-        end
-    
-    LogStash::Bundler.setup!
-    
-        signal_error('No plugins found') if filtered_specs.empty?
-    
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
     
       # Make sure we dont build this gem from a non jruby
   # environment.
@@ -237,4 +195,8 @@ WARNING
 end
 
     
-          puts user_feedback_string_for('bootstrapping', args[:platform], machines, {'experimental' => experimental})
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
