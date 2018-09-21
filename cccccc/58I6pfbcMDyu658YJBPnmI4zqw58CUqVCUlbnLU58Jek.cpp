@@ -1,172 +1,163 @@
 
         
-        #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
-#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
-    
-      // Computes matrix.vector v = Wu.
-  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
-  // u is imagined to have an extra element at the end with value 1, to
-  // implement the bias, but it doesn't actually have it.
-  // Computes the base C++ implementation, if there are no partial_funcs_.
-  // NOTE: The size of the input vector (u) must be padded using
-  // RoundInputs above.
-  // The input will be over-read to the extent of the padding. There are no
-  // alignment requirements.
-  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                       const GenericVector<double>& scales, const int8_t* u,
-                       double* v) const;
-    
-      // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
-    
-    
-    {
-    {    if (amount[tag.string()] == 1) {
-      other->AddChild(vc->GetName(), vc->GetId(), vc->GetValue().string(),
-                      vc->GetDescription());
-    } else {  // More than one would use this submenu -> create submenu.
-      SVMenuNode* sv = mr->AddChild(tag.string());
-      if ((amount[tag.string()] <= MAX_ITEMS_IN_SUBMENU) ||
-          (amount[tag2.string()] <= 1)) {
-        sv->AddChild(vc->GetName(), vc->GetId(),
-                     vc->GetValue().string(), vc->GetDescription());
-      } else {  // Make subsubmenus.
-        SVMenuNode* sv2 = sv->AddChild(tag2.string());
-        sv2->AddChild(vc->GetName(), vc->GetId(),
-                      vc->GetValue().string(), vc->GetDescription());
-      }
+        // The inductive case.
+template <size_t N>
+struct TuplePrefixPrinter {
+  // Prints the first N fields of a tuple.
+  template <typename Tuple>
+  static void PrintPrefixTo(const Tuple& t, ::std::ostream* os) {
+    TuplePrefixPrinter<N - 1>::PrintPrefixTo(t, os);
+    *os << ', ';
+    UniversalPrinter<typename ::std::tr1::tuple_element<N - 1, Tuple>::type>
+        ::Print(::std::tr1::get<N - 1>(t), os);
+  }
     }
-  }
-  return mr;
+    
+      // Gets the summary of the failure message.
+  const char* summary() const { return summary_.c_str(); }
+    
+    // Boolean assertions. Condition can be either a Boolean expression or an
+// AssertionResult. For more information on how to use AssertionResult with
+// these macros see comments on that class.
+#define EXPECT_TRUE(condition) \
+  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
+                      GTEST_NONFATAL_FAILURE_)
+#define EXPECT_FALSE(condition) \
+  GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
+                      GTEST_NONFATAL_FAILURE_)
+#define ASSERT_TRUE(condition) \
+  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
+                      GTEST_FATAL_FAILURE_)
+#define ASSERT_FALSE(condition) \
+  GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
+                      GTEST_FATAL_FAILURE_)
+    
+    template <int k, GTEST_10_TYPENAMES_(T)>
+GTEST_ADD_REF_(GTEST_TUPLE_ELEMENT_(k, GTEST_10_TUPLE_(T)))
+get(GTEST_10_TUPLE_(T)& t) {
+  return gtest_internal::Get<k>::Field(t);
 }
     
-     private:
-  // Gets the up to the first 3 prefixes from s (split by _).
-  // For example, tesseract_foo_bar will be split into tesseract,foo and bar.
-  void GetPrefixes(const char* s, STRING* level_one,
-                   STRING* level_two, STRING* level_three);
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
+
     
+    // Tests the c'tor that accepts a C string.
+TEST(MyString, ConstructorFromCString) {
+  const MyString s(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
+            s.Length());
+}
     
-    {  FileLock* lock;
-  const std::string lockname = LockFileName(dbname);
-  result = env->LockFile(lockname, &lock);
-  if (result.ok()) {
-    uint64_t number;
-    FileType type;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      if (ParseFileName(filenames[i], &number, &type) &&
-          type != kDBLockFile) {  // Lock file will be deleted at end
-        Status del = env->DeleteFile(dbname + '/' + filenames[i]);
-        if (result.ok() && !del.ok()) {
-          result = del;
-        }
-      }
+      // Gets the first element of the queue, or NULL if the queue is empty.
+  QueueNode<E>* Head() { return head_; }
+  const QueueNode<E>* Head() const { return head_; }
+    
+    class SecureChannelCredentials final : public ChannelCredentials {
+ public:
+  explicit SecureChannelCredentials(grpc_channel_credentials* c_creds);
+  ~SecureChannelCredentials() { grpc_channel_credentials_release(c_creds_); }
+  grpc_channel_credentials* GetRawCreds() { return c_creds_; }
     }
-    env->UnlockFile(lock);  // Ignore error since state is already gone
-    env->DeleteFile(lockname);
-    env->DeleteDir(dbname);  // Ignore error in case dir contains other files
-  }
-  return result;
-}
     
-    void DBIter::SeekToFirst() {
-  direction_ = kForward;
-  ClearSavedValue();
-  iter_->SeekToFirst();
-  if (iter_->Valid()) {
-    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
-  } else {
-    valid_ = false;
-  }
-}
+    void ChannelArguments::SetString(const grpc::string& key,
+                                 const grpc::string& value) {
+  grpc_arg arg;
+  arg.type = GRPC_ARG_STRING;
+  strings_.push_back(key);
+  arg.key = const_cast<char*>(strings_.back().c_str());
+  strings_.push_back(value);
+  arg.value.string = const_cast<char*>(strings_.back().c_str());
+    }
     
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
+    void CompletionQueue::CompleteAvalanching() {
+  // Check if this was the last avalanching operation
+  if (gpr_atm_no_barrier_fetch_add(&avalanches_in_flight_,
+                                   static_cast<gpr_atm>(-1)) == 1) {
+    grpc_completion_queue_shutdown(cq_);
   }
 }
     
+    // Returns the incoming data size from the grpc call final info.
+uint64_t GetIncomingDataSize(const grpc_call_final_info* final_info);
     
-    {  ParsedInternalKey() { }  // Intentionally left uninitialized (for speed)
-  ParsedInternalKey(const Slice& u, const SequenceNumber& seq, ValueType t)
-      : user_key(u), sequence(seq), type(t) { }
-  std::string DebugString() const;
+    template <class T, typename = void>
+struct GetTypeInfo {
+	static const Variant::Type VARIANT_TYPE = Variant::NIL;
+	static inline PropertyInfo get_class_info() {
+		ERR_PRINT('GetTypeInfo fallback. Bug!');
+		return PropertyInfo(); // Not 'Nil', this is an error
+	}
 };
     
-    #include <stdio.h>
-#include 'leveldb/dumpfile.h'
-#include 'leveldb/env.h'
-#include 'leveldb/status.h'
+    void B_TO_G(btTransform const &inVal, Transform &outVal) {
+	B_TO_G(inVal.getBasis(), outVal.basis);
+	B_TO_G(inVal.getOrigin(), outVal.origin);
+}
     
-        if (type == kZeroType && length == 0) {
-      // Skip zero length record without reporting any drops since
-      // such records are produced by the mmap based writing code in
-      // env_posix.cc that preallocates file regions.
-      buffer_.clear();
-      return kBadRecord;
+    // Bullet to Godot
+extern void B_TO_G(btVector3 const &inVal, Vector3 &outVal);
+extern void INVERT_B_TO_G(btVector3 const &inVal, Vector3 &outVal);
+extern void B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
+extern void INVERT_B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
+extern void B_TO_G(btTransform const &inVal, Transform &outVal);
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #include 'csg_gizmos.h'
+#include 'csg_shape.h'
+    
+      // Must be called before any CompareBlock() calls can be called.
+  virtual void StartBlockComparisons() = 0;
+  // No more CompareBlock() calls can be called after this.
+  virtual void FinishBlockComparisons() = 0;
+    
+        std::sort(tree, tree + n, SortHuffmanTree);
+    
+    #endif  // GUETZLI_FDCT_H_
+
+    
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
+    
+    namespace guetzli {
     }
     
+    static const uint8_t kDefaultQuantMatrix[2][64] = {
+  { 16,  11,  10,  16,  24,  40,  51,  61,
+    12,  12,  14,  19,  26,  58,  60,  55,
+    14,  13,  16,  24,  40,  57,  69,  56,
+    14,  17,  22,  29,  51,  87,  80,  62,
+    18,  22,  37,  56,  68, 109, 103,  77,
+    24,  35,  55,  64,  81, 104, 113,  92,
+    49,  64,  78,  87, 103, 121, 120, 101,
+    72,  92,  95,  98, 112, 100, 103,  99 },
+  { 17,  18,  24,  47,  99,  99,  99,  99,
+    18,  21,  26,  66,  99,  99,  99,  99,
+    24,  26,  56,  99,  99,  99,  99,  99,
+    47,  66,  99,  99,  99,  99,  99,  99,
+    99,  99,  99,  99,  99,  99,  99,  99,
+    99,  99,  99,  99,  99,  99,  99,  99,
+    99,  99,  99,  99,  99,  99,  99,  99,
+    99,  99,  99,  99,  99,  99,  99,  99 }
+};
     
-    {  // Write the header and the payload
-  Status s = dest_->Append(Slice(buf, kHeaderSize));
-  if (s.ok()) {
-    s = dest_->Append(Slice(ptr, n));
-    if (s.ok()) {
-      s = dest_->Flush();
-    }
+    #include 'guetzli/jpeg_data.h'
+    
+    #define VERIFY_LEN(n)                                                   \
+  if (*pos + (n) > len) {                                               \
+    fprintf(stderr, 'Unexpected end of input: pos=%d need=%d len=%d\n', \
+            static_cast<int>(*pos), static_cast<int>(n),                \
+            static_cast<int>(len));                                     \
+    jpg->error = JPEG_UNEXPECTED_EOF;                                   \
+    return false;                                                       \
   }
-  block_offset_ += kHeaderSize + n;
-  return s;
-}
-    
-    Iterator* MemTable::NewIterator() {
-  return new MemTableIterator(&table_);
-}
-    
-        ALLEGRO_LOCKED_REGION *locked_img = al_lock_bitmap(img, al_get_bitmap_format(img), ALLEGRO_LOCK_WRITEONLY);
-    if (!locked_img)
-    {
-        al_destroy_bitmap(img);
-        return false;
-    }
-    memcpy(locked_img->data, pixels, sizeof(int)*width*height);
-    al_unlock_bitmap(img);
-    
-    #include <s3eKeyboard.h>
-#include <s3ePointer.h>
-#include <IwGx.h>
-    
-        // Check for WSI support
-    VkBool32 res;
-    vkGetPhysicalDeviceSurfaceSupportKHR(g_PhysicalDevice, g_QueueFamily, wd->Surface, &res);
-    if (res != VK_TRUE)
-    {
-        fprintf(stderr, 'Error no WSI support on physical device 0\n');
-        exit(-1);
-    }
-    
-        // Create the D3DDevice
-    if (pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &g_d3dpp, &g_pd3dDevice) < 0)
-    {
-        pD3D->Release();
-        UnregisterClass(_T('ImGui Example'), wc.hInstance);
-        return 0;
-    }
-    
-        // Setup time step
-    double current_time = glfwGetTime();
-    io.DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)(1.0f/60.0f);
-    g_Time = current_time;
