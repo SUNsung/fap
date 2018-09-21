@@ -1,119 +1,180 @@
 
         
-        namespace atom {
+        void SyntaxASTMap::dumpSyntaxMap() const {
+  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
+    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
+    auto SemanticNode = SyntaxAndSemaNode.getSecond();
+    }
     }
     
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/auto_updater.h'
-#include 'atom/browser/window_list_observer.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
-    
-    void BoxLayout::SetFlexForView(mate::Handle<View> view, int flex) {
-  auto* box_layout = static_cast<views::BoxLayout*>(layout_manager());
-  box_layout->SetFlexForView(view->view(), flex);
-}
-    
-      web_contents_.Reset(isolate, web_contents.ToV8());
-  api_web_contents_ = web_contents.get();
-    
-    namespace api {
+    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
+    return false;
     }
     
-    using atom::api::Button;
+    bool CacheImpl::remove(const void *Key) {
+  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
+  llvm::sys::ScopedLock L(DCache.Mux);
+    }
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_BUTTON_H_
-#define ATOM_BROWSER_API_ATOM_API_BUTTON_H_
+      auto getMoreBits =
+    [&](size_t numBitsWanted) -> ChunkType {
+    auto result = generator(numBitsWanted);
+    assert((numBitsWanted == ChunkSizeInBits ||
+            result <= (ChunkType(1) << numBitsWanted)) &&
+           'generator returned out-of-range value!');
+    return result;
+  };
     
-    #include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/native_mate_converters/file_path_converter.h'
-#include 'base/bind.h'
-#include 'base/files/file_util.h'
-#include 'content/public/browser/tracing_controller.h'
-#include 'native_mate/dictionary.h'
+      // Set the 'targetEnvironment' platform condition if targeting a simulator
+  // environment. Otherwise _no_ value is present for targetEnvironment; it's
+  // an optional disambiguating refinement of the triple.
+  if (swift::tripleIsAnySimulator(Target))
+    addPlatformConditionValue(PlatformConditionKind::TargetEnvironment,
+                              'simulator');
+    
+    // We'd like the dump routine to be present in all builds, but it's
+// a pretty large amount of code, most of which is not sensitive to the
+// actual key and value data.  If we try to have a common implementation,
+// we're left with the problem of describing the layout of a node when
+// that's technically instantiation-specific.  Redefining the struct here
+// is technically an aliasing violation, but we can just tell the compilers
+// that actually use TBAA that this is okay.
+typedef struct _Node Node LLVM_MAY_ALIAS;
+struct _Node {
+  // If you change the layout in the header, you'll need to change it here.
+  // (This comment is repeated there.)
+  Node *Left, *Right, *Further;
+};
     
     
-    {}  // namespace api
+    {  return UuidCompare(&uuid1, &uuid2, &s);
+#else
+  return uuid_compare(Value, y.Value);
+#endif
+}
     
-    #include 'atom/browser/api/atom_api_button.h'
+    % for start_code_point, end_code_point, value in break_table.property_value_ranges:
+%   if start_code_point == 0:
+  if (C <= ${end_code_point})
+%   else:
+  if (C >= ${start_code_point} && C <= ${end_code_point})
+%   end
+    return GraphemeClusterBreakProperty::${value};
+% end
+    
+    /// Maintain a set of known CF types.
+static bool isKnownCFTypeName(StringRef name) {
+  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
+                            name, SortByLengthComparator());
+}
+    
+      StringRef presumedFile = presumedLoc.getFilename();
+  SourceLoc startOfLine = loc.getAdvancedLoc(-presumedLoc.getColumn() + 1);
+  bool isNewVirtualFile =
+    swiftSrcMgr.openVirtualFile(startOfLine, presumedFile,
+                                presumedLoc.getLine() - bufferLineNumber);
+  if (isNewVirtualFile) {
+    SourceLoc endOfLine = findEndOfLine(swiftSrcMgr, loc, mirrorID);
+    swiftSrcMgr.closeVirtualFile(endOfLine);
+  }
     
     
-    {}  // namespace atom
+    {    QString name;
+    bool imagesOnButtons;
+    bool colorizeIcons;
+    bool useExtraSpacing;
+    QColor singleColor;
+    QColor textColor;
+    /* ... more to come later */
+};
     
-    #endif // BITCOIN_QT_NETWORKSTYLE_H
-
-    
-        QColor TextColor() const { return textColor; }
-    QColor SingleColor() const { return singleColor; }
-    
-        Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged USER true)
-    
-    
-    {    ConfirmMessage(&warning_text, 5);
-    dialog->accept();
-    QCOMPARE(warning_text, expected_msg);
+    namespace Ui {
+    class SignVerifyMessageDialog;
 }
     
     
-    {    /* d = (a0*2) * a3 */
-    'leaq (%%r10,%%r10,1),%%rax\n'
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
     'mulq %%r13\n'
-    'movq %%rax,%%rbx\n'
-    'movq %%rdx,%%rcx\n'
-    /* d += (a1*2) * a2 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
     'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c = a4 * a4 */
-    'movq %%r14,%%rax\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
     'mulq %%r14\n'
     'movq %%rax,%%r8\n'
     'movq %%rdx,%%r9\n'
     /* d += (c & M) * R */
-    'andq %%r15,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq $0x1000003d10,%%rdx\n'
     'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
     /* c >>= 52 (%%r8 only) */
     'shrdq $52,%%r9,%%r8\n'
     /* t3 (tmp1) = d & M */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
     'movq %%rsi,%q1\n'
     /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* a4 *= 2 */
-    'addq %%r14,%%r14\n'
-    /* d += a0 * a4 */
-    'movq %%r10,%%rax\n'
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
     'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d+= (a1*2) * a3 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
     'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a2 * a2 */
-    'movq %%r12,%%rax\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
     'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
     /* d += c * R */
     'movq %%r8,%%rax\n'
     'movq $0x1000003d10,%%rdx\n'
     'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
     /* t4 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
     /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
     /* tx = t4 >> 48 (tmp3) */
     'movq %%rsi,%%rax\n'
     'shrq $48,%%rax\n'
@@ -122,27 +183,38 @@
     'movq $0xffffffffffff,%%rax\n'
     'andq %%rax,%%rsi\n'
     'movq %%rsi,%q2\n'
-    /* c = a0 * a0 */
-    'movq %%r10,%%rax\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
     'mulq %%r10\n'
     'movq %%rax,%%r8\n'
     'movq %%rdx,%%r9\n'
-    /* d += a1 * a4 */
-    'movq %%r11,%%rax\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
     'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += (a2*2) * a3 */
-    'leaq (%%r12,%%r12,1),%%rax\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
     'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
     /* u0 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
     /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
     /* u0 = (u0 << 4) | tx (%%rsi) */
     'shlq $4,%%rsi\n'
     'movq %q3,%%rax\n'
@@ -154,75 +226,98 @@
     'adcq %%rdx,%%r9\n'
     /* r[0] = c & M */
     'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq %%rax,0(%%rdi)\n'
     /* c >>= 52 */
     'shrdq $52,%%r9,%%r8\n'
     'xorq %%r9,%%r9\n'
-    /* a0 *= 2 */
-    'addq %%r10,%%r10\n'
-    /* c += a0 * a1 */
-    'movq %%r10,%%rax\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
     'mulq %%r11\n'
     'addq %%rax,%%r8\n'
     'adcq %%rdx,%%r9\n'
-    /* d += a2 * a4 */
-    'movq %%r12,%%rax\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
     'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a3 * a3 */
-    'movq %%r13,%%rax\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
     'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
     /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq $0x1000003d10,%%rdx\n'
     'mulq %%rdx\n'
     'addq %%rax,%%r8\n'
     'adcq %%rdx,%%r9\n'
     /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
     /* r[1] = c & M */
     'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq %%rax,8(%%rdi)\n'
     /* c >>= 52 */
     'shrdq $52,%%r9,%%r8\n'
     'xorq %%r9,%%r9\n'
-    /* c += a0 * a2 (last use of %%r10) */
-    'movq %%r10,%%rax\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
     'mulq %%r12\n'
     'addq %%rax,%%r8\n'
     'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* c += a1 * a1 */
-    'movq %%r11,%%rax\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
     'mulq %%r11\n'
     'addq %%rax,%%r8\n'
     'adcq %%rdx,%%r9\n'
-    /* d += a3 * a4 */
-    'movq %%r13,%%rax\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
     'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
     /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq $0x1000003d10,%%rdx\n'
     'mulq %%rdx\n'
     'addq %%rax,%%r8\n'
     'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rbx only) */
-    'shrdq $52,%%rcx,%%rbx\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
     /* r[2] = c & M */
     'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq %%rax,16(%%rdi)\n'
     /* c >>= 52 */
     'shrdq $52,%%r9,%%r8\n'
@@ -230,14 +325,15 @@
     /* c += t3 */
     'addq %%r10,%%r8\n'
     /* c += d * R */
-    'movq %%rbx,%%rax\n'
+    'movq %%rcx,%%rax\n'
     'movq $0x1000003d10,%%rdx\n'
     'mulq %%rdx\n'
     'addq %%rax,%%r8\n'
     'adcq %%rdx,%%r9\n'
     /* r[3] = c & M */
     'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
     'movq %%rax,24(%%rdi)\n'
     /* c >>= 52 (%%r8 only) */
     'shrdq $52,%%r9,%%r8\n'
@@ -246,295 +342,350 @@
     /* r[4] = c */
     'movq %%r8,32(%%rdi)\n'
 : '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'D'(r)
-: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
 );
 }
     
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
-    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
     
-    double UniValue::get_real() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not a number as expected');
-    double retval;
-    if (!ParseDouble(getValStr(), &retval))
-        throw std::runtime_error('JSON double out of range');
-    return retval;
+    {    r->infinity = 0;
+    secp256k1_fe_sqr(&z22, &b->z);
+    secp256k1_fe_sqr(&z12, &a->z);
+    secp256k1_fe_mul(&u1, &a->x, &z22);
+    secp256k1_fe_mul(&u2, &b->x, &z12);
+    secp256k1_fe_mul(&s1, &a->y, &z22); secp256k1_fe_mul(&s1, &s1, &b->z);
+    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
+    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
+    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
+    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
+        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
+            secp256k1_gej_double_var(r, a, rzr);
+        } else {
+            if (rzr != NULL) {
+                secp256k1_fe_set_int(rzr, 0);
+            }
+            r->infinity = 1;
+        }
+        return;
+    }
+    secp256k1_fe_sqr(&i2, &i);
+    secp256k1_fe_sqr(&h2, &h);
+    secp256k1_fe_mul(&h3, &h, &h2);
+    secp256k1_fe_mul(&h, &h, &b->z);
+    if (rzr != NULL) {
+        *rzr = h;
+    }
+    secp256k1_fe_mul(&r->z, &a->z, &h);
+    secp256k1_fe_mul(&t, &u1, &h2);
+    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
+    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
+    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
+    secp256k1_fe_add(&r->y, &h3);
 }
     
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
+            secp256k1_ecmult_const(&res, &pt, &s);
+        secp256k1_ge_set_gej(&pt, &res);
+        /* Compute a hash of the point in compressed form
+         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
+         * expect its output to be secret and has a timing sidechannel. */
+        secp256k1_fe_normalize(&pt.x);
+        secp256k1_fe_normalize(&pt.y);
+        secp256k1_fe_get_b32(x, &pt.x);
+        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
     
-    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
-template <typename Dtype>
-class GaussianFiller : public Filler<Dtype> {
- public:
-  explicit GaussianFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    CHECK(blob->count());
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
-        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
-    int sparse = this->filler_param_.sparse();
-    CHECK_GE(sparse, -1);
-    if (sparse >= 0) {
-      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
-      // These have num == channels == 1; width is number of inputs; height is
-      // number of outputs.  The 'sparse' variable specifies the mean number
-      // of non-zero input weights for a given output.
-      CHECK_GE(blob->num_axes(), 1);
-      const int num_outputs = blob->shape(0);
-      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
-      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
-      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
-      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
-      for (int i = 0; i < blob->count(); ++i) {
-        data[i] *= mask[i];
-      }
-    }
-  }
-    }
-    
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include 'caffe/blob.hpp'
+    #include 'caffe/common.hpp'
 #include 'caffe/layer.hpp'
 #include 'caffe/proto/caffe.pb.h'
     
+      virtual inline const char* type() const { return 'Accuracy'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
     
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
+      virtual inline const char* type() const { return 'Concat'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
     
     { protected:
-  int n_ = 0;
-  std::mutex m_;
-  std::condition_variable cv_;
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
 };
     
-    struct ClientSession {
-  ClientSession(ManagerSocket s): socket(std::move(s)), pid(0) {}
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
+    
+    #include <vector>
+    
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
+    
+     protected:
+  // Function to compute part of a matrix.vector multiplication. The weights
+  // are in a very specific order (see above) in w, which is multiplied by
+  // u of length num_in, to produce output v after scaling the integer results
+  // by the corresponding member of scales.
+  // The amount of w and scales consumed is fixed and not available to the
+  // caller. The number of outputs written to v will be at most num_out.
+  typedef void (*PartialFunc)(const int8_t* w, const double* scales,
+                              const int8_t* u, int num_in, int num_out,
+                              double* v);
+    
+      // ============= Accessing data ==============.
+  // Coordinate system:
+  // Integer coordinates are at the cracks between the pixels.
+  // The top-left corner of the top-left pixel in the image is at (0,0).
+  // The bottom-right corner of the bottom-right pixel in the image is at
+  // (width, height).
+  // Every bounding box goes from the top-left of the top-left contained
+  // pixel to the bottom-right of the bottom-right contained pixel, so
+  // the bounding box of the single top-left pixel in the image is:
+  // (0,0)->(1,1).
+  // If an image rectangle has been set in the API, then returned coordinates
+  // relate to the original (full) image, rather than the rectangle.
+    
+      // go through the list again and this time create the menu structure.
+  vc_it.move_to_first();
+  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
+    ParamContent* vc = vc_it.data();
+    STRING tag;
+    STRING tag2;
+    STRING tag3;
+    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
     }
     
-    OpSchema::Cost CostInferenceForFC(
-    const OperatorDef& def,
-    const vector<TensorShape>& in) {
-  CAFFE_ENFORCE_EQ(in.size(), 3, 'FC requires three inputs');
-  struct OpSchema::Cost c;
-  ArgumentHelper helper(def);
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
+  }
+    
+        // Nesterov's accelerated SGDLearnerBase descent. 
+    class LearnerNesterov : public LearnerMomentumSGD
+    {
+    public:
     }
     
-    REGISTER_GRADIENT(
-    MergeMultiListFeatureTensors,
-    GetMergeMultiListFeatureTensorsGradient);
-    
-    op = core.CreateOperator(
-    'Floor',
-    ['X'],
-    ['X'],
-)
-    
-    #endif // CAFFE2_OPERATORS_FREE_OP_H_
-
-    
-    typedef enum _match_flags
-{
-   match_default = 0,
-   match_not_bol = 1,                                /* first is not start of line */
-   match_not_eol = match_not_bol << 1,               /* last is not end of line */
-   match_not_bob = match_not_eol << 1,               /* first is not start of buffer */
-   match_not_eob = match_not_bob << 1,               /* last is not end of buffer */
-   match_not_bow = match_not_eob << 1,               /* first is not start of word */
-   match_not_eow = match_not_bow << 1,               /* last is not end of word */
-   match_not_dot_newline = match_not_eow << 1,       /* \n is not matched by '.' */
-   match_not_dot_null = match_not_dot_newline << 1,  /* '\0' is not matched by '.' */
-   match_prev_avail = match_not_dot_null << 1,       /* *--first is a valid expression */
-   match_init = match_prev_avail << 1,               /* internal use */
-   match_any = match_init << 1,                      /* don't care what we match */
-   match_not_null = match_any << 1,                  /* string can't be null */
-   match_continuous = match_not_null << 1,           /* each grep match must continue from */
-                                                     /* uninterupted from the previous one */
-   match_partial = match_continuous << 1,            /* find partial matches */
-   
-   match_stop = match_partial << 1,                  /* stop after first match (grep) V3 only */
-   match_not_initial_null = match_stop,              /* don't match initial null, V4 only */
-   match_all = match_stop << 1,                      /* must find the whole of input even if match_any is set */
-   match_perl = match_all << 1,                      /* Use perl matching rules */
-   match_posix = match_perl << 1,                    /* Use POSIX matching rules */
-   match_nosubs = match_posix << 1,                  /* don't trap marked subs */
-   match_extra = match_nosubs << 1,                  /* include full capture information for repeated captures */
-   match_single_line = match_extra << 1,             /* treat text as single line and ignor any \n's when matching ^ and $. */
-   match_unused1 = match_single_line << 1,           /* unused */
-   match_unused2 = match_unused1 << 1,               /* unused */
-   match_unused3 = match_unused2 << 1,               /* unused */
-   match_max = match_unused3,
+        size_t CurrentSeed() const
+    {
+        return currentseed;
     }
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_match()
-{
-   if(!recursion_stack.empty())
-   {
-      BOOST_ASSERT(0 == recursion_stack.back().idx);
-      const re_syntax_base* saved_state = pstate = recursion_stack.back().preturn_address;
-      *m_presult = recursion_stack.back().results;
-      recursion_stack.pop_back();
-      if(!match_all_states())
-      {
-         recursion_stack.push_back(recursion_info<results_type>());
-         recursion_stack.back().preturn_address = saved_state;
-         recursion_stack.back().results = *m_presult;
-         return false;
-      }
+      /**
+   * \fn  virtual void Predictor::PredictContribution( DMatrix* dmat,
+   * std::vector<bst_float>* out_contribs, const gbm::GBTreeModel& model,
+   * unsigned ntree_limit = 0) = 0;
+   *
+   * \brief feature contributions to individual predictions; the output will be
+   * a vector of length (nfeats + 1) * num_output_group * nsample, arranged in
+   * that order.
+   *
+   * \param [in,out]  dmat               The input feature matrix.
+   * \param [in,out]  out_contribs       The output feature contribs.
+   * \param           model              Model to make predictions from.
+   * \param           ntree_limit        (Optional) The ntree limit.
+   * \param           approximate        Use fast approximate algorithm.
+   * \param           condition          Condition on the condition_feature (0=no, -1=cond off, 1=cond on).
+   * \param           condition_feature  Feature to condition on (i.e. fix) during calculations.
+   */
+    
+    inline Float8 pow2n(Float8 const& n) {
+  const float pow2_23 = 8388608.0;  // 2^23
+  const float bias = 127.0;         // bias in exponent
+  Float8 a =
+      n + Float8(bias + pow2_23);  // put n + bias in least significant bits
+  __m256i b = _mm256_castps_si256(a.x);
+    }
+    
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief base implementation of config reader
+ */
+class ConfigReaderBase {
+ public:
+  /*!
+   * \brief get current name, called after Next returns true
+   * \return current parameter name
+   */
+  inline const char *Name() const {
+    return s_name_.c_str();
+  }
+  /*!
+   * \brief get current value, called after Next returns true
+   * \return current parameter value
+   */
+  inline const char *Val() const {
+    return s_val_.c_str();
+  }
+  /*!
+   * \brief move iterator to next position
+   * \return true if there is value in next position
+   */
+  inline bool Next() {
+    while (!this->IsEnd()) {
+      GetNextToken(&s_name_);
+      if (s_name_ == '=') return false;
+      if (GetNextToken(&s_buf_) || s_buf_ != '=')  return false;
+      if (GetNextToken(&s_val_) || s_val_ == '=')  return false;
       return true;
-   }
-   if((m_match_flags & match_not_null) && (position == (*m_presult)[0].first))
-      return false;
-   if((m_match_flags & match_all) && (position != last))
-      return false;
-   if((m_match_flags & regex_constants::match_not_initial_null) && (position == search_base))
-      return false;
-   m_presult->set_second(position);
-   pstate = 0;
-   m_has_found_match = true;
-   if((m_match_flags & match_posix) == match_posix)
-   {
-      m_result.maybe_assign(*m_presult);
-      if((m_match_flags & match_any) == 0)
-         return false;
-   }
-#ifdef BOOST_REGEX_MATCH_EXTRA
-   if(match_extra & m_match_flags)
-   {
-      for(unsigned i = 0; i < m_presult->size(); ++i)
-         if((*m_presult)[i].matched)
-            ((*m_presult)[i]).get_captures().push_back((*m_presult)[i]);
-   }
-#endif
-   return true;
-}
-    
-    //
-// regex_grep:
-// find all non-overlapping matches within the sequence first last:
-//
-template <class Predicate, class BidiIterator, class charT, class traits>
-inline unsigned int regex_grep(Predicate foo, 
-                               BidiIterator first, 
-                               BidiIterator last, 
-                               const basic_regex<charT, traits>& e, 
-                               match_flag_type flags = match_default)
-{
-   if(e.flags() & regex_constants::failbit)
-      return false;
+    }
+    return false;
+  }
+  // called before usage
+  inline void Init() {
+    ch_buf_ = this->GetChar();
+  }
+    }
+    }
     }
     
-    
-    
-    template <class OutputIterator, class charT, class Traits1, class Alloc1>
-inline std::size_t regex_split(OutputIterator out,
-                   std::basic_string<charT, Traits1, Alloc1>& s)
-{
-   return regex_split(out, s, BOOST_REGEX_DETAIL_NS::get_default_expression(charT(0)), match_default, UINT_MAX);
-}
-    
-    #ifdef BOOST_MSVC
-#pragma warning(pop)
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    template <class BaseT>
-struct regex_traits_wrapper 
-   : public ::boost::BOOST_REGEX_DETAIL_NS::compute_wrapper_base<
-               BaseT, 
-               ::boost::BOOST_REGEX_DETAIL_NS::has_boost_extensions_tag<BaseT>::value
-            >::type
-{
-   regex_traits_wrapper(){}
-private:
-   regex_traits_wrapper(const regex_traits_wrapper&);
-   regex_traits_wrapper& operator=(const regex_traits_wrapper&);
-};
-    
-    #ifndef GUETZLI_COLOR_TRANSFORM_H_
-#define GUETZLI_COLOR_TRANSFORM_H_
-    
-    namespace guetzli {
+    class SparsePageDMatrix : public DMatrix {
+ public:
+  explicit SparsePageDMatrix(std::unique_ptr<DataSource>&& source,
+                             std::string  cache_info)
+      : source_(std::move(source)), cache_info_(std::move(cache_info)) {
+  }
     }
     
+    namespace xgboost {
+namespace obj {
+    }
+    }
     
-// these are the macro required by COLUMN_*
-#define LOAD_CST(dst, src) (dst) = (src)
-#define LOAD(dst, src) (dst) = (src)
-#define MULT(a, b)  (a) = (((a) * (b)) >> 16)
-#define ADD(a, b)   (a) = (a) + (b)
-#define SUB(a, b)   (a) = (a) - (b)
-#define LSHIFT(a, n) (a) = ((a) << (n))
-#define STORE16(a, b) (a) = (b)
-#define CORRECT_LSB(a) (a) += 1
+    TEST(ExecutorTest, KeepAliveBasic) {
+  KeepAliveTestExecutor exec;
+    }
     
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
+    BENCHMARK_RELATIVE(format_short_string_unsafe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& shortString = getShortString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { format(&out, shortString); });
   }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
 }
     
+    static uint8_t hexToInt(const std::string& hex) {
+  std::stringstream converter(hex);
+  int value;
+  converter >> std::hex >> value;
+  return uint8_t(value);
+}
     
-    {}  // namespace guetzli
+    // Helper to throw std::system_error from errno and components of a string
+template <class... Args>
+[[noreturn]] void throwSystemError(Args&&... args) {
+  throwSystemErrorExplicit(errno, std::forward<Args>(args)...);
+}
+    
+    namespace {
+std::exception const* get_std_exception_(std::exception_ptr eptr) noexcept {
+  try {
+    std::rethrow_exception(eptr);
+  } catch (const std::exception& ex) {
+    return &ex;
+  } catch (...) {
+    return nullptr;
+  }
+}
+} // namespace
+    
+    void Executor::addWithPriority(Func, int8_t /* priority */) {
+  throw std::runtime_error(
+      'addWithPriority() is not implemented for this Executor');
+}
+    
+    namespace std {
+    }
+    
+      VirtualExecutor(const VirtualExecutor&) = delete;
+  VirtualExecutor& operator=(const VirtualExecutor&) = delete;
+    
+      // We don't use std::chrono_literals suffixes here since older
+  // gcc versions silently truncate the literals to 32-bits.
+  ts = to<struct timespec>(nanoseconds(987654321012LL));
+  EXPECT_EQ(987, ts.tv_sec);
+  EXPECT_EQ(654321012, ts.tv_nsec);
+    
+    #include <folly/io/Cursor.h>
+#include <folly/io/IOBuf.h>
+#include <folly/lang/Bits.h>
+    
+      // no permutations in locality index mapping
+  for (size_t cpu = 0; cpu < numCpus; ++cpu) {
+    rv.localityIndexByCpu.push_back(cpu);
+  }
     
     
-    {}  // namespace guetzli
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
+}
+    
+      /**
+   * @brief Receive messages
+   * @param frames The messages to receive.
+   * @param frame_num The amount of messages to receive.
+   * @return The status of the receiving action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Receive(std::vector<CanFrame> *frames,
+                                    int32_t *const frame_num) override;
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+    
+      /**
+   * @brief Check if the bit on a specified position is one.
+   * @param pos The position of the bit to check.
+   * @return If the bit on a specified position is one.
+   */
+  bool is_bit_1(const int32_t pos) const;
+    
+    TEST(ByteTest, ByteToString) {
+  unsigned char value = 0x34;
+  EXPECT_EQ('34', Byte::byte_to_hex(value));
+  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
+  uint32_t int_value = 0xE13A;
+  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+}
+    
+    #endif  // MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
