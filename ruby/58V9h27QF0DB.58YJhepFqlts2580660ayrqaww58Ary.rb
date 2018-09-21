@@ -1,144 +1,182 @@
 
         
-        Badge.seed do |b|
-  b.id = Badge::FirstOnebox
-  b.name = 'First Onebox'
-  b.badge_type_id = BadgeType::Bronze
-  b.multiple_grant = false
-  b.target_posts = true
-  b.show_posts = true
-  b.query = nil
-  b.badge_grouping_id = BadgeGrouping::GettingStarted
-  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
-  b.trigger = Badge::Trigger::None
-  b.system = true
-end
+            # Is executed before each test run
+    def before_all(&block)
+      @runner.set_before_all(@current_platform, block)
+    end
     
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
+        # Some actions have special handling in fast_file.rb, that means we can't directly call the action
+    # but we have to use the same logic that is in fast_file.rb instead.
+    # That's where this switch statement comes into play
+    def run_action_requiring_special_handling(command: nil, parameter_map: nil, action_return_type: nil)
+      action_return = nil
+      closure_argument_value = nil # only used if the action uses it
     
-          def local_variable_get(binding, name)
-        if binding.respond_to?(:local_variable_get)
-          binding.local_variable_get(name)
-        else
-          binding.eval(name.to_s)
-        end
+            expect(result[1]).to start_with('security set-keychain-settings')
+        expect(result[1]).to include('-t 600')
+        expect(result[1]).to include('-l')
+        expect(result[1]).to include('-u')
+        expect(result[1]).to include('~/Library/Keychains/test.keychain')
       end
     
-          all_reviews
+            expect(result).to include(''fastlane/spec/fixtures/oclint/src/AppDelegate.m'')
+      end
+    
+    
+      # If we found the resource handler for this resource, call its
+      # procedure.
+      if (p[1] == true)
+        Rex::ThreadFactory.spawn('HTTPServerRequestHandler', false) {
+          handler.on_request(cli, request)
+        }
+      else
+        handler.on_request(cli, request)
+      end
+    else
+      elog('Failed to find handler for resource: #{request.resource}',
+        LogSource)
+    
+            end
+      end
     end
-    
-    def du_upload_geojson_failure
-  stub_request(:post, 'https://du-itc.itunes.apple.com/upload/geo-json').
-    with(body: du_upload_invalid_geojson.bytes,
-           headers: { 'Accept' => 'application/json, text/plain, */*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Connection' => 'keep-alive', 'Content-Length' => du_upload_invalid_geojson.file_size, 'Content-Type' => 'application/json', 'Referrer' => 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/898536088',
-                     'X-Apple-Jingle-Correlation-Key' => 'iOS App:AdamId=898536088:Version=0.9.13', 'X-Apple-Upload-Appleid' => '898536088', 'X-Apple-Upload-Contentproviderid' => '1234567', 'X-Apple-Upload-Itctoken' => 'sso token for image',
-                     'X-Apple-Upload-Referrer' => 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/898536088', 'X-Original-Filename' => 'ftl_FAKEMD5_upload_invalid.GeoJSON' }).
-    to_return(status: 400, body: du_read_upload_geojson_response_failed, headers: { 'Content-Type' => 'application/json' })
-end
-    
-          #   # First, stub a failing request
-      #   stub_request(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/1234/apps/898536088/platforms/ios/trains').
-      #     # to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains_operation_failed.json'), headers: { 'Content-Type' => 'application/json' }).times(2).
-      #     to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains.json'), headers: { 'Content-Type' => 'application/json' })
-    
-        # returns true if fastlane was installed via RubyGems
-    def self.rubygems?
-      !self.bundler? && !self.contained_fastlane? && !self.homebrew? && !self.mac_app?
-    end
-    
-          describe 'with scan option :include_simulator_logs set to false' do
-        it 'does not copy any device logs to the output directory', requires_xcodebuild: true do
-          # Circle CI is setting the SCAN_INCLUDE_SIMULATOR_LOGS env var, so just leaving
-          # the include_simulator_logs option out does not let it default to false
-          Scan.config = FastlaneCore::Configuration.create(Scan::Options.available_options, {
-            output_directory: '/tmp/scan_results',
-            project: './scan/examples/standard/app.xcodeproj',
-            include_simulator_logs: false
-          })
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
-end
-    
-            context 'otherwise' do
-          it 'converts a floating point number in dd.dddd form' do
-            format('%#{f}', 0.0001).should == '0.0001'
-            format('%#{f}', -0.0001).should == '-0.0001'
-            format('%#{f}', 123456).should == '123456'
-            format('%#{f}', -123456).should == '-123456'
-          end
-    
-      it 'accepts a negative seed' do
-    srand(-17)
-    srand.should == -17
   end
+end
+
     
-      after :each do
-    $VERBOSE = @before_verbose
-    $/ = @before_separator
-  end
-    
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+              # Encodes the pvno field
           #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-              # Decodes the cipher from an OpenSSL::ASN1::ASN1Data
+              # Decodes the key_expiration field
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Sting]
-          def decode_cipher(input)
+          # @return [Time]
+          def decode_key_expiration(input)
             input.value[0].value
           end
     
-          spec['version'] = Bootstrap::VERSION
+              # Decodes the realm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_realm(input)
+            input.value[0].value
+          end
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+    $stderr.puts <<DEPRECATION
+WARNING: Ruby Sass's Git repository is moving, and the old repository will be
+deled on 26 March 2019! Please update your Git URLs to point to the new
+repository at https://github.com/sass/ruby-sass.
+    
+            fold_commas(child)
+        prev_rule = child
+        child
       end
+      root.children.compact!
     end
     
-      namespace :release do
-    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-      desc 'Release #{gem} as a package'
-      task gem => 'package:#{gem}' do
-        sh <<-SH
-          gem install #{package(gem, '.gem')} --local &&
-          gem push #{package(gem, '.gem')}
-        SH
-      end
+        # Prints a status message about performing the given action,
+    # colored using the given color (via terminal escapes) if possible.
+    #
+    # @param name [#to_s] A short name for the action being performed.
+    #   Shouldn't be longer than 11 characters.
+    # @param color [Symbol] The name of the color to use for this action.
+    #   Can be `:red`, `:green`, or `:yellow`.
+    def puts_action(name, color, arg)
+      return if @options[:for_engine][:quiet]
+      printf color(color, '%11s %s\n'), name, arg
+      STDOUT.flush
     end
     
-          env['rack.errors'] = errors
+    group :debugging do
+  gem 'cocoapods_debug'
     
-          # Essentially the inverse of +mask_token+.
-      def unmask_token(masked_token)
-        # Split the token into the one-time pad and the encrypted
-        # value and decrypt it
-        token_length = masked_token.length / 2
-        one_time_pad = masked_token[0...token_length]
-        encrypted_token = masked_token[token_length..-1]
-        xor_byte_strings(one_time_pad, encrypted_token)
+      # Spec
+  #-----------------------------------------------------------------------------#
+    
+            # Removes the specified cache
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        An array of caches to remove, each specified with the same
+        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
+        #
+        def remove_caches(cache_descriptors)
+          cache_descriptors.each do |desc|
+            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
+              FileUtils.rm(desc[:spec_file])
+            end
+            UI.message('Removing cache #{desc[:slug]}') do
+              FileUtils.rm_rf(desc[:slug])
+            end
+          end
+        end
+    
+              begin
+            lineno = frame.lineno-1
+            lines = ::File.readlines(frame.filename)
+            frame.pre_context_lineno = [lineno-CONTEXT, 0].max
+            frame.pre_context = lines[frame.pre_context_lineno...lineno]
+            frame.context_line = lines[lineno].chomp
+            frame.post_context_lineno = [lineno+CONTEXT, lines.size].min
+            frame.post_context = lines[lineno+1..frame.post_context_lineno]
+          rescue
+          end
+    
+            if has_vector?(request, headers)
+          warn env, 'attack prevented by #{self.class}'
+    
+          def order_token
+        request.headers['X-Spree-Order-Token'] || params[:order_token]
       end
     
-          def react_and_close(env, body)
-        reaction = react(env)
+            def show
+          authorize! :read, @order, order_token
+          @address = find_address
+          respond_with(@address)
+        end
     
-    desc 'Test the paperclip plugin.'
-RSpec::Core::RakeTask.new(:spec)
+            def line_items_attributes
+          { line_items_attributes: {
+              id: params[:id],
+              quantity: params[:line_item][:quantity],
+              options: line_item_params[:options] || {}
+          } }
+        end
     
-    When /^I rollback a migration$/ do
-  step %[I successfully run `rake db:rollback STEPS=1 --trace`]
+            def scope
+          @scope ||= if params[:option_type_id]
+                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :read)
+                     else
+                       Spree::OptionValue.accessible_by(current_ability, :read).load
+                     end
+        end
+    
+            def payment_params
+          params.require(:payment).permit(permitted_payment_attributes)
+        end
+      end
+    end
+  end
 end
+
+    
+              if @product_property.update_attributes(product_property_params)
+            respond_with(@product_property, status: 200, default_template: :show)
+          else
+            invalid_resource!(@product_property)
+          end
+        end
+    
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
+    
+            def order
+          @order ||= Spree::Order.find_by!(number: order_id)
+          authorize! :read, @order
+        end
