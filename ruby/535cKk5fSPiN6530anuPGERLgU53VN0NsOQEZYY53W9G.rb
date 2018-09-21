@@ -1,116 +1,101 @@
 
         
-          # True if a {Formula} is being built with {Formula.stable} instead of {Formula.devel} or {Formula.head}. This is the default.
-  # <pre>args << '--some-beta' if build.devel?</pre>
-  def stable?
-    !(head? || devel?)
+            def show_message
+      UI.message('Sending anonymous analytics information')
+      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
+      UI.message('No personal or sensitive data is sent.')
+      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+    end
+    
+            expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
+      end
+    
+          true
+    end
+    
+    # Here be helper
+    
+      def self.all_versions
+    all.flat_map(&:versions)
   end
     
-        s = 'This formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX}.'
-    s << '\n\n#{f.keg_only_reason}'
-    if f.lib.directory? || f.include.directory?
-      s <<
-        <<-EOS.undent_________________________________________________________72
+          def db_path
+        File.join path, DB_FILENAME
+      end
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
+        def initialize
+      @pages = {}
+    end
+    
+        def terminal_width
+      return @terminal_width if defined? @terminal_width
+    
+            css('h1[class]').remove_attr('class')
+        css('table[class]').remove_attr('class')
+        css('table[width]').remove_attr('width')
+        css('tr[style]').remove_attr('style')
+    
+      gem.licenses      = ['MIT']
+    
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
+    end
   end
-  alias_method :python2, :python
-  alias_method :python3, :python
+    
+            if echo?
+          $stdin.gets
+        else
+          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
+        end
+      rescue Errno::EIO
+        # when stdio gets closed
+        return
+      end
+    
+            if callable_without_parameters?(value_to_evaluate)
+          super(key, assert_valid_later(key, value_to_evaluate), &nil)
+        else
+          assert_valid_now(key, value_to_evaluate)
+          super
+        end
+      end
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
+        end
+      end
+    end
+  end
 end
 
     
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-                # The current row includes screenshots for all device types
-            # so we need to enable scaling for both iOS and watchOS apps
-            device_language_details['scaled']['value'] = true if device_language_details['scaled']
-            device_language_details['messagesScaled']['value'] = true if device_language_details['messagesScaled']
-            # we unset `scaled` or `messagesScaled` as soon as we upload a
-            # screenshot for this device/language combination
-          end
-        end
-    
-            client.create_version!(apple_id, version_number, platform.nil? ? 'ios' : platform)
-    
-    def du_uploadtrailer_preview_correct_jpg
-  mock_jpg = double
-  allow(mock_jpg).to receive(:file_name).and_return('ftl_FAKEMD5_trailer-en-US_preview.jpg')
-  allow(mock_jpg).to receive(:file_size).and_return(12_345)
-  allow(mock_jpg).to receive(:content_type).and_return('image/jpg')
-  allow(mock_jpg).to receive(:bytes).and_return('trailer preview...')
-  mock_jpg
-end
-    
-      context '#post_tester_to_group' do
-    it 'executes the request' do
-      MockAPI::TestFlightServer.post('/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/testers') {}
-      tester = OpenStruct.new({ first_name: 'Josh', last_name: 'Taquitos', email: 'taquitos@google.com' })
-      subject.post_tester_to_group(app_id: app_id,
-                                    email: tester.email,
-                               first_name: tester.first_name,
-                                last_name: tester.last_name,
-                                 group_id: 'fake-group-id')
-      expect(WebMock).to have_requested(:post, 'https://appstoreconnect.apple.com/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/testers').
-        with(body: '[{'email':'taquitos@google.com','firstName':'Josh','lastName':'Taquitos'}]')
-    end
-  end
-    
-          it 'none' do
-        val = @v.raw_data['ratings']['nonBooleanDescriptors'].find do |a|
-          a['name'].include?('GAMBLING')
-        end
-        expect(val['level']).to eq('ITC.apps.ratings.level.NONE')
-      end
-    
-    # Contributors should always provide a changelog when submitting a PR
-if github.pr_body.length < 5
-  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
-end
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-        def handle_gist_redirecting(data)
-      redirected_url = data.header['Location']
-      if redirected_url.nil? || redirected_url.empty?
-        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
-      end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
-    
-          def gateway_error(exception)
-        @order.errors.add(:base, exception.message)
-        invalid_resource!(@order)
-      end
-    
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
+                if @order.completed? || @order.next
+              state_callback(:after)
+              respond_with(@order, default_template: 'spree/api/v1/orders/show')
+            else
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+            end
           else
-            invalid_resource!(@address)
+            invalid_resource!(@order)
           end
         end
     
-            private
-    
-            def find_order
-          @order = Spree::Order.find_by!(number: order_id)
-          authorize! :read, @order, order_token
+              state = @states.last
+          respond_with(@states) if stale?(state)
         end
     
             def index
-          if params[:ids]
-            @products = product_scope.where(id: params[:ids].split(',').flatten)
-          else
-            @products = product_scope.ransack(params[:q]).result
-          end
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
