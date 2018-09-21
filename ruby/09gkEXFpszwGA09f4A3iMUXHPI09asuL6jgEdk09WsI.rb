@@ -1,173 +1,275 @@
 
         
-              def find_oauth_access_token
-        token = Doorkeeper::OAuth::Token.from_request(current_request, *Doorkeeper.configuration.access_token_methods)
-        return unless token
+          # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
+  # permissions and removing .la files, unless the files (or parent
+  # directories) are protected by skip_clean.
+  #
+  # bin and sbin should not have any subdirectories; if either do that is
+  # caught as an audit warning
+  #
+  # lib may have a large directory tree (see Erlang for instance), and
+  # clean_dir applies cleaning rules to the entire tree
+  def clean_dir(d)
+    d.find do |path|
+      path.extend(ObserverPathnameExtension)
     
-            def metadata
-          @metadata ||= Coverage::Metadata.new(self)
-        end
-    
-            def key_text
-          @entity.to_s
-        end
-    
-            def initialize(badge)
-          @entity = badge.entity
-          @status = badge.status
-        end
-    
-      def passthru
-    render status: 404, plain: 'Not found. Authentication passthru.'
-  end
-    
-    module Devise
-  module Controllers
-    # Provide sign in and sign out functionality.
-    # Included by default in all controllers.
-    module SignInOut
-      # Return true if the given scope is signed in session. If no scope given, return
-      # true if any scope is signed in. This will run authentication hooks, which may
-      # cause exceptions to be thrown from this method; if you simply want to check
-      # if a scope has already previously been authenticated without running
-      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
-      def signed_in?(scope=nil)
-        [scope || Devise.mappings.keys].flatten.any? do |_scope|
-          warden.authenticate?(scope: _scope)
-        end
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
       end
     
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
+          dt = Date.today
+      freeze_time dt
+    
+      def show
+    render json: outbox_presenter, serializer: ActivityPub::OutboxSerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
+  end
+    
+          if @custom_emoji.save
+        log_action :create, @custom_emoji
+        redirect_to admin_custom_emojis_path, notice: I18n.t('admin.custom_emojis.created_msg')
+      else
+        render :new
+      end
+    end
+    
+          if @domain_block.save
+        DomainBlockWorker.perform_async(@domain_block.id)
+        log_action :create, @domain_block
+        redirect_to admin_domain_blocks_path, notice: I18n.t('admin.domain_blocks.created_msg')
+      else
+        render :new
+      end
+    end
+    
+        def resource_params
+      params.require(:report_note).permit(
+        :content,
+        :report_id
+      )
+    end
+    
+    module Homebrew
+  module_function
+    
+          def inherited_hash_writer(name)
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          def set_#{name}(name, value)
+            name = name.tr('_', '-')
+            @#{name}s[name] = value unless try_set_#{name}(name, value)
           end
+    
+        # Modify the top Sass backtrace entries
+    # (that is, the most deeply nested ones)
+    # to have the given attributes.
+    #
+    # Specifically, this goes through the backtrace entries
+    # from most deeply nested to least,
+    # setting the given attributes for each entry.
+    # If an entry already has one of the given attributes set,
+    # the pre-existing attribute takes precedence
+    # and is not used for less deeply-nested entries
+    # (even if they don't have that attribute set).
+    #
+    # @param attrs [{Symbol => Object}] The information to add to the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def modify_backtrace(attrs)
+      attrs = attrs.reject {|_k, v| v.nil?}
+      # Move backwards through the backtrace
+      (0...sass_backtrace.size).to_a.reverse_each do |i|
+        entry = sass_backtrace[i]
+        sass_backtrace[i] = attrs.merge(entry)
+        attrs.reject! {|k, _v| entry.include?(k)}
+        break if attrs.empty?
+      end
+    end
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+          class << self
+        alias escape_url escape
+        public :escape_html
+      end
+    
+            def right_brace_and_space(loc_end, space)
+          brace_and_space =
+            range_with_surrounding_space(
+              range: loc_end,
+              side: :left,
+              newlines: space[:newlines],
+              whitespace: space[:right]
+            )
+          range_with_surrounding_comma(brace_and_space, :left)
         end
-      end
     
-        def initialize(options = {})
-      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
-      options[:max_concurrency] ||= 20
-      options[:pipelining] = false
-      super
-    end
-    
-        def load_capybara_selenium
-      require 'capybara/dsl'
-      require 'selenium/webdriver'
-      Capybara.register_driver :chrome do |app|
-        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-      end
-      Capybara.javascript_driver = :chrome
-      Capybara.current_driver = :chrome
-      Capybara.run_server = false
-      Capybara
-    end
-    
-      private
-    
-      def next_page
-    account_outbox_url(@account, page: true, max_id: @statuses.last.id) if @statuses.size == LIMIT
-  end
-    
-        def memorialize
-      authorize @account, :memorialize?
-      @account.memorialize!
-      log_action :memorialize, @account
-      redirect_to admin_account_path(@account.id)
-    end
-    
-        def set_domain_block
-      @domain_block = DomainBlock.find(params[:id])
-    end
-    
-        def form_status_batch_params
-      params.require(:form_status_batch).permit(status_ids: [])
-    end
-    
-    class Api::PushController < Api::BaseController
-  include SignatureVerification
-    
-      path = 'assets/stylesheets'
-  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
-  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
-  Dir.mkdir(css_path) unless File.directory?(css_path)
-  %w(_bootstrap bootstrap/_theme).each do |file|
-    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
-    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
-    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    css       = engine.render
-    File.open(save_path, 'w') { |f| f.write css }
-  end
-end
-    
-          configure_sass
-    end
-    
-      # Disable Rails's static asset server (Apache or nginx will already do this).
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-    
-    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
-  stream_element_numbers_content(position).should have_content(post_text)
-end
-    
-    Given /^I have been invited by '([^\']+)'$/ do |email|
-  AppConfig.settings.enable_registrations = false
-  @inviter = User.find_by_email(email)
-  @inviter_invite_count = @inviter.invitation_code.count
-  i = EmailInviter.new('new_invitee@example.com', @inviter)
-  i.send!
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-          # Returns the path to a file for the given key.
-      #
-      # @param key [String]
-      # @return [String] The path to the cache file.
-      def path_to(key)
-        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
-        File.join(cache_location, key)
+          it 'corrects one hash parameter without braces with one hash value' do
+        corrected = autocorrect_source('where(x: { 'y' => 'z' })')
+        expect(corrected).to eq('where({x: { 'y' => 'z' }})')
       end
     end
   end
 end
 
     
-          opts.on('-s', '--stdin', :NONE,
-              'Read input from standard input instead of an input file.',
-              'This is the default if no input file is specified. Requires --from.') do
-        @options[:input] = $stdin
-      end
-    
-      it 'ignores implicit hashes' do
-    expect_no_offenses(<<-RUBY.strip_indent)
-      foo(a: 1,
-      b: 2)
-    RUBY
+      include_examples 'multiline literal brace layout trailing comma' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
   end
+end
+
     
-    shared_examples_for 'multiline literal brace layout method argument' do
-  include MultilineLiteralBraceHelper
+            expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                  '#{b}#{close}',
+                                  suffix].join($RS))
+      end
+    end
+  end
+end
+
     
-            def incorrect_style_detected(node)
-          add_offense(node, message: PREFER_FOR) do
-            opposite_style_detected
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
+    
+          # Chacks whether the `if` node has nested `if` nodes in any of its
+      # branches.
+      #
+      # @note This performs a shallow search.
+      #
+      # @return [Boolean] whether the `if` node contains nested conditionals
+      def nested_conditional?
+        node_parts[1..2].compact.each do |branch|
+          branch.each_node(:if) do |nested|
+            return true unless nested.elsif?
           end
         end
+    
+    Given /^I update my new user view to include the file upload field$/ do
+  steps %{
+    Given I overwrite 'app/views/users/new.html.erb' with:
+      '''
+      <%= form_for @user, :html => { :multipart => true } do |f| %>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+        <%= f.label :attachment %>
+        <%= f.file_field :attachment %>
+        <%= submit_tag 'Submit' %>
+      <% end %>
+      '''
+  }
+end
+    
+      def migration_name
+    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+  end
+    
+      module ClassMethods
+    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
+    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
+    # The attribute returns a Paperclip::Attachment object which handles the management of
+    # that file. The intent is to make the attachment as much like a normal attribute. The
+    # thumbnails will be created when the new file is assigned, but they will *not* be saved
+    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
+    # called on it, the attachment will *not* be deleted until +save+ is called. See the
+    # Paperclip::Attachment documentation for more specifics. There are a number of options
+    # you can set to change the behavior of a Paperclip attachment:
+    # * +url+: The full URL of where the attachment is publicly accessible. This can just
+    #   as easily point to a directory served directly through Apache as it can to an action
+    #   that can control permissions. You can specify the full domain and path, but usually
+    #   just an absolute path is sufficient. The leading slash *must* be included manually for
+    #   absolute paths. The default value is
+    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
+    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
+    #     :url => '/:class/:attachment/:id/:style_:filename'
+    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
+    #   Note: When using the +s3+ storage option, the +url+ option expects
+    #   particular values. See the Paperclip::Storage::S3#url documentation for
+    #   specifics.
+    # * +default_url+: The URL that will be returned if there is no attachment assigned.
+    #   This field is interpolated just as the url is. The default value is
+    #   '/:attachment/:style/missing.png'
+    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
+    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
+    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
+    #   geometry strings at the ImageMagick website
+    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
+    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
+    #   inside the dimensions and then crop the rest off (weighted at the center). The
+    #   default value is to generate no thumbnails.
+    # * +default_style+: The thumbnail style that will be used by default URLs.
+    #   Defaults to +original+.
+    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
+    #                       :default_style => :normal
+    #     user.avatar.url # => '/avatars/23/normal_me.png'
+    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
+    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
+    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
+    #   record is destroyed. Defaults to +false+.
+    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
+    #   to a command line error. This will override the global setting for this attachment.
+    #   Defaults to true.
+    # * +convert_options+: When creating thumbnails, use this free-form options
+    #   array to pass in various convert command options.  Typical options are '-strip' to
+    #   remove all Exif data from the image (save space for thumbnails and avatars) or
+    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
+    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
+    #   Note that this option takes a hash of options, each of which correspond to the style
+    #   of thumbnail being generated. You can also specify :all as a key, which will apply
+    #   to all of the thumbnails being generated. If you specify options for the :original,
+    #   it would be best if you did not specify destructive options, as the intent of keeping
+    #   the original around is to regenerate all the thumbnails when requirements change.
+    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
+    #                                :convert_options => {
+    #                                  :all => '-strip',
+    #                                  :negative => '-negate'
+    #                                }
+    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
+    #   It is recommended that :convert_options option be included in the hash passed to each
+    #   :styles for compatibility with future versions.
+    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
+    #   shell quoting for safety. If your options require a space, please pre-split them
+    #   and pass an array to :convert_options instead.
+    # * +storage+: Chooses the storage backend where the files will be stored. The current
+    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
+    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
+    #   for backend-specific options.
+    #
+    # It's also possible for you to dynamically define your interpolation string for :url,
+    # :default_url, and :path in your model by passing a method name as a symbol as a argument
+    # for your has_attached_file definition:
+    #
+    #   class Person
+    #     has_attached_file :avatar, :default_url => :default_url_by_gender
+    #
+    #     private
+    #
+    #     def default_url_by_gender
+    #       '/assets/avatars/default_#{gender}.png'
+    #     end
+    #   end
+    def has_attached_file(name, options = {})
+      HasAttachedFile.define_on(self, name, options)
+    end
+  end
+end
+    
+        # Returns the larger of the two dimensions
+    def larger
+      [height, width].max
+    end
