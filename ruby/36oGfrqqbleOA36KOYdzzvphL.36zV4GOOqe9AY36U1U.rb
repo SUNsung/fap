@@ -1,82 +1,73 @@
-      def before_feature_element(feature_element)
-        @indent = 2
-        @scenario_indent = 2
-        @timings[feature_element_timing_key(feature_element)] = Time.now
-      end
-    
-    module Jekyll
-  # Handles the cleanup of a site's destination before it is built.
-  class Cleaner
-    HIDDEN_FILE_REGEX = %r!\/\.{1,2}$!
-    attr_reader :site
-    
-    module Jekyll
-  module Commands
-    class New < Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:new) do |c|
-            c.syntax 'new PATH'
-            c.description 'Creates a new Jekyll site scaffold in PATH'
-    
-            # The VM which this system is tied to.
-        attr_reader :vm
-    
-              # Register a new host class only if a name was given
-          data[:hosts].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-      before_action :set_account
-  before_action :set_statuses
-    
-        def create
-      authorize AccountModerationNote, :create?
-    
-          log_action :confirm, @user
-    
-        def filtered_instances
-      InstanceFilter.new(filter_params).results
-    end
-    
-          redirect_to admin_report_path(@report)
-    end
-    
-    class Api::OEmbedController < Api::BaseController
-  respond_to :json
-    
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
-    
-        # Parses the command-line arguments and runs the executable.
-    # Calls `Kernel#exit` at the end, so it never returns.
-    #
-    # @see #parse
-    def parse!
-      # rubocop:disable RescueException
-      begin
-        parse
-      rescue Exception => e
-        # Exit code 65 indicates invalid data per
-        # http://www.freebsd.org/cgi/man.cgi?query=sysexits. Setting it via
-        # at_exit is a bit of a hack, but it allows us to rethrow when --trace
-        # is active and get both the built-in exception formatting and the
-        # correct exit code.
-        at_exit {exit Sass::Util.windows? ? 13 : 65} if e.is_a?(Sass::SyntaxError)
-    
-          # Returns the time the given Sass file was last modified.
+
+        
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
       #
-      # If the given file has been deleted or the time can't be accessed
-      # for some other reason, this should return nil.
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
       #
-      # @param uri [String] The URI of the file to check.
-      #   Comes from a `:filename` option set on an engine returned by this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [Time, nil]
-      def mtime(uri, options)
-        Sass::Util.abstract(self)
-      end
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
     
-          def hash
-        @root.hash
+            private
+    
+              def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
+    
+    require 'action_view/helpers/tags/collection_helpers'
+    
+              def render_component(builder)
+            builder.translation
+          end
+      end
+    end
+  end
+end
+
+    
+    require 'action_view/helpers/tags/placeholderable'
+    
+    module Rack
+  module Protection
+    class Base
+      DEFAULT_OPTIONS = {
+        :reaction    => :default_reaction, :logging   => true,
+        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
+        :session_key => 'rack.session',    :status    => 403,
+        :allow_empty_referrer => true,
+        :report_key           => 'protection.failed',
+        :html_types           => %w[text/html application/xhtml text/xml application/xml]
+      }
+    
+            def check(arg, args)
+          if style == :braces && !arg.braces?
+            add_arg_offense(arg, :missing)
+          elsif style == :no_braces && arg.braces?
+            add_arg_offense(arg, :redundant)
+          elsif style == :context_dependent
+            check_context_dependent(arg, args)
+          end
+        end
+    
+            if node.respond_to?(:loc) &&
+           node.loc.respond_to?(:heredoc_end) &&
+           node.loc.heredoc_end.last_line >= parent.last_line
+          return true
+        end
+    
+          # Checks whether this `hash` element is on the same line as `other`.
+      #
+      # @note A multiline element is considered to be on the same line if it
+      #       shares any of its lines with `other`
+      #
+      # @return [Boolean] whether this element is on the same line as `other`
+      def same_line?(other)
+        loc.last_line == other.loc.line || loc.line == other.loc.last_line
       end
