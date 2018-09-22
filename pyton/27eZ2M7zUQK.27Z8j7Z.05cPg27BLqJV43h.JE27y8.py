@@ -1,75 +1,95 @@
 
         
-            def __init__(self, *a, **kw):
-        super(QPSSpider, self).__init__(*a, **kw)
-        if self.qps is not None:
-            self.qps = float(self.qps)
-            self.download_delay = 1 / self.qps
-        elif self.download_delay is not None:
-            self.download_delay = float(self.download_delay)
+        import codecs
+import subprocess
     
-            parser.add_option_group(group)
-    
-        def parse(self, response):
-        for link in self.link_extractor.extract_links(response):
-            yield scrapy.Request(link.url, callback=self.parse)
-
-    
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
-        filename = args[0]
-        if not os.path.exists(filename):
-            raise UsageError('File not found: %s\n' % filename)
-        try:
-            module = _import_file(filename)
-        except (ImportError, ValueError) as e:
-            raise UsageError('Unable to load %r: %s\n' % (filename, e))
-        spclasses = list(iter_spider_classes(module))
-        if not spclasses:
-            raise UsageError('No spider found in file: %s\n' % filename)
-        spidercls = spclasses.pop()
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--get', dest='get', metavar='SETTING',
-            help='print raw setting value')
-        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
-            help='print setting value, interpreted as a boolean')
-        parser.add_option('--getint', dest='getint', metavar='SETTING',
-            help='print setting value, interpreted as an integer')
-        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
-            help='print setting value, interpreted as a float')
-        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
-            help='print setting value, interpreted as a list')
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
-            help='also display twisted/python/platform info (useful for bug reports)')
+    entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
     
     
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-    # Predefined token types
-EOR_TOKEN_TYPE = 1
     
-    class MismatchedTokenException(RecognitionException):
-    '''@brief A mismatched char or Token or tree node.'''
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-    def __init__(self, expecting, input):
-        RecognitionException.__init__(self, input)
-        self.expecting = expecting
-        
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
     
-        # The antlr_version attribute has been introduced in 3.1. If it is not
-    # overwritten in the generated recognizer, we assume a default of 3.0.1.
-    antlr_version = (3, 0, 1, 0)
-    antlr_version_str = '3.0.1'
     
-            txt = self.text
-        if txt is not None:
-            txt = txt.replace('\n','\\\\n')
-            txt = txt.replace('\r','\\\\r')
-            txt = txt.replace('\t','\\\\t')
-        else:
-            txt = '<no text>'
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+    
+    from __future__ import print_function
+import os
+from os.path import lexists
+    
+        def __get__(self, obj, T):
+        def transaction(*args, **kwargs):
+            state = memento(obj)
+            try:
+                return self.method(obj, *args, **kwargs)
+            except Exception as e:
+                state()
+                raise e
+    
+        jim = Subscriber('jim', message_center)
+    jim.subscribe('cartoon')
+    jack = Subscriber('jack', message_center)
+    jack.subscribe('music')
+    gee = Subscriber('gee', message_center)
+    gee.subscribe('movie')
+    vani = Subscriber('vani', message_center)
+    vani.subscribe('movie')
+    vani.unsubscribe('movie')
+    
+        def __init__(self):
+        '''We have an AM state and an FM state'''
+        self.amstate = AmState(self)
+        self.fmstate = FmState(self)
+        self.state = self.amstate
+    
+    http://stackoverflow.com/questions/963965/how-is-this-strategy-pattern
+ -written-in-python-the-sample-in-wikipedia
+In most of other languages Strategy pattern is implemented via creating some
+base strategy interface/abstract class and subclassing it with a number of
+concrete strategies (as we can see at
+http://en.wikipedia.org/wiki/Strategy_pattern), however Python supports
+higher-order functions and allows us to have only one class and inject
+functions into it's instances, as shown in this example.
+    
+        def find_all_path(self, start, end, path=None):
+        path = path or []
+        path.append(start)
+        if start == end:
+            return [path]
+        paths = []
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpaths = self.find_all_path(node, end, path[:])
+                paths.extend(newpaths)
+        return paths
