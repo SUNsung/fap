@@ -1,203 +1,202 @@
 
         
-        SVCNAME = 'youtubedl_builder'
+            plt.figure('scikit-learn GLM benchmark results')
+    plt.xlabel('Dimensions')
+    plt.ylabel('Time (s)')
+    plt.plot(dimensions, time_ridge, color='r')
+    plt.plot(dimensions, time_ols, color='g')
+    plt.plot(dimensions, time_lasso, color='b')
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
-
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
     
-        def gen_ies_md(ies):
-        for ie in ies:
-            ie_md = '**{0}**'.format(ie.IE_NAME)
-            ie_desc = getattr(ie, 'IE_DESC', None)
-            if ie_desc is False:
-                continue
-            if ie_desc is not None:
-                ie_md += ': {0}'.format(ie.IE_DESC)
-            if not ie.working():
-                ie_md += ' (Currently broken)'
-            yield ie_md
+    A test of LocalOutlierFactor on classical anomaly detection datasets.
     
-        readme = filter_options(readme)
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = PCA(n_components=n_components, svd_solver='randomized',
+                   random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
     
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
+                gc.collect()
+            print('benchmarking scikit-learn randomized_svd: n_iter=%d '
+                  % n_iter)
+            tstart = time()
+            randomized_svd(X, rank, n_iter=n_iter)
+            results['scikit-learn randomized_svd (n_iter=%d)'
+                    % n_iter].append(time() - tstart)
     
-        def test_html_search_meta(self):
-        ie = self.ie
-        html = '''
-            <meta name='a' content='1' />
-            <meta name='b' content='2'>
-            <meta name='c' content='3'>
-            <meta name=d content='4'>
-            <meta property='e' content='5' >
-            <meta content='6' name='f'>
-        '''
+        print('Averaging results...', end='')
+    for name in sampling_algorithm:
+        time[name] = np.mean(time[name], axis=1)
+    print('done\n')
     
-        # Path-based component
-    if self.hparams.input in ['path', 'integrated', 'integrated-nc']:
+    try:
+    from urllib.request import urlopen
+except ImportError:
+    # Python 2
+    from urllib import urlopen
     
-        Args:
-      data_name: The name of the data dict, to select which in/out matrices
-        to use.
-      data_bxtxd:  Numpy array training data with shape:
-        batch_size x # time steps x # dimensions
-      ext_input_bxtxi: Numpy array training external input with shape:
-        batch_size x # time steps x # external input dims
-      do_eval_cost (optional): If true, the IWAE (Importance Weighted
-         Autoencoder) log likeihood bound, instead of the VAE version.
-      do_average_batch (optional): average over the batch, useful for getting
-      good IWAE costs, and model outputs for a single data point.
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
     
-    # generate trials for both RNNs
-rates_a, x0s_a, _ = generate_data(rnn_a, T=T, E=E, x0s=x0s, P_sxn=P_nxn,
-                                  input_magnitude=0.0, input_times=None)
-spikes_a = spikify_data(rates_a, rng, rnn_a['dt'], rnn_a['max_firing_rate'])
-    
-        us = np.zeros([1, ntime_steps])
-    for t in range(ntime_steps):
-      x_t = alpha*x_tm1 + np.dot(W,r_tm1) + b
-      if input_time is not None and t == input_time:
-        us[0,t] = input_magnitude
-        x_t += Bin * us[0,t] # DCS is this what was used?
-      r_t = np.tanh(x_t)
-      x_tm1 = x_t
-      r_tm1 = r_t
-      rs[:,t] = r_t
-    return rs, us
-    
-      Args:
-    data_fname: The filename of teh file in which to write the data.
-    data_dict:  The dictionary of data to write. The keys are strings
-      and the values are numpy arrays.
-    use_json (optional): human readable format for simple items
-    compression (optional): The compression to use for h5py (disabled by
-      default because the library borks on scalars, otherwise try 'gzip').
-  '''
-    
-      # print('Number of batches per epoch: %d' % epoch_size)
-  for i in range(epoch_size):
-    x = data[:, i * num_steps:(i + 1) * num_steps]
-    y = data[:, i * num_steps + 1:(i + 1) * num_steps + 1]
-    w = np.ones_like(x)
-    yield (x, y, w)
-
-    
-      elif FLAGS.mask_strategy == 'contiguous':
-    masked_length = int((1 - FLAGS.is_present_rate) * FLAGS.sequence_length) - 1
-    # Determine location to start masking.
-    start_mask = np.random.randint(
-        1, FLAGS.sequence_length - masked_length + 1, size=FLAGS.batch_size)
-    p = np.full([FLAGS.batch_size, FLAGS.sequence_length], True, dtype=bool)
-    
-            # attn_fun
-        scores = _attn_add_fun(score_v, keys, query)
-      elif attention_option == 'luong':
-        # reshape query: [batch_size, 1, num_units]
-        query = tf.reshape(query, [-1, 1, num_units])
-    
-            request_line = '{method} {path}{query} HTTP/1.1'.format(
-            method=self._orig.method,
-            path=url.path or '/',
-            query='?' + url.query if url.query else ''
-        )
-    
-        # The URL prefix the adapter should be mount to.
-    prefix = None
-    
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
-    
-        def test_format_option(self, httpbin):
-        env = MockEnvironment(colors=256)
-        r = http('--print=B', '--pretty=format',
-                 'GET', httpbin.url + '/get', 'a=b',
-                 env=env)
-        # Tests that the JSON data is formatted.
-        assert r.strip().count('\n') == 2
-        assert COLOR not in r
-    
-    
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-    
-easy_install.ScriptWriter.get_args = get_args
-    
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 '''
     
+        @classmethod
+    def default_decoder(cls, value):
+        try:
+            return pyrfc3339.parse(value)
+        except ValueError as error:
+            raise jose.DeserializationError(error)
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+        def test_decode(self):
+        self.assertEqual('x', self.field.decode('x'))
+    
+    OLD_REWRITE_HTTPS_ARGS = [
+    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,QSA,R=permanent]'],
+    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,QSA,R=permanent]']]
+    
+            self.vhosts.append(
+            obj.VirtualHost(
+                'path', 'aug_path', set([obj.Addr.fromstring('*:80')]),
+                False, False,
+                'wildcard.com', set(['*.wildcard.com'])))
+    
+            self.vhost2 = VirtualHost(
+            'fp', 'vhp', set([self.addr2]), False, False, 'localhost')
+    
+            self.assertEqual(
+            len(self.sni.configurator.parser.find_dir(
+                'Include', self.sni.challenge_conf)),
+            1)
+        self.assertEqual(len(sni_responses), 2)
+        for i in xrange(2):
+            self.assertEqual(sni_responses[i], acme_responses[i])
+    
+    logger = logging.getLogger(__name__)
+    
+    site_info = 'baomihua.com'
+download = baomihua_download
+download_playlist = playlist_not_supported('baomihua')
+
+    
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
+    
+            if not title:
+            self.title = vid
     
     
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_match(brew_no_available_formula, brew_already_installed,
-               brew_install_no_argument):
-    assert match(Command('brew install elsticsearch',
-                         brew_no_available_formula))
-    assert not match(Command('brew install git',
-                             brew_already_installed))
-    assert not match(Command('brew install', brew_install_no_argument))
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
     
-            return urls
+    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads Dailymotion videos by URL.
+    '''
     
-            complex_vh = VirtualHost(
-            'fp', 'vhp',
-            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
-            False, False)
-        self.assertTrue(complex_vh.conflicts([self.addr1]))
-        self.assertTrue(complex_vh.conflicts([self.addr2]))
-        self.assertFalse(complex_vh.conflicts([self.addr_default]))
+    	type, ext, size = url_info(url)
+	print_info(site_info, title, type, size)
+	
+	if not info_only:
+		download_urls([url], title, ext, size, output_dir, merge = merge)
     
-        def test_perform0(self):
-        resp = self.sni.perform()
-        self.assertEqual(len(resp), 0)
+    from ..common import *
     
-    def get_marker(line):
-    matchlist = TAG_REGEX.findall(line)
-    if matchlist:
-        namematch = NAMED_A_TAG_REGEX.match(line)
-        if namematch:
-            return namematch.group(1) # group 0 is full match
+        if 'tvId' not in q or 'channelId' not in q:
+        raise Exception('No enough arguments!')
+    
+    # looks that flickr won't return urls for all sizes
+# we required in 'extras field without a acceptable header
+dummy_header = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
+}
+def get_content_headered(url):
+    return get_content(url, dummy_header)
+    
+        move = Action('move')
+    person = Person('Jack', move)
+    person.do_action().amount('5m').stop()
+    
+    
+class DB:
+    def __init__(self):
+        self._tm = None
+    
+    
+class Transactional(object):
+    '''Adds transactional semantics to methods. Methods decorated  with
+    
+    ### OUTPUT ###
+# Scanning... Station is 1380 AM
+# Scanning... Station is 1510 AM
+# Switching to FM
+# Scanning... Station is 89.1 FM
+# Scanning... Station is 103.9 FM
+# Scanning... Station is 81.3 FM
+# Scanning... Station is 89.1 FM
+# Switching to AM
+# Scanning... Station is 1250 AM
+# Scanning... Station is 1380 AM
+
+    
+    
+class A(Node):
+    pass
+    
+    
+class ComplexHouse(ComplexBuilding):
+    def build_floor(self):
+        self.floor = 'One'
+    
+    
+if __name__ == '__main__':
+    main()
+    
+            path.append(start)
+        if start == end:
+            return path
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpath = self.find_path(node, end, path[:])
+                if newpath:
+                    return newpath
