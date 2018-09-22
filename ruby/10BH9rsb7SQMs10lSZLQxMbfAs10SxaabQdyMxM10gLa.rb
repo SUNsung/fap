@@ -1,110 +1,116 @@
 
         
-                class << self
-          def select_type
-            @select_type ||= name.split('::').last.sub('Select', '').downcase
-          end
-        end
-    
-    require 'action_view/rendering'
-require 'active_support/core_ext/module/redefine_method'
-    
-          # Whenever setting view paths, makes a copy so that we can manipulate them in
-      # instance objects as we wish.
-      def view_paths=(paths)
-        @view_paths = ActionView::PathSet.new(Array(paths))
-      end
-    
-    When /^I fill out forgot password form with '([^']*)'$/ do |email|
-  fill_forgot_password_form(email)
-end
-    
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
-    end
+            Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
+    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
   end
+    
+          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
+      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
+    
+      def status_finder
+    StatusFinder.new(params[:url])
+  end
+    
+      #
+  # Mounts a directory or resource as being serviced by the supplied handler.
+  #
+  def mount(root, handler, long_call = false, *args)
+    resources[root] = [ handler, long_call, args ]
+  end
+    
+    require 'rex/proto/ipmi/utils'
+    
+                encoded
+          end
+    
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
+            end
+          end
+    
+              # Decodes the nonce field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_nonce(input)
+            input.value[0].value.to_i
+          end
+    
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
+            end
+    
+    Then(/^the tasks folder is created$/) do
+  path = TestApp.test_app_path.join('lib/capistrano/tasks')
+  expect(Dir.exist?(path)).to be true
 end
+    
+    World(VagrantHelpers)
 
     
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
+        def setup_filters
+      @filters = cmdline_filters
+      @filters += @custom_filters if @custom_filters
+      @filters << Filter.new(:role, ENV['ROLES']) if ENV['ROLES']
+      @filters << Filter.new(:host, ENV['HOSTS']) if ENV['HOSTS']
+      fh = fetch_for(:filter, {}) || {}
+      @filters << Filter.new(:host, fh[:hosts]) if fh[:hosts]
+      @filters << Filter.new(:role, fh[:roles]) if fh[:roles]
+      @filters << Filter.new(:host, fh[:host]) if fh[:host]
+      @filters << Filter.new(:role, fh[:role]) if fh[:role]
+    end
     
-        it 'lets a user destroy their like' do
-      current_user = controller.send(:current_user)
-      expect(current_user).to receive(:retract).with(@like)
+      # the install logic below support installing multiple plugins with each a version specification
+  # but the argument parsing does not support it for now so currently if specifying --version only
+  # one plugin name can be also specified.
+  def execute
+    # Turn off any jar dependencies lookup when running with `--local`
+    ENV['JARS_SKIP'] = 'true' if local?
     
-    if RUBY_ENGINE == 'ruby'
-  gem 'less', '~> 2.0'
-  gem 'mini_racer'
-  gem 'redcarpet'
-  gem 'wlang', '>= 2.0.1'
-  gem 'bluecloth'
-  gem 'rdiscount'
-  gem 'RedCloth'
-  gem 'activesupport', '~> 5.1.6'
-  gem 'puma'
-  gem 'yajl-ruby'
-  gem 'nokogiri'
-  gem 'thin'
-  gem 'slim', '~> 2.0'
-  gem 'coffee-script', '>= 2.0'
-  gem 'rdoc'
-  gem 'kramdown'
-  gem 'maruku'
-  gem 'creole'
-  gem 'wikicloth'
-  gem 'markaby'
-  gem 'radius'
-  gem 'asciidoctor'
-  gem 'liquid'
-  gem 'stylus'
-  gem 'rabl'
-  gem 'builder'
-  gem 'erubis'
-  gem 'haml', '>= 3.0'
-  gem 'sass'
-  gem 'reel-rack'
-  gem 'celluloid', '~> 0.16.0'
-  gem 'simplecov', require: false
-end
+        puts('Packaging plugins for offline usage')
     
-      // writing
-  $('form').on('submit',function(e) {
-    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
-    $('#msg').val(''); $('#msg').focus();
-    e.preventDefault();
-  });
-</script>
+      private
     
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
-  end
+    class LogStash::PluginManager::Update < LogStash::PluginManager::Command
+  REJECTED_OPTIONS = [:path, :git, :github]
+  # These are local gems used by LS and needs to be filtered out of other plugin gems
+  NON_PLUGIN_LOCAL_GEMS = ['logstash-core', 'logstash-core-plugin-api']
     
-            safe?(env) ||
-          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
-          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
-          ( options[:allow_if] && options[:allow_if].call(env) )
-      end
+    Gem::Specification.new do |gem|
+  gem.authors       = ['Elastic']
+  gem.email         = ['info@elastic.co']
+  gem.description   = %q{Logstash plugin API}
+  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
+  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
+  gem.license       = 'Apache License (2.0)'
     
-          def handle(hash)
-        was = hash.dup
-        hash.replace escape(hash)
-        was
-      end
-    
-            def update
-          @line_item = find_line_item
-    
-            def index
-          authorize! :admin, ReturnAuthorization
-          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
-                                   ransack(params[:q]).result.
-                                   page(params[:page]).per(params[:per_page])
-          respond_with(@return_authorizations)
+            it 'should raise a configuration error' do
+          expect { subject.required_strings }.to raise_error(LogStash::ConfigurationError)
         end
+      end
+    
+        not_same_pipeline_id = described_class.new(source, :another_pipeline, unordered_config_parts, settings)
+    expect(subject).not_to eq(not_same_pipeline_id)
+  end
