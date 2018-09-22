@@ -1,227 +1,313 @@
 
         
-          Optional<const swift::markup::Paragraph *> getBrief() const {
-    return Parts.Brief;
-  }
-    
-      /// Keep emitting subsequent diagnostics after a fatal error.
-  bool ShowDiagnosticsAfterFatalError = false;
-    
-    #ifndef SWIFT_INDEX_INDEXSYMBOL_H
-#define SWIFT_INDEX_INDEXSYMBOL_H
-    
-      virtual void failed(StringRef error) = 0;
-  virtual void warning(StringRef warning) {}
-    
-    
-    {private:
-  ResultPlanPtr buildTopLevelResult(Initialization *init, SILLocation loc);
-};
-    
-      /// Materialize the SILValue that this LSValue represents.
-  ///
-  /// In the case where we have a single value this can be materialized by
-  /// applying Path to the Base.
-  SILValue materialize(SILInstruction *Inst) {
-    if (CoveringValue)
-      return SILValue();
-    return Path.getValue().createExtract(Base, Inst, true);
-  }
-    
-    class FixitApplyDiagnosticConsumer final
-  : public DiagnosticConsumer, public FixitFilter {
-  clang::RewriteBuffer RewriteBuf;
+        Status ModelAnalyzer::GenerateReport(bool debug, bool assume_valid_feeds,
+                                     std::ostream& os) {
+  GraphProperties properties(item_);
+  TF_RETURN_IF_ERROR(properties.InferStatically(assume_valid_feeds));
     }
     
-    public:
-  Context(StringRef RuntimeLibPath,
-          llvm::function_ref<
-              std::unique_ptr<LangSupport>(Context &)> LangSupportFactoryFn,
-          bool shouldDispatchNotificationsOnMain = true);
-  ~Context();
-    
-        DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = width;
-    sd.BufferDesc.Height = height;
-#ifdef CHECK_NV12
-    sd.BufferDesc.Format = DXGI_FORMAT_NV12;
-#else
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-#endif
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = NULL; //g_hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    
-            const std::vector<Point>* quads[4] = {&black_contours[black_order[0].first], &black_contours[black_order[1].first],
-                                         &white_contours[white_order[0].first], &white_contours[white_order[1].first]};
-        std::vector<Point2f> quads_approx[4];
-        Point2f quad_corners[4];
-        for(int k = 0; k < 4; k++)
-        {
-            std::vector<Point2f> temp;
-            for(size_t j = 0; j < quads[k]->size(); j++) temp.push_back((*quads[k])[j]);
-            approxPolyDP(Mat(temp), quads_approx[k], 0.5, true);
+    namespace tensorflow {
     }
     
-    /** @file
- * @deprecated Use @ref cudev instead.
- */
+    // Creates a numpy array with shapes specified by dim_size and dims and content
+// in data. The array does not own the memory, and destructor will be called to
+// release it. If the status is not ok the caller is responsible for releasing
+// the memory.
+Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result);
     
-    // This macro is used for implementing macros such as
-// EXPECT_DEATH_IF_SUPPORTED and ASSERT_DEATH_IF_SUPPORTED on systems where
-// death tests are not supported. Those macros must compile on such systems
-// iff EXPECT_DEATH and ASSERT_DEATH compile with the same parameters on
-// systems that support death tests. This allows one to write such a macro
-// on a system that does not support death tests and be sure that it will
-// compile on a death-test supporting system.
-//
-// Parameters:
-//   statement -  A statement that a macro such as EXPECT_DEATH would test
-//                for program termination. This macro has to make sure this
-//                statement is compiled but not executed, to ensure that
-//                EXPECT_DEATH_IF_SUPPORTED compiles with a certain
-//                parameter iff EXPECT_DEATH compiles with it.
-//   regex     -  A regex that a macro such as EXPECT_DEATH would use to test
-//                the output of statement.  This parameter has to be
-//                compiled but not evaluated by this macro, to ensure that
-//                this macro only accepts expressions that a macro such as
-//                EXPECT_DEATH would accept.
-//   terminator - Must be an empty statement for EXPECT_DEATH_IF_SUPPORTED
-//                and a return statement for ASSERT_DEATH_IF_SUPPORTED.
-//                This ensures that ASSERT_DEATH_IF_SUPPORTED will not
-//                compile inside functions where ASSERT_DEATH doesn't
-//                compile.
-//
-//  The branch that has an always false condition is used to ensure that
-//  statement and regex are compiled (and thus syntactically correct) but
-//  never executed. The unreachable code macro protects the terminator
-//  statement from generating an 'unreachable code' warning in case
-//  statement unconditionally returns or throws. The Message constructor at
-//  the end allows the syntax of streaming additional messages into the
-//  macro, for compilational compatibility with EXPECT_DEATH/ASSERT_DEATH.
-# define GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, terminator) \
-    GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-    if (::testing::internal::AlwaysTrue()) { \
-      GTEST_LOG_(WARNING) \
-          << 'Death tests are not supported on this platform.\n' \
-          << 'Statement '' #statement '' cannot be verified.'; \
-    } else if (::testing::internal::AlwaysFalse()) { \
-      ::testing::internal::RE::PartialMatch('.*', (regex)); \
-      GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-      terminator; \
-    } else \
-      ::testing::Message()
+    #include <map>
     
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Stores a parameter value and later creates tests parameterized with that
-// value.
-template <class TestClass>
-class ParameterizedTestFactory : public TestFactoryBase {
- public:
-  typedef typename TestClass::ParamType ParamType;
-  explicit ParameterizedTestFactory(ParamType parameter) :
-      parameter_(parameter) {}
-  virtual Test* CreateTest() {
-    TestClass::SetParam(&parameter_);
-    return new TestClass();
-  }
+    namespace tensorflow {
+namespace detail {
+    }
     }
     
-      // Formats a byte as '%02X'.
-  static std::string FormatByte(unsigned char value);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#include 'tensorflow/python/util/kernel_registry.h'
     
-      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
-      GTEST_BY_REF_(T2) f2, GTEST_BY_REF_(T3) f3, GTEST_BY_REF_(T4) f4,
-      GTEST_BY_REF_(T5) f5, GTEST_BY_REF_(T6) f6, GTEST_BY_REF_(T7) f7,
-      GTEST_BY_REF_(T8) f8) : f0_(f0), f1_(f1), f2_(f2), f3_(f3), f4_(f4),
-      f5_(f5), f6_(f6), f7_(f7), f8_(f8) {}
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
     
-    // A unique type used as the default value for the arguments of class
-// template Types.  This allows us to simulate variadic templates
-// (e.g. Types<int>, Type<int, double>, and etc), which C++ doesn't
-// support directly.
-struct None {};
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+     protected:
+   ~NwCurrentWindowInternalLeaveKioskModeFunction() override {}
     
-    {  return result;
-}
-    
-      if (options->Has(String::NewSymbol('target_level')) &&
-      options->Get(String::NewSymbol('target_level'))->IsInt32()) {
-    target_level = (int)(options->Get(
-        String::NewSymbol('target_level'))->ToInt32()->Value());
-    }
-    
-    #if defined (__cplusplus)
-namespace rocksdb {
-#endif
-    }
-    
-    class CompactionFilterFactoryJniCallback : public JniCallback, public CompactionFilterFactory {
- public:
-    CompactionFilterFactoryJniCallback(
-        JNIEnv* env, jobject jcompaction_filter_factory);
-    virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context);
-    virtual const char* Name() const;
-    }
+    IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
+                           int /* object id */,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
     
     
-    {  assert(odds > 0);
-  if (odds % 7 == 0) {
-    // class Random uses multiplier 16807, which is 7^5. If odds are
-    // multiplier of 7, there might be limited values generated.
-    odds++;
-  }
-  auto* r = Random::GetTLSInstance();
-  bool crash = r->OneIn(odds);
-  if (crash) {
-    port::Crash(srcfile, srcline);
-  }
-}
-    
-    #include 'port/port.h'
-#include 'util/random.h'
-    
-    
-    {} // namespace aria2
+    {}  // namespace nw
 
     
-    AbstractBtMessage::~AbstractBtMessage() = default;
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
     
-      bool shouldProcess() const;
+        bool Read(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return ReadText(data);
+        break;
+        case TYPE_HTML:
+        return ReadHTML(data);
+        break;
+        case TYPE_RTF:
+        return ReadRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return ReadImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;      
+    }
     
     
-    {  virtual bool execute() CXX11_OVERRIDE;
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
 };
     
-    bool AbstractOptionHandler::isHidden() const { return flags_ & FLAG_HIDDEN; }
+    #include 'extensions/browser/extension_function.h'
     
-    public:
-  AbstractProxyRequestCommand(cuid_t cuid, const std::shared_ptr<Request>& req,
-                              const std::shared_ptr<FileEntry>& fileEntry,
-                              RequestGroup* requestGroup, DownloadEngine* e,
-                              const std::shared_ptr<Request>& proxyRequest,
-                              const std::shared_ptr<SocketCore>& s);
+      caffe::Datum datum;
+  datum.set_channels(2);  // one channel for each image in the pair
+  datum.set_height(rows);
+  datum.set_width(cols);
+  LOG(INFO) << 'A total of ' << num_items << ' items.';
+  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
+  for (int itemid = 0; itemid < num_items; ++itemid) {
+    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
+    int j = caffe::caffe_rng_rand() % num_items;
+    read_image(&image_file, &label_file, i, rows, cols,
+        pixels, &label_i);
+    read_image(&image_file, &label_file, j, rows, cols,
+        pixels + (rows * cols), &label_j);
+    datum.set_data(pixels, 2*rows*cols);
+    if (label_i  == label_j) {
+      datum.set_label(1);
+    } else {
+      datum.set_label(0);
+    }
+    datum.SerializeToString(&value);
+    std::string key_str = caffe::format_int(itemid, 8);
+    db->Put(leveldb::WriteOptions(), key_str, value);
+  }
+    
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
+
+    
+    namespace caffe {
+    }
+    
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include 'caffe/layers/conv_layer.hpp'
     
     
-    {  void setBtAnnounce(const std::shared_ptr<BtAnnounce>& btAnnounce);
-};
+    {}  // namespace caffe
     
-      /**
-   * The internal announce URL pointer points to next URL.
-   * If the current URL is the last element of its group, then the first
-   * element of the next group is pointed.
+    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
+
+    
+    // Computes one set of 4x8 products of inputs and weights, adding to result.
+// Horizontally adds 4 adjacent results, making 8x32-bit results.
+// rep_input is assumed to be an 8x replicated set of 4x8-bit signed integers.
+// Note that wi must previously have been re-organized with blocks of 4x8
+// weights in contiguous memory.
+// ones is a register of 16x16-bit values all equal to 1.
+// Note: wi is incremented by the amount of data read.
+// weights and reps are scratch registers.
+// This function must be inlined with references in order for the compiler to
+// correctly use the registers declared in the caller.
+inline void MultiplyGroup(const __m256i& rep_input, const __m256i& ones,
+                          const int8_t*& wi, __m256i& weights, __m256i& reps,
+                          __m256i& result) {
+  // Load a 4x8 block of weights.
+  weights = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(wi));
+  wi += kNumInputsPerRegister;
+  // Normalize the signs on rep_input, weights, so weights is always +ve.
+  reps = _mm256_sign_epi8(rep_input, weights);
+  weights = _mm256_sign_epi8(weights, weights);
+  // Multiply 32x8-bit reps by 32x8-bit weights to make 16x16-bit results,
+  // with adjacent pairs added.
+  weights = _mm256_maddubs_epi16(weights, reps);
+  // Multiply 16x16-bit result by 16x16-bit ones to make 8x32-bit results,
+  // with  adjacent pairs added. What we really want is a horizontal add of
+  // 16+16=32 bit result, but there is no such instruction, so multiply by
+  // 16-bit ones instead. It is probably faster than all the sign-extending,
+  // permuting and adding that would otherwise be required.
+  weights = _mm256_madd_epi16(weights, ones);
+  result = _mm256_add_epi32(result, weights);
+}
+    
+      // Split the part (horizontally), and save the split result into
+  // parts_splitted. Note that it is caller's responsibility to release the
+  // memory owns by parts_splitted. On the other hand, the part is unchanged
+  // during this process and still owns the blobs, so do NOT call DeleteBoxes
+  // when freeing the colpartitions in parts_splitted.
+  void SplitCPHor(ColPartition* part,
+                  GenericVector<ColPartition*>* parts_splitted);
+    
+    
+    {
+/**
+ * @name tess_add_doc_word
+ *
+ * Add the given word to the document dictionary
+ */
+void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
+  getDict().add_document_word(*word_choice);
+}
+}  // namespace tesseract
+
+    
+    namespace caffe2 {
+    }
+    
+    
+<details>
+    
+    namespace {
+    }
+    
+      FlexibleTopKGradientOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws) {}
+    
+    namespace caffe2 {
+    }
+    
+    #include 'hphp/runtime/base/apc-object.h'
+#include 'hphp/runtime/base/apc-array.h'
+#include 'hphp/runtime/base/apc-stats.h'
+#include 'hphp/runtime/base/object-data.h'
+#include 'hphp/runtime/base/type-object.h'
+#include 'hphp/runtime/ext/apc/ext_apc.h'
+#include 'hphp/runtime/base/collections.h'
+#include 'hphp/runtime/ext/collections/ext_collections-map.h'
+#include 'hphp/runtime/ext/collections/ext_collections-set.h'
+#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
+#include 'hphp/runtime/base/data-walker.h'
+    
+      static void ParseIniFile(const std::string &filename,
+                           const bool is_system = true);
+  static void ParseIniFile(const std::string &filename, IniSettingMap &ini,
+                           const bool constants_only = false,
+                           const bool is_system = true);
+    
+    #endif
+
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    std::string FileUtil::normalizeDir(const std::string &dirname) {
+  /*
+   * normalizeDir may be called before very early one, such as
+   * in Runtime option parsing, when MemoryManager may not have been
+   * initialized
    */
-  void announceFailure();
+  tl_heap.getCheck();
+  string ret = FileUtil::canonicalize(dirname).toCppString();
+  if (!ret.empty() && !isDirSeparator(ret[ret.length() - 1])) {
+    ret += getDirSeparator();
+  }
+  return ret;
+}
     
-    #include 'Notifier.h'
+    #include <memory>
     
-    #include 'common.h'
+      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
+    
+    
+    {  void setTaskFactory(DHTTaskFactory* taskFactory);
+};
+    
+    DHTRoutingTableSerializer::DHTRoutingTableSerializer(int family)
+    : family_(family)
+{
+}
+    
+    #include <vector>
+#include <memory>
+    
+    #endif // D_DHT_TASK_H
+
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    std::vector<DNSCache::AddrEntry>::const_iterator
+DNSCache::CacheEntry::find(const std::string& addr) const
+{
+  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
+    if ((*i).addr_ == addr) {
+      return i;
+    }
+  }
+  return addrEntries_.end();
+}
