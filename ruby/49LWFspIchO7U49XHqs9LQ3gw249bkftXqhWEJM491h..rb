@@ -1,91 +1,68 @@
 
         
-            def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
-            end
-          rescue ThreadError # ignore empty queue error
+            gu = GroupUser.find_by(user_id: moderator.id, group_id: group.id)
+    expect(gu.notification_level).to eq(NotificationLevels.all[:regular])
+  end
+    
+    UserEmail.seed do |ue|
+  ue.id = -1
+  ue.email = 'no_email'
+  ue.primary = true
+  ue.user_id = -1
+end
+    
+        self.client.send_regreq_chall_response(self, chall)
+    res = wait_for( IAX_SUBTYPE_REGACK, IAX_SUBTYPE_REGREJ )
+    return if not res
+    
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
+    
+              # Decodes the cname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_cname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
+    
+    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
+    
+            def create
+          authorize! :create, Spree::OptionType
+          @option_type = Spree::OptionType.new(option_type_params)
+          if @option_type.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_type)
           end
         end
-      end
-      workers.map(&:join)
-    end
     
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-            it 'sets up screenshots folder in fastlane folder' do
-          expect(options[:screenshots_path]).to eq('./fastlane/screenshots')
+            def destroy
+          authorize! :destroy, @product_property
+          @product_property.destroy
+          respond_with(@product_property, status: 204)
         end
     
-            it 'review_user_needed is true' do
-          uploader.send('set_review_information', version, options)
-          expect(version).to have_received(:review_user_needed=).with(true)
+            def create
+          authorize! :create, Property
+          @property = Spree::Property.new(property_params)
+          if @property.save
+            respond_with(@property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@property)
+          end
         end
-      end
-    
-          def self.details
-        'see adb --help for more details'
-      end
-    
-        s = StringIO.new
-    SystemConfig.dump_verbose_config s
-    # Dummy summary file, asciibetically first, to control display title of gist
-    files['# #{f.name} - #{timestamp}.txt'] = { content: brief_build_info(f) }
-    files['00.config.out'] = { content: s.string }
-    files['00.doctor.out'] = { content: Utils.popen_read('#{HOMEBREW_PREFIX}/bin/brew', 'doctor', err: :out) }
-    unless f.core_formula?
-      tap = <<~EOS
-        Formula: #{f.name}
-        Tap: #{f.tap}
-        Path: #{f.path}
-      EOS
-      files['00.tap.out'] = { content: tap }
-    end
-    
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
-    end
-    dirs.delete 'etc'
-    dirs.delete 'var'
-    
-        Keg::PRUNEABLE_DIRECTORIES.each do |dir|
-      next unless dir.directory?
-      dir.find do |path|
-        path.extend(ObserverPathnameExtension)
-        if path.symlink?
-          unless path.resolved_path_exists?
-            if path.to_s =~ Keg::INFOFILE_RX
-              path.uninstall_info unless ARGV.dry_run?
-            end
-    
-    When /^I fill out change password section with my password and '([^']*)' and '([^']*)'$/ do |new_pass, confirm_pass|
-  fill_change_password_section(@me.password, new_pass, confirm_pass)
-end
-    
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
-  end
-end
-
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
-    
-          sign_in alice, scope: :user
-    end
