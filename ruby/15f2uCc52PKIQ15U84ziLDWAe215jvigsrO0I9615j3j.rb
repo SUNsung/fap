@@ -1,107 +1,92 @@
 
         
-            def build_pages(&block)
-      raise NotImplementedError
+          def command
+    abort 'This command requires a command argument' if ARGV.empty?
+    
+        mode = OpenStruct.new
+    mode.dry_run = true if ARGV.dry_run?
+    
+              private
+    
+              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_e_data(input)
+            input.value[0].value
+          end
+        end
+      end
     end
   end
 end
-
     
-        def initialize
-      @pages = {}
-    end
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
     
-        def url
-      @url ||= URL.parse request.base_url
-    end
-    
-          def inherited(subclass)
-        super
-        subclass.base_url = base_url
-        subclass.dir = dir
-      end
-    end
-    
-          str.truncate(max_length).ljust(max_length) << tag.to_s
-    end
-    
-        def normalized_path
-      path == '' ? '/' : path
-    end
-    
-            if h1 = at_css('h1')
-          h1.prepend_child(css('.view-source', '.improve-docs'))
-        end
-    
-        def set_account_moderation_note
-      @account_moderation_note = AccountModerationNote.find(params[:id])
-    end
-  end
+      task :all => [:readmes, :index]
 end
-
     
-          @account.reset_avatar!
-      @account.reset_header!
-      @account.save!
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
     
-        def resubscribe
-      authorize :instance, :resubscribe?
-      params.require(:by_domain)
-      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
-      redirect_to admin_instances_path
-    end
-    
-          redirect_to admin_report_path(@report)
-    end
-    
-      def account_from_topic
-    if hub_topic.present? && local_domain? && account_feed_path?
-      Account.find_local(hub_topic_params[:username])
-    end
-  end
-    
-        local_gem = plugins_arg.collect { |plugin| ::File.extname(plugin) == '.gem' }.uniq
-    
-                              specs
-                        end
-  end
-end # class Logstash::PluginManager
-
-    
-        def self.find_by_name_with_wildcards(pattern)
-      re = transform_pattern_into_re(pattern)
-      ::Gem::Specification.find_all.select do |specification|
-        specification.name =~ re
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
       end
     end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
     
-        validate_target_file
-    LogStash::Bundler.invoke!({:package => true, :all => true})
-    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
-    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
     
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
-    
-    Gem::Specification.new do |gem|
-  gem.authors       = ['Elastic']
-  gem.email         = ['info@elastic.co']
-  gem.description   = %q{Logstash plugin API}
-  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
-  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
-  gem.license       = 'Apache License (2.0)'
-    
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
+        def poster
+      'poster='#{@poster}'' if @poster
     end
