@@ -1,264 +1,293 @@
 
         
-        // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel AVX intrinsics to access the SIMD instruction set.
-double DotProductAVX(const double* u, const double* v, int n) {
-  int max_offset = n - 4;
-  int offset = 0;
-  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
-  // v, and multiplying them together in parallel.
-  __m256d sum = _mm256_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 4;
-    // Aligned load is reputedly faster but requires 32 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
-      // Use aligned load.
-      __m256d floats1 = _mm256_load_pd(u);
-      __m256d floats2 = _mm256_load_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_load_pd(u + offset);
-        floats2 = _mm256_load_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    } else {
-      // Use unaligned load.
-      __m256d floats1 = _mm256_loadu_pd(u);
-      __m256d floats2 = _mm256_loadu_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_loadu_pd(u + offset);
-        floats2 = _mm256_loadu_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    }
-  }
-  // Add the 4 product sums together horizontally. Not so easy as with sse, as
-  // there is no add across the upper/lower 128 bit boundary, so permute to
-  // move the upper 128 bits to lower in another register.
-  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
-  sum = _mm256_hadd_pd(sum, sum2);
-  sum = _mm256_hadd_pd(sum, sum);
-  double result;
-  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
-  // instruction, as that introduces a 70 cycle delay. All this casting is to
-  // fool the intrinsics into thinking we are extracting the bottom int64.
-  auto cast_sum = _mm256_castpd_si256(sum);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored '-Wstrict-aliasing'
-  *(reinterpret_cast<int64_t*>(&result)) =
-#if defined(_WIN32) || defined(__i386__)
-      // This is a very simple workaround that is activated
-      // for all platforms that do not have _mm256_extract_epi64.
-      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
-      ((uint64_t*)&cast_sum)[0]
-#else
-      _mm256_extract_epi64(cast_sum, 0)
-#endif
-      ;
-#pragma GCC diagnostic pop
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
-  int max_offset = n - 8;
-  int offset = 0;
-  // Accumulate a set of 4 32-bit sums in sum, by loading 8 pairs of 8-bit
-  // values, extending to 16 bit, multiplying to make 32 bit results.
-  __m128i sum = _mm_setzero_si128();
-  if (offset <= max_offset) {
-    offset = 8;
-    __m128i packed1 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(u));
-    __m128i packed2 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(v));
-    sum = _mm_cvtepi8_epi16(packed1);
-    packed2 = _mm_cvtepi8_epi16(packed2);
-    // The magic _mm_add_epi16 is perfect here. It multiplies 8 pairs of 16 bit
-    // ints to make 32 bit results, which are then horizontally added in pairs
-    // to make 4 32 bit results that still fit in a 128 bit register.
-    sum = _mm_madd_epi16(sum, packed2);
-    while (offset <= max_offset) {
-      packed1 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(u + offset));
-      packed2 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(v + offset));
-      offset += 8;
-      packed1 = _mm_cvtepi8_epi16(packed1);
-      packed2 = _mm_cvtepi8_epi16(packed2);
-      packed1 = _mm_madd_epi16(packed1, packed2);
-      sum = _mm_add_epi32(sum, packed1);
-    }
-  }
-  // Sum the 4 packed 32 bit sums and extract the low result.
-  sum = _mm_hadd_epi32(sum, sum);
-  sum = _mm_hadd_epi32(sum, sum);
-  int32_t result = _mm_cvtsi128_si32(sum);
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
-    
-    #include <cstdint>
-#include <vector>
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-     private:
-  // The unique ID of this VC object.
-  int my_id_;
-  // Whether the parameter was changed_ and thus needs to be rewritten.
-  bool changed_;
-  // The actual ParamType of this VC object.
-  ParamType param_type_;
-    
-    /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
- */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-    }
-    
-    #include <osquery/config.h>
-#include <osquery/registry_factory.h>
-    
-    #include <string>
-#include <vector>
-    
-      // Retrieve a basic events parser.
-  auto plugin = Config::get().getParser('events');
-  EXPECT_TRUE(plugin != nullptr);
-  const auto& data = plugin->getData();
-    
-      update['awesome'] = R'raw({
-    'options': {
-      'custom_nested_json': 
-        {'foo':1,'bar':'baz'}
-    }
-  })raw';
-  auto s = c.update(update);
-  EXPECT_TRUE(s.ok());
-  EXPECT_EQ(s.toString(), 'OK');
-    
-    class ExampleTable : public TablePlugin {
- private:
-  TableColumns columns() const {
-    return {
-        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
-        std::make_tuple(
-            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
-    };
+        std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status) {
+  if (!PyList_Check(input_constant_tensor_values)) {
+    TF_SetStatus(out_status, TF_INVALID_ARGUMENT, 'Invalid python value');
+    return std::vector<string>();
   }
     }
     
-    void Waves3D::update(float time)
-{
-    int i, j;
-    for (i = 0; i < _gridSize.width + 1; ++i)
-    {
-        for (j = 0; j < _gridSize.height + 1; ++j)
-        {
-            Vec3 v = getOriginalVertex(Vec2(i ,j));
-            v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * 0.01f) * _amplitude * _amplitudeRate);
-            //CCLOG('v.z offset is %f\n', (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude * _amplitudeRate));
-            setVertex(Vec2(i, j), v);
-        }
-    }
-}
     
-    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
+    {}  // namespace tensorflow
 
     
-    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
-{
-    Animation *animation = new (std::nothrow) Animation();
-    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
-    animation->autorelease();
-    return animation;
+    
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
+        }
+      }
+    }
+  }
 }
     
-        /** Purges the cache. It releases all the Animation objects and the shared instance.
-		@js NA
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    void ImportNumpy() {
+  import_array1();
+}
+    
+    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
+  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
+                                   'before PyExceptionRegistry::Lookup()';
+  DCHECK_NE(code, TF_OK);
+  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
+      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
+  return singleton_->exc_types_[code];
+}
+    
+    #include 'caffe/common.hpp'
+    
+    #include <vector>
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #endif  // CAFFE_CUDNN_CONV_LAYER_HPP_
+
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t bias_desc_;
+  cudnnFilterDescriptor_t filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
+    
+    #include 'caffe/layers/lrn_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+    // If the type list contains only one type, you can write that type
+// directly without Types<...>:
+//   INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, int);
+    
+      const std::string& file() const { return file_; }
+  int line() const { return line_; }
+  int index() const { return index_; }
+  int write_fd() const { return write_fd_; }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20>
+class ValueArray20 {
+ public:
+  ValueArray20(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5),
+      v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12),
+      v13_(v13), v14_(v14), v15_(v15), v16_(v16), v17_(v17), v18_(v18),
+      v19_(v19), v20_(v20) {}
+    }
+    
+      tuple() : f0_(), f1_(), f2_() {}
+    
+        for (int i = 2; i*i <= n; i++) {
+      // n is divisible by an integer other than 1 and itself.
+      if ((n % i) == 0) return false;
+    }
+    
+    TEST(CorruptionTest, CorruptedDescriptor) {
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  dbi->TEST_CompactRange(0, nullptr, nullptr);
+    }
+    
+    #if defined(__linux)
+static Slice TrimSpace(Slice s) {
+  size_t start = 0;
+  while (start < s.size() && isspace(s[start])) {
+    start++;
+  }
+  size_t limit = s.size();
+  while (limit > start && isspace(s[limit-1])) {
+    limit--;
+  }
+  return Slice(s.data() + start, limit - start);
+}
+#endif
+    
+    
+    {  FileLock* lock;
+  const std::string lockname = LockFileName(dbname);
+  result = env->LockFile(lockname, &lock);
+  if (result.ok()) {
+    uint64_t number;
+    FileType type;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type) &&
+          type != kDBLockFile) {  // Lock file will be deleted at end
+        Status del = env->DeleteFile(dbname + '/' + filenames[i]);
+        if (result.ok() && !del.ok()) {
+          result = del;
+        }
+      }
+    }
+    env->UnlockFile(lock);  // Ignore error since state is already gone
+    env->DeleteFile(lockname);
+    env->DeleteDir(dbname);  // Ignore error in case dir contains other files
+  }
+  return result;
+}
+    
+      // Have we encountered a background error in paranoid mode?
+  Status bg_error_ GUARDED_BY(mutex_);
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    namespace leveldb {
+    }
+    
+        if (type == kZeroType && length == 0) {
+      // Skip zero length record without reporting any drops since
+      // such records are produced by the mmap based writing code in
+      // env_posix.cc that preallocates file regions.
+      buffer_.clear();
+      return kBadRecord;
+    }
+    
+      // Compute the crc of the record type and the payload.
+  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
+  crc = crc32c::Mask(crc);                 // Adjust for storage
+  EncodeFixed32(buf, crc);
+    
+      std::string const dbname_;
+  Env* const env_;
+  InternalKeyComparator const icmp_;
+  InternalFilterPolicy const ipolicy_;
+  Options const options_;
+  bool owns_info_log_;
+  bool owns_cache_;
+  TableCache* table_cache_;
+  VersionEdit edit_;
+    
+    http://www.cocos2d-x.org
+    
+        /** 
+     * initializes the action
+     * @param duration In seconds.
      */
-    static void destroyInstance();
+    bool initWithDuration(float duration, const Vec2& position, float height, int jumps);
     
-    void AtlasNode::setBlendFunc(const BlendFunc &blendFunc)
-{
-    _blendFunc = blendFunc;
-}
-    
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-bool ImGui_ImplAllegro5_ProcessEvent(ALLEGRO_EVENT *ev)
-{
-    ImGuiIO& io = ImGui::GetIO();
+        tHashElement *element = nullptr;
+    // we should convert it to Ref*, because we save it as Ref*
+    Ref *tmp = target;
+    HASH_FIND_PTR(_targets, &tmp, element);
+    if (! element)
+    {
+        element = (tHashElement*)calloc(sizeof(*element), 1);
+        element->paused = paused;
+        target->retain();
+        element->target = target;
+        HASH_ADD_PTR(_targets, target, element);
     }
     
-    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
-{
-    //printf('key_up_func %d\n', key);
-    ImGuiIO& io = ImGui::GetIO();
-    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
-        io.KeysDown[key + 256] = false;
-    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
-    (void)x; (void)y; // Unused
-}
+        /** 
+     * @brief Initializes with a duration and destination percentage. 
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, float percent);
     
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCAnimationCache.h'
+#include '2d/CCSpriteFrameCache.h'
+#include 'platform/CCFileUtils.h'
     
-    void CleanupRenderTarget()
-{
-    WaitForLastSubmittedFrame();
+    
+    {    if( _isOpacityModifyRGB )
+    {
+        tmp.r = tmp.r * _displayedOpacity/255;
+        tmp.g = tmp.g * _displayedOpacity/255;
+        tmp.b = tmp.b * _displayedOpacity/255;
     }
+    Node::setColor(tmp);
+}
     
     #include 'imgui.h'
-#include 'imgui_impl_dx10.h'
+#include 'imgui_stl.h'
     
-    void ImGui_ImplDX11_NewFrame()
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    int main(int, char**)
 {
-    if (!g_pFontSampler)
-        ImGui_ImplDX11_CreateDeviceObjects();
-}
-
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
     
-    #include 'common.h'
+        // Setup style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
     
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
     
-    {} // namespace aria2
-
-    
-    void DHTRoutingTable::setTaskQueue(DHTTaskQueue* taskQueue)
-{
-  taskQueue_ = taskQueue;
-}
-    
-    #include 'common.h'
-    
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) = 0;
+    // Data
+static double       g_Time = 0.0f;
+static bool         g_MousePressed[3] = { false, false, false };
+static CIwTexture*  g_FontTexture = NULL;
+static char*        g_ClipboardText = NULL;
+static bool         g_osdKeyboardEnabled = false;
