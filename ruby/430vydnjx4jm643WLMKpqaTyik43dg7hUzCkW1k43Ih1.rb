@@ -1,55 +1,75 @@
 
         
-              raise Discourse::InvalidParameters.new(:to_address) unless args[:to_address].present?
-    
-      protected
-    
-          def get_type
-        return 'Reference' if base_url.path == '/spec/'
-    
-        options[:attribution] = <<-HTML
-      &copy; 2011&ndash;2018 Twitter, Inc.<br>
-      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
-      Code licensed under the MIT License.<br>
-      Documentation licensed under the Creative Commons Attribution License v3.0.
-    HTML
-    
-          html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
-    
-        def types_as_json
-      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+            it 'returns a label 'Yes' if a given agent is working' do
+      stub(@agent).working? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Yes'
     end
     
-        private
+              it 'doesn't crash without any control links' do
+            valid_parsed_data.delete(:control_links)
     
-            css('h2:not([id]) a[id]:not([href])').each do |node|
-          node.parent['id'] = node['id']
-          node.before(node.children).remove
-        end
-    
-      def id
-    object.id.to_s
+    describe HuginnScheduler do
+  before(:each) do
+    @rufus_scheduler = Rufus::Scheduler.new
+    @scheduler = HuginnScheduler.new
+    stub(@scheduler).setup {}
+    @scheduler.setup!(@rufus_scheduler, Mutex.new)
   end
     
-      def participation_answer(user)
-    poll_participations.find_by(author_id: user.person.id)
+        it 'returns nil when passed nil' do
+      expect(Utils.parse_duration(nil)).to be_nil
+    end
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
   end
     
-      describe '#profile_photo_url' do
-    it 'returns a large profile photo url' do
-      @service.uid = 'abc123'
-      @service.access_token = 'token123'
-      expect(@service.profile_photo_url).to eq(
-      'https://graph.facebook.com/abc123/picture?type=large&access_token=token123'
-      )
+          @log.level = 0
+      expect(@log).to be_valid
     end
   end
     
-          def save_request_parameters
-        session[:client_id] = @o_auth_application.client_id
-        session[:response_type] = @response_type
-        session[:redirect_uri] = @redirect_uri
-        session[:scopes] = scopes_as_space_seperated_values
-        session[:state] = params[:state]
-        session[:nonce] = params[:nonce]
+          it 'makes options symbol-indifferent before validating' do
+        agent = Agents::SomethingSource.new(:name => 'something')
+        agent.user = users(:bob)
+        agent.options['bad'] = true
+        expect(agent).to have(1).error_on(:base)
+        agent.options['bad'] = false
+        expect(agent).to have(0).errors_on(:base)
       end
+    
+      it 'raises a TypeError when passed nil' do
+    lambda { srand(nil) }.should raise_error(TypeError)
+  end
+    
+      ruby_version_is '2.5' do
+    describe ':uplevel keyword argument' do
+      before :each do
+        $VERBOSE = true
+      end
+    
+          # Creates a masked version of the authenticity token that varies
+      # on each request. The masking is used to mitigate SSL attacks
+      # like BREACH.
+      def mask_token(token)
+        token = decode_token(token)
+        one_time_pad = SecureRandom.random_bytes(token.length)
+        encrypted_token = xor_byte_strings(one_time_pad, token)
+        masked_token = one_time_pad + encrypted_token
+        encode_token(masked_token)
+      end
+    
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+        it 'corrects one hash parameter with braces and a trailing comma' do
+      corrected = autocorrect_source('where({ x: 1, y: 2, })')
+      expect(corrected).to eq('where(x: 1, y: 2)')
+    end
