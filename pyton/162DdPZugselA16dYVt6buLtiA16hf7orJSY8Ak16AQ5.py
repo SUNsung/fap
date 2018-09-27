@@ -1,74 +1,132 @@
 
         
-        
-class CITextExtension(CreateExtension):
+        from .compat import is_py2, builtin_str, str
     
-        # If protocol is None, the URLs in the sitemap will use the protocol
-    # with which the sitemap was requested.
-    protocol = None
+            if is_stream:
+            body = data
     
-            #type_, ext, size = url_info(url)
-        #print_info(site_info, title, type_, size)
-        #if not info_only:
-            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
-    
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
-    
-    __all__ = ['fc2video_download']
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    # If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-import sys
-import os
-import inspect
-    
-        # held_more_than and held_less_than: trigger on released (if in time range)
-    # held_more_than: trigger after pressed with calculation
-    # held_less_than: trigger on released with calculation
-    # neither: trigger on pressed
+    from sklearn.datasets import fetch_20newsgroups_vectorized
+from sklearn.metrics import accuracy_score
+from sklearn.utils.validation import check_array
     
     
-@asyncio.coroutine
-def async_trigger(hass, config, action):
-    '''Listen for events based on configuration.'''
-    event = config.get(CONF_EVENT)
-    offset = config.get(CONF_OFFSET)
+def benchmark(estimator, data):
+    gc.collect()
+    print('Benching %s' % estimator)
+    t0 = time()
+    estimator.fit(data)
+    training_time = time() - t0
+    data_t = estimator.transform(data)
+    data_r = estimator.inverse_transform(data_t)
+    reconstruction_error = np.mean(np.abs(data - data_r))
+    return {'time': training_time, 'error': reconstruction_error}
     
-        def axis_device_discovered(service, discovery_info):
-        '''Call when axis devices has been found.'''
-        host = discovery_info[CONF_HOST]
-        name = discovery_info['hostname']
-        serialnumber = discovery_info['properties']['macaddress']
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
     
-        def scan_completed_callback(scan_wizard, result, address, name):
-        '''Restart scan wizard to constantly check for new buttons.'''
-        if result == pyflic.ScanWizardResult.WizardSuccess:
-            _LOGGER.info('Found new button %s', address)
-        elif result != pyflic.ScanWizardResult.WizardFailedTimeout:
-            _LOGGER.warning(
-                'Failed to connect to button %s. Reason: %s', address, result)
+        ###########################################################################
+    # Set transformer input
+    ###########################################################################
+    transformers = {}
+    
+        print('Sampling algorithm performance:')
+    print('===============================')
+    print('Results are averaged over %s repetition(s).' % opts.n_times)
+    print('')
     
     
-def setup(hass, config):
-    '''Listen for browse_url events.'''
-    import webbrowser
+def bench_scikit_tree_regressor(X, Y):
+    '''Benchmark with scikit-learn decision tree regressor'''
     
-            # We cover all current fields above, but just in case we start
-        # supporting more fields in the future.
-        updated_value.update(cur_value)
-        updated_value.update(new_value)
-        data[index] = updated_value
+    
+def issue_role(name, rawtext, text, lineno,
+               inliner, options=None, content=None):
+    '''Sphinx role for linking to an issue. Must have
+    `issues_uri` or `issues_github_path` configured in ``conf.py``.
+    
+    
+def rev_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'http://hg.scrapy.org/scrapy/changeset/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'r' + text, refuri=ref, **options)
+    return [node], []
+
+    
+            if 'latency' in request.args:
+            latency = float(request.args['latency'][0])
+            reactor.callLater(latency, self._finish, request)
+            return NOT_DONE_YET
+    
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+        requires_project = False
+    default_settings = {'SPIDER_LOADER_WARN_ONLY': True}
+    
+                appid = random.choice(self.working_appid_list)
+            return str(appid)
+        else:
+            for _ in xrange(0, 10):
+                appid = self.public_appid.get()
+                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
+                    continue
+                else:
+                    return appid
+            return None
+    
+    
+if __name__ == '__main__':
+    sys.path.append(root_path)
+    
+    
+def best_server(probe_nat=False):
+    best_server = None
+    prober = new_pteredor(probe_nat=probe_nat)
+    prober.qualified = True
+    if not probe_nat:
+        prober.nat_type = 'unknown'
+        prober.rs_cone_flag = 0
+    
+    # Predefined token types
+EOR_TOKEN_TYPE = 1
+    
+                if stream_id in self.streams:
+                urls = self.streams[stream_id]['src']
+                ext = self.streams[stream_id]['container']
+                total_size = self.streams[stream_id]['size']
+            else:
+                urls = self.dash_streams[stream_id]['src']
+                ext = self.dash_streams[stream_id]['container']
+                total_size = self.dash_streams[stream_id]['size']
+    
+    import json
+import re
+import base64
+import time
+    
+    
+class CNTV(VideoExtractor):
+    name = 'CNTV.com'
+    stream_types = [
+        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
+        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
+        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
+        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
+        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
+    ]
+    
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
