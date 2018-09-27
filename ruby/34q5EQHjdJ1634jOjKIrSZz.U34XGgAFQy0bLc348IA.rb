@@ -1,220 +1,275 @@
 
         
-              expected_options = FastlaneCore::Configuration.create(Deliver::Options.available_options, {
-        description: 'My description',
-        app_identifier: 'abcd',
-        metadata_path: 'metadata/path',
-        force: true
-      })
-    
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << ''#{tag}''
-        cmd << options[:commit].to_s if options[:commit]
-    
-          def self.run(params)
-        unless Helper.test?
-          UI.message('Install using `brew install homebrew/boneyard/appledoc`')
-          UI.user_error!('appledoc not installed') if `which appledoc`.length == 0
-        end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :file,
-                                       env_name: 'FL_ARTIFACTORY_FILE',
-                                       description: 'File to be uploaded to artifactory',
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :repo,
-                                       env_name: 'FL_ARTIFACTORY_REPO',
-                                       description: 'Artifactory repo to put the file in',
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :repo_path,
-                                       env_name: 'FL_ARTIFACTORY_REPO_PATH',
-                                       description: 'Path to deploy within the repo, including filename',
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :endpoint,
-                                       env_name: 'FL_ARTIFACTORY_ENDPOINT',
-                                       description: 'Artifactory endpoint',
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :username,
-                                       env_name: 'FL_ARTIFACTORY_USERNAME',
-                                       description: 'Artifactory username',
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :password,
-                                       env_name: 'FL_ARTIFACTORY_PASSWORD',
-                                       description: 'Artifactory password',
-                                       sensitive: true,
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :properties,
-                                       env_name: 'FL_ARTIFACTORY_PROPERTIES',
-                                       description: 'Artifact properties hash',
-                                       is_string: false,
-                                       default_value: {},
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :ssl_pem_file,
-                                       env_name: 'FL_ARTIFACTORY_SSL_PEM_FILE',
-                                       description: 'Location of pem file to use for ssl verification',
-                                       default_value: nil,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :ssl_verify,
-                                       env_name: 'FL_ARTIFACTORY_SSL_VERIFY',
-                                       description: 'Verify SSL',
-                                       is_string: false,
-                                       default_value: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :proxy_username,
-                                       env_name: 'FL_ARTIFACTORY_PROXY_USERNAME',
-                                       description: 'Proxy username',
-                                       default_value: nil,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :proxy_password,
-                                       env_name: 'FL_ARTIFACTORY_PROXY_PASSWORD',
-                                       description: 'Proxy password',
-                                       sensitive: true,
-                                       default_value: nil,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :proxy_address,
-                                       env_name: 'FL_ARTIFACTORY_PROXY_ADDRESS',
-                                       description: 'Proxy address',
-                                       default_value: nil,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :proxy_port,
-                                       env_name: 'FL_ARTIFACTORY_PROXY_PORT',
-                                       description: 'Proxy port',
-                                       default_value: nil,
-                                       optional: true)
-        ]
-      end
-    end
-  end
+        group :docs do
+  gem 'typhoeus'
+  gem 'nokogiri'
+  gem 'html-pipeline'
+  gem 'image_optim'
+  gem 'image_optim_pack', platforms: :ruby
+  gem 'progress_bar', require: false
+  gem 'unix_utils', require: false
+  gem 'tty-pager', require: false
 end
-
     
-        case params
-    when EventFilter.push
-      events.where(action: Event::PUSHED)
-    when EventFilter.merged
-      events.where(action: Event::MERGED)
-    when EventFilter.comments
-      events.where(action: Event::COMMENTED)
-    when EventFilter.team
-      events.where(action: [Event::JOINED, Event::LEFT, Event::EXPIRED])
-    when EventFilter.issue
-      events.where(action: [Event::CREATED, Event::UPDATED, Event::CLOSED, Event::REOPENED])
-    end
-  end
-    
-            def generate_temporarily_email(username)
-          'temp-email-for-oauth-#{username}@gitlab.localhost'
+        def handle_response(response)
+      if process_response?(response)
+        instrument 'process_response.scraper', response: response do
+          process_response(response)
         end
+      else
+        instrument 'ignore_response.scraper', response: response
+      end
+    rescue => e
+      if Docs.rescue_errors
+        instrument 'error.doc', exception: e, url: response.url
+        nil
+      else
+        raise e
       end
     end
-  end
-end
-
     
-              <<-SQL.strip_heredoc
-            (CASE
-              WHEN (#{builds}) = (#{skipped}) AND (#{warnings}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{skipped}) THEN #{STATUSES[:skipped]}
-              WHEN (#{builds}) = (#{success}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{created}) THEN #{STATUSES[:created]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) + (#{canceled}) THEN #{STATUSES[:canceled]}
-              WHEN (#{builds}) = (#{created}) + (#{skipped}) + (#{pending}) THEN #{STATUSES[:pending]}
-              WHEN (#{running}) + (#{pending}) > 0 THEN #{STATUSES[:running]}
-              WHEN (#{manual}) > 0 THEN #{STATUSES[:manual]}
-              WHEN (#{created}) > 0 THEN #{STATUSES[:running]}
-              ELSE #{STATUSES[:failed]}
-            END)
-          SQL
-        end
-      end
+        def terminal_width
+      return @terminal_width if defined? @terminal_width
     
-            MergeRequest
-          .where(id: start_id..stop_id)
-          .where(latest_merge_request_diff_id: nil)
-          .each_batch(of: BATCH_SIZE) do |relation|
+          private
     
-          def link_url
-        raise NotImplementedError
-      end
-    end
-  end
-end
-
-    
-            def entity
-          'pipeline'
+            # Remove ng-* attributes
+        css('*').each do |node|
+          node.attributes.each_key do |attribute|
+            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
+          end
         end
     
-        # The environment that this machine is a part of.
-    #
-    # @return [Environment]
-    attr_reader :env
-    
-            # Upload a file to the remote machine.
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
         #
-        # @param [String] from Path of the file locally to upload.
-        # @param [String] to Path of where to save the file on the remote
-        #   machine.
-        def upload(from, to)
+        # @param [Environment] env Vagrant::Environment object of the
+        #   environment that this configuration has been loaded into. This
+        #   gives you convenient access to things like the the root path
+        #   and so on.
+        # @param [ErrorRecorder] errors
+        def validate(env, errors)
         end
-    
-              result
-        end
-    
-      def collection_presenter
-    ActivityPub::CollectionPresenter.new(
-      id: account_collection_url(@account, params[:id]),
-      type: :ordered,
-      size: @size,
-      items: @statuses
-    )
+      end
+    end
   end
 end
 
     
-      def upgrade_account
-    if signed_request_account.ostatus?
-      signed_request_account.update(last_webfingered_at: nil)
-      ResolveAccountWorker.perform_async(signed_request_account.acct)
-    end
+            # This contains all the command plugins by name, and returns
+        # the command class and options. The command class is wrapped
+        # in a Proc so that it can be lazy loaded.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        attr_reader :commands
     
-        def destroy
-      authorize @custom_emoji, :destroy?
-      @custom_emoji.destroy!
-      log_action :destroy, @custom_emoji
-      flash[:notice] = I18n.t('admin.custom_emojis.destroyed_msg')
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
-    end
-    
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
+              nil
         end
     
-      def status_finder
-    StatusFinder.new(params[:url])
-  end
-    
-      def hub_topic_uri
-    @_hub_topic_uri ||= Addressable::URI.parse(hub_topic).normalize
-  end
-    
-      def set_account
-    @account = Account.find(params[:id])
-  end
-    
-      def set_account
-    @account = Account.find(params[:id])
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
+        end
+      end
+    end
   end
 end
 
     
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
+    end
+  end
+end
+    
+    When /^I submit the password reset form$/ do
+  submit_password_reset_form
+end
+    
+    When /^I have user with username '([^']*)' in an aspect called '([^']*)'$/ do |username, aspect|
+  user = User.find_by_username(username)
+  contact = @me.reload.contact_for(user.person)
+  contact.aspects << @me.aspects.find_by_name(aspect)
+end
+    
+    require 'cucumber/rails'
+    
+      class SendPrivate < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+    # The module that contains everything Sass-related:
+#
+# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
+# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
+# * {Sass::SyntaxError} is raised when Sass encounters an error.
+# * {Sass::CSS} handles conversion of CSS to Sass.
+#
+# Also see the {file:SASS_REFERENCE.md full Sass reference}.
+module Sass
+  class << self
+    # @private
+    attr_accessor :tests_running
+  end
+    
+        # Transform
+    #
+    #     foo
+    #       bar
+    #         color: blue
+    #       baz
+    #         color: blue
+    #
+    # into
+    #
+    #     foo
+    #       bar, baz
+    #         color: blue
+    #
+    # @param root [Tree::Node] The parent node
+    def fold_commas(root)
+      prev_rule = nil
+      root.children.map! do |child|
+        unless child.is_a?(Tree::RuleNode)
+          fold_commas(child) if child.is_a?(Tree::DirectiveNode)
+          next child
+        end
+    
+        # Set an option for specifying `Encoding.default_external`.
+    #
+    # @param opts [OptionParser]
+    def encoding_option(opts)
+      encoding_desc = 'Specify the default encoding for input files.'
+      opts.on('-E', '--default-encoding ENCODING', encoding_desc) do |encoding|
+        Encoding.default_external = encoding
+      end
+    end
+    
+          opts.on('-v', '--version', 'Print the Sass version.') do
+        puts('Sass #{Sass.version[:string]}')
+        exit
+      end
+    end
+    
+        assert_match /Delete this Page/, last_response.body, ''Delete this Page' link is blocked in page template'
+    assert_match /New/,              last_response.body, ''New' button is blocked in page template'
+    assert_match /Upload/,           last_response.body, ''Upload' link is blocked in page template'
+    assert_match /Rename/,           last_response.body, ''Rename' link is blocked in page template'
+    assert_match /Edit/,             last_response.body, ''Edit' link is blocked in page template'
+    
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+        # make a backup of the option and sanitize it
+    base_path_original = base_path.dup
+    base_path = CGI.escape(base_path)
+    
+    # then let the user know if we changed the URL
+    unless base_path_original == base_path
+      puts <<MSG
+Warning: your base-path has been sanitized:
+  - original: '#{base_path_original}'
+  - sanitized: '#{base_path}'
+MSG
+    end
+      
+    # and finally, let others enjoy our hard work:
+    wiki_options[:base_path] = base_path
+  end
+  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.', 
+    'Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.') do |path|
+    wiki_options[:page_file_dir] = path
+  end
+  opts.on('--css', 'Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).') do
+    wiki_options[:css] = true
+  end
+  opts.on('--js', 'Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).') do
+    wiki_options[:js] = true
+  end
+  opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:).') do
+    wiki_options[:emoji] = true
+  end
+  opts.on('--no-edit', 'Disable the feature of editing pages.')  do
+    wiki_options[:allow_editing] = false
+  end
+  opts.on('--live-preview', 'Enable the live preview feature in page editor.') do
+    wiki_options[:live_preview] = true
+  end
+  opts.on('--no-live-preview', 'Disable the live preview feature in page editor.') do
+    wiki_options[:live_preview] = false
+  end
+  opts.on('--allow-uploads [MODE]', [:dir, :page], 'Enable file uploads.',
+    'If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.',
+    'If set to 'page', Gollum will store each upload at the currently edited page.') do |mode|
+    wiki_options[:allow_uploads]    = true
+    wiki_options[:per_page_uploads] = true if mode == :page
+  end
+  opts.on('--mathjax', 'Enable MathJax (renders mathematical equations).',
+    'By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.') do
+    wiki_options[:mathjax] = true
+  end
+  opts.on('--irb', 'Launch Gollum in 'console mode', with a predefined API.') do
+    options[:irb] = true
+  end
+  
+  opts.separator ''
+  opts.separator '  Minor:'
+  
+  opts.on('--h1-title', 'Use the first '<h1>' as page title.') do
+    wiki_options[:h1_title] = true
+  end
+  opts.on('--show-all', 'Also show files in the file view. By default, only valid pages are shown.') do
+    wiki_options[:show_all] = true
+  end
+  opts.on('--collapse-tree', 'Collapse the tree, when file view is opened. By default, the tree is expanded.') do
+    wiki_options[:collapse_tree] = true
+  end
+  opts.on('--user-icons [MODE]', [:gravatar, :identicon, :none], 'Use specific user-icons for history view.',
+    'Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.') do |mode|
+    wiki_options[:user_icons] = mode
+  end
+  opts.on('--mathjax-config [FILE]', 'Specify path to a custom MathJax configuration.',
+    'If not specified, uses the '<git-repo>/mathjax.config.js' file.') do |file|
+    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
+  end
+  opts.on('--plantuml-url [URL]', 'Sets the PlantUML server endpoint.') do |url|
+    wiki_options[:plantuml_url] = url
+  end
+  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory.') do |path|
+    wiki_options[:template_dir] = path
+  end
+  
+  opts.separator ''
+  opts.separator '  Common:'
+  
+  opts.on('--help', 'Display this message.') do
+    puts opts
+    exit 0
+  end
+  opts.on('--version', 'Display the current version of Gollum.') do
+    puts 'Gollum ' + Gollum::VERSION
+    exit 0
+  end
+  
+  opts.separator ''
+end
