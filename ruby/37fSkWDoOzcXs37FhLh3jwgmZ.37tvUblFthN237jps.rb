@@ -1,97 +1,224 @@
 
         
-          at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
+        module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
+        end
+    
+            # Helper method that will set a value if a value is given, or otherwise
+        # return the already set value.
+        #
+        # @param [Symbol] key Key for the data
+        # @param [Object] value Value to store.
+        # @return [Object] Stored value.
+        def self.get_or_set(key, value=UNSET_VALUE)
+          # If no value is to be set, then return the value we have already set
+          return data[key] if value.eql?(UNSET_VALUE)
+    
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
+    
+            # wait_for_ready waits until the communicator is ready, blocking
+        # until then. It will wait up to the given duration or raise an
+        # exception if something goes wrong.
+        #
+        # @param [Integer] duration Timeout in seconds.
+        # @return [Boolean] Will return true on successful connection
+        #   or false on timeout.
+        def wait_for_ready(duration)
+          # By default, we implement a naive solution.
+          begin
+            Timeout.timeout(duration) do
+              while true
+                return true if ready?
+                sleep 0.5
+              end
+            end
+          rescue Timeout::Error
+            # We timed out, we failed.
+          end
+    
+            # This returns all the registered configuration classes.
+        #
+        # @return [Hash]
+        def config
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:top])
+            end
+          end
+        end
+    
+      #
+  # HTTP POST request class wrapper.
+  #
+  class Post < Request
+    def initialize(uri = '/', proto = DefaultProtocol)
+      super('POST', uri, proto)
     end
   end
     
-        def display_error_message(ex)
-      unless options.backtrace
-        Rake.application.options.suppress_backtrace_pattern = backtrace_pattern if backtrace_pattern
-        trace '(Backtrace restricted to imported tasks)'
+              self.connection = nil
+        end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
+    
+              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def encode
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+        end
       end
+    end
+  end
+end
     
-          def add_roles(roles)
-        Array(roles).each { |role| add_role(role) }
-        self
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos EncryptionKey data
+        # definition
+        class EncryptionKey < Element
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_value(input)
+            input.value[0].value
+          end
+        end
       end
-      alias roles= add_roles
+    end
+  end
+end
     
-    module Sinatra
-  class Application < Base
-    
-          TEMPLATE.result(binding)
+          configure_sass
     end
     
-    desc 'generate documentation'
-task :doc => 'doc:all'
+        # Returns a new {Installer} parametrized from the {Config}.
+    #
+    # @return [Installer]
+    #
+    def installer_for_config
+      Installer.new(config.sandbox, config.podfile, config.lockfile)
+    end
     
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-      def plugins_args_human
-    plugins_arg.join(', ')
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
   end
-end # class Logstash::PluginManager
+end
 
     
-      def filtered_specs
-    @filtered_specs ||= begin
-                          # start with all locally installed plugin gems regardless of the Gemfile content
-                          specs = LogStash::PluginManager.find_plugins_gem_specs
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
     
-        desc 'Generate a valid ssh-config'
-    task :ssh_config do
-      require 'json'
-      # Loop until the Vagrant box finishes SSH bootstrap
-      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
-          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
-      end
-      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
-      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
+    Then(/^references in the remote repo are listed$/) do
+  expect(@output).to include('refs/heads/master')
+end
+    
+        def filter(list)
+      setup_filters if @filters.nil?
+      @filters.reduce(list) { |l, f| f.filter l }
     end
     
-            def load_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
-          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
-          @order.state = params[:state] if params[:state]
-          state_callback(:before)
+            def fetch(key)
+          @properties[key]
         end
     
-              can_event = 'can_#{@event}?'
+        <div id='rack'>
+      <h3 id='env-info'>Rack ENV</h3>
+      <table class='req'>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
+         <tr>
+           <td><%=h key %></td>
+           <td class='code'><div><%=h val %></div></td>
+         </tr>
+         <% } %>
+      </table>
+      <div class='clear'></div>
+    </div> <!-- /RACK ENV -->
     
-            def create
-          authorize! :create, Property
-          @property = Spree::Property.new(property_params)
-          if @property.save
-            respond_with(@property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
-        end
-    
-            def destroy
-          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
-          @stock_item.destroy
-          respond_with(@stock_item, status: 204)
-        end
-    
-            private
-    
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
+          def origin(env)
+        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
+      end
