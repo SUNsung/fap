@@ -1,141 +1,179 @@
 
         
-        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
-  if (LangOpts.Target.isMacOSX()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::OSXApplicationExtension
-                : PlatformKind::OSX);
-  }
-    }
-    
-    void SyntaxASTMap::dumpSyntaxMap() const {
-  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
-    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
-    auto SemanticNode = SyntaxAndSemaNode.getSecond();
-    }
-    }
-    
-    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
-  llvm::SmallString<32> NameBuf(Name);
-  cache_attributes_t Attrs = {
-    CACHE_ATTRIBUTES_VERSION_2,
-    CBs.keyHashCB,
-    CBs.keyIsEqualCB,
-    nullptr,
-    CBs.keyDestroyCB,
-    CBs.valueReleaseCB,
-    nullptr,
-    nullptr,
-    CBs.UserData,
-    CBs.valueRetainCB,
-  };
-    }
-    
-    
-    {  return Begin + oldSize;
-}  
-
-    
-      bool IsFirstLine = true;
-    
-      SmallString<16> localScratch;
-  auto name = camel_case::toLowercaseWord(text, localScratch);
-    
-    #endif // SWIFT_IMPORTER_CFTYPEINFO_H
-
-    
-     protected:
-  ~NwCurrentWindowInternalCapturePageInternalFunction() override;
-    
-    
-    {
-    {
-    {      rph->Send(new ViewMsg_WillQuit(&no_use));
-    }
-    CloseAllWindows(true);
-  }
-  // Then quit.
-  MessageLoop::current()->PostTask(FROM_HERE, MessageLoop::QuitClosure());
-}
-    
-    
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
-      routing_id,
-      object_id,
-      type,
-      *static_cast<base::DictionaryValue*>(value_option.get())));
-  return v8::Undefined(isolate);
-}
-    
-    
-    {}  // namespace remote
-    
-    
-    {  template<typename T> bool RemoveListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i!=listerners_.end()) {
-      delete i->second;
-      listerners_.erase(i);
-      return true;
-    }
+        bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
     return false;
-  }
-private:
-  DISALLOW_COPY_AND_ASSIGN(EventListener);
+    }
+    
+    #include 'swift/Basic/Cache.h'
+#include 'llvm/ADT/SmallString.h'
+#include <cache.h>
+    
+    class TreePrinter {
+  llvm::raw_ostream &Out;
+  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
+  SmallString<40> Indent;
+public:
+  TreePrinter(llvm::raw_ostream &out,
+              void (&printNodeData)(llvm::raw_ostream &out, void *node))
+    : Out(out), PrintNodeData(printNodeData) {}
+    }
+    
+    using namespace swift;
+    
+    
+    {  return loc;
+}
+    
+    
+    { private:
+  App();
+  DISALLOW_COPY_AND_ASSIGN(App);
 };
     
-    namespace {
-    }
+    #include 'content/nw/src/api/base/base.h'
     
-        bool ReadRTF(ClipboardData& data) {
-      DCHECK(data.type == TYPE_RTF);
-      std::string text;
-      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(text));
-      return true;
-    }
+    #include 'base/compiler_specific.h'
+#include 'content/nw/src/api/base/base.h'
     
-    class NwObjAllocateIdFunction : public NWSyncExtensionFunction {
- public:
-  NwObjAllocateIdFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
     
-    template <>
-bool FullyConnectedOp<
-    CUDAContext,
-    TensorCoreEngine,
-    false /* don't transpose weight */>::RunOnDevice() {
-  return RunFullyConnectedOpOnCUDADevice(false /* float16_compute */, this);
+    {} // namespace nwapi
+
+    
+      static int getUID() {
+    static int id = 0;
+    return ++id;
+  }
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+    EnumGenerator::~EnumGenerator() {
 }
     
-    #endif // D_DHT_ROUTING_TABLE_DESERIALIZER_H
+    #include <google/protobuf/compiler/java/java_context.h>
+    
+    void WriteMethodDocComment(io::Printer* printer,
+                           const MethodDescriptor* method) {
+  printer->Print('/**\n');
+  WriteDocCommentBody(printer, method);
+  printer->Print(
+    ' * <code>$def$</code>\n'
+    ' */\n',
+    'def', EscapeJavadoc(FirstLineOf(method->DebugString())));
+}
+    
+    
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
     
-    {} // namespace aria2
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
+    {  WriteFieldDocComment(printer, descriptor_);
+  if (descriptor_->is_repeated()) {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newRepeatedGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $packed$,\n'
+        '      $singular_type$.class);\n');
+  } else {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newSingularGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $default$,\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $singular_type$.class);\n');
   }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
+  printer->Annotate('name', descriptor_);
 }
     
-    #include 'common.h'
-#include <string>
+    #include <google/protobuf/compiler/java/java_shared_code_generator.h>
     
-    #include <memory>
+    ALWAYS_INLINE
+const APCLocalArray* APCLocalArray::asApcArray(const ArrayData* ad) {
+  assertx(ad->kind() == kApcKind);
+  return static_cast<const APCLocalArray*>(ad);
+}
+    
+    const StaticString
+  s_wrapper_type('wrapper_type'),
+  s_stream_type('stream_type'),
+  s_mode('mode'),
+  s_unread_bytes('unread_bytes'),
+  s_seekable('seekable'),
+  s_timed_out('timed_out'),
+  s_blocked('blocked'),
+  s_eof('eof'),
+  s_plainfile('plainfile'),
+  s_dir('dir'),
+  s_r('r');
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {    if (isPHP == php) {
+      callback(spath + ename, false);
+    }
+  }
+    
+    #include 'hphp/runtime/base/type-string.h'
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        uint64_t const* p_value = (uint64_t const*)&v;
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %[dest], %%rax\n\t'
+            'movq 8+%[dest], %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b %[dest]\n\t'
+            'jne 1b\n\t'
+            : [dest] '=o' (storage)
+            : 'b' (p_value[0]), 'c' (p_value[1])
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq 0(%[dest]), %%rax\n\t'
+            'movq 8(%[dest]), %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            :
+            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+    }
