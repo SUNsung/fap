@@ -1,209 +1,150 @@
 
         
-        from enum import Enum
+            def process_lhs(self, qn, connection):
+        if not isinstance(self.lhs.output_field, SearchVectorField):
+            self.lhs = SearchVector(self.lhs)
+        lhs, lhs_params = super().process_lhs(qn, connection)
+        return lhs, lhs_params
     
-    
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-    
-class Graph(object):
-    
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-        def remove_from_tail(self):
-        ...
-    
-        def _call(self, req):
-        if isinstance(req, compat_basestring):
-            req = sanitized_Request(req)
-        # Authorizing manually since GitHub does not response with 401 with
-        # WWW-Authenticate header set (see
-        # https://developer.github.com/v3/#basic-authentication)
-        b64 = base64.b64encode(
-            ('%s:%s' % (self._username, self._password)).encode('utf-8')).decode('ascii')
-        req.add_header('Authorization', 'Basic %s' % b64)
-        response = self._opener.open(req).read().decode('utf-8')
-        return json.loads(response)
-    
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    import io
-import sys
-import re
-    
-        ies = sorted(youtube_dl.gen_extractors(), key=lambda i: i.IE_NAME.lower())
-    out = '# Supported sites\n' + ''.join(
-        ' - ' + md + '\n'
-        for md in gen_ies_md(ies))
-    
-            ydl = YDL({'simulate': True})
-        self.assertEqual(ydl._default_format_spec({'is_live': True}), 'bestvideo+bestaudio/best')
-    
-        def test_keywords(self):
-        self.assertMatch(':ytsubs', ['youtube:subscriptions'])
-        self.assertMatch(':ytsubscriptions', ['youtube:subscriptions'])
-        self.assertMatch(':ythistory', ['youtube:history'])
-    
-    DOCUMENTATION = '''
-module: aws_waf_facts
-short_description: Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
-description:
-  - Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
-version_added: '2.4'
-requirements: [ boto3 ]
-options:
-  name:
-    description:
-      - The name of a Web Application Firewall
-    
-        for condition_type in MATCH_LOOKUP:
-        method = 'list_' + MATCH_LOOKUP[condition_type]['method'] + 's'
-        all_conditions[condition_type] = dict()
         try:
-            paginator = client.get_paginator(method)
-            func = paginator.paginate().build_full_result
-        except (KeyError, botocore.exceptions.OperationNotPageableError):
-            # list_geo_match_sets and list_regex_match_sets do not have a paginator
-            # and throw different exceptions
-            func = getattr(client, method)
+        oids, array_oids = get_hstore_oids(connection.alias)
+        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
+    except ProgrammingError:
+        # Hstore is not available on the database.
+        #
+        # If someone tries to create an hstore field it will error there.
+        # This is necessary as someone may be using PSQL without extensions
+        # installed but be using other features of contrib.postgres.
+        #
+        # This is also needed in order to create the connection in order to
+        # install the hstore extension.
+        pass
+    
+        def __init__(self, session_key=None):
+        self._session_key = session_key
+        self.accessed = False
+        self.modified = False
+        self.serializer = import_string(settings.SESSION_SERIALIZER)
+    
+    
+class SessionStore(SessionBase):
+    '''
+    A cache-based session store.
+    '''
+    cache_key_prefix = KEY_PREFIX
+    
+    
+def generate_perturbed_logarithm_dataset(size):
+    return (np.random.randint(-50, 50, size=size) +
+            50. * np.log(1 + np.arange(size)))
+    
+        Returns
+    -------
+    array of floats shaped like (metrics, formats, samples, classes, density)
+        Time in seconds.
+    '''
+    metrics = np.atleast_1d(metrics)
+    samples = np.atleast_1d(samples)
+    classes = np.atleast_1d(classes)
+    density = np.atleast_1d(density)
+    formats = np.atleast_1d(formats)
+    out = np.zeros((len(metrics), len(formats), len(samples), len(classes),
+                    len(density)), dtype=float)
+    it = itertools.product(samples, classes, density)
+    for i, (s, c, d) in enumerate(it):
+        _, y_true = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=42)
+        _, y_pred = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=84)
+        for j, f in enumerate(formats):
+            f_true = f(y_true)
+            f_pred = f(y_pred)
+            for k, metric in enumerate(metrics):
+                t = timeit(partial(metric, f_true, f_pred), number=n_times)
+    
+                results['kmeans_speed'].append(delta)
+            results['kmeans_quality'].append(kmeans.inertia_)
+    
+        max_it = len(samples_range) * len(features_range)
+    for n_samples in samples_range:
+        for n_features in features_range:
+            it += 1
+            print('====================')
+            print('Iteration %03d of %03d' % (it, max_it))
+            print('====================')
+            X = make_low_rank_matrix(n_samples, n_features,
+                                  effective_rank=rank,
+                                  tail_strength=0.2)
+    
+        ###########################################################################
+    # Print results
+    ###########################################################################
+    print('Script arguments')
+    print('===========================')
+    arguments = vars(opts)
+    print('%s \t | %s ' % ('Arguments'.ljust(16),
+                           'Value'.center(12),))
+    print(25 * '-' + ('|' + '-' * 14) * 1)
+    for key, value in arguments.items():
+        print('%s \t | %s ' % (str(key).ljust(16),
+                               str(value).strip().center(12)))
+    print('')
+    
+    
+def score(y_test, y_pred, case):
+    r2 = r2_score(y_test, y_pred)
+    print('r^2 on test data (%s) : %f' % (case, r2))
+    
+    '''
+    
+            :issue:`123`
+        :issue:`42,45`
+    '''
+    options = options or {}
+    content = content or []
+    issue_nos = [each.strip() for each in utils.unescape(text).split(',')]
+    config = inliner.document.settings.env.app.config
+    ret = []
+    for i, issue_no in enumerate(issue_nos):
+        node = _make_issue_node(issue_no, config, options=options)
+        ret.append(node)
+        if i != len(issue_nos) - 1:
+            sep = nodes.raw(text=', ', format='html')
+            ret.append(sep)
+    return ret, []
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
         try:
-            pred_results = func()[MATCH_LOOKUP[condition_type]['conditionset'] + 's']
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Could not list %s conditions' % condition_type)
-        for pred in pred_results:
-            pred['DataId'] = pred[MATCH_LOOKUP[condition_type]['conditionset'] + 'Id']
-            all_conditions[condition_type][pred['Name']] = camel_dict_to_snake_dict(pred)
-            all_conditions[condition_type][pred['DataId']] = camel_dict_to_snake_dict(pred)
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
     
-        def validate_distribution_id(self, distribution_id, alias):
-        try:
-            if distribution_id is None and alias is None:
-                self.module.fail_json(msg='distribution_id or alias must be specified')
-            if distribution_id is None:
-                distribution_id = self.__cloudfront_facts_mgr.get_distribution_id_from_domain_name(alias)
-            return distribution_id
-        except (ClientError, BotoCoreError) as e:
-            self.module.fail_json_aws(e, msg='Error validating parameters.')
-    
-    - cloudwatchevent_rule:
-    name: MyCronTask
-    state: absent
-'''
-    
-    try:
-    import boto3
-    from botocore.exceptions import ClientError
-    HAS_BOTO3 = True
-except ImportError:
-    HAS_BOTO3 = False
-    
-            if to_add or to_remove:
-            try:
-                connection.modify_image_attribute(ImageId=image_id, Attribute='launchPermission',
-                                                  LaunchPermission=dict(Add=to_add, Remove=to_remove))
-                changed = True
-            except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-                module.fail_json_aws(e, msg='Error updating launch permissions of image %s' % image_id)
-    
-        def describe_gateways(self, ip_address):
-        response = self.ec2.describe_customer_gateways(
-            DryRun=False,
-            Filters=[
-                {
-                    'Name': 'state',
-                    'Values': [
-                        'available',
-                    ]
-                },
-                {
-                    'Name': 'ip-address',
-                    'Values': [
-                        ip_address,
-                    ]
-                }
-            ]
+            # Adding field 'ApiToken.expires_at'
+        db.add_column(
+            'sentry_apitoken',
+            'expires_at',
+            self.gf('django.db.models.fields.DateTimeField')(null=True),
+            keep_default=False
         )
-        return response
-    
-            if not res:
-            raise EIPException('disassociation failed')
-    
-        try:
-        network_interfaces_result = connection.describe_network_interfaces(Filters=filters)['NetworkInterfaces']
-    except (ClientError, NoCredentialsError) as e:
-        module.fail_json(msg=e.message)
-    
-        if instance_id:
-        try:
-            volumes = ec2.get_all_volumes(filters={'attachment.instance-id': instance_id, 'attachment.device': device_name})
-        except boto.exception.BotoServerError as e:
-            module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
-    
-    ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-    
-        urls = []
-    
-            # Changing field 'Environment.organization_id'
-        db.alter_column(
-            'sentry_environment', 'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-        )
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'EventProcessingIssue', fields
-        # ['raw_event', 'processing_issue']
-        db.delete_unique('sentry_eventprocessingissue', ['raw_event_id', 'processing_issue_id'])
-    
-            # Adding model 'ApiAuthorization'
-        db.create_table(
-            'sentry_apiauthorization', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ApiApplication'], null=True
-                    )
-                ), (
-                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.User']
-                    )
-                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ApiAuthorization'])
-    
-        def backwards(self, orm):
-        # Deleting field 'ApiGrant.scope_list'
-        db.delete_column('sentry_apigrant', 'scope_list')
     
         models = {
         'sentry.activity': {
@@ -256,14 +197,14 @@ except ImportError:
             }),
             'client_id': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''90ad7e5fa38040e5960b53783ae21ad05b6ce9e66b8a4dbbaeb29535bb086787'',
+                    'default': ''6949fb4996184c5abf84d6e2206deb2028847544b25745dcb59f9788f860cd4b'',
                     'unique': 'True',
                     'max_length': '64'
                 }
             ),
             'client_secret': (
                 'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
-                    'default': ''6dbc1fbf818c4d1da6461a83f8f540845bff496a57cb407d896dc41d2067c02e''
+                    'default': ''120099c387964b1c826925621112bec1d8dbb441c0f24233b2487fa1350c03d7''
                 }
             ),
             'date_added':
@@ -281,7 +222,7 @@ except ImportError:
             }),
             'name': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''Ungeneralized Ronan'',
+                    'default': ''Transitive Clemente'',
                     'max_length': '64',
                     'blank': 'True'
                 }
@@ -353,14 +294,14 @@ except ImportError:
             ),
             'code': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''507f7c453c134c73b1ab1a5d1ebddaee'',
+                    'default': ''c52f5a5dc7dd41448dc017bd251144dc'',
                     'max_length': '64',
                     'db_index': 'True'
                 }
             ),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 3, 22, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 23, 0, 0)',
                     'db_index': 'True'
                 }
             ),
@@ -451,7 +392,7 @@ except ImportError:
             }),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 21, 0, 0)',
+                    'default': 'datetime.datetime(2017, 4, 22, 0, 0)',
                     'null': 'True'
                 }
             ),
@@ -461,7 +402,7 @@ except ImportError:
             }),
             'refresh_token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''e4f8c544288144d383de40706085c0362a60c7b1a2754f018ef80a3b4492282a'',
+                    'default': ''4f556f8dc184403fa0cd07e85a1a388204ca73f817294a0a9652081c86929bca'',
                     'max_length': '64',
                     'unique': 'True',
                     'null': 'True'
@@ -477,7 +418,7 @@ except ImportError:
             }),
             'token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''10941cc78a564b92a15ece43d456e7f4c4ee773360a54e4e910fa68af79ac307'',
+                    'default': ''da4ff55914c148c1b652ef734ac727adc0fc7dc596a2445199009467c7d51337'',
                     'unique': 'True',
                     'max_length': '64'
                 }
@@ -671,7 +612,7 @@ except ImportError:
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 3, 29, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 30, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -876,6 +817,44 @@ except ImportError:
                     'blank': 'True'
                 }
             )
+        },
+        'sentry.dsymapp': {
+            'Meta': {
+                'unique_together': '(('project', 'platform', 'app_id'),)',
+                'object_name': 'DSymApp'
+            },
+            'app_id': ('django.db.models.fields.CharField', [], {
+                'max_length': '64'
+            }),
+            'data': ('jsonfield.fields.JSONField', [], {
+                'default': '{}'
+            }),
+            'date_added':
+            ('django.db.models.fields.DateTimeField', [], {
+                'default': 'datetime.datetime.now'
+            }),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'last_synced':
+            ('django.db.models.fields.DateTimeField', [], {
+                'default': 'datetime.datetime.now'
+            }),
+            'platform':
+            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
+                'default': '0'
+            }),
+            'project': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.Project']'
+                }
+            ),
+            'sync_id':
+            ('django.db.models.fields.CharField', [], {
+                'max_length': '64',
+                'null': 'True'
+            })
         },
         'sentry.dsymbundle': {
             'Meta': {
@@ -3007,7 +2986,7 @@ except ImportError:
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'Q9uumn1w1BWKCPBB1u2SmjrLjq20dEy5'',
+                    'default': 'u'MJgpqztt1JFwT0a7mqP7bJys66oGvuWt'',
                     'max_length': '32'
                 }
             )
@@ -3072,21 +3051,38 @@ except ImportError:
                     'to': 'orm['sentry.Project']'
                 }
             )
+        },
+        'sentry.versiondsymfile': {
+            'Meta': {
+                'unique_together': '(('dsym_file', 'version', 'build'),)',
+                'object_name': 'VersionDSymFile'
+            },
+            'build':
+            ('django.db.models.fields.CharField', [], {
+                'max_length': '32',
+                'null': 'True'
+            }),
+            'date_added':
+            ('django.db.models.fields.DateTimeField', [], {
+                'default': 'datetime.datetime.now'
+            }),
+            'dsym_app': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.DSymApp']'
+                }
+            ),
+            'dsym_file': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.ProjectDSymFile']',
+                    'null': 'True'
+                }
+            ),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'version': ('django.db.models.fields.CharField', [], {
+                'max_length': '32'
+            })
         }
     }
-    
-        '''catalog of multiple methods that are executed depending on an init
-    
-    print()
-    
-    
-class Subscriber:
-    
-    http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-    
-        def __str__(self):
-        return 'Dog'
-    
-        @property
-    def is_eager_to_contribute(self):
-        return True if self.blackboard.common_state['problems'] > 100 else False
