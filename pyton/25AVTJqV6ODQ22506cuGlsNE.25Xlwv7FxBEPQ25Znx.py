@@ -1,151 +1,131 @@
 
         
-            def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
-    
-        def handle_budget_notifications(self, key, total):
-        '''Call notification API if nearing or exceeded budget.'''
-        ...
-    
-        def __init__(self, timestamp, seller, amount):
-        self.timestamp = timestamp
-        self.seller = seller
-        self.amount = amount
-    
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
-    
-    from mrjob.job import MRJob
-    
-    
-# Used for determining if the system is running a new enough python version
-# and should only restrict on our documented minimum versions
-_PY3_MIN = sys.version_info[:2] >= (3, 5)
-_PY2_MIN = (2, 6) <= sys.version_info[:2] < (3,)
-_PY_MIN = _PY3_MIN or _PY2_MIN
-if not _PY_MIN:
-    raise SystemExit('ERROR: Ansible requires a minimum of Python2 version 2.6 or Python3 version 3.5. Current version: %s' % ''.join(sys.version.splitlines()))
-    
-        return_fields = ['name', 'view', 'extattrs', 'ipv4addrs']
-    
-            # Retrieve only guest VMs, or include host systems?
-        if guests_only is not None:
-            self.guests_only = guests_only
-        elif self.config.has_option('defaults', 'guests_only'):
-            self.guests_only = self.config.getboolean('defaults', 'guests_only')
-        else:
-            self.guests_only = True
-    
-    # -- Options for LaTeX output ---------------------------------------------
-    
-        # WIth no action/subcommand
-    # shared opts set
-    # instantiate each cli and ask its options
-    cli_klass = getattr(__import__('ansible.cli.%s' % cli_module_name,
-                                   fromlist=[cli_class_name]), cli_class_name)
-    cli = cli_klass([])
-    
-        populate_data(dict(
-        modules=dict(
-            rows=modules_rows,
-            schema=(
-                ('module', 'TEXT'),
-                ('namespace', 'TEXT'),
-                ('path', 'TEXT'),
-                ('supported_by', 'TEXT'),
-            )),
-        module_statuses=dict(
-            rows=module_statuses_rows,
-            schema=(
-                ('module', 'TEXT'),
-                ('status', 'TEXT'),
-            )),
-    ))
-    
-    for f in filelist:
-    if os.path.exists(f):
-        s = os.path.getsize(f)
-        if s > 0 and s < 10000:
-            with open(f) as fh:
-                fcont[f] = fh.read()
-    
-            if self.options.host:
-            hosts = self.inventory.get_hosts(self.options.host)
-            if len(hosts) != 1:
-                raise AnsibleOptionsError('You must pass a single valid host to --host parameter')
-    
-    if __name__ == '__main__':
-    
-        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
-    plt.axis('tight')
-    plt.show()
+            Ensures that the post exists and that the logged in user is the
+    author of the post.
+    '''
+    get_post(id)
+    db = get_db()
+    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('blog.index'))
 
     
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
     
-def compute_bench(alpha, n_samples, n_features, precompute):
-    lasso_results = []
-    lars_lasso_results = []
+        Either you can fill the config from a config file::
     
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
+            buf.append('  Make sure to directly send your %s-request to this URL '
+                   'since we can\'t make browsers or HTTP clients redirect '
+                   'with form data reliably or without user interaction.' %
+                   request.method)
+        buf.append('\n\nNote: this exception is only raised in debug mode')
+        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
     
-        ###########################################################################
-    # Set GaussianRandomProjection input
-    gaussian_matrix_params = {
-        'n_components': opts.n_components,
-        'random_state': opts.random_seed
-    }
-    transformers['GaussianRandomProjection'] = \
-        GaussianRandomProjection(**gaussian_matrix_params)
+        if dataset_name == 'shuttle':
+        dataset = fetch_mldata('shuttle')
+        X = dataset.data
+        y = dataset.target
+        # we remove data with label 4
+        # normal data are then those of class 1
+        s = (y != 4)
+        X = X[s, :]
+        y = y[s]
+        y = (y != 1).astype(int)
     
     Line #      Hits         Time  Per Hit   % Time  Line Contents
 ==============================================================
-    56                                           @profile
-    57                                           def benchmark_sparse_predict():
-    58         1        10854  10854.0      2.8      X_test_sparse = csr_matrix(X_test)
-    59       301          477      1.6      0.1      for _ in range(300):
-    60       300       381409   1271.4     97.1          clf.predict(X_test_sparse)
-'''
+    51                                           @profile
+    52                                           def benchmark_dense_predict():
+    53       301          640      2.1      0.1      for _ in range(300):
+    54       300       532339   1774.5     99.9          clf.predict(X_test)
     
-    from scrapy.utils.conf import arglist_to_dict
-from scrapy.exceptions import UsageError
+        bench = {'vectorizer': Vectorizer.__name__}
+    params = {'analyzer': analyzer, 'ngram_range': ngram_range}
+    bench.update(params)
+    dt = timeit.repeat(run_vectorizer(Vectorizer, text, **params),
+                       number=1,
+                       repeat=n_repeat)
+    bench['time'] = '{:.2f} (+-{:.2f})'.format(np.mean(dt), np.std(dt))
     
-            infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
+            if opts.logfile:
+            self.settings.set('LOG_ENABLED', True, priority='cmdline')
+            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
     
-        def process_request_meta(self, opts):
     
-            # The crawler is created this way since the Shell manually handles the
-        # crawling engine, so the set up in the crawl method won't work
-        crawler = self.crawler_process._create_crawler(spidercls)
-        # The Shell class needs a persistent engine in the crawler
-        crawler.engine = crawler._create_engine()
-        crawler.engine.start()
+class _BenchServer(object):
     
-      else:
-    # Found DISALLOW* macro outside a class declaration, or perhaps it
-    # was used inside a function when it should have been part of the
-    # class declaration.  We could issue a warning here, but it
-    # probably resulted in a compiler error already.
-    pass
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
     
-        # Loop through each person in the training set
-    for class_dir in os.listdir(train_dir):
-        if not os.path.isdir(os.path.join(train_dir, class_dir)):
-            continue
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
     
-    while True:
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
+        def post_process(self, output):
+        occurrences = 0
+        for x in output:
+            if isinstance(x, self.obj_type):
+                occurrences += 1
     
-    # Open video file
-video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
+    
+    @implementer(IPolicyForHTTPS)
+    class BrowserLikeContextFactory(ScrapyClientContextFactory):
+        '''
+        Twisted-recommended context factory for web clients.
+    
+        @callback
+    def pressed_more_than_satisfied(now):
+        '''Handle the LiteJet's switch's button pressed >= held_more_than.'''
+        call_action()
+    
+    CONF_HOURS = 'hours'
+CONF_MINUTES = 'minutes'
+CONF_SECONDS = 'seconds'
+    
+    from homeassistant.components.http import HomeAssistantView
+from homeassistant.config import async_check_ha_config_file
+    
+        return True
+    
+    import voluptuous as vol
+    
+            url = '{}/cgi-bin/luci/rpc/sys'.format(self.origin)
+    
+        for device in new_devices:
+        dev_id = (
+            id(device.gateway), device.node_id, device.child_id,
+            device.value_type)
+        async_dispatcher_connect(
+            hass, mysensors.const.SIGNAL_CALLBACK.format(*dev_id),
+            device.async_update_callback)
