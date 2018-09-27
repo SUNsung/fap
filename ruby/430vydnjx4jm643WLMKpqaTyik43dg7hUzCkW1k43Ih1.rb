@@ -1,75 +1,45 @@
 
         
-            it 'returns a label 'Yes' if a given agent is working' do
-      stub(@agent).working? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Yes'
-    end
+              # Returns an array of all available build trains (not the builds they include)
+      def get_build_trains(app_id: nil, platform: 'ios')
+        assert_required_params(__method__, binding)
     
-              it 'doesn't crash without any control links' do
-            valid_parsed_data.delete(:control_links)
-    
-    describe HuginnScheduler do
-  before(:each) do
-    @rufus_scheduler = Rufus::Scheduler.new
-    @scheduler = HuginnScheduler.new
-    stub(@scheduler).setup {}
-    @scheduler.setup!(@rufus_scheduler, Mutex.new)
-  end
-    
-        it 'returns nil when passed nil' do
-      expect(Utils.parse_duration(nil)).to be_nil
-    end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-          @log.level = 0
-      expect(@log).to be_valid
+      context '#builds_for_group' do
+    it 'executes the request' do
+      MockAPI::TestFlightServer.get('/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/builds') {}
+      subject.builds_for_group(app_id: app_id, group_id: 'fake-group-id')
+      expect(WebMock).to have_requested(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/builds')
     end
   end
     
-          it 'makes options symbol-indifferent before validating' do
-        agent = Agents::SomethingSource.new(:name => 'something')
-        agent.user = users(:bob)
-        agent.options['bad'] = true
-        expect(agent).to have(1).error_on(:base)
-        agent.options['bad'] = false
-        expect(agent).to have(0).errors_on(:base)
+          #   # First, stub a failing request
+      #   stub_request(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/1234/apps/898536088/platforms/ios/trains').
+      #     # to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains_operation_failed.json'), headers: { 'Content-Type' => 'application/json' }).times(2).
+      #     to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains.json'), headers: { 'Content-Type' => 'application/json' })
+    
+          def self.author
+        'KrauseFx'
       end
     
-      it 'raises a TypeError when passed nil' do
-    lambda { srand(nil) }.should raise_error(TypeError)
-  end
-    
-      ruby_version_is '2.5' do
-    describe ':uplevel keyword argument' do
-      before :each do
-        $VERBOSE = true
-      end
-    
-          # Creates a masked version of the authenticity token that varies
-      # on each request. The masking is used to mitigate SSL attacks
-      # like BREACH.
-      def mask_token(token)
-        token = decode_token(token)
-        one_time_pad = SecureRandom.random_bytes(token.length)
-        encrypted_token = xor_byte_strings(one_time_pad, token)
-        masked_token = one_time_pad + encrypted_token
-        encode_token(masked_token)
-      end
-    
-          def call(env)
-        request               = Request.new(env)
-        status, headers, body = app.call(env)
-    
-        it 'corrects one hash parameter with braces and a trailing comma' do
-      corrected = autocorrect_source('where({ x: 1, y: 2, })')
-      expect(corrected).to eq('where(x: 1, y: 2)')
+        def itc_stub_set_preorder_cleared
+      stub_request(:post, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/898536088/pricing/intervals').
+        with(body: JSON.parse(itc_read_fixture_file(File.join('availability', 'set_preorder_cleared_request.json'))).to_json).
+        to_return(status: 200, body: itc_read_fixture_file(File.join('availability', 'set_preorder_cleared_response.json')),
+                  headers: { 'Content-Type' => 'application/json' })
     end
+    
+    full_params = ARGV.shelljoin
+    
+      before_action :set_account
+  before_action :set_statuses
+    
+        def destroy
+      authorize @domain_block, :destroy?
+      UnblockDomainService.new.call(@domain_block, retroactive_unblock?)
+      log_action :destroy, @domain_block
+      redirect_to admin_domain_blocks_path, notice: I18n.t('admin.domain_blocks.destroyed_msg')
+    end
+    
+      private
+    
+    require 'sass/version'
