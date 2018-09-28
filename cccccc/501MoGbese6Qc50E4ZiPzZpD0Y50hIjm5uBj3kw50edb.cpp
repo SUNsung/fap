@@ -1,321 +1,244 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    template <typename T>
-class ArgMinOpModel : public ArgBaseOpModel<T> {
- public:
-  ArgMinOpModel(std::initializer_list<int> input_shape, TensorType input_type,
-                TensorType output_type, TensorType index_output_type)
-      : ArgBaseOpModel<T>(input_shape, input_type, output_type,
-                          index_output_type) {
-    ArgBaseOpModel<T>::SetBuiltinOp(
-        BuiltinOperator_ARG_MIN, BuiltinOptions_ArgMinOptions,
-        CreateArgMinOptions(ArgBaseOpModel<T>::builder_, index_output_type)
-            .Union());
-    ArgBaseOpModel<T>::BuildInterpreter({input_shape, {1, 1, 1, 1}});
+        
+    {
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
+    }
+    llvm::errs() << '\n=====================================================\n';
   }
-};
-    
-    #include 'tensorflow/core/lib/core/notification.h'
-#include 'tensorflow/core/platform/test.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      void set_length(int d, int64 x) {
-    DCHECK_GE(d, 0);
-    DCHECK_LT(d, dims());
-    lengths_[d] = x;
-  }
-    
-    
-    {}  // namespace atom
-    
-    #endif  // CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
+}
 
     
-    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
-#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
     
-    // filenames
-extern const base::FilePath::CharType kCacheDirname[];
-extern const base::FilePath::CharType kChannelIDFilename[];
-extern const base::FilePath::CharType kCookieFilename[];
-extern const base::FilePath::CharType kCRLSetFilename[];
-extern const base::FilePath::CharType kCustomDictionaryFileName[];
-extern const base::FilePath::CharType kExtensionActivityLogFilename[];
-extern const base::FilePath::CharType kExtensionsCookieFilename[];
-extern const base::FilePath::CharType kFirstRunSentinel[];
-extern const base::FilePath::CharType kGCMStoreDirname[];
-extern const base::FilePath::CharType kLocalStateFilename[];
-extern const base::FilePath::CharType kLocalStorePoolName[];
-extern const base::FilePath::CharType kMediaCacheDirname[];
-extern const base::FilePath::CharType kNetworkPersistentStateFilename[];
-extern const base::FilePath::CharType kOfflinePageArchviesDirname[];
-extern const base::FilePath::CharType kOfflinePageMetadataDirname[];
-extern const base::FilePath::CharType kPreferencesFilename[];
-extern const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[];
-extern const base::FilePath::CharType kReadmeFilename[];
-extern const base::FilePath::CharType kResetPromptMementoFilename[];
-extern const base::FilePath::CharType kSafeBrowsingBaseFilename[];
-extern const base::FilePath::CharType kSecurePreferencesFilename[];
-extern const base::FilePath::CharType kServiceStateFileName[];
-extern const base::FilePath::CharType kSingletonCookieFilename[];
-extern const base::FilePath::CharType kSingletonLockFilename[];
-extern const base::FilePath::CharType kSingletonSocketFilename[];
-extern const base::FilePath::CharType kSupervisedUserSettingsFilename[];
-extern const base::FilePath::CharType kThemePackFilename[];
-extern const base::FilePath::CharType kThemePackMaterialDesignFilename[];
-extern const base::FilePath::CharType kWebAppDirname[];
-    
-    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
-    
-    // Get render process host.
-RenderProcessHost* GetRenderProcessHost() {
-  RenderProcessHost* render_process_host = NULL;
-  std::vector<Shell*> windows = Shell::windows();
-  for (size_t i = 0; i < windows.size(); ++i) {
-    if (!windows[i]->is_devtools()) {
-      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
-      break;
-    }
+    {    triple.setOSName(osx.str());
   }
+  Target = std::move(triple);
+    
+    #ifndef DIRECTIONAL_PREPOSITION
+#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
+#endif
+    
+      IsFirstLine = true;
+  for (auto &Line : Lines) {
+    if (!IsFirstLine) {
+      Line = Line.drop_front(WhitespaceToTrim);
     }
+    IsFirstLine = false;
+  }
     
-      static void ClearCache(content::RenderProcessHost* render_view_host);
-  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
-                             const std::string& proxy_config);
-    
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    return ;
-  } else {
-    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
-    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
-    while (menu_item_iterator != menu_item_end){
-      MenuItem *menu_item = *menu_item_iterator;
-      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
-        menu_item->UpdateKeys(gtk_accel_group);
-      }
-      ++menu_item_iterator;
+    namespace {
+  // Quasi-lexicographic order: string length first, then string data.
+  // Since we don't care about the actual length, we can use this, which
+  // lets us ignore the string data a larger proportion of the time.
+  struct SortByLengthComparator {
+    bool operator()(StringRef lhs, StringRef rhs) const {
+      return (lhs.size() < rhs.size() ||
+              (lhs.size() == rhs.size() && lhs < rhs));
     }
-  }
-}
+  };
+} // end anonymous namespace
+    
+      static IAMResult infer(ASTContext &, clang::Sema &, const clang::NamedDecl *,
+                         IAMOptions = IAMOptions::getDefault());
+    
+    private:
+    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
+    
+    #endif // BITCOIN_QT_PLATFORMSTYLE_H
+    
+    #ifndef SECP256K1_HASH_IMPL_H
+#define SECP256K1_HASH_IMPL_H
+    
+        (void)ctx;
+    ARG_CHECK(sig != NULL);
+    ARG_CHECK(input64 != NULL);
+    ARG_CHECK(recid >= 0 && recid <= 3);
+    
+        BOOST_CHECK(v.setInt((uint64_t)1023ULL));
+    BOOST_CHECK(v.isNum());
+    BOOST_CHECK_EQUAL(v.getValStr(), '1023');
     
     
-    {  // Convert from content coordinates to window coordinates.
-  // This code copied from chrome_web_contents_view_delegate_views.cc
-  aura::Window* target_window = GetActiveNativeView(rfh);
-  aura::Window* root_window = target_window->GetRootWindow();
-  views::Widget* top_level_widget =
-    views::Widget::GetTopLevelWidgetForNativeView(target_window);
-  aura::client::ScreenPositionClient* screen_position_client =
-        aura::client::GetScreenPositionClient(root_window);
-  if (screen_position_client) {
-    screen_position_client->ConvertPointToScreen(target_window,
-             &screen_point);
-  }
-  set_delay_destruction(true);
-  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
-                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
-  menu_runner_->RunMenuAt(top_level_widget,
-                       nullptr,
-                       gfx::Rect(screen_point, gfx::Size()),
-                       views::MENU_ANCHOR_TOPRIGHT,
-                       ui::MENU_SOURCE_NONE);
-  // It is possible for the same MenuMessageLoopAura to start a nested
-  // message-loop while it is already running a nested loop. So make
-  // sure the quit-closure gets reset to the outer loop's quit-closure
-  // once the innermost loop terminates.
-  {
-    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
-                                                      base::Closure());
-  
-    //base::MessageLoop* loop = base::MessageLoop::current();
-    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
-    base::RunLoop run_loop;
-    message_loop_quit_ = run_loop.QuitClosure();
-  
-    run_loop.Run();
-  }
-  set_delay_destruction(false);
-  if (pending_destruction())
-    object_manager_->OnDeallocateObject(id_);
-}
-    
-    void MenuItem::SetLabel(const std::string& label) {
-  is_modified_ = true;
-  label_ = base::UTF8ToUTF16(label);
-    }
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
  public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
+
     
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+    {} // namespace osquery
+
+    
+    #include <osquery/config.h>
+#include <osquery/logger.h>
+#include <osquery/registry_factory.h>
+    
+    DECLARE_bool(disable_decorators);
+DECLARE_bool(decorations_top_level);
+    
+      // This looks funky, because the parser is named 'options' and it claims
+  // ownership of a single top-level-key called 'options'.
+  const auto& doc = c.getParser('options')->getData().doc()['options'];
+    
+      /**
+   * @brief Update the internal context buffer with additional content
+   *
+   * This method allows you to chunk up large content so that it doesn't all
+   * have to be loaded into memory at the same time
+   *
+   * @param buffer The buffer to be hashed
+   * @param size The size of the buffer to be hashed
+   */
+  void update(const void* buffer, size_t size);
+    
+    
+    {  return true;
+}
+    
+      /// Limit the `inotify` actions to the subscription mask (if not 0).
+  uint32_t mask{0};
+    
+      auto ec = pub->createEventContext();
+  pub->fire(ec, 0);
+    
+    class ExampleTable : public TablePlugin {
  private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+    template <size_t... Indexes>
+int snprintf20Numbers(int i, index_sequence<Indexes...>) {
+  static_assert(20 == sizeof...(Indexes), 'Must have exactly 20 indexes');
+  return snprintf(
+      bigBuf.data(),
+      bigBuf.size(),
+      '%d %d %d %d %d'
+      '%d %d %d %d %d'
+      '%d %d %d %d %d'
+      '%d %d %d %d %d',
+      (i + static_cast<int>(Indexes))...);
+}
+    
+    
+    {  EXPECT_TRUE(fref);
+  EXPECT_EQ(42, fref(4, 2));
+}
+    
+    
+    {  std::string arguments2;
+  ASSERT_TRUE(getTracepointArguments(
+      'folly', 'test_static_tracepoint_branch_2', 0, arguments2));
+  std::array<int, 1> expected2{{sizeof(double)}};
+  checkTracepointArguments(arguments2, expected2);
+}
+    
+    #include <folly/GLog.h>
+    
+    #include <string>
+    
+    TEST(Conv, timespecToStdChrono) {
+  struct timespec ts;
+    }
+    
+    template <typename T>
+typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
+prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  prefix = Endian::little(prefix);
+  std::string result;
+  result.resize(n);
+  memcpy(&result[0], &prefix, n);
+  return result;
+}
+    
+    
+    {  /**
+   * The strategy parameter is used to tune the compression algorithm.
+   * Supported values:
+   * - Z_DEFAULT_STRATEGY: normal data
+   * - Z_FILTERED: data produced by a filter (or predictor)
+   * - Z_HUFFMAN_ONLY: force Huffman encoding only (no string match)
+   * - Z_RLE: limit match distances to one
+   * - Z_FIXED: prevents the use of dynamic Huffman codes
+   *
+   * The strategy parameter only affects the compression ratio but not the
+   * correctness of the compressed output.
+   */
+  int strategy;
 };
     
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallObjectMethodSync(render_frame_host(), id, type, method, *arguments, response);
-  return true;
-}
-    
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
+      bool compare_exchange_weak(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_weak(
+        expected, n, mo, detail::default_failure_memory_order(mo));
   }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    auto newptr = get_newptr(n);
+    PackedPtr oldptr, expectedptr;
     }
     
-          case kDeletedFile:
-        if (GetLevel(&input, &level) &&
-            GetVarint64(&input, &number)) {
-          deleted_files_.insert(std::make_pair(level, number));
-        } else {
-          msg = 'deleted file';
-        }
-        break;
     
-    TEST(FindFileTest, OverlapSequenceChecks) {
-  Add('200', '200', 5000, 3000);
-  ASSERT_TRUE(! Overlaps('199', '199'));
-  ASSERT_TRUE(! Overlaps('201', '300'));
-  ASSERT_TRUE(Overlaps('200', '200'));
-  ASSERT_TRUE(Overlaps('190', '200'));
-  ASSERT_TRUE(Overlaps('200', '210'));
-}
+    {        uint32_t scratch;
+        bool success;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %[desired_lo], %%ebx\n\t'
+            'lock; cmpxchg8b %[dest]\n\t'
+            'movl %[scratch], %%ebx\n\t'
+            'sete %[success]\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A,A,A,A,A' (expected), [dest] '+m,m,m,m,m,m' (storage), [scratch] '=m,m,m,m,m,m' (scratch), [success] '=q,m,q,m,q,m' (success)
+            : [desired_lo] 'S,S,D,D,m,m' ((uint32_t)desired), 'c,c,c,c,c,c' ((uint32_t)(desired >> 32))
+#else
+            : '+A' (expected), [dest] '+m' (storage), [scratch] '=m' (scratch), [success] '=q' (success)
+            : [desired_lo] 'S' ((uint32_t)desired), 'c' ((uint32_t)(desired >> 32))
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return success;
+#else
+        bool success;
+        __asm__ __volatile__
+        (
+            'lock; cmpxchg8b %[dest]\n\t'
+            'sete %[success]\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A' (expected), [dest] '+m,m' (storage), [success] '=q,m' (success)
+            : 'b,b' ((uint32_t)desired), 'c,c' ((uint32_t)(desired >> 32))
+#else
+            : '+A' (expected), [dest] '+m' (storage), [success] '=q' (success)
+            : 'b' ((uint32_t)desired), 'c' ((uint32_t)(desired >> 32))
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return success;
+#endif
+    }
     
-      // Choose a location for the test database if none given with --db=<path>
-  if (FLAGS_db == NULL) {
-      leveldb::Env::Default()->GetTestDirectory(&default_db_path);
-      default_db_path += '/dbbench';
-      FLAGS_db = default_db_path.c_str();
-  }
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_enum_field.h>
-#include <google/protobuf/compiler/java/java_extension.h>
-#include <google/protobuf/compiler/java/java_extension_lite.h>
-#include <google/protobuf/compiler/java/java_field.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_message.h>
-#include <google/protobuf/compiler/java/java_message_lite.h>
-#include <google/protobuf/compiler/java/java_service.h>
-    
-      desired_output_for_decode = 'ABCD__EfghI_j';
-  expected = string('\x64\x80\xC5\xA1\x0', 5);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
-    
-      virtual int ExtraRuntimeHasBitsNeeded(void) const;
-  virtual void SetExtraRuntimeHasBitsBase(int index_base);
-    
-    class VersionEditTest { };
-    
-      void StartBlock(uint64_t block_offset);
-  void AddKey(const Slice& key);
-  Slice Finish();
-    
-    TEST(CRC, Mask) {
-  uint32_t crc = Value('foo', 3);
-  ASSERT_NE(crc, Mask(crc));
-  ASSERT_NE(crc, Mask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
-}
-    
-    static void Usage() {
-  fprintf(
-      stderr,
-      'Usage: leveldbutil command...\n'
-      '   dump files...         -- dump contents of specified files\n'
-      );
-}
-    
-    struct Options;
-    
-      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  std::string key       = *v8::String::Utf8Value(args[0]->ToString());
-  std::string value     = *v8::String::Utf8Value(args[1]->ToString());
-  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
-    
-     private: // Private Functions
-  /// Calls InsertBefore or InsertAfter
-  int Insert(const std::string& key, const std::string& pivot,
-             const std::string& value, bool insert_after);
- private:
-  std::string db_name_;       // The actual database name/path
-  WriteOptions put_option_;
-  ReadOptions get_option_;
-    
-    
-    {}  //namespace rocksdb
-    
-    #endif  // JAVA_ROCKSJNI_COMPARATORJNICALLBACK_H_
+    using atomics::atomic_thread_fence;
+using atomics::atomic_signal_fence;
