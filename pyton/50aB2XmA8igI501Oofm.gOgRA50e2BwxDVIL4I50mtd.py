@@ -1,96 +1,149 @@
 
         
-            def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
+        
+class GroupChat(Chat):
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
+    
+    
+class SalesRanker(MRJob):
+    
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
+    
+        # test that successful registration redirects to the login page
+    response = client.post(
+        '/auth/register', data={'username': 'a', 'password': 'a'}
+    )
+    assert 'http://localhost/auth/login' == response.headers['Location']
+    
+                app.config['IMAGE_STORE_TYPE'] = 'fs'
+            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
+            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
+            image_store_config = app.config.get_namespace('IMAGE_STORE_')
+    
+    
+_request_ctx_err_msg = '''\
+Working outside of request context.
+    
+            return value
+    
+    signals_available = False
+try:
+    from blinker import Namespace
+    signals_available = True
+except ImportError:
+    class Namespace(object):
+        def signal(self, name, doc=None):
+            return _FakeSignal(name, doc)
+    
+        def __exit__(self, exc_type, exc_value, tb):
+        self.preserve_context = False
+    
+            if (not has_actual_code
+            and not line.strip().startswith('//')
+            and not line.strip().startswith('???')
+            and not line.strip() == ''):
+            has_actual_code = True
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
+        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
+    
+        complete_apps = ['sentry']
+
+    
+            # Adding model 'EventProcessingIssue'
+        db.create_table(
+            'sentry_eventprocessingissue', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'raw_event', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.RawEvent']
+                    )
+                ), (
+                    'processing_issue',
+                    self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ProcessingIssue']
+                    )
+                ),
             )
-        super().__init__(get_response)
+        )
+        db.send_create_signal('sentry', ['EventProcessingIssue'])
     
-        @classmethod
-    def get_session_store_class(cls):
-        raise NotImplementedError
+            for release_project in RangeQuerySetWrapperWithProgressBar(
+            orm.ReleaseProject.objects.all()
+        ):
+            orm.ReleaseProject.objects.filter(id=release_project.id).update(
+                new_groups=orm.Group.objects.filter(
+                    project_id=release_project.project_id,
+                    first_release_id=release_project.release_id,
+                ).count()
+            )
     
-            if 'quality' in stream:
-            print('      quality:       %s' % stream['quality'])
+            # Adding unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
+        db.create_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
     
-        vid = r1('data-vid='(\d+)'', html)
-    up = r1('data-name='([^']+)'', html)
-    p_title = r1('active'>([^<]+)', html)
-    title = '%s (%s)' % (title, up)
-    if p_title: title = '%s - %s' % (title, p_title)
-    acfun_download_by_vid(vid, title,
-                          output_dir=output_dir,
-                          merge=merge,
-                          info_only=info_only,
-                          **kwargs)
-    
-    __all__ = ['baomihua_download', 'baomihua_download_by_id']
-    
-    from ..common import *
-    
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls(urls, title, ext, size, output_dir, merge=False)
-    
-    #----------------------------------------------------------------------
-def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
-    ''''''
-    fake_headers = {
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
-        'Accept': '*/*',
-        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
-        'Connection': 'keep-alive',
-    }
-    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
-    html = get_content(api_base, headers=fake_headers)
-    
-    def fetch_photo_url_list(url, size):
-    for pattern in url_patterns:
-        # FIXME: fix multiple matching since the match group is dropped
-        if match1(url, pattern[0]):
-            return fetch_photo_url_list_impl(url, size, *pattern[1:])
-    raise NotImplementedError('Flickr extractor is not supported for %s.' % url)
-    
-      new_candidates = []
-  for candidate in candidates:
-    if isinstance( candidate, dict ):
-      new_candidate = candidate.copy()
+            # Deleting field 'CommitAuthor.external_id'
+        db.delete_column('sentry_commitauthor', 'external_id')
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    self._response = self.PostDataToHandler( request_data,
-                                             'debug_info',
-                                             display_message = False )
-    
-      f = _CreateFilterForTypes( opts, [ 'java', 'xml' ] )
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
+
     
     
-class FakeFuture( object ):
-  '''A fake version of a future response object, just about suitable for
-  mocking a server response as generated by PostDataToHandlerAsync.
-  Not usually used directly. See MockAsyncServerResponse* methods'''
-  def __init__( self, done, response = None, exception = None ):
-    self._done = done
+@asyncio.coroutine
+def async_trigger(hass, config, action):
+    '''Listen for events based on configuration.'''
+    number = config.get(CONF_NUMBER)
+    held_more_than = config.get(CONF_HELD_MORE_THAN)
+    held_less_than = config.get(CONF_HELD_LESS_THAN)
+    pressed_time = None
+    cancel_pressed_more_than = None
     
+    SERVICE_VAPIX_CALL = 'vapix_call'
+SERVICE_VAPIX_CALL_RESPONSE = 'vapix_call_response'
+SERVICE_CGI = 'cgi'
+SERVICE_ACTION = 'action'
+SERVICE_PARAM = 'param'
+SERVICE_DEFAULT_CGI = 'param.cgi'
+SERVICE_DEFAULT_ACTION = 'update'
     
-@patch( 'ycm.vimsupport.CurrentFiletypes', return_value = [ 'ycmtest' ] )
-def OnCompleteDone_NoActionNoError_test( *args ):
-  request = CompletionRequest( None )
-  request.Done = MagicMock( return_value = True )
-  request._OnCompleteDone_Csharp = MagicMock()
-  request._OnCompleteDone_FixIt = MagicMock()
-  request.OnCompleteDone()
-  request._OnCompleteDone_Csharp.assert_not_called()
-  request._OnCompleteDone_FixIt.assert_not_called()
+        hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP,
+                         lambda event: client.close())
     
-      def run( self ):
-    if not self.future.set_running_or_notify_cancel():
-      return
+    SERVICE_BROWSE_URL_SCHEMA = vol.Schema({
+    # pylint: disable=no-value-for-parameter
+    vol.Required(ATTR_URL, default=ATTR_URL_DEFAULT): vol.Url(),
+})
+    
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        filter_named = [result.name for result in self.last_results
+                        if result.mac == device]
