@@ -1,207 +1,187 @@
 
         
-            # Check urllib3 for compatibility.
-    major, minor, patch = urllib3_version  # noqa: F811
-    major, minor, patch = int(major), int(minor), int(patch)
-    # urllib3 >= 1.21.1, <= 1.23
-    assert major == 1
-    assert minor >= 21
-    assert minor <= 23
+              self.path_dim = self.path_embeddings.shape[1]
+    
+    # add train_ext_input and valid_ext input
+data = {'train_truth': rates_train,
+        'valid_truth': rates_valid,
+        'train_data' : spikes_train,
+        'valid_data' : spikes_valid,
+        'train_ext_input' : np.array(ext_input_train),
+        'valid_ext_input': np.array(ext_input_valid),
+        'train_percentage' : train_percentage,
+        'nreplications' : nreplications,
+        'dt' : FLAGS.dt,
+        'P_sxn' : P_nxn,
+        'condition_labels_train' : condition_labels_train,
+        'condition_labels_valid' : condition_labels_valid,
+        'conversion_factor': 1.0 / rnn_a['conversion_factor']}
+    
+      def _score(self, word_patch):
+    '''Score a matrix of shape (batch_size, num_timesteps+1) str tokens.'''
+    word_ids = np.array(
+        [[self.vocab.word_to_id(word) for word in row]
+         for row in word_patch])
+    char_ids = np.array(
+        [[self.vocab.word_to_char_ids(word) for word in row]
+         for row in word_patch])
+    print('Probs for \n{}\n='.format(np.array(word_patch)[:, 1:]))
     
     
-class InvalidHeader(RequestException, ValueError):
-    '''The header value provided was somehow invalid.'''
-    
-        # Redirection.
-    300: ('multiple_choices',),
-    301: ('moved_permanently', 'moved', '\\o-'),
-    302: ('found',),
-    303: ('see_other', 'other'),
-    304: ('not_modified',),
-    305: ('use_proxy',),
-    306: ('switch_proxy',),
-    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
-    308: ('permanent_redirect',
-          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
-    
-        def list_regex_patterns(self):
-        # at time of writing(2017-11-20) no regex pattern paginator exists
-        regex_patterns = []
-        params = {}
-        while True:
-            try:
-                response = self.list_regex_patterns_with_backoff(**params)
-            except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-                self.module.fail_json_aws(e, msg='Could not list regex patterns')
-            regex_patterns.extend(response['RegexPatternSets'])
-            if 'NextMarker' in response:
-                params['NextMarker'] = response['NextMarker']
-            else:
-                break
-        return regex_patterns
-    
-        existing_conditions = dict((condition_type, dict()) for condition_type in MATCH_LOOKUP)
-    desired_conditions = dict((condition_type, dict()) for condition_type in MATCH_LOOKUP)
-    all_conditions = dict()
-    
-    DOCUMENTATION = '''
-module: aws_waf_web_acl
-short_description: create and delete WAF Web ACLs
-description:
-  - Read the AWS documentation for WAF
-    U(https://aws.amazon.com/documentation/waf/)
-version_added: '2.5'
-    
-    RETURN = '''
-invalidation:
-  description: The invalidation's information.
-  returned: always
-  type: complex
-  contains:
-    create_time:
-      description: The date and time the invalidation request was first made.
-      returned: always
-      type: string
-      sample: '2018-02-01T15:50:41.159000+00:00'
-    id:
-      description: The identifier for the invalidation request.
-      returned: always
-      type: string
-      sample: I2G9MOWJZFV612
-    invalidation_batch:
-      description: The current invalidation information for the batch request.
-      returned: always
-      type: complex
-      contains:
-        caller_reference:
-          description: The value used to uniquely identify an invalidation request.
-          returned: always
-          type: string
-          sample: testing 123
-        paths:
-          description: A dict that contains information about the objects that you want to invalidate.
-          returned: always
-          type: complex
-          contains:
-            items:
-              description: A list of the paths that you want to invalidate.
-              returned: always
-              type: list
-              sample:
-              - /testpathtwo/test2.js
-              - /testpathone/test1.css
-              - /testpaththree/test3.ss
-            quantity:
-              description: The number of objects that you want to invalidate.
-              returned: always
-              type: int
-              sample: 3
-    status:
-      description: The status of the invalidation request.
-      returned: always
-      type: string
-      sample: Completed
-location:
-  description: The fully qualified URI of the distribution and invalidation batch request.
-  returned: always
-  type: string
-  sample: https://cloudfront.amazonaws.com/2017-03-25/distribution/E1ZID6KZJECZY7/invalidation/I2G9MOWJZFV622
-'''
-    
-    try:
-    import botocore
-except ImportError:
-    pass  # will be detected by imported HAS_BOTO3
-    
-        if pipeline_field(client, dp_id, field='@pipelineState') in DP_ACTIVE_STATES:
-        changed = False
+def create_gen_train_op(hparams, learning_rate, gen_loss, global_step, mode):
+  '''Create Generator train op.'''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
     else:
-        try:
-            client.activate_pipeline(pipelineId=dp_id)
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'InvalidRequestException':
-                module.fail_json(msg='You need to populate your pipeline before activation.')
-        try:
-            pipeline_status_timeout(client, dp_id, status=DP_ACTIVE_STATES,
-                                    timeout=timeout)
-        except TimeOutException:
-            if pipeline_field(client, dp_id, field='@pipelineState') == 'FINISHED':
-                # activated but completed more rapidly than it was checked
-                pass
-            else:
-                module.fail_json(msg=('Data Pipeline {0} failed to activate '
-                                      'within timeout {1} seconds').format(dp_name, timeout))
-        changed = True
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('Optimizing Generator vars.')
+    for v in gen_vars:
+      print(v)
+    if mode == 'MINIMIZE':
+      gen_grads = tf.gradients(gen_loss, gen_vars)
+    elif mode == 'MAXIMIZE':
+      gen_grads = tf.gradients(-gen_loss, gen_vars)
+    else:
+      raise ValueError('Must be one of 'MINIMIZE' or 'MAXIMIZE'')
+    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+                                                  FLAGS.grad_clipping)
+    gen_train_op = gen_optimizer.apply_gradients(
+        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    return gen_train_op, gen_grads_clipped, gen_vars
     
-        argument_spec = ec2_argument_spec()
+    
+def test_on_first_run(usage_tracker_io, usage_tracker_exists, shell_pid, logs):
+    shell_pid.return_value = 12
+    main()
+    usage_tracker_exists.return_value = False
+    _assert_tracker_updated(usage_tracker_io, 12)
+    logs.how_to_configure_alias.assert_called_once()
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+    
+@pytest.mark.parametrize('command, packages', [
+    (Command('vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
+     [('vim', 'main'), ('vim-tiny', 'main')])])
+def test_match(mocker, command, packages):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
+    
+    EXAMPLES = '''
+# Note: These examples do not set authentication details, see the AWS Guide for details.
+    
+    - cloudwatchevent_rule:
+    name: MyDisabledCronTask
+    schedule_expression: 'rate(5 minutes)'
+    description: Run my disabled scheduled task
+    state: disabled
+    targets:
+      - id: MyOtherTargetId
+        arn: arn:aws:lambda:us-east-1:123456789012:function:MyFunction
+        input: '{'foo': 'bar'}'
+    
+        '''
+    dp_description = pipeline_description(client, dp_id)
+    for field_key in dp_description['pipelineDescriptionList'][0]['fields']:
+        if field_key['key'] == field:
+            return field_key['stringValue']
+    raise KeyError('Field key {0} not found!'.format(field))
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
     argument_spec.update(
         dict(
-            image_ids=dict(default=[], type='list', aliases=['image_id']),
-            filters=dict(default={}, type='dict'),
-            owners=dict(default=[], type='list', aliases=['owner']),
-            executable_users=dict(default=[], type='list', aliases=['executable_user']),
-            describe_image_attributes=dict(default=False, type='bool')
+            bgp_asn=dict(required=False, type='int'),
+            ip_address=dict(required=True),
+            name=dict(required=True),
+            routing=dict(default='dynamic', choices=['dynamic', 'static']),
+            state=dict(default='present', choices=['present', 'absent']),
         )
     )
     
-        for hook in all_hooks['LifecycleHooks']:
-        if hook['LifecycleHookName'] == lch_name:
-            lch_params = {
-                'LifecycleHookName': lch_name,
-                'AutoScalingGroupName': asg_name
-            }
+    - name: Gather facts about a filtered list of customer gateways, based on tags
+  ec2_customer_gateway_facts:
+    region: ap-southeast-2
+    filters:
+      'tag:Name': test-customer-gateway
+      'tag:AltName': test-customer-gateway-alt
+  register: cust_gw_facts
     
-        # If we're in check mode, nothing else to do
-    if not check_mode:
-        if isinstance:
-            if address.domain == 'vpc':
-                res = ec2.associate_address(device_id,
-                                            allocation_id=address.allocation_id,
-                                            private_ip_address=private_ip_address,
-                                            allow_reassociation=allow_reassociation)
-            else:
-                res = ec2.associate_address(device_id,
-                                            public_ip=address.public_ip,
-                                            private_ip_address=private_ip_address,
-                                            allow_reassociation=allow_reassociation)
-        else:
-            res = ec2.associate_address(network_interface_id=device_id,
-                                        allocation_id=address.allocation_id,
-                                        private_ip_address=private_ip_address,
-                                        allow_reassociation=allow_reassociation)
-        if not res:
-            raise EIPException('association failed')
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.ec2 import (HAS_BOTO3, boto3_conn, camel_dict_to_snake_dict, ec2_argument_spec,
+                                      get_aws_connection_info)
     
-        name = module.params['name']
-    state = module.params.get('state')
-    key_material = module.params.get('key_material')
-    force = module.params.get('force')
     
-    # Encrypted Snapshot copy
-- ec2_snapshot_copy:
-    source_region: eu-central-1
-    region: eu-west-1
-    source_snapshot_id: snap-xxxxxxx
-    encrypted: yes
+@AWSRetry.exponential_backoff()
+def get_placement_group_details(connection, module):
+    name = module.params.get('name')
+    try:
+        response = connection.describe_placement_groups(
+            Filters=[{
+                'Name': 'group-name',
+                'Values': [name]
+            }])
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Couldn't find placement group named [%s]' % name)
     
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
-
     
-        def test_phones(self):
-        self.assertEqual(('1234',), self.reg.phones)
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'GroupCommitResolution'
+        db.create_table(
+            'sentry_groupcommitresolution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'group_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'commit_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'datetime', self.gf('django.db.models.fields.DateTimeField')(
+                        db_index=True
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['GroupCommitResolution'])
     
-        def test_rollback_error(self):
-        self.config.reverter.rollback_checkpoints = mock.Mock(
-            side_effect=errors.ReverterError)
-        self.assertRaises(errors.PluginError, self.config.rollback_checkpoints)
-    
-    from certbot import errors
+        def backwards(self, orm):
+        # Removing unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
+        db.delete_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
