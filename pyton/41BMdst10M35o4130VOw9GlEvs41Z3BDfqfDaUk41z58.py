@@ -1,169 +1,238 @@
 
         
-            def _get_session_key(self):
-        '''
-        Instead of generating a random string, generate a secure url-safe
-        base64-encoded string of data as our session key.
-        '''
-        return signing.dumps(
-            self._session, compress=True,
-            salt='django.contrib.sessions.backends.signed_cookies',
-            serializer=self.serializer,
-        )
-    
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
+            Returns:
+      the word pairs of these instances.
     '''
-    objects = SessionManager()
+    word_pairs = session.run(self.pairs_to_load,
+                             feed_dict={self.instances_to_load: instances})
+    return [pair[0].split('::') for pair in word_pairs]
     
-    # convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+      def call(self, h_tm1_bxn, u_bx1):
+    act_t_bxn = tf.matmul(h_tm1_bxn, self.Wh_nxn) + self.b_1xn + u_bx1 * self.Bu_1xn
+    h_t_bxn = tf.nn.tanh(act_t_bxn)
+    z_t = tf.nn.xw_plus_b(h_t_bxn, self.Wro_nxo, self.bro_o)
+    return z_t, h_t_bxn
     
-        with gzip.open(paths[3], 'rb') as imgpath:
-        x_test = np.frombuffer(imgpath.read(), np.uint8,
-                               offset=16).reshape(len(y_test), 28, 28)
-    
-        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
-                      output_shape=x.shape)(inputs)
-    model1 = Model(inputs, outputs1)
-    out1 = model1.predict(x[np.newaxis])[0]
-    x2 = np.transpose(x, (2, 0, 1))
-    inputs2 = Input(shape=x2.shape)
-    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
-                      output_shape=x2.shape)(inputs2)
-    model2 = Model(inputs2, outputs2)
-    out2 = model2.predict(x2[np.newaxis])[0]
-    assert_allclose(out1, out2.transpose(1, 2, 0))
-    
-    
-@keras_test
-def test_vector_regression():
+      Args:
+    data_e: nexamples length list of NxT trials
+    dt: how often the data are sampled
+    max_firing_rate: the firing rate that is associated with a value of 1.0
+  Returns:
+    gauss_e: a list of length b of the data with noise.
     '''
-    Perform float data prediction (regression) using 2 layer MLP
-    with tanh and sigmoid activations.
-    '''
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         output_shape=(num_classes,),
-                                                         classification=False)
     
+    '''Eval pre-trained 1 billion word language model.
+'''
+import os
+import sys
     
-def test_serialization():
-    all_activations = ['max_norm', 'non_neg',
-                       'unit_norm', 'min_max_norm']
-    for name in all_activations:
-        fn = constraints.get(name)
-        ref_fn = getattr(constraints, name)()
-        assert fn.__class__ == ref_fn.__class__
-        config = constraints.serialize(fn)
-        fn = constraints.deserialize(config)
-        assert fn.__class__ == ref_fn.__class__
+        probs_cache = os.path.join(self.log_dir, '{}.probs'.format(test_data_name))
+    if os.path.exists(probs_cache):
+      print('Reading cached result from {}'.format(probs_cache))
+      with tf.gfile.Open(probs_cache, 'r') as f:
+        probs = pkl.load(f)
+    else:
+      tf.reset_default_graph()
+      self.sess = tf.Session()
+      # Build the graph.
+      saver = tf.train.import_meta_graph(
+          os.path.join(self.log_dir, 'ckpt-best.meta'))
+      saver.restore(self.sess, os.path.join(self.log_dir, 'ckpt-best'))
+      print('Restored from {}'.format(self.log_dir))
+      graph = tf.get_default_graph()
+      self.tensors = dict(
+          inputs_in=graph.get_tensor_by_name('test_inputs_in:0'),
+          char_inputs_in=graph.get_tensor_by_name('test_char_inputs_in:0'),
+          softmax_out=graph.get_tensor_by_name('SotaRNN_1/softmax_out:0'),
+          states_init=graph.get_operation_by_name('SotaRNN_1/states_init'))
+      self.shape = self.tensors['inputs_in'].shape.as_list()
     
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+      # Cut preprocessed into patches of shape [batch_size, num_timesteps]
+  patches = []
+  for row in range(nrow):
+    patches.append([])
+    for col in range(ncol):
+      patch = [sent[col * num_timesteps:
+                    (col+1) * num_timesteps + 1]
+               for sent in preprocessed[row * batch_size:
+                                        (row+1) * batch_size]]
+      if np.all(np.array(patch)[:, 1:] == PAD):
+        patch = None  # no need to process this patch.
+      patches[-1].append(patch)
+  return patches
     
-        def process_options(self, args, opts):
+    '''IMDB data loader and helpers.'''
+    
+              [gen_initial_state_eval, fake_gen_initial_state_eval, _] = sess.run(
+              [
+                  model.eval_final_state, model.fake_gen_final_state,
+                  model.global_step
+              ],
+              feed_dict=eval_feed)
+    
+      Args:
+    gen_logits:  Generator logits.
+    gen_labels:  Labels for the correct token.
+    dis_values:  Discriminator values Tensor of shape [batch_size,
+      sequence_length].
+    is_real_input:  Tensor indicating whether the label is present.
+    
+    from models import bidirectional_zaremba
+from models import cnn
+from models import critic_vd
+from models import feedforward
+from models import rnn
+from models import rnn_nas
+from models import rnn_vd
+from models import rnn_zaremba
+from models import seq2seq
+from models import seq2seq_nas
+from models import seq2seq_vd
+from models import seq2seq_zaremba
+    
+        # rnn_vd derived from the same code base as rnn_zaremba.
+    elif (FLAGS.discriminator_model == 'rnn_zaremba' or
+          FLAGS.discriminator_model == 'rnn_vd'):
+      dis_variable_maps = variable_mapping.rnn_zaremba(hparams, model='dis')
+      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
+      init_savers['dis_init_saver'] = dis_init_saver
+    
+        def describe(self):
+        return 'Creates extension %s' % self.name
+    
+            # No redirect was found. Return the response.
+        return response
+
+    
+        __not_given = object()
+    
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
+    
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
+    
+        for stack_description in service_mgr.describe_stacks(module.params.get('stack_name')):
+        facts = {'stack_description': stack_description}
+        stack_name = stack_description.get('StackName')
+    
+    RETURN = '''
+changed:
+  description: whether a keypair was created/deleted
+  returned: always
+  type: bool
+  sample: true
+msg:
+  description: short message describing the action taken
+  returned: always
+  type: string
+  sample: key pair created
+key:
+  description: details of the keypair (this is set to null when state is absent)
+  returned: always
+  type: complex
+  contains:
+    fingerprint:
+      description: fingerprint of the key
+      returned: when state is present
+      type: string
+      sample: 'b0:22:49:61:d9:44:9d:0c:7e:ac:8a:32:93:21:6c:e8:fb:59:62:43'
+    name:
+      description: name of the keypair
+      returned: when state is present
+      type: string
+      sample: my_keypair
+    private_key:
+      description: private key of a newly created keypair
+      returned: when a new keypair is created by AWS (key_material is not provided)
+      type: string
+      sample: '-----BEGIN RSA PRIVATE KEY-----
+        MIIEowIBAAKC...
+        -----END RSA PRIVATE KEY-----'
+'''
+    
         try:
-            self.settings.setdict(arglist_to_dict(opts.set),
-                                  priority='cmdline')
-        except ValueError:
-            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+        connection.delete_placement_group(
+            GroupName=name, DryRun=module.check_mode)
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Couldn't delete placement group [%s]' % name)
     
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
+    
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+        import matplotlib.pyplot as plt
+    
+        plt.figure('scikit-learn LASSO benchmark results')
+    plt.subplot(211)
+    plt.plot(list_n_samples, lasso_results, 'b-',
+                            label='Lasso')
+    plt.plot(list_n_samples, lars_lasso_results, 'r-',
+                            label='LassoLars')
+    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
+                            alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    
+        if dataset_name == 'shuttle':
+        dataset = fetch_mldata('shuttle')
+        X = dataset.data
+        y = dataset.target
+        # we remove data with label 4
+        # normal data are then those of class 1
+        s = (y != 4)
+        X = X[s, :]
+        y = y[s]
+        y = (y != 1).astype(int)
+    
+    import six
+    
+    File: sparsity_benchmark.py
+Function: benchmark_sparse_predict at line 56
+Total time: 0.39274 s
+    
+    
+df = pd.DataFrame(res).set_index(['analyzer', 'ngram_range', 'vectorizer'])
+    
+        scikit_classifier_results = []
+    scikit_regressor_results = []
+    n = 10
+    step = 500
+    start_dim = 500
+    n_classes = 10
+    
+    
+def setup(app):
+    # Format template for issues URI
+    # e.g. 'https://github.com/sloria/marshmallow/issues/{issue}
+    app.add_config_value('issues_uri', default=None, rebuild='html')
+    # Shortcut for GitHub, e.g. 'sloria/marshmallow'
+    app.add_config_value('issues_github_path', default=None, rebuild='html')
+    # Format template for user profile URI
+    # e.g. 'https://github.com/{user}'
+    app.add_config_value('issues_user_uri', default=None, rebuild='html')
+    app.add_role('issue', issue_role)
+    app.add_role('user', user_role)
 
     
-            spidercls = DefaultSpider
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        else:
-            spidercls = spidercls_for_request(spider_loader, request, spidercls)
-        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
-        self.crawler_process.start()
-
-    
-            self.process_spider_arguments(opts)
-        self.process_request_meta(opts)
-    
-    
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
-    
-        def syntax(self):
-        return '[options]'
-    
-        def update_vars(self, vars):
-        '''You can use this function to update the Scrapy objects that will be
-        available in the shell
-        '''
-        pass
-    
-    import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.utils.versions import scrapy_components_versions
-    
-    import logging
-from twisted.internet import defer
-import six
-from scrapy.exceptions import NotSupported, NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.misc import load_object
-from scrapy.utils.python import without_none_values
-from scrapy import signals
-    
-        # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-    
-    for face_location in face_locations:
-    
-    
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
-    # Check if a valid image file was uploaded
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
-    
-    frames = []
-frame_count = 0
-    
-    import os
-import warnings
-    
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
-    
-    
-def _authenticate(cloud, email, password):
-    '''Log in and return an authenticated Cognito instance.'''
-    from botocore.exceptions import ClientError
-    from warrant.exceptions import ForceChangePasswordException
-    
-    
-def get_scanner(hass, config):
-    '''Validate the configuration and return an Actiontec scanner.'''
-    scanner = ActiontecDeviceScanner(config[DOMAIN])
-    return scanner if scanner.success_init else None
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
