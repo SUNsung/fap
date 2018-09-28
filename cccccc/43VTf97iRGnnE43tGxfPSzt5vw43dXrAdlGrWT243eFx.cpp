@@ -1,211 +1,355 @@
 
         
-        #endif  // GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
-
+        #include <unordered_map>
+    
+    REGISTER_OP('FloatOutputStringOutput')
+    .Output('a: float32')
+    .Output('b: string')
+    .SetShapeFn(shape_inference::UnknownShape);
+    
+    #include <iomanip>
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/grappler/costs/graph_properties.h'
+#include 'tensorflow/core/grappler/grappler_item.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    // Register the bfloat16 numpy type.
+void RegisterNumpyBfloat16();
+    
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/platform/mutex.h'
+#include 'tensorflow/python/lib/core/bfloat16.h'
+#include 'tensorflow/python/lib/core/ndarray_tensor_bridge.h'
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    string DiagonalString(Diagonal d) {
+  switch (d) {
+    case Diagonal::kUnit:
+      return 'Unit';
+    case Diagonal::kNonUnit:
+      return 'NonUnit';
+    default:
+      LOG(FATAL) << 'Unknown diagonal ' << static_cast<int32>(d);
+  }
+}
+    
+    #define VOID_LINE(type, n) (void)dst##n##Base; (void)dst##n##Stride;
+    
+    #ifdef CAROTENE_NEON
+    
+    s32 countNonZero(const Size2D &_size,
+                 const u8 * srcBase, ptrdiff_t srcStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw16 = size.width & ~15u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u8* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
+    }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35>
+internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35> Values(T1 v1, T2 v2, T3 v3, T4 v4,
+    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
+    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
+    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
+    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35) {
+  return internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35>(v1, v2, v3, v4, v5, v6,
+      v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21,
+      v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35);
+}
+    
+      // Appends an event listener to the end of the list. Google Test assumes
+  // the ownership of the listener (i.e. it will delete the listener when
+  // the test program finishes).
+  void Append(TestEventListener* listener);
     
     
-    {  virtual void ReportTestPartResult(const TestPartResult& result) = 0;
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ', '
+                            << e3 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2
+                            << '\n' << e3 << ' evaluates to ' << v3;
+}
+    
+    
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+  const T30 v30_;
+  const T31 v31_;
+  const T32 v32_;
+  const T33 v33_;
+  const T34 v34_;
+  const T35 v35_;
 };
     
-    // Adds reference to a type if it is not a reference type,
-// otherwise leaves it unchanged.  This is the same as
-// tr1::add_reference, which is not widely available yet.
-template <typename T>
-struct AddReference { typedef T& type; };  // NOLINT
-template <typename T>
-struct AddReference<T&> { typedef T& type; };  // NOLINT
     
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_STRING_H_
+    {  T0 f0_;
+  T1 f1_;
+  T2 f2_;
+  T3 f3_;
+  T4 f4_;
+  T5 f5_;
+};
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49>
+struct Types49 {
+  typedef T1 Head;
+  typedef Types48<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+      T44, T45, T46, T47, T48, T49> Tail;
+};
+    
+        for (int i = 2; i <= max; i++) {
+      if (!is_prime_[i]) continue;
+    }
+    
+    
+    {  return clone;
+}
+    
+    // Tests the default c'tor.
+TEST(MyString, DefaultConstructor) {
+  const MyString s;
+    }
+    
+    data.shape: (100, 100)
+expanded.shape: (1, 1, 100, 100)
+    
+    namespace caffe2 {
+std::vector<TensorShape> FCShapeInference(
+    const OperatorDef& def,
+    const vector<TensorShape>& in,
+    bool pretransposed_weight) {
+  vector<TensorShape> out(1);
+  ArgumentHelper helper(def);
+    }
+    }
+    
+        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
+         ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
+      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 3));
+    }
+    input_blob_names.push_back(GO(3));
+    
+    
+  )DOC')
+    .Input(0, 'data', 'a 1-D tensor.')
+    .Output(
+        0,
+        'indices',
+        'Indices of duplicate elements in data, excluding first occurrences.');
+    
+    
+    {  bool RunOnDevice() override;
+};
+    
+    ```
+    
+    #endif // CAFFE2_OPERATORS_FLOOR_OP_H_
 
     
-    
-// Step 2. Use the TEST macro to define your tests.
-//
-// TEST has two parameters: the test case name and the test name.
-// After using the macro, you should define your test logic between a
-// pair of braces.  You can use a bunch of macros to indicate the
-// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
-// examples of such macros.  For a complete list, see gtest.h.
-//
-// <TechnicalDetails>
-//
-// In Google Test, tests are grouped into test cases.  This is how we
-// keep test code organized.  You should put logically related tests
-// into the same test case.
-//
-// The test case name and the test name should both be valid C++
-// identifiers.  And you should not use underscore (_) in the names.
-//
-// Google Test guarantees that each test you define is run exactly
-// once, but it makes no guarantee on the order the tests are
-// executed.  Therefore, you should write your tests in such a way
-// that their results don't depend on their order.
-//
-// </TechnicalDetails>
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
-
-    
-      // Gets the first element of the queue, or NULL if the queue is empty.
-  QueueNode<E>* Head() { return head_; }
-  const QueueNode<E>* Head() const { return head_; }
-    
-    #include <emmintrin.h>
-#include <smmintrin.h>
-#include <cstdint>
-#include 'dotproductsse.h'
-    
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
+    namespace caffe2 {
     }
-  }
-}
-    
-    #include <cstdint>  // for int16_t
-    
-      // Split the part (horizontally), and save the split result into
-  // parts_splitted. Note that it is caller's responsibility to release the
-  // memory owns by parts_splitted. On the other hand, the part is unchanged
-  // during this process and still owns the blobs, so do NOT call DeleteBoxes
-  // when freeing the colpartitions in parts_splitted.
-  void SplitCPHor(ColPartition* part,
-                  GenericVector<ColPartition*>* parts_splitted);
-    
-      bool has_leaders;   // does the line contain leader dots (.....)?
-  bool has_drop_cap;  // does the line have a drop cap?
-  int pix_ldistance;  // distance to the left pblock boundary in pixels
-  int pix_rdistance;  // distance to the right pblock boundary in pixels
-  float pix_xheight;  // guessed xheight for the line
-  int average_interword_space; // average space between words in pixels.
-    
-    
-    {
-    {    if (amount[tag.string()] == 1) {
-      other->AddChild(vc->GetName(), vc->GetId(), vc->GetValue().string(),
-                      vc->GetDescription());
-    } else {  // More than one would use this submenu -> create submenu.
-      SVMenuNode* sv = mr->AddChild(tag.string());
-      if ((amount[tag.string()] <= MAX_ITEMS_IN_SUBMENU) ||
-          (amount[tag2.string()] <= 1)) {
-        sv->AddChild(vc->GetName(), vc->GetId(),
-                     vc->GetValue().string(), vc->GetDescription());
-      } else {  // Make subsubmenus.
-        SVMenuNode* sv2 = sv->AddChild(tag2.string());
-        sv2->AddChild(vc->GetName(), vc->GetId(),
-                      vc->GetValue().string(), vc->GetDescription());
-      }
-    }
-  }
-  return mr;
-}
-    
-      // Gets the first n words (split by _) and puts them in t.
-  // For example, tesseract_foo_bar with N=2 will yield tesseract_foo_.
-  void GetFirstWords(const char *s,  // source string
-                     int n,          // number of words
-                     char *t);       // target string
-    
-    #include <grpc/support/port_platform.h>
     
     namespace grpc {
     }
     
-    MeasureDouble RpcClientServerLatency() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientServerLatencyMeasureName,
-      'Time between first byte of request received to last byte of response '
-      'sent, or terminal error (propagated from the server)',
-      kUnitMilliseconds);
-  return measure;
+    AuthPropertyIterator& AuthPropertyIterator::operator++() {
+  grpc_auth_property_iterator iter = {ctx_, index_, name_};
+  property_ = grpc_auth_property_iterator_next(&iter);
+  ctx_ = iter.ctx;
+  index_ = iter.index;
+  name_ = iter.name;
+  return *this;
 }
     
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
+    namespace grpc {
+    }
+    
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
+    
+      grpc_error* Init(grpc_call_element* elem,
+                   const grpc_call_element_args* args) override;
+    
+    #define MAKE_TEMPLATE_TYPE_INFO(m_template, m_type, m_var_type) \
+	template <>                                                 \
+	struct GetTypeInfo<m_template<m_type> > {                   \
+		static const Variant::Type VARIANT_TYPE = m_var_type;   \
+		static inline PropertyInfo get_class_info() {           \
+			return PropertyInfo(VARIANT_TYPE, String());        \
+		}                                                       \
+	};                                                          \
+	template <>                                                 \
+	struct GetTypeInfo<const m_template<m_type> &> {            \
+		static const Variant::Type VARIANT_TYPE = m_var_type;   \
+		static inline PropertyInfo get_class_info() {           \
+			return PropertyInfo(VARIANT_TYPE, String());        \
+		}                                                       \
+	};
+    
+    		const btDiscreteDynamicsWorld *m_world;
+		CreateFunc(const btDiscreteDynamicsWorld *world);
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #include 'modules/gdnative/gdnative.h'
     
     
-    {  std::atomic<int> refCount{0};
-};
+    {	id = 0;
+}
+
     
-    template <class UIntType, size_t w, size_t s, size_t r>
-struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
-  // [rand.eng.sub]: r * ceil(w / 32)
-  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
-};
+    
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        }
+    }
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include 'Utils.h'
+#include 'Learner.h'
+#include 'PerformanceProfiler.h'
+#include 'CompositeFunction.h'
+#include 'Serialization.h'
+    
+        private:
+        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const NDArrayViewPtr& packedData, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
+            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(packedData), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
+        {
+            // Determine unpacked shape
+            m_unpackedShape = GetUnpackedShape(sampleShape, sampleDynamicAxes, packedDataLayout);
+        }
+    
+    #endif
+
+    
+    BENCHMARK_RELATIVE(sformat_short_string_safe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& shortString = getShortString();
+  while (iters--) {
+    std::string out;
+    suspender.dismissing([&] { out = sformat('{}', shortString); });
+  }
+}
+    
+    #include <folly/Benchmark.h>
+#include <folly/FileUtil.h>
+#include <folly/init/Init.h>
+#include <folly/json.h>
     
       /**
-   * Returns a secure random uint64_t
+   * Returns true 1/n of the time. If n == 0, always returns false
    */
-  static uint64_t secureRand64() {
-    return secureRandom<uint64_t>();
+  static bool oneIn(uint32_t n) {
+    return oneIn(n, ThreadLocalPRNG());
   }
     
-    namespace folly {
-    }
+    
+    {} // namespace uri_detail
+    
+        ts.tv_sec = std::numeric_limits<int64_t>::min();
+    ts.tv_nsec = std::numeric_limits<int64_t>::min();
+    EXPECT_THROW(to<nsec_i64>(ts), std::range_error);
+    
+    
+    {
+    {} // namespace detail
+} // namespace folly
+
     
     #endif // D_DHT_REGISTRY_H
 
     
-    public:
-  DHTRoutingTable(const std::shared_ptr<DHTNode>& localNode);
-    
-    
-    {} // namespace aria2
-
-    
-      std::shared_ptr<DHTNode> localNode_;
+    std::shared_ptr<DHTBucket>
+DHTRoutingTable::getBucketFor(const std::shared_ptr<DHTNode>& node) const
+{
+  return getBucketFor(node->getID());
+}
     
         taskFactory->setLocalNode(localNode);
     taskFactory->setRoutingTable(routingTable.get());
@@ -214,28 +358,11 @@ struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
     taskFactory->setTaskQueue(taskQueue.get());
     taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
     
-    #endif // D_DHT_SETUP_H
+    #endif // D_DHT_TASK_H
 
     
+      virtual void executeTask() = 0;
     
-    {  virtual bool finished() = 0;
+    
+    {  void updateTokenSecret();
 };
-    
-    #include <algorithm>
-    
-    class DHTTaskExecutor {
-private:
-  int numConcurrent_;
-  std::vector<std::shared_ptr<DHTTask>> execTasks_;
-  std::deque<std::shared_ptr<DHTTask>> queue_;
-    }
-    
-    
-    {} // namespace aria2
-    
-    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
-{
-  factory_ = factory;
-}
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
