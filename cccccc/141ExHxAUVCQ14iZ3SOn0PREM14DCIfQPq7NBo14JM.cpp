@@ -1,189 +1,269 @@
 
         
-        #include <google/protobuf/compiler/annotation_test_util.h>
+        TegraCvtColor_Invoker(rgb2bgr565, rgb2bgr565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                              dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgb2rgb565, rgb2rgb565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                              dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgbx2bgr565, rgbx2bgr565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgbx2rgb565, rgbx2rgb565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+#define TEGRA_CVTBGRTOBGR565(src_data, src_step, dst_data, dst_step, width, height, scn, swapBlue, greenBits) \
+( \
+    greenBits == 6 && CAROTENE_NS::isSupportedConfiguration() ? \
+        scn == 3 ? \
+            (swapBlue ? \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgb2bgr565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) : \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgb2rgb565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) ), \
+            CV_HAL_ERROR_OK : \
+        scn == 4 ? \
+            (swapBlue ? \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgbx2bgr565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) : \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgbx2rgb565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) ), \
+            CV_HAL_ERROR_OK : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    TEST(MovableMessageTest, MoveConstructor) {
-  protobuf_unittest::TestAllTypes message1;
-  TestUtil::SetAllFields(&message1);
-  const auto* nested = &message1.optional_nested_message();
+    template <> struct wAdd<f32>
+{
+    typedef f32 type;
     }
     
-    void EnumOneofFieldGenerator::GenerateParsingCode(io::Printer* printer) {
-  // TODO(jonskeet): What about if we read the default value?
-  printer->Print(
-    variables_,
-    '$oneof_name$_ = input.ReadEnum();\n'
-    '$oneof_name$Case_ = $oneof_property_name$OneofCase.$property_name$;\n');
+    template <bool L2gradient, bool externalSobel>
+inline void Canny3x3(const Size2D &size, s32 cn,
+                     const u8 * srcBase, ptrdiff_t srcStride,
+                     u8 * dstBase, ptrdiff_t dstStride,
+                     s16 * dxBase, ptrdiff_t dxStride,
+                     s16 * dyBase, ptrdiff_t dyStride,
+                     f64 low_thresh, f64 high_thresh,
+                     Margin borderMargin)
+{
+    s32 low, high;
+    prepareThresh<L2gradient>(low_thresh, high_thresh, low, high);
+    }
+    
+        s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const f64* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
+    
+            if (cpolicy == CONVERT_POLICY_SATURATE)
+        {
+            for (; j < roiw128; j += step128)
+            {
+                internal::prefetch(src1 + j);
+    }
+    }
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const T * src = getRowPtr((const T *)srcBase, srcStride, i);
+        T * dst = getRowPtr((T *)dstBase, dstStride, (flipMode & FLIP_VERTICAL_MODE) != 0 ? size.height - i - 1 : i);
+        size_t j = 0, js = 0, jd = size.width * 3;
+    }
+    
+    #include 'err.h'
+#include 'socket.h'
+    
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+    void CoreCodegen::grpc_slice_buffer_pop(grpc_slice_buffer* sb) {
+  ::grpc_slice_buffer_pop(sb);
 }
     
-    class EnumFieldGenerator : public PrimitiveFieldGenerator {
+      bool IsPeerAuthenticated() const override;
+    
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusClientCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusClientCallData : public CallData {
  public:
-  EnumFieldGenerator(const FieldDescriptor* descriptor,
-                     int fieldOrdinal,
-                     const Options *options);
-  ~EnumFieldGenerator();
+  // Maximum size of trace context is sent on the wire.
+  static constexpr uint32_t kMaxTraceContextLen = 64;
+  // Maximum size of tags that are sent on the wire.
+  static constexpr uint32_t kMaxTagsLen = 2048;
     }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/mathlimits.h>
-#include <google/protobuf/stubs/strutil.h>
-#include <google/protobuf/wire_format.h>
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    void RepeatedEnumFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.WriteTo(output, _repeated_$name$_codec);\n');
-}
-    
-    #endif  // TESSERACT_ARCH_DOTPRODUCTSSE_H_
-
-    
-    
-    {}  // namespace tesseract
-
-    
-    
-    {  if (len > 4) {
-    dodgy_chars = 2 * tess_rejs + bad_char_count + isolated_digits +
-        isolated_alphas;
-    if (dodgy_chars > 5 || (dodgy_chars / (float) len) > 0.5)
-      return G_DODGY;
-    else
-      return G_OK;
-  } else {
-    dodgy_chars = 2 * tess_rejs + bad_char_count;
-    if ((len == 4 && dodgy_chars > 2) ||
-        (len == 3 && dodgy_chars > 2) || dodgy_chars >= len)
-      return G_DODGY;
-    else
-      return G_OK;
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
   }
+    
+    Status ProtoServerReflection::ListService(ServerContext* context,
+                                          ListServiceResponse* response) {
+  if (services_ == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Services not found.');
+  }
+  for (auto it = services_->begin(); it != services_->end(); ++it) {
+    ServiceResponse* service_response = response->add_service();
+    service_response->set_name(*it);
+  }
+  return Status::OK;
 }
     
-    #include 'bbgrid.h'
-#include 'classify.h'
-#include 'colpartition.h'
-#include 'colpartitiongrid.h'
-#include 'colpartitionset.h'
-#include 'helpers.h'
-#include 'ratngs.h'
-#include 'tesseractclass.h'
+       static char_class_type BOOST_REGEX_CALL lookup_classname(const wchar_t* p1, const wchar_t* p2);
+   static string_type BOOST_REGEX_CALL lookup_collatename(const wchar_t* p1, const wchar_t* p2);
     
-      // Compute the foreground pixel density for a tbox area.
-  float ComputeForegroundDensity(const TBOX& tbox);
+    template <class I>
+struct is_random_imp
+{
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+private:
+   typedef typename std::iterator_traits<I>::iterator_category cat;
+public:
+   BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<cat*, std::random_access_iterator_tag*>::value));
+#else
+   BOOST_STATIC_CONSTANT(bool, value = false);
+#endif
+};
     
-    extern BLOCK_LIST *current_block_list;
-extern STRING_VAR_H (editor_image_win_name, 'EditorImage',
-'Editor image window name');
-extern INT_VAR_H (editor_image_xpos, 590, 'Editor image X Pos');
-extern INT_VAR_H (editor_image_ypos, 10, 'Editor image Y Pos');
-extern INT_VAR_H (editor_image_height, 680, 'Editor image height');
-extern INT_VAR_H (editor_image_width, 655, 'Editor image width');
-extern INT_VAR_H (editor_image_word_bb_color, BLUE,
-'Word bounding box colour');
-extern INT_VAR_H (editor_image_blob_bb_color, YELLOW,
-'Blob bounding box colour');
-extern INT_VAR_H (editor_image_text_color, WHITE, 'Correct text colour');
-extern STRING_VAR_H (editor_dbwin_name, 'EditorDBWin',
-'Editor debug window name');
-extern INT_VAR_H (editor_dbwin_xpos, 50, 'Editor debug window X Pos');
-extern INT_VAR_H (editor_dbwin_ypos, 500, 'Editor debug window Y Pos');
-extern INT_VAR_H (editor_dbwin_height, 24, 'Editor debug window height');
-extern INT_VAR_H (editor_dbwin_width, 80, 'Editor debug window width');
-extern STRING_VAR_H (editor_word_name, 'BlnWords',
-'BL normalised word window');
-extern INT_VAR_H (editor_word_xpos, 60, 'Word window X Pos');
-extern INT_VAR_H (editor_word_ypos, 510, 'Word window Y Pos');
-extern INT_VAR_H (editor_word_height, 240, 'Word window height');
-extern INT_VAR_H (editor_word_width, 655, 'Word window width');
-extern double_VAR_H (editor_smd_scale_factor, 1.0, 'Scaling for smd image');
+             if(*p == static_cast<charT>(0)) // if null we've matched
+            return set_->isnot ? next : (ptr == next) ? ++next : ptr;
+    
+    #include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/is_function.hpp>
+#include <boost/type_traits/is_class.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/and.hpp>
+#include <boost/mpl/not.hpp>
+#ifndef BOOST_NO_SFINAE
+#include <boost/mpl/has_xxx.hpp>
+#endif
+#include <boost/ref.hpp>
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+       void BOOST_REGEX_CALL resize(size_type n);
+   
+   void* BOOST_REGEX_CALL extend(size_type n)
+   {
+      if(size_type(last - end) < n)
+         resize(n + (end - start));
+      pointer result = end;
+      end += n;
+      return result;
+   }
+    
+      XGBOOST_DEVICE GradientPairInternal<T> &operator-=(
+      const GradientPairInternal<T> &rhs) {
+    grad_ -= rhs.grad_;
+    hess_ -= rhs.hess_;
+    return *this;
+  }
+    
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
+    }
     
     /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
+ * \brief Macro to register tree updater.
  *
  * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
+ * // example of registering a objective ndcg@k
+ * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
+ * .describe('Column based tree maker.')
+ * .set_body([]() {
+ *     return new ColMaker<TStats>();
+ *   });
  * \endcode
- *
- * \sa FInferStorageType
  */
-using StorageTypeVector = std::vector<int>;
-    
-      std::map<std::string, std::string> GetParams() const override {
-    return param_.__DICT__();
-  }
-    
-      // Set up caffe op with real data
-  void CaffeOpSetup() {
-    if (!setup_) {
-      setup_ = true;
-      caffeOp_->SetUp(bot_, top_);
-    }
-  }
+#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
+  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
+      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
     
     /*!
- * \brief Stream manager.
- *
- * Uses a basic round-robin algorithm to dispatch GPU streams. Returns default
- * context on CPU.
+ * \brief Find the maximum iterator within the iterators
+ * \param begin The begining iterator.
+ * \param end The end iterator.
+ * \return the iterator point to the maximum value.
+ * \tparam Iterator The type of the iterator.
  */
-template <std::size_t kNumGpus, std::size_t kStreams>
-class StreamManager {
- public:
-  StreamManager();
-  ~StreamManager() {
-    Finalize();
+template<typename Iterator>
+inline Iterator FindMaxIndex(Iterator begin, Iterator end) {
+  Iterator maxit = begin;
+  for (Iterator it = begin; it != end; ++it) {
+    if (*it > *maxit) maxit = it;
   }
-  RunContext GetRunContext(Context const& ctx);
-  RunContext GetIORunContext(Context const& ctx);
-  void Finalize();
- private:
-  std::mutex mutex_;
-#if MXNET_USE_CUDA
-  std::array<std::array<mshadow::Stream<gpu>*, kStreams>, kNumGpus>
-      gpu_streams_;
-  std::array<mshadow::Stream<gpu>*, kNumGpus> gpu_io_streams_;
-  std::array<int, kNumGpus> gpu_cnt_;
-#endif  // MXNET_USE_CUDA
-  DISALLOW_COPY_AND_ASSIGN(StreamManager);
-};  // class StreamManager
+  return maxit;
+}
     
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
