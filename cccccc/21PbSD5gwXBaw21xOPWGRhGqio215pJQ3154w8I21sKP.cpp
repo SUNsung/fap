@@ -1,388 +1,129 @@
 
         
-        namespace atom {
+        namespace {
     }
-    
-        uint8_t flags = 0;
-    bool width = false;
-    if (params.Get('width', &width) && width) {
-      flags |= atom::kAutoResizeWidth;
-    }
-    bool height = false;
-    if (params.Get('height', &height) && height) {
-      flags |= atom::kAutoResizeHeight;
-    }
-    
-    template <>
-struct Converter<file_dialog::DialogSettings> {
-  static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     file_dialog::DialogSettings* out) {
-    mate::Dictionary dict;
-    if (!ConvertFromV8(isolate, val, &dict))
-      return false;
-    dict.Get('window', &(out->parent_window));
-    dict.Get('title', &(out->title));
-    dict.Get('message', &(out->message));
-    dict.Get('buttonLabel', &(out->button_label));
-    dict.Get('nameFieldLabel', &(out->name_field_label));
-    dict.Get('defaultPath', &(out->default_path));
-    dict.Get('filters', &(out->filters));
-    dict.Get('properties', &(out->properties));
-    dict.Get('showsTagField', &(out->shows_tag_field));
-#if defined(MAS_BUILD)
-    dict.Get('securityScopedBookmarks', &(out->security_scoped_bookmarks));
-#endif
-    return true;
-  }
-};
-    
-    namespace atom {
-    }
-    
-      views::LayoutManager* layout_manager() const { return layout_manager_; }
-    
-    bool Menu::IsEnabledAt(int index) const {
-  return model_->IsEnabledAt(index);
-}
-    
-    #include <Python.h>
-    
-    static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
-  return NULL;
-}
-static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
-  return NULL;
-}
     
     
     {
-    {
-    {
-    {bool AnnotationMatchesSubstring(const string& file_content,
-                                const GeneratedCodeInfo::Annotation* annotation,
-                                const string& expected_text) {
-  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
-  annotations.push_back(annotation);
-  return AtLeastOneAnnotationMatchesSubstring(file_content, annotations,
-                                              expected_text);
-}
-}  // namespace annotation_test_util
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    #include <string>
-    
-    // Groups are hacky:  The name of the field is just the lower-cased name
-// of the group type.  In C#, though, we would like to retain the original
-// capitalization of the type name.
-std::string GetFieldName(const FieldDescriptor* descriptor) {
-  if (descriptor->type() == FieldDescriptor::TYPE_GROUP) {
-    return descriptor->message_type()->name();
-  } else {
-    return descriptor->name();
-  }
-}
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    void PrimitiveFieldGenerator::WriteHash(io::Printer* printer) {
-  const char *text = 'if ($has_property_check$) hash ^= $property_name$.GetHashCode();\n';
-  if (descriptor_->type() == FieldDescriptor::TYPE_FLOAT) {
-    text = 'if ($has_property_check$) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode($property_name$);\n';
-  } else if (descriptor_->type() == FieldDescriptor::TYPE_DOUBLE) {
-    text = 'if ($has_property_check$) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode($property_name$);\n';
-  }
-	printer->Print(variables_, text);
-}
-void PrimitiveFieldGenerator::WriteEquals(io::Printer* printer) {
-  const char *text = 'if ($property_name$ != other.$property_name$) return false;\n';
-  if (descriptor_->type() == FieldDescriptor::TYPE_FLOAT) {
-    text = 'if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals($property_name$, other.$property_name$)) return false;\n';
-  } else if (descriptor_->type() == FieldDescriptor::TYPE_DOUBLE) {
-    text = 'if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals($property_name$, other.$property_name$)) return false;\n';
-  }
-  printer->Print(variables_, text);
-}
-void PrimitiveFieldGenerator::WriteToString(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'PrintField(\'$descriptor_name$\', $has_property_check$, $property_name$, writer);\n');
-}
-    
-      virtual void GenerateCodecCode(io::Printer* printer);
-  virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    
-    {
-    {  if (!namespace_.empty()) {
-    printer->Outdent();
-    printer->Print('}\n');
-  }
-  printer->Print('\n');
-  printer->Print('#endregion Designer generated code\n');
-}
-    
-    std::shared_ptr<Channel> CreateChannelInternal(const grpc::string& host,
-                                               grpc_channel* c_channel);
-    
-    namespace internal {
-class AlarmImpl : public CompletionQueueTag {
- public:
-  AlarmImpl() : cq_(nullptr), tag_(nullptr) {
-    gpr_ref_init(&refs_, 1);
-    grpc_timer_init_unset(&timer_);
-    GRPC_CLOSURE_INIT(&on_alarm_,
-                      [](void* arg, grpc_error* error) {
-                        // queue the op on the completion queue
-                        AlarmImpl* alarm = static_cast<AlarmImpl*>(arg);
-                        alarm->Ref();
-                        grpc_cq_end_op(
-                            alarm->cq_, alarm, error,
-                            [](void* arg, grpc_cq_completion* completion) {},
-                            arg, &alarm->completion_);
-                      },
-                      this, grpc_schedule_on_exec_ctx);
-  }
-  ~AlarmImpl() {
-    grpc_core::ExecCtx exec_ctx;
-    if (cq_ != nullptr) {
-      GRPC_CQ_INTERNAL_UNREF(cq_, 'alarm');
-    }
-  }
-  bool FinalizeResult(void** tag, bool* status) override {
-    *tag = tag_;
-    Unref();
-    return true;
-  }
-  void Set(CompletionQueue* cq, gpr_timespec deadline, void* tag) {
-    grpc_core::ExecCtx exec_ctx;
-    GRPC_CQ_INTERNAL_REF(cq->cq(), 'alarm');
-    cq_ = cq->cq();
-    tag_ = tag;
-    GPR_ASSERT(grpc_cq_begin_op(cq_, this));
-    grpc_timer_init(&timer_, grpc_timespec_to_millis_round_up(deadline),
-                    &on_alarm_);
-  }
-  void Cancel() {
-    grpc_core::ExecCtx exec_ctx;
-    grpc_timer_cancel(&timer_);
-  }
-  void Destroy() {
-    Cancel();
-    Unref();
-  }
-    }
-    }
-    
-    AuthPropertyIterator::~AuthPropertyIterator() {}
-    
-    grpc::string SecureAuthContext::GetPeerIdentityPropertyName() const {
-  if (!ctx_) {
-    return '';
-  }
-  const char* name = grpc_auth_context_peer_identity_property_name(ctx_);
-  return name == nullptr ? '' : name;
-}
-    
-    #include <grpcpp/support/channel_arguments.h>
-    
-    namespace grpc {
-    }
-    
-    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerServerLatency();
-::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
-    
-    void CensusServerCallData::OnDoneRecvMessageCb(void* user_data,
-                                               grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusServerCallData* calld =
-      reinterpret_cast<CensusServerCallData*>(elem->call_data);
-  CensusChannelData* channeld =
-      reinterpret_cast<CensusChannelData*>(elem->channel_data);
-  GPR_ASSERT(calld != nullptr);
-  GPR_ASSERT(channeld != nullptr);
-  // Stream messages are no longer valid after receiving trailing metadata.
-  if ((*calld->recv_message_) != nullptr) {
-    ++calld->recv_message_count_;
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
-}
-    
-    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsCollision(body0, body1);
-}
-    
-    
-    {#ifdef TOOLS_ENABLED
-	EditorPlugins::add_by_type<EditorPluginCSG>();
-#endif
-#endif
-}
-    
-    class Camera;
-    
-    NS_CC_BEGIN
-// implementation of GridAction
-    
-    #include '2d/CCAction.h'
-#include 'base/CCVector.h'
-#include 'base/CCRef.h'
-    
-    /*
- * Update each tick
- * Time is the percentage of the way through the duration
- */
-void PageTurn3D::update(float time)
-{
-    float tt = MAX(0, time - 0.25f);
-    float deltaAy = (tt * tt * 500);
-    float ay = -100 - deltaAy;
-    
-    float deltaTheta = sqrtf(time);
-    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
-    
-    float rotateByYAxis = (2-time)* M_PI;
-    
-    float sinTheta = sinf(theta);
-    float cosTheta = cosf(theta);
-    
-    for (int i = 0; i <= _gridSize.width; ++i)
-    {
-        for (int j = 0; j <= _gridSize.height; ++j)
+    {        for (; dj < size.width; sj += 4, ++dj)
         {
-            // Get original vertex
-            Vec3 p = getOriginalVertex(Vec2(i ,j));
-            
-            p.x -= getGridRect().origin.x;
-            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
-            float r = R * sinTheta;
-            float alpha = asinf( p.x / R );
-            float beta = alpha / sinTheta;
-            float cosBeta = cosf( beta );
-            
-            // If beta > PI then we've wrapped around the cone
-            // Reduce the radius to stop these points interfering with others
-            if (beta <= M_PI)
-            {
-                p.x = ( r * sinf(beta));
-            }
-            else
-            {
-                // Force X = 0 to stop wrapped
-                // points
-                p.x = 0;
-            }
-    }
-    }
-    }
-    
-    /**
- @brief This action simulates a page turn from the bottom right hand corner of the screen.
- 
- @details It's not much use by itself but is used by the PageTurnTransition.
-         Based on an original paper by L Hong et al.
-         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
-  
- @since v0.8.2
- */
-class CC_DLL PageTurn3D : public Grid3DAction
-{
-public:
-    /**
-     * @js NA 
-     */
-    virtual GridBase* getGrid() override;
-    }
-    
-    #define GUETZLI_LOG(stats, ...)                                    \
-  do {                                                             \
-    char debug_string[1024];                                       \
-    int res = snprintf(debug_string, sizeof(debug_string),         \
-                       __VA_ARGS__);                               \
-    assert(res > 0 && 'expected successful printing');             \
-    (void)res;                                                     \
-    debug_string[sizeof(debug_string) - 1] = '\0';                 \
-    ::guetzli::PrintDebug(                      \
-         stats, std::string(debug_string));        \
-  } while (0)
-#define GUETZLI_LOG_QUANT(stats, q)                    \
-  for (int y = 0; y < 8; ++y) {                        \
-    for (int c = 0; c < 3; ++c) {                      \
-      for (int x = 0; x < 8; ++x)                      \
-        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
-      GUETZLI_LOG(stats, '   ');                       \
-    }                                                  \
-    GUETZLI_LOG(stats, '\n');                          \
-  }
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
-}
-    
-    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
-  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
-  jpg->quant.clear();
-  int num_tables = 0;
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    JPEGComponent* comp = &jpg->components[i];
-    // Check if we have this quant table already.
-    bool found = false;
-    for (int j = 0; j < num_tables; ++j) {
-      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
-        comp->quant_idx = j;
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      JPEGQuantTable table;
-      memcpy(&table.values[0], &q[i][0], kTableSize);
-      table.precision = 0;
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        assert(table.values[k] >= 0);
-        assert(table.values[k] < (1 << 16));
-        if (table.values[k] > 0xff) {
-          table.precision = 1;
+            dst[dj] = src[sj + coi];
         }
-      }
-      table.index = num_tables;
-      comp->quant_idx = num_tables;
-      jpg->quant.push_back(table);
-      ++num_tables;
     }
-  }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)coi;
+#endif
 }
     
-    #include 'guetzli/jpeg_data_encoder.h'
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
+    {
+        v_dst = internal::vcgt(v_src0, v_src1);
+    }
     
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
+{
+    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
+    size_t len = _len + startMargin + endMargin;
+    if( (size_t)p < len )
+        return _p;
+    else if( borderType == BORDER_MODE_REPLICATE )
+        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
+    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
+    {
+        s32 delta = borderType == BORDER_MODE_REFLECT101;
+        if( len == 1 )
+            return 0;
+        do
+        {
+            if( p < 0 )
+                p = -p - 1 + delta;
+            else
+                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
+        }
+        while( (size_t)p >= len );
+    }
+    else if( borderType == BORDER_MODE_WRAP )
+    {
+        if( p < 0 )
+            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
+        if( p >= (ptrdiff_t)len )
+            p %= (ptrdiff_t)len;
+    }
+    else if( borderType == BORDER_MODE_CONSTANT )
+        p = -1;
+    else
+        internal::assertSupportedConfiguration(false);
+    return p - (ptrdiff_t)startMargin;
+}
     
+    void assertSupportedConfiguration(bool parametersSupported = true);
     
-    {}  // namespace guetzli
+        uint8x8_t tprev[3] = { v_zero_u8, v_zero_u8, v_zero_u8 },
+              tcurr[3] = { v_zero_u8, v_zero_u8, v_zero_u8 },
+              tnext[3] = { v_zero_u8, v_zero_u8, v_zero_u8 };
+    uint8x8_t t0 = v_zero_u8, t1 = v_zero_u8, t2 = v_zero_u8;
+    
+    inline float32x4_t vroundq(const float32x4_t& v)
+{
+    const int32x4_t signMask = vdupq_n_s32(1 << 31), half = vreinterpretq_s32_f32(vdupq_n_f32(0.5f));
+    float32x4_t v_addition = vreinterpretq_f32_s32(vorrq_s32(half, vandq_s32(signMask, vreinterpretq_s32_f32(v))));
+    return vaddq_f32(v, v_addition);
+}
+    
+    #ifdef CAROTENE_NEON
+    
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+        ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    
+        // Copy and convert all vertices into a single contiguous buffer
+    ImDrawVert* vtx_dst = NULL;
+    ImDrawIdx* idx_dst = NULL;
+    g_pVB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&vtx_dst);
+    g_pIB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&idx_dst);
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        vtx_dst += cmd_list->VtxBuffer.Size;
+        idx_dst += cmd_list->IdxBuffer.Size;
+    }
+    g_pVB->Unmap();
+    g_pIB->Unmap();
+    
+            D3D12_STATIC_SAMPLER_DESC staticSampler = {};
+        staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+        staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        staticSampler.MipLODBias = 0.f;
+        staticSampler.MaxAnisotropy = 0;
+        staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+        staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+        staticSampler.MinLOD = 0.f;
+        staticSampler.MaxLOD = 0.f;
+        staticSampler.ShaderRegister = 0;
+        staticSampler.RegisterSpace = 0;
+        staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    
+    // CHANGELOG 
+// (minor and older changes stripped away, please see git history for details)
+//  2018-06-08: Misc: Extracted imgui_impl_dx9.cpp/.h away from the old combined DX9+Win32 example.
+//  2018-06-08: DirectX9: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
+//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
+//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
