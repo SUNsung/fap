@@ -1,150 +1,131 @@
 
         
-            try:
-        citext_oids = get_citext_oids(connection.alias)
-        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
-        psycopg2.extensions.register_type(array_type, None)
-    except ProgrammingError:
-        # citext is not available on the database.
-        #
-        # The same comments in the except block of the above call to
-        # register_hstore() also apply here.
-        pass
-
+                    # >leading or trailing LWS MAY be removed without
+            # >changing the semantics of the field value'
+            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
+            # Also, requests raises `InvalidHeader` for leading spaces.
+            value = value.strip()
     
-        def __eq__(self, other):
-        return (
-            isinstance(other, self.__class__) and
-            self.keys == other.keys and
-            self.messages == other.messages and
-            self.strict == other.strict
-        )
     
-        def has_key(self, key):
-        return key in self._session
+class Solarized256Style(pygments.style.Style):
+    '''
+    solarized256
+    ------------
     
-        @property
-    def cache_key(self):
-        return self.cache_key_prefix + self._get_or_create_session_key()
+        See <https://github.com/httpie/httpie-ntlm> for an example auth plugin.
     
-        @classmethod
-    def get_session_store_class(cls):
-        raise NotImplementedError
-    
-        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
-    plt.axis('tight')
-    plt.show()
-
-    
-        if args.show_plot:
-        plt.plot(*zip(*timings))
-        plt.title('Average time taken running isotonic regression')
-        plt.xlabel('Number of observations')
-        plt.ylabel('Time (s)')
-        plt.axis('tight')
-        plt.loglog()
-        plt.show()
-
-    
-                print('Fast K-Means')
-            # let's prepare the data in small chunks
-            mbkmeans = MiniBatchKMeans(init='k-means++',
-                                       n_clusters=10,
-                                       batch_size=chunk)
-            tstart = time()
-            mbkmeans.fit(data)
-            delta = time() - tstart
-            print('Speed: %0.3fs' % delta)
-            print('Inertia: %f' % mbkmeans.inertia_)
-            print()
-            print()
-    
-                gc.collect()
-            print('benchmarking orthogonal_mp (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            orthogonal_mp(X, y, precompute=True,
-                          n_nonzero_coefs=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            omp_gram[i_f, i_s] = delta
-    
-      * scikit-learn
-    
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
+    # sdist
+if 'bdist_wheel' not in sys.argv:
     try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
+        # noinspection PyUnresolvedReferences
+        import argparse
+    except ImportError:
+        install_requires.append('argparse>=1.2.1')
     
-        Examples: ::
     
-            env.scrapy_all_settings.append({
-            'docname': env.docname,
-            'setting_name': setting_name,
-            'refid': refid,
-        })
+@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
+def test_digest_auth(httpbin_both, argument_name):
+    r = http(argument_name + '=digest', '--auth=user:password',
+             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    def _print_header(settings, inproject):
-    if inproject:
-        print('Scrapy %s - project: %s\n' % (scrapy.__version__, \
-            settings['BOT_NAME']))
-    else:
-        print('Scrapy %s - no active project\n' % scrapy.__version__)
     
-            name, domain = args[0:2]
-        module = sanitize_module_name(name)
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
-            if network_ok:
-            self.last_check_time = time.time()
-            self.report_ok()
-            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
-        else:
-            xlog.warn('network %s fail', self.type)
-            self.network_stat = 'Fail'
-            self.last_check_time = time.time()
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
     
-        def __init__(self, logger):
-        self.logger = logger
+        def get_config(self):
+        return {'l1': float(self.l1),
+                'l2': float(self.l2)}
     
-    - tree.CommonTree: A basic and most commonly used Tree implementation.
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
     
-        def prepare(self, **kwargs):
     
-            assert vid
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
     
-        def __init__(self):
-        super().__init__()
-        self.api_data = None
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loss = MSE_MAE_loss(0.3)
+        inputs = keras.layers.Input((2,))
+        outputs = keras.layers.Dense(1, name='model_output')(inputs)
+        model = keras.models.Model(inputs, outputs)
+        model.compile(optimizer='sgd', loss={'model_output': loss})
+        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
+        model.save(model_filename)
     
-    headers = {
-    'DNT': '1',
-    'Accept-Encoding': 'gzip, deflate, sdch, br',
-    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Cache-Control': 'max-age=0',
-    'Referer': 'http://www.dilidili.com/',
-    'Connection': 'keep-alive',
-    'Save-Data': 'on',
-}
+        model = create_multi_input_model_from(dummy_model, dummy_model)
+    model.compile(loss='categorical_crossentropy', optimizer='sgd')
+    assert len(model.losses) == 6
     
-            for i in range(len(titles)):
-            title = titles[i]
-            datas = {
-                'sid': song_id[i],
-                'ssid': song_ssid[i]
-            }
-            post_params = urllib.parse.urlencode(datas).encode('utf-8')
-            try:
-                resp = urllib.request.urlopen(get_song_url, post_params)
-                resp_data = json.loads(resp.read().decode('utf-8'))
-                real_url = resp_data['r']
-                type, ext, size = url_info(real_url)
-                print_info(site_info, title, type, size)
-            except:
-                pass
+    # try using different optimizers and different optimizer configs
+model.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
+    
+    print('Build model...')
+model = Sequential()
+    
+    # Vectorize the data.
+input_texts = []
+target_texts = []
+input_characters = set()
+target_characters = set()
+with open(data_path, 'r', encoding='utf-8') as f:
+    lines = f.read().split('\n')
+for line in lines[: min(num_samples, len(lines) - 1)]:
+    input_text, target_text = line.split('\t')
+    # We use 'tab' as the 'start sequence' character
+    # for the targets, and '\n' as 'end sequence' character.
+    target_text = '\t' + target_text + '\n'
+    input_texts.append(input_text)
+    target_texts.append(target_text)
+    for char in input_text:
+        if char not in input_characters:
+            input_characters.add(char)
+    for char in target_text:
+        if char not in target_characters:
+            target_characters.add(char)
+    
+    print('Predicting')
+predicted_stateful = model_stateful.predict(x_test, batch_size=batch_size)
+    
+    
+if __name__ == '__main__':
+    # Create our localizers
+    e, g = get_localizer(language='English'), get_localizer(language='Greek')
+    # Localize some text
+    for msgid in 'dog parrot cat bear'.split():
+        print(e.get(msgid), g.get(msgid))
+    
+        def __init__(self, one, other):
+        self._one = one
+        self._other = other
+    
+        '''A radio.     It has a scan button, and an AM/FM toggle switch.'''
+    
+    
+class PetShop(object):
+    
+        def __enter__(self):
+        if self.item is None:
+            self.item = self._queue.get()
+        return self.item
