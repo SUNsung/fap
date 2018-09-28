@@ -1,100 +1,90 @@
 
         
-                @io.puts
-        print_exception(exception, status, @indent)
-        @io.flush
+              # Creates a file upload field. If you are using file uploads then you will also need
+      # to set the multipart option for the form tag:
+      #
+      #   <%= form_tag '/upload', multipart: true do %>
+      #     <label for='file'>File to Upload</label> <%= file_field_tag 'file' %>
+      #     <%= submit_tag %>
+      #   <% end %>
+      #
+      # The specified URL will then be passed a File object containing the selected file, or if the field
+      # was left blank, a StringIO object.
+      #
+      # ==== Options
+      # * Creates standard HTML attributes for the tag.
+      # * <tt>:disabled</tt> - If set to true, the user will not be able to use this input.
+      # * <tt>:multiple</tt> - If set to true, *in most updated browsers* the user will be allowed to select multiple files.
+      # * <tt>:accept</tt> - If set to one or multiple mime-types, the user will be suggested a filter when choosing a file. You still need to set up model validations.
+      #
+      # ==== Examples
+      #   file_field_tag 'attachment'
+      #   # => <input id='attachment' name='attachment' type='file' />
+      #
+      #   file_field_tag 'avatar', class: 'profile_input'
+      #   # => <input class='profile_input' id='avatar' name='avatar' type='file' />
+      #
+      #   file_field_tag 'picture', disabled: true
+      #   # => <input disabled='disabled' id='picture' name='picture' type='file' />
+      #
+      #   file_field_tag 'resume', value: '~/resume.doc'
+      #   # => <input id='resume' name='resume' type='file' value='~/resume.doc' />
+      #
+      #   file_field_tag 'user_pic', accept: 'image/png,image/gif,image/jpeg'
+      #   # => <input accept='image/png,image/gif,image/jpeg' id='user_pic' name='user_pic' type='file' />
+      #
+      #   file_field_tag 'file', accept: 'text/html', class: 'upload', value: 'index.html'
+      #   # => <input accept='text/html' class='upload' id='file' name='file' type='file' value='index.html' />
+      def file_field_tag(name, options = {})
+        text_field_tag(name, nil, convert_direct_upload_option_to_url(options.merge(type: :file)))
       end
     
-          Utils.safe_glob(site.in_dest_dir, ['**', '*'], File::FNM_DOTMATCH).each do |file|
-        next if file =~ HIDDEN_FILE_REGEX || file =~ regex || dirs.include?(file)
-        files << file
-      end
+    require 'active_support/core_ext/string/output_safety'
     
-                output.to_s.each_line do |line|
-              Jekyll.logger.info('Bundler:'.green, line.strip) unless line.to_s.empty?
-            end
-    
-      # DBM stores ruby objects as a ruby `String`. Hence, when fetching the data,
-  # to convert the ruby string back into a ruby `Hash`, the string is converted
-  # into a JSON compatible string in `ruby_hash_to_json_string`, where it may
-  # later be parsed by `JSON.parse` in the `json_string_to_ruby_hash` method
-  #
-  # @param  [Hash] ruby `Hash` to be converted to `JSON` string
-  # @return [String]
-  def ruby_hash_to_json_string(hash)
-    hash.to_json
+    class BuildEnvironment
+  def initialize(*settings)
+    @settings = Set.new(*settings)
   end
     
-              begin
-            lineno = frame.lineno-1
-            lines = ::File.readlines(frame.filename)
-            frame.pre_context_lineno = [lineno-CONTEXT, 0].max
-            frame.pre_context = lines[frame.pre_context_lineno...lineno]
-            frame.context_line = lines[lineno].chomp
-            frame.post_context_lineno = [lineno+CONTEXT, lines.size].min
-            frame.post_context = lines[lineno+1..frame.post_context_lineno]
-          rescue
-          end
-    
-          def mask_authenticity_token(session)
-        token = set_token(session)
-        mask_token(token)
+          begin
+        f = Formulary.factory(new_full_name)
+      rescue Exception => e
+        onoe e if ARGV.homebrew_developer?
+        next
       end
     
-          def referrer(env)
-        ref = env['HTTP_REFERER'].to_s
-        return if !options[:allow_empty_referrer] and ref.empty?
-        URI.parse(ref).host || Request.new(env).host
-      rescue URI::InvalidURIError
-      end
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
     
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
+    require 'builder'
+require 'feedbag'
+require 'json'
+require 'nokogiri'
     
-        context 'opening brace on same line as first element' do
-      it 'allows closing brace on same line from last element' do
-        expect_no_offenses(construct(false, false))
-      end
+        sh 'gem build spree.gemspec'
+    mv 'spree-#{version}.gem', pkgdir
+  end
     
-            expect(new_source).to eq(<<-RUBY.strip_indent)
-          def func
-            for _ in [1, 2, 3] do
-              something
+                if handler.error.present?
+              @coupon_message = handler.error
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
+              return true
             end
           end
-        RUBY
-      end
-    
-            def check(node)
-          return unless node.body && node.body.kwbegin_type?
-    
-      it 'accepts a def with required begin block' do
-    expect_no_offenses(<<-RUBY.strip_indent)
-      def func
-        begin
-          ala
-        rescue => e
-          bala
+          false
         end
-        something
-      end
-    RUBY
-  end
     
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
+            def inventory_unit_params
+          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        end
       end
+    end
+  end
+end
+
+    
+            def show
+          respond_with(stock_location)
+        end
