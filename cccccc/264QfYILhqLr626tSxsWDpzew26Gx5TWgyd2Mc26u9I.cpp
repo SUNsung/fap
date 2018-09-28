@@ -1,153 +1,197 @@
 
         
-          // Called immediately after all windows are closed.
-  virtual void OnWindowAllClosed() {}
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
     
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Locker);
-};
-    
-    #ifndef ATOM_RENDERER_PREFERENCES_MANAGER_H_
-#define ATOM_RENDERER_PREFERENCES_MANAGER_H_
-    
-    
-    {}  // namespace chrome
-    
-    
-    {  virtual int GetSourceCount() const = 0;
-  virtual const Source& GetSource(int index) const = 0;
-  virtual std::vector<Source> GetSources() const = 0;
-};
-    
-    #ifndef CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
-#define CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
-    
-    #undef FPL
-
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+    // Computes one set of 4x8 products of inputs and weights, adding to result.
+// Horizontally adds 4 adjacent results, making 8x32-bit results.
+// rep_input is assumed to be an 8x replicated set of 4x8-bit signed integers.
+// Note that wi must previously have been re-organized with blocks of 4x8
+// weights in contiguous memory.
+// ones is a register of 16x16-bit values all equal to 1.
+// Note: wi is incremented by the amount of data read.
+// weights and reps are scratch registers.
+// This function must be inlined with references in order for the compiler to
+// correctly use the registers declared in the caller.
+inline void MultiplyGroup(const __m256i& rep_input, const __m256i& ones,
+                          const int8_t*& wi, __m256i& weights, __m256i& reps,
+                          __m256i& result) {
+  // Load a 4x8 block of weights.
+  weights = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(wi));
+  wi += kNumInputsPerRegister;
+  // Normalize the signs on rep_input, weights, so weights is always +ve.
+  reps = _mm256_sign_epi8(rep_input, weights);
+  weights = _mm256_sign_epi8(weights, weights);
+  // Multiply 32x8-bit reps by 32x8-bit weights to make 16x16-bit results,
+  // with adjacent pairs added.
+  weights = _mm256_maddubs_epi16(weights, reps);
+  // Multiply 16x16-bit result by 16x16-bit ones to make 8x32-bit results,
+  // with  adjacent pairs added. What we really want is a horizontal add of
+  // 16+16=32 bit result, but there is no such instruction, so multiply by
+  // 16-bit ones instead. It is probably faster than all the sign-extending,
+  // permuting and adding that would otherwise be required.
+  weights = _mm256_madd_epi16(weights, ones);
+  result = _mm256_add_epi32(result, weights);
 }
     
-    
-    {    if (s.ok()) {
-      // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
-                                              meta->number,
-                                              meta->file_size);
-      s = it->status();
-      delete it;
-    }
+    // Setter for the value.
+void ParamContent::SetValue(const char* val) {
+// TODO (wanke) Test if the values actually are properly converted.
+// (Quickly visible impacts?)
+  changed_ = true;
+  if (param_type_ == VT_INTEGER) {
+    iIt->set_value(atoi(val));
+  } else if (param_type_ == VT_BOOLEAN) {
+    bIt->set_value(atoi(val));
+  } else if (param_type_ == VT_DOUBLE) {
+    dIt->set_value(strtod(val, nullptr));
+  } else if (param_type_ == VT_STRING) {
+    sIt->set_value(val);
   }
+}
     
-    class DBImpl;
+    namespace tesseract {
+  class Tesseract;
+}
     
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
+    #include 'mfoutline.h'
+#include 'tesseractclass.h'
+    
+      /// Get enough parameters to be able to rebuild bounding boxes in the
+  /// original image (not just within the rectangle).
+  /// Left and top are enough with top-down coordinates, but
+  /// the height of the rectangle and the image are needed for bottom-up.
+  virtual void GetImageSizes(int* left, int* top, int* width, int* height,
+                             int* imagewidth, int* imageheight);
+    
+        /*virtual*/ void LearnerUniversal::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue,
+        const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) /*override*/
+    {
+        LogicError('Shouldn't trigger single element update in universal learner.');
+    }
+    
+        // TODO: This could actually be strided?
+    template <typename ElementType, typename V1ElemType>
+    const ElementType* NDArrayView::_DataBuffer() const
+    {
+        if (AsDataType<ElementType>() != m_dataType)
+            InvalidArgument('NDArrayView::DataBuffer: The specified ElementType '%s' does not match this NDArrayView's DataType '%s'.', typeid(ElementType).name(), DataTypeName(m_dataType));
+    }
+    
+        // TODO: This could actually be strided?
+    const MaskKind* NDMask::DataBuffer() const
+    {
+        // First make sure that the underlying matrix is on the right device
+        auto matrix = GetMatrix();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
+        return (const MaskKind*)(matrix->Data());
+    }
+    
+            auto matrix = sequenceData->GetMatrix<ElementType>();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(DeviceDescriptor::CPUDevice()), true);
+        auto cpuSparseMatrix = matrix->m_CPUSparseMatrix;
+        auto currentSequenceNumCols = matrix->GetNumCols();
+        auto currentSequenceColStarts = cpuSparseMatrix->SecondaryIndexLocation();
+        auto currentSequenceNumNonZeroValues = currentSequenceColStarts[currentSequenceNumCols] - currentSequenceColStarts[0];
+        std::copy(cpuSparseMatrix->MajorIndexLocation(), cpuSparseMatrix->MajorIndexLocation() + currentSequenceNumNonZeroValues, std::back_inserter(rowIndices));
+        std::copy((char*)(cpuSparseMatrix->Data()), (char*)(cpuSparseMatrix->Data() + currentSequenceNumNonZeroValues), std::back_inserter(nonZeroValues));
+    
+    
+    {            // Determine unpacked shape
+            m_unpackedShape = GetUnpackedShape(sampleShape, sampleDynamicAxes, packedDataLayout);
+        }
+    
+        void Variable::SetOwner(const std::weak_ptr<Function>& ownerFunction)
+    {
+        if (Kind() != VariableKind::Output)
+            LogicError('Variable '%S' SetOwner: Owner can only be set for Output Variables', AsString().c_str());
+    }
+    
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
+    
+        virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange&) override
+    {
+        InvalidArgument('PerDimMeanVarNormalizationNode should only be called in the evaluation stage. Is any of its descendents a learnable parameter that requires gradient?');
+    }
+    
+            for (const auto& sequence : pMBLayout->GetAllSequences())
+        {
+            if (sequence.seqId == GAP_SEQUENCE_ID)
+                continue;
+    }
+    
+    /*!
+ * \brief Input stream that support additional PeekRead
+ *  operation, besides read.
+ */
+class PeekableInStream : public dmlc::Stream {
  public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
-  }
-};
-    
-    std::string SSTTableFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'sst');
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
-
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    
-TEST(FindFileTest, Multiple) {
-  Add('150', '200');
-  Add('200', '250');
-  Add('300', '350');
-  Add('400', '450');
-  ASSERT_EQ(0, Find('100'));
-  ASSERT_EQ(0, Find('150'));
-  ASSERT_EQ(0, Find('151'));
-  ASSERT_EQ(0, Find('199'));
-  ASSERT_EQ(0, Find('200'));
-  ASSERT_EQ(1, Find('201'));
-  ASSERT_EQ(1, Find('249'));
-  ASSERT_EQ(1, Find('250'));
-  ASSERT_EQ(2, Find('251'));
-  ASSERT_EQ(2, Find('299'));
-  ASSERT_EQ(2, Find('300'));
-  ASSERT_EQ(2, Find('349'));
-  ASSERT_EQ(2, Find('350'));
-  ASSERT_EQ(3, Find('351'));
-  ASSERT_EQ(3, Find('400'));
-  ASSERT_EQ(3, Find('450'));
-  ASSERT_EQ(4, Find('451'));
+  explicit PeekableInStream(dmlc::Stream* strm)
+      : strm_(strm), buffer_ptr_(0) {}
     }
     
     
-    {    status = sqlite3_finalize(read_stmt);
-    ErrorCheck(status);
-    status = sqlite3_finalize(begin_trans_stmt);
-    ErrorCheck(status);
-    status = sqlite3_finalize(end_trans_stmt);
-    ErrorCheck(status);
+    {    inline size_t Size() const {
+      return end - begin;
+    }
+  };
+  /* \brief specifies how to split a rowset into two */
+  struct Split {
+    std::vector<size_t> left;
+    std::vector<size_t> right;
+  };
+    
+    
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
   }
-    
-    #ifndef STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
-#define STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
-    
-      // The name of the comparator.  Used to check for comparator
-  // mismatches (i.e., a DB created with one comparator is
-  // accessed using a different comparator.
-  //
-  // The client of this package should switch to a new name whenever
-  // the comparator implementation changes in a way that will cause
-  // the relative ordering of any two keys to change.
-  //
-  // Names starting with 'leveldb.' are reserved and should not be used
-  // by any clients of this package.
-  virtual const char* Name() const = 0;
-    
-    // Return a new filter policy that uses a bloom filter with approximately
-// the specified number of bits per key.  A good value for bits_per_key
-// is 10, which yields a filter with ~ 1% false positive rate.
-//
-// Callers must delete the result after any database that is using the
-// result has been closed.
-//
-// Note: if you are using a custom comparator that ignores some parts
-// of the keys being compared, you must not use NewBloomFilterPolicy()
-// and must provide your own FilterPolicy that also ignores the
-// corresponding parts of the keys.  For example, if the comparator
-// ignores trailing spaces, it would be incorrect to use a
-// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
-// trailing spaces in keys.
-extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
-    
-    inline int Slice::compare(const Slice& b) const {
-  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
-  int r = memcmp(data_, b.data_, min_len);
-  if (r == 0) {
-    if (size_ < b.size_) r = -1;
-    else if (size_ > b.size_) r = +1;
-  }
-  return r;
 }
+}  // namespace data
+}  // namespace xgboost
+    
+    namespace {
+    }
+    
+    void compareBenchmarkResults(const std::string& base, const std::string& test) {
+  printResultComparison(resultsFromFile(base), resultsFromFile(test));
+}
+    
+    // Semaphore define, declare and probe note format
+    
+        template <
+        typename OtherExecutor,
+        typename = typename std::enable_if<
+            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
+    KeepAlive& operator=(KeepAlive<OtherExecutor>&& other) {
+      return *this = KeepAlive(std::move(other));
+    }
+    
+      /**
+   * Returns a secure random uint32_t in [0, max). If max == 0, returns 0.
+   */
+  static uint32_t secureRand32(uint32_t max) {
+    SecureRNG<uint32_t> srng;
+    return rand32(max, srng);
+  }
+    
+    #include <folly/io/Cursor.h>
+#include <folly/io/IOBuf.h>
+#include <folly/lang/Bits.h>
