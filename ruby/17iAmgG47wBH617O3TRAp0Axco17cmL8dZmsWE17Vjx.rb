@@ -1,155 +1,79 @@
 
         
-              # Creates a text field of type 'date'.
-      #
-      # ==== Options
-      # * Accepts the same options as text_field_tag.
-      #
-      # ==== Examples
-      #   date_field_tag 'name'
-      #   # => <input id='name' name='name' type='date' />
-      #
-      #   date_field_tag 'date', '01/01/2014'
-      #   # => <input id='date' name='date' type='date' value='01/01/2014' />
-      #
-      #   date_field_tag 'date', nil, class: 'special_input'
-      #   # => <input class='special_input' id='date' name='date' type='date' />
-      #
-      #   date_field_tag 'date', '01/01/2014', class: 'special_input', disabled: true
-      #   # => <input disabled='disabled' class='special_input' id='date' name='date' type='date' value='01/01/2014' />
-      def date_field_tag(name, value = nil, options = {})
-        text_field_tag(name, value, options.merge(type: :date))
-      end
-    
-        EMPTY = ''
-    def from_rails_root(string) # :doc:
-      string = string.sub(rails_root, EMPTY)
-      string.sub!(VIEWS_PATTERN, EMPTY)
-      string
+              redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.change_email.changed_msg')
     end
     
-          super(default_locale)
-    end
+      puts '* [Sinatra](#sinatra)'
+  title = Regexp.new('(?<=\* )(.*)') # so Ruby 1.8 doesn't complain
+  File.binread(a.readme).scan(/^##.*/) do |line|
+    puts line.gsub(/#(?=#)/, '    ').gsub('#', '*').gsub(title) { '[#{$1}](##{link($1)})' }
   end
 end
-
     
-          def typecast(paths)
-        paths.map do |path|
-          case path
-          when Pathname, String
-            OptimizedFileSystemResolver.new path.to_s
-          else
-            path
-          end
-        end
-      end
-  end
-end
-
-    
-      protected
-    
-    Rails.application.initialize!
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
-      end
-    
-        def skip_format?
-      %w(html */*).include? request_format.to_s
-    end
-    
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-              result
-        end
-    
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
-    
-      # Sets a value in the underlying database (and creates it if necessary).
-  def set(key, value)
-    db[key] = value
-  end
-    
-          def set_constraints(name, depends_on:, required_for:)
-        secondary = option_to_name(name)
-        unless required_for.nil?
-          primary = option_to_name(required_for)
-          @constraints << [primary, secondary, :mandatory]
-        end
-    
-        # Find commands in Homebrew/cmd
-    puts 'Built-in commands'
-    puts Formatter.columns(internal_commands.sort)
-    
-        if args.pinned? || args.versions?
-      filtered_list
-    elsif ARGV.named.empty?
-      if args.full_name?
-        full_names = Formula.installed.map(&:full_name).sort(&tap_and_name_comparison)
-        return if full_names.empty?
-        puts Formatter.columns(full_names)
-      else
-        ENV['CLICOLOR'] = nil
-        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
-      end
-    elsif args.verbose? || !$stdout.tty?
-      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
-    else
-      ARGV.kegs.each { |keg| PrettyListing.new keg }
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
     end
   end
     
-    # Thanks in announcement ===============================================
+        private
     
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
-  end
+          def session(env)
+        return env[options[:session_key]] if session? env
+        fail 'you need to set up a session middleware *before* #{self.class}'
+      end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+      end
+    
+          default_options :escape => :html,
+        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
