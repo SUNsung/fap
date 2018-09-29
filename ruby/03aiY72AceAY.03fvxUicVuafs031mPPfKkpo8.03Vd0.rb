@@ -1,178 +1,188 @@
 
         
-          def merge(*args)
-    @settings.merge(*args)
-    self
-  end
-    
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
+              content.scan(/^\s*require (.*)/).each do |current|
+        gem_name = current.last
+        next if gem_name.include?('.') # these are local gems
+        UI.important('You have required a gem, if this is a third party gem, please use `fastlane_require #{gem_name}` to ensure the gem is installed locally.')
       end
+    
+            cmd << ['-am #{message.shellescape}']
+        cmd << '--force' if options[:force]
+        cmd << '-s' if options[:sign]
+        cmd << tag.shellescape
+        cmd << options[:commit].to_s if options[:commit]
+    
+            message = 'builds/test/#{build_number}#{postfix} (fastlane)'
+        tag = 'builds/test/#{build_number}#{postfix}'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
+      end
+    
+          it 'adds docset_cert_issuer param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_cert_issuer: 'Some issuer'
+          )
+        end').runner.execute(:test)
+    
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0]} #{path[1]}', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: #{path})
+          end').runner.execute(:test)
+        end
+      end
+    
+          it 'generates the correct git command with an array of paths and/or pathspecs' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+    # test monkey patched method on both (simulated) OSes
+describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
     end
     
-        checks.inject_dump_stats! if ARGV.switch? 'D'
+      describe 'converting escaped JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
+                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
+      )
+    end
     
-      def migrate_formula_rename
-    report[:R].each do |old_full_name, new_full_name|
-      old_name = old_full_name.split('/').last
-      next unless (dir = HOMEBREW_CELLAR/old_name).directory? && !dir.subdirs.empty?
+          it 'makes memory symbol-indifferent before validating' do
+        agent = Agents::SomethingSource.new(:name => 'something')
+        agent.user = users(:bob)
+        agent.memory['bad'] = 2
+        agent.save
+        expect(agent.memory[:bad]).to eq(2)
+      end
     
-        def build_pages(&block)
-      raise NotImplementedError
+        # Link new version, if not keg-only
+    if Formulary.keg_only?(rack)
+      keg.optlink
+      puts 'Opt link created for #{keg}'
+    else
+      puts '#{keg.link} links created for #{keg}'
     end
   end
 end
 
     
-        def load_capybara_selenium
-      require 'capybara/dsl'
-      require 'selenium/webdriver'
-      Capybara.register_driver :chrome do |app|
-        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+      #
+  # HTTP POST request class wrapper.
+  #
+  class Post < Request
+    def initialize(uri = '/', proto = DefaultProtocol)
+      super('POST', uri, proto)
+    end
+  end
+    
+          # If the handler class requires a relative resource...
+      if (handler.relative_resource_required?)
+        # Substituted the mount point root in the request to make things
+        # relative to the mount point.
+        request.relative_resource = request.resource.gsub(/^#{root}/, '')
+        request.relative_resource = '/' + request.relative_resource if (request.relative_resource !~ /^\//)
       end
-      Capybara.javascript_driver = :chrome
-      Capybara.current_driver = :chrome
-      Capybara.run_server = false
-      Capybara
-    end
     
-        def log(msg)
-      puts '\r' + justify(msg)
-    end
+    module Rex
+module Proto
+module IPMI
+  require 'rex/proto/ipmi/channel_auth_reply'
+  require 'rex/proto/ipmi/open_session_reply'
+  require 'rex/proto/ipmi/rakp2'
     
-      private
-    
-        def update
-      authorize @user, :change_email?
-    
-        def set_filter_params
-      @filter_params = filter_params.to_hash.symbolize_keys
-    end
-    
-        def resubscribe
-      authorize :instance, :resubscribe?
-      params.require(:by_domain)
-      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
-      redirect_to admin_instances_path
-    end
-    
-    =begin
- +------+----------------+-------------------------------------------+
-   | HEX  | NAME           | DESCRIPTION                               |
-   +------+----------------+-------------------------------------------+
-   | HEX  | NAME           | DESCRIPTION                               |
-   | 0x01 | CALLED NUMBER  | Number/extension being called             |
-   | 0x02 | CALLING NUMBER | Calling number                            |
-   | 0x03 | CALLING ANI    | Calling number ANI for billing            |
-   | 0x04 | CALLING NAME   | Name of caller                            |
-   | 0x05 | CALLED CONTEXT | Context for number                        |
-   | 0x06 | USERNAME       | Username (peer or user) for               |
-   |      |                | authentication                            |
-   | 0x07 | PASSWORD       | Password for authentication               |
-   | 0x08 | CAPABILITY     | Actual CODEC capability                   |
-   | 0x09 | FORMAT         | Desired CODEC format                      |
-   | 0x0a | LANGUAGE       | Desired language                          |
-   | 0x0b | VERSION        | Protocol version                          |
-   | 0x0c | ADSICPE        | CPE ADSI capability                       |
-   | 0x0d | DNID           | Originally dialed DNID                    |
-   | 0x0e | AUTHMETHODS    | Authentication method(s)                  |
-   | 0x0f | CHALLENGE      | Challenge data for MD5/RSA                |
-   | 0x10 | MD5 RESULT     | MD5 challenge result                      |
-   | 0x11 | RSA RESULT     | RSA challenge result                      |
-   | 0x12 | APPARENT ADDR  | Apparent address of peer                  |
-   | 0x13 | REFRESH        | When to refresh registration              |
-   | 0x14 | DPSTATUS       | Dialplan status                           |
-   | 0x15 | CALLNO         | Call number of peer                       |
-   | 0x16 | CAUSE          | Cause                                     |
-   | 0x17 | IAX UNKNOWN    | Unknown IAX command                       |
-   | 0x18 | MSGCOUNT       | How many messages waiting                 |
-   | 0x19 | AUTOANSWER     | Request auto-answering                    |
-   | 0x1a | MUSICONHOLD    | Request musiconhold with QUELCH           |
-   | 0x1b | TRANSFERID     | Transfer Request Identifier               |
-   | 0x1c | RDNIS          | Referring DNIS                            |
-   | 0x1d | Reserved       | Reserved for future use                   |
-   | 0x1e | Reserved       | Reserved for future use                   |
-   | 0x1f | DATETIME       | Date/Time                                 |
-   | 0x20 | Reserved       | Reserved for future use                   |
-   | 0x21 | Reserved       | Reserved for future use                   |
-   | 0x22 | Reserved       | Reserved for future use                   |
-   | 0x23 | Reserved       | Reserved for future use                   |
-   | 0x24 | Reserved       | Reserved for future use                   |
-   | 0x25 | Reserved       | Reserved for future use                   |
-   | 0x26 | CALLINGPRES    | Calling presentation                      |
-   | 0x27 | CALLINGTON     | Calling type of number                    |
-   | 0x28 | CALLINGTNS     | Calling transit network select            |
-   | 0x29 | SAMPLINGRATE   | Supported sampling rates                  |
-   | 0x2a | CAUSECODE      | Hangup cause                              |
-   | 0x2b | ENCRYPTION     | Encryption format                         |
-   | 0x2c | ENCKEY         | Reserved for future Use                   |
-   | 0x2d | CODEC PREFS    | CODEC Negotiation                         |
-   | 0x2e | RR JITTER      | Received jitter, as in RFC 3550           |
-   | 0x2f | RR LOSS        | Received loss, as in RFC 3550             |
-   | 0x30 | RR PKTS        | Received frames                           |
-   | 0x31 | RR DELAY       | Max playout delay for received frames in  |
-   |      |                | ms                                        |
-   | 0x32 | RR DROPPED     | Dropped frames (presumably by jitter      |
-   |      |                | buffer)                                   |
-   | 0x33 | RR OOO         | Frames received Out of Order              |
-   | 0x34 | OSPTOKEN       | OSP Token Block                           |
-   +------+----------------+-------------------------------------------+
-=end
-    
-        data =
-      [0x00, 0x00, 0x00, 0x00].pack('C*') +
-      bmc_session_id +
-      console_random_id +
-      [
-        0x14, 0x00, 0x00,
-        username.length
-      ].pack('C*') +
-      username
-    
-              connection
-        end
-    
-                encoded
+              # Decodes the till field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_till(input)
+            input.value[0].value
           end
     
-                seq = OpenSSL::ASN1::Sequence.new(seqs)
-    
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+              # Decodes the sname field
           #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
     
-    When /^I fill out change password section with my password and '([^']*)' and '([^']*)'$/ do |new_pass, confirm_pass|
-  fill_change_password_section(@me.password, new_pass, confirm_pass)
+              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+            title 'Running Inch'
+        Rake::Task['inch'].invoke
+      end
+    end
+    
+    ; TODO make this stricter if possible
+(allow network-outbound)
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
 end
     
-    Before do |scenario|
-  Devise.mailer.deliveries = []
-  page.driver.headers = if scenario.source_tag_names.include? '@mobile'
-                          {'User-Agent' => 'Mozilla/5.0 (Mobile; rv:18.0) Gecko/18.0 Firefox/18.0'}
-                        else
-                          {}
-                        end
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
     
-        # Parses the command-line arguments and runs the executable.
-    # This does not handle exceptions or exit the program.
-    #
-    # @see #parse!
-    def parse
-      @opts = OptionParser.new(&method(:set_opts))
-      @opts.parse!(@args)
-    
-          # @see Base#watched_file?
-      def watched_file?(filename)
-        # Check against the root with symlinks resolved, since Listen
-        # returns fully-resolved paths.
-        filename =~ /\.s[ac]ss$/ && filename.start_with?(@real_root + File::SEPARATOR)
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
+      super
+    end
