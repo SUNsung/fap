@@ -1,332 +1,241 @@
 
         
-        
-    {
-    {    rph->Send(new ShellViewMsg_Reopen());
-  }
-}
+        // Multiply-included file, no traditional include guard.
+#include <string>
+    
+    
+    {} // namespace nwapi
     
     namespace nw {
     }
     
-    class Base {
+    namespace nw {
+    }
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+      inline Dtype data_at(const int n, const int c, const int h,
+      const int w) const {
+    return cpu_data()[offset(n, c, h, w)];
+  }
+    
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      virtual inline const char* type() const { return 'Convolution'; }
+    
+    
+    {
+    {  // Recursive copy function: this is similar to crop_copy() but loops over all
+  // but the last two dimensions to allow for ND cropping while still relying on
+  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
+  // alterantive implementation could rely on the kernel more by passing
+  // offsets, but this is problematic because of its variable length.
+  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
+  // could be achieved by not looping the application of the copy_kernel around
+  // these dimensions.
+  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
+                const vector<Blob<Dtype>*>& top,
+                const vector<int>& offsets,
+                vector<int> indices,
+                int cur_dim,
+                const Dtype* src_data,
+                Dtype* dest_data,
+                bool is_forward);
+};
+}  // namespace caffe
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
  public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
     }
     
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
+    #include <grpcpp/impl/codegen/core_codegen.h>
+    
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
   } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+    return end();
   }
 }
     
-    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
-
+    #include 'absl/strings/string_view.h'
+#include 'absl/time/time.h'
+#include 'src/cpp/ext/filters/census/channel_filter.h'
+#include 'src/cpp/ext/filters/census/context.h'
     
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
-    }
-    }
+    #include <grpc/support/port_platform.h>
     
-    namespace nw {
-    }
-    
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
-  }
-}
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
     
     
-    {} // namespace extensions
-#endif
-
-    
-        bool ReadRTF(ClipboardData& data) {
-      DCHECK(data.type == TYPE_RTF);
-      std::string text;
-      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(text));
-      return true;
-    }
-    
-    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
-}
-    
-    TEST(AutoCompactTest, ReadAll) {
-  DoReads(kCount);
-}
-    
-      // When user keys are misordered
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('bar', 99, kTypeValue)));
-    
-    std::string InfoLogFileName(const std::string& dbname) {
-  return dbname + '/LOG';
-}
-    
-    // Return the name of a temporary file owned by the db named 'dbname'.
-// The result will be prefixed with 'dbname'.
-std::string TempFileName(const std::string& dbname, uint64_t number);
-    
-    class FileNameTest { };
-    
-    
-    {
-    {}  // namespace log
-}  // namespace leveldb
-    
-      Status AddRecord(const Slice& slice);
-    
-    
-    {}  // namespace leveldb
-
-    
-        /* Sets the Eye value of the Camera. 
-     * 
-     * @param eye The Eye value of the Camera.
-     * @js NA
-     */
-    void setEye(const Vec3 &eye);
-    void setEye(float x, float y, float z);
-    /* Returns the Eye value of the Camera. 
-     *
-     * @return The Eye value of the Camera.
-     * @js NA
-     */
-    const Vec3& getEye() const { return _eye; }
-    /* Sets the Center value of the Camera. 
-     *
-     * @param center The Center value of the Camera.
-     * @js NA
-     */
-    void setCenter(const Vec3 &center);
-    /* Returns the Center value of the Camera. 
-     *
-     * @return The Center value of the Camera.
-     * @js NA
-     */
-    const Vec3& getCenter() const { return _center; }
-    /* Sets the Up value of the Camera. 
-     *
-     * @param up The Up value of the Camera.
-     * @js NA
-     */
-    void setUp(const Vec3 &up);
-    /* Returns the Up value of the Camera. 
-     *
-     * @return The Up value of the Camera.
-     * @js NA
-     */
-    const Vec3& getUp() const { return _up; }
-    
-    
-    {    return false;
-}
-    
-        /**
-    @brief Get the amplitude rate of the effect.
-    @return Return the amplitude rate of the effect.
-    */
-    float getAmplitudeRate() const { return _amplitudeRate; }
-    /**
-    @brief Set the amplitude rate of the effect.
-    @param amplitudeRate The value of amplitude rate will be set.
-    */
-    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
-    
-        if( _selectorTarget)
-    {
-        a->initWithTarget(_selectorTarget, _callFuncN);
-    }
-    else if( _functionN ){
-        a->initWithFunction(_functionN);
-    }
-    
-    
-    {// end of actions group
-/// @}
-    
-    // implementation of ShakyTiles3D
-    
-    #include '2d/CCNode.h'
-#include 'base/CCProtocols.h'
-#include 'base/ccTypes.h'
-#include 'renderer/CCQuadCommand.h'
-    
-        std::sort(tree, tree + n, SortHuffmanTree);
-    
-    
-    {}  // namespace guetzli
-
-    
-      std::istringstream memstream(data, std::ios::in | std::ios::binary);
-  png_set_read_fn(png_ptr, static_cast<void*>(&memstream), [](png_structp png_ptr, png_bytep outBytes, png_size_t byteCountToRead) {
-    std::istringstream& memstream = *static_cast<std::istringstream*>(png_get_io_ptr(png_ptr));
-    
-    memstream.read(reinterpret_cast<char*>(outBytes), byteCountToRead);
-    }
-    
-      void JumpToByteBoundary() {
-    while (put_bits <= 56) {
-      int c = (put_buffer >> 56) & 0xff;
-      EmitByte(c);
-      put_buffer <<= 8;
-      put_bits += 8;
-    }
-    if (put_bits < 64) {
-      int padmask = 0xff >> (64 - put_bits);
-      int c = ((put_buffer >> 56) & ~padmask) | padmask;
-      EmitByte(c);
-    }
-    put_buffer = 0;
-    put_bits = 64;
-  }
-    
-    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
-  if (jpg.components.size() == 1 ||
-      (jpg.components.size() == 3 &&
-       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
-    OutputImage img(jpg.width, jpg.height);
-    img.CopyFromJpegData(jpg);
-    return img.ToSRGB();
-  }
-  return std::vector<uint8_t>();
-}
-    
-    static const int kIQuantBits = 16;
-// Output of the DCT is upscaled by 16.
-static const int kDCTBits = kIQuantBits + 4;
-static const int kBias = 0x80 << (kDCTBits - 8);
-    
-    DEFINE_bool(populate_cache, false, 'Populate cache before operations');
-DEFINE_int32(insert_percent, 40,
-             'Ratio of insert to total workload (expressed as a percentage)');
-DEFINE_int32(lookup_percent, 50,
-             'Ratio of lookup to total workload (expressed as a percentage)');
-DEFINE_int32(erase_percent, 10,
-             'Ratio of erase to total workload (expressed as a percentage)');
-    
-      ColumnFamilyData* cfd_;
-  Version* version_;
-  const Comparator* user_comparator_;
-  LevelFilesBrief files_;
-    
-      DestroyAndReopen(options);
-    
-    Status DBImpl::DisableFileDeletions() {
-  InstrumentedMutexLock l(&mutex_);
-  ++disable_delete_obsolete_files_;
-  if (disable_delete_obsolete_files_ == 1) {
-    ROCKS_LOG_INFO(immutable_db_options_.info_log, 'File Deletions Disabled');
-  } else {
-    ROCKS_LOG_WARN(immutable_db_options_.info_log,
-                   'File Deletions Disabled, but already disabled. Counter: %d',
-                   disable_delete_obsolete_files_);
-  }
-  return Status::OK();
-}
-    
-      virtual Status NewIterators(
-      const ReadOptions& options,
-      const std::vector<ColumnFamilyHandle*>& column_families,
-      std::vector<Iterator*>* iterators) override;
-    
-    namespace rocksdb {
-    }
-    
-    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
-                                    const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return SingleDelete(column_family, key_slice);
-}
-    
-      // When flush happens, it determines whether to trigger compaction. If
-  // triggered_writes_stop is true, it will also set the retry flag of
-  // compaction-task to true.
-  void OnFlushCompleted(
-      DB* db, const FlushJobInfo& info) override {
-    CompactionTask* task = PickCompaction(db, info.cf_name);
-    if (task != nullptr) {
-      if (info.triggered_writes_stop) {
-        task->retry_on_fail = true;
+    {    size_t pos = kVersionIdSize;
+    while (pos < buf.size()) {
+      size_t bytes_read =
+          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
+      if (bytes_read == 0) {
+        break;
+      } else {
+        pos += bytes_read;
       }
-      // Schedule compaction in a different thread.
-      ScheduleCompaction(task);
     }
+    return pos;
   }
     
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
-#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
+    const ViewDescriptor& ServerServerLatencyMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/server/server_latency/minute')
+          .set_measure(kRpcServerServerLatencyMeasureName)
+          .set_aggregation(MillisDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+      SrcLoc(SrcPos start, SrcPos past)
+    : start(start)
+    , past(past)
+  {}
+    
+          X_form_t x_formater {{
+                            rc,
+                            xop,
+                            static_cast<uint32_t>(rb),
+                            static_cast<uint32_t>(ra),
+                            static_cast<uint32_t>(rt),
+                            op
+                          }};
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    inline APCLocalArray::APCLocalArray(const APCArray* source)
+  : ArrayData(kApcKind)
+  , m_arr(source)
+{
+  m_size = m_arr->size();
+  source->reference();
+  tl_heap->addApcArray(this);
+  memset(localCache(), static_cast<data_type_t>(KindOfUninit),
+         m_size * sizeof(TypedValue));
+  assertx(hasExactlyOneRef());
+}
+    
+    static HackStrictOption GetHackStrictOption(const IniSettingMap& ini,
+                                            const Hdf& config,
+                                            const std::string& name /* = '' */,
+                                            HackStrictOption def
+                                           ) {
+  auto val = Config::GetString(ini, config, name);
+  if (val.empty()) {
+    return def;
+  }
+  if (val == 'warn') {
+    return HackStrictOption::WARN;
+  }
+  bool ret;
+  ini_on_update(val, ret);
+  return ret ? HackStrictOption::ON : HackStrictOption::OFF;
+}
+    
+    public:
+  static void Add(InfoVec& out, const char* name, const std::string& value);
+  static void AddServerStats(InfoVec& out, const char* name,
+                             const char* statsName = nullptr);
     
     
+    {    if (follow && valid)
     {
+        follow->autorelease();
+        return follow;
+    }
+    
+    delete follow;
+    return nullptr;
+    
+}
+Follow* Follow::clone() const
+{
+    // no copy constructor
+    return Follow::createWithOffset(_followedNode, _offsetX,_offsetY,_worldRect);
+    
+}
+    
+        if (action && action->initWithDuration(duration, gridSize, numberOfJumps, amplitude))
     {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
+        action->autorelease();
+        return action;
+    }
+    
+    NS_CC_BEGIN
+    
+    void BENCHFUN(insertFront)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
+  });
+}
+    
+    #define FOLLY_SDT_SEMAPHORE(provider, name)                                    \
+  folly_sdt_semaphore_##provider##_##name
+    
+    namespace folly {
+    }
     
       /**
-   * @brief Start the ESD CAN client.
-   * @return The status of the start action which is defined by
-   *         apollo::common::ErrorCode.
+   * Returns a secure double in [min, max), if min == max, returns 0.
    */
-  apollo::common::ErrorCode Start() override;
+  static double secureRandDouble(double min, double max) {
+    SecureRNG<uint64_t> srng;
+    return randDouble(min, max, srng);
+  }
     
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    using ::apollo::canbus::ChassisDetail;
-    
-    // Canbus gflags
-DEFINE_double(sensor_freq, 100,
-              'Sensor feedback timer frequency -- 0 means event trigger.');
+      bool compare_exchange_weak(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_weak(
+        expected, n, mo, detail::default_failure_memory_order(mo));
+  }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    auto newptr = get_newptr(n);
+    PackedPtr oldptr, expectedptr;
+    }
