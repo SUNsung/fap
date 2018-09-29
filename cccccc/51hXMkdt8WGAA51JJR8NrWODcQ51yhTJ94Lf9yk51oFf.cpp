@@ -1,49 +1,16 @@
 
         
-        // Get the python wrappers for a list of ops in a OpList.
-// `op_list_buf` should be a pointer to a buffer containing
-// the binary encoded OpList proto, and `op_list_len` should be the
-// length of that buffer.
-string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
-    
-    #include <unordered_map>
-    
-    
-    {}  // end namespace tensorflow
-
-    
-    
-    {  if (debug) {
-    const OpRegistrationData* op_reg_data;
-    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
-    if (!status.ok()) {
-      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
-    } else if (!op_reg_data->shape_inference_fn) {
-      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
-    } else if (properties.HasInputProperties(node->name())) {
-      const std::vector<OpInfo::TensorProperties>& props =
-          properties.GetInputProperties(node->name());
-      for (int i = 0; i < props.size(); ++i) {
-        const OpInfo::TensorProperties& prop = props[i];
-        if (prop.has_value()) {
-          os << '\t'
-             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
-             << ') has known value' << std::endl;
-        }
-      }
-    }
+        std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status) {
+  if (!PyList_Check(input_constant_tensor_values)) {
+    TF_SetStatus(out_status, TF_INVALID_ARGUMENT, 'Invalid python value');
+    return std::vector<string>();
   }
-}
-    
-      void Compute(OpKernelContext* context) override {
-    // Output a scalar string.
-    Tensor* output_tensor = nullptr;
-    OP_REQUIRES_OK(context,
-                   context->allocate_output(0, TensorShape(), &output_tensor));
-    auto output = output_tensor->scalar<string>();
     }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -52,147 +19,218 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    // Safe containers for an owned TF_Status. On destruction, the handle
-// will be deleted by TF_DeleteStatus.
-using Safe_TF_StatusPtr = std::unique_ptr<TF_Status, detail::TFStatusDeleter>;
-Safe_TF_StatusPtr make_safe(TF_Status* status);
+    void CostAnalyzer::GatherCosts() {
+  CostGraphDef cost_graph_measured;
+  PredictCosts(&measure_estimator_, &cost_graph_measured,
+               &total_time_measured_);
+  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
+  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
+    }
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // ATOM_APP_UV_TASK_RUNNER_H_
-
-    
-    
-    {}  // namespace mate
-    
-      // Override download::DownloadItem::Observer methods
-  void OnDownloadUpdated(download::DownloadItem* download) override;
-  void OnDownloadDestroyed(download::DownloadItem* download) override;
-    
-    
-    {}  // namespace atom
-    
-    template <>
-struct Converter<in_app_purchase::Transaction> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const in_app_purchase::Transaction& val) {
-    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
-    dict.SetHidden('simple', true);
-    dict.Set('transactionIdentifier', val.transactionIdentifier);
-    dict.Set('transactionDate', val.transactionDate);
-    dict.Set('originalTransactionIdentifier',
-             val.originalTransactionIdentifier);
-    dict.Set('transactionState', val.transactionState);
-    dict.Set('errorCode', val.errorCode);
-    dict.Set('errorMessage', val.errorMessage);
-    dict.Set('payment', val.payment);
-    return dict.GetHandle();
+    bool TfPyInt_Check(PyObject* object) {
+  if (!PyLong_Check(object)) {
+    return 0;
   }
-};
-    
-    PowerMonitor::PowerMonitor(v8::Isolate* isolate) {
-#if defined(OS_LINUX)
-  SetShutdownHandler(
-      base::Bind(&PowerMonitor::ShouldShutdown, base::Unretained(this)));
-#elif defined(OS_MACOSX)
-  Browser::Get()->SetShutdownHandler(
-      base::Bind(&PowerMonitor::ShouldShutdown, base::Unretained(this)));
-#endif
-  base::PowerMonitor::Get()->AddObserver(this);
-  Init(isolate);
-#if defined(OS_MACOSX) || defined(OS_WIN)
-  InitPlatformSpecificMonitors();
-#endif
+  int overflow = 0;
+  PyLong_AsLongAndOverflow(object, &overflow);
+  return (overflow == 0);
 }
     
-      // The handle of the module that contains the window procedure of |window_|.
-  HMODULE instance_;
+    Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result) {
+  int size = 1;
+  for (int i = 0; i < dim_size; ++i) {
+    size *= dims[i];
+  }
+  if (dtype == DT_STRING || dtype == DT_RESOURCE || size == 0) {
+    return errors::FailedPrecondition(
+        'Cannot convert strings, resources, or empty Tensors.');
+  }
+    }
     
-    uint32_t swap_endian(uint32_t val) {
-    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
-    return (val << 16) | (val >> 16);
-}
-    
-     protected:
-#ifndef CPU_ONLY
-  cublasHandle_t cublas_handle_;
-  curandGenerator_t curand_generator_;
-#endif
-  shared_ptr<RNG> random_generator_;
-    
-      /** The vector that indicates whether each top blob has a non-zero weight in
-   *  the objective function. */
-  vector<Dtype> loss_;
-    
-      int num_kernels_im2col_;
-  int num_kernels_col2im_;
-  int conv_out_channels_;
-  int conv_in_channels_;
-  int conv_out_spatial_dim_;
-  int kernel_dim_;
-  int col_offset_;
-  int output_offset_;
-    
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-    template <typename Dtype>
-class CropLayer : public Layer<Dtype> {
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
  public:
-  explicit CropLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
     }
     
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/c/eager/c_api.h'
     
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    ScopedActivateExecutorContext &&other)
+    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
+  other.driver_scoped_activate_context_ = nullptr;
+}
+    
+      ScopedActivateExecutorContext(ScopedActivateExecutorContext&& other);
+    
+      HWND hWnd = getHWND(getAppWindow(this));
+  if (hWnd == NULL) {
+    error_ = kNoAssociatedAppWindow;
+    LOG(ERROR) << error_;
+    return RespondNow(Error(error_));
+  }
+  TBPFLAG tbpFlag = TBPF_NOPROGRESS;
+    
+    
+    {   // ExtensionFunction:
+   ResponseAction Run() override;
+   DECLARE_EXTENSION_FUNCTION('nw.currentWindowInternal.reloadIgnoringCache', UNKNOWN)
 };
-#endif
+    
+    IPC_MESSAGE_ROUTED1(ShellViewHostMsg_Deallocate_Object,
+                    int /* object id */)
     
     
-    {}  // namespace caffe
-    
-    void ShowErrorAndExit(DWORD ec, const wchar_t * func, int line)
-{
-	wchar_t * buffer;
-	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, ec, 0, (LPWSTR)&buffer, 0, NULL) == 0)
-	{
-		buffer = L'Unknown error. FormatMessage failed.';
-	}
+    {  for (size_t i = 0; i < windows.size(); ++i) {
+    // Only send close event to browser windows, since devtools windows will
+    // be automatically closed.
+    if (!windows[i]->is_devtools()) {
+      // If there is no js object bound to the window, then just close.
+      if (force || windows[i]->ShouldCloseWindow(quit))
+        // we used to delete the Shell object here
+        // but it should be deleted on native window destruction
+        windows[i]->window()->Close();
     }
+  }
+  if (force) {
+    // in a special force close case, since we're going to exit the
+    // main loop soon, we should delete the shell object asap so the
+    // render widget can be closed on the renderer side
+    windows = Shell::windows();
+    for (size_t i = 0; i < windows.size(); ++i) {
+      if (!windows[i]->is_devtools())
+        delete windows[i];
+    }
+  }
+}
+    
+      scoped_ptr<base::Value> value_option(
+      converter->FromV8Value(options, isolate->GetCurrentContext()));
+  if (!value_option.get() ||
+      !value_option->IsType(base::Value::TYPE_DICTIONARY))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'option' passed to AllocateObject')));
+    
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
+    
+    class EventListener : public Base {
+  std::map<int, BaseEvent*> listerners_;
+    }
+    
+    void Menu::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    for(auto* item : menu_items_) {
+      item->UpdateKeys(focus_manager);
+    }
+  }
+}
+    
+    class NwAppQuitFunction : public UIThreadExtensionFunction {
+ public:
+  NwAppQuitFunction();
+    }
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+};
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    class NwObjCallObjectMethodSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjCallObjectMethodSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+        if(needsTranslation)
+    {
+        Mat4 t;
+        Mat4::createTranslation(anchorPoint.x, anchorPoint.y, 0, &t);
+        mv = mv * t;
+    }
+    
+    mv = mv * lookupMatrix;
+    
+        if (action && action->initWithDuration(duration, gridSize))
+    {
+        action->autorelease();
+        return action;
+    }
+    
+        // Overrides
+	virtual TurnOffTiles* clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    TurnOffTiles() {}
+    virtual ~TurnOffTiles();
+    
+        friend class Director;
+    void setIgnoreContentScaleFactor(bool bIgnoreContentScaleFactor);
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
+}
+    
+    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
+{
+  immediateTaskQueue_.addTask(task);
+}
+    
+      virtual void preProcess() CXX11_OVERRIDE;
+    
+    #include 'DHTNode.h'
+#include 'util.h'
+#include 'a2functional.h'
