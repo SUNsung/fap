@@ -1,180 +1,140 @@
 
         
-        Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
-end
-
-    
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
-    
-      [before || '.',
-    after || '.',]
-end
-    
-      all_files       = `git ls-files -z`.split('\x0')
-  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
-  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
-  s.bindir        = 'exe'
-  s.require_paths = ['lib']
-    
-        s = nil
-    homebrew_site_packages = Language::Python.homebrew_site_packages
-    user_site_packages = Language::Python.user_site_packages 'python'
-    pth_file = user_site_packages/'homebrew.pth'
-    instructions = <<-EOS.undent.gsub(/^/, '  ')
-      mkdir -p #{user_site_packages}
-      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+            To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
     EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
     
-        def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
-            end
-          rescue ThreadError # ignore empty queue error
+          if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
+        else
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
           end
         end
-      end
-      workers.map(&:join)
-    end
-    
-          out = checks.send(method)
-      unless out.nil? || out.empty?
-        if first_warning
-          $stderr.puts <<-EOS.undent
-            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
-            with debugging if you file an issue. If everything you use Homebrew for is
-            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
-          EOS
-        end
-    
-        results.map do |name|
-      begin
-        formula = Formulary.factory(name)
-        canonical_name = formula.name
-        canonical_full_name = formula.full_name
-      rescue
-        canonical_name = canonical_full_name = name
-      end
-      # Ignore aliases from results when the full name was also found
-      if aliases.include?(name) && results.include?(canonical_full_name)
-        next
-      elsif (HOMEBREW_CELLAR/canonical_name).directory?
-        pretty_installed(name)
-      else
-        name
-      end
-    end.compact
-  end
-end
-
-    
-      def dump_formula_report(key, title)
-    formulae = select_formula(key).sort.map do |name, new_name|
-      # Format list items of renamed formulae
-      if key == :R
-        name = pretty_installed(name) if installed?(name)
-        new_name = pretty_installed(new_name) if installed?(new_name)
-        '#{name} -> #{new_name}'
-      else
-        installed?(name) ? pretty_installed(name) : name
-      end
-    end
-    
-          expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    
-    describe GroupUser do
-    
-        def action_completed(action_name, status: nil)
-      completion_context = FastlaneCore::ActionCompletionContext.context_for_action_name(action_name,
-                                                                                         args: ARGV,
-                                                                                         status: status)
-      FastlaneCore.session.action_completed(completion_context: completion_context)
-    end
-  end
-end
-
-    
-        # Some actions have special handling in fast_file.rb, that means we can't directly call the action
-    # but we have to use the same logic that is in fast_file.rb instead.
-    # That's where this switch statement comes into play
-    def run_action_requiring_special_handling(command: nil, parameter_map: nil, action_return_type: nil)
-      action_return = nil
-      closure_argument_value = nil # only used if the action uses it
-    
-          context 'as array with spaces in name and directory' do
-        let(:path) { ['my file.txt', 'some dir/your file.txt'] }
-    
-          it 'generates the correct git command with a shell-escaped message' do
-        message = 'message with 'quotes' (and parens)'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: \'#{message}\')
-        end').runner.execute(:test)
-        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
+        path.chmod perms
       end
     end
   end
 end
 
     
-          it 'works with multiple ignore patterns' do
-        pattern1 = 'Pods/*'
-        pattern2 = '../**/*/Xcode*'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          slather({
-            ignore: ['#{pattern1}', '#{pattern2}'],
-            proj: 'foo.xcodeproj'
-          })
-        end').runner.execute(:test)
-    
-        def help_default_value
-      return '#{self.default_value} *'.strip if self.default_value_dynamic
-      return '' if self.default_value.nil?
-      return '''' if self.default_value.instance_of?(String) && self.default_value.empty?
-      return ':#{self.default_value}' if self.default_value.instance_of?(Symbol)
-    
-          it 'should shell escape keychain names when checking for installation' do
-        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
-    
-    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
-  stream_element_numbers_content(position).should have_content(post_text)
-end
-    
-    RSpec::Matchers.define :have_value do |expected|
-  match do |actual|
-    await_condition { actual.value && actual.value.include?(expected) }
+      def internal_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
   end
     
-      def post_path_by_content(text)
-    p = Post.find_by_text(text)
-    post_path(p)
+        raise SEARCH_ERROR_QUEUE.pop unless SEARCH_ERROR_QUEUE.empty?
   end
     
-      # fill change password section on the user edit page
-  def fill_change_password_section(cur_pass, new_pass, confirm_pass)
-    fill_in 'user_current_password', :with => cur_pass
-    fill_in 'user_password', :with => new_pass
-    fill_in 'user_password_confirmation', :with => confirm_pass
+      def self.all
+    opoo 'Formula.all is deprecated, use Formula.map instead'
+    map
   end
     
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
+          def store_index(store, filename, index)
+        old_json = store.read(filename) || '{}'
+        new_json = index.to_json
+        instrument '#{filename.remove('.json')}.doc', before: old_json, after: new_json
+        store.write(filename, new_json)
+      end
+    
+        def version
+      context[:version]
+    end
+    
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
+      end
+    end
+    
+          if base == dest
+        ''
+      elsif dest.start_with? File.join(base, '')
+        url.path[(path.length)..-1]
+      end
+    end
+    
+          # Returns the path to a file for the given key.
+      #
+      # @param key [String]
+      # @return [String] The path to the cache file.
+      def path_to(key)
+        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
+        File.join(cache_location, key)
+      end
     end
   end
 end
+
+    
+          private
+    
+        def handle_load_error(err)
+      dep = err.message[/^no such file to load -- (.*)/, 1]
+      raise err if @options[:trace] || dep.nil? || dep.empty?
+      $stderr.puts <<MESSAGE
+Required dependency #{dep} not found!
+    Run 'gem install #{dep}' to get it.
+  Use --trace for backtrace.
+MESSAGE
+      exit 1
+    end
+  end
+end
+
+    
+        # Initializes a new CategoryIndex.
+    #
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'index.html'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
+    end
+    
+        def get_cache_file_for(gist, file)
+      bad_chars = /[^a-zA-Z0-9\-_.]/
+      gist      = gist.gsub bad_chars, ''
+      file      = file.gsub bad_chars, ''
+      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
+      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
+    end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
