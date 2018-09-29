@@ -1,106 +1,120 @@
 
         
-        content::PepperPluginInfo CreatePepperFlashInfo(const base::FilePath& path,
-                                                const std::string& version) {
-  content::PepperPluginInfo plugin;
+        private Q_SLOTS:
+    void on_selectFileButton_clicked();
+    
+        bool getImagesOnButtons() const { return imagesOnButtons; }
+    bool getUseExtraSpacing() const { return useExtraSpacing; }
+    
+    /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
+{
+public:
     }
     
-     protected:
-  // content::ContentClient:
-  std::string GetProduct() const override;
-  std::string GetUserAgent() const override;
-  base::string16 GetLocalizedString(int message_id) const override;
-  void AddAdditionalSchemes(Schemes* schemes) override;
-  void AddPepperPlugins(
-      std::vector<content::PepperPluginInfo>* plugins) override;
-  void AddContentDecryptionModules(
-      std::vector<content::CdmInfo>* cdms,
-      std::vector<media::CdmHostFilePath>* cdm_host_file_paths) override;
-    
-          // colon indicates that the argument starts with a URI scheme
-      if (c == ':') {
-        // it could also be a Windows filesystem path
-        if (p == arg + 1)
-          break;
+    int secp256k1_ecdsa_recoverable_signature_convert(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const secp256k1_ecdsa_recoverable_signature* sigin) {
+    secp256k1_scalar r, s;
+    int recid;
     }
     
-    UvTaskRunner::~UvTaskRunner() {
-  for (auto& iter : tasks_) {
-    uv_unref(reinterpret_cast<uv_handle_t*>(iter.first));
-    delete iter.first;
-  }
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_invalid)
+{
+    static const std::string CASES[] = {
+        ' 1nwldj5',
+        '\x7f''1axkwrx',
+        '\x80''1eym55h',
+        'an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx',
+        'pzry9x0s0muk',
+        '1pzry9x0s0muk',
+        'x1b4n0q5v',
+        'li1dgmt3',
+        'de1lg7wt\xff',
+        'A1G7SGD8',
+        '10a06t8',
+        '1qzzfhee',
+        'a12UEL5L',
+        'A12uEL5L',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(ret.first.empty());
+    }
 }
     
-    namespace api {
-    }
+    #include 'caffe/util/device_alternate.hpp'
+    
+     private:
+  void entry(int device, Caffe::Brew mode, int rand_seed,
+      int solver_count, int solver_rank, bool multiprocess);
+    
+      /// @brief The spatial dimensions of a filter kernel.
+  Blob<int> kernel_shape_;
+  /// @brief The spatial dimensions of the stride.
+  Blob<int> stride_;
+  /// @brief The spatial dimensions of the padding.
+  Blob<int> pad_;
+  /// @brief The spatial dimensions of the dilation.
+  Blob<int> dilation_;
+  /// @brief The spatial dimensions of the convolution input.
+  Blob<int> conv_input_shape_;
+  /// @brief The spatial dimensions of the col_buffer.
+  vector<int> col_buffer_shape_;
+  /// @brief The spatial dimensions of the output.
+  vector<int> output_shape_;
+  const vector<int>* bottom_shape_;
+    
+    
+    {}  // namespace caffe
     
      protected:
-  Debugger(v8::Isolate* isolate, content::WebContents* web_contents);
-  ~Debugger() override;
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    void ShowOpenDialog(const file_dialog::DialogSettings& settings,
-                    mate::Arguments* args) {
-  v8::Local<v8::Value> peek = args->PeekNext();
-  file_dialog::OpenDialogCallback callback;
-  if (mate::Converter<file_dialog::OpenDialogCallback>::FromV8(
-          args->isolate(), peek, &callback)) {
-    file_dialog::ShowOpenDialog(settings, callback);
-  } else {
-    std::vector<base::FilePath> paths;
-    if (file_dialog::ShowOpenDialog(settings, &paths))
-      args->Return(paths);
-  }
-}
+    #include <LinearMath/btMatrix3x3.h>
+#include <LinearMath/btTransform.h>
+#include <LinearMath/btVector3.h>
     
-      bool visitBoundGenericType(BoundGenericType *ty) {
-    if (auto parent = ty->getParent())
-      if (doIt(parent))
-        return true;
-    }
     
-    #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
-#include 'swift/Basic/Dwarf.h'
-#include 'swift/Serialization/SerializedModuleLoader.h'
-#include 'swift/Serialization/Validation.h'
-#include 'llvm/Support/Debug.h'
-#include 'llvm/Support/raw_ostream.h'
-    
-    #ifndef VERB
-#  define VERB(Word)
+    {	_FORCE_INLINE_ btTypedConstraint *get_bt_constraint() { return constraint; }
+};
 #endif
+
     
-    void swift::UUID::toString(llvm::SmallVectorImpl<char> &out) const {
-  out.resize(UUID::StringBufferSize);
-#if defined(_WIN32)
-  ::UUID uuid;
-  memcpy(&uuid, Value, Size);
-    }
     
-    void Assembler::rldicr(const Reg64& ra, const Reg64& rs, uint8_t sh,
-                       uint8_t mb, bool rc) {
-  EmitMDForm(30, rn(rs), rn(ra), sh, mb, 1, rc);
+    {		virtual btCollisionAlgorithm *CreateCollisionAlgorithm(btCollisionAlgorithmConstructionInfo &ci, const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap) {
+			void *mem = ci.m_dispatcher1->allocateCollisionAlgorithm(sizeof(GodotRayWorldAlgorithm));
+			return new (mem) GodotRayWorldAlgorithm(m_world, ci.m_manifold, ci, body0Wrap, body1Wrap, false);
+		}
+	};
+    
+    class RigidBodyBullet;
+    
+    #include 'texture_loader_dds.h'
+    
+    	if (!obj) {
+		r_error.error = Variant::CallError::CALL_ERROR_INSTANCE_IS_NULL;
+		return Variant();
+	}
+    
+    	if (instance == NULL) {
+		instance = memnew(ZipArchive);
+	};
+    
+    
+    {	return ret;
 }
     
-    inline APCLocalArray* APCLocalArray::Make(const APCArray* aa) {
-  auto size = sizeof(APCLocalArray) + aa->size() * sizeof(TypedValue);
-  auto local = new (tl_heap->objMalloc(size)) APCLocalArray(aa);
-  assertx(local->heapSize() == size);
-  return local;
-}
-    
-    #ifndef HPHP_DATA_STREAM_WRAPPER_H
-#define HPHP_DATA_STREAM_WRAPPER_H
-    
-    #include 'hphp/runtime/base/file-util.h'
-#include 'hphp/runtime/base/stream-wrapper-registry.h'
-#include 'hphp/runtime/base/unit-cache.h'
-#include 'hphp/runtime/ext/std/ext_std_file.h'
-#include 'hphp/util/logger.h'
-    
-      String ret(maxlen, ReserveString);
-  char* path = ret.mutableData();
-    
-    #include 'hphp/runtime/base/type-string.h'
+    	ADD_PROPERTY(PropertyInfo(Variant::BOOL, 'refuse_new_connections'), 'set_refuse_new_connections', 'is_refusing_new_connections');
+	ADD_PROPERTY(PropertyInfo(Variant::INT, 'transfer_mode', PROPERTY_HINT_ENUM, 'Unreliable,Unreliable Ordered,Reliable'), 'set_transfer_mode', 'get_transfer_mode');
     
     void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
 {
@@ -109,18 +123,7 @@
   setFinished(true);
 }
     
-    void DHTRoutingTable::showBuckets() const
-{
-  /*
-    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
-    buckets_.begin(); itr != buckets_.end(); ++itr) {
-    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
-    << 'nodes = ' << (*itr)->countNode() << endl;
-    }
-  */
-}
-    
-    #include 'common.h'
+      DHTTaskQueue* taskQueue_;
     
     
     {
@@ -131,15 +134,53 @@
   A2_LOG_INFO('DHT routing table was loaded successfully');
 }
     
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
+    void DHTTaskQueueImpl::executeTask()
 {
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
-    }
-  }
-  return false;
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
 }
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+      bool validateToken(const std::string& token, const unsigned char* infoHash,
+                     const std::string& ipaddr, uint16_t port) const;
+    
+    const std::string& DNSCache::find(const std::string& hostname,
+                                  uint16_t port) const
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.find(target);
+  if (i == entries_.end()) {
+    return A2STR::NIL;
+  }
+  else {
+    return (*i)->getGoodAddr();
+  }
+}
+    
+    public:
+  DNSCache();
+  DNSCache(const DNSCache& c);
+  ~DNSCache();
