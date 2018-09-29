@@ -1,428 +1,198 @@
 
         
-        
-    {    if (tmp.handle_data().is_set()) {
-      input_handle_shapes_and_types[i].reset(
-          new std::vector<std::pair<TensorShapeProto, DataType>>);
-      auto& v = *input_handle_shapes_and_types[i];
-      for (const auto& x : tmp.handle_data().shape_and_type()) {
-        v.emplace_back(x.shape(), x.dtype());
-      }
-    }
-  }
+        // Get the python wrappers for a list of ops in a OpList.
+// `op_list_buf` should be a pointer to a buffer containing
+// the binary encoded OpList proto, and `op_list_len` should be the
+// length of that buffer.
+string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // Returns the Python exception type corresponding to `code`. Init() must be
-  // called before using this function. `code` should not be TF_OK.
-  static PyObject* Lookup(TF_Code code);
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
-
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        QMenu *dockMenu();
-    void setIcon(const QIcon &icon);
-    void setMainWindow(QMainWindow *window);
-    static MacDockIconHandler *instance();
-    static void cleanup();
-    void handleDockIconClickEvent();
-    
-        const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
+    #include <unordered_map>
     
     
-    {        return std::make_pair(dest, QString::fromStdString(EncodeDestination(dest)));
-    };
-    
-            secp256k1_ecmult_const(&res, &pt, &s);
-        secp256k1_ge_set_gej(&pt, &res);
-        /* Compute a hash of the point in compressed form
-         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
-         * expect its output to be secret and has a timing sidechannel. */
-        secp256k1_fe_normalize(&pt.x);
-        secp256k1_fe_normalize(&pt.y);
-        secp256k1_fe_get_b32(x, &pt.x);
-        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
-    
-    BOOST_AUTO_TEST_CASE(get_difficulty_for_low_target)
-{
-    TestDifficulty(0x1ef88f6f, 0.000016);
-}
-    
-        BOOST_CHECK(arr.push_backV(vec));
-    
-    
-    {} // namespace nwapi
-
-    
-    #include 'base/logging.h'
-#include 'base/strings/string_util.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_jump()
-{
-   pstate = static_cast<const re_jump*>(pstate)->alt.p;
-   return true;
-}
-    
-    
-    {   int pos = 0;
-   while((pos <= static_cast<int>(sa.size())) && (pos <= static_cast<int>(sA.size())) && (sa[pos] == sA[pos])) ++pos;
-   --pos;
-   if(pos < 0)
-   {
-      *delim = 0;
-      return sort_unknown;
-   }
-   //
-   // at this point sa[pos] is either the end of a fixed width field
-   // or the character that acts as a delimiter:
-   //
-   charT maybe_delim = sa[pos];
-   if((pos != 0) && (count_chars(sa, maybe_delim) == count_chars(sA, maybe_delim)) && (count_chars(sa, maybe_delim) == count_chars(sc, maybe_delim)))
-   {
-      *delim = maybe_delim;
-      return sort_delim;
-   }
-   //
-   // OK doen't look like a delimiter, try for fixed width field:
-   //
-   if((sa.size() == sA.size()) && (sa.size() == sc.size()))
-   {
-      // note assumes that the fixed width field is less than
-      // (numeric_limits<charT>::max)(), should be true for all types
-      // I can't imagine 127 character fields...
-      *delim = static_cast<charT>(++pos);
-      return sort_fixed;
-   }
-   //
-   // don't know what it is:
-   //
-   *delim = 0;
-   return sort_unknown;
-}
-    
-    template <class OutputIterator, class Results, class traits, class ForwardIter>
-void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format_escape()
-{
-   // skip the escape and check for trailing escape:
-   if(++m_position == m_end)
-   {
-      put(static_cast<char_type>('\\'));
-      return;
-   }
-   // now switch on the escape type:
-   switch(*m_position)
-   {
-   case 'a':
-      put(static_cast<char_type>('\a'));
-      ++m_position;
-      break;
-   case 'f':
-      put(static_cast<char_type>('\f'));
-      ++m_position;
-      break;
-   case 'n':
-      put(static_cast<char_type>('\n'));
-      ++m_position;
-      break;
-   case 'r':
-      put(static_cast<char_type>('\r'));
-      ++m_position;
-      break;
-   case 't':
-      put(static_cast<char_type>('\t'));
-      ++m_position;
-      break;
-   case 'v':
-      put(static_cast<char_type>('\v'));
-      ++m_position;
-      break;
-   case 'x':
-      if(++m_position == m_end)
-      {
-         put(static_cast<char_type>('x'));
-         return;
-      }
-      // maybe have \x{ddd}
-      if(*m_position == static_cast<char_type>('{'))
-      {
-         ++m_position;
-         int val = this->toi(m_position, m_end, 16);
-         if(val < 0)
-         {
-            // invalid value treat everything as literals:
-            put(static_cast<char_type>('x'));
-            put(static_cast<char_type>('{'));
-            return;
-         }
-         if((m_position == m_end) || (*m_position != static_cast<char_type>('}')))
-         {
-            --m_position;
-            while(*m_position != static_cast<char_type>('\\'))
-               --m_position;
-            ++m_position;
-            put(*m_position++);
-            return;
-         }
-         ++m_position;
-         put(static_cast<char_type>(val));
-         return;
-      }
-      else
-      {
-         std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-         len = (std::min)(static_cast<std::ptrdiff_t>(2), len);
-         int val = this->toi(m_position, m_position + len, 16);
-         if(val < 0)
-         {
-            --m_position;
-            put(*m_position++);
-            return;
-         }
-         put(static_cast<char_type>(val));
-      }
-      break;
-   case 'c':
-      if(++m_position == m_end)
-      {
-         --m_position;
-         put(*m_position++);
-         return;
-      }
-      put(static_cast<char_type>(*m_position++ % 32));
-      break;
-   case 'e':
-      put(static_cast<char_type>(27));
-      ++m_position;
-      break;
-   default:
-      // see if we have a perl specific escape:
-      if((m_flags & boost::regex_constants::format_sed) == 0)
-      {
-         bool breakout = false;
-         switch(*m_position)
-         {
-         case 'l':
-            ++m_position;
-            m_restore_state = m_state;
-            m_state = output_next_lower;
-            breakout = true;
-            break;
-         case 'L':
-            ++m_position;
-            m_state = output_lower;
-            breakout = true;
-            break;
-         case 'u':
-            ++m_position;
-            m_restore_state = m_state;
-            m_state = output_next_upper;
-            breakout = true;
-            break;
-         case 'U':
-            ++m_position;
-            m_state = output_upper;
-            breakout = true;
-            break;
-         case 'E':
-            ++m_position;
-            m_state = output_copy;
-            breakout = true;
-            break;
-         }
-         if(breakout)
-            break;
-      }
-      // see if we have a \n sed style backreference:
-      std::ptrdiff_t len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-      len = (std::min)(static_cast<std::ptrdiff_t>(1), len);
-      int v = this->toi(m_position, m_position+len, 10);
-      if((v > 0) || ((v == 0) && (m_flags & ::boost::regex_constants::format_sed)))
-      {
-         put(m_results[v]);
-         break;
-      }
-      else if(v == 0)
-      {
-         // octal ecape sequence:
-         --m_position;
-         len = ::boost::BOOST_REGEX_DETAIL_NS::distance(m_position, m_end);
-         len = (std::min)(static_cast<std::ptrdiff_t>(4), len);
-         v = this->toi(m_position, m_position + len, 8);
-         BOOST_ASSERT(v >= 0);
-         put(static_cast<char_type>(v));
-         break;
-      }
-      // Otherwise output the character 'as is':
-      put(*m_position++);
-      break;
-   }
-}
-    }
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_match.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Regular expression matching algorithms.
-  *                Note this is an internal header file included
-  *                by regex.hpp, do not include on its own.
-  */
-    
-    
-
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_PREFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
-inline std::size_t regex_split(OutputIterator out,
-                   std::basic_string<charT, Traits1, Alloc1>& s, 
-                   const basic_regex<charT, Traits2>& e,
-                   match_flag_type flags = match_default)
-{
-   return regex_split(out, s, e, flags, UINT_MAX);
-}
-    
-    template <class BidirectionalIterator,
-          class charT,
-          class traits>
-class regex_token_iterator_implementation 
-{
-   typedef basic_regex<charT, traits> regex_type;
-   typedef sub_match<BidirectionalIterator>      value_type;
-    }
-    
-    //
-// class regex_traits_wrapper.
-// this is what our implementation will actually store;
-// it provides default implementations of the 'optional'
-// interfaces that we support, in addition to the
-// required 'standard' ones:
-//
-namespace BOOST_REGEX_DETAIL_NS{
-#if !BOOST_WORKAROUND(__HP_aCC, < 60000)
-BOOST_MPL_HAS_XXX_TRAIT_DEF(boost_extensions_tag)
-#else
-template<class T>
-struct has_boost_extensions_tag
-{
-   BOOST_STATIC_CONSTANT(bool, value = false);
-};
-#endif
-    }
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+    {}  // end namespace tensorflow
 
     
     
-    {  return Status();
-}
-    
-      // serialize the QueryLogItem and make sure decorations go top level
-  auto doc = JSON::newObject();
-  auto status = serializeQueryLogItem(item, doc);
-  std::string expected = 'test';
-  std::string result = doc.doc()['load_test'].GetString();
-  EXPECT_EQ(result, expected);
-    
-    #include <osquery/config.h>
-#include <osquery/database.h>
-#include <osquery/registry.h>
-    
-    #include 'osquery/core/json.h'
-#include 'osquery/tests/test_util.h'
-    
-    TEST_F(QueryTests, test_add_and_get_current_results) {
-  // Test adding a 'current' set of results to a scheduled query instance.
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('foobar', query);
-  uint64_t counter = 128;
-  auto status = cf.addNewResults(getTestDBExpectedResults(), 0, counter);
-  EXPECT_TRUE(status.ok());
-  EXPECT_EQ(status.toString(), 'OK');
-  EXPECT_EQ(counter, 0UL);
-    }
-    
-    
-    {
-    {
-    {
-    {        if (queries_to_run.empty() || queries_to_run.count(name)) {
-          setDatabaseValue(kQueries, kDistributedQueryPrefix + name, query);
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
         }
       }
     }
   }
-  if (doc.doc().HasMember('accelerate')) {
-    const auto& accelerate = doc.doc()['accelerate'];
-    if (accelerate.IsInt()) {
-      auto duration = accelerate.GetInt();
-      LOG(INFO) << 'Accelerating distributed query checkins for ' << duration
-                << ' seconds';
-      setDatabaseValue(kPersistentSettings,
-                       'distributed_accelerate_checkins_expire',
-                       std::to_string(getUnixTime() + duration));
-    } else {
-      VLOG(1) << 'Falied to Accelerate: Timeframe is not an integer';
-    }
-  }
-  return Status();
 }
     
-      free((char*)reply.message);
+      void Compute(OpKernelContext* context) override {
+    // Output a scalar string.
+    Tensor* output_tensor = nullptr;
+    OP_REQUIRES_OK(context,
+                   context->allocate_output(0, TensorShape(), &output_tensor));
+    auto output = output_tensor->scalar<string>();
+    }
     
-    #include <boost/atomic/detail/config.hpp>
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // Safe containers for an owned TF_Status. On destruction, the handle
+// will be deleted by TF_DeleteStatus.
+using Safe_TF_StatusPtr = std::unique_ptr<TF_Status, detail::TFStatusDeleter>;
+Safe_TF_StatusPtr make_safe(TF_Status* status);
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #endif  // ATOM_APP_UV_TASK_RUNNER_H_
+
     
     
-    {
-    {
-    {} // namespace detail
-} // namespace atomics
-} // namespace mars_boost
+    {}  // namespace mate
+    
+      // Override download::DownloadItem::Observer methods
+  void OnDownloadUpdated(download::DownloadItem* download) override;
+  void OnDownloadDestroyed(download::DownloadItem* download) override;
+    
+    
+    {}  // namespace atom
+    
+    template <>
+struct Converter<in_app_purchase::Transaction> {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
+                                   const in_app_purchase::Transaction& val) {
+    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
+    dict.SetHidden('simple', true);
+    dict.Set('transactionIdentifier', val.transactionIdentifier);
+    dict.Set('transactionDate', val.transactionDate);
+    dict.Set('originalTransactionIdentifier',
+             val.originalTransactionIdentifier);
+    dict.Set('transactionState', val.transactionState);
+    dict.Set('errorCode', val.errorCode);
+    dict.Set('errorMessage', val.errorMessage);
+    dict.Set('payment', val.payment);
+    return dict.GetHandle();
+  }
+};
+    
+    PowerMonitor::PowerMonitor(v8::Isolate* isolate) {
+#if defined(OS_LINUX)
+  SetShutdownHandler(
+      base::Bind(&PowerMonitor::ShouldShutdown, base::Unretained(this)));
+#elif defined(OS_MACOSX)
+  Browser::Get()->SetShutdownHandler(
+      base::Bind(&PowerMonitor::ShouldShutdown, base::Unretained(this)));
+#endif
+  base::PowerMonitor::Get()->AddObserver(this);
+  Init(isolate);
+#if defined(OS_MACOSX) || defined(OS_WIN)
+  InitPlatformSpecificMonitors();
+#endif
+}
+    
+      // The handle of the module that contains the window procedure of |window_|.
+  HMODULE instance_;
+    
+    uint32_t swap_endian(uint32_t val) {
+    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
+    return (val << 16) | (val >> 16);
+}
+    
+     protected:
+#ifndef CPU_ONLY
+  cublasHandle_t cublas_handle_;
+  curandGenerator_t curand_generator_;
+#endif
+  shared_ptr<RNG> random_generator_;
+    
+      /** The vector that indicates whether each top blob has a non-zero weight in
+   *  the objective function. */
+  vector<Dtype> loss_;
+    
+      int num_kernels_im2col_;
+  int num_kernels_col2im_;
+  int conv_out_channels_;
+  int conv_in_channels_;
+  int conv_out_spatial_dim_;
+  int kernel_dim_;
+  int col_offset_;
+  int output_offset_;
+    
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      virtual inline const char* type() const { return 'Convolution'; }
+    
+    template <typename Dtype>
+class CropLayer : public Layer<Dtype> {
+ public:
+  explicit CropLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+  cudnnPoolingDescriptor_t  pooling_desc_;
+  cudnnPoolingMode_t        mode_;
+};
+#endif
+    
+    
+    {}  // namespace caffe
+    
+    void ShowErrorAndExit(DWORD ec, const wchar_t * func, int line)
+{
+	wchar_t * buffer;
+	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, ec, 0, (LPWSTR)&buffer, 0, NULL) == 0)
+	{
+		buffer = L'Unknown error. FormatMessage failed.';
+	}
+    }
