@@ -1,357 +1,278 @@
 
         
-        // TaskRunner implementation that posts tasks into libuv's default loop.
-class UvTaskRunner : public base::SingleThreadTaskRunner {
- public:
-  explicit UvTaskRunner(uv_loop_t* loop);
-    }
+        
+    {}  // namespace tesseract.
     
-    #include 'atom/browser/api/atom_api_browser_window.h'
     
-    void ShowOpenDialog(const file_dialog::DialogSettings& settings,
-                    mate::Arguments* args) {
-  v8::Local<v8::Value> peek = args->PeekNext();
-  file_dialog::OpenDialogCallback callback;
-  if (mate::Converter<file_dialog::OpenDialogCallback>::FromV8(
-          args->isolate(), peek, &callback)) {
-    file_dialog::ShowOpenDialog(settings, callback);
-  } else {
-    std::vector<base::FilePath> paths;
-    if (file_dialog::ShowOpenDialog(settings, &paths))
-      args->Return(paths);
-  }
+    {}  // namespace tesseract.
+
+    
+      // Array holding scores for each orientation id [0,3].
+  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
+  // page respectively, where the values refer to the amount of clockwise
+  // rotation to be applied to the page for the text to be upright and readable.
+  float orientations[4];
+  // Script confidence scores for each of 4 possible orientations.
+  float scripts_na[4][kMaxNumberOfScripts];
+    
+    #include 'db/builder.h'
+    
+      void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  static void BGWork(void* db);
+  void BackgroundCall();
+  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  void CleanupCompaction(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status DoCompactionWork(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+    
+      iter->SeekToFirst();
+  ASSERT_EQ(IterStatus(iter), 'a->va');
+  iter->Next();
+  ASSERT_EQ(IterStatus(iter), 'b->vb');
+  iter->Next();
+  ASSERT_EQ(IterStatus(iter), 'c->vc');
+  iter->Next();
+  ASSERT_EQ(IterStatus(iter), '(invalid)');
+  iter->SeekToFirst();
+  ASSERT_EQ(IterStatus(iter), 'a->va');
+  iter->Prev();
+  ASSERT_EQ(IterStatus(iter), '(invalid)');
+    
+    static std::string ShortSuccessor(const std::string& s) {
+  std::string result = s;
+  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
+  return result;
 }
     
+      fname = LockFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kDBLockFile, type);
     
-    {}  // namespace api
-    
-    namespace api {
-    }
-    
-    #include 'atom/browser/api/trackable_object.h'
-#include 'native_mate/handle.h'
-#include 'services/device/wake_lock/power_save_blocker/power_save_blocker.h'
-    
-        QMenu *dockMenu();
-    void setIcon(const QIcon &icon);
-    void setMainWindow(QMainWindow *window);
-    static MacDockIconHandler *instance();
-    static void cleanup();
-    void handleDockIconClickEvent();
-    
-        Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged USER true)
-    
-    
-    {} // namespace
-    
-    QT_BEGIN_NAMESPACE
-class QPaintEvent;
-class QTimer;
-QT_END_NAMESPACE
-    
-    namespace Ui {
-    class TransactionDescDialog;
-}
-    
-    int UniValue::get_int() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int32_t retval;
-    if (!ParseInt32(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
-}
-    
-      virtual bool Generate(const FileDescriptor* file, const string& parameter,
-                        GeneratorContext* context, string* error) const {
-    file->CopyTo(file_);
+    template<typename Key, class Comparator>
+bool SkipList<Key,Comparator>::Contains(const Key& key) const {
+  Node* x = FindGreaterOrEqual(key, nullptr);
+  if (x != nullptr && Equal(key, x->key)) {
     return true;
-  }
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    void Context::InitializeFieldGeneratorInfo(const FileDescriptor* file) {
-  for (int i = 0; i < file->message_type_count(); ++i) {
-    InitializeFieldGeneratorInfoForMessage(file->message_type(i));
+  } else {
+    return false;
   }
 }
     
+      // Removes a SnapshotImpl from this list.
+  //
+  // The snapshot must have been created by calling New() on this list.
+  //
+  // The snapshot pointer should not be const, because its memory is
+  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
+  // which is in the API, and currently takes a const Snapshot.
+  void Delete(const SnapshotImpl* snapshot) {
+#if !defined(NDEBUG)
+    assert(snapshot->list_ == this);
+#endif  // !defined(NDEBUG)
+    snapshot->prev_->next_ = snapshot->next_;
+    snapshot->next_->prev_ = snapshot->prev_;
+    delete snapshot;
+  }
     
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_doc_comment.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_name_resolver.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    #include <google/protobuf/compiler/objectivec/objectivec_enum.h>
-#include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-      std::vector<string> options;
-  if (descriptor_->is_repeated()) options.push_back('GPBExtensionRepeated');
-  if (descriptor_->is_packed()) options.push_back('GPBExtensionPacked');
-  if (descriptor_->containing_type()->options().message_set_wire_format())
-    options.push_back('GPBExtensionSetWireFormat');
-    
-    #define TEGRA_ADD(src1, sz1, src2, sz2, dst, sz, w, h) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    CAROTENE_NS::add(CAROTENE_NS::Size2D(w, h), \
-                     src1, sz1, \
-                     src2, sz2, \
-                     dst, sz, \
-                     CAROTENE_NS::CONVERT_POLICY_SATURATE), /*Original addition use saturated operator*/ \
-                                                            /*so use the same from CAROTENE*/ \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-                v_srclo = vget_low_s16(v_src1);
-            v_srchi = vget_high_s16(v_src1);
-            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst1))),
-                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst1))));
-    
-    void add(const Size2D &size,
-         const u32 * src0Base, ptrdiff_t src0Stride,
-         const u32 * src1Base, ptrdiff_t src1Stride,
-         u32 * dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-        if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<u32, u64>());
+    Status CheckCFPathsSupported(const DBOptions& db_options,
+                             const ColumnFamilyOptions& cf_options) {
+  // More than one cf_paths are supported only in universal
+  // and level compaction styles. This function also checks the case
+  // in which cf_paths is not specified, which results in db_paths
+  // being used.
+  if ((cf_options.compaction_style != kCompactionStyleUniversal) &&
+      (cf_options.compaction_style != kCompactionStyleLevel)) {
+    if (cf_options.cf_paths.size() > 1) {
+      return Status::NotSupported(
+          'More than one CF paths are only supported in '
+          'universal and level compaction styles. ');
+    } else if (cf_options.cf_paths.empty() &&
+               db_options.db_paths.size() > 1) {
+      return Status::NotSupported(
+          'More than one DB paths are only supported in '
+          'universal and level compaction styles. ');
     }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<u32, u64>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
+  }
+  return Status::OK();
 }
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+      Options options = CurrentOptions();
+  options.create_if_missing = true;
+  options.merge_operator = MergeOperators::CreateUInt64AddOperator();
+  options.num_levels = 3;
+  // Filter out keys with value is 2.
+  options.compaction_filter_factory =
+      std::make_shared<ConditionalFilterFactory>(two);
+  DestroyAndReopen(options);
+    
+      virtual Status EnableFileDeletions(bool /*force*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+  virtual Status GetLiveFiles(std::vector<std::string>&,
+                              uint64_t* /*manifest_file_size*/,
+                              bool /*flush_memtable*/ = true) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+    
+          // Print the message
+      if (p < limit) {
+        va_list backup_ap;
+        va_copy(backup_ap, ap);
+        p += vsnprintf(p, limit - p, format, backup_ap);
+        va_end(backup_ap);
+      }
+    
+    /*
+ * PosixMmapFile
+ *
+ * We preallocate up to an extra megabyte and use memcpy to append new
+ * data to the file.  This is safe since we either properly close the
+ * file before reading from it, or for log files, the reading code
+ * knows enough to skip zero suffixes.
+ */
+Status PosixMmapFile::UnmapCurrentRegion() {
+  TEST_KILL_RANDOM('PosixMmapFile::UnmapCurrentRegion:0', rocksdb_kill_odds);
+  if (base_ != nullptr) {
+    int munmap_status = munmap(base_, limit_ - base_);
+    if (munmap_status != 0) {
+      return IOError('While munmap', filename_, munmap_status);
+    }
+    file_offset_ += limit_ - base_;
+    base_ = nullptr;
+    limit_ = nullptr;
+    last_sync_ = nullptr;
+    dst_ = nullptr;
+    }
     }
     
-        ptrdiff_t width = (ptrdiff_t)size.width, height = (ptrdiff_t)size.height;
-    
-    void rshift(const Size2D &size,
-            const s16 * srcBase, ptrdiff_t srcStride,
-            u8 * dstBase, ptrdiff_t dstStride,
-            u32 shift, CONVERT_POLICY cpolicy)
-{
-    internal::assertSupportedConfiguration();
+    namespace rocksdb {
     }
     
-                int32x2_t vnz1 = vreinterpret_s32_u32(vpmax_u32(vget_low_u32(vlx1), vget_high_u32(vlx1)));
-            int32x2_t vnz2 = vreinterpret_s32_u32(vpmax_u32(vget_low_u32(vlx2), vget_high_u32(vlx2)));
-            int32x2_t vnz3 = vreinterpret_s32_u32(vpmax_u32(vget_low_u32(vlx3), vget_high_u32(vlx3)));
-            int32x2_t vnz4 = vreinterpret_s32_u32(vpmax_u32(vget_low_u32(vlx4), vget_high_u32(vlx4)));
+      // Transaction could not commit since the write outside of the txn conflicted
+  // with the read!
+  assert(s.IsBusy());
     
-    #include 'common.hpp'
-#include 'vtransform.hpp'
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24>
-internal::ValueArray24<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24> Values(T1 v1, T2 v2,
-    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12,
-    T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20,
-    T21 v21, T22 v22, T23 v23, T24 v24) {
-  return internal::ValueArray24<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24>(v1, v2,
-      v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18,
-      v19, v20, v21, v22, v23, v24);
-}
-    
-    
-    
-    // Returns a newly created InternalRunDeathTestFlag object with fields
-// initialized from the GTEST_FLAG(internal_run_death_test) flag if
-// the flag is specified; otherwise returns NULL.
-InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag();
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10>
-struct Types10 {
-  typedef T1 Head;
-  typedef Types9<T2, T3, T4, T5, T6, T7, T8, T9, T10> Tail;
+    static const int kCbToGreenTable[256] = {
+  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
+  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
+  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
+  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
+  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
+  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
+  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
+  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
+  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
+  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
+  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
+   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
+   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
+   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
+   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
+   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
+    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
+  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
+  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
+  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
+  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
+  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
+ -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
+ -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
+ -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
+ -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
+ -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
+ -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
+ -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
+ -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
+ -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
+ -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
 };
     
-    
-// This sample shows how to write a more complex unit test for a class
-// that has multiple member functions.
-//
-// Usually, it's a good idea to have one test for each method in your
-// class.  You don't have to do that exactly, but it helps to keep
-// your tests organized.  You may also throw in additional tests as
-// needed.
-    
-    
-    {    return new_queue;
+      int opt_idx = 1;
+  for(;opt_idx < argc;opt_idx++) {
+    if (strnlen(argv[opt_idx], 2) < 2 || argv[opt_idx][0] != '-' || argv[opt_idx][1] != '-')
+      break;
+    if (!strcmp(argv[opt_idx], '--verbose')) {
+      verbose = 1;
+    } else if (!strcmp(argv[opt_idx], '--quality')) {
+      opt_idx++;
+      if (opt_idx >= argc)
+        Usage();
+      quality = atoi(argv[opt_idx]);
+    } else if (!strcmp(argv[opt_idx], '--memlimit')) {
+      opt_idx++;
+      if (opt_idx >= argc)
+        Usage();
+      memlimit_mb = atoi(argv[opt_idx]);
+    } else if (!strcmp(argv[opt_idx], '--nomemlimit')) {
+      memlimit_mb = -1;
+    } else if (!strcmp(argv[opt_idx], '--')) {
+      opt_idx++;
+      break;
+    } else {
+      fprintf(stderr, 'Unknown commandline flag: %s\n', argv[opt_idx]);
+      Usage();
+    }
   }
     
-    class CronetChannelCredentialsImpl final : public ChannelCredentials {
- public:
-  CronetChannelCredentialsImpl(void* engine) : engine_(engine) {}
-    }
+    #include 'guetzli/jpeg_data.h'
     
-    void ChannelArguments::SetServiceConfigJSON(
-    const grpc::string& service_config_json) {
-  SetString(GRPC_ARG_SERVICE_CONFIG, service_config_json);
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    
+    {  return true;
 }
     
-    void CensusClientCallData::StartTransportStreamOpBatch(
-    grpc_call_element* elem, TransportStreamOpBatch* op) {
-  if (op->send_initial_metadata() != nullptr) {
-    census_context* ctxt = op->get_census_context();
-    GenerateClientContext(
-        qualified_method_, &context_,
-        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
-    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
-                                               kMaxTraceContextLen);
-    if (tracing_len > 0) {
-      GRPC_LOG_IF_ERROR(
-          'census grpc_filter',
-          grpc_metadata_batch_add_tail(
-              op->send_initial_metadata()->batch(), &tracing_bin_,
-              grpc_mdelem_from_slices(
-                  GRPC_MDSTR_GRPC_TRACE_BIN,
-                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
-    }
-    grpc_slice tags = grpc_empty_slice();
-    // TODO: Add in tagging serialization.
-    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
-    if (encoded_tags_len > 0) {
-      GRPC_LOG_IF_ERROR(
-          'census grpc_filter',
-          grpc_metadata_batch_add_tail(
-              op->send_initial_metadata()->batch(), &stats_bin_,
-              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
-    }
-  }
-    }
     
-      // Serializes a GrpcTraceContext into the provided buffer. Returns the number
-  // of bytes serialized into the buffer. If the buffer is not of sufficient
-  // size (it must be at least kGrpcTraceContextSize bytes) it will drop
-  // everything and return 0 bytes serialized. Inlined for performance reasons.
-  static size_t Encode(const GrpcTraceContext& tc, char* buf, size_t buf_size) {
-    if (buf_size < kGrpcTraceContextSize) {
-      return kEncodeDecodeFailure;
-    }
-    buf[kVersionIdOffset] = kVersionId;
-    buf[kTraceIdOffset] = kTraceIdField;
-    memcpy(&buf[kTraceIdOffset + 1], tc.trace_id,
-           opencensus::trace::TraceId::kSize);
-    buf[kSpanIdOffset] = kSpanIdField;
-    memcpy(&buf[kSpanIdOffset + 1], tc.span_id,
-           opencensus::trace::SpanId::kSize);
-    buf[kTraceOptionsOffset] = kTraceOptionsField;
-    memcpy(&buf[kTraceOptionsOffset + 1], tc.trace_options,
-           opencensus::trace::TraceOptions::kSize);
-    return kGrpcTraceContextSize;
-  }
-    
-    const ViewDescriptor& ServerSentMessagesPerRpcMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/server/sent_messages_per_rpc/minute')
-          .set_measure(kRpcServerSentMessagesPerRpcMeasureName)
-          .set_aggregation(CountDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
+    {  std::string arguments;
+  ASSERT_TRUE(getTracepointArguments(
+      'folly', 'test_static_tracepoint_array', 0, arguments));
+  std::array<int, 3> expected{{sizeof(void*), sizeof(int), sizeof(int64_t)}};
+  checkTracepointArguments(arguments, expected);
 }
     
-        template CNTK_API NDArrayViewPtr NDArrayView::RandomNormal<float>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device/* = DeviceDescriptor::UseDefaultDevice()*/);
-    template CNTK_API NDArrayViewPtr NDArrayView::RandomNormal<double>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device/* = DeviceDescriptor::UseDefaultDevice()*/);
-    template CNTK_API NDArrayViewPtr NDArrayView::RandomNormal<float16>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device/* = DeviceDescriptor::UseDefaultDevice()*/);
-    template CNTK_API NDArrayViewPtr NDArrayView::RandomNormal<int8_t>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device/* = DeviceDescriptor::UseDefaultDevice()*/);
-    template CNTK_API NDArrayViewPtr NDArrayView::RandomNormal<int16_t>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device/* = DeviceDescriptor::UseDefaultDevice()*/);
+    #pragma once
     
-        ProgressWriter::ProgressWriter(size_t trainingUpdateWriteFrequency, size_t trainingFirstUpdatesToWrite,
-                                   size_t testUpdateWriteFrequency, size_t testFirstUpdatesToWrite,
-                                   size_t distributedSyncUpdateWriteFrequency, size_t distributedSyncFirstUpdatesToWrite)
-        : m_training(std::make_unique<Impl>(trainingUpdateWriteFrequency, trainingFirstUpdatesToWrite)),
-        m_test(std::make_unique<Impl>(testUpdateWriteFrequency, testFirstUpdatesToWrite)),
-        m_distributedSync(std::make_unique<Impl>(distributedSyncUpdateWriteFrequency, distributedSyncFirstUpdatesToWrite))
-    {
+        template <
+        typename OtherExecutor,
+        typename = typename std::enable_if<
+            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
+    /* implicit */ KeepAlive(KeepAlive<OtherExecutor>&& other) noexcept
+        : KeepAlive(other.get(), other.executorAndDummyFlag_ & kDummyFlag) {
+      other.executorAndDummyFlag_ = 0;
     }
     
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
     
+    {} // namespace detail
     
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
+        // Test the boundaries of conversion to int32_t seconds
+    using sec_i32 = std::chrono::duration<int32_t>;
+    ts.tv_sec = 2147483647;
+    ts.tv_nsec = 0;
+    EXPECT_EQ(std::numeric_limits<int32_t>::max(), to<sec_i32>(ts).count());
+    ts.tv_nsec = 1000000000;
+    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
+    ts.tv_sec = -2147483648;
+    ts.tv_nsec = 0;
+    EXPECT_EQ(std::numeric_limits<int32_t>::min(), to<sec_i32>(ts).count());
+    ts.tv_sec = -2147483649;
+    ts.tv_nsec = 999999999;
+    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
+    ts.tv_sec = -2147483649;
+    ts.tv_nsec = 0;
+    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
+    ts.tv_sec = -2147483650;
+    ts.tv_nsec = 0;
+    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
     
-            // Edit distance between subsequences
-        Matrix<float> grid(CPUDEVICE);
-        
-        // Number of insertions between subsequences
-        Matrix<float> insMatrix(CPUDEVICE);
-        
-        //Number of deletions between subsequences
-        Matrix<float> delMatrix(CPUDEVICE);
+    #endif // D_DHT_ROUTING_TABLE_SERIALIZER_H
+
+    
+    DNSCache::DNSCache(const DNSCache& c) = default;
