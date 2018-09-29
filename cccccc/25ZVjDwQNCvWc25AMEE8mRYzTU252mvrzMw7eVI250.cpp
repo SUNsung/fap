@@ -1,234 +1,184 @@
 
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(AtomContentClient);
-};
+        
+        // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    namespace {
-    }
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT2.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT2_(pred_format, v1, v2, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, v1, v2), \
+                on_failure)
     
+    // Names of the flags (needed for parsing Google Test flags).
+const char kDeathTestStyleFlag[] = 'death_test_style';
+const char kDeathTestUseFork[] = 'death_test_use_fork';
+const char kInternalRunDeathTestFlag[] = 'internal_run_death_test';
     
-    {  std::move(self->tasks_[timer]).Run();
-  self->tasks_.erase(timer);
-  uv_timer_stop(timer);
-  uv_close(reinterpret_cast<uv_handle_t*>(timer), UvTaskRunner::OnClose);
+      explicit FilePath(const std::string& pathname) : pathname_(pathname) {
+    Normalize();
+  }
+    
+    APCHandle::Pair APCCollection::WrapArray(APCHandle::Pair inner,
+                                         CollectionType colType) {
+  auto const col = new APCCollection;
+  col->m_arrayHandle = inner.handle;
+  col->m_colType = colType;
+  return { &col->m_handle, inner.size + sizeof(APCCollection) };
 }
     
-      uv_loop_t* loop_;
+    public:
+  virtual ~IDebuggable() {}
     
-    #include <memory>
+    struct FatalErrorException : ExtendedException {
+  explicit FatalErrorException(const char *msg)
+    : ExtendedException('%s', msg)
+  {}
+  FatalErrorException(int, ATTRIBUTE_PRINTF_STRING const char *msg, ...)
+    ATTRIBUTE_PRINTF(3,4);
+  FatalErrorException(const std::string&, const Array& backtrace,
+                      bool isRecoverable = false);
+    }
+    
+    inline int ExecutionContext::getPageletTasksStarted() const {
+  return m_pageletTasksStarted;
+}
+    
+    
+    {}
+    
+    template<>
+void SetDataGradToBlob<mshadow::gpu, float>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<float>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_gpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, float)->set_gpu_diff(data_ptr);
+}
+    
+    #endif  // PLUGIN_CAFFE_CAFFE_BLOB_H_
+
+    
+    #include <cstddef>
+#include <cstdlib>
+#include <sstream>
+#include <limits>
+#include <map>
+#include <set>
+#include <typeinfo>
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <utility>
     
+    MXNET_REGISTER_OP_PROPERTY(CaffeOp, CaffeOpProp)
+.describe('Apply caffe operator')
+.add_argument('data', 'Symbol[]', 'List of tensors')
+.add_arguments(CaffeOpParam::__FIELDS__());
     
-    {}  // namespace
-    
-    #include 'atom/common/node_includes.h'
-    
-    
-    {
-    {    return dict.GetHandle();
-  }
-};
-    
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/mac/in_app_purchase.h'
-#include 'atom/browser/mac/in_app_purchase_observer.h'
-#include 'atom/browser/mac/in_app_purchase_product.h'
-#include 'native_mate/handle.h'
-    
-    namespace atom {
+    template <std::size_t kNumGpus, std::size_t kStreams>
+void StreamManager<kNumGpus, kStreams>::Finalize() {
+#if MXNET_USE_CUDA
+  for (std::size_t i = 0; i < kNumGpus; ++i) {
+    if (gpu_cnt_.at(i) != -1) {
+      for (auto&& j : gpu_streams_.at(i)) {
+        // Catch exception for CUDA driver shutdown
+        MSHADOW_CATCH_ERROR(mshadow::DeleteStream<gpu>(j));
+      }
+      gpu_cnt_.at(i) = -1;
     }
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(LayoutManager);
-};
-    
-    StringRef swift::platformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return #X;
-#include 'swift/AST/PlatformKinds.def'
   }
-  llvm_unreachable('bad PlatformKind');
+#endif  // MXNET_USE_CUDA
 }
     
-    
-    {    return GenericTypeParamType::get(genericParam->getDepth(),
-                                     genericParam->getIndex(), ctx);
-  };
-  auto conformanceToSyntheticConformanceFn =
-      MakeAbstractConformanceForGenericType();
-    
-    TaskQueue::~TaskQueue() = default;
-    
-    
-    {  bool isTypedef() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
-  }
-  const clang::TypedefNameDecl *getTypedef() const {
-    assert(isTypedef());
-    return Decl.get<const clang::TypedefNameDecl *>();
-  }
-};
-    
-        // Main loop
-    bool running = true;
-    while (running)
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplAllegro5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                ImGui_ImplAllegro5_CreateDeviceObjects();
-            }
-        }
-    }
-    
-    void my_display_code()
-{
-    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-    }
-    
-    
-    {        // Rendering
-        ImGui::Render();
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        SDL_GL_SwapWindow(window);
-    }
-    
-    #define IM_VEC4_CLASS_EXTRA                                                 \
-        ImVec4(const MyVec4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
-    
-        // Setup viewport
-    D3DVIEWPORT9 vp;
-    vp.X = vp.Y = 0;
-    vp.Width = (DWORD)draw_data->DisplaySize.x;
-    vp.Height = (DWORD)draw_data->DisplaySize.y;
-    vp.MinZ = 0.0f;
-    vp.MaxZ = 1.0f;
-    g_pd3dDevice->SetViewport(&vp);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-      // create names of the live files. The names are not absolute
-  // paths, instead they are relative to dbname_;
-  for (auto live_file : live) {
-    ret.push_back(MakeTableFileName('', live_file.GetNumber()));
-  }
-    
-      // atomic write
-  WriteBatch batch;
-  batch.Put(handles[0], Slice('key2'), Slice('value2'));
-  batch.Put(handles[1], Slice('key3'), Slice('value3'));
-  batch.Delete(handles[0], Slice('key'));
-  s = db->Write(WriteOptions(), &batch);
-  assert(s.ok());
-    
-      // Always pick a compaction which includes all files whenever possible.
-  CompactionTask* PickCompaction(
-      DB* db, const std::string& cf_name) override {
-    ColumnFamilyMetaData cf_meta;
-    db->GetColumnFamilyMetaData(&cf_meta);
-    }
-    
-    class MyFilter : public rocksdb::CompactionFilter {
+    namespace mxnet {
+namespace engine {
+/*!
+ * \brief ThreadedEngine using global thread pool across all devices.
+ * The policy of this Engine:
+ *  - Execute Async operation immediately if pushed from Pusher.
+ *  - Use a common thread pool for normal operations on all devices.
+ *  - Use special thread pool for copy operations.
+ */
+class ThreadedEnginePooled : public ThreadedEngine {
  public:
-  bool Filter(int level, const rocksdb::Slice& key,
-              const rocksdb::Slice& existing_value, std::string* new_value,
-              bool* value_changed) const override {
-    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
-    ++count_;
-    assert(*value_changed == false);
+  ThreadedEnginePooled() {
+    this->Start();
+  }
+    }
+    }
+    }
+    
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
+    
+    bool get_png_size(const uint8_t* data, uint32_t data_size, int64_t *width, int64_t *height) {
+  if (data[0] == 0x89 && data[1] == 0x50 && data[2] ==0x4E && data[3] == 0x47) {
+    uint8_t const* p = data + 16;
+    *width = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
+    p += 4;
+    *height = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
+    return true;
+  } else {
     return false;
   }
-    }
-    
-      /**
-   * @brief Destructor
-   */
-  virtual ~EsdCanClient();
-    
-    
-    { private:
-  bool _is_init;
-  bcan_hdl_t _dev_handler;
-  CANCardParameter::CANChannelId _card_port;
-  bcan_msg_t _send_frames[MAX_CAN_SEND_FRAME_LEN];
-  bcan_msg_t _recv_frames[MAX_CAN_RECV_FRAME_LEN];
-};
-    
-    #include 'modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h'
-#include 'gtest/gtest.h'
-    
-      // init config and state
-  // 1. set receive message_id filter, ie white list
-  struct can_filter filter[2048];
-  for (int i = 0; i < 2048; ++i) {
-    filter[i].can_id = 0x000 + i;
-    filter[i].can_mask = CAN_SFF_MASK;
-  }
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                 int32_t *const frame_num) override;
-    
-    std::string Byte::byte_to_binary(const uint8_t value) {
-  return std::bitset<8 * sizeof(uint8_t)>(value).to_string();
 }
     
-      /**
-   * @brief Desctructor.
-   */
-  ~Byte() = default;
+    #ifndef GUETZLI_COMPARATOR_H_
+#define GUETZLI_COMPARATOR_H_
     
-    const int32_t CANBUS_MESSAGE_LENGTH = 8;  // according to ISO-11891-1
-const int32_t MAX_CAN_PORT = 3;
+    #endif  // GUETZLI_IDCT_H_
+
     
-      // 3. set timer to trigger publish info periodically
-  // if sensor_freq == 0, then it is event-triggered publishment.
-  // no need for timer.
-  if (FLAGS_sensor_freq > 0) {
-    const double duration = 1.0 / FLAGS_sensor_freq;
-    timer_ = AdapterManager::CreateTimer(
-        ros::Duration(duration), &SensorCanbus<SensorType>::OnTimer, this);
-  } else {
-    data_trigger_running_ = true;
-    thread_.reset(new std::thread([this] { DataTrigger(); }));
-    if (thread_ == nullptr) {
-      AERROR << 'Unable to create data trigger thread.';
-      return OnError('Failed to start data trigger thread.');
-    }
-  }
+    #include 'guetzli/jpeg_data_decoder.h'
