@@ -1,91 +1,106 @@
 
         
-        $LOAD_PATH.unshift File.expand_path('lib', __dir__)
-require 'jekyll/version'
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-    require 'erb'
-    
-    module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-      # body
-  xml.tag!('body') do
-    xml.tag!('outline', text: TITLE, title: TITLE) do
-      blogs.each do |blog|
-        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
-          xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
-      end
-    end
+            # The stdlib recorded in the install receipt is used during dependency
+    # compatibility checks, so we only care about the stdlib that libraries
+    # link against.
+    keg.detect_cxx_stdlibs(:skip_executables => true)
   end
-end
     
-    desc 'LESS to stdin -> Sass to stdout'
-task :less_to_scss, :branch do |t, args|
-  require './tasks/converter'
-  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
-end
-    
-          less.gsub /&:extend\((#{SELECTOR_RE})(?: all)?\)/ do
-        selector = $1
-        selector =~ /\.([\w-]+)/
-        mixin    = $1
-        if mixin && mixin_names.include?(mixin)
-          '@include #{mixin}'
-        else
-          '@extend #{selector}'
+        def self.rm_DS_Store
+      paths = Queue.new
+      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
+        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
+      workers = (0...Hardware::CPU.cores).map do
+        Thread.new do
+          begin
+            while p = paths.pop(true)
+              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
+            end
+          rescue ThreadError # ignore empty queue error
+          end
         end
       end
+      workers.map(&:join)
     end
     
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
+        end
+      end
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
+      end
     end
     
-    desc 'generate documentation'
-task :doc => 'doc:all'
-    
-          def instrument(env)
-        return unless i = options[:instrumenter]
-        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
-        i.instrument('rack.protection', env)
-      end
-    
-          def csp_policy
-        directives = []
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-    ## -- Misc Configs -- ##
-    
-    run SinatraStaticServer
-
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      def dump_formula_report(key, title)
+    formulae = select_formula(key).sort.map do |name, new_name|
+      # Format list items of renamed formulae
+      if key == :R
+        name = pretty_installed(name) if installed?(name)
+        new_name = pretty_installed(new_name) if installed?(new_name)
+        '#{name} -> #{new_name}'
       else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+        installed?(name) ? pretty_installed(name) : name
       end
     end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
   end
 end
+
+    
+    puts '\nDone.'
+
+    
+            private
+    
+            # NOTE: feed_token was renamed from rss_token but both needs to be supported because
+        #       users might have already added the feed to their RSS reader before the rename
+        token = current_request.params[:feed_token].presence || current_request.params[:rss_token].presence
+        return unless token
+    
+            scope :latest, -> { where(retried: [false, nil]) }
+        scope :created, -> { where(status: 'created') }
+        scope :running, -> { where(status: 'running') }
+        scope :pending, -> { where(status: 'pending') }
+        scope :success, -> { where(status: 'success') }
+        scope :failed, -> { where(status: 'failed')  }
+        scope :canceled, -> { where(status: 'canceled')  }
+        scope :skipped, -> { where(status: 'skipped')  }
+        scope :manual, -> { where(status: 'manual')  }
+    
+          def to_markdown
+        '[![#{title}](#{image_url})](#{link_url})'
+      end
+    
+    
+    
+        def get_web_content(url)
+      raw_uri           = URI.parse url
+      proxy             = ENV['http_proxy']
+      if proxy
+        proxy_uri       = URI.parse(proxy)
+        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
+      else
+        https           = Net::HTTP.new raw_uri.host, raw_uri.port
+      end
+      https.use_ssl     = true
+      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request           = Net::HTTP::Get.new raw_uri.request_uri
+      data              = https.request request
+    end
+  end
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
