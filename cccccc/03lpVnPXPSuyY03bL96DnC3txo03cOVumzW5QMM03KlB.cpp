@@ -1,198 +1,200 @@
 
         
-        /*
- * Call a function that produces a return value for each element of
- * `inputs' in parallel, and collect the results.
- *
- * Requires: the type returned from the function call must be
- * DefaultConstructible, and either MoveAssignable or Assignable.
- *
- * If `func' throws an exception, the results of the output vector
- * will contain some default-constructed values.
- */
-template<class Func, class Items>
-auto map(Items&& inputs, Func func) -> std::vector<decltype(func(inputs[0]))> {
-  std::vector<decltype(func(inputs[0]))> retVec(inputs.size());
-  auto const retMem = &retVec[0];
-    }
+        #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
+#endif
     
-      /*
-   * Patch a branch to the correct target.
-   *
-   * It decodes the branch @jmp to decide whether it's an absolute branch or an
-   * offset branch and patches it properly.
-   */
-  static void patchBranch(CodeAddress jmp, CodeAddress dest);
-  static void patchAbsolute(CodeAddress jmp, CodeAddress dest);
+    /* Enum lookups:
+ * - ntoi:  look up a name with specified length.
+ * - ntoiz: look up a name provided as a null-terminated string.
+ * - iton:  look up an integer, returning the name as a null-terminated
+ *          string. */
+bool upb_enumdef_ntoi(const upb_enumdef *e, const char *name, size_t len,
+                      int32_t *num);
+UPB_INLINE bool upb_enumdef_ntoiz(const upb_enumdef *e,
+                                  const char *name, int32_t *num) {
+  return upb_enumdef_ntoi(e, name, strlen(name), num);
+}
+const char *upb_enumdef_iton(const upb_enumdef *e, int32_t num);
+    
+      virtual bool Generate(const FileDescriptor* file, const string& parameter,
+                        GeneratorContext* context, string* error) const {
+    file->CopyTo(file_);
+    return true;
+  }
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/compiler/plugin.pb.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    #include <sstream>
     
     #include <string>
-#include <utility>
-#include <vector>
     
-    inline void* ExecutionContext::operator new(size_t s) {
-  // Can't use req::make_raw here because we want raw memory, not a constructed
-  // object. This gets called generically from ThreadLocal, so we can't just
-  // change the call-sites.
-  return req::malloc(s, type_scan::getIndexForMalloc<ExecutionContext>());
+    // Does this message class have generated parsing, serialization, and other
+// standard methods for which reflection-based fallback implementations exist?
+bool Context::HasGeneratedMethods(const Descriptor* descriptor) const {
+  return options_.enforce_lite ||
+         descriptor->file()->options().optimize_for() != FileOptions::CODE_SIZE;
 }
     
-    struct Options;
-struct FileMetaData;
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    
-    {    fprintf(stderr,
-            'expected=%d..%d; got=%d; bad_keys=%d; bad_values=%d; missed=%d\n',
-            min_expected, max_expected, correct, bad_keys, bad_values, missed);
-    ASSERT_LE(min_expected, correct);
-    ASSERT_GE(max_expected, correct);
-  }
-    
-        Slice key = input->key();
-    if (compact->compaction->ShouldStopBefore(key) &&
-        compact->builder != nullptr) {
-      status = FinishCompactionOutputFile(compact, input);
-      if (!status.ok()) {
-        break;
-      }
-    }
-    
-    class DBImpl : public DB {
- public:
-  DBImpl(const Options& options, const std::string& dbname);
-  virtual ~DBImpl();
-    }
-    
-    
-    {}  // namespace
-    
-    
-    {}  // namespace leveldb
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
-  }
-  return (ok ? 0 : 1);
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
 }
+    
+    AuthPropertyIterator::AuthPropertyIterator(
+    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
+    : property_(property),
+      ctx_(iter->ctx),
+      index_(iter->index),
+      name_(iter->name) {}
+    
+    bool CompletionQueue::CompletionQueueTLSCache::Flush(void** tag, bool* ok) {
+  int res = 0;
+  void* res_tag;
+  flushed_ = true;
+  if (grpc_completion_queue_thread_local_cache_flush(cq_->cq_, &res_tag,
+                                                     &res)) {
+    auto cq_tag = static_cast<internal::CompletionQueueTag*>(res_tag);
+    *ok = res == 1;
+    if (cq_tag->FinalizeResult(tag, ok)) {
+      return true;
+    }
+  }
+  return false;
+}
+    
+    
+    {}  // namespace grpc
 
     
-    TEST(LogTest, MissingLastIsIgnored) {
-  Write(BigString('bar', kBlockSize));
-  // Remove the LAST block, including header.
-  ShrinkSize(14);
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ('', ReportMessage());
-  ASSERT_EQ(0, DroppedBytes());
-}
-    
-    
-    {
-    {  void ArchiveFile(const std::string& fname) {
-    // Move into another directory.  E.g., for
-    //    dir/foo
-    // rename to
-    //    dir/lost/foo
-    const char* slash = strrchr(fname.c_str(), '/');
-    std::string new_dir;
-    if (slash != nullptr) {
-      new_dir.assign(fname.data(), slash - fname.data());
-    }
-    new_dir.append('/lost');
-    env_->CreateDir(new_dir);  // Ignore error
-    std::string new_file = new_dir;
-    new_file.append('/');
-    new_file.append((slash == nullptr) ? fname.c_str() : slash + 1);
-    Status s = env_->RenameFile(fname, new_file);
-    Log(options_.info_log, 'Archiving %s: %s\n',
-        fname.c_str(), s.ToString().c_str());
-  }
-};
-}  // namespace
-    
-    bool Action::isDone() const
-{
-    return true;
-}
-    
-        p = reverse->getControlPointAtIndex(reverse->count()-1);
-    reverse->removeControlPointAtIndex(reverse->count()-1);
-    
-    // implementation of ReuseGrid
-    
-    // FIXME: Passing 'const O *' instead of 'const O&' because HASH_FIND_IT requires the address of a pointer
-// and, it is not possible to get the address of a reference
-size_t ActionManager::getNumberOfRunningActionsInTargetByTag(const Node *target,
-                                                             int tag)
-{
-    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
+    namespace mxnet {
     }
     
-        /** 
-     * @brief Initializes with a duration and destination percentage. 
-     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
-     * @param percent Specify the destination percentage.
-     * @return If the creation success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, float percent);
+    #if defined(__i386__) || defined(_M_X86) || defined(_M_X64) || defined(__x86_64__)
+#define ARCH_IS_INTEL_X86
+#endif
     
-        if (_once == false)
-    {
-        for (i = 0; i < _gridSize.width; ++i)
+    
+    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
+            }
+            else if (!sampleDynamicAxes.empty())
+                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+    
+            // 'initializer' must be a random initializer
+        auto initializerType = initializer[InitializerTypeAttributeName].Value<std::wstring>();
+        if ((initializerType != Microsoft::MSR::CNTK::UniformInitializerTypeName) &&
+            (initializerType != Microsoft::MSR::CNTK::BilinearInitializerTypeName) &&
+            (initializerType != Microsoft::MSR::CNTK::ConstantInitializerTypeName))
         {
-            for (j = 0; j < _gridSize.height; ++j)
-            {
-                Quad3 coords = getOriginalTile(Vec2(i ,j));
-                
-                // X
-                coords.bl.x += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.x += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.x += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.x += ( rand() % (_randrange*2) ) - _randrange;
-                
-                // Y
-                coords.bl.y += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.y += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.y += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.y += ( rand() % (_randrange*2) ) - _randrange;
-    }
-    }
+            int oldOutputRank = initializer[OutputRankAttributeName].Value<int>();
+            int oldFilterRank = initializer[FilterRankAttributeName].Value<int>();
     }
     
-    CC_CONSTRUCTOR_ACCESS:
-    FadeOutTRTiles() {}
-    virtual ~FadeOutTRTiles() {}
+        // computation functions don't do anything for parameter nodes
+    virtual void UpdateFunctionMBSize() override;
+    virtual void /*ComputationNode::*/ ForwardProp(const FrameRange&) override;
+    virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange&) override;
+    virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override;
     
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
+    BENCHMARK_PARAM(BENCHFUN(pushBack), 16)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 128)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 1024)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 10240)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 102400)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 1024000)
+
+    
+    
+    {  // Synchronous transmission of CAN messages
+  int32_t ret = canWrite(dev_handler_, send_frames_, frame_num, nullptr);
+  if (ret != NTCAN_SUCCESS) {
+    AERROR << 'send message failed, error code: ' << ret << ', '
+           << GetErrorString(ret);
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+  return ErrorCode::OK;
 }
     
-     ActionTween is an action that lets you update any property of an object.
- For example, if you want to modify the 'width' property of a target from 200 to 300 in 2 seconds, then:
     
-        /** Returns a Animation that was previously added.
-     * If the name is not found it will return nil.
-     * You should retain the returned copy if you are going to use it.
-     *
-     * @return A Animation that was previously added. If the name is not found it will return nil.
-     */
-    Animation* getAnimation(const std::string& name);
-    /**
-     * @deprecated. Use getAnimation() instead
-     * @js NA
-     * @lua NA
-     */
-    CC_DEPRECATED_ATTRIBUTE Animation* animationByName(const std::string& name){ return getAnimation(name); }
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
+}
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    
+    {  // Synchronous transmission of CAN messages
+  int32_t send_num = *frame_num;
+  int32_t ret = bcan_send(_dev_handler, _send_frames, send_num);
+  if (ret < 0) {
+    int ret_send_error = bcan_get_status(_dev_handler);
+    AERROR << 'send message failed, error code: ' << ret
+           << ', send error: ' << ret_send_error;
+    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+  }
+  *frame_num = ret;
+  return ErrorCode::OK;
+}
+    
+    #include 'gtest/gtest.h'
+    
+    
+    {  std::condition_variable cvar_;
+};
+    
+    TEST(ProtocolDataTest, CheckSum) {
+  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
+  const uint8_t result =
+      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
+  EXPECT_EQ(0xE7, result);
+}
