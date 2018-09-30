@@ -1,201 +1,113 @@
 
         
-          it 'raises ZeroDivisionError for Rational(0, 1) passed a negative Integer' do
-    [-1, -4, -9999].each do |exponent|
-      lambda { Rational(0, 1) ** exponent }.should raise_error(ZeroDivisionError, 'divided by 0')
+            def translation_scope
+      'devise.confirmations'
     end
-  end
-    
-      it 'evaluates else-body when then-body separated by 'then' and expression is false' do
-    if false then 123
-    else 456
-    end.should == 456
-    
-      def test_keyword_duplicated
-    bug10315 = '[ruby-core:65625] [Bug #10315]'
-    a = []
-    def a.add(x) push(x); x; end
-    def a.f(k:) k; end
-    a.clear
-    r = nil
-    assert_warn(/duplicated/) {r = eval('a.f(k: a.add(1), k: a.add(2))')}
-    assert_equal(2, r)
-    assert_equal([1, 2], a, bug10315)
-    a.clear
-    r = nil
-    assert_warn(/duplicated/) {r = eval('a.f({k: a.add(1), k: a.add(2)})')}
-    assert_equal(2, r)
-    assert_equal([1, 2], a, bug10315)
-  end
-    
-    load_extension('data')
-    
-    describe 'CApiAllocTypedSpecs (a class with an alloc func defined)' do
-  it 'calls the alloc func' do
-    @s = CApiAllocTypedSpecs.new
-    @s.typed_wrapped_data.should == 42 # not defined in initialize
-  end
-end
-    
-        assert_equal 'some_gem', spec.name
-    assert_equal 'this is a summary', spec.summary
-  end
-    
-      DIGESTRES_ = /
-    ([a-zA-Z\-]+)
-      [ \t]*(?:\r\n[ \t]*)*
-      =
-      [ \t]*(?:\r\n[ \t]*)*
-      (?:
-       '((?:[^']+|\\[\x00-\x7F])*)' |
-       ([!\#$%&'*+\-.0-9A-Z^_`a-z|~]+)
-      )/x
-    
-          def reload
-        mtime = File::mtime(@path)
-        if mtime > @mtime
-          @passwd.clear
-          File.open(@path){|io|
-            while line = io.gets
-              line.chomp!
-              case line
-              when %r!\A[^:]+:[a-zA-Z0-9./]{13}\z!
-                if @password_hash == :bcrypt
-                  raise StandardError, '.htpasswd file contains crypt password, only bcrypt passwords supported'
-                end
-                user, pass = line.split(':')
-              when %r!\A[^:]+:\$2[aby]\$\d{2}\$.{53}\z!
-                if @password_hash == :crypt
-                  raise StandardError, '.htpasswd file contains bcrypt password, only crypt passwords supported'
-                end
-                user, pass = line.split(':')
-              when /:\$/, /:{SHA}/
-                raise NotImplementedError,
-                      'MD5, SHA1 .htpasswd file not supported'
-              else
-                raise StandardError, 'bad .htpasswd file'
-              end
-              @passwd[user] = pass
-            end
-          }
-          @mtime = mtime
-        end
-      end
-    
-    if mflags = ENV['GNUMAKEFLAGS'] and /\A-(\S*)j\d*/ =~ mflags
-  mflags = mflags.gsub(/(\A|\s)(-\S*)j\d*/, '\1\2')
-  mflags.strip!
-  ENV['GNUMAKEFLAGS'] = (mflags unless mflags.empty?)
-end
-ENV['LC_ALL'] = ENV['LANG'] = 'C'
-SVNURL = URI.parse('https://svn.ruby-lang.org/repos/ruby/')
-GITURL = URI.parse('https://git.ruby-lang.org/ruby.git')
-RUBY_VERSION_PATTERN = /^\#define\s+RUBY_VERSION\s+'([\d.]+)'/
-    
-      end # class Parser
-end # module URI
-
-    
-      # Unicode-based encodings (except UTF-8)
-  UNICODE_ENCODINGS = [Encoding::UTF_16BE, Encoding::UTF_16LE, Encoding::UTF_32BE, Encoding::UTF_32LE,
-                       Encoding::GB18030, Encoding::UCS_2BE, Encoding::UCS_4BE]
-    
-    Bundler.require(
-    *Rails.groups(
-        coverage: [:test],
-        db: all_environments,
-        pcap: all_environments
-    )
-)
-    
-        # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
-    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'imap4'
-    
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
-    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
-    
-    signer._invoke('JarSignerMSF','[Ljava.lang.String;',jarsignerOpts)
-    
-          def failure_message_helper(negated = '')
-        verb = @expected_title.is_a?(Regexp) ? 'match' : 'include'
-        'expected #{@actual_title.inspect}#{negated} to #{verb} #{@expected_title.inspect}'
-      end
-    
-    module Capybara
-  class Selector
-    module Filters
-      class Base
-        def initialize(name, matcher, block, **options)
-          @name = name
-          @matcher = matcher
-          @block = block
-          @options = options
-          @options[:valid_values] = [true, false] if options[:boolean]
-        end
-    
-          def extract_locator(args)
-        locator, options = *args, {}
-        locator, options = nil, locator if locator.is_a? Hash
-        [locator, options]
-      end
-    end
-  end
 end
 
     
-        if @user.save
-      if email_changed
-        redirect_to_with_json verify_path(:return_to => settings_path), :notice => 'Your settings have been updated successfully. As you've changed, your e-mail address you'll need to verify it before you can continue.'
-      else
-        redirect_to_with_json settings_path, :notice => 'Your settings have been updated successfully.'
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
+    
+    class Devise::PasswordsController < DeviseController
+  prepend_before_action :require_no_authentication
+  # Render the #edit only if coming from a reset password email link
+  append_before_action :assert_reset_token_passed, only: :edit
+    
+      def auth_options
+    { scope: resource_name, recall: '#{controller_path}#new' }
+  end
+    
+      protected
+    
+      def test_returns_success
+    Warden.test_mode!
+    
+    module Devise
+  module Controllers
+    # Provide sign in and sign out functionality.
+    # Included by default in all controllers.
+    module SignInOut
+      # Return true if the given scope is signed in session. If no scope given, return
+      # true if any scope is signed in. This will run authentication hooks, which may
+      # cause exceptions to be thrown from this method; if you simply want to check
+      # if a scope has already previously been authenticated without running
+      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
+      def signed_in?(scope=nil)
+        [scope || Devise.mappings.keys].flatten.any? do |_scope|
+          warden.authenticate?(scope: _scope)
+        end
       end
-    else
-      render_form_errors 'edit', @user
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
     end
+    
+              opts.parse!(argv)
+          return argv
+        rescue OptionParser::InvalidOption
+          raise Errors::CLIInvalidOptions, help: opts.help.chomp
+        end
+    
+            # Merge another configuration object into this one. This assumes that
+        # the other object is the same class as this one. This should not
+        # mutate this object, but instead should return a new, merged object.
+        #
+        # The default implementation will simply iterate over the instance
+        # variables and merge them together, with this object overriding
+        # any conflicting instance variables of the older object. Instance
+        # variables starting with '__' (double underscores) will be ignored.
+        # This lets you set some sort of instance-specific state on your
+        # configuration keys without them being merged together later.
+        #
+        # @param [Object] other The other configuration object to merge from,
+        #   this must be the same type of object as this one.
+        # @return [Object] The merged object.
+        def merge(other)
+          result = self.class.new
+    
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
+    
+    Struct.new('Blog', :name, :web_url, :rss_url)
+blogs = []
+    
+    Then(/^I should not be able to sign up$/) do
+  confirm_not_signed_up
+end
+    
+    require 'capybara/rails'
+require 'capybara/cucumber'
+require 'capybara/session'
+require 'capybara/poltergeist'
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
   end
-    
-      def require_organization_owner
-    unless organization.owner == current_user
-      redirect_to organization_root_path(organization), :alert => 'This page can only be accessed by the organization's owner (#{organization.owner.name})'
-    end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
   end
+end
     
-      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
-  before_action { params[:id] && @http_endpoint = @server.http_endpoints.find_by_uuid!(params[:id]) }
-    
-      before_action :admin_required
-  before_action { @ip_pool = IPPool.find_by_uuid!(params[:ip_pool_id]) }
-  before_action { params[:id] && @ip_address = @ip_pool.ip_addresses.find(params[:id]) }
-    
-      def create
-    @route = @server.routes.build(safe_params)
-    if @route.save
-      redirect_to_with_json [organization, @server, :routes]
-    else
-      render_form_errors 'new', @route
-    end
-  end
-    
-      def create
-    login(User.authenticate(params[:email_address], params[:password]))
-    flash[:remember_login] = true
-    redirect_to_with_return_to root_path
-  rescue Postal::Errors::AuthenticationError => e
-    flash.now[:alert] = 'The credentials you've provided are incorrect. Please check and try again.'
-    render 'new'
-  end
-    
-      def create
-    @webhook = @server.webhooks.build(safe_params)
-    if @webhook.save
-      redirect_to_with_json [organization, @server, :webhooks]
-    else
-      render_form_errors 'new', @webhook
-    end
-  end
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
