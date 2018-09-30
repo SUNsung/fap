@@ -1,142 +1,103 @@
 
         
-        #include <QDialog>
+        // Convert an AttrValue with type `type` to the Python representation for
+// that value.
+string AttrValueToPython(const string& type, const AttrValue& value,
+                         const string& dtype_module = 'tf.');
     
-        /** Colorize an icon (given filename) with the text color */
-    QIcon TextColorIcon(const QString& filename) const;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    class SignVerifyMessageDialog : public QDialog
-{
-    Q_OBJECT
-    }
+    REGISTER_OP('ShapelessOp');
     
-        // Add a preexisting 'receive' entry in the address book.
-    QString preexisting_r_address;
-    QString r_label('already here (r)');
-    
-    class ClientModel;
+        http://www.apache.org/licenses/LICENSE-2.0
     
     
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
-    }
+    {}  // namespace tensorflow
+
+    
+    Safe_TF_TensorPtr make_safe(TF_Tensor* tensor) {
+  return Safe_TF_TensorPtr(tensor);
 }
     
-    #include <boost/test/unit_test.hpp>
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    BOOST_AUTO_TEST_CASE(get_difficulty_for_mid_target)
-{
-    TestDifficulty(0x1df88f6f, 0.004023);
-}
-    
-    
-    {  for (size_t i = 0; i < windows.size(); ++i) {
-    // Only send close event to browser windows, since devtools windows will
-    // be automatically closed.
-    if (!windows[i]->is_devtools()) {
-      // If there is no js object bound to the window, then just close.
-      if (force || windows[i]->ShouldCloseWindow(quit))
-        // we used to delete the Shell object here
-        // but it should be deleted on native window destruction
-        windows[i]->window()->Close();
-    }
-  }
-  if (force) {
-    // in a special force close case, since we're going to exit the
-    // main loop soon, we should delete the shell object asap so the
-    // render widget can be closed on the renderer side
-    windows = Shell::windows();
-    for (size_t i = 0; i < windows.size(); ++i) {
-      if (!windows[i]->is_devtools())
-        delete windows[i];
-    }
-  }
-}
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #include <map>
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
-};
-    
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
-  }
-}
-    
-     protected:
-  ~NwAppSetProxyConfigFunction() override;
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+    /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
  public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
  protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
+  FillerParameter filler_param_;
+};  // class Filler
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
+      /** Will not return until the internal thread has exited. */
+  void StopInternalThread();
     
-    #include 'godot_collision_dispatcher.h'
     
-    	virtual void processCollision(const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap, const btDispatcherInfo &dispatchInfo, btManifoldResult *resultOut);
-	virtual btScalar calculateTimeOfImpact(btCollisionObject *body0, btCollisionObject *body1, const btDispatcherInfo &dispatchInfo, btManifoldResult *resultOut);
+    {}  // namespace caffe
     
-        NDMaskPtr NDMask::DeepClone(const DeviceDescriptor& device) const
-    {
-        NDMaskPtr newMask = MakeSharedObject<NDMask>(this->Shape(), device);
-        newMask->CopyFrom(*this);
+    template <typename Dtype>
+class BasePrefetchingDataLayer :
+    public BaseDataLayer<Dtype>, public InternalThread {
+ public:
+  explicit BasePrefetchingDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden.
+  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-            void Erase() override
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {}  // namespace caffe
+    
+    #include <vector>
+    
+    namespace CNTK
+{
+    CNTK_API const std::wstring Learner::MinibatchSizeKey = L'MinibatchSize';
+    ///
+    /// A special value that can be used for the minibatchSize to indicate that the reference minibatch size is not specified.
+    ///
+    CNTK_API const size_t Learner::IgnoredMinibatchSize = TrainingParameterSchedule<double>::IgnoredMinibatchSize;
+    }
+    
+    #pragma once
+    
+            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
         {
-            if (IsPacked())
+            // failed to acquire
+            int rc = ::CloseHandle(m_handle);
+            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
             {
-                m_packedData = nullptr;
-                m_packedDataLayout = nullptr;
-                m_isPacked = false;
+                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
             }
-            else
-                Value::Erase();
+            m_handle = NULL;
+            return false;
         }
     
-    // some older code uses this namespace
-namespace DebugUtil
+    bool DataReader::GetProposalObs(StreamMinibatchInputs* matrices, const size_t tidx, vector<size_t>& history)
 {
-    void PrintCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-    }
+    bool bRet = true;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        bRet &= m_dataReaders[m_ioNames[i]]->GetProposalObs(matrices, tidx, history);
+    return bRet;
+}
     
-        virtual bool OutputUsedInComputingInputNodesGradients() const override
-    {
-        return false;
-    }
-    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override
-    {
-        return false;
-    }
+        virtual const char * CallStack() const override { return m_callStack.c_str(); }
