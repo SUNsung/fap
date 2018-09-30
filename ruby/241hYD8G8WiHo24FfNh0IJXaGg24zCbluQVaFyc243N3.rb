@@ -1,144 +1,71 @@
 
         
-          def test_escape_javascript
-    assert_equal '', escape_javascript(nil)
-    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
-    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
-    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
-    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
+              # it 'raises an exception after retrying a failed request multiple times' do
+      #   stub_request(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/1234/apps/898536088/platforms/ios/trains').
+      #     to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains_operation_failed.json'), headers: { 'Content-Type' => 'application/json' })
     
-          private
-        def concise_options(options)
-          if columns.size == options.size && options.values.uniq.size == 1
-            options.values.first
-          else
-            options
+          stub_request(:get, 'https://appstoreconnect.apple.com/itc/static-resources/controllers/login_cntrl.js').
+        to_return(status: 200, body: itc_read_fixture_file('login_cntrl.js'))
+      stub_request(:get, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa').
+        to_return(status: 200, body: '')
+      stub_request(:get, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/wa').
+        to_return(status: 200, body: '')
+      stub_request(:get, 'https://olympus.itunes.apple.com/v1/session').
+        to_return(status: 200, body: itc_read_fixture_file('olympus_session.json'))
+      stub_request(:get, 'https://olympus.itunes.apple.com/v1/app/config?hostname=itunesconnect.apple.com').
+        to_return(status: 200, body: { authServiceKey: 'e0abc' }.to_json, headers: { 'Content-Type' => 'application/json' })
+    
+        def self.prevalidate
+      output_types = Scan.config[:output_types]
+      has_multiple_report_types = output_types && output_types.split(',').size > 1
+      if has_multiple_report_types && Scan.config[:custom_report_file_name]
+        UI.user_error!('Using a :custom_report_file_name with multiple :output_types (#{output_types}) will lead to unexpected results. Use :output_files instead.')
+      end
+    end
+    
+    full_params = ARGV.shelljoin
+    
+        def assets_path
+      @assets_path ||= File.join gem_path, 'assets'
+    end
+    
+          spec['version'] = Bootstrap::VERSION
+    
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
+    
+        def parse_warn_directive(parent, line, root, value, offset)
+      raise SyntaxError.new('Invalid warn directive '@warn': expected expression.') unless value
+      raise SyntaxError.new('Illegal nesting: Nothing may be nested beneath warn directives.',
+        :line => @line + 1) unless line.children.empty?
+      offset = line.offset + line.text.index(value).to_i
+      Tree::WarnNode.new(parse_script(value, :offset => offset))
+    end
+    
+              def _#{name}(name)
+            (@#{name}s && @#{name}s[name]) || @parent && @parent._#{name}(name)
           end
-        end
+          protected :_#{name}
+    
+        # The name of the mixin in which the error occurred.
+    # This could be `nil` if the error occurred outside a mixin.
+    #
+    # @return [String]
+    def sass_mixin
+      sass_backtrace.first[:mixin]
     end
     
-            assert_called(connection.websocket, :transmit) do
-          @server.broadcast 'test_room_1', { foo: 'bar' }, { coder: DummyEncoder }
-          wait_for_async
-          wait_for_executor connection.server.worker_pool.executor
-        end
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
       end
-    end
-    
-      setup do
-    @server = TestServer.new
-    @server.config.allowed_request_origins = %w( http://rubyonrails.com )
-  end
-    
-    require 'test_helper'
-    
-        def check_maruku(config)
-      if config.fetch('markdown', 'kramdown').to_s.casecmp('maruku').zero?
-        Jekyll.logger.abort_with 'Error:', 'You're using the 'maruku' ' \
-          'Markdown processor, which has been removed as of 3.0.0. ' \
-          'We recommend you switch to Kramdown. To do this, replace ' \
-          '`markdown: maruku` with `markdown: kramdown` in your ' \
-          '`_config.yml` file.'
-      end
-    end
-    
-        context 'minimal configuration' do
-      let(:options) do
-        {
-          name: { 'en-US' => 'Fastlane Demo' },
-          description: { 'en-US' => 'Demo description' }
-        }
-      end
-    
-        def teardown
-      begin
-        if @test_pid
-          Timeout.timeout(2) do
-            Process.waitpid(@test_pid)
-          end
-        end
-      rescue Timeout::Error
-        Process.kill(:KILL, @test_pid) if @test_pid
-      ensure
-        @test_out&.close
-      end
-    end
-    
-      it 'accepts extra flags as a keyword argument and combine with a string mode' do
-    lambda {
-      File.open(@file, 'w', flags: File::EXCL) { }
-    }.should raise_error(Errno::EEXIST)
-    
-        it 'does not normalize line endings in binary mode' do
-      @io = new_io(@fname, 'wb')
-      @io.write 'a\r\nb\r\nc'
-      @io.close
-      File.binread(@fname).should == 'a\r\nb\r\nc'
-    end
-  end
-end
-
-    
-        ruby_version_is '2.5' do
-      it 'returns nil if other can't be converted to a string' do
-        'abc'.casecmp?(mock('abc')).should be_nil
-      end
-    end
-  end
-end
-
-    
-          it 'handles a hanging comma without curly braces' do
-        specs.fooM3('abc', 123, abc: 123,).should == ['abc', 123, {abc: 123}]
-        specs.fooM3('abc', 123, rbx: 'cool', specs: :fail_sometimes, non_sym: 1234,).should ==
-          ['abc', 123, { rbx: 'cool', specs: :fail_sometimes, non_sym: 1234 }]
-      end
-    end
-  end
-    
-        res = Net::HTTPClientError.new('1.0', '4xx', 'test response')
-    ruby_version_is ''...'2.6' do
-      res.error_type.should == Net::HTTPServerException
-    end
-    ruby_version_is '2.6' do
-      res.error_type.should == Net::HTTPClientException
-    end
-    
-          def to_yaml
-        @pairs.to_yaml
-      end
-    
-      return unless check_content
-    
-    desc 'copy dot files for deployment'
-task :copydot, :source, :dest do |t, args|
-  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
-    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
-  end
-end
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
-    end
-    
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
-    
-    module Jekyll
-    
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
