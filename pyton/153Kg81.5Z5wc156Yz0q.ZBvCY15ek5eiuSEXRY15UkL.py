@@ -1,261 +1,148 @@
 
         
-          - name: create WAF size condition
-    aws_waf_condition:
-      name: my_size_condition
-      filters:
-        - field_to_match: query_string
-          size: 300
-          comparison: GT
-      type: size
+        
+def check_alphabetical(lines):
+    '''
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
+        title_re_match = link_re.match(raw_title)
+        if title_re_match:
+            sections[category].append(title_re_match.group(1).upper())
     
     
-def create_rule_lookup(client, module):
-    try:
-        rules = list_rules_with_backoff(client)
-        return dict((rule['Name'], rule) for rule in rules)
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Could not list rules')
     
-        for stack_description in service_mgr.describe_stacks(module.params.get('stack_name')):
-        facts = {'stack_description': stack_description}
-        stack_name = stack_description.get('StackName')
-    
-        desc_log_group = describe_log_group(client=logs,
-                                        log_group_name=module.params['log_group_name'],
-                                        module=module)
-    final_log_group_snake = []
-    
-    RETURN = '''
-images:
-  description: a list of images
-  returned: always
-  type: complex
-  contains:
-    architecture:
-      description: The architecture of the image
-      returned: always
-      type: string
-      sample: x86_64
-    block_device_mappings:
-      description: Any block device mapping entries
-      returned: always
-      type: complex
-      contains:
-        device_name:
-          description: The device name exposed to the instance
-          returned: always
-          type: string
-          sample: /dev/sda1
-        ebs:
-          description: EBS volumes
-          returned: always
-          type: complex
-    creation_date:
-      description: The date and time the image was created
-      returned: always
-      type: string
-      sample: '2017-10-16T19:22:13.000Z'
-    description:
-      description: The description of the AMI
-      returned: always
-      type: string
-      sample: ''
-    ena_support:
-      description: whether enhanced networking with ENA is enabled
-      returned: always
-      type: bool
-      sample: true
-    hypervisor:
-      description: The hypervisor type of the image
-      returned: always
-      type: string
-      sample: xen
-    image_id:
-      description: The ID of the AMI
-      returned: always
-      type: string
-      sample: ami-5b466623
-    image_location:
-      description: The location of the AMI
-      returned: always
-      type: string
-      sample: 408466080000/Webapp
-    image_type:
-      description: The type of image
-      returned: always
-      type: string
-      sample: machine
-    launch_permissions:
-      description: launch permissions of the ami
-      returned: when image is owned by calling account and describe_image_attributes is yes
-      type: complex
-      sample: [{'group': 'all'}, {'user_id': '408466080000'}]
-    name:
-      description: The name of the AMI that was provided during image creation
-      returned: always
-      type: string
-      sample: Webapp
-    owner_id:
-      description: The AWS account ID of the image owner
-      returned: always
-      type: string
-      sample: '408466080000'
-    public:
-      description: whether the image has public launch permissions
-      returned: always
-      type: bool
-      sample: true
-    root_device_name:
-      description: The device name of the root device
-      returned: always
-      type: string
-      sample: /dev/sda1
-    root_device_type:
-      description: The type of root device used by the AMI
-      returned: always
-      type: string
-      sample: ebs
-    sriov_net_support:
-      description: whether enhanced networking is enabled
-      returned: always
-      type: string
-      sample: simple
-    state:
-      description: The current state of the AMI
-      returned: always
-      type: string
-      sample: available
-    tags:
-      description: Any tags assigned to the image
-      returned: always
-      type: complex
-    virtualization_type:
-      description: The type of virtualization of the AMI
-      returned: always
-      type: string
-      sample: hvm
-'''
-    
-    try:
-    import boto3
-    HAS_BOTO3 = True
-except ImportError:
-    HAS_BOTO3 = False
-    
-    # List all EIP addresses for several VMs.
-- ec2_eip_facts:
-    filters:
-       instance-id:
-         - i-123456789
-         - i-987654321
-  register: my_vms_eips
-    
-        interface_info = {'id': interface.id,
-                      'subnet_id': interface.subnet_id,
-                      'vpc_id': interface.vpc_id,
-                      'description': interface.description,
-                      'owner_id': interface.owner_id,
-                      'status': interface.status,
-                      'mac_address': interface.mac_address,
-                      'private_ip_address': interface.private_ip_address,
-                      'source_dest_check': interface.source_dest_check,
-                      'groups': dict((group.id, group.name) for group in interface.groups),
-                      'private_ip_addresses': private_addresses
-                      }
-    
-        key = find_key_pair(module, ec2_client, name)
-    if key:
-        if not module.check_mode:
-            try:
-                ec2_client.delete_key_pair(KeyName=name)
-            except ClientError as err:
-                module.fail_json_aws(err, msg='error deleting key')
-        if not finish_task:
-            return
-        module.exit_json(changed=True, key=None, msg='key deleted')
-    module.exit_json(key=None, msg='key did not exist')
-    
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(dict(
-        region=dict(required=True, aliases=['aws_region', 'ec2_region']),
-        name_regex=dict(required=True),
-        sort_order=dict(required=False, default='ascending', choices=['ascending', 'descending']),
-        limit=dict(required=False, type='int'),
-    )
-    )
-    
-    import os, json, imp
-here = os.path.abspath(os.path.dirname(__file__))
-proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
-try:
-    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
-except:
-    README = ''
-CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
-VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
-    
-    def acfun_download_by_vid(vid, title, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''str, str, str, bool, bool ->None
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-    
-    
-def get_title_and_urls(json_data):
-    title = legitimize(re.sub('[\s*]', '_', json_data['title']))
-    video_info = json_data['file_versions']['html5']['video']
-    if 'high' not in video_info:
-        if 'med' not in video_info:
-            video_url = video_info['low']['url']
-        else:
-            video_url = video_info['med']['url']
+        if len(sys.argv) > 1:
+        ip = sys.argv[1]
     else:
-        video_url = video_info['high']['url']
-    audio_info = json_data['file_versions']['html5']['audio']
-    if 'high' not in audio_info:
-        if 'med' not in audio_info:
-            audio_url = audio_info['low']['url']
-        else:
-            audio_url = audio_info['med']['url']
+        ip = '46.134.208.94'
+        ip = '2001:ee0:3203:a::12'
+        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
+    print('test ip:%s' % ip)
+    
+        value = lp[1].strip()
+    return value
+
+    
+        if len(front.config.GAE_APPIDS):
+        xlog.info('GAE APPID          : %s', '|'.join(front.config.GAE_APPIDS))
     else:
-        audio_url = audio_info['high']['url']
-    return title, video_url, audio_url
+        xlog.info('Using public APPID')
+    xlog.info('------------------------------------------------------')
     
-        print_info(site_info, title, mime, size)
-    if not info_only:
-        download_urls([real_url], title, ext, size, output_dir=output_dir, merge=merge)
+        return (major, minor, patch, beta)
     
-            # here s the parser...
-        stream_types = dilidili_parser_data_to_stream_types(typ, vid, hd2, sign, tmsign, ulk)
-        
-        #get best
-        best_id = max([i['id'] for i in stream_types])
-        
-        parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = best_id, sign = sign, tmsign = tmsign, ulk = ulk)
-        
-        another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+        ANTLR generates code that throws exceptions upon recognition error and
+    also generates code to catch these exceptions in each rule.  If you
+    want to quit upon first error, you can turn off the automatic error
+    handling mechanism using rulecatch action, but you still need to
+    override methods mismatch and recoverFromMismatchSet.
+    
+    In general, the recognition exceptions can track where in a grammar a
+    problem occurred and/or what was the expected input.  While the parser
+    knows its state (such as current input symbol and line info) that
+    state can change before the exception is reported so current token index
+    is computed and stored at exception time.  From this info, you can
+    perhaps print an entire line of input not just a single token, for example.
+    Better to just say the recognizer had a problem and then let the parser
+    figure out a fancy report.
+    
+    '''
+    
+            ## The channel number for the current token
+        self.channel = None
+    
+            self.seek(p)
+        self.line = line
+        self.charPositionInLine = charPositionInLine
+        self.release(marker)
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    self._response = self.PostDataToHandler( request_data,
-                                             'debug_info',
-                                             display_message = False )
+logging.basicConfig(level=logging.DEBUG)
     
-    SYNTAX_ARGUMENT_REGEX = re.compile(
-  r'^\w+=.*$' )
+            '''
+        if self._addr_less_specific(addr):
+            return True
+        elif self.get_addr() == addr.get_addr():
+            if self.is_wildcard() or self.get_port() == addr.get_port():
+                return True
+        return False
+    
+        def test_nonexistent_generic(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                mock_like.return_value = ['unknonwn']
+                self.assertEqual(entrypoint.get_configurator(),
+                                 configurator.ApacheConfigurator)
+    
+        def test_get_addrs_default(self):
+        self.sni.configurator.choose_vhost = mock.Mock(
+            return_value=obj.VirtualHost(
+                'path', 'aug_path',
+                set([obj.Addr.fromstring('_default_:443')]),
+                False, False)
+        )
+    
+                config_text += self._get_config_text(achall, achall_addrs)
     
     
-@patch( 'ycm.vimsupport.GetVariableValue',
-        GetVariableValue_CompleteItemIs( 'Test', user_data='0' ) )
-def GetCompletionsUserMayHaveCompleted_UseUserData0_test( *args ):
-  # Identical completions but we specify the first one via user_data.
-  completions = [
-    BuildCompletionNamespace( 'namespace1' ),
-    BuildCompletionNamespace( 'namespace2' )
-  ]
+def LastEnteredCharIsIdentifierChar():
+  line, current_column = vimsupport.CurrentLineContentsAndCodepointColumn()
+  if current_column - 1 < 0:
+    return False
+  filetype = vimsupport.CurrentFiletypes()[ 0 ]
+  return (
+    identifier_utils.StartOfLongestIdentifierEndingAtIndex(
+        line, current_column, filetype ) != current_column )
+    
+    import logging
+    
+        return True
+    
+    
+def _GetAllDescendentats( root_group ):
+  descendants = []
+  for child in root_group.children:
+    descendants.append( child )
+    descendants.extend( _GetAllDescendentats( child ) )
+  return descendants
+    
+    
+def LastEnteredCharIsIdentifierChar_FiletypeHtml_test():
+  with MockCurrentFiletypes( [ 'html' ] ):
+    with MockCurrentColumnAndLineContents( 3, 'ab-' ):
+      ok_( base.LastEnteredCharIsIdentifierChar() )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+def BuildCompletionNamespace( namespace = None,
+                              insertion_text = 'Test',
+                              menu_text = None,
+                              extra_menu_info = None,
+                              detailed_info = None,
+                              kind = None ):
+  return BuildCompletion( insertion_text = insertion_text,
+                          menu_text = menu_text,
+                          extra_menu_info = extra_menu_info,
+                          detailed_info = detailed_info,
+                          kind = kind,
+                          extra_data = {
+                            'required_namespace_import': namespace
+                          } )
