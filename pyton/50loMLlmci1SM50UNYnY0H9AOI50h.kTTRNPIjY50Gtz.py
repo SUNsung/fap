@@ -1,100 +1,112 @@
 
         
-                print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+            for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
     
-        plt.figure('scikit-learn LASSO benchmark results')
-    plt.subplot(211)
-    plt.plot(list_n_samples, lasso_results, 'b-',
-                            label='Lasso')
-    plt.plot(list_n_samples, lars_lasso_results, 'r-',
-                            label='LassoLars')
-    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
-                            alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
+    secret_msg = b'Secret message goes here'
     
-    pages = {
-    u'ar': u'http://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7',
-    u'de': u'http://de.wikipedia.org/wiki/Wikipedia',
-    u'en': u'https://en.wikipedia.org/wiki/Wikipedia',
-    u'es': u'http://es.wikipedia.org/wiki/Wikipedia',
-    u'fr': u'http://fr.wikipedia.org/wiki/Wikip%C3%A9dia',
-    u'it': u'http://it.wikipedia.org/wiki/Wikipedia',
-    u'ja': u'http://ja.wikipedia.org/wiki/Wikipedia',
-    u'nl': u'http://nl.wikipedia.org/wiki/Wikipedia',
-    u'pl': u'http://pl.wikipedia.org/wiki/Wikipedia',
-    u'pt': u'http://pt.wikipedia.org/wiki/Wikip%C3%A9dia',
-    u'ru': u'http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F',
-#    u'zh': u'http://zh.wikipedia.org/wiki/Wikipedia',
-}
-    
-        # Print the classification report
-    print(metrics.classification_report(y_test, y_predicted,
-                                        target_names=dataset.target_names))
-    
-        def clear_data(self):
-        self.model.data = []
-        self.fitted = False
-        self.model.changed('clear')
-    
-    score_funcs = [
-    metrics.adjusted_rand_score,
-    metrics.v_measure_score,
-    metrics.adjusted_mutual_info_score,
-    metrics.mutual_info_score,
-]
-    
-    # plot shrinkage coefficient
-plt.subplot(2, 1, 2)
-plt.errorbar(n_samples_range, lw_shrinkage.mean(1), yerr=lw_shrinkage.std(1),
-             label='Ledoit-Wolf', color='navy', lw=2)
-plt.errorbar(n_samples_range, oa_shrinkage.mean(1), yerr=oa_shrinkage.std(1),
-             label='OAS', color='darkorange', lw=2)
-plt.xlabel('n_samples')
-plt.ylabel('Shrinkage')
-plt.legend(loc='lower right')
-plt.ylim(plt.ylim()[0], 1. + (plt.ylim()[1] - plt.ylim()[0]) / 10.)
-plt.xlim(5, 31)
-    
-            self.concurrent -= 1
-        return ''
+    entries = []
+for v in versions:
+    fields = v.split('.')
+    year, month, day = map(int, fields[:3])
+    faked = 0
+    patchlevel = 0
+    while True:
+        try:
+            datetime.date(year, month, day)
+        except ValueError:
+            day -= 1
+            faked += 1
+            assert day > 0
+            continue
+        break
+    if len(fields) >= 4:
+        try:
+            patchlevel = int(fields[3])
+        except ValueError:
+            patchlevel = 1
+    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
     
     
-logger = logging.getLogger(__name__)
+def get_base_name(base):
+    if base is InfoExtractor:
+        return 'LazyLoadExtractor'
+    elif base is SearchInfoExtractor:
+        return 'LazyLoadSearchExtractor'
+    else:
+        return base.__name__
     
-        def _add_middleware(self, mw):
-        if hasattr(mw, 'process_request'):
-            self.methods['process_request'].append(mw.process_request)
-        if hasattr(mw, 'process_response'):
-            self.methods['process_response'].insert(0, mw.process_response)
-        if hasattr(mw, 'process_exception'):
-            self.methods['process_exception'].insert(0, mw.process_exception)
+    for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
     
-            if 'ajax_crawlable' in request.meta:  # prevent loops
-            return response
-    
-    logger = logging.getLogger(__name__)
-    
-    from scrapy import signals
-    
-            self.config = mock.MagicMock(nsone_credentials=path,
-                                     nsone_propagation_seconds=0)  # don't wait during tests
+    from youtube_dl.aes import aes_decrypt, aes_encrypt, aes_cbc_decrypt, aes_cbc_encrypt, aes_decrypt_text
+from youtube_dl.utils import bytes_to_intlist, intlist_to_bytes
+import base64
     
     
-class TestDfs(object):
+def runtest(ns, test):
+    '''Run a single test.
     
-        def test_add_reverse(self):
-        print('Test: Empty list(s)')
-        assert_equal(MyLinkedList().add_reverse(None, None), None)
-        assert_equal(MyLinkedList().add_reverse(Node(5), None), None)
-        assert_equal(MyLinkedList().add_reverse(None, Node(10)), None)
+    import xml.etree.ElementTree as ET
     
-            print('Test: One element list')
-        linked_list.insert_to_front(2)
-        linked_list.remove_dupes()
-        assert_equal(linked_list.get_all_data(), [2])
+            self.abcd_parent = ErrorRaisingArgumentParser(add_help=False)
+        self.abcd_parent.add_argument('a')
+        self.abcd_parent.add_argument('-b')
+        c_group = self.abcd_parent.add_argument_group('c')
+        c_group.add_argument('--d')
+    
+            class FloatSizeof:
+            def __sizeof__(self):
+                return 4.5
+        self.assertRaises(TypeError, sys.getsizeof, FloatSizeof())
+        self.assertIs(sys.getsizeof(FloatSizeof(), sentinel), sentinel)
+    
+        def get_output(self, *args, failure=False, **kw):
+        kw = dict(self.DEFAULT_ENV, **kw)
+        if failure:
+            out = assert_python_failure(*args, **kw)
+            out = out[2]
+        else:
+            out = assert_python_ok(*args, **kw)
+            out = out[1]
+        return out.decode().rstrip('\n\r')
+    
+        # compile the pattern
+    _compile(code, p.data, flags)
+    
+    
+# Split a path in a drive specification (a drive letter followed by a
+# colon) and the path specification.
+# It is always true that drivespec + pathspec == p
+def splitdrive(p):
+    '''Split a pathname into drive/UNC sharepoint and relative path specifiers.
+    Returns a 2-tuple (drive_or_unc, path); either part may be empty.
+    
+        def read_text(self, encoding=None, errors=None):
+        '''
+        Open the file in text mode, read it, and close the file.
+        '''
+        with self.open(mode='r', encoding=encoding, errors=errors) as f:
+            return f.read()
+    
+        def test_str_common(self):
+        # Canonicalized paths roundtrip
+        for pathstr in ('a', 'a/b', 'a/b/c', '/', '/a/b', '/a/b/c'):
+            self._check_str(pathstr, (pathstr,))
+        # Special case for the empty path
+        self._check_str('.', ('',))
+        # Other tests for str() are in test_equivalences()
+    
+    import unittest
+import sys
+from ctypes import *
