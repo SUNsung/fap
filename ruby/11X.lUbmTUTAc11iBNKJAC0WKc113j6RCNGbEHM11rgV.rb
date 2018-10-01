@@ -1,69 +1,91 @@
 
         
-          def search_taps(rx)
-    SEARCHABLE_TAPS.map do |user, repo|
-      Thread.new { search_tap(user, repo, rx) }
-    end.inject([]) do |results, t|
-      results.concat(t.value)
+          def post_superenv_hacks
+    # Only allow Homebrew-approved directories into the PATH, unless
+    # a formula opts-in to allowing the user's path.
+    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
+      ENV.userpaths!
     end
   end
     
-      DATA = :DATA
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
+      end
+    end
+    
+      def print_remaining_files(files, root, other = '')
+    case files.length
+    when 0
+      # noop
+    when 1
+      puts files
+    else
+      puts '#{root}/ (#{files.length} #{other}files)'
+    end
+  end
+end
+
+    
+    module Homebrew
+  def update_report
+    install_core_tap_if_necessary
     
       # Use this method to generate standard caveats.
   def standard_instructions(home_name, home_value = libexec)
     <<-EOS.undent
       Before you can use these tools you must export some variables to your $SHELL.
     
-      it 'raises a TypeError when passed nil' do
-    lambda { sleep(nil)   }.should raise_error(TypeError)
+    desc 'Deploy website via rsync'
+task :rsync do
+  exclude = ''
+  if File.exists?('./rsync-exclude')
+    exclude = '--exclude-from '#{File.expand_path('./rsync-exclude')}''
+  end
+  puts '## Deploying website via Rsync'
+  ok_failed system('rsync -avze 'ssh -p #{ssh_port}' #{exclude} #{rsync_args} #{'--delete' unless rsync_delete == false} #{public_dir}/ #{ssh_user}:#{document_root}')
+end
+    
+          # Create an Atom-feed for each index.
+      feed = CategoryFeed.new(self, self.source, category_dir, category)
+      feed.render(self.layouts, site_payload)
+      feed.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << feed
+    end
+    
+          def title
+        'Comparison of #{@page.title}'
+      end
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+      test 'retain edit information' do
+    page1 = 'page1'
+    user1 = 'user1'
+    @wiki.write_page(page1, :markdown, '',
+                     { :name => user1, :email => user1 });
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
   end
     
-      it 'accepts and uses a seed of 0' do
-    srand(0)
-    srand.should == 0
+      teardown do
+    FileUtils.rm_rf(@path)
   end
     
-      it 'returns true when passed ?e if the argument is a file' do
-    Kernel.test(?e, @file).should == true
-  end
-    
-      it 'transfers control to the innermost catch block waiting for the same sympol' do
-    one = two = three = 0
-    catch :duplicate do
-      catch :duplicate do
-        catch :duplicate do
-          one = 1
-          throw :duplicate
+              @wiki.sanitizer.clean(result)
+        else
+          ''
         end
-        two = 2
-        throw :duplicate
       end
-      three = 3
-      throw :duplicate
-    end
-    [one, two, three].should == [1, 2, 3]
-  end
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-          def set_token(session)
-        session[:csrf] ||= self.class.random_token
-      end
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
-    end
