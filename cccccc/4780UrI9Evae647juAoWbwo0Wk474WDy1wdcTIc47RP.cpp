@@ -1,298 +1,143 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+        Q_SIGNALS:
+    void valueChanged();
     
-    namespace tensorflow {
-namespace {
+        // Initialize relevant QT models.
+    std::unique_ptr<const PlatformStyle> platformStyle(PlatformStyle::instantiate('other'));
+    auto node = interfaces::MakeNode();
+    OptionsModel optionsModel(*node);
+    AddWallet(wallet);
+    WalletModel walletModel(std::move(node->getWallets()[0]), *node, platformStyle.get(), &optionsModel);
+    RemoveWallet(wallet);
+    EditAddressDialog editAddressDialog(EditAddressDialog::NewSendingAddress);
+    editAddressDialog.setModel(walletModel.getAddressTableModel());
+    
+    
+    {    count = 0;
+    for (i = 0; i < len; i++) {
+        r[i].infinity = a[i].infinity;
+        if (!a[i].infinity) {
+            secp256k1_ge_set_gej_zinv(&r[i], &a[i], &azi[count++]);
+        }
     }
+    free(azi);
+}
+    
+    #define Ch(x,y,z) ((z) ^ ((x) & ((y) ^ (z))))
+#define Maj(x,y,z) (((x) & (y)) | ((z) & ((x) | (y))))
+#define Sigma0(x) (((x) >> 2 | (x) << 30) ^ ((x) >> 13 | (x) << 19) ^ ((x) >> 22 | (x) << 10))
+#define Sigma1(x) (((x) >> 6 | (x) << 26) ^ ((x) >> 11 | (x) << 21) ^ ((x) >> 25 | (x) << 7))
+#define sigma0(x) (((x) >> 7 | (x) << 25) ^ ((x) >> 18 | (x) << 14) ^ ((x) >> 3))
+#define sigma1(x) (((x) >> 17 | (x) << 15) ^ ((x) >> 19 | (x) << 13) ^ ((x) >> 10))
+    
+    int secp256k1_ecdsa_recover(const secp256k1_context* ctx, secp256k1_pubkey *pubkey, const secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32) {
+    secp256k1_ge q;
+    secp256k1_scalar r, s;
+    secp256k1_scalar m;
+    int recid;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_context_is_built(&ctx->ecmult_ctx));
+    ARG_CHECK(msg32 != NULL);
+    ARG_CHECK(signature != NULL);
+    ARG_CHECK(pubkey != NULL);
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      void Compute(OpKernelContext* context) override {
-    // Get and verify the input data.
-    OP_REQUIRES(
-        context, context->num_inputs() == 1,
-        errors::InvalidArgument('EncodeAudio requires exactly one input.'));
-    const Tensor& contents = context->input(0);
-    OP_REQUIRES(context, TensorShapeUtils::IsMatrix(contents.shape()),
-                errors::InvalidArgument(
-                    'sampled_audio must be a rank 2 tensor but got shape ',
-                    contents.shape().DebugString()));
-    OP_REQUIRES(
-        context, contents.NumElements() <= std::numeric_limits<int32>::max(),
-        errors::InvalidArgument(
-            'sampled_audio cannot have more than 2^31 entries. Shape = ',
-            contents.shape().DebugString()));
+    {    /* On the first run, return 0 to force a second run */
+    if (counter == 0) {
+        memset(nonce32, 0, 32);
+        return 1;
     }
+    /* On the second run, return an overflow to force a third run */
+    if (counter == 1) {
+        memset(nonce32, 0xff, 32);
+        return 1;
+    }
+    /* On the next run, return a valid nonce, but flip a coin as to whether or not to fail signing. */
+    memset(nonce32, 1, 32);
+    return secp256k1_rand_bits(1);
+}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_invalid)
+{
+    static const std::string CASES[] = {
+        ' 1nwldj5',
+        '\x7f''1axkwrx',
+        '\x80''1eym55h',
+        'an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx',
+        'pzry9x0s0muk',
+        '1pzry9x0s0muk',
+        'x1b4n0q5v',
+        'li1dgmt3',
+        'de1lg7wt\xff',
+        'A1G7SGD8',
+        '10a06t8',
+        '1qzzfhee',
+        'a12UEL5L',
+        'A12uEL5L',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(ret.first.empty());
+    }
+}
     
-    REGISTER_COMPLEX(CPU, float, complex64);
-REGISTER_COMPLEX(CPU, double, complex128);
     
-    #include 'tensorflow/core/kernels/cwise_ops_gpu_common.cu.h'
+    {    RejectDifficultyMismatch(difficulty, expected_difficulty);
+}
     
-    public:
-  EventListener(int id,
-                const base::WeakPtr<DispatcherHost>& dispatcher_host,
-                const base::DictionaryValue& option);
     
-    bool MenuDelegate::HasIcon(int command_id) {
-  if (command_id < 0)
+//------------------------------------------------------------------------------
+// Tools for emulating variadic templates in C++98.  The basic idea here is
+// stolen from the boost preprocessor metaprogramming library and cut down to
+// be just general enough for what we need.
+    
+    ExtensionFunction::ResponseAction
+NwCurrentWindowInternalSetShadowFunction::Run() {
+#if defined(OS_MACOSX)
+  EXTENSION_FUNCTION_VALIDATE(args_);
+  bool shadow;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetBoolean(0, &shadow));
+  AppWindow* window = getAppWindow(this);
+  SetShadowOnWindow(window->GetNativeWindow(), shadow);
+#endif
+  return RespondNow(NoArguments());
+}
+    
+    // The browser want to open a file.
+IPC_MESSAGE_CONTROL1(ShellViewMsg_Open,
+                     std::string /* file name */)
+    
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
+    
+    #include <map>
+    
+    
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
     return false;
     }
     
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
-    
-    #include <string.h>
-    
-    void MenuItem::SetEnabled(bool enabled) {
-  gtk_widget_set_sensitive(menu_item_, enabled);
-}
-    
-        bool WriteImage(ClipboardData& data) {
-      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
-      std::string content = *(data.data);
+    void Menu::Create(const base::DictionaryValue& option) {
+  is_menu_modified_ = true;
+  menu_delegate_.reset(new MenuDelegate(object_manager()));
+  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
     }
     
-    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    typedef std::map<std::string,std::string> KeyMap;
+    
+      // Returns true iff the test part passed.
+  bool passed() const { return type_ == kSuccess; }
+    
+    int main(int argc, char **argv) {
+  InitGoogleTest(&argc, argv);
     }
     
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.allocateId', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjAllocateIdFunction);
-};
-    
-    // Streams a Message to an ostream.
-inline std::ostream& operator <<(std::ostream& os, const Message& sb) {
-  return os << sb.GetString();
-}
-    
-      // Note: we deliberately don't call this PrintTo(), as that name
-  // conflicts with ::testing::internal::PrintTo in the body of the
-  // function.
-  static void Print(const T& value, ::std::ostream* os) {
-    // By default, ::testing::internal::PrintTo() is used for printing
-    // the value.
-    //
-    // Thanks to Koenig look-up, if T is a class and has its own
-    // PrintTo() function defined in its namespace, that function will
-    // be visible here.  Since it is more specific than the generic ones
-    // in ::testing::internal, it will be picked by the compiler in the
-    // following statement - exactly what we want.
-    PrintTo(value, os);
-  }
-    
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
-
-    
-    // Traps C++ exceptions escaping statement and reports them as test
-// failures. Note that trapping SEH exceptions is not implemented here.
-# if GTEST_HAS_EXCEPTIONS
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  try { \
-    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } catch (const ::std::exception& gtest_exception) { \
-    fprintf(\
-        stderr, \
-        '\n%s: Caught std::exception-derived exception escaping the ' \
-        'death test statement. Exception message: %s\n', \
-        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
-        gtest_exception.what()); \
-    fflush(stderr); \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  } catch (...) { \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  }
-    
-    #ifndef GTEST_LANG_CXX11
-// gcc and clang define __GXX_EXPERIMENTAL_CXX0X__ when
-// -std={c,gnu}++{0x,11} is passed.  The C++11 standard specifies a
-// value for __cplusplus, and recent versions of clang, gcc, and
-// probably other compilers set that too in C++11 mode.
-# if __GXX_EXPERIMENTAL_CXX0X__ || __cplusplus >= 201103L
-// Compiling in at least C++11 mode.
-#  define GTEST_LANG_CXX11 1
-# else
-#  define GTEST_LANG_CXX11 0
-# endif
-#endif
-    
-    
-    {  return result;
-}
-    
-      // count the keys
-  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
-  size_t num_keys = 0;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    num_keys++;
-  }
-  delete iter;
-  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
-    
-    void BlockBuilder::Add(const Slice& key, const Slice& value) {
-  Slice last_key_piece(last_key_);
-  assert(!finished_);
-  assert(counter_ <= options_->block_restart_interval);
-  assert(buffer_.empty() // No values yet?
-         || options_->comparator->Compare(key, last_key_piece) > 0);
-  size_t shared = 0;
-  if (counter_ < options_->block_restart_interval) {
-    // See how much sharing to do with previous string
-    const size_t min_length = std::min(last_key_piece.size(), key.size());
-    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
-      shared++;
-    }
-  } else {
-    // Restart compression
-    restarts_.push_back(buffer_.size());
-    counter_ = 0;
-  }
-  const size_t non_shared = key.size() - shared;
-    }
-    
-    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
-// between switch labels. The real definition should be provided externally.
-// This one is a fallback version for unsupported compilers.
-#ifndef FALLTHROUGH_INTENDED
-#define FALLTHROUGH_INTENDED do { } while (0)
-#endif
-    
-      Status status_;
-  std::string saved_key_;     // == current key when direction_==kReverse
-  std::string saved_value_;   // == current raw value when direction_==kReverse
-  Direction direction_;
-  bool valid_;
-    
-    static std::string ShortSuccessor(const std::string& s) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
-  return result;
-}
-    
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
-    
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    void dev_poll_reactor::cancel_ops(socket_type descriptor,
-    dev_poll_reactor::per_descriptor_data&)
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-  cancel_ops_unlocked(descriptor, boost::asio::error::operation_aborted);
-}
-    
-    	extern void addLoadModule(std::string _module_name);
-    
-        while (-1 != __ParseStack(stream, state, strcache, strstack)) {
-        if (!_processname.empty() && std::string::npos == strstack.find(processname, 0)) {
-            strstack.clear();
-            continue;
-        }
-    }
-    
-    
-/*
- * DumpCrashStack.h
- *
- *  Created on: 2012-9-28
- *      Author: yerungui
- */
-    
-    
-    {    ::wakeupLock_delete(object_);
-}
-    
-    class ServiceBase {
-  public:
-    virtual ~ServiceBase() {}
-    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
-    const char* ServiceName() const { return m_servicename.c_str();}
-    }
-    
-    // bool JNU_Jstring2Wstring( JNIEnv* _env, const jstring jstr, std::wstring& wstr); //in linux sizeof(wchar_t)==4 but sizeof(jchar)==2
-wchar_t* JNU_Jstring2Wchar(JNIEnv* _env, const jstring jstr);
-void JNU_FreeWchar(JNIEnv* _env, jstring str, wchar_t* wchar);
-jstring JNU_Wstring2Jstring(JNIEnv* _env, const std::wstring& wstr);
-jstring JNU_Wchar2JString(JNIEnv* _env, wchar_t* wchar);
-    
-    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
-    cuid_t cuid, const std::shared_ptr<Request>& req,
-    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
-    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
-    const std::shared_ptr<SocketCore>& s)
-    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
-      proxyRequest_(proxyRequest),
-      httpConnection_(std::make_shared<HttpConnection>(
-          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
-{
-  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
-  disableReadCheckSocket();
-  setWriteCheckSocket(getSocket());
-}
-    
-      // Don't allow copying
-  AnnounceList(const AnnounceList&) = delete;
-  AnnounceList& operator=(const AnnounceList&) = delete;
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
-    }
-    
-    class AuthResolver {
-public:
-  virtual ~AuthResolver() = default;
-    }
+      // The default c'tor constructs a NULL string.
+  MyString() : c_string_(NULL) {}
