@@ -1,102 +1,174 @@
 
         
-        def normalize_bullets(markdown)
-  markdown.gsub(%r!\n\s{2}\*{1}!, '\n-')
-end
-    
-    def run_jekyll(args)
-  args = args.strip.split(' ') # Shellwords?
-  process = run_in_shell('ruby', Paths.jekyll_bin.to_s, *args, '--trace')
-  process.exitstatus.zero?
-end
-    
-            # Build your Jekyll site.
-        #
-        # site - the Jekyll::Site instance to build
-        # options - A Hash of options passed to the command
-        #
-        # Returns nothing.
-        def build(site, options)
-          t = Time.now
-          source      = options['source']
-          destination = options['destination']
-          incremental = options['incremental']
-          Jekyll.logger.info 'Source:', source
-          Jekyll.logger.info 'Destination:', destination
-          Jekyll.logger.info 'Incremental build:',
-                             (incremental ? 'enabled' : 'disabled. Enable with --incremental')
-          Jekyll.logger.info 'Generating...'
-          process_site(site)
-          Jekyll.logger.info '', 'done in #{(Time.now - t).round(3)} seconds.'
+                def self.ldap_attributes(config)
+          [
+            'dn',
+            config.uid,
+            *config.attributes['name'],
+            *config.attributes['email'],
+            *config.attributes['username']
+          ].compact.uniq
         end
     
-            def urls_only_differ_by_case(site)
-          urls_only_differ_by_case = false
-          urls = case_insensitive_urls(site.pages + site.docs_to_write, site.dest)
-          urls.each_value do |real_urls|
-            next unless real_urls.uniq.size > 1
-            urls_only_differ_by_case = true
-            Jekyll.logger.warn 'Warning:', 'The following URLs only differ' \
-              ' by case. On a case-insensitive file system one of the URLs' \
-              ' will be overwritten by the other: #{real_urls.join(', ')}'
-          end
-          urls_only_differ_by_case
+            scope :failed_but_allowed, -> do
+          where(allow_failure: true, status: [:failed, :canceled])
         end
     
-        if keys.empty?
-      raise ArgumentError, 'Range unspecified. Specify the :within, :maximum, :minimum, or :is option.'
+    group :production do
+  gem 'uglifier'
+  gem 'newrelic_rpm'
+end
+    
+      def self.generate(doc, version = nil)
+    doc = find(doc, version) unless doc.respond_to?(:store_pages)
+    doc.store_pages(store)
+  end
+    
+        def release
+      context[:release]
     end
     
-              @coverage.to_f.round(2)
-        end
+        def read_file(path)
+      File.read(path)
+    rescue
+      instrument 'warn.doc', msg: 'Failed to open file: #{path}'
+      nil
+    end
+  end
+end
+
     
-              if @box
-            entry.extra_data['box'] = {
-              'name'     => @box.name,
-              'provider' => @box.provider.to_s,
-              'version'  => @box.version.to_s,
-            }
+        private
+    
+      gem.add_development_dependency 'danger'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop', '0.48.1'
+end
+
+    
+      def safely_remove_file(_path)
+    run_vagrant_command('rm #{test_file}')
+  rescue
+    VagrantHelpers::VagrantSSHCommandError
+  end
+end
+    
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
+    end
+  end
+    
+          def fetch_primary(role)
+        hosts = roles_for([role])
+        hosts.find(&:primary) || hosts.first
+      end
+    
+          # Internal use only.
+      def peek(key, default=nil, &block)
+        value = fetch_for(key, default, &block)
+        while callable_without_parameters?(value)
+          value = (values[key] = value.call)
+        end
+        value
+      end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+    end
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+    
+    
+          return false
+    end
+    
+          def footer
+        if @footer.nil?
+          if page = @page.footer
+            @footer = page.text_data
+          else
+            @footer = false
           end
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
         end
+        @footer
+      end
     
-            # This contains all the registered guest capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :guest_capabilities
+          def base_url
+        @base_url
+      end
     
-            # Called after the configuration is finalized and loaded to validate
-        # this object.
-        #
-        # @param [Machine] machine Access to the machine that is being
-        #   validated.
-        # @return [Hash]
-        def validate(machine)
-          return { self.to_s => _detected_errors }
+    def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+  end
+  cloned
+end
+    
+        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+    
+        @wiki = Gollum::Wiki.new(@path)
+    page  = @wiki.page('PG')
+    assert_equal '바뀐 text', utf8(page.raw_data)
+    assert_equal 'ghi', page.version.message
+  end
+    
+    desc 'Generate RCov test coverage and open in your browser'
+task :coverage do
+  require 'rcov'
+  sh 'rm -fr coverage'
+  sh 'rcov test/test_*.rb'
+  sh 'open coverage/index.html'
+end
+    
+    # Set ruby to UTF-8 mode
+# This is required for Ruby 1.8.7 which gollum still supports.
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
+    
+                try += 1
+            $stderr.puts('Error #{e.class}, retrying #{try}/#{options[:max_tries]}')
+            $stderr.puts(e.message)
+            sleep(0.5)
+          end
         end
+      end
+      raise exception if exception
     
-            # Defines additional configuration keys to be available in the
-        # Vagrantfile. The configuration class should be returned by a
-        # block passed to this method. This is done to ensure that the class
-        # is lazy loaded, so if your class inherits from any classes that
-        # are specific to Vagrant 1.0, then the plugin can still be defined
-        # without breaking anything in future versions of Vagrant.
-        #
-        # @param [String] name Configuration key.
-        def self.config(name, scope=nil, &block)
-          scope ||= :top
-          components.configs[scope].register(name.to_sym, &block)
-          nil
-        end
+    Gem::Specification.new do |gem|
+  gem.authors       = ['Elastic']
+  gem.email         = ['info@elastic.co']
+  gem.description   = %q{Logstash plugin API}
+  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
+  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
+  gem.license       = 'Apache License (2.0)'
+    
+        desc 'Run one single machine acceptance test'
+    task :single, :machine do |t, args|
+      ENV['LS_VAGRANT_HOST']  = args[:machine]
+      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
+    end
+  end
+end
