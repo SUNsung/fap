@@ -1,170 +1,169 @@
-with open('update/versions.json', 'w') as jsonf:
-    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
 
+        
+        password = key
+new_key = aes_encrypt(password, key_expansion(password))
+r = openssl_encode('aes-128-ctr', new_key, iv)
+print('aes_decrypt_text 16')
+print(repr(r))
     
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
     
-    # SYNOPSIS
+    # The master toctree document.
+master_doc = 'index'
     
-    
-def expect_info_dict(self, got_dict, expected_dict):
-    expect_dict(self, got_dict, expected_dict)
-    # Check for the presence of mandatory fields
-    if got_dict.get('_type') not in ('playlist', 'multi_video'):
-        for key in ('id', 'url', 'title', 'ext'):
-            self.assertTrue(got_dict.get(key), 'Missing mandatory field %s' % key)
-    # Check for mandatory fields that are automatically set by YoutubeDL
-    for key in ['webpage_url', 'extractor', 'extractor_key']:
-        self.assertTrue(got_dict.get(key), 'Missing field: %s' % key)
-    
-            ydl = YDL({'format': '20/47'})
-        ydl.process_ie_result(info_dict.copy())
-        downloaded = ydl.downloaded_info_dicts[0]
-        self.assertEqual(downloaded['format_id'], '47')
-    
-        def get_config(self):
-        return {'axis': self.axis}
-    
-        if K.image_data_format() == 'channels_last':
-        x_train = x_train.transpose(0, 2, 3, 1)
-        x_test = x_test.transpose(0, 2, 3, 1)
-    
-    
-def test_reuters():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = reuters.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        assert len(x_train) + len(x_test) == 11228
-        (x_train, y_train), (x_test, y_test) = reuters.load_data(maxlen=10)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = reuters.get_word_index()
-        assert isinstance(word_index, dict)
-    
-    from keras.utils.test_utils import keras_test
-from keras.utils.test_utils import layer_test
-from keras.legacy import layers as legacy_layers
-from keras import regularizers
-from keras import constraints
+            for mpd_file, mpd_url, expected_formats in _TEST_CASES:
+            with io.open('./test/testdata/mpd/%s.mpd' % mpd_file,
+                         mode='r', encoding='utf-8') as f:
+                formats = self.ie._parse_mpd_formats(
+                    compat_etree_fromstring(f.read().encode('utf-8')),
+                    mpd_url=mpd_url)
+                self.ie._sort_formats(formats)
+                expect_value(self, formats, expected_formats, None)
     
     
-def test_sparse_categorical_crossentropy_4d():
-    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
-                                    [0.0, 0.3, 0.7],
-                                    [0.1, 0.1, 0.8]],
-                                   [[0.3, 0.7, 0.0],
-                                    [0.3, 0.4, 0.3],
-                                    [0.2, 0.5, 0.3]],
-                                   [[0.8, 0.1, 0.1],
-                                    [1.0, 0.0, 0.0],
-                                    [0.4, 0.3, 0.3]]]]))
-    y_true = K.variable(np.array([[[0, 1, 0],
-                                   [2, 1, 0],
-                                   [2, 2, 1]]]))
-    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
-                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
-                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
-    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
-        # Load the records from the pickle data stream.
-    file.seek(0)
-    memos = DBUnpickler(file, conn).load()
+    DOCUMENTATION = '''
+module: aws_waf_web_acl
+short_description: create and delete WAF Web ACLs
+description:
+  - Read the AWS documentation for WAF
+    U(https://aws.amazon.com/documentation/waf/)
+version_added: '2.5'
     
-    from argparse import ArgumentParser
+        def create_client(self, resource):
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(self.module, boto3=True)
+        self.client = boto3_conn(self.module, conn_type='client', resource=resource, region=region, endpoint=ec2_url, **aws_connect_kwargs)
     
-        def detach(self, observer):
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    logs = boto3_conn(module, conn_type='client', resource='logs', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    
+    # Find all groups
+- ec2_asg_facts:
+  register: asgs
+    
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.ec2 import (boto3_conn, AWSRetry, camel_dict_to_snake_dict,
+                                      ec2_argument_spec, get_aws_connection_info)
+    
+        if hasattr(interface, 'publicDnsName'):
+        interface_info['association'] = {'public_ip_address': interface.publicIp,
+                                         'public_dns_name': interface.publicDnsName,
+                                         'ip_owner_id': interface.ipOwnerId
+                                         }
+    
+    
+def create_snapshot(module, ec2, state=None, description=None, wait=None,
+                    wait_timeout=None, volume_id=None, instance_id=None,
+                    snapshot_id=None, device_name=None, snapshot_tags=None,
+                    last_snapshot_min_age=None):
+    snapshot = None
+    changed = False
+    
+                # some site need full name cert
+            # like https://about.twitter.com in Google Chrome
+            if not isip and not full_name and commonname.count('.') >= 2 and [len(x) for x in reversed(commonname.split('.'))] > [2, 4]:
+                commonname = commonname.partition('.')[-1]
+                certfile = CertUtil._get_old_cert(commonname)
+                if certfile:
+                    return certfile
+    
+        def get_stat(self):
+        return self.network_stat
+    
+        '''
+    
+        def test_with_code(self):
+        from acme.messages import Error, is_acme_error
+        self.assertTrue(is_acme_error(Error.with_code('badCSR')))
+        self.assertRaises(ValueError, Error.with_code, 'not an ACME error code')
+    
+        .. note:: This does not need to be accurate in order for the client to
+        run.  This simply keeps things clean if the user decides to revert
+        changes.
+    .. warning:: If all deps are not included, it may cause incorrect parsing
+        behavior, due to enable_mod's shortcut for updating the parser's
+        currently defined modules (`.ApacheParser.add_mod`)
+        This would only present a major problem in extremely atypical
+        configs that use ifmod for the missing deps.
+    
+        @certbot_util.patch_get_utility()
+    def test_noninteractive(self, mock_util):
+        mock_util().menu.side_effect = errors.MissingCommandlineFlag('no vhost default')
         try:
-            self._observers.remove(observer)
-        except ValueError:
-            pass
+            self._call(self.vhosts)
+        except errors.MissingCommandlineFlag as e:
+            self.assertTrue('vhost ambiguity' in str(e))
     
-    ### OUTPUT ###
-# Scanning... Station is 1380 AM
-# Scanning... Station is 1510 AM
-# Switching to FM
-# Scanning... Station is 89.1 FM
-# Scanning... Station is 103.9 FM
-# Scanning... Station is 81.3 FM
-# Scanning... Station is 89.1 FM
-# Switching to AM
-# Scanning... Station is 1250 AM
-# Scanning... Station is 1380 AM
+    import os
+import logging
+    
+        '''catalog of multiple class methods that are executed depending on an init
+    
+    
+class AndSpecification(CompositeSpecification):
+    _one = Specification()
+    _other = Specification()
+    
+    
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
 
     
-            if not meth:
-            meth = self.generic_visit
-        return meth(node, *args, **kwargs)
+            if serialnumber not in AXIS_DEVICES:
+            config_file = load_json(hass.config.path(CONFIG_FILE))
+            if serialnumber in config_file:
+                # Device config previously saved to file
+                try:
+                    device_config = DEVICE_SCHEMA(config_file[serialnumber])
+                    device_config[CONF_HOST] = host
+                except vol.Invalid as err:
+                    _LOGGER.error('Bad data from %s. %s', CONFIG_FILE, err)
+                    return False
+                if not setup_device(hass, config, device_config):
+                    _LOGGER.error(
+                        'Couldn't set up %s', device_config[CONF_NAME])
+            else:
+                # New device, create configuration request for UI
+                request_configuration(hass, config, name, host, serialnumber)
+        else:
+            # Device already registered, but on a different IP
+            device = AXIS_DEVICES[serialnumber]
+            device.config.host = host
+            dispatcher_send(hass, DOMAIN + '_' + device.name + '_new_ip', host)
+    
+        cognito = _cognito(cloud)
+    # Workaround for bug in Warrant. PR with fix:
+    # https://github.com/capless/warrant/pull/82
+    cognito.add_base_attributes()
+    try:
+        cognito.register(email, password)
+    except ClientError as err:
+        raise _map_aws_exception(err)
     
     
-class Person(object):
+def setup_scanner(hass, config, see, discovery_info=None):
+    '''Set up the demo tracker.'''
+    def offset():
+        '''Return random offset.'''
+        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
     
-    
-class Prototype(object):
-    
-    
-class ProductionCodeTimeProvider(object):
-    '''
-    Production code version of the time provider (just a wrapper for formatting
-    datetime for this example).
-    '''
-    
-    In Blackboard pattern several specialised sub-systems (knowledge sources)
-assemble their knowledge to build a possibly partial or approximate solution.
-In this way, the sub-systems work together to solve the problem,
-where the solution is the sum of its parts.
-    
-    # initialization of new graph search object
-graph1 = GraphSearch(graph)
-    
-        def on_diagnostics_failed(self):
-        raise UnsupportedTransition
-    
-        >>> objects = []
-    >>> dog = Dog()
-    >>> print(dog.__dict__)
-    {'name': 'Dog'}
-    >>> objects.append(Adapter(dog, make_noise=dog.bark))
-    >>> print(objects[0].original_dict())
-    {'name': 'Dog'}
-    >>> cat = Cat()
-    >>> objects.append(Adapter(cat, make_noise=cat.meow))
-    >>> human = Human()
-    >>> objects.append(Adapter(human, make_noise=human.speak))
-    >>> car = Car()
-    >>> car_noise = lambda: car.make_noise(3)
-    >>> objects.append(Adapter(car, make_noise=car_noise))
-    
-    face_recognition_model = face_recognition_models.face_recognition_model_location()
-face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
-    
-            if was_queued and self._queued_event_check(click_type, time_diff):
-            return
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Optional(CONF_MODE, default=DEFAULT_MODE):
-            vol.In([MODE_DEV] + list(SERVERS)),
-        # Change to optional when we include real servers
-        vol.Optional(CONF_COGNITO_CLIENT_ID): str,
-        vol.Optional(CONF_USER_POOL_ID): str,
-        vol.Optional(CONF_REGION): str,
-        vol.Optional(CONF_RELAYER): str,
-        vol.Optional(CONF_GOOGLE_ACTIONS_SYNC_URL): str,
-        vol.Optional(CONF_ALEXA): ALEXA_SCHEMA,
-        vol.Optional(CONF_GOOGLE_ACTIONS): GACTIONS_SCHEMA,
-    }),
-}, extra=vol.ALLOW_EXTRA)
-    
-    import homeassistant.helpers.config_validation as cv
-import homeassistant.util.dt as dt_util
-from homeassistant.components.device_tracker import (
-    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
-from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
-    
-            return 'Setting location for {}'.format(device)
+            return [device.mac for device in self.last_results]
