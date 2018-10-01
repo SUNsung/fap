@@ -1,246 +1,220 @@
 
         
-        /// @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$.
-template <typename Dtype>
-class UniformFiller : public Filler<Dtype> {
- public:
-  explicit UniformFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), Dtype(this->filler_param_.min()),
-        Dtype(this->filler_param_.max()), blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
+        REGISTER_OP('RequiresOlderGraphVersion')
+    .Output('version: int32')
+    .SetIsStateful()
+    .SetShapeFn([](shape_inference::InferenceContext* c) {
+      if (c->graph_def_version() != TF_GRAPH_DEF_VERSION - 1) {
+        return errors::InvalidArgument('Wrong graph version for shape');
+      }
+      return shape_inference::ScalarShape(c);
+    });
+    
+    #include 'tensorflow/core/framework/op.h'
+    
+    void CostAnalyzer::AnalyzeCosts() {
+  std::map<string, OpPerfSummary> ops;
+  for (const auto& op_perf : op_perf_.op_performance()) {
+    string op_name = op_perf.op().op();
+    ops[op_name].count++;
+    ops[op_name].time += op_perf.compute_cost();
+    ops[op_name].compute_time += op_perf.compute_time();
+    ops[op_name].memory_time += op_perf.memory_time();
+    ops[op_name].time_upper += op_perf.compute_time() + op_perf.memory_time();
+    ops[op_name].time_lower +=
+        std::max(op_perf.compute_time(), op_perf.memory_time());
+    ops[op_name].name = op_name;
   }
-};
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
+  SortOpsByTime(ops);
     }
     
     
-    {
-    {        // For now reusing the shim to allow prefetch.
-        // Please only use a subset of the shim interface that includes
-        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
-        // Shim will be deleted in the future versions.
-        std::shared_ptr<ReaderShim<float>> m_shim;
-        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
-    };
+    {}  // namespace tensorflow
+
+    
+    // Creates a tensor in 'ret' from the input Ndarray.
+Status NdarrayToTensor(PyObject* obj, Tensor* ret);
+    
+    #include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/lib/core/status.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+      // Close the underlying file and release its resources.
+  void Close();
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    ScopedActivateExecutorContext &&other)
+    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
+  other.driver_scoped_activate_context_ = nullptr;
+}
+    
+    ```
+    
+    ```
+    
+    NO_GRADIENT(GivenTensorFill);
+NO_GRADIENT(GivenTensorDoubleFill);
+NO_GRADIENT(GivenTensorBoolFill);
+NO_GRADIENT(GivenTensorIntFill);
+NO_GRADIENT(GivenTensorInt64Fill);
+NO_GRADIENT(GivenTensorStringFill);
+    
+    public:
+	GodotRayWorldAlgorithm(const btDiscreteDynamicsWorld *world, btPersistentManifold *mf, const btCollisionAlgorithmConstructionInfo &ci, const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap, bool isSwapped);
+	virtual ~GodotRayWorldAlgorithm();
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #ifndef _3D_DISABLED
+    
+    
+    {	memdelete(resource_loader_pkm);
 }
 
     
-        template <typename V1ElemType>
-    std::shared_ptr<Matrix<V1ElemType>> NDArrayView::GetWritableMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/)
-    {
-        return GetMatrixImpl<V1ElemType>(GetWritableTensorView<V1ElemType>(), rowColSplitPoint);
-    }
     
-            VariableFields(const NDShape& shape, VariableKind varType, ::CNTK::DataType type, const std::weak_ptr<Function>& ownerFunction, const NDArrayViewPtr& value, bool needsGradient, const std::vector<Axis>& dynamicAxes, bool isSparse, const std::wstring& name, const std::wstring& uid)
-            : m_shape(shape), m_varKind(varType), m_dataType(type), m_ownerFunction(ownerFunction), m_value(value), m_needsGradient(needsGradient), m_dynamicAxes(dynamicAxes), m_isSparse(isSparse), m_name(name), m_uid(uid), m_valueTimeStamp(0)
-        {
-            if (value && (type != value->GetDataType()))
-                InvalidArgument('The DataType of the Parameter/Constant Variable '%S' does not match the DataType of the associated Value', AsString().c_str());
-    }
-    
-        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
-    // function waits until mutex is released
-    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
-    bool Acquire(bool wait)
-    {
-        assert(m_handle == NULL);
-        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
-        if (m_handle == NULL)
-        {
-            if (!wait)
-                return false;   // can't lock due to access permissions: lock already exists, consider not available
-            else
-                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
-        }
-    }
-    
-    
-    {protected:
-    std::string m_callStack;
-};
-    
-    template <class ElemType>
-class SumColumnElementsNode : public ComputationNode<ElemType>, public NumInputs<1>
-{
-    typedef ComputationNode<ElemType> Base; UsingComputationNodeMembersBoilerplate;
-    static const std::wstring TypeName() { return L'SumColumnElements'; }
-    }
-    
-    public:
-    // subPen - substitution penalty
-    // delPen - deletion penalty
-    // insPen - insertion penalty
-    // squashInputs - whether to merge sequences of identical samples.
-    // tokensToIgnore - list of indices of samples to ignore during edit distance evaluation
-    EditDistanceErrorNode(DEVICEID_TYPE deviceId, const wstring & name, float subPen = 1.0f, float delPen = 1.0f, float insPen = 1.0f, bool squashInputs = false, vector<size_t> tokensToIgnore = {})
-        : Base(deviceId, name), m_subPen(subPen), m_delPen(delPen), m_insPen(insPen), m_squashInputs(squashInputs), m_tokensToIgnore(tokensToIgnore)
-    {
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    /** @class CatmullRomTo
- * An action that moves the target with a CatmullRom curve to a destination point.
- * A Catmull Rom is a Cardinal Spline with a tension of 0.5.
- * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
- * @ingroup Actions
- */
-class CC_DLL CatmullRomTo : public CardinalSplineTo
-{
-public:
-    }
-    
-        // Override
-    virtual Ripple3D* clone() const override;
-    virtual void update(float time) override;
-    
-    protected:
-    std::vector<float>* _splitTimes;
-    int             _nextFrame;
-    SpriteFrame*    _origFrame;
-    int _currFrameIndex;
-    unsigned int    _executedLoops;
-    Animation*      _animation;
-    
-    NS_CC_BEGIN
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionProgressTimer.h'
-#include '2d/CCProgressTimer.h'
-    
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
+    {	alloc_mutex = Mutex::create();
 }
     
-    
-    {    frame->autorelease();
-    return frame;
-}
-    
-    
-    {    /** how many times the animation is going to loop. 0 means animation is not animated. 1, animation is executed one time, ... */
-    unsigned int _loops;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Animation);
-};
-    
-    #include <string>
+    	String ip;
+	if (p_start != 0) {
+		ip = p_string.substr(p_start, p_string.length() - p_start);
+	} else {
+		ip = p_string;
+	};
     
     
-    {  /**
-   * @brief CanFrame string including essential information about the message.
-   * @return The info string.
-   */
-  std::string CanFrameString() const {
-    std::stringstream output_stream('');
-    output_stream << 'id:0x' << Byte::byte_to_hex(id)
-                  << ',len:' << static_cast<int>(len) << ',data:';
-    for (uint8_t i = 0; i < len; ++i) {
-      output_stream << Byte::byte_to_hex(data[i]);
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
     }
-    output_stream << ',';
-    return output_stream.str();
   }
-};
     
-    #if USE_ESD_CAN
-  CANCardParameter can_card_parameter;
-  can_card_parameter.set_brand(CANCardParameter::ESD_CAN);
-  can_card_parameter.set_type(CANCardParameter::PCI_CARD);
-  can_card_parameter.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    TEST(CorruptionTest, TableFileRepair) {
+  options_.block_size = 2 * kValueSize;  // Limit scope of corruption
+  options_.paranoid_checks = true;
+  Reopen();
+  Build(100);
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  dbi->TEST_CompactRange(0, nullptr, nullptr);
+  dbi->TEST_CompactRange(1, nullptr, nullptr);
+    }
     
-    #include <memory>
-#include <sstream>
-#include <string>
-#include <thread>
-    
-    
-    {  return ErrorCode::OK;
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
+  }
+  user_policy_->CreateFilter(keys, n, dst);
 }
     
-      /**
-   * @brief get chassis detail. used lock_guard in this function to avoid
-   * concurrent read/write issue.
-   * @param chassis_detail chassis_detail to be filled.
-   */
-  common::ErrorCode GetSensorData(SensorType *const sensor_data);
     
-    TEST(ByteTest, SetGetHighLowBit) {
-  unsigned char byte_value = 0x37;
-  Byte value(&byte_value);
-  value.set_value_high_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
-  value.set_value_low_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+    {}  // namespace leveldb
+    
+      // When start user key is prefix of limit user key
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foobar', 200, kTypeValue)));
+    
+    std::string LockFileName(const std::string& dbname) {
+  return dbname + '/LOCK';
 }
     
-    #include <cstdint>
+          case kBadRecord:
+        if (in_fragmented_record) {
+          ReportCorruption(scratch->size(), 'error in middle of record');
+          in_fragmented_record = false;
+          scratch->clear();
+        }
+        break;
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+    
+      void ScanTable(uint64_t number) {
+    TableInfo t;
+    t.meta.number = number;
+    std::string fname = TableFileName(dbname_, number);
+    Status status = env_->GetFileSize(fname, &t.meta.file_size);
+    if (!status.ok()) {
+      // Try alternate file name.
+      fname = SSTTableFileName(dbname_, number);
+      Status s2 = env_->GetFileSize(fname, &t.meta.file_size);
+      if (s2.ok()) {
+        status = Status::OK();
+      }
+    }
+    if (!status.ok()) {
+      ArchiveFile(TableFileName(dbname_, number));
+      ArchiveFile(SSTTableFileName(dbname_, number));
+      Log(options_.info_log, 'Table #%llu: dropped: %s',
+          (unsigned long long) t.meta.number,
+          status.ToString().c_str());
+      return;
+    }
+    }
+    
+      // Immutable after construction
+  Comparator const compare_;
+  Arena* const arena_;    // Arena used for allocations of nodes
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+{
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
+}
+    
+    void DHTRoutingTable::getClosestKNodes(
+    std::vector<std::shared_ptr<DHTNode>>& nodes,
+    const unsigned char* key) const
+{
+  dht::findClosestKNodes(nodes, root_.get(), key);
+}
+    
+      std::unique_ptr<DHTBucketTreeNode> root_;
+    
+      const std::shared_ptr<DHTNode>& getLocalNode() const { return localNode_; }
+    
+    #endif // D_DHT_ROUTING_TABLE_SERIALIZER_H
+
+    
+        taskFactory->setLocalNode(localNode);
+    taskFactory->setRoutingTable(routingTable.get());
+    taskFactory->setMessageDispatcher(dispatcher.get());
+    taskFactory->setMessageFactory(factory.get());
+    taskFactory->setTaskQueue(taskQueue.get());
+    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+    
+    class DHTNode;
+class DHTRoutingTable;
+class DHTMessageDispatcher;
+class DHTMessageFactory;
+class DHTTaskQueue;
+class DHTAbstractTask;
+    
+      virtual void
+  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+    
+    class DHTTokenTracker {
+private:
+  static const size_t SECRET_SIZE = 4;
+    }
+    
+        std::vector<AddrEntry>::iterator find(const std::string& addr);
