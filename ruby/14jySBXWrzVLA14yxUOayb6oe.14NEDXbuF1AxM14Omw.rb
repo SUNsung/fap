@@ -1,100 +1,94 @@
 
         
-          def ==(other)
-    if other.respond_to?(:to_ary)
-      return true if to_ary == other.to_ary
-    end
+        require 'action_view/helpers/tags/placeholderable'
     
-      # @private
-  def used_options
-    @options & @args
-  end
-    
-          def self.english_description
-        '#{english_name} #{link_type_english_name}s'
+            @lookup_context.formats = formats | @lookup_context.formats
       end
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
   end
 end
 
     
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
+    Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
 end
+
     
-    # Ensure we know the appservers port
-Capybara.server_port = AppConfig.pod_uri.port
-Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
-Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
+    # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
     
-      class SendPrivate < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+          end
     
-    describe ContactsController, :type => :controller do
-  describe '#index' do
-    before do
-      AppConfig.chat.enabled = true
-      @aspect = bob.aspects.create(:name => 'another aspect')
-      bob.share_with alice.person, @aspect
-      bob.share_with eve.person, @aspect
-      sign_in bob, scope: :user
-    end
-    
-    if Encoding.default_external != Encoding::UTF_8
-    
-        # Returns a new {Installer} parametrized from the {Config}.
-    #
-    # @return [Installer]
-    #
-    def installer_for_config
-      Installer.new(config.sandbox, config.podfile, config.lockfile)
-    end
-    
-            self.description = <<-DESC
-          Remove the cache for a given pod, or clear the cache completely.
-    
-    if RUBY_ENGINE == 'jruby'
-  gem 'nokogiri', '!= 1.5.0'
-  gem 'trinidad'
-end
-    
-          def mask_authenticity_token(session)
-        token = set_token(session)
-        mask_token(token)
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
       end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
+        def register_compass_extension
+      ::Compass::Frameworks.register(
+          'bootstrap',
+          :version               => Bootstrap::VERSION,
+          :path                  => gem_path,
+          :stylesheets_directory => stylesheets_path,
+          :templates_directory   => File.join(gem_path, 'templates')
+      )
+    end
     
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
+      def save_file(path, content, mode='w')
+    dir = File.dirname(path)
+    FileUtils.mkdir_p(dir) unless File.directory?(dir)
+    File.open(path, mode) { |file| file.write(content) }
+  end
     
-      # Defines the geometry of an image.
-  class Geometry
-    attr_accessor :height, :width, :modifier
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
+    
+        # Create a {Sass::Selector::CommaSequence}.
+    #
+    # @param seqs [Array<Sass::Selector::Sequence>]
+    # @return [Sass::Selector::CommaSequence]
+    def make_cseq(*seqs)
+      Sass::Selector::CommaSequence.new(seqs)
+    end
+    
+          def is_edit_page
+        true
+      end
+    
+          def base_url
+        @base_url
+      end
+    
+        assert_no_match /New/, last_response.body, ''New' link not blocked in pages template'
+    
+    def name
+  @name ||= Dir['*.gemspec'].first.split('.').first
+end
+    
+        post '/compare/*' do
+      @file     = encodeURIComponent(params[:splat].first)
+      @versions = params[:versions] || []
+      if @versions.size < 2
+        redirect to('/history/#{@file}')
+      else
+        redirect to('/compare/%s/%s...%s' % [
+            @file,
+            @versions.last,
+            @versions.first]
+                 )
+      end
+    end
