@@ -1,81 +1,86 @@
 
         
-                    Thread.pass while @thread.alive?
-          end
-    
-            attributes.flat_map do |key, value|
-          if value.is_a?(Hash) && !table.has_column?(key)
-            associated_predicate_builder(key).expand_from_hash(value)
-          elsif table.associated_with?(key)
-            # Find the foreign key when using queries such as:
-            # Post.where(author: author)
-            #
-            # For polymorphic relationships, find the foreign key and type:
-            # PriceEstimate.where(estimate_of: treasure)
-            associated_table = table.associated_table(key)
-            if associated_table.polymorphic_association?
-              case value.is_a?(Array) ? value.first : value
-              when Base, Relation
-                value = [value] unless value.is_a?(Array)
-                klass = PolymorphicArrayValue
-              end
-            end
-    
-        # This isn't strictly necessary for the test, but a little bit of
-    # knowledge of internals allows us to make failures far more likely.
-    model.define_singleton_method(:define_attribute) do |*args|
-      Thread.pass
-      super(*args)
+          def post_superenv_hacks
+    # Only allow Homebrew-approved directories into the PATH, unless
+    # a formula opts-in to allowing the user's path.
+    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
+      ENV.userpaths!
     end
-    
-        def speak(data)
-      @last_action = [ :speak, data ]
-    end
-    
-      test 'disallow block and arg together' do
-    e = assert_raise ArgumentError do
-      ChatChannel.periodically(:send_updates, every: 1) { ping }
-    end
-    assert_match(/not both/, e.message)
   end
     
-          expected = { 'identifier' => '{id: 1}', 'type' => 'reject_subscription' }
-      assert_equal expected, @connection.last_transmission
+      def repo_var
+    @repo_var ||= tap.path.to_s.
+        strip_prefix(Tap::TAP_DIRECTORY.to_s).
+        tr('^A-Za-z0-9', '_').
+        upcase
+  end
+    
+        def replace_fadein(less)
+      less.gsub(/(?![\-$@.])fadein\((.*?),\s*(.*?)%\)/) { 'fade_in(#{$1}, #{$2.to_i / 100.0})' }
     end
     
-            Connection.new(@server, env).tap do |connection|
-          connection.process
-          assert_predicate connection.websocket, :possible?
+        def get_json(url)
+      JSON.parse get_file(url)
+    end
+  end
+end
+
     
-        def close
-      sleep WAIT_WHEN_NOT_EXPECTING_EVENT
+    When /^I (?:sign|log) in with password '([^']*)'( on the mobile website)?$/ do |password, mobile|
+  @me.password = password
+  automatic_login
+  confirm_login mobile
+end
     
-            assert_equal 'action_cable/User#lifo', pubsub_call[:channel]
-        assert_instance_of Proc, pubsub_call[:callback]
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+      class OfflinePluginPackager
+    LOGSTASH_DIR = 'logstash'
+    DEPENDENCIES_DIR = ::File.join(LOGSTASH_DIR, 'dependencies')
+    
+      # Make sure we dont build this gem from a non jruby
+  # environment.
+  if RUBY_PLATFORM == 'java'
+    gem.platform = 'java'
+  else
+    raise 'The logstash-core-api need to be build on jruby'
+  end
+end
+
+    
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+    module RuboCop
+  module Cop
+    # Common functionality for checking the closing brace of a literal is
+    # either on the same line as the last contained elements, or a new line.
+    module MultilineLiteralBraceLayout
+      include ConfigurableEnforcedStyle
+    
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
+    
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
+    
+          # Returns the operator for the `kwsplat` as a string.
+      #
+      # @return [String] the double splat operator
+      def operator
+        DOUBLE_SPLAT
       end
-    end
-  end
-    
-            # Internal hax = :(
-        client = connection.websocket.send(:websocket)
-        rack_hijack_io = client.instance_variable_get('@stream').instance_variable_get('@rack_hijack_io')
-        rack_hijack_io.stub(:write, proc { raise(closed_exception, 'foo') }) do
-          assert_called(client, :client_gone) do
-            client.write('boo')
-          end
-        end
-        assert_equal [], connection.errors
-      end
-    end
-  end
-    
-      def evernote_client
-    EvernoteOAuth::Client.new(
-      token:           evernote_oauth_token,
-      consumer_key:    evernote_consumer_key,
-      consumer_secret: evernote_consumer_secret,
-      sandbox:         use_sandbox?
-    )
-  end
-    
-      before_action :upgrade_warning, only: :index
