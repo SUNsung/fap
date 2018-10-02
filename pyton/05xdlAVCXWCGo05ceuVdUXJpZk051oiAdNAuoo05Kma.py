@@ -1,209 +1,127 @@
 
         
-            def process_rhs(self, compiler, connection):
-        result = super().process_rhs(compiler, connection)
-        # Treat None lookup values as null.
-        return (''null'', []) if result == ('%s', [None]) else result
-
-    
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
-    
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
+        
+def check_format(filename):
     '''
-    objects = SessionManager()
-    
-    
-IPv4 = CheckNetwork('IPv4')
-IPv4.urls = [
-            'https://www.microsoft.com',
-            'https://www.apple.com',
-            'https://code.jquery.com',
-            'https://cdn.bootcss.com',
-            'https://cdnjs.cloudflare.com']
-IPv4.triger_check_network()
-    
-        if len(front.config.GAE_APPIDS):
-        xlog.info('GAE APPID          : %s', '|'.join(front.config.GAE_APPIDS))
-    else:
-        xlog.info('Using public APPID')
-    xlog.info('------------------------------------------------------')
-    
-        deadline = URLFETCH_TIMEOUT
-    validate_certificate = bool(int(kwargs.get('validate', 0)))
-    accept_encoding = headers.get('Accept-Encoding', '')
-    errors = []
-    for i in xrange(int(kwargs.get('fetchmax', URLFETCH_MAX))):
-        try:
-            response = urlfetch.fetch(url, payload, fetchmethod, headers, allow_truncated=False, follow_redirects=False, deadline=deadline, validate_certificate=validate_certificate)
-            break
-        except apiproxy_errors.OverQuotaError as e:
-            time.sleep(5)
-        except urlfetch.DeadlineExceededError as e:
-            errors.append('%r, deadline=%s' % (e, deadline))
-            logging.error('DeadlineExceededError(deadline=%s, url=%r)', deadline, url)
-            time.sleep(1)
-            deadline = URLFETCH_TIMEOUT * 2
-        except urlfetch.DownloadError as e:
-            errors.append('%r, deadline=%s' % (e, deadline))
-            logging.error('DownloadError(deadline=%s, url=%r)', deadline, url)
-            time.sleep(1)
-            deadline = URLFETCH_TIMEOUT * 2
-        except urlfetch.ResponseTooLargeError as e:
-            errors.append('%r, deadline=%s' % (e, deadline))
-            response = e.response
-            logging.error('ResponseTooLargeError(deadline=%s, url=%r) response(%r)', deadline, url, response)
-            m = re.search(r'=\s*(\d+)-', headers.get('Range') or headers.get('range') or '')
-            if m is None:
-                headers['Range'] = 'bytes=0-%d' % int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE))
+    validates that each line is formatted correctly,
+    appending to error list as needed
+    '''
+    with open(filename) as fp:
+        lines = list(line.rstrip() for line in fp)
+    check_alphabetical(lines)
+    # START Check Entries
+    num_in_category = min_entries_per_section + 1
+    category = ''
+    category_line = 0
+    for line_num, line in enumerate(lines):
+        if section_title_re.match(line):
+            title_links.append(section_title_re.match(line).group(1))
+        # check each section for the minimum number of entries
+        if line.startswith(anchor):
+            match = anchor_re.match(line)
+            if match:
+                if match.group(1) not in title_links:
+                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
             else:
-                headers.pop('Range', '')
-                headers.pop('range', '')
-                start = int(m.group(1))
-                headers['Range'] = 'bytes=%s-%d' % (start, start+int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE)))
-            deadline = URLFETCH_TIMEOUT * 2
-        except urlfetch.SSLCertificateError as e:
-            errors.append('%r, should validate=0 ?' % e)
-            logging.error('%r, deadline=%s', e, deadline)
-        except Exception as e:
-            errors.append(str(e))
-            if i == 0 and method == 'GET':
-                deadline = URLFETCH_TIMEOUT * 2
+                add_error(line_num, 'section header is not formatted correctly')
+            if num_in_category < min_entries_per_section:
+                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
+                    category, min_entries_per_section, num_in_category))
+            category = line.split(' ')[1]
+            category_line = line_num
+            num_in_category = 0
+            continue
+        # skips lines that we do not care about
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        num_in_category += 1
+        segments = line.split('|')[1:-1]
+        if len(segments) < num_segments:
+            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
+                len(segments), num_segments))
+            continue
+        # START Global
+        for segment in segments:
+            # every line segment should start and end with exactly 1 space
+            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
+                add_error(line_num, 'each segment must start and end with exactly 1 space')
+        # END Global
+        segments = [seg.strip() for seg in segments]
+        check_entry(line_num, segments)
+    # END Check Entries
+    
+    with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+            for m3u8_file, m3u8_url, expected_formats in _TEST_CASES:
+            with io.open('./test/testdata/m3u8/%s.m3u8' % m3u8_file,
+                         mode='r', encoding='utf-8') as f:
+                formats = self.ie._parse_m3u8_formats(
+                    f.read(), m3u8_url, ext='mp4')
+                self.ie._sort_formats(formats)
+                expect_value(self, formats, expected_formats, None)
+    
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
+        )
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+        def test_no_duplicates(self):
+        ies = gen_extractors()
+        for tc in gettestcases(include_onlymatching=True):
+            url = tc['url']
+            for ie in ies:
+                if type(ie).__name__ in ('GenericIE', tc['name'] + 'IE'):
+                    self.assertTrue(ie.suitable(url), '%s should match URL %r' % (type(ie).__name__, url))
+                else:
+                    self.assertFalse(
+                        ie.suitable(url),
+                        '%s should not match URL %r . That URL belongs to %s.' % (type(ie).__name__, url, tc['name']))
+    
+        :param key: name of cli constant
+    :return: value of constant for active os
+    '''
+    return CLI_DEFAULTS[key]
+    
+    
+class Header(jose.Header):
+    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    '''
+    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
+    kid = jose.Field('kid', omitempty=True)
+    url = jose.Field('url', omitempty=True)
+    
+        good_nonce = jose.encode_b64jose(b'foo')
+    wrong_nonce = u'F'
+    # Following just makes sure wrong_nonce is wrong
+    try:
+        jose.b64decode(wrong_nonce)
+    except (ValueError, TypeError):
+        assert True
     else:
-        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
-        error_string = '<br />\n'.join(errors)
-        if not error_string:
-            logurl = 'https://appengine.google.com/logs?&app_id=%s' % os.environ['APPLICATION_ID']
-            error_string = 'Internal Server Error. <p/>try <a href='javascript:window.location.reload(true);'>refresh</a> or goto <a href='%s' target='_blank'>appengine.google.com</a> for details' % logurl
-        yield message_html('502 Urlfetch Error', 'Python Urlfetch Error: %r' % method,  error_string)
-        raise StopIteration
+        assert False  # pragma: no cover
     
-    A tree.RewriteCardinalityException is raised, when the parsers hits a
-cardinality mismatch during AST construction. Although this is basically a
-bug in your grammar, it can only be detected at runtime.
+            ip_addr:* == ip_addr
     
-    class MismatchedTreeNodeException(RecognitionException):
-    '''@brief The next tree mode does not match the expected type.'''
-    
-    supports_unicode_filenames = True
-
-    
-    
-# Return whether a path is absolute.
-# Trivial in Posix, harder on Windows.
-# For Windows it is absolute if it starts with a slash or backslash (current
-# volume), or if a pathname after the volume-letter-and-colon or UNC-resource
-# starts with a slash or backslash.
-    
-        def gethomedir(self, username):
-        if not username:
-            try:
-                return os.environ['HOME']
-            except KeyError:
-                import pwd
-                return pwd.getpwuid(os.getuid()).pw_dir
-        else:
-            import pwd
-            try:
-                return pwd.getpwnam(username).pw_dir
-            except KeyError:
-                raise RuntimeError('Can't determine home directory '
-                                   'for %r' % username)
-    
-            create_file(test_fn1)
-        stat1 = os.stat(test_fn1)
-        self.assertTrue(self.pathmodule.samestat(stat1, os.stat(test_fn1)))
-    
-        def test_match_common(self):
-        P = self.cls
-        # Absolute patterns
-        self.assertTrue(P('c:/b.py').match('/*.py'))
-        self.assertTrue(P('c:/b.py').match('c:*.py'))
-        self.assertTrue(P('c:/b.py').match('c:/*.py'))
-        self.assertFalse(P('d:/b.py').match('c:/*.py'))  # wrong drive
-        self.assertFalse(P('b.py').match('/*.py'))
-        self.assertFalse(P('b.py').match('c:*.py'))
-        self.assertFalse(P('b.py').match('c:/*.py'))
-        self.assertFalse(P('c:b.py').match('/*.py'))
-        self.assertFalse(P('c:b.py').match('c:/*.py'))
-        self.assertFalse(P('/b.py').match('c:*.py'))
-        self.assertFalse(P('/b.py').match('c:/*.py'))
-        # UNC patterns
-        self.assertTrue(P('//some/share/a.py').match('/*.py'))
-        self.assertTrue(P('//some/share/a.py').match('//some/share/*.py'))
-        self.assertFalse(P('//other/share/a.py').match('//some/share/*.py'))
-        self.assertFalse(P('//some/share/a/b.py').match('//some/share/*.py'))
-        # Case-insensitivity
-        self.assertTrue(P('B.py').match('b.PY'))
-        self.assertTrue(P('c:/a/B.Py').match('C:/A/*.pY'))
-        self.assertTrue(P('//Some/Share/B.Py').match('//somE/sharE/*.pY'))
-    
-    class ImplementationDetail(Directive):
-    
-    
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
-
-    
-        for diags in itervalues( self._line_to_diags ):
-      # We also want errors to be listed before warnings so that errors aren't
-      # hidden by the warnings; Vim won't place a sign over an existing one.
-      diags.sort( key = lambda diag: ( diag[ 'kind' ],
-                                       diag[ 'location' ][ 'column_num' ] ) )
-    
-    
-def YouCompleteMeInstance( custom_options = {} ):
-  '''Defines a decorator function for tests that passes a unique YouCompleteMe
-  instance as a parameter. This instance is initialized with the default options
-  `DEFAULT_CLIENT_OPTIONS`. Use the optional parameter |custom_options| to give
-  additional options and/or override the already existing ones.
-    
-    from mock import MagicMock
-from nose.tools import eq_
-from hamcrest import assert_that, has_entries
-    
-      current_buffer = VimBuffer( 'current_buffer' )
-  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
-    ycm.ToggleLogs()
-    
-        '''Simply echoes the msg ids'''
-    
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
-    
-        def setReporter(self, reporter):
-        self._reporter = reporter
-    
-            return transaction
-    
-        @property
-    def data(self):
-        return self._data
-    
-    
-class Specification(object):
-    def and_specification(self, candidate):
-        raise NotImplementedError()
-    
-        def scan(self):
-        '''Scan the dial to the next station'''
-        self.pos += 1
-        if self.pos == len(self.stations):
-            self.pos = 0
-        print(u'Scanning... Station is %s %s' % (self.stations[self.pos], self.name))
-    
-        def __str__(self):
-        return 'Dog'
+            self.sni.configurator.parser.find_dir(
+            'Include', self.sni.challenge_conf)
+        vh_match = self.sni.configurator.aug.match(
+            '/files' + self.sni.challenge_conf + '//VirtualHost')
