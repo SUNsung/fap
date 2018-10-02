@@ -1,167 +1,178 @@
 
         
-            You can install it using Cask:
-    
-      def bash_completion_caveats
-    if keg && keg.completion_installed?(:bash) then <<-EOS.undent
-      Bash completion has been installed to:
-        #{HOMEBREW_PREFIX}/etc/bash_completion.d
-      EOS
-    end
+        # User for the smoke tests
+if ENV['SMOKE'] == '1'
+  UserEmail.seed do |ue|
+    ue.id = 0
+    ue.email = 'smoke_user@discourse.org'
+    ue.primary = true
+    ue.user_id = 0
   end
     
-      def internal_development_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
   end
     
-        @report
-  end
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
     
-      def self.bottle_sha1(*)
-  end
-    
-            sql = <<-SQL
-          UPDATE ci_stages SET status = (#{status_sql})
-            WHERE ci_stages.status IS NULL
-            AND ci_stages.id BETWEEN #{start_id.to_i} AND #{stop_id.to_i}
-        SQL
-    
-            def initialize(badge)
-          @entity = badge.entity
-          @status = badge.status
-        end
-    
-            def entity
-          'pipeline'
-        end
-    
-              providers
-        end
-    
-              # Return the list if we don't have a block
-          return hooks if !block_given?
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
-        end
+        def respond
+      if http_auth?
+        http_auth
+      elsif warden_options[:recall]
+        recall
+      else
+        redirect
       end
+    end
+    
+        def destroy
+      authorize @account_moderation_note, :destroy?
+      @account_moderation_note.destroy!
+      redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.destroyed_msg')
+    end
+    
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+  end
+    
+      def hub_topic_uri
+    @_hub_topic_uri ||= Addressable::URI.parse(hub_topic).normalize
+  end
+    
+      #
+  # HTTP server.
+  #
+  def alias
+    super || 'HTTP Server'
+  end
+    
+          # Look for IAX_AUTH_MD5 (2) as an available auth method
+      if res[2][14].unpack('n')[0] & 2 <= 0
+        dprint('REGAUTH: MD5 authentication is not enabled on the server')
+        return
+      end
+    
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+    
+  def self.create_rakp_hmac_sha1_salt(con_sid, bmc_sid, con_rid, bmc_rid, bmc_gid, auth_level, username)
+    con_sid +
+    bmc_sid +
+    con_rid +
+    bmc_rid +
+    bmc_gid +
+    [ auth_level ].pack('C') +
+    [ username.length ].pack('C') +
+    username
+  end
+    
+              res = decode_kerb_response(data)
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
+          #
+          # @return [String] encoded principal
+          def encode
+            encoded = ''
+            encoded << encode_name_type
+            encoded << [components.length].pack('N')
+            encoded << encode_realm
+            encoded << encode_components
+    
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+          end
+    
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
+    
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
+            end
+          end
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+    end
+    
+    When /^I have user with username '([^']*)' in an aspect called '([^']*)'$/ do |username, aspect|
+  user = User.find_by_username(username)
+  contact = @me.reload.contact_for(user.person)
+  contact.aspects << @me.aspects.find_by_name(aspect)
+end
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
     end
   end
 end
 
     
-            # Merge another configuration object into this one. This assumes that
-        # the other object is the same class as this one. This should not
-        # mutate this object, but instead should return a new, merged object.
-        #
-        # The default implementation will simply iterate over the instance
-        # variables and merge them together, with this object overriding
-        # any conflicting instance variables of the older object. Instance
-        # variables starting with '__' (double underscores) will be ignored.
-        # This lets you set some sort of instance-specific state on your
-        # configuration keys without them being merged together later.
-        #
-        # @param [Object] other The other configuration object to merge from,
-        #   this must be the same type of object as this one.
-        # @return [Object] The merged object.
-        def merge(other)
-          result = self.class.new
-    
-    class FiltersController < ApplicationController
-  include Authorization
-    
-          if @account_moderation_note.save
-        redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.created_msg')
-      else
-        @account          = @account_moderation_note.target_account
-        @moderation_notes = @account.targeted_moderation_notes.latest
-    
-    module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-          @user.resend_confirmation_instructions
-    
-      def update
-    if verify_payload?
-      process_salmon
-      head 202
-    elsif payload.present?
-      render plain: signature_verification_failure_reason, status: 401
-    else
-      head 400
+        # The import/mixin stack.
+    #
+    # @return [Sass::Stack]
+    def stack
+      @stack || global_env.stack
     end
   end
     
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
+        # Processes the options set by the command-line arguments,
+    # and runs the Sass compiler appropriately.
+    def process_result
+      require 'sass'
+    
+          # @see Base#watched_file?
+      def watched_file?(filename)
+        # Check against the root with symlinks resolved, since Listen
+        # returns fully-resolved paths.
+        filename =~ /\.s[ac]ss$/ && filename.start_with?(@real_root + File::SEPARATOR)
       end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
-    end
-    
-      desc 'Install all spree gems'
-  task install: :build do
-    for_each_gem do |gem_path|
-      Bundler.with_clean_env do
-        sh 'gem install #{gem_path}'
-      end
-    end
-  end
-    
-                if handler.error.present?
-              @coupon_message = handler.error
-              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
-              return true
-            end
-          end
-          false
-        end
-    
-            def update
-          authorize! :update, inventory_unit.order
-    
-            self.line_item_options = []
-    
-            def authorize
-          perform_payment_action(:authorize)
-        end
-    
-            private
-    
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
