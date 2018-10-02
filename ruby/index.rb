@@ -1,97 +1,113 @@
 
         
-                  return obj
-        end
+              https://pip.readthedocs.org/en/stable/installing/#install-pip
+    EOS
+  when 'pil' then <<-EOS.undent
+    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
+    EOS
+  when 'macruby' then <<-EOS.undent
+    MacRuby works better when you install their package:
+      http://www.macruby.org/
+    EOS
+  when /(lib)?lzma/
+    'lzma is now part of the xz formula.'
+  when 'xcode'
+    if MacOS.version >= :lion
+      <<-EOS.undent
+      Xcode can be installed from the App Store.
+      EOS
+    else
+      <<-EOS.undent
+      Xcode can be installed from https://developer.apple.com/xcode/downloads/
+      EOS
+    end
+  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
+    Installing gtest system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
+    Installing gmock system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'sshpass' then <<-EOS.undent
+    We won't add sshpass because it makes it too easy for novice SSH users to
+    ruin SSH's security.
+    EOS
+  when 'gsutil' then <<-EOS.undent
+    Install gsutil with `pip install gsutil`
+    EOS
+  when 'clojure' then <<-EOS.undent
+    Clojure isn't really a program but a library managed as part of a
+    project and Leiningen is the user interface to that library.
     
-        it 'raises an InternalServerError exception on a HTTP 500 error' do
-      response = double('Response', body: '<html>Server Error</html>', status: 500)
-      expect do
-        subject.handle_response(response)
-      end.to raise_error(Spaceship::Client::InternalServerError)
+        # The stdlib recorded in the install receipt is used during dependency
+    # compatibility checks, so we only care about the stdlib that libraries
+    # link against.
+    keg.detect_cxx_stdlibs(:skip_executables => true)
+  end
+    
+      def std?
+    @settings.include? :std
+  end
+    
+        if RUBY_PATH.to_s !~ %r{^/System/Library/Frameworks/Ruby.framework/Versions/[12]\.[089]/usr/bin/ruby}
+      s << ' => #{RUBY_PATH}'
+    end
+    s
+  end
+    
+      def snow_leopard_64?
+    MacOS.prefer_64_bit?
+  end
+end
+    
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
     end
   end
     
-        it 'allows modifications of localized values' do
-      new_title = 'New Title'
-      version.description['English'] = new_title
-      lang = version.languages.find { |a| a['language'] == 'English' }
-      expect(lang['description']['value']).to eq(new_title)
+      namespace :release do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Release #{gem} as a package'
+      task gem => 'package:#{gem}' do
+        sh <<-SH
+          gem install #{package(gem, '.gem')} --local &&
+          gem push #{package(gem, '.gem')}
+        SH
+      end
     end
     
-          #   # First, stub a failing request
-      #   stub_request(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/1234/apps/898536088/platforms/ios/trains').
-      #     # to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains_operation_failed.json'), headers: { 'Content-Type' => 'application/json' }).times(2).
-      #     to_return(status: 200, body: TunesStubbing.itc_read_fixture_file('build_trains.json'), headers: { 'Content-Type' => 'application/json' })
-    
-          # Zips build products and moves it to output directory
-      UI.message('Zipping build products')
-      FastlaneCore::Helper.zip_directory(path, output_path, contents_only: true, overwrite: true, print: false)
-      UI.message('Succesfully zipped build products: #{output_path}')
-    end
-    
-            # Sometimes latest build will disappear and a different build would get selected
-        # Only set build if no latest build found or if same build versions as previously fetched build
-        # Issue: https://github.com/fastlane/fastlane/issues/10945
-        if build.nil? || (latest_build && latest_build.train_version == build.train_version && latest_build.build_version == build.build_version)
-          build = latest_build
-        end
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
+            reaction
       end
     
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-        def resource_params
-      params.require(:account_moderation_note).permit(
-        :content,
-        :target_account_id
-      )
-    end
-    
-    module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-        def create
-      authorize :status, :update?
-    
-      def status_finder
-    StatusFinder.new(params[:url])
+      test 'clean path with leading slash' do
+    assert_equal '/Mordor', clean_path('/Mordor')
   end
     
-          def find_product(id)
-        @product = product_scope.friendly.distinct(false).find(id.to_s)
-      rescue ActiveRecord::RecordNotFound
-        @product = product_scope.find_by(id: id)
-        not_found unless @product
+        # Remove all slashes from the start of string.
+    # Remove all double slashes
+    def clean_url url
+      return url if url.nil?
+      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
+    end
+    
+          # Checks whether this `hash` element is on the same line as `other`.
+      #
+      # @note A multiline element is considered to be on the same line if it
+      #       shares any of its lines with `other`
+      #
+      # @return [Boolean] whether this element is on the same line as `other`
+      def same_line?(other)
+        loc.last_line == other.loc.line || loc.line == other.loc.last_line
       end
     
-            private
-    
-            private
-    
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
+          # Checks whether the `pair` uses a hash rocket delimiter.
+      #
+      # @return [Boolean] whether this `pair` uses a hash rocket delimiter
+      def hash_rocket?
+        loc.operator.is?(HASH_ROCKET)
+      end
