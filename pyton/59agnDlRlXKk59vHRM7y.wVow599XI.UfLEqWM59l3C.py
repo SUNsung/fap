@@ -1,118 +1,113 @@
 
         
-        tf_proto_library_cc(
-    name = 'data_proto',
-    srcs = ['data.proto'],
-)
+        
+class DefaultCategories(Enum):
     
-        self._weights = []
-    self._weights.append(
-        tf.get_variable('weights_arc', [self._source_dim, self._target_dim],
-                        tf.float32, tf.orthogonal_initializer()))
-    self._weights.append(
-        tf.get_variable('weights_source', [self._source_dim], tf.float32,
-                        tf.zeros_initializer()))
-    self._weights.append(
-        tf.get_variable('root', [self._source_dim], tf.float32,
-                        tf.zeros_initializer()))
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
-          self.assertAllEqual(focus1,
-                          [[0], [-1], [-1], [-1],
-                           [0], [1], [-1], [-1],
-                           [0], [1], [2], [-1],
-                           [0], [1], [2], [3]])  # pyformat: disable
-    
-                              [[[  8,  19,  37],
-                            [ 18,  43,  85],
-                            [ 28,  67, 133]],
-                           [[ 27,  65, 131],
-                            [ 17,  41,  83],
-                            [  7,  17,  35]]])  # pyformat: disable
-    
-    
-if __name__ == '__main__':
-  tf.test.main()
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
 
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+                    condition_insert = dict(FieldToMatch=dict(Type=filtr.get('field_to_match').upper()),
+                                        TextTransformation=filtr.get('transformation', 'none').upper())
     
-    exercise_dir = os.path.dirname(__file__)
-if exercise_dir == '':
-    exercise_dir = '.'
+        desired_tags = module.params.get('tags')
+    if desired_tags is not None:
+        current_tags = boto3_tag_list_to_ansible_dict(image.get('Tags'))
+        tags_to_add, tags_to_remove = compare_aws_tags(current_tags, desired_tags, purge_tags=module.params.get('purge_tags'))
     
-    # Generate waveform data
-n_features = 2000
-t = np.pi * np.linspace(0, 1, n_features)
+    - name: associate an elastic IP with a device
+  ec2_eip:
+    device_id: eni-c8ad70f3
+    ip: 93.184.216.119
     
-    The left and right examples highlight the ``n_labels`` parameter:
-more of the samples in the right plot have 2 or 3 labels.
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import (ansible_dict_to_boto3_filter_list,
+                                      boto3_tag_list_to_ansible_dict,
+                                      camel_dict_to_snake_dict)
+try:
+    from botocore.exceptions import (BotoCoreError, ClientError)
+except ImportError:
+    pass  # caught by imported AnsibleAWSModule
     
-            # cookie handler
-        ssl_context = request.HTTPSHandler(
-            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
-        cookie_handler = request.HTTPCookieProcessor()
-        opener = request.build_opener(ssl_context, cookie_handler)
-        opener.addheaders = [
-            ('Referer', self.url),
-            ('Cookie',
-             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
-        ]
-        request.install_opener(opener)
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-    site = MusicPlayOn()
-download = site.download_by_url
-# TBD: implement download_playlist
-
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            # for each available stream
-            s = self.streams[i]
-            # fill in 'container' field and 'size' field (optional)
-            _, s['container'], s['size'] = url_info(s['url'])
-            # 'src' field is a list of processed urls for direct downloading
-            # usually derived from 'url'
-            s['src'] = [s['url']]
-    
-        #This is mainly for testing the M3U FFmpeg parser so I would ignore any non-m3u ones
-    stream_url = [i['url'] for i in html['streaming_url_list'] if i['is_default'] and i['type'] == 'hls'][0]
-    
-        type2test = str
+    - ec2_lc:
+    name: special
+    image_id: ami-XXX
+    key_name: default
+    security_groups: ['group', 'group2' ]
+    instance_type: t1.micro
+    volumes:
+    - device_name: /dev/sdf
+      no_device: true
+'''
     
     
-    def test_sys_path_adjustment_protects_pydoc_dir(self):
-        def _get_revised_path(given_path):
-            return self._get_revised_path(given_path, argv0=pydoc.__file__)
-        clean_path = self._get_starting_path()
-        leading_argv0dir = [self.argv0dir] + clean_path
-        expected_path = [self.abs_curdir] + leading_argv0dir
-        self.assertEqual(_get_revised_path(leading_argv0dir), expected_path)
-        trailing_argv0dir = clean_path + [self.argv0dir]
-        expected_path = [self.abs_curdir] + trailing_argv0dir
-        self.assertEqual(_get_revised_path(trailing_argv0dir), expected_path)
+@AWSRetry.exponential_backoff()
+def get_placement_group_details(connection, module):
+    name = module.params.get('name')
+    try:
+        response = connection.describe_placement_groups(
+            Filters=[{
+                'Name': 'group-name',
+                'Values': [name]
+            }])
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Couldn't find placement group named [%s]' % name)
     
-        def new_future_import(self, old):
-        new = FromImport('__future__',
-                         [Name('absolute_import', prefix=' '), Comma(),
-                          Name('division', prefix=' '), Comma(),
-                          Name('print_function', prefix=' ')])
-        if old is not None:
-            new.prefix = old.prefix
-        return new
+        if not HAS_BOTO:
+        module.fail_json(msg='boto required for this module')
     
-    '''Usage: python file_receiver.py
+                elif opt in ('-f', '--force'):
+                # Force download.
+                conf['force'] = True
     
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
+    
+    __all__ = ['ehow_download']
+    
+    from ..common import *
+    
+    while True:
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
+    
+        # Draw a label with a name below the face
+    text_width, text_height = draw.textsize(name)
+    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+    
+        # Scale down image if it's giant so things run a little faster
+    if max(unknown_image.shape) > 1600:
+        pil_img = PIL.Image.fromarray(unknown_image)
+        pil_img.thumbnail((1600, 1600), PIL.Image.LANCZOS)
+        unknown_image = np.array(pil_img)
