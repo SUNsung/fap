@@ -1,78 +1,46 @@
 
         
-                def self.disabled_via_active_directory?(dn, adapter)
-          adapter.dn_matches_filter?(dn, AD_USER_DISABLED)
-        end
+          private
     
-    module Gitlab
-  module BackgroundMigration
-    class PopulateMergeRequestsLatestMergeRequestDiffId
-      BATCH_SIZE = 1_000
+          ENV[new_initial_revision_var] ||= ENV[old_initial_revision_var]
+      ENV[new_current_revision_var] ||= ENV[old_current_revision_var]
     
-            def value_text
-          @status ? ('%.2f%%' % @status) : 'unknown'
-        end
+    if Encoding.default_external != Encoding::UTF_8
     
-            def initialize(project, ref)
-          @project = project
-          @ref = ref
-    
-            def key_width
-          62
-        end
-    
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+      def prefix_from_bin(bin_name)
+    unless (path = `which #{bin_name}`.strip).empty?
+      File.dirname(File.dirname(path))
     end
-    
-        # get sha of the branch (= the latest commit)
-    def get_branch_sha
-      @branch_sha ||= begin
-        if @branch + '\n' == %x[git rev-parse #@branch]
-          @branch
-        else
-          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
-          log cmd
-          result = %x[#{cmd}]
-          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
-          result.split(/\s+/).first
-        end
-      end
-    end
-    
-        # Render the template to CSS.
-    #
-    # @return [String] The CSS
-    # @raise [Sass::SyntaxError] if there's an error in the document
-    # @raise [Encoding::UndefinedConversionError] if the source encoding
-    #   cannot be converted to UTF-8
-    # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-    def render
-      return _to_tree.render unless @options[:quiet]
-      Sass::Util.silence_sass_warnings {_to_tree.render}
-    end
-    
-        # Finds the line of the source template
-    # on which an exception was raised.
-    #
-    # @param exception [Exception] The exception
-    # @return [String] The line number
-    def get_line(exception)
-      # SyntaxErrors have weird line reporting
-      # when there's trailing whitespace
-      if exception.is_a?(::SyntaxError)
-        return (exception.message.scan(/:(\d+)/).first || ['??']).first
-      end
-      (exception.backtrace[0].scan(/:(\d+)/).first || ['??']).first
-    end
-    
-    module Sass
-  module Importers
-    # The default importer, used for any strings found in the load path.
-    # Simply loads Sass files from the filesystem using the default logic.
-    class Filesystem < Base
-      attr_accessor :root
-    
-      def framework_version
-    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
   end
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+    module Pod
+  class Command
+    class Env < Command
+      self.summary = 'Display pod environment'
+      self.description = 'Display pod environment.'
