@@ -1,101 +1,156 @@
 
         
-        gemspec
+        module BuildEnvironmentDSL
+  def env(*settings)
+    @env ||= BuildEnvironment.new
+    @env.merge(settings)
+  end
+end
     
-    class BugTest < ActionDispatch::IntegrationTest
-  include Rack::Test::Methods
-  include Warden::Test::Helpers
+      # True if a {Formula} is being built with a specific option.
+  # <pre>args << '--i-want-spam' if build.with? 'spam'
+  #
+  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
+  #
+  # # If a formula presents a user with a choice, but the choice must be fulfilled:
+  # if build.with? 'example2'
+  #   args << '--with-example2'
+  # else
+  #   args << '--with-example1'
+  # end</pre>
+  def with?(val)
+    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
     
-      # The time the user will be remembered without asking for credentials again.
-  mattr_accessor :remember_for
-  @@remember_for = 2.weeks
+      def zsh_completion_caveats
+    if keg && keg.completion_installed?(:zsh) then <<-EOS.undent
+      zsh completion has been installed to:
+        #{HOMEBREW_PREFIX}/share/zsh/site-functions
+      EOS
+    end
+  end
     
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
+      def internal_development_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
+  end
+    
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
+    
+      describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+    end
+    
+      it 'ignores invalid values' do
+    location2 = Location.new(
+      lat: 2,
+      lng: 3,
+      radius: -1,
+      speed: -1,
+      course: -1)
+    expect(location2.radius).to be_nil
+    expect(location2.speed).to be_nil
+    expect(location2.course).to be_nil
+  end
+    
+      it 'accepts a Float' do
+    sleep(0.1).should be_close(0, 2)
+  end
+    
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
+    end
+  end
+    
+        it 'returns true when passed ?w if the argument is readable by the effective uid' do
+      Kernel.test(?w, @tmp_file).should be_true
+    end
+    
+      it 'creates a public method in TOPLEVEL_BINDING' do
+    eval @code, TOPLEVEL_BINDING
+    Object.should have_method :boom
+  end
+    
+              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def encode
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
         end
-    
-          if message.is_a?(Symbol)
-        options = {}
-        options[:resource_name] = scope
-        options[:scope] = 'devise.failure'
-        options[:default] = [message]
-        auth_keys = scope_class.authentication_keys
-        keys = (auth_keys.respond_to?(:keys) ? auth_keys.keys : auth_keys).map { |key| scope_class.human_attribute_name(key) }
-        options[:authentication_keys] = keys.join(I18n.translate(:'support.array.words_connector'))
-        options = i18n_options(options)
-    
-      platform_is :windows do
-    it 'runs commands starting with any number of @ using shell' do
-      `#{ruby_cmd('p system 'does_not_exist'')} 2>NUL`.chomp.should == 'nil'
-      @object.system('@does_not_exist 2>NUL').should == false
-      @object.system('@@@#{ruby_cmd('exit 0')}').should == true
+      end
     end
   end
 end
     
-        it 'returns the time at which the file was created when passed ?C' do
-      Kernel.test(?C, @tmp_file).should == @tmp_file.ctime
+              # Decodes the nonce field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_nonce(input)
+            input.value[0].value.to_i
+          end
+    
+              # Encodes the value field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_value
+            OpenSSL::ASN1::OctetString.new(value)
+          end
+        end
+      end
     end
-    
-      after :each do
-    untrace_var :$Kernel_trace_var_global
-    
-      it 'returns the method name as symbol' do
-    eval(@code, TOPLEVEL_BINDING).should equal :boom
   end
+end
+    
+    begin
+  require 'ruby-prof'
+    
+            if e.is_a?(Sass::SyntaxError)
+          $stderr.puts e.sass_backtrace_str('standard input')
+        else
+          $stderr.print '#{e.class}: ' unless e.class == RuntimeError
+          $stderr.puts e.message.to_s
+        end
+        $stderr.puts '  Use --trace for backtrace.'
+    
+    team = ['Ryan Tomayko', 'Blake Mizerany', 'Simon Rozet', 'Konstantin Haase', 'Zachary Scott']
+desc 'list of contributors'
+task :thanks, ['release:all', :backports] do |t, a|
+  a.with_defaults :release => '#{prev_version}..HEAD',
+    :backports => '#{prev_feature}.0..#{prev_feature}.x'
+  included = `git log --format=format:'%aN\t%s' #{a.release}`.lines.map { |l| l.force_encoding('binary') }
+  excluded = `git log --format=format:'%aN\t%s' #{a.backports}`.lines.map { |l| l.force_encoding('binary') }
+  commits  = (included - excluded).group_by { |c| c[/^[^\t]+/] }
+  authors  = commits.keys.sort_by { |n| - commits[n].size } - team
+  puts authors[0..-2].join(', ') << ' and ' << authors.last,
+    '(based on commits included in #{a.release}, but not in #{a.backports})'
+end
+    
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+    class Rack::Builder
+  include Sinatra::Delegator
 end
 
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
+      <script type='text/javascript'>
+  //<!--
+  function toggle(id) {
+    var pre  = document.getElementById('pre-' + id);
+    var post = document.getElementById('post-' + id);
+    var context = document.getElementById('context-' + id);
+    }
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-        it 'accepts multiline each' do
-      expect_no_offenses(<<-RUBY.strip_indent)
-        def func
-          [1, 2, 3].each do |n|
-            puts n
-          end
-        end
-      RUBY
-    end
-    
-          if allow_implicit_return
-        expect(cop.offenses.empty?).to be true
-      else
-        expect(cop.messages)
-          .to match_array(start_with('Use `#{method}!` instead of `#{method}`' \
-                             ' if the return value is not checked.'))
-      end
-    end
-  end
-    
-            pairs.map(&:value).each do |value|
-          yield value
-        end
-    
-          # Checks whether this node is an `unless` statement. (This is not true
-      # of ternary operators and `if` statements.)
-      #
-      # @return [Boolean] whether the node is an `unless` statement
-      def unless?
-        keyword == 'unless'
-      end
+    require 'stringex'
