@@ -1,152 +1,232 @@
 
         
-                :param variable_name: name of the environment variable
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
-        :return: bool. ``True`` if able to load config, ``False`` otherwise.
-        '''
-        rv = os.environ.get(variable_name)
-        if not rv:
-            if silent:
-                return False
-            raise RuntimeError('The environment variable %r is not set '
-                               'and as such configuration could not be '
-                               'loaded.  Set this variable and make it '
-                               'point to a configuration file' %
-                               variable_name)
-        return self.from_pyfile(rv, silent=silent)
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
-        for idx, (loader, srcobj, triple) in enumerate(attempts):
-        if isinstance(srcobj, Flask):
-            src_info = 'application '%s'' % srcobj.import_name
-        elif isinstance(srcobj, Blueprint):
-            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
-                                                srcobj.import_name)
-        else:
-            src_info = repr(srcobj)
+    from mrjob.job import MRJob
     
-                # If we have no method at all in there we don't want to add a
-            # method list. This is for instance the case for the base class
-            # or another subclass of a base method view that does not introduce
-            # new methods.
-            if methods:
-                cls.methods = methods
+        if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.update(test_config)
     
-        rv = parse_changelog()
     
-        sys.meta_path.append(Loader())
-    request.addfinalizer(sys.meta_path.pop)
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def delete(id):
+    '''Delete a post.
     
-        logging.root.handlers[:] = root_handlers
-    logging.root.setLevel(root_level)
-    
-            gc.collect()
-        self.old_objects = len(gc.get_objects())
-    
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
-
-    
-        In this task, there are variable length inputs of integers from 1-9, and a random
-    subset of unmasked outputs. Each of these outputs has a 50% probability of being
-    the input number unchanged, and a 50% probability of being 2*input%10.
-    
-    model1 = create_network(num_classes=num_classes, **network1)
-history_model1 = model1.fit(x_train,
-                            y_train,
-                            batch_size=batch_size,
-                            epochs=epochs,
-                            verbose=1,
-                            validation_split=0.1)
-    
-        x_train = np.array(x[:int(len(x) * (1 - test_split))])
-    y_train = np.array(y[:int(len(x) * (1 - test_split))])
-    x_test = np.array(x[int(len(x) * (1 - test_split)):])
-    y_test = np.array(y[int(len(x) * (1 - test_split)):])
-    return (x_train, y_train), (x_test, y_test)
-
-    
-    # Since the output is a moving average of the input,
-# the first few points of output will be NaN
-# and will be dropped from the generated data
-# before training the LSTM.
-# Also, when lahead > 1,
-# the preprocessing step later of 'rolling window view'
-# will also cause some points to be lost.
-# For aesthetic reasons,
-# in order to maintain generated data length = input_len after pre-processing,
-# add a few points to account for the values that will be lost.
-to_drop = max(tsteps - 1, lahead - 1)
-data_input = gen_uniform_amp(amp=0.1, xn=input_len + to_drop)
-    
-        def format(self, record):
-        return self._fmt % record.__dict__
-    
-    # Being true for dangling symbolic links is also useful.
-    
-            self.loop._close_self_pipe.reset_mock()
-        self.loop.close()
-        self.assertFalse(self.loop._close_self_pipe.called)
-    
-        def test_empty_file_actions(self):
-        pid = posix.posix_spawn(
-            sys.executable,
-            [sys.executable, '-c', 'pass'],
-            os.environ,
-            []
+        def login(self, username='test', password='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'username': username, 'password': password}
         )
-        self.assertEqual(os.waitpid(pid, 0), (pid, 0))
     
-    # Were we compiled --with-pydebug or with #define Py_DEBUG?
-COMPILED_WITH_PYDEBUG = hasattr(sys, 'gettotalrefcount')
+    PY2 = sys.version_info[0] == 2
+_identity = lambda x: x
     
-        for url in urls:
-        if not url.startswith('http'):
-            print('markdown file name: ' + url)
-            continue
-        if check_live_url(url):
-            print(url)
+    from base64 import b64decode, b64encode
+from datetime import datetime
+from uuid import UUID
+    
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
+    
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    
+    
+def create_model(stateful):
+    model = Sequential()
+    model.add(LSTM(20,
+              input_shape=(lahead, 1),
+              batch_size=batch_size,
+              stateful=stateful))
+    model.add(Dense(1))
+    model.compile(loss='mse', optimizer='adam')
+    return model
+    
+        try:
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+        connection = boto3_conn(module, conn_type='client', resource='ec2', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    except botocore.exceptions.NoRegionError:
+        module.fail_json(msg=('Region must be specified as a parameter in AWS_DEFAULT_REGION environment variable or in boto configuration file.'))
+    
+        if 'delete_on_termination' in volume:
+        return_object['Ebs']['DeleteOnTermination'] = volume.get('delete_on_termination', False)
+    
+    version_added: '2.2'
+author: 'Jose Armesto (@fiunchinho)'
+options:
+  region:
+    description:
+      - The AWS region to use.
+    required: true
+    aliases: ['aws_region', 'ec2_region']
+  name_regex:
+    description:
+      - A Launch Configuration to match
+      - It'll be compiled as regex
+    required: True
+  sort_order:
+    description:
+      - Order in which to sort results.
+    choices: ['ascending', 'descending']
+    default: 'ascending'
+  limit:
+    description:
+      - How many results to show.
+      - Corresponds to Python slice notation like list[:limit].
+requirements:
+  - 'python >= 2.6'
+  - boto3
+extends_documentation_fragment:
+    - aws
+'''
+    
+        connection = boto3_conn(module,
+                            resource='ec2', conn_type='client',
+                            region=region, endpoint=ec2_url, **aws_connect_params)
+    
+    Note that LocalOutlierFactor is not meant to predict on a test set and its
+performance is assessed in an outlier detection context:
+1. The model is trained on the whole dataset which is assumed to contain
+outliers.
+2. The ROC curve is computed on the same dataset using the knowledge of the
+labels.
+In this context there is no need to shuffle the dataset because the model
+is trained and tested on the whole dataset. The randomness of this benchmark
+is only caused by the random selection of anomalies in the SA dataset.
+    
+    
+def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
+                      Drange=2 ** np.arange(7),
+                      krange=2 ** np.arange(10),
+                      N=1000,
+                      D=64,
+                      k=5,
+                      leaf_size=30,
+                      dataset='digits'):
+    algorithms = ('kd_tree', 'brute', 'ball_tree')
+    fiducial_values = {'N': N,
+                       'D': D,
+                       'k': k}
+    
+            all_time[label].append(time)
+        if enable_spectral_norm:
+            A = U.dot(np.diag(s).dot(V))
+            all_spectral[label].append(norm_diff(X - A, norm=2) /
+                                       X_spectral_norm)
+        f = scalable_frobenius_norm_discrepancy(X, U, s, V)
+        all_frobenius[label].append(f / X_fro_norm)
+    
+            for group in groups:
+            small_content = u' '.join(group)
+    
+    IPv6 = CheckNetwork('IPv6')
+IPv6.urls = ['http://[2001:41d0:8:e8ad::1]',
+             'http://[2001:260:401:372::5f]',
+             'http://[2a02:188:3e00::32]',
+             'http://[2804:10:4068::202:82]'
+             ]
+IPv6.triger_check_network()
+    
+    '''
+    result_info = '\nThe recommend server is %r.'
+    wait_info = 'Please wait 10 seconds...'
+    resume_info = 'The teredo cilent has resumed.'
+    warn_1 = 'The value of parameter '-p' error: local port must be a number.'
+    warn_2 = 'The value of parameter '-P' error: remote port must be a number.'
+    warn_3 = 'This device may not be able to use teredo tunnel, the NAT type is %s!'
+    warn_4 = 'We can not judge the NAT type.'
+    confirm_stop = 'Stop teredo cilent for run prober, Y/N? '
+    confirm_set = 'Do you want to set recommend teredo server, Y/N? '
+    confirm_reset = 'Do you want to reset refreshinterval to the default value, Y/N? '
+    confirm_over = 'Press enter to over...'
+    confirm_force = 'Do you want to force probe and set the teredo servers, Y/N? '
+    nat_type_result = 'The NAT type is %s.'
+    
+        '''
+    
+    def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
+                 input=None, start=None, stop=None, oldToken=None):
+        Token.__init__(self)
+        
+        if oldToken is not None:
+            self.type = oldToken.type
+            self.line = oldToken.line
+            self.charPositionInLine = oldToken.charPositionInLine
+            self.channel = oldToken.channel
+            self.index = oldToken.index
+            self._text = oldToken._text
+            if isinstance(oldToken, CommonToken):
+                self.input = oldToken.input
+                self.start = oldToken.start
+                self.stop = oldToken.stop
+            
         else:
-            print(url, file=sys.stderr)
+            self.type = type
+            self.input = input
+            self.charPositionInLine = -1 # set to invalid position
+            self.line = 0
+            self.channel = channel
+            
+	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
+            self.index = -1
+            
+            # We need to be able to change the text once in a while.  If
+            # this is non-null, then getText should return this.  Note that
+            # start/stop are not affected by changing this.
+            self._text = text
     
-    from babel.messages.pofile import read_po
+    -u is used to specify which special resource intensive tests to run,
+such as those requiring large file support or network connectivity.
+The argument is a comma-separated list of words indicating the
+resources to test.  Currently only the following are defined:
     
-        def test_fd_command_line_interface_hog_model(self):
-        target_string = 'obama.jpg'
-        runner = CliRunner()
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+            rc, out, err = assert_python_ok('-c', code, PYTHONHASHSEED='0')
+        self.assertIn(b'random is 0', out)
     
-    # Load a sample picture and learn how to recognize it.
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    def normpath(path):
+    '''Normalize path, eliminating double slashes, etc.'''
+    path = os.fspath(path)
+    if isinstance(path, bytes):
+        sep = b'\\'
+        altsep = b'/'
+        curdir = b'.'
+        pardir = b'..'
+        special_prefixes = (b'\\\\.\\', b'\\\\?\\')
+    else:
+        sep = '\\'
+        altsep = '/'
+        curdir = '.'
+        pardir = '..'
+        special_prefixes = ('\\\\.\\', '\\\\?\\')
+    if path.startswith(special_prefixes):
+        # in the case of paths with these prefixes:
+        # \\.\ -> device names
+        # \\?\ -> literal paths
+        # do not do any normalization, but return the path unchanged
+        return path
+    path = path.replace(altsep, sep)
+    prefix, path = splitdrive(path)
     
+        def test_exists(self):
+        filename = support.TESTFN
+        bfilename = os.fsencode(filename)
+        self.addCleanup(support.unlink, filename)
     
-def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
-    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
-    execution_time = fastest_execution / iterations_per_test
-    fps = 1.0 / execution_time
-    return execution_time, fps
-    
-    while True:
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
-    
-    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-# See http://pillow.readthedocs.io/ for more about PIL/Pillow
-pil_image = Image.fromarray(unknown_image)
-# Create a Pillow ImageDraw Draw instance to draw with
-draw = ImageDraw.Draw(pil_image)
-    
-    
-# -- Options for HTML output -------------------------------------------
-    
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('two_people.jpg')
+            expected = [('__hello__', 139),
+                    ('__phello__', -139),
+                    ('__phello__.spam', 139),
+                    ]
+        self.assertEqual(items, expected, 'PyImport_FrozenModules example '
+            'in Doc/library/ctypes.rst may be out of date')
