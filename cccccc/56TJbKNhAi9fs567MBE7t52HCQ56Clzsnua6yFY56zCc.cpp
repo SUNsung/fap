@@ -1,147 +1,176 @@
 
         
-            struct Margin {
-        Margin() : left(0), right(0), top(0), bottom(0) {}
-        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
-            : left(left_), right(right_), top(top_), bottom(bottom_) {}
+          // Fill database
+  for (int i = 0; i < kCount; i++) {
+    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
+  }
+  ASSERT_OK(dbi->TEST_CompactMemTable());
+    
+      int num_initialized GUARDED_BY(mu);
+  int num_done GUARDED_BY(mu);
+  bool start GUARDED_BY(mu);
+    
+    Status DBImpl::DoCompactionWork(CompactionState* compact) {
+  const uint64_t start_micros = env_->NowMicros();
+  int64_t imm_micros = 0;  // Micros spent doing imm_ compactions
     }
     
-        accumulateSquareConstFunc funcs[16] =
-    {
-        accumulateSquareConst<0>,
-        accumulateSquareConst<1>,
-        accumulateSquareConst<2>,
-        accumulateSquareConst<3>,
-        accumulateSquareConst<4>,
-        accumulateSquareConst<5>,
-        accumulateSquareConst<6>,
-        accumulateSquareConst<7>,
-        accumulateSquareConst<8>,
-        accumulateSquareConst<9>,
-        accumulateSquareConst<10>,
-        accumulateSquareConst<11>,
-        accumulateSquareConst<12>,
-        accumulateSquareConst<13>,
-        accumulateSquareConst<14>,
-        accumulateSquareConst<15>
-    }, func = funcs[shift];
-    
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        v_dst = vorrq_u8(v_src0, v_src1);
-    }
-    
-    namespace {
-    }
-    
-    #include 'common.hpp'
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const T * src1 = internal::getRowPtr(src1Base, src1Stride, i);
-        T * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-            for ( ; j + 7 < size.width; j += 8)
-        {
-            internal::prefetch(sum + j);
-            internal::prefetch(src + j);
+    struct ParsedInternalKey {
+  Slice user_key;
+  SequenceNumber sequence;
+  ValueType type;
     }
     
     
-    {  // Number of 32 bit outputs held in each register.
-  int num_outputs_per_register_;
-  // Maximum number of registers that we will use to hold outputs.
-  int max_output_registers_;
-  // Number of 8 bit inputs in the inputs register.
-  int num_inputs_per_register_;
-  // Number of inputs in each weight group.
-  int num_inputs_per_group_;
-  // Number of groups of inputs to be broadcast.
-  int num_input_groups_;
-  // The weights matrix reorganized in whatever way suits this instance.
-  std::vector<int8_t> shaped_w_;
-  // A series of functions to compute a partial result.
-  std::vector<PartialFunc> partial_funcs_;
-};
-    
-    #ifndef DOCQUAL_H
-#define DOCQUAL_H
-    
-    int orientation_and_script_detection(STRING& filename,
-                                     OSResults*,
-                                     tesseract::Tesseract*);
-    
-    /**
- * Class to iterate over tesseract page structure, providing access to all
- * levels of the page hierarchy, without including any tesseract headers or
- * having to handle any tesseract structures.
- * WARNING! This class points to data held within the TessBaseAPI class, and
- * therefore can only be used while the TessBaseAPI class still exists and
- * has not been subjected to a call of Init, SetImage, Recognize, Clear, End
- * DetectOS, or anything else that changes the internal PAGE_RES.
- * See apitypes.h for the definition of PageIteratorLevel.
- * See also ResultIterator, derived from PageIterator, which adds in the
- * ability to access OCR output with text-specific methods.
- */
-    
-    #endif  // TESSERACT_CCMAIN_PARAGRAPHS_H_
-
-    
-    namespace tesseract {
-  class Tesseract;
-}
-    
-    Status DBImpl::TEST_CompactMemTable() {
-  // nullptr batch means just wait for earlier writes to be done
-  Status s = Write(WriteOptions(), nullptr);
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
   if (s.ok()) {
-    // Wait until the compaction completes
-    MutexLock l(&mutex_);
-    while (imm_ != nullptr && bg_error_.ok()) {
-      background_work_finished_signal_.Wait();
-    }
-    if (imm_ != nullptr) {
-      s = bg_error_;
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
     }
   }
+  block_offset_ += kHeaderSize + n;
   return s;
 }
     
-    class DBImpl : public DB {
- public:
-  DBImpl(const Options& options, const std::string& dbname);
-  virtual ~DBImpl();
-    }
     
-    
-    {      counter++;
-      if (empty) {
-        empty = false;
-        t.meta.smallest.DecodeFrom(key);
-      }
-      t.meta.largest.DecodeFrom(key);
-      if (parsed.sequence > t.max_sequence) {
-        t.max_sequence = parsed.sequence;
+    {    uint64_t number;
+    FileType type;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type)) {
+        if (type == kDescriptorFile) {
+          manifests_.push_back(filenames[i]);
+        } else {
+          if (number + 1 > next_file_number_) {
+            next_file_number_ = number + 1;
+          }
+          if (type == kLogFile) {
+            logs_.push_back(number);
+          } else if (type == kTableFile) {
+            table_numbers_.push_back(number);
+          } else {
+            // Ignore other files
+          }
+        }
       }
     }
-    if (!iter->status().ok()) {
-      status = iter->status();
-    }
-    delete iter;
-    Log(options_.info_log, 'Table #%llu: %d entries %s',
-        (unsigned long long) t.meta.number,
-        counter,
-        status.ToString().c_str());
+    return status;
+  }
     
     template<typename Key, class Comparator>
-bool SkipList<Key,Comparator>::Contains(const Key& key) const {
-  Node* x = FindGreaterOrEqual(key, nullptr);
-  if (x != nullptr && Equal(key, x->key)) {
-    return true;
-  } else {
+inline void SkipList<Key,Comparator>::Iterator::Next() {
+  assert(Valid());
+  node_ = node_->Next(0);
+}
+    
+        /** Returns a new copy of the array reversed. User is responsible for releasing this copy.
+     *
+     * @js NA
+     * @return A new copy of the array reversed.
+     */
+    PointArray* reverse() const;
+    
+    
+    {    // Overrides
+    virtual PageTurn3D* clone() const override;
+    virtual void update(float time) override;
+};
+    
+        /**
+     * Use k to loop. Because _tilesCount is unsigned int,
+     * and i is used later for int.
+     */
+    for (unsigned int k = 0; k < _tilesCount; ++k)
+    {
+        _tilesOrder[k] = k;
+    }
+    
+        /**
+    @brief Hide the tile at specified position.
+    @param pos The position index of the tile should be hide.
+    */
+    void turnOffTile(const Vec2& pos);
+    
+    #include '2d/CCNode.h'
+#include 'base/CCProtocols.h'
+#include 'base/ccTypes.h'
+#include 'renderer/CCQuadCommand.h'
+    
+    TEST(CanClientFactoryTest, CreateCanClient) {
+  auto *can_factory = CanClientFactory::instance();
+  EXPECT_TRUE(can_factory != nullptr);
+    }
+    
+      using apollo::drivers::canbus::CANCardParameter;
+  using apollo::drivers::canbus::CanClient;
+  using apollo::drivers::canbus::CanClientFactory;
+  using apollo::drivers::canbus::TestCanParam;
+  using apollo::drivers::canbus::CanAgent;
+  using apollo::common::ErrorCode;
+  CANCardParameter can_client_conf_a;
+  std::shared_ptr<TestCanParam> param_ptr_a(new TestCanParam());
+  std::shared_ptr<TestCanParam> param_ptr_b(new TestCanParam());
+    
+      if (!is_started_) {
+    AERROR << 'Esd can client has not been initiated! Please init first!';
+    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+  }
+  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
+    send_frames_[i].id = frames[i].id;
+    send_frames_[i].len = frames[i].len;
+    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
+  }
+    
+      /**
+   * @brief Send messages
+   * @param frames The messages to send.
+   * @param frame_num The amount of messages to send.
+   * @return The status of the sending action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
+                                 int32_t *const frame_num) override;
+    
+    bool HermesCanClient::Init(const CANCardParameter &parameter) {
+  if (!parameter.has_channel_id()) {
+    AERROR << 'Init CAN failed: parameter does not have channel id. The '
+              'parameter is '
+           << parameter.DebugString();
     return false;
+  } else {
+    _card_port = parameter.channel_id();
+    return true;
   }
 }
+    
+      /**
+   * @brief Send messages
+   * @param frames The messages to send.
+   * @param frame_num The amount of messages to send.
+   * @return The status of the sending action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
+                                 int32_t *const frame_num) override;
+    
+    
+    {  receiver.Init(&can_client, &pm, false);
+  EXPECT_EQ(receiver.Start(), common::ErrorCode::OK);
+  EXPECT_TRUE(receiver.IsRunning());
+  receiver.Stop();
+  EXPECT_FALSE(receiver.IsRunning());
+}
+    
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
+    }
+    
+    // System gflags
+DECLARE_string(node_name);
+DECLARE_string(canbus_driver_name);
