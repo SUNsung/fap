@@ -1,132 +1,147 @@
 
         
-        _codes = {
-    }
+            with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
     
     
-@pytest.mark.parametrize(
-    'value, length', (
-        ('', 0),
-        ('T', 1),
-        ('Test', 4),
-        ('Cont', 0),
-        ('Other', -5),
-        ('Content', None),
-    ))
-def test_iter_slices(value, length):
-    if length is None or (length <= 0 and len(value) > 0):
-        # Reads all content at once
-        assert len(list(iter_slices(value, length))) == 1
-    else:
-        assert len(list(iter_slices(value, 1))) == length
+@pytest.fixture
+def runner(app):
+    '''A test runner for the app's Click commands.'''
+    return app.test_cli_runner()
     
     
-def check_compatibility(urllib3_version, chardet_version):
-    urllib3_version = urllib3_version.split('.')
-    assert urllib3_version != ['dev']  # Verify urllib3 isn't installed from git.
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
     
-        :param url: URL for the new :class:`Request` object.
-    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
-        object to send in the body of the :class:`Request`.
-    :param json: (optional) json data to send in the body of the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+        def app_url_value_preprocessor(self, f):
+        '''Same as :meth:`url_value_preprocessor` but application wide.
+        '''
+        self.record_once(lambda s: s.app.url_value_preprocessors
+            .setdefault(None, []).append(f))
+        return f
+    
+           It is strongly recommended to activate either ``X-Sendfile`` support in
+       your webserver or (if no authentication happens) to tell the webserver
+       to serve files for the given path on its own without calling into the
+       web application for improved performance.
+    
+    
+def tojson_filter(obj, **kwargs):
+    return Markup(htmlsafe_dumps(obj, **kwargs))
+
+    
+    from time import time
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.metrics import roc_curve, auc
+from sklearn.datasets import fetch_kddcup99, fetch_covtype, fetch_mldata
+from sklearn.preprocessing import LabelBinarizer
+    
+        ###########################################################################
+    # Set custom tracking based method
+    sampling_algorithm['custom-tracking-selection'] = \
+        lambda n_population, n_samples, random_state=None: \
+            sample_without_replacement(n_population,
+                                       n_samples,
+                                       method='tracking_selection',
+                                       random_state=random_state)
+    
+        plt.show()
+
+    
+        # decode the payload explicitly as UTF-8 since lxml is confused for some
+    # reason
+    with codecs.open(html_filename,'r','utf-8') as html_file:
+        html_content = html_file.read()
+    tree = ElementTree(lxml.html.document_fromstring(html_content))
+    i = 0
+    j = 0
+    for p in tree.findall('//p'):
+        content = p.text_content()
+        if len(content) < 100:
+            # skip paragraphs that are too short - probably too noisy and not
+            # representative of the actual language
+            continue
+    
+        def report_not_exist(self, appid, ip):
+        self.logger.debug('report_not_exist:%s %s', appid, ip)
+        th = threading.Thread(target=self.process_appid_not_exist, args=(appid, ip))
+        th.start()
+    
+            xlog.info('Add new cert to Firefox in %s', firefox_config_path)
+        cmd_line = 'certutil -d %s -A -t 'C,,' -n '%s' -i '%s'' % (firefox_config_path, common_name, ca_file)
+        os.system(cmd_line) # install new cert
+        return True
+    
+    import sys
+import os
+import threading
+    
+    
+def run_cmds(cmds):
+    log = Log()
+    cmd_pl = cmds.split('\n')
+    outs = []
+    for cmd in cmd_pl:
+        if not cmd:
+            continue
+    
+            raise NotImplementedError
+    
+    
+class RadioTest(unittest.TestCase):
+    '''
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
     '''
     
-            start = datetime.now()
-        ridge = linear_model.Ridge(alpha=1.)
-        ridge.fit(X, Y)
-        time_ridge[i] = total_seconds(datetime.now() - start)
+        '''catalog of multiple methods that are executed depending on an init
     
-        if args.plot is not None:
-        max_val = getattr(args, args.plot)
-        if args.plot in ('classes', 'samples'):
-            min_val = 2
+    
+@coroutine
+def coroutine1(target):
+    while True:
+        request = yield
+        if 0 < request <= 10:
+            print('request {} handled in coroutine 1'.format(request))
         else:
-            min_val = 0
-        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
-        if args.plot in ('classes', 'samples'):
-            steps = np.unique(np.round(steps).astype(int))
-        setattr(args, args.plot, steps)
-    
-                print('Fast K-Means')
-            # let's prepare the data in small chunks
-            mbkmeans = MiniBatchKMeans(init='k-means++',
-                                       n_clusters=10,
-                                       batch_size=chunk)
-            tstart = time()
-            mbkmeans.fit(data)
-            delta = time() - tstart
-            print('Speed: %0.3fs' % delta)
-            print('Inertia: %f' % mbkmeans.inertia_)
-            print()
-            print()
-    
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-                gc.collect()
-            print('benchmarking scikit-learn randomized_svd: n_iter=0')
-            tstart = time()
-            randomized_svd(X, rank, n_iter=0)
-            results['scikit-learn randomized_svd (n_iter=0)'].append(
-                time() - tstart)
-    
-                print('=======================')
-            print('Round %d %d' % (i, j))
-            print('n_features:', n_features)
-            print('n_samples:', n_train)
-    
-    ROOT_URL = 'https://api.github.com/repos/scikit-learn/scikit-learn.github.io/contents/'  # noqa
-RAW_FMT = 'https://raw.githubusercontent.com/scikit-learn/scikit-learn.github.io/master/%s/documentation.html'  # noqa
-VERSION_RE = re.compile(r'\bVERSION:\s*'([^']+)'')
-NAMED_DIRS = ['dev', 'stable']
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    from . import flash_briefings, intent, smart_home
-from .const import (
-    CONF_AUDIO, CONF_DISPLAY_URL, CONF_TEXT, CONF_TITLE, CONF_UID, DOMAIN,
-    CONF_FILTER, CONF_ENTITY_CONFIG)
+            target.send(request)
     
     
-@asyncio.coroutine
-def async_trigger(hass, config, action):
-    '''Listen for state changes based on configuration.'''
-    if CONF_AT in config:
-        at_time = config.get(CONF_AT)
-        hours, minutes, seconds = at_time.hour, at_time.minute, at_time.second
-    else:
-        hours = config.get(CONF_HOURS)
-        minutes = config.get(CONF_MINUTES)
-        seconds = config.get(CONF_SECONDS)
+class Action(object):
+    def __init__(self, name):
+        self.name = name
     
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/browser/
-'''
-import voluptuous as vol
+    from __future__ import print_function
+import os
+from os.path import lexists
     
-        def _get_value(self, hass, data, config_key):
-        '''Get value.'''
-        customize = hass.data.get(DATA_CUSTOMIZE, {}).get(config_key) or {}
-        return {'global': customize, 'local': data.get(config_key, {})}
+    ### OUTPUT ###
+# Counting to two...
+# one two
+# Counting to five...
+# one two three four five
+
     
-        @asyncio.coroutine
-    def get(self, request):
-        '''Request suite status.'''
-        inp = yield from hassbian_status(request.app['hass'], self._test_mode)
+        def prepare(self):
+        print('Reporter Class is preparing to report the results')
+        time.sleep(0.1)
     
-            # At this point it is difficult to tell if a connection is established.
-        # So just check for null objects.
-        if self.fritz_box is None or not self.fritz_box.modelname:
-            self.success_init = False
+        def notify(self, msg):
+        self.msg_queue.append(msg)
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def now(self):
+        current_time_is_always_midnight = '24:01'
+        return current_time_is_always_midnight
