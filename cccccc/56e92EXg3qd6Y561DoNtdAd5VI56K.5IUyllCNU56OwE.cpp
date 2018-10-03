@@ -1,273 +1,309 @@
 
         
-        // static
-void App::Quit(RenderProcessHost* render_process_host) {
-  // Send the quit message.
-  int no_use;
-  if (render_process_host) {
-    render_process_host->Send(new ViewMsg_WillQuit(&no_use));
-  }else{
-    std::set<RenderProcessHost*> rphs;
-    std::set<RenderProcessHost*>::iterator it;
-    }
+        SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
+{
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
+#endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
+  }
+}
+    
+    void ClusteredBitVector::appendReserved(size_t numBits,
+                llvm::function_ref<ChunkType(size_t numBitsWanted)> generator) {
+  assert(LengthInBits + numBits <= getCapacityInBits());
+  assert(numBits > 0);
     }
     
+      // Set the 'targetEnvironment' platform condition if targeting a simulator
+  // environment. Otherwise _no_ value is present for targetEnvironment; it's
+  // an optional disambiguating refinement of the triple.
+  if (swift::tripleIsAnySimulator(Target))
+    addPlatformConditionValue(PlatformConditionKind::TargetEnvironment,
+                              'simulator');
     
-    {}  // namespace nw
+    StringRef camel_case::getLastWord(StringRef string) {
+  if (string.empty())
+    return '';
+    }
+    
+    DummyTaskQueue::~DummyTaskQueue() = default;
+    
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
+};
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
+    
+        template <typename ElementType>
+    std::tuple<const void *, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers() const
+    {
+        return _SparseBlockColumnDataBuffers<ElementType, ElementType>();
+    }
+    
+                m_totalSummaries++;
+            auto now = std::chrono::high_resolution_clock::now();
+            size_t durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_lastResetTime).count();
+    
+            std::vector<DictionaryPtr> remoteState;
+        communicator->Gather(state, remoteState, communicator->Workers());
+    
+    
+    {
+    {    private:
+        static bool IsNativeUDF(const Dictionary& dict);
+    };
+}
 
     
-    #include 'base/memory/weak_ptr.h'
-    
-    
-    {}  // namespace nwapi
-    
-    namespace nw {
-    }
-    
-    namespace nw {
-    }
-    
-       void ExecuteCommand(int command_id, int event_flags) override;
-    
-    void MenuItem::SetEnabled(bool enabled) {
-  gtk_widget_set_sensitive(menu_item_, enabled);
+    TEST(CorruptionTest, MissingDescriptor) {
+  Build(1000);
+  RepairDB();
+  Reopen();
+  Check(1000, 1000);
 }
     
-      nw::Package* package = nw::package();
-  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-  base::CommandLine::StringVector args = command_line->GetArgs();
-  base::CommandLine::StringVector argv = command_line->original_argv();
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    io::ZeroCopyOutputStream* GeneratorContext::OpenForInsert(
-    const string& filename, const string& insertion_point) {
-  GOOGLE_LOG(FATAL) << 'This GeneratorContext does not support insertion.';
-  return NULL;  // make compiler happy
-}
-    
-    
-    {  // Check if the optional_nested_message was actually moved (and not just
-  // copied).
-  EXPECT_EQ(nested, &message2.optional_nested_message());
-  EXPECT_NE(nested, &message1.optional_nested_message());
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    void MapFieldGenerator::WriteHash(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'hash ^= $property_name$.GetHashCode();\n');
-}
-void MapFieldGenerator::WriteEquals(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if (!$property_name$.Equals(other.$property_name$)) return false;\n');
-}
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    void PrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
-  // TODO(jonskeet): Work out whether we want to prevent the fields from ever being
-  // null, or whether we just handle it, in the cases of bytes and string.
-  // (Basically, should null-handling code be in the getter or the setter?)
-  printer->Print(
-    variables_,
-    'private $type_name$ $name_def_message$;\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ $type_name$ $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '  set {\n');
-  if (is_value_type) {
-    printer->Print(
-      variables_,
-      '    $name$_ = value;\n');
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
   } else {
-    printer->Print(
-      variables_,
-      '    $name$_ = pb::ProtoPreconditions.CheckNotNull(value, \'value\');\n');
+    dst = new char[needed];
   }
-  printer->Print(
-    '  }\n'
-    '}\n');
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
 }
     
-      SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
-    
-    namespace grpc {
-    }
-    
-    CompletionQueue::CompletionQueueTLSCache::CompletionQueueTLSCache(
-    CompletionQueue* cq)
-    : cq_(cq), flushed_(false) {
-  grpc_completion_queue_thread_local_cache_init(cq_->cq_);
-}
-    
-    void CensusClientCallData::Destroy(grpc_call_element* elem,
-                                   const grpc_call_final_info* final_info,
-                                   grpc_closure* then_call_closure) {
-  const uint64_t request_size = GetOutgoingDataSize(final_info);
-  const uint64_t response_size = GetIncomingDataSize(final_info);
-  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
-  ::opencensus::stats::Record(
-      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
-       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
-       {RpcClientRoundtripLatency(), latency_ms},
-       {RpcClientServerLatency(),
-        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
-       {RpcClientSentMessagesPerRpc(), sent_message_count_},
-       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
-      {{ClientMethodTagKey(), method_},
-       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
-  grpc_slice_unref_internal(path_);
-  context_.EndSpan();
-}
-    
-    using LineNumber = uint32_t;
-using ColNumber  = uint32_t;
-using LineRange  = std::tuple<LineNumber,LineNumber>;
-    
-    int execute_program(int argc, char **argv);
-    
-    #include 'hphp/runtime/base/thread-info.h'
-    
-    struct CompactionIterationStats {
-  // Compaction statistics
-    }
-    
-      // Write 100K keys, these are written to a few files in L0.
-  const std::string value(10, 'x');
-  for (int i = 0; i < 100000; i++) {
-    char key[100];
-    snprintf(key, sizeof(key), 'B%010d', i);
-    Put(1, key, value);
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
   }
-  ASSERT_OK(Flush(1));
-    
-    #ifndef ROCKSDB_LITE
-    
-    std::unique_ptr<WriteControllerToken>
-WriteController::GetCompactionPressureToken() {
-  ++total_compaction_pressure_;
-  return std::unique_ptr<WriteControllerToken>(
-      new CompactionPressureToken(this));
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
+  }
+  delete file;
+  return Status::OK();
 }
     
-    namespace rocksdb {
-    }
-    
-      Status Append(const Slice& data) {
-    MutexLock lock(&mutex_);
-    data_.append(data.data(), data.size());
-    size_ = data_.size();
-    modified_time_ = Now();
-    return Status::OK();
+      size_t WrittenBytes() const {
+    return dest_.contents_.size();
   }
     
-      virtual Status GetChildren(const std::string& dir,
-                             std::vector<std::string>* result) override;
     
-    #include 'env/mock_env.h'
+    {
+    {      // Install new manifest
+      status = env_->RenameFile(tmp, DescriptorFileName(dbname_, 1));
+      if (status.ok()) {
+        status = SetCurrentFile(env_, dbname_, 1);
+      } else {
+        env_->DeleteFile(tmp);
+      }
+    }
+    return status;
+  }
     
-        std::unique_ptr<DHTRoutingTable> routingTable;
-    
-    namespace aria2 {
+    class TestState {
+ public:
+  ConcurrentTest t_;
+  int seed_;
+  port::AtomicPointer quit_flag_;
     }
     
-      // localnode
-  // 8bytes reserved
-  readBytes(fp, buf, buf.size(), 8);
-  // localnode ID
-  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
-  auto localNode = std::make_shared<DHTNode>(buf);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
+    
+    {}  // namespace leveldb
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+{
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
+}
+    
+      void onTimeout(const std::shared_ptr<DHTNode>& node);
+    
+    const std::string& DHTResponseMessage::getType() const { return R; }
+    
+    #endif // D_DHT_RESPONSE_MESSAGE_H
+
+    
+      std::shared_ptr<DHTBucket> getBucketFor(const unsigned char* nodeID) const;
+    
+    public:
+  DHTRoutingTableSerializer(int family);
+    
+        uint16_t port;
+    auto connection = make_unique<DHTConnectionImpl>(family);
+    {
+      port = e->getBtRegistry()->getUdpPort();
+      const std::string& addr = e->getOption()->get(
+          family == AF_INET ? PREF_DHT_LISTEN_ADDR : PREF_DHT_LISTEN_ADDR6);
+      // If UDP port is already used, use the same port
+      // number. Normally IPv4 port is available, then IPv6 port is
+      // (especially for port >= 1024). We don't loose much by doing
+      // this. We did the same thing in TCP socket. See BtSetup.cc.
+      bool rv;
+      if (port == 0) {
+        auto sgl =
+            util::parseIntSegments(e->getOption()->get(PREF_DHT_LISTEN_PORT));
+        sgl.normalize();
+        rv = connection->bind(port, addr, sgl);
+      }
+      else {
+        rv = connection->bind(port, addr);
+      }
+      if (!rv) {
+        throw DL_ABORT_EX('Error occurred while binding UDP port for DHT');
+      }
+      localNode->setPort(port);
+    }
+    A2_LOG_DEBUG(fmt('Initialized local node ID=%s',
+                     util::toHex(localNode->getID(), DHT_ID_LENGTH).c_str()));
+    auto tracker = std::make_shared<DHTMessageTracker>();
+    auto routingTable = make_unique<DHTRoutingTable>(localNode);
+    auto factory = make_unique<DHTMessageFactoryImpl>(family);
+    auto dispatcher = make_unique<DHTMessageDispatcherImpl>(tracker);
+    auto receiver = make_unique<DHTMessageReceiver>(tracker);
+    auto taskQueue = make_unique<DHTTaskQueueImpl>();
+    auto taskFactory = make_unique<DHTTaskFactoryImpl>();
+    auto peerAnnounceStorage = make_unique<DHTPeerAnnounceStorage>();
+    auto tokenTracker = make_unique<DHTTokenTracker>();
+    // For now, UDPTrackerClient was enabled along with DHT
+    auto udpTrackerClient = std::make_shared<UDPTrackerClient>();
+    const auto messageTimeout =
+        e->getOption()->getAsInt(PREF_DHT_MESSAGE_TIMEOUT);
+    // wiring up
+    tracker->setRoutingTable(routingTable.get());
+    tracker->setMessageFactory(factory.get());
     
     
-    {  void deserialize(const std::string& filename);
+    {  virtual std::shared_ptr<DHTTask>
+  createReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
+                        const std::shared_ptr<DHTNode>& newNode) = 0;
 };
     
-    void DHTTaskExecutor::update()
+    void DHTTaskFactoryImpl::setCommonProperty(
+    const std::shared_ptr<DHTAbstractTask>& task)
 {
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
-    }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
+  task->setRoutingTable(routingTable_);
+  task->setMessageDispatcher(dispatcher_);
+  task->setMessageFactory(factory_);
+  task->setTaskQueue(taskQueue_);
+  task->setLocalNode(localNode_);
 }
     
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
-{
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
     
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
+    {  virtual void
+  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+};
+    
+    class DHTTokenTracker;
     
     #include <cstring>
+#include <cstdlib>
     
-      const std::string& find(const std::string& hostname, uint16_t port) const;
+    void DNSCache::markBad(const std::string& hostname, const std::string& ipaddr,
+                       uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.find(target);
+  if (i != entries_.end()) {
+    (*i)->markBad(ipaddr);
+  }
+}
+    
+    namespace benchmark {
+enum LogColor {
+  COLOR_DEFAULT,
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_YELLOW,
+  COLOR_BLUE,
+  COLOR_MAGENTA,
+  COLOR_CYAN,
+  COLOR_WHITE
+};
+    }
+    
+      // Is the parsed value in the range of an Int32?
+  const int32_t result = static_cast<int32_t>(long_value);
+  if (long_value == std::numeric_limits<long>::max() ||
+      long_value == std::numeric_limits<long>::min() ||
+      // The parsed value overflows as a long.  (strtol() returns
+      // LONG_MAX or LONG_MIN when the input overflows.)
+      result != long_value
+      // The parsed value overflows as an Int32.
+      ) {
+    std::cerr << src_text << ' is expected to be a 32-bit integer, '
+              << 'but actually has value \'' << str << '\', '
+              << 'which overflows.\n';
+    return false;
+  }
+    
+    // Parses a string for an Int32 flag, in the form of
+// '--flag=value'.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseInt32Flag(const char* str, const char* flag, int32_t* value);
+    
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
+}
+    
+    #include <cstdint>
+    
+    
+    {
+    {#if defined(NDEBUG)
+  const char build_type[] = 'release';
+#else
+  const char build_type[] = 'debug';
+#endif
+  out << indent << FormatKV('library_build_type', build_type) << '\n';
+  // Close context block and open the list of benchmarks.
+  out << inner_indent << '},\n';
+  out << inner_indent << '\'benchmarks\': [\n';
+  return true;
+}
+    
+    inline int& LogLevel() {
+  static int log_level = 0;
+  return log_level;
+}
+    
+    namespace benchmark {
+    }
