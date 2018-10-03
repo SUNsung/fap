@@ -1,102 +1,115 @@
 
         
-        Given(/config stage file has line '(.*?)'/) do |line|
-  TestApp.append_to_deploy_file(line)
-end
+        module ActionView #:nodoc:
+  # = Action View Raw Output Helper
+  module Helpers #:nodoc:
+    module OutputSafetyHelper
+      # This method outputs without escaping a string. Since escaping tags is
+      # now default, this can be used when you don't want Rails to automatically
+      # escape tags. This is not recommended if the data is coming from the user's
+      # input.
+      #
+      # For example:
+      #
+      #  raw @user.name
+      #  # => 'Jimmy <alert>Tables</alert>'
+      def raw(stringish)
+        stringish.to_s.html_safe
+      end
     
-          OptionParser.new do |opts|
-        opts.banner = 'See full documentation at http://capistranorb.com/.'
-        opts.separator ''
-        opts.separator 'Install capistrano in a project:'
-        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
-        opts.separator ''
-        opts.separator 'Show available tasks:'
-        opts.separator '    bundle exec cap -T'
-        opts.separator ''
-        opts.separator 'Invoke (or simulate invoking) a task:'
-        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
-        opts.separator ''
-        opts.separator 'Advanced options:'
+              def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
     
-        def servers
-      @servers ||= Servers.new
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class DateSelect < Base # :nodoc:
+        def initialize(object_name, method_name, template_object, options, html_options)
+          @html_options = html_options
+    
+              content_is_options = content_or_options.is_a?(Hash)
+          if content_is_options
+            options.merge! content_or_options
+            @content = nil
+          else
+            @content = content_or_options
+          end
+    
+        initializer 'action_view.setup_action_pack' do |app|
+      ActiveSupport.on_load(:action_controller) do
+        ActionView::RoutingUrlFor.include(ActionDispatch::Routing::UrlFor)
+      end
     end
     
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
+    # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
+# ------------------------------------------------------------------------
+def check_with_regex(content)
+  !content.to_s.match?(%r!{[{%]!)
+end
+    }
+    }
+    
+    #
+    
+            def bundle_install(path)
+          Jekyll.logger.info 'Running bundle install in #{path.cyan}...'
+          Dir.chdir(path) do
+            exe = Gem.bin_path('bundler', 'bundle')
+            process, output = Jekyll::Utils::Exec.run('ruby', exe, 'install')
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+            def self.disabled_via_active_directory?(dn, adapter)
+          adapter.dn_matches_filter?(dn, AD_USER_DISABLED)
         end
+    
+          def user
+        find_sessionless_user || find_user_from_warden
       end
     
-          def initialize(values={})
-        @trusted_keys = []
-        @fetched_keys = []
-        @locations = {}
-        @values = values
-        @trusted = true
+            def value_width
+          @status ? 54 : 58
+        end
+    
+            def initialize(project, ref)
+          @project = project
+          @ref = ref
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
       end
     
-          def check_new_line(node)
-        return unless closing_brace_on_same_line?(node)
+      gem.files         = Dir.glob(['logstash-core-plugin-api.gemspec', 'lib/**/*.rb', 'spec/**/*.rb'])
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.name          = 'logstash-core-plugin-api'
+  gem.require_paths = ['lib']
+  gem.version       = LOGSTASH_CORE_PLUGIN_API
     
-      include_examples 'multiline literal brace layout method argument' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
-    let(:multi_prefix) { 'b: ' }
-    let(:multi) { ['[', '1', ']'] }
-  end
+        desc 'Bootstrap all the VM's used for this tests'
+    task :setup, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
     
-          it 'detects closing brace on different line from last element' do
-        src = construct(true, true)
-        inspect_source(src)
-        expect(cop.offenses.size).to eq(1)
-        expect(cop.highlights).to eq([close])
-        expect(cop.messages).to eq([described_class::ALWAYS_SAME_LINE_MESSAGE])
-      end
-    
-        it 'registers an offense for each without an item' do
-      expect_offense(<<-RUBY.strip_indent)
-        def func
-          [1, 2, 3].each do
-          ^^^^^^^^^^^^^^^^^ Prefer `for` over `each`.
-            something
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
           end
         end
-      RUBY
-    end
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-          # Returns the branch of the `if` node that gets evaluated when its
-      # condition is truthy.
-      #
-      # @note This is normalized for `unless` nodes.
-      #
-      # @return [Node] the truthy branch node of the `if` node
-      # @return [nil] if the truthy branch is empty
-      def if_branch
-        node_parts[1]
-      end
-    
-          # Returns the delta between this element's delimiter and the argument's.
-      #
-      # @note Pairs with different delimiter styles return a delta of 0
-      #
-      # @return [Integer] the delta between the two delimiters
-      def delimiter_delta(other)
-        HashElementDelta.new(self, other).delimiter_delta
       end
