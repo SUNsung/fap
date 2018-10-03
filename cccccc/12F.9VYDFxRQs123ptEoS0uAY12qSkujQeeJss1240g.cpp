@@ -1,194 +1,194 @@
 
         
-        #endif  // PYTHON_PROTO2_PYTHON_IMPL
-#endif  // PYTHON_PROTO2_CPP_IMPL_V2
-#endif  // PYTHON_PROTO2_CPP_IMPL_V1
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    class FieldGeneratorBase;
-    
-    void MessageFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if ($has_property_check$) {\n'
-    '  output.WriteRawTag($tag_bytes$);\n'
-    '  output.WriteMessage($property_name$);\n'
-    '}\n');
-}
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(MessageFieldGenerator);
-};
-    
-      printer->Print(
-    '/// <summary>Holder for reflection information generated from $file_name$</summary>\n'
-    '$access_level$ static partial class $reflection_class_name$ {\n'
-    '\n',
-    'file_name', file_->name(),
-    'access_level', class_access_level(),
-    'reflection_class_name', reflectionClassname_);
-  printer->Indent();
-}
-    
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        v_dst = vorrq_u8(v_src0, v_src1);
-    }
-    
-    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
-#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
-#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
-#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
-#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
-#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
-    
-    #endif
-    
-    
-    {    if (!parametersSupported) {
-        std::cerr << 'internal error: attempted to use a function with unsupported parameters' << std::endl;
-        std::abort();
-    }
-}
-    
-    inline void prefetch(const void *ptr, size_t offset = 32*10)
-{
-#if defined __GNUC__
-    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#elif defined _MSC_VER && defined CAROTENE_NEON
-    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#else
-    (void)ptr;
-    (void)offset;
-#endif
-}
-    
-                    for (; j < roiw16; j += 16)
-                {
-                    internal::prefetch(src + j);
-                    int16x8_t v_src0 = vld1q_s16(src + j), v_src1 = vld1q_s16(src + j + 8);
-                    uint8x16_t v_dst = vcombine_u8(vmovn_u16(vcltq_s16(v_src0, v_zero)),
-                                                   vmovn_u16(vcltq_s16(v_src1, v_zero)));
-                    vst1q_u8(dst + j, v_dst);
-                }
-                for (; j < roiw8; j += 8)
-                {
-                    int16x8_t v_src = vld1q_s16(src + j);
-                    vst1_u8(dst + j, vmovn_u16(vcltq_s16(v_src, v_zero)));
-                }
-    
-            x -= 8;
-        if (x == width)
-            --x;
-    
-    template <typename T, int elsize> struct vtail
-{
-    static inline void inRange(const T *, const T *, const T *,
-                               u8 *, size_t &, size_t)
-    {
-        //do nothing since there couldn't be enough data
-    }
-};
-template <typename T> struct vtail<T, 2>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
-        if( x + 8 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1(dst + x, internal::vmovn(vd));
-            x+=8;
+            for (auto &pfd: pollfds) {
+      if (pfd.revents & (POLLERR | POLLHUP)) {
+        // some process died
+        DEBUG('detaching process');
+        auto &session = client_sessions.at(pfd.fd);
+        DEBUG('%d has died', session.pid);
+        to_remove.push_back(pfd.fd);
+      } else if (pfd.revents & POLLIN) {
+        if (pfd.fd == srv_socket->socket_fd) {
+          // someone is joining
+          DEBUG('registered new client');
+          auto client = srv_socket->accept();
+          int fd = client.socket_fd;
+          to_add.push_back(fd);
+          client_sessions.emplace(fd, std::move(client));
+        } else {
+          // someone wants to register a segment
+          DEBUG('got alloc info');
+          auto &session = client_sessions.at(pfd.fd);
+          AllocInfo info = session.socket.receive();
+          session.pid = info.pid;
+          DEBUG('got alloc info: %d %d %s', (int)info.free, info.pid, info.filename);
+          if (info.free) {
+            free_used_object(info.filename);
+          } else {
+            used_objects.insert(info.filename);
+            DEBUG('registered object %s', info.filename);
+            session.socket.confirm();
+          }
         }
+      }
     }
-};
-template <typename T> struct vtail<T, 1>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        typedef typename internal::VecTraits<T>::vec64 vec64;
-        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
-        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
-        if( x + 16 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1q(dst + x, vd);
-            x+=16;
-        }
-        if( x + 8 < width)
-        {
-             vec64  vs = internal::vld1( src + x);
-             vec64 vr1 = internal::vld1(rng1 + x);
-             vec64 vr2 = internal::vld1(rng2 + x);
-            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
-            internal::vst1(dst + x, vd);
-            x+=8;
-        }
+    
+    
+    {} // namespace
+    
+    
+<details>
+    
+    #include <grpcpp/support/config.h>
+    
+    class SecureChannelCredentials final : public ChannelCredentials {
+ public:
+  explicit SecureChannelCredentials(grpc_channel_credentials* c_creds);
+  ~SecureChannelCredentials() { grpc_channel_credentials_release(c_creds_); }
+  grpc_channel_credentials* GetRawCreds() { return c_creds_; }
     }
-};
     
-                vsuml = vaddw_u16(vsuml, vget_low_u16(el8));
-            vsumh = vaddw_u16(vsumh, el4h);
+    const AuthProperty AuthPropertyIterator::operator*() {
+  return std::pair<grpc::string_ref, grpc::string_ref>(
+      property_->name,
+      grpc::string_ref(property_->value, property_->value_length));
+}
     
-      // Sets the coordinates of the current macro-block for the purpose of
-  // CompareBlock() calls.
-  virtual void SwitchBlock(int block_x, int block_y,
-                           int factor_x, int factor_y) = 0;
+    void CoreCodegen::grpc_metadata_array_init(grpc_metadata_array* array) {
+  ::grpc_metadata_array_init(array);
+}
     
-    // A node of a Huffman tree.
-struct HuffmanTree {
-  HuffmanTree() {}
-  HuffmanTree(uint32_t count, int16_t left, int16_t right)
-      : total_count_(count),
-        index_left_(left),
-        index_right_or_value_(right) {
+    void CensusClientCallData::StartTransportStreamOpBatch(
+    grpc_call_element* elem, TransportStreamOpBatch* op) {
+  if (op->send_initial_metadata() != nullptr) {
+    census_context* ctxt = op->get_census_context();
+    GenerateClientContext(
+        qualified_method_, &context_,
+        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
+    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
+                                               kMaxTraceContextLen);
+    if (tracing_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &tracing_bin_,
+              grpc_mdelem_from_slices(
+                  GRPC_MDSTR_GRPC_TRACE_BIN,
+                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
+    }
+    grpc_slice tags = grpc_empty_slice();
+    // TODO: Add in tagging serialization.
+    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
+    if (encoded_tags_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &stats_bin_,
+              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
+    }
   }
-  uint32_t total_count_;
-  int16_t index_left_;
-  int16_t index_right_or_value_;
-};
+    }
     
+    #include <grpc/status.h>
+#include 'absl/memory/memory.h'
+#include 'absl/strings/string_view.h'
+#include 'absl/strings/strip.h'
+#include 'opencensus/trace/span.h'
+#include 'opencensus/trace/span_context.h'
+#include 'opencensus/trace/trace_params.h'
+#include 'src/core/lib/slice/slice_internal.h'
+#include 'src/cpp/common/channel_filter.h'
+#include 'src/cpp/ext/filters/census/rpc_encoding.h'
     
-    {    if (memstream.eof()) png_error(png_ptr, 'unexpected end of data');
-    if (memstream.fail()) png_error(png_ptr, 'read from memory error');
-  });
-    
-    bool JPEGData::Is420() const {
-  return (components.size() == 3 &&
-          max_h_samp_factor == 2 &&
-          max_v_samp_factor == 2 &&
-          components[0].h_samp_factor == 2 &&
-          components[0].v_samp_factor == 2 &&
-          components[1].h_samp_factor == 1 &&
-          components[1].v_samp_factor == 1 &&
-          components[2].h_samp_factor == 1 &&
-          components[2].v_samp_factor == 1);
+    const ViewDescriptor& ClientCompletedRpcsMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/client/completed_rpcs/minute')
+          .set_measure(kRpcClientRoundtripLatencyMeasureName)
+          .set_aggregation(Aggregation::Count())
+          .add_column(ClientMethodTagKey())
+          .add_column(ClientStatusTagKey());
+  return descriptor;
 }
     
+    //////////////////////////////////////////////////////////////////////
     
-    {}  // namespace guetzli
-
+        assert(static_cast<uint32_t>(rt) < 32);
+    assert(static_cast<uint32_t>(ra) < 32);
+    assert(static_cast<uint32_t>(rb) < 32);
     
-    namespace guetzli {
+      EXCEPTION_COMMON_IMPL(ExtendedException);
+    
+    inline String ExecutionContext::getRawPostData() const {
+  return m_rawPostData;
+}
+    
+    #ifndef HPHP_FILE_STREAM_WRAPPER_H
+#define HPHP_FILE_STREAM_WRAPPER_H
+    
+        bool isPHP = false;
+    const char *p = strrchr(ename, '.');
+    if (p) {
+      isPHP = (strncmp(p + 1, 'php', 3) == 0);
+    } else {
+      try {
+        std::string line;
+        std::ifstream fin(fe.c_str());
+        if (std::getline(fin, line)) {
+          if (line[0] == '#' && line[1] == '!' &&
+              line.find('php') != std::string::npos) {
+            isPHP = true;
+          }
+        }
+      } catch (...) {
+        Logger::Error('FileUtil::find(): unable to read %s', fe.c_str());
+      }
+    }
+    
+    namespace leveldb {
+    }
+    
+      // Recover from all newer log files than the ones named in the
+  // descriptor (new log files may have been added by the previous
+  // incarnation without registering them in the descriptor).
+  //
+  // Note that PrevLogNumber() is no longer used, but we pay
+  // attention to it in case we are recovering a database
+  // produced by an older version of leveldb.
+  const uint64_t min_log = versions_->LogNumber();
+  const uint64_t prev_log = versions_->PrevLogNumber();
+  std::vector<std::string> filenames;
+  s = env_->GetChildren(dbname_, &filenames);
+  if (!s.ok()) {
+    return s;
+  }
+  std::set<uint64_t> expected;
+  versions_->AddLiveFiles(&expected);
+  uint64_t number;
+  FileType type;
+  std::vector<uint64_t> logs;
+  for (size_t i = 0; i < filenames.size(); i++) {
+    if (ParseFileName(filenames[i], &number, &type)) {
+      expected.erase(number);
+      if (type == kLogFile && ((number >= min_log) || (number == prev_log)))
+        logs.push_back(number);
+    }
+  }
+  if (!expected.empty()) {
+    char buf[50];
+    snprintf(buf, sizeof(buf), '%d missing files; e.g.',
+             static_cast<int>(expected.size()));
+    return Status::Corruption(buf, TableFileName(dbname_, *(expected.begin())));
+  }
+    
+    class InternalKey;
+    
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+}
+    
+    namespace leveldb {
     }
