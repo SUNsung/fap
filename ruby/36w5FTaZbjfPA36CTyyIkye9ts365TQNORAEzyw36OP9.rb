@@ -1,44 +1,61 @@
 
         
-        multitask :default => [:test, :features]
+        gem 'responders', '~> 2.4'
     
-        # Private: The list of files to be created when site is built.
-    #
-    # Returns a Set with the file paths
-    def new_files
-      @new_files ||= Set.new.tap do |files|
-        site.each_site_file { |item| files << item.destination(site.dest) }
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+      protected
+    
+      def index
+    render plain: 'Home'
+  end
+end
+    
+      module Controllers
+    autoload :Helpers,        'devise/controllers/helpers'
+    autoload :Rememberable,   'devise/controllers/rememberable'
+    autoload :ScopedViews,    'devise/controllers/scoped_views'
+    autoload :SignInOut,      'devise/controllers/sign_in_out'
+    autoload :StoreLocation,  'devise/controllers/store_location'
+    autoload :UrlHelpers,     'devise/controllers/url_helpers'
+  end
+    
+    desc 'LESS to stdin -> Sass to stdout'
+task :less_to_scss, :branch do |t, args|
+  require './tasks/converter'
+  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
+end
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+    require 'bundler/cli'
+require 'bundler/friendly_errors'
+    
+            if explicit_plugins.any? { |spec| filename =~ /^#{spec.name}/ }
+          FileUtils.mv(gem_file, ::File.join(explicit_path, filename))
+        else
+          FileUtils.mv(gem_file, ::File.join(dependencies_path, filename))
+        end
       end
     end
     
-              if options.fetch('skip_initial_build', false)
-            Jekyll.logger.warn 'Build Warning:', 'Skipping the initial build.' \
-                               ' This may result in an out-of-date site.'
-          else
-            build(site, options)
-          end
+      def execute
+    signal_deprecation_warning_for_pack
     
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
-        end
-      end
-    
-          def unauthorized
-        render 'spree/api/errors/unauthorized', status: 401 and return
-      end
-    
-            private
-    
-            private
-    
-            def index
-          @product_properties = @product.product_properties.accessible_by(current_ability, :read).
-                                ransack(params[:q]).result.
-                                page(params[:page]).per(params[:per_page])
-          respond_with(@product_properties)
-        end
+        desc 'Run one single machine acceptance test'
+    task :single, :machine do |t, args|
+      ENV['LS_VAGRANT_HOST']  = args[:machine]
+      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
+    end
+  end
+end
