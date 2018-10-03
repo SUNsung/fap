@@ -1,66 +1,82 @@
 
         
-            def __init__(self, from_user_id, to_user_id, request_status, timestamp):
-        self.from_user_id = from_user_id
-        self.to_user_id = to_user_id
-        self.request_status = request_status
-        self.timestamp = timestamp
+        anchor = '###'
+min_entries_per_section = 3
+auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
+punctuation = ['.', '?', '!']
+https_keys = ['Yes', 'No']
+cors_keys = ['Yes', 'No', 'Unknown']
     
-        def __init__(self, categorizer):
-        self.categorizer = categorizer
-        ...
+        def setUp(self):
+        with open(TESTFN, 'wb') as fp:
+            fp.write(self.data)
+        self.zip = zipfile.ZipFile(TESTFN, 'r')
+        with open(TESTFN2, 'wb') as fp:
+            fp.write(self.data2)
+        self.zip2 = zipfile.ZipFile(TESTFN2, 'r')
     
+        @unittest.skipIf(sys.platform.startswith('openbsd'),
+                     'Issue #12868: sigaltstack() doesn't work on '
+                     'OpenBSD if Python is compiled with pthread')
+    @unittest.skipIf(not hasattr(faulthandler, '_stack_overflow'),
+                     'need faulthandler._stack_overflow()')
+    def test_stack_overflow(self):
+        self.check_fatal_error('''
+            import faulthandler
+            faulthandler.enable()
+            faulthandler._stack_overflow()
+            ''',
+            3,
+            '(?:Segmentation fault|Bus error)',
+            other_regex='unable to raise a stack overflow')
     
-if __name__ == '__main__':
-    HitCounts.run()
+            split_paths = [[c for c in s if c and c != curdir] for s in split_paths]
+        s1 = min(split_paths)
+        s2 = max(split_paths)
+        for i, c in enumerate(s1):
+            if c != s2[i]:
+                common = common[:i]
+                break
+        else:
+            common = common[:len(s1)]
+    
+    def normcase(s):
+    '''Normalize case of pathname.  Has no effect under Posix'''
+    s = os.fspath(s)
+    if not isinstance(s, (bytes, str)):
+        raise TypeError('normcase() argument must be str or bytes, '
+                        'not '{}''.format(s.__class__.__name__))
+    return s
+    
+        def test_stop_iteration(self):
+        def f():
+            for i in range(2):
+                yield i
+        def g(p):
+            for i in f():
+                pass
+        f_ident = ident(f)
+        g_ident = ident(g)
+        self.check_events(g, [(1, 'call', g_ident),
+                              # call the iterator twice to generate values
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              # once more to hit the raise:
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              (1, 'return', g_ident),
+                              ])
+    
+            # let's run the code that finds the right wininst*.exe file
+        # and make sure it finds it and returns its content
+        # no matter what platform we have
+        exe_file = cmd.get_exe_bytes()
+        self.assertGreater(len(exe_file), 10)
+    
+    if __name__ == '__main__':
+    main()
 
     
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-            if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
-    
-        def logout(self):
-        return self._client.get('/auth/logout')
-    
-            :param variable_name: name of the environment variable
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
-        :return: bool. ``True`` if able to load config, ``False`` otherwise.
-        '''
-        rv = os.environ.get(variable_name)
-        if not rv:
-            if silent:
-                return False
-            raise RuntimeError('The environment variable %r is not set '
-                               'and as such configuration could not be '
-                               'loaded.  Set this variable and make it '
-                               'point to a configuration file' %
-                               variable_name)
-        return self.from_pyfile(rv, silent=silent)
-    
-            from flask import jsonify
-    
-    
-ALL_SSL_OPTIONS_HASHES = [
-    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
-    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
-    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
-    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
-    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
-    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
-]
-'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
-    
-        # TODO: decoder should check that nonce is in the protected header
-    
-            self.config.recovery_routine()
-        self.assertEqual(mock_load.call_count, 1)
-    
-        def test_basic_ifdefine(self):
-        self.assertEqual(len(self.parser.find_dir('VAR_DIRECTIVE')), 2)
-        self.assertEqual(len(self.parser.find_dir('INVALID_VAR_DIRECTIVE')), 0)
+    def check_live_url(url):
