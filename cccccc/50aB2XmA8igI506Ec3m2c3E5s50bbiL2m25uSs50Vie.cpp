@@ -1,371 +1,173 @@
 
         
-        void AnyMetadata::PackFrom(const Message& message,
-                           const string& type_url_prefix) {
-  type_url_->SetNoArena(&::google::protobuf::internal::GetEmptyString(),
-                        GetTypeUrl(message.GetDescriptor(), type_url_prefix));
-  message.SerializeToString(value_->MutableNoArena(
-      &::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+        // Like ASSERT_DEATH, but continues on to successive tests in the
+// test case, if any:
+# define EXPECT_DEATH(statement, regex) \
+    EXPECT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47>
+internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+    T44, T45, T46, T47> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
+    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
+    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
+    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
+    T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39,
+    T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47) {
+  return internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
+      T40, T41, T42, T43, T44, T45, T46, T47>(v1, v2, v3, v4, v5, v6, v7, v8,
+      v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
+      v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37,
+      v38, v39, v40, v41, v42, v43, v44, v45, v46, v47);
 }
     
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    // Groups are hacky:  The name of the field is just the lower-cased name
-// of the group type.  In C#, though, we would like to retain the original
-// capitalization of the type name.
-std::string GetFieldName(const FieldDescriptor* descriptor) {
-  if (descriptor->type() == FieldDescriptor::TYPE_GROUP) {
-    return descriptor->message_type()->name();
-  } else {
-    return descriptor->name();
+      // C'tor.  TestPartResult does NOT have a default constructor.
+  // Always use this constructor (with parameters) to create a
+  // TestPartResult object.
+  TestPartResult(Type a_type,
+                 const char* a_file_name,
+                 int a_line_number,
+                 const char* a_message)
+      : type_(a_type),
+        file_name_(a_file_name == NULL ? '' : a_file_name),
+        line_number_(a_line_number),
+        summary_(ExtractSummary(a_message)),
+        message_(a_message) {
   }
+    
+    // This flags control whether Google Test prints the elapsed time for each
+// test.
+GTEST_DECLARE_bool_(print_time);
+    
+      // A helper class that aborts a death test when it's deleted.
+  class ReturnSentinel {
+   public:
+    explicit ReturnSentinel(DeathTest* test) : test_(test) { }
+    ~ReturnSentinel() { test_->Abort(TEST_ENCOUNTERED_RETURN_STATEMENT); }
+   private:
+    DeathTest* const test_;
+    GTEST_DISALLOW_COPY_AND_ASSIGN_(ReturnSentinel);
+  } GTEST_ATTRIBUTE_UNUSED_;
+    
+    // Tests factorial of positive numbers.
+TEST(FactorialTest, Positive) {
+  EXPECT_EQ(1, Factorial(1));
+  EXPECT_EQ(2, Factorial(2));
+  EXPECT_EQ(6, Factorial(3));
+  EXPECT_EQ(40320, Factorial(8));
 }
     
-    
-    {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
 
     
-    void PrimitiveFieldGenerator::GenerateMergingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if ($other_has_property_check$) {\n'
-    '  $property_name$ = other.$property_name$;\n'
-    '}\n');
+        for (ssize_t i = 1; i < reverse->count(); ++i)
+    {
+        Vec2 current = reverse->getControlPointAtIndex(i);
+        current = -current;
+        Vec2 abs = current + p;
+        reverse->replaceControlPoint(abs, i);
+    }
+    
+    
+Ripple3D* Ripple3D::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) Ripple3D();
+    a->initWithDuration(_duration, _gridSize, _position, _radius, _waves, _amplitude);
+    a->autorelease();
+    return a;
 }
     
-        void inRange(const Size2D &_size,
-                 const u8 * srcBase, ptrdiff_t srcStride,
-                 const u8 * rng1Base, ptrdiff_t rng1Stride,
-                 const u8 * rng2Base, ptrdiff_t rng2Stride,
-                 u8 * dstBase, ptrdiff_t dstStride);
-    
-    
-    {    struct KeypointStore {
-        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
-        virtual ~KeypointStore() {};
-    };
+    FlipX* FlipX::reverse() const
+{
+    return FlipX::create(!_flipX);
 }
     
-    template <int shift>
-void accumulateSquareConst(const Size2D &size,
-                           const u8 *srcBase, ptrdiff_t srcStride,
-                           s16 *dstBase, ptrdiff_t dstStride)
+    Repeat* Repeat::create(FiniteTimeAction *action, unsigned int times)
 {
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    
-    {} // namespace
-    
-    
-    {            v_y = vld2q_u8(srcy + syj + 32);
-            v_dst.val[0] = v_y.val[0];
-            v_dst.val[1] = vld1q_u8(srcu + sj + 16);
-            v_dst.val[2] = v_y.val[1];
-            v_dst.val[3] = vld1q_u8(srcv + sj + 16);
-            vst4q_u8(dst + dj + 64, v_dst);
-        }
-#endif
-    
-    void rgb2ycrcb(const Size2D &size,
-               const u8 * srcBase, ptrdiff_t srcStride,
-               u8 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    YCRCB_CONSTS
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    #ifdef CAROTENE_NEON
-    if (shift >= 16u)
+    Repeat* repeat = new (std::nothrow) Repeat();
+    if (repeat && repeat->initWithAction(action, times))
     {
-        for (size_t i = 0; i < size.height; ++i)
-        {
-            s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
-            std::memset(dst, 0, sizeof(s16) * size.width);
-        }
-        return;
+        repeat->autorelease();
+        return repeat;
+    }
     }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, s16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
+    
+    ProgressTo* ProgressTo::clone() const
 {
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                             \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                             \n\t'
-            'vcvt.f32.s32 q4, q2                                    \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vmul.f32 q6, q4, q0                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vadd.f32 q8, q6, q1                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vcvt.s32.f32 q10, q8                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vqmovn.s32 d24, q10                                    \n\t'
-            'vqmovn.s32 d25, q11                                    \n\t'
-            'vst1.8 {d24-d25}, [%[dst]]                             \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25'
-        );
+    // no copy constructor
+    return ProgressTo::create(_duration, _to);
+}
+    
+        /** 
+    * @brief Initializes the action with grid size, random seed and duration.
+    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @param seed Specify the random seed.
+    * @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
+    
+        /** array of AnimationFrames. */
+    Vector<AnimationFrame*> _frames;
+    
+    
+// AtlasNode - Atlas generation
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+namespace atomics {
+namespace detail {
     }
-})
+    }
+    }
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+namespace atomics {
+namespace detail {
+    }
+    }
+    }
+    
+    #if defined(BOOST_HAS_INT128)
+    
+    #if BOOST_ATOMIC_THREAD_FENCE > 0
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::thread_fence(order);
+}
 #else
-CVTS_FUNC(s32, s16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
 {
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
+    detail::lockpool::thread_fence();
+}
 #endif
-    
-    
-    {                    for( k = 0; k < N; k++ )
-                    {
-                        s32 x = ptr[pixel[k]];
-                        if(x < vt)
-                        {
-                            if( ++count > K )
-                            {
-                                cornerpos[ncorners++] = j;
-                                if(nonmax_suppression)
-                                    curr[j] = cornerScore(ptr, pixel);
-                                break;
-                            }
-                        }
-                        else
-                            count = 0;
-                    }
-                }
-    
-    
-    {            if (mask[0])
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-    namespace parallel {
-    }
-    
-      std::vector<std::thread> workers;
-  for (auto worker = size_t{0}; worker < num_threads; ++worker) {
-    workers.push_back(std::thread([&] {
-      try {
-        hphp_thread_init();
-        hphp_session_init(Treadmill::SessionKind::HHBBC);
-        SCOPE_EXIT {
-          hphp_context_exit();
-          hphp_session_exit();
-          hphp_thread_exit();
-        };
-    }
-    }
-    }
-    
-      /*
-   * Ensure the output stream is in a finished state.
-   */
-  void finalize();
-    
-    void Assembler::oris(const Reg64& ra, const Reg64& rs, Immed imm) {
-  assert(imm.fits(HPHP::sz::word) && 'Immediate is too big');
-  EmitDForm(25, rn(rs), rn(ra), imm.w());
-}
-    
-      void branchFar(CodeAddress c,
-                 ConditionCode cc,
-                 LinkReg lr = LinkReg::DoNotTouch,
-                 ImmType immt = ImmType::TocOnly,
-                 bool immMayChange = false) {
-    branchFar(c, BranchParams::convertCC(cc), lr, immt, immMayChange);
-  }
-    
-    #ifndef HPHP_DATA_STREAM_WRAPPER_H
-#define HPHP_DATA_STREAM_WRAPPER_H
-    
-    Array Directory::getMetaData() {
-  return make_map_array(
-    s_wrapper_type, s_plainfile, // PHP5 compatibility
-    s_stream_type,  s_dir,
-    s_mode,         s_r,
-    s_unread_bytes, 0,
-    s_seekable,     false,
-    s_timed_out,    false,
-    s_blocked,      true,
-    s_eof,          isEof()
-  );
-}
-    
-      explicit ExtendedException();
-  explicit ExtendedException(const std::string& msg);
-  explicit ExtendedException(SkipFrame frame, const std::string& msg);
-  explicit ExtendedException(ATTRIBUTE_PRINTF_STRING const char* fmt, ...)
-    ATTRIBUTE_PRINTF(2,3);
-  ExtendedException(const ExtendedException& other);
-  ExtendedException(ExtendedException&& other) noexcept;
-    
-    #include 'hphp/runtime/base/thread-info.h'
-    
-    namespace HPHP { namespace FileUtil {
-    }
-    }
-    
-    namespace boost{
-    }
-    
-    
-    
-    
-    {   if(!result)
-   {
-      next_count = recursion_stack.back().repeater_stack;
-      *m_presult = recursion_stack.back().results;
-      recursion_stack.pop_back();
-      return false;
-   }
-   return true;
-}
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_PREFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-            Vec2 tempPos = _halfScreenSize - _followedNode->getPosition();
-    
-    
-FadeTo* FadeIn::reverse() const
-{
-    auto action = FadeOut::create(_duration);
-    action->setReverseAction(const_cast<FadeIn*>(this));
-    return action;
-    
-}
-    
-    void ProgressTo::update(float time)
-{
-    ((kProgressTimerCast)(_target))->setPercentage(_from + (_to - _from) * time);
-}
-    
-    void AtlasNode::setOpacity(GLubyte opacity)
-{
-    Node::setOpacity(opacity);
-    }
-    
-    
-    {
-    {        BOOST_DEFAULTED_FUNCTION(aligned(), {})
-        BOOST_FORCEINLINE BOOST_CONSTEXPR explicit aligned(type v) BOOST_NOEXCEPT : value(v) {}
-    };
-};
-    
-    
-    { private:
-  NTCAN_HANDLE dev_handler_;
-  CANCardParameter::CANChannelId port_;
-  CMSG send_frames_[MAX_CAN_SEND_FRAME_LEN];
-  CMSG recv_frames_[MAX_CAN_RECV_FRAME_LEN];
-};
-    
-    /**
- * @class HermesCanClient
- * @brief The class which defines a BCAN client which inherits CanClient.
- */
-    
-    
-    {    // Synchronous transmission of CAN messages
-    int ret = write(dev_handler_, &send_frames_[i], sizeof(send_frames_[i]));
-    if (ret <= 0) {
-      AERROR << 'send message failed, error code: ' << ret;
-      return ErrorCode::CAN_CLIENT_ERROR_BASE;
-    }
-  }
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
-    
-    /**
- * @class Byte
- * @brief The class of one byte, which is 8 bits.
- *        It includes some operations on one byte.
- */
-class Byte {
- public:
-  /**
-   * @brief Constructor which takes a pointer to a one-byte unsigned integer.
-   * @param value The pointer to a one-byte unsigned integer for construction.
-   */
-  explicit Byte(const uint8_t *value);
-    }
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-    
-    #ifndef MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
-#define MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
-    
-    // method implementations
-    
-    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
-              'The adapter config file');
-    
-    #include 'gflags/gflags.h'
