@@ -1,134 +1,87 @@
 
         
-        from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
+          * scan
+'''
     
-        if args.plot is not None:
-        print('Displaying plot', file=sys.stderr)
-        title = ('Multilabel metrics with %s' %
-                 ', '.join('{0}={1}'.format(field, getattr(args, field))
-                           for field in ['samples', 'classes', 'density']
-                           if args.plot != field))
-        _plot(results, args.metrics, args.formats, title, steps, args.plot)
+        module = AnsibleAWSModule(argument_spec=argument_spec, supports_check_mode=False, mutually_exclusive=[['distribution_id', 'alias']])
+    
+    # AMI Creation, excluding a volume attached at /dev/sdb
+- ec2_ami:
+    instance_id: i-xxxxxx
+    name: newtest
+    device_mapping:
+        - device_name: /dev/sda1
+          size: XXX
+          delete_on_termination: true
+          volume_type: gp2
+        - device_name: /dev/sdb
+          no_device: yes
+    
+        if region:
+        ec2_client = boto3_conn(module, conn_type='client', resource='ec2', region=region, endpoint=ec2_url, **aws_connect_params)
+    else:
+        module.fail_json(msg='region must be specified')
+    
+        try:
+        asgs_paginator = conn.get_paginator('describe_auto_scaling_groups')
+        asgs = asgs_paginator.paginate().build_full_result()
+    except ClientError as e:
+        module.fail_json(msg=e.message, **camel_dict_to_snake_dict(e.response))
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-        for (sbplt, vals, quantity,
-         build_time, query_time) in [(311, Nrange, 'N',
-                                      N_results_build,
-                                      N_results_query),
-                                     (312, Drange, 'D',
-                                      D_results_build,
-                                      D_results_query),
-                                     (313, krange, 'k',
-                                      k_results_build,
-                                      k_results_query)]:
-        ax = plt.subplot(sbplt, yscale='log')
-        plt.grid(True)
+    '''
+    
+        connection = boto3_conn(module,
+                            resource='ec2', conn_type='client',
+                            region=region, endpoint=ec2_url, **aws_connect_params)
+    
+    
+# Find the most recent snapshot
+def _get_snapshot_starttime(snap):
+    return datetime.datetime.strptime(snap.start_time, '%Y-%m-%dT%H:%M:%S.000Z')
+    
+        volume_info = {}
+    attachment = volume.attach_data
+    
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.http import Request
+from scrapy.exceptions import UsageError
+from scrapy.utils.datatypes import SequenceExclude
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+    
+            spider_loader = self.crawler_process.spider_loader
+    
+    
+__licence__ = 'BSD (3 clause)'
     
         try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
-    
-            #Creating a list of all md files in the current directory
-        for temp in glob.glob(os.path.join(loc, operating_sys, '*.md')):
-            allmd.append(temp)
+        cognito.authenticate(password=password)
+        return cognito
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
-    
-    
-  def Response( self ):
-    return {
-      'completions': self._results,
-      'completion_start_column': self.request_data[ 'start_column' ]
-    }
-    
-            for diags in itervalues( self._line_to_diags ):
-          # Insert squiggles in reverse order so that errors overlap warnings.
-          for diag in reversed( diags ):
-            group = ( 'YcmErrorSection' if _DiagnosticIsError( diag ) else
-                      'YcmWarningSection' )
-    
-    SYNTAX_REGION_ARGUMENT_REGEX = re.compile(
-  r'^(?:matchgroup|start)=.*$' )
-    
-    import contextlib
-from nose.tools import eq_, ok_
-from mock import patch
-    
-    
-def EndsWithPython_Bad( path ):
-  ok_( not _EndsWithPython( path ),
-       'Path {0} does end with a Python name.'.format( path ) )
-    
-    
-def BuildCompletionNamespace( namespace = None,
-                              insertion_text = 'Test',
-                              menu_text = None,
-                              extra_menu_info = None,
-                              detailed_info = None,
-                              kind = None ):
-  return BuildCompletion( insertion_text = insertion_text,
-                          menu_text = menu_text,
-                          extra_menu_info = extra_menu_info,
-                          detailed_info = detailed_info,
-                          kind = kind,
-                          extra_data = {
-                            'required_namespace_import': namespace
-                          } )
-    
-                output[ATTR_UPDATE_DATE] = datetime.now().strftime(DATE_FORMAT)
-    
-    SERVICE_SCHEMA = vol.Schema({
-    vol.Required(CONF_NAME): cv.string,
-    vol.Required(SERVICE_PARAM): cv.string,
-    vol.Optional(SERVICE_CGI, default=SERVICE_DEFAULT_CGI): cv.string,
-    vol.Optional(SERVICE_ACTION, default=SERVICE_DEFAULT_ACTION): cv.string,
-})
-    
-        cognito = _cognito(cloud)
-    # Workaround for bug in Warrant. PR with fix:
-    # https://github.com/capless/warrant/pull/82
-    cognito.add_base_attributes()
+def get_scanner(hass, config):
+    '''Validate the configuration and return a Linksys AP scanner.'''
     try:
-        cognito.register(email, password)
-    except ClientError as err:
-        raise _map_aws_exception(err)
-    
-            try:
-            value = state_helper.state_as_number(state)
-        except ValueError:
-            _LOGGER.debug(
-                'Error sending %s: %s (tags: %s)', metric, state.state, tags)
-            return
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client.mac == device:
-                return client.ip
+        return LinksysSmartWifiDeviceScanner(config[DOMAIN])
+    except ConnectionError:
         return None
     
-        return True
+            # Test the router is accessible.
+        data = self.get_swisscom_data()
+        self.success_init = data is not None
     
-            self.success_init = self._update_info()
-        _LOGGER.info('Scanner initialized')
-    
-    MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=1)
+        from libpurecoollink.dyson import DysonAccount
+    dyson_account = DysonAccount(config[DOMAIN].get(CONF_USERNAME),
+                                 config[DOMAIN].get(CONF_PASSWORD),
+                                 config[DOMAIN].get(CONF_LANGUAGE))
