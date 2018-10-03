@@ -1,121 +1,140 @@
 
         
         
-def _plot(results, metrics, formats, title, x_ticks, x_label,
-          format_markers=('x', '|', 'o', '+'),
-          metric_colors=('c', 'm', 'y', 'k', 'g', 'r', 'b')):
+@pytest.fixture(autouse=True)
+def usage_tracker_io(usage_tracker):
+    io = StringIO()
+    usage_tracker.return_value \
+                 .open.return_value \
+                 .__enter__.return_value = io
+    return io
+    
+    
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    
+    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
     '''
-    Plot the results by metric, format and some other variable given by
-    x_label
-    '''
-    fig = plt.figure('scikit-learn multilabel metrics benchmarks')
-    plt.title(title)
-    ax = fig.add_subplot(111)
-    for i, metric in enumerate(metrics):
-        for j, format in enumerate(formats):
-            ax.plot(x_ticks, results[i, j].flat,
-                    label='{}, {}'.format(metric, format),
-                    marker=format_markers[j],
-                    color=metric_colors[i % len(metric_colors)])
-    ax.set_xlabel(x_label)
-    ax.set_ylabel('Time (s)')
-    ax.legend()
-    plt.show()
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-        for i, DD in enumerate(Drange):
-        print('D = %i (%i out of %i)' % (DD, i + 1, len(Drange)))
-        X = get_data(N, DD, dataset)
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=k,
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
     
-                gc.collect()
-            print('benchmarking orthogonal_mp (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            orthogonal_mp(X, y, precompute=False,
-                          n_nonzero_coefs=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            omp[i_f, i_s] = delta
+def default_hooks():
+    return dict((event, []) for event in HOOKS)
     
-    score(y_test, clf.predict(X_test), 'dense model')
-benchmark_dense_predict()
-clf.sparsify()
-score(y_test, clf.predict(X_test), 'sparse model')
-benchmark_sparse_predict()
+    
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
+    
+        proxy_keys = [
+        urlparts.scheme + '://' + urlparts.hostname,
+        urlparts.scheme,
+        'all://' + urlparts.hostname,
+        'all',
+    ]
+    proxy = None
+    for proxy_key in proxy_keys:
+        if proxy_key in proxies:
+            proxy = proxies[proxy_key]
+            break
+    
+        def __getstate__(self):
+        '''Unlike a normal CookieJar, this class is pickleable.'''
+        state = self.__dict__.copy()
+        # remove the unpickleable RLock object
+        state.pop('_cookies_lock')
+        return state
+    
+    # build the model
+model = Sequential()
+model.add(layers.Dense(256, input_shape=(784,)))
+model.add(Antirectifier())
+model.add(layers.Dropout(0.1))
+model.add(layers.Dense(256))
+model.add(Antirectifier())
+model.add(layers.Dropout(0.1))
+model.add(layers.Dense(num_classes))
+model.add(layers.Activation('softmax'))
+    
+    
+def test_mnist():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        assert len(x_train) == len(y_train) == 60000
+        assert len(x_test) == len(y_test) == 10000
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test))
+score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)
 
     
-        def get(self):
-        if len(self.config.GAE_APPIDS):
-            if len(self.working_appid_list) == 0:
-                time_to_reset = 600 - (time.time() - self.last_reset_time)
-                if time_to_reset > 0:
-                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
-                    time.sleep(time_to_reset)
-                    return None
-                else:
-                    self.logger.warn('reset appid')
-                    self.reset_appid()
-    
-        def send_rs_packet(self, rs_packet, dst_ip):
-        rs_packet = rs_packet.type_cone if self.rs_cone_flag else rs_packet.type_restricted
-        logger.debug('send ; RS_cone = %s\n%s' % (self.rs_cone_flag, str2hex(rs_packet)))
-        self.teredo_sock.sendto(rs_packet, (dst_ip, self.teredo_port))
-    
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
+        if not info_only and not dry_run:
+        if not kwargs['caption']:
+            print('Skipping danmaku.')
+            return
+        try:
+            title = get_filename(title)
+            print('Downloading %s ...\n' % (title + '.cmt.json'))
+            cmt = get_srt_json(vid)
+            with open(os.path.join(output_dir, title + '.cmt.json'), 'w', encoding='utf-8') as x:
+                x.write(cmt)
+        except:
+            pass
     
     
-class Fixed(jose.Field):
-    '''Fixed field.'''
+def get_coub_data(html):
+    coub_data = r1(r'<script id=\'coubPageCoubJson\' type=\'text/json\'>([^<]+)</script>', html)
+    json_data = json.loads(coub_data)
+    return json_data
+    
+    import urllib.request, urllib.parse
+from ..common import *
+    
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
+    
+    __all__ = ['fc2video_download']
     
     
-def _guess_loader(filename, loader_pem, loader_der):
-    _, ext = os.path.splitext(filename)
-    if ext.lower() == '.pem':
-        return loader_pem
-    elif ext.lower() == '.der':
-        return loader_der
-    else:  # pragma: no cover
-        raise ValueError('Loader could not be recognized based on extension')
+def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
+    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
+    execution_time = fastest_execution / iterations_per_test
+    fps = 1.0 / execution_time
+    return execution_time, fps
     
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
+
     
-DIRECTORY_URL = 'https://acme-staging.api.letsencrypt.org/directory'
-BITS = 2048  # minimum for Boulder
-DOMAIN = 'example1.com'  # example.com is ignored by Boulder
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
     
-            self.vh_truth = util.get_vh_truth(
-            self.temp_dir, 'debian_apache_2_4/multiple_vhosts')
-    
-    
-class ComplexParserTest(util.ParserTest):
-    '''Apache Parser Test.'''
-    
-            # Make sure calls made to mocked function were correct
-        self.assertEqual(
-            mock_setup_cert.call_args_list[0], mock.call(self.achalls[0]))
-        self.assertEqual(
-            mock_setup_cert.call_args_list[1], mock.call(self.achalls[1]))
-    
-            :param .KeyAuthorizationAnnotatedChallenge achall: Annotated
-            TLS-SNI-01 challenge.
-    
-    try:
-    # compatible for python2
-    from urllib2 import urlopen
-    from urllib2 import HTTPError
-    from urllib2 import URLError
-except ImportError:
-    # compatible for python3
-    from urllib.request import urlopen
-    from urllib.error import HTTPError
-    from urllib.error import URLError
+    # Open video file
+video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
