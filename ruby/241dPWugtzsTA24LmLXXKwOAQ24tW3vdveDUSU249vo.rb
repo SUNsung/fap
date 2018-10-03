@@ -1,156 +1,130 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
+        require 'jekyll'
+require 'mercenary'
     
-    After do
-  FileUtils.rm_rf(Paths.test_dir) if Paths.test_dir.exist?
-  Paths.output_file.delete if Paths.output_file.exist?
-  Paths.status_file.delete if Paths.status_file.exist?
-  Dir.chdir(Paths.test_dir.parent)
-  ENV['TZ'] = @timezone_before_scenario
-end
-    
-              @reload_body = File.read(reload_file)
-          @reload_size = @reload_body.bytesize
-        end
-    
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
-    
-            if self.version_sets.length == 1
-          version_sets[0].platform
-        end
-        platform = Spaceship::Tunes::AppVersionCommon.find_platform(raw_data['versionSets'])
-        platform['type']
-      end
-    
-        def itc_stub_app_version_ref
-      stub_request(:get, 'https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/version/ref').
-        to_return(status: 200, body: itc_read_fixture_file('app_version_ref.json'),
-                  headers: { 'Content-Type' => 'application/json' })
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
-    
-    group :test do
-  gem 'omniauth-facebook'
-  gem 'omniauth-openid'
-  gem 'webrat', '0.7.3', require: false
-  gem 'mocha', '~> 1.1', require: false
-end
-    
-    class Devise::PasswordsController < DeviseController
-  prepend_before_action :require_no_authentication
-  # Render the #edit only if coming from a reset password email link
-  append_before_action :assert_reset_token_passed, only: :edit
-    
-        users.all?(&:blank?)
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
-      end
-    
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
   end
 end
 
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
+      describe '#yes_no' do
+    it 'returns a label 'Yes' if any truthy value is given' do
+      [true, Object.new].each { |value|
+        label = yes_no(value)
+        expect(label).to be_html_safe
+        expect(Nokogiri(label).text).to eq 'Yes'
       }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
+    end
     
-          it 'should be catched when it means that the target is not found' do
-        post :create, params: {post_id: -1}, format: :json
-        expect(response.code).to eq('422')
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
+  end
+    
+          # Returns the path to a file for the given key.
+      #
+      # @param key [String]
+      # @return [String] The path to the cache file.
+      def path_to(key)
+        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
+        File.join(cache_location, key)
+      end
+    end
+  end
+end
+
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
       end
     
-    ```
-Executable Path: #{actual_path}
-```
-EOS
-      end
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-    desc 'Runs all tests in all Spree engines'
-task test: :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rspec'
+        for_each_gem do |gem_path|
+      sh 'gem push '#{gem_path}''
     end
   end
 end
     
-            self.line_item_options = []
+              scope = scope.not_deleted unless params[:show_deleted]
+          scope = scope.not_discontinued unless params[:show_discontinued]
+        else
+          scope = Product.accessible_by(current_ability, :read).active.includes(*product_includes)
+        end
     
-            def current
-          @order = find_current_order
-          if @order
-            respond_with(@order, default_template: :show, locals: { root_object: @order })
-          else
-            head :no_content
+            include Spree::Core::ControllerHelpers::Auth
+        include Spree::Core::ControllerHelpers::Order
+        # This before_action comes from Spree::Core::ControllerHelpers::Order
+        skip_before_action :set_current_order
+    
+              unless inventory_unit.respond_to?(can_event) &&
+              inventory_unit.send(can_event)
+            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
+                   status: 200
+            false
           end
+        end
+    
+            def update
+          @line_item = find_line_item
+    
+            def create
+          authorize! :create, Spree::OptionType
+          @option_type = Spree::OptionType.new(option_type_params)
+          if @option_type.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_type)
+          end
+        end
+    
+            def update
+          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
+          if @option_value.update_attributes(option_value_params)
+            render :show
+          else
+            invalid_resource!(@option_value)
+          end
+        end
+    
+            def authorize_product!
+          authorize! :read, @product
+        end
+    
+            def variants_params
+          variants_key = if params[:product].key? :variants
+                           :variants
+                         else
+                           :variants_attributes
+          end
+    
+            def order
+          @order ||= Spree::Order.find_by!(number: order_id)
+          authorize! :read, @order
         end
     
             def destroy
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :destroy).find(params[:id])
-          @return_authorization.destroy
-          respond_with(@return_authorization, status: 204)
+          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
+          @stock_item.destroy
+          respond_with(@stock_item, status: 204)
         end
-    
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
-          else
-            State.accessible_by(current_ability, :read).order('name ASC')
-          end
-        end
-      end
-    end
-  end
-end
-
     
             def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
           else
-            invalid_resource!(@stock_movement)
+            invalid_resource!(@stock_location)
           end
         end
