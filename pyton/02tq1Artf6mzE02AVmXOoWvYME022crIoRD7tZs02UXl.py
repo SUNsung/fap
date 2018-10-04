@@ -1,193 +1,200 @@
 
         
-        secret_msg = b'Secret message goes here'
+            request.addfinalizer(_reset_settings)
+    conf.settings.user_dir = Path('~/.thefuck')
+    return conf.settings
     
     
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+@pytest.mark.parametrize('app, help_text, operations', [
+    ('apt', apt_help, apt_operations),
+    ('apt-get', apt_get_help, apt_get_operations)
+])
+def test_get_operations(set_help, app, help_text, operations):
+    set_help(help_text)
+    assert _get_operations(app) == operations
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
-    
-    
-def get_base_name(base):
-    if base is InfoExtractor:
-        return 'LazyLoadExtractor'
-    elif base is SearchInfoExtractor:
-        return 'LazyLoadSearchExtractor'
-    else:
-        return base.__name__
-    
-        def gen_ies_md(ies):
-        for ie in ies:
-            ie_md = '**{0}**'.format(ie.IE_NAME)
-            ie_desc = getattr(ie, 'IE_DESC', None)
-            if ie_desc is False:
-                continue
-            if ie_desc is not None:
-                ie_md += ': {0}'.format(ie.IE_DESC)
-            if not ie.working():
-                ie_md += ' (Currently broken)'
-            yield ie_md
+        def find_condition_in_rules(self, condition_set_id):
+        rules_in_use = []
+        try:
+            all_rules = list_rules_with_backoff(self.client)
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            self.module.fail_json_aws(e, msg='Could not list rules')
+        for rule in all_rules:
+            try:
+                rule_details = get_rule_with_backoff(self.client, rule['RuleId'])
+            except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+                self.module.fail_json_aws(e, msg='Could not get rule details')
+            if condition_set_id in [predicate['DataId'] for predicate in rule_details['Predicates']]:
+                rules_in_use.append(rule_details['Name'])
+        return rules_in_use
     
     
-if __name__ == '__main__':
-    main()
-
+def remove_rule_conditions(client, module, rule_id):
+    conditions = get_rule(client, module, rule_id)['Predicates']
+    updates = [format_for_deletion(camel_dict_to_snake_dict(condition)) for condition in conditions]
+    try:
+        run_func_with_change_token_backoff(client, module, {'RuleId': rule_id, 'Updates': updates}, client.update_rule)
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Could not remove rule conditions')
     
-    py2exe_options = {
-    'bundle_files': 1,
-    'compressed': 1,
-    'optimize': 2,
-    'dist_dir': '.',
-    'dll_excludes': ['w9xpopen.exe', 'crypt32.dll'],
-}
-    
-    from __future__ import unicode_literals
-    
-            :param variable_name: name of the environment variable
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
-        :return: bool. ``True`` if able to load config, ``False`` otherwise.
-        '''
-        rv = os.environ.get(variable_name)
-        if not rv:
-            if silent:
-                return False
-            raise RuntimeError('The environment variable %r is not set '
-                               'and as such configuration could not be '
-                               'loaded.  Set this variable and make it '
-                               'point to a configuration file' %
-                               variable_name)
-        return self.from_pyfile(rv, silent=silent)
-    
-        This makes it safe to embed such strings in any place in HTML with the
-    notable exception of double quoted attributes.  In that case single
-    quote your attributes or HTML escape it in addition.
-    
-        def check(self, value):
-        '''Check if the given value should be tagged by this tag.'''
-        raise NotImplementedError
-    
-        @permanent.setter
-    def permanent(self, value):
-        self['_permanent'] = bool(value)
-    
-            return self.__dict__.get(key, None)
+    notes:
+  - does not support check mode
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
+def define_pipeline(client, module, objects, dp_id):
+    '''Puts pipeline definition
+    
+            else:
+            result['changed'] = False
+    
+    RETURN = '''
+gateway.customer_gateways:
+    description: details about the gateway that was created.
+    returned: success
+    type: complex
+    contains:
+        bgp_asn:
+            description: The Border Gateway Autonomous System Number.
+            returned: when exists and gateway is available.
+            sample: 65123
+            type: string
+        customer_gateway_id:
+            description: gateway id assigned by amazon.
+            returned: when exists and gateway is available.
+            sample: cgw-cb6386a2
+            type: string
+        ip_address:
+            description: ip address of your gateway device.
+            returned: when exists and gateway is available.
+            sample: 1.2.3.4
+            type: string
+        state:
+            description: state of gateway.
+            returned: when gateway exists and is available.
+            state: available
+            type: string
+        tags:
+            description: any tags on the gateway.
+            returned: when gateway exists and is available, and when tags exist.
+            state: available
+            type: string
+        type:
+            description: encryption type.
+            returned: when gateway exists and is available.
+            sample: ipsec.1
+            type: string
+'''
+    
+        params['Filters'] = ansible_dict_to_boto3_filter_list(module.params.get('filters'))
+    params['CustomerGatewayIds'] = module.params.get('customer_gateway_ids')
     
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
+def create_metric_alarm(connection, module):
     
-            Number:                    '#990000',        # class: 'm'
+    RETURN = '''
+snapshot_id:
+    description: The ID of the snapshot. Each snapshot receives a unique identifier when it is created.
+    type: string
+    returned: always
+    sample: snap-01234567
+volume_id:
+    description: The ID of the volume that was used to create the snapshot.
+    type: string
+    returned: always
+    sample: vol-01234567
+state:
+    description: The snapshot state (completed, pending or error).
+    type: string
+    returned: always
+    sample: completed
+state_message:
+    description: Encrypted Amazon EBS snapshots are copied asynchronously. If a snapshot copy operation fails (for example, if the proper
+                 AWS Key Management Service (AWS KMS) permissions are not obtained) this field displays error state details to help you diagnose why the
+                 error occurred.
+    type: string
+    returned: always
+    sample:
+start_time:
+    description: The time stamp when the snapshot was initiated.
+    type: string
+    returned: always
+    sample: '2015-02-12T02:14:02+00:00'
+progress:
+    description: The progress of the snapshot, as a percentage.
+    type: string
+    returned: always
+    sample: '100%'
+owner_id:
+    description: The AWS account ID of the EBS snapshot owner.
+    type: string
+    returned: always
+    sample: '099720109477'
+description:
+    description: The description for the snapshot.
+    type: string
+    returned: always
+    sample: 'My important backup'
+volume_size:
+    description: The size of the volume, in GiB.
+    type: int
+    returned: always
+    sample: 8
+owner_alias:
+    description: The AWS account alias (for example, amazon, self) or AWS account ID that owns the snapshot.
+    type: string
+    returned: always
+    sample: '033440102211'
+tags:
+    description: Any tags assigned to the snapshot.
+    type: dict
+    returned: always
+    sample: '{ 'my_tag_key': 'my_tag_value' }'
+encrypted:
+    description: Indicates whether the snapshot is encrypted.
+    type: boolean
+    returned: always
+    sample: 'True'
+kms_key_id:
+    description: The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to \
+    protect the volume encryption key for the parent volume.
+    type: string
+    returned: always
+    sample: '74c9742a-a1b2-45cb-b3fe-abcdef123456'
+data_encryption_key_id:
+    description: The data encryption key identifier for the snapshot. This value is a unique identifier that \
+    corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy.
+    type: string
+    returned: always
+    sample: 'arn:aws:kms:ap-southeast-2:012345678900:key/74c9742a-a1b2-45cb-b3fe-abcdef123456'
     
-        :param url: URL for the new :class:`Request` object.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#language = None
+    
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
+    
+        # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
     '''
     
-        def test_response_without_release_conn(self):
-        '''Test `close` call for non-urllib3-like raw objects.
-        Should work when `release_conn` attr doesn't exist on `response.raw`.
-        '''
-        resp = requests.Response()
-        resp.raw = StringIO.StringIO('test')
-        assert not resp.raw.closed
-        resp.close()
-        assert resp.raw.closed
+            # Draw a box around the face
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
     
-    batch_size = 128
-num_classes = 10
-epochs = 12
-log_dir = './logs'
+    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
+# other example, but it includes some basic performance tweaks to make things run a lot faster:
+#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
+#   2. Only detect faces in every other frame of video.
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+        unknown_encodings = face_recognition.face_encodings(unknown_image)
     
-    import gzip
-import os
-    
-        # Arguments
-        model: Keras model instance.
-        line_length: Total length of printed lines
-            (e.g. set this to adapt the display to different
-            terminal window sizes).
-        positions: Relative or absolute positions of log elements in each line.
-            If not provided, defaults to `[.33, .55, .67, 1.]`.
-        print_fn: Print function to use.
-            It will be called on each line of the summary.
-            You can set it to a custom function
-            in order to capture the string summary.
-            It defaults to `print` (prints to stdout).
-    '''
-    if print_fn is None:
-        print_fn = print
-    
-    
-@keras_test
-def test_leaky_relu():
-    for alpha in [0., .5, -1.]:
-        layer_test(layers.LeakyReLU, kwargs={'alpha': alpha},
-                   input_shape=(2, 3, 4))
-    
-    def acfun_download_by_vid(vid, title, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''str, str, str, bool, bool ->None
-    
-    import json
-import re
-    
-    
-def get_coub_data(html):
-    coub_data = r1(r'<script id=\'coubPageCoubJson\' type=\'text/json\'>([^<]+)</script>', html)
-    json_data = json.loads(coub_data)
-    return json_data
-    
-    yinyuetai_embed_patterns = [ 'player\.yinyuetai\.com/video/swf/(\d+)' ]
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        # Create queues
-    task_queue = Queue()
-    done_queue = Queue()
-    
-    import sqlite3
-    
-    class Point:
-    def __init__(self, x, y):
-        self.x, self.y = x, y
+    test_requirements = [
+    'tox',
+    'flake8==2.6.0'
+]
