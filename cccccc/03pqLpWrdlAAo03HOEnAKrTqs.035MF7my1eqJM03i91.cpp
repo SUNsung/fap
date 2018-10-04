@@ -1,311 +1,346 @@
 
         
-        TegraUnaryOp_Invoker(bitwiseNot, bitwiseNot)
-#define TEGRA_UNARYOP(type, op, src1, sz1, dst, sz, w, h) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    parallel_for_(Range(0, h), \
-    TegraGenOp_##op##_Invoker<const type, type>(src1, sz1, dst, sz, w, h), \
-    (w * h) / static_cast<double>(1<<16)), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        v_dst = internal::vabd(v_src0, v_src1);
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-    
-    {
-    {
-    {            vst1q_f32(dsta + x, wa);
-            vst1q_f32(dstb + x, wb);
-        }
-        if(x < colsn)
-        {
-            x = colsn-4;
-            goto box3x3f32_horiz_last2;
-        }
-    }
-#else
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)borderValue;
-    (void)borderMargin;
-#endif
+        StringRef swift::platformString(PlatformKind platform) {
+  switch (platform) {
+  case PlatformKind::none:
+    return '*';
+#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
+  case PlatformKind::X:                                                        \
+    return #X;
+#include 'swift/AST/PlatformKinds.def'
+  }
+  llvm_unreachable('bad PlatformKind');
 }
     
-    #define MERGE_QUAD(sgn, bits, n) { \
-                                     vec128 v_dst; \
-                                     /*FILL_LINES##n(PREF, sgn##bits) \
-                                     FILL_LINES##n(VLD1Q, sgn##bits)*/ \
-                                     FILL_LINES##n(PRLD, sgn##bits) \
-                                     vst##n##q_##sgn##bits(dst + dj, v_dst); \
-                                 }
+    using namespace swift;
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s16, s32, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
+    
     {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.s16 q3, d4                                       \n\t'
-            'vmovl.s16 q4, d5                                       \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vcvt.f32.s32 q6, q4                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vmul.f32 q8, q6, q0                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vadd.f32 q10, q8, q1                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vcvt.s32.f32 q12, q10                                  \n\t'
-            'vst1.32 {d22-d23}, [%[dst1]]                           \n\t'
-            'vst1.32 {d24-d25}, [%[dst2]]                           \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst1] 'r' (_dst + i + 0),
-              [dst2] 'r' (_dst + i + 4),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25'
-        );
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
     }
-})
-#else
-CVTS_FUNC(s16, s32, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int16x8_t vline = vld1q_s16(_src + i);
-        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
-        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        vst1q_s32(_dst + i + 0, vline1_s32);
-        vst1q_s32(_dst + i + 4, vline2_s32);
-    }
-})
-#endif
-    
-    
-    {    return 0;
-#endif
-}
-    
-    template <typename T>
-inline T recipSaturate(const T &v2, const float scale)
-{
-    return internal::vqmovn(recipSaturateQ(internal::vmovl(v2), scale));
-}
-template <>
-inline int32x2_t recipSaturate<int32x2_t>(const int32x2_t &v2, const float scale)
-{ return vcvt_s32_f32(vmul_n_f32(internal::vrecp_f32(vcvt_f32_s32(v2)), scale)); }
-template <>
-inline uint32x2_t recipSaturate<uint32x2_t>(const uint32x2_t &v2, const float scale)
-{ return vcvt_u32_f32(vmul_n_f32(internal::vrecp_f32(vcvt_f32_u32(v2)), scale)); }
-    
-    f64 dotProduct(const Size2D &_size,
-               const s8 * src0Base, ptrdiff_t src0Stride,
-               const s8 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    }
-    
-    #ifdef CAROTENE_NEON
-    
-            uint32x4_t vsuml = vaddw_u16(prev, vget_low_u16(el8));
-        uint32x4_t vsumh = vaddw_u16(prev, el4h);
-    
-      std::shared_ptr<grpc::Channel> CreateChannel(
-      const string& target, const grpc::ChannelArguments& args) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '', grpc_cronet_secure_channel_create(engine_, target.c_str(),
-                                              &channel_args, nullptr));
-  }
-    
-    #include <grpc/grpc.h>
-#include <grpc/support/log.h>
-#include <grpcpp/channel.h>
-#include <grpcpp/support/channel_arguments.h>
-#include <grpcpp/support/config.h>
-#include 'src/cpp/client/create_channel_internal.h'
-    
-    // Note: a second call to this will add in front the result of the first call.
-// An example is calling this on a copy of ChannelArguments which already has a
-// prefix. The user can build up a prefix string by calling this multiple times,
-// each with more significant identifier.
-void ChannelArguments::SetUserAgentPrefix(
-    const grpc::string& user_agent_prefix) {
-  if (user_agent_prefix.empty()) {
-    return;
-  }
-  bool replaced = false;
-  auto strings_it = strings_.begin();
-  for (auto it = args_.begin(); it != args_.end(); ++it) {
-    const grpc_arg& arg = *it;
-    ++strings_it;
-    if (arg.type == GRPC_ARG_STRING) {
-      if (grpc::string(arg.key) == GRPC_ARG_PRIMARY_USER_AGENT_STRING) {
-        GPR_ASSERT(arg.value.string == strings_it->c_str());
-        *(strings_it) = user_agent_prefix + ' ' + arg.value.string;
-        it->value.string = const_cast<char*>(strings_it->c_str());
-        replaced = true;
-        break;
-      }
-      ++strings_it;
-    }
-  }
-  if (!replaced) {
-    SetString(GRPC_ARG_PRIMARY_USER_AGENT_STRING, user_agent_prefix);
+    llvm::errs() << '\n=====================================================\n';
   }
 }
-    
-    
-    {}  // namespace grpc
 
     
-    #include 'src/cpp/ext/filters/census/context.h'
     
-    void GenerateClientContext(absl::string_view method, CensusContext* ctxt,
-                           CensusContext* parent_ctxt) {
-  if (parent_ctxt != nullptr) {
-    SpanContext span_ctxt = parent_ctxt->Context();
-    Span span = parent_ctxt->Span();
-    if (span_ctxt.IsValid()) {
-      new (ctxt) CensusContext(method, &span);
-      return;
-    }
-  }
-  new (ctxt) CensusContext(method);
+    {  cache_t *cache_out = nullptr;
+  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
+  assert(cache_out);
+  return cache_out;
 }
     
-    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerServerLatency();
-::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
-    
-    
-    {    size_t pos = kVersionIdSize;
-    while (pos < buf.size()) {
-      size_t bytes_read =
-          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
-      if (bytes_read == 0) {
-        break;
-      } else {
-        pos += bytes_read;
-      }
+    bool DummyTaskQueue::execute(TaskQueue::TaskBeganCallback Began,
+                             TaskQueue::TaskFinishedCallback Finished,
+                             TaskQueue::TaskSignalledCallback Signalled) {
+  using PidTaskPair = std::pair<ProcessId, std::unique_ptr<DummyTask>>;
+  std::queue<PidTaskPair> ExecutingTasks;
     }
-    return pos;
-  }
     
-    struct cmderOptions
-{
-	std::wstring cmderCfgRoot = L'';
-	std::wstring cmderStart = L'';
-	std::wstring cmderTask = L'';
-	std::wstring cmderRegScope = L'USER';
-	bool cmderSingle = false;
-	bool registerApp = false;
-	bool unRegisterApp = false;
-	bool error = false;
+    #include <google/protobuf/python/python_protobuf.h>
+    
+    const GeneratedCodeInfo::Annotation* FindAnnotationOnPath(
+    const GeneratedCodeInfo& info, const string& source_file,
+    const std::vector<int>& path) {
+  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
+  FindAnnotationsOnPath(info, source_file, path, &annotations);
+  if (annotations.empty()) {
+    return NULL;
+  }
+  return annotations[0];
+}
+    
+    // Parses a set of comma-delimited name/value pairs.
+void ParseGeneratorParameter(const string& text,
+                             std::vector<std::pair<string, string> >* output) {
+  std::vector<string> parts = Split(text, ',', true);
+    }
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    
+    {
+    {
+    {
+    {
+    {
+    {
+    {  printer->Print(
+      '      return YES;\n'
+      '    default:\n'
+      '      return NO;\n'
+      '  }\n'
+      '}\n\n');
+}
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    template <>
+template <typename T>
+bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
+  EnforceOnCPU<T>(Input(0));
+  return true;
+}
+    
+    template <class Context>
+class FindDuplicateElementsOp final : public Operator<Context> {
+ public:
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  USE_SIMPLE_CTOR_DTOR(FindDuplicateElementsOp);
+  USE_DISPATCH_HELPER;
+    }
+    
+    </details>
+    
+    #endif  // GRPC_INTERNAL_CPP_COMMON_SECURE_AUTH_CONTEXT_H
+
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
+}
+    
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
 };
     
+    namespace grpc {
+    }
+    
+    size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
+                              uint64_t* server_elapsed_time) {
+  return RpcServerStatsEncoding::Decode(absl::string_view(buf, buf_size),
+                                        server_elapsed_time);
+}
+    
+    // Creates a new client context that is by default a new root context.
+// If the current context is the default context then the newly created
+// span automatically becomes a root span. This should only be called with a
+// blank CensusContext as it overwrites it.
+void GenerateClientContext(absl::string_view method, CensusContext* ctxt,
+                           CensusContext* parent_ctx);
+    
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+      // Serializes rpc server stats into the provided buffer.  It returns the
+  // number of bytes written to the buffer. If the buffer is smaller than
+  // kRpcServerStatsSize bytes it will return kEncodeDecodeFailure. Inlined for
+  // performance reasons.
+  static size_t Encode(uint64_t time, char* buf, size_t buf_size) {
+    if (buf_size < kRpcServerStatsSize) {
+      return kEncodeDecodeFailure;
+    }
+    }
+    
+    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
+    : reflection_service_(new grpc::ProtoServerReflection()) {}
+    
+    ThreadPoolInterface* CreateDefaultThreadPoolImpl() {
+  int cores = gpr_cpu_num_cores();
+  if (!cores) cores = 4;
+  return new DynamicThreadPool(cores);
+}
+    
     
     {
-    {      // Record end time
-      uint64_t end_time = env->NowMicros();
-      double elapsed = static_cast<double>(end_time - start_time) * 1e-6;
-      uint32_t qps = static_cast<uint32_t>(
-          static_cast<double>(FLAGS_threads * FLAGS_ops_per_thread) / elapsed);
-      fprintf(stdout, 'Complete in %.3f s; QPS = %u\n', elapsed, qps);
+    {
+    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
+            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
+            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
+            p.z/=7;
+            //    Stop z coord from dropping beneath underlying page in a transition
+            // issue #751
+            if( p.z < 0.5f )
+            {
+                p.z = 0.5f;
+            }
+            
+            // Set new coords
+            p.x += getGridRect().origin.x;
+            setVertex(Vec2(i, j), p);
+            
+        }
     }
-    return true;
-  }
-    
-      // Input statistics
-  // TODO(noetzli): The stats are incomplete. They are lacking everything
-  // consumed by MergeHelper.
-  uint64_t num_input_records = 0;
-  uint64_t num_input_deletion_records = 0;
-  uint64_t num_input_corrupt_records = 0;
-  uint64_t total_input_raw_key_bytes = 0;
-  uint64_t total_input_raw_value_bytes = 0;
-    
-      ret.push_back(CurrentFileName(''));
-  ret.push_back(DescriptorFileName('', versions_->manifest_file_number()));
-  ret.push_back(OptionsFileName('', versions_->options_file_number()));
-    
-      // Implementations of the DB interface
-  using DB::Get;
-  virtual Status Get(const ReadOptions& options,
-                     ColumnFamilyHandle* column_family, const Slice& key,
-                     PinnableSlice* value) override;
-    
-    #include <string>
-    
-    // For non linux platform, the following macros are used only as place
-// holder.
-#if !(defined OS_LINUX) && !(defined CYGWIN) && !(defined OS_AIX)
-#define POSIX_FADV_NORMAL 0     /* [MC1] no further special treatment */
-#define POSIX_FADV_RANDOM 1     /* [MC1] expect random page refs */
-#define POSIX_FADV_SEQUENTIAL 2 /* [MC1] expect sequential page refs */
-#define POSIX_FADV_WILLNEED 3   /* [MC1] will need these pages */
-#define POSIX_FADV_DONTNEED 4   /* [MC1] dont need these pages */
-#endif
-    
-      virtual Status FileExists(const std::string& fname) override;
-    
-    
-    {  rocksdb::WriteOptions wopts;
-  db->Merge(wopts, '0', 'bad');  // This is filtered out
-  db->Merge(wopts, '1', 'data1');
-  db->Merge(wopts, '1', 'bad');
-  db->Merge(wopts, '1', 'data2');
-  db->Merge(wopts, '1', 'bad');
-  db->Merge(wopts, '3', 'data3');
-  db->CompactRange(rocksdb::CompactRangeOptions(), nullptr, nullptr);
-  fprintf(stderr, 'filter.count_ = %d\n', filter.count_);
-  assert(filter.count_ == 0);
-  fprintf(stderr, 'filter.merge_count_ = %d\n', filter.merge_count_);
-  assert(filter.merge_count_ == 6);
 }
-
     
-      // Write a key in this transaction
-  txn->Put('abc', 'def');
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
+    
+    ShakyTiles3D* ShakyTiles3D::create(float duration, const Size& gridSize, int range, bool shakeZ)
+{
+    ShakyTiles3D *action = new (std::nothrow) ShakyTiles3D();
+    }
+    
+    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+{
+    Animation *animation = new (std::nothrow) Animation();
+    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
+    animation->autorelease();
+    return animation;
+}
+    
+        /** Gets the units of time the frame takes.
+     *
+     * @return The units of time the frame takes.
+     */
+    float getDelayUnits() const { return _delayUnits; };
+    
+    /** Sets the units of time the frame takes.
+     *
+     * @param delayUnits The units of time the frame takes.
+     */
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
+    
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
+     *
+     * @return A dictionary as UserInfo
+     */
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
+    
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+        /** Adds an animation from an NSDictionary.
+     * Make sure that the frames were previously loaded in the SpriteFrameCache.
+     * @param dictionary An NSDictionary.
+     * @param plist The path of the relative file,it use to find the plist path for load SpriteFrames.
+     * @since v1.1
+	 @js NA
+     */
+    void addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist);
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+    
+    {        glfwMakeContextCurrent(window);
+        glfwSwapBuffers(window);
+    }
+    
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    // DirectX data
+static ID3D11Device*            g_pd3dDevice = NULL;
+static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+static IDXGIFactory*            g_pFactory = NULL;
+static ID3D11Buffer*            g_pVB = NULL;
+static ID3D11Buffer*            g_pIB = NULL;
+static ID3D10Blob*              g_pVertexShaderBlob = NULL;
+static ID3D11VertexShader*      g_pVertexShader = NULL;
+static ID3D11InputLayout*       g_pInputLayout = NULL;
+static ID3D11Buffer*            g_pVertexConstantBuffer = NULL;
+static ID3D10Blob*              g_pPixelShaderBlob = NULL;
+static ID3D11PixelShader*       g_pPixelShader = NULL;
+static ID3D11SamplerState*      g_pFontSampler = NULL;
+static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
+static ID3D11RasterizerState*   g_pRasterizerState = NULL;
+static ID3D11BlendState*        g_pBlendState = NULL;
+static ID3D11DepthStencilState* g_pDepthStencilState = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+    
+    void    ImGui_ImplOpenGL2_Shutdown()
+{
+    ImGui_ImplOpenGL2_DestroyDeviceObjects();
+}
