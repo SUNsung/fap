@@ -1,277 +1,156 @@
 
         
-          // ExtensionFunction:
-  ResponseAction Run() override;
-  DECLARE_EXTENSION_FUNCTION('nw.currentWindowInternal.clearMenu', UNKNOWN)
-    
-    #include 'base/basictypes.h'
-#include '../dispatcher_host.h'
-    
-    
-    {  RenderView* render_view = RenderView::FromWebView(view);
-  return render_view;
-}
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    
-    {  focus_manager_ = NULL;
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
-};
-    
-    #include <vector>
-    
-    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::DictionaryValue* options = nullptr;
-  int id = 0;
-  std::string type;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+          void PopulateCache() {
+    Random rnd(1);
+    for (int64_t i = 0; i < FLAGS_cache_size; i++) {
+      uint64_t rand_key = rnd.Next() % FLAGS_max_key;
+      // Cast uint64* to be char*, data would be copied to cache
+      Slice key(reinterpret_cast<char*>(&rand_key), 8);
+      // do insert
+      cache_->Insert(key, new char[10], 1, &deleter);
     }
-    
-    REGISTER_CPU_OPERATOR(
-    Exp,
-    UnaryElementwiseOp<TensorTypes<float>, CPUContext, ExpFunctor<CPUContext>>);
-    
-          CAFFE_ENFORCE(dims.front() >= 0, 'Dimension ids must be non-negative.');
-      CAFFE_ENFORCE_GE(
-          in[0].dims_size() + dims.size(),
-          dims.back() + 1,
-          'Input needs at least ',
-          (1 + dims.back() - dims.size()),
-          ' dimensions given `dims`.');
-    
-    REGISTER_CPU_OPERATOR(
-    MergeMultiScalarFeatureTensors,
-    MergeMultiScalarFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiScalarFeatureTensors)
-    .SetDoc(
-        'Merge given multi-feature tensors with scalar features into one.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
-    .NumOutputs(3)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_keys', '.keys')
-    .Input(2, 'in1_values', '.values')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values', '.values');
-    
-    op = core.CreateOperator(
-    'FindDuplicateElements',
-    ['data'],
-    ['indices'],
-)
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/operator.h'
-    
-    // The RunFullyConnectedOpOnCUDADevice Function will use the pointer of current
-// op and the DoRunWithType will make sure to run the correct things.
-template <>
-bool FullyConnectedOp<CUDAContext>::RunOnDevice() {
-  return RunFullyConnectedOpOnCUDADevice(float16_compute_, this);
-}
-    
-    void ChannelArguments::SetResourceQuota(
-    const grpc::ResourceQuota& resource_quota) {
-  SetPointerWithVtable(GRPC_ARG_RESOURCE_QUOTA,
-                       resource_quota.c_resource_quota(),
-                       grpc_resource_quota_arg_vtable());
-}
-    
-    void CompletionQueue::Shutdown() {
-  g_gli_initializer.summon();
-  CompleteAvalanching();
-}
-    
-    size_t CoreCodegen::grpc_byte_buffer_length(grpc_byte_buffer* bb) {
-  return ::grpc_byte_buffer_length(bb);
-}
-    
-      bool IsPeerAuthenticated() const override;
-    
-    
-    {}  // namespace grpc
-    
-    // A CallData class will be created for every grpc call within a channel. It is
-// used to store data and methods specific to that call. CensusClientCallData is
-// thread-compatible, however typically only 1 thread should be interacting with
-// a call at a time.
-class CensusClientCallData : public CallData {
- public:
-  // Maximum size of trace context is sent on the wire.
-  static constexpr uint32_t kMaxTraceContextLen = 64;
-  // Maximum size of tags that are sent on the wire.
-  static constexpr uint32_t kMaxTagsLen = 2048;
-    }
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-    
-    {    return bytes_read;
   }
     
-    /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+    Status CheckConcurrentWritesSupported(const ColumnFamilyOptions& cf_options) {
+  if (cf_options.inplace_update_support) {
+    return Status::InvalidArgument(
+        'In-place memtable updates (inplace_update_support) is not compatible '
+        'with concurrent writes (allow_concurrent_memtable_write)');
+  }
+  if (!cf_options.memtable_factory->IsInsertConcurrentlySupported()) {
+    return Status::InvalidArgument(
+        'Memtable doesn't concurrent writes (allow_concurrent_memtable_write)');
+  }
+  return Status::OK();
 }
+    
+    int main(int argc, char** argv) {
+  rocksdb::port::InstallStackTraceHandler();
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+    
+    Status DBImpl::GetLiveFiles(std::vector<std::string>& ret,
+                            uint64_t* manifest_file_size,
+                            bool flush_memtable) {
+  *manifest_file_size = 0;
+    }
+    
+    #include 'rocksdb/write_batch_base.h'
+    
+      virtual Status GetFileModificationTime(const std::string& fname,
+                                         uint64_t* file_mtime) override {
+    auto status_and_enc_path = EncodePath(fname);
+    if (!status_and_enc_path.first.ok()) {
+      return status_and_enc_path.first;
+    }
+    return EnvWrapper::GetFileModificationTime(status_and_enc_path.second,
+                                               file_mtime);
+  }
+    
+    Status PosixRandomRWFile::Sync() {
+  if (fdatasync(fd_) < 0) {
+    return IOError('While fdatasync random read/write file', filename_, errno);
+  }
+  return Status::OK();
+}
+    
+      virtual Status UnlockFile(FileLock* flock) override;
+    
+      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
+                          const rocksdb::Slice& existing_value) const override {
+    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
+    ++merge_count_;
+    return existing_value == 'bad';
+  }
     
     
     {
-    {/*! \brief typedef the factory function of data iterator */
-typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
-/*!
- * \brief Registry entry for DataIterator factory functions.
- */
-struct ImageAugmenterReg
-    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
-                                        ImageAugmenterFactory> {
-};
-//--------------------------------------------------------------
-// The following part are API Registration of Iterators
-//--------------------------------------------------------------
-/*!
- * \brief Macro to register image augmenter
- *
- * \code
- * // example of registering a mnist iterator
- * REGISTER_IMAGE_AUGMENTER(aug_default)
- * .describe('default augmenter')
- * .set_body([]() {
- *     return new DefaultAugmenter();
- *   });
- * \endcode
- */
-#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
-  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_USE_OPENCV
+    {}  // namespace
+}  // namespace internal
     
-    namespace leveldb {
-    }
     
-    TEST(DBTest, NonWritableFileSystem) {
-  Options options = CurrentOptions();
-  options.write_buffer_size = 1000;
-  options.env = env_;
-  Reopen(&options);
-  ASSERT_OK(Put('foo', 'v1'));
-  env_->non_writable_.Release_Store(env_);  // Force errors for new files
-  std::string big(100000, 'x');
-  int errors = 0;
-  for (int i = 0; i < 20; i++) {
-    fprintf(stderr, 'iter %d; errors %d\n', i, errors);
-    if (!Put('foo', big).ok()) {
-      errors++;
-      DelayMilliseconds(100);
-    }
+    {}  // end namespace internal
+    
+      if (reports[0].complexity == oLambda) {
+    result_cpu = MinimalLeastSq(n, cpu_time, reports[0].complexity_lambda);
+    result_real = MinimalLeastSq(n, real_time, reports[0].complexity_lambda);
+  } else {
+    result_cpu = MinimalLeastSq(n, cpu_time, reports[0].complexity);
+    result_real = MinimalLeastSq(n, real_time, result_cpu.complexity);
   }
-  ASSERT_GT(errors, 0);
-  env_->non_writable_.Release_Store(nullptr);
-}
+  std::string benchmark_name =
+      reports[0].benchmark_name.substr(0, reports[0].benchmark_name.find('/'));
     
-    
-    {  // No copying allowed
-  LookupKey(const LookupKey&);
-  void operator=(const LookupKey&);
-};
-    
-    static void Usage() {
-  fprintf(
-      stderr,
-      'Usage: leveldbutil command...\n'
-      '   dump files...         -- dump contents of specified files\n'
-      );
-}
-    
-      kFullType = 1,
-    
-    namespace guetzli {
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
     }
     
-      int verbose = 0;
-  int quality = kDefaultJPEGQuality;
-  int memlimit_mb = kDefaultMemlimitMB;
-    
-      tmp0 = in[3 * stride];
-  tmp1 = kIDCTMatrix[ 3] * tmp0;
-  tmp2 = kIDCTMatrix[11] * tmp0;
-  tmp3 = kIDCTMatrix[19] * tmp0;
-  tmp4 = kIDCTMatrix[27] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
-    
-    
-    {  // Bit length histogram.
-  std::vector<int> counts;
-  // Symbol values sorted by increasing bit lengths.
-  std::vector<int> values;
-  // The index of the Huffman code in the current set of Huffman codes. For AC
-  // component Huffman codes, 0x10 is added to the index.
-  int slot_id;
-  // Set to true if this Huffman code is the last one within its marker segment.
-  bool is_last;
-};
-    
-    // Single pixel rgb to 16-bit yuv conversion.
-// The returned yuv values are signed integers in the
-// range [-128, 127] inclusive.
-inline static void RGBToYUV16(const uint8_t* const rgb,
-                              coeff_t *out) {
-  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
-  const int r = rgb[0];
-  const int g = rgb[1];
-  const int b = rgb[2];
-  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
-  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
-  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
-}
-    
-      // Cluster AC histograms.
-  size_t num_ac_histo = ncomps;
-  int ac_histo_indexes[kMaxComponents];
-  ClusterHistograms(&histograms[num_dc_histo], &num_ac_histo, ac_histo_indexes,
-                    &depths[num_dc_histo * JpegHistogram::kSize]);
+    #define RELEASE(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(release_capability(__VA_ARGS__))
