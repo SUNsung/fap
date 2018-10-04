@@ -1,30 +1,15 @@
 
         
-                  # If we don't have the lock, then we need to acquire it.
-          if !@machine_locks[entry.id]
-            raise 'Unlocked delete on machine: #{entry.id}'
-          end
+                def self.normalize_dn(dn)
+          ::Gitlab::Auth::LDAP::DN.new(dn).to_normalized_s
+        rescue ::Gitlab::Auth::LDAP::DN::FormatError => e
+          Rails.logger.info('Returning original DN \'#{dn}\' due to error during normalization attempt: #{e.message}')
     
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
+            # Expiration, revocation and scopes are verified in `validate_access_token!`
+        oauth_token = OauthAccessToken.by_token(token)
+        raise UnauthorizedError unless oauth_token
     
-            # Called to change the hostname of the virtual machine.
-        def change_host_name(name)
-          raise BaseError, _key: :unsupported_host_name
+              relation.update_all(update)
         end
       end
     end
@@ -32,182 +17,137 @@
 end
 
     
-    module Vagrant
-  module Plugin
-    module V1
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
+            def initialize(badge)
+          @entity = badge.entity
+          @status = badge.status
         end
+    
+          def to_html
+        link_to(image_tag(image_url, alt: title), link_url)
       end
-    end
-  end
-end
-
     
-    $stderr.puts <<DEPRECATION
-WARNING: Ruby Sass's Git repository is moving, and the old repository will be
-deled on 26 March 2019! Please update your Git URLs to point to the new
-repository at https://github.com/sass/ruby-sass.
-    
-        def parse_comment(line)
-      if line.text[1] == CSS_COMMENT_CHAR || line.text[1] == SASS_COMMENT_CHAR
-        silent = line.text[1] == SASS_COMMENT_CHAR
-        loud = !silent && line.text[2] == SASS_LOUD_COMMENT_CHAR
-        if silent
-          value = [line.text]
-        else
-          value = self.class.parse_interp(
-            line.text, line.index, to_parser_offset(line.offset), :filename => @filename)
-        end
-        value = Sass::Util.with_extracted_values(value) do |str|
-          str = str.gsub(/^#{line.comment_tab_str}/m, '')[2..-1] # get rid of // or /*
-          format_comment_text(str, silent)
-        end
-        type = if silent
-                 :silent
-               elsif loud
-                 :loud
-               else
-                 :normal
-               end
-        comment = Tree::CommentNode.new(value, type)
-        comment.line = line.index
-        text = line.text.rstrip
-        if text.include?('\n')
-          end_offset = text.length - text.rindex('\n')
-        else
-          end_offset = to_parser_offset(line.offset + text.length)
-        end
-        comment.source_range = Sass::Source::Range.new(
-          Sass::Source::Position.new(@line, to_parser_offset(line.offset)),
-          Sass::Source::Position.new(@line + text.count('\n'), end_offset),
-          @options[:filename])
-        comment
+          if @account_moderation_note.save
+        redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.created_msg')
       else
-        Tree::RuleNode.new(parse_interp(line.text), full_line_range(line))
-      end
+        @account          = @account_moderation_note.target_account
+        @moderation_notes = @account.targeted_moderation_notes.latest
+    
+        def resource_params
+      params.require(:email_domain_block).permit(:domain)
     end
+  end
+end
+
     
-          opts.on('--watch', 'Watch files or directories for changes.',
-                         'The location of the generated CSS can be set using a colon:',
-                         '  #{@default_syntax} --watch input.#{@default_syntax}:output.css',
-                         '  #{@default_syntax} --watch input-dir:output-dir') do
-        @options[:watch] = true
-      end
+    class Api::PushController < Api::BaseController
+  include SignatureVerification
     
-            found = possible_files(remove_root(name)).map do |f, s|
-          path = if dir == '.' || Sass::Util.pathname(f).absolute?
-                   f
-                 else
-                   '#{escape_glob_characters(dir)}/#{f}'
-                 end
-          Dir[path].map do |full_path|
-            full_path.gsub!(REDUNDANT_DIRECTORY, File::SEPARATOR)
-            [Sass::Util.cleanpath(full_path).to_s, s]
-          end
-        end.flatten(1)
-        return if found.empty?
+    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
+# requests with `config.assets.quiet`, because the default silence method of
+# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
+Logging::Logger.send :alias_method, :local_level, :level
+Logging::Logger.send :alias_method, :local_level=, :level=
+Logging::Logger.send :include, LoggerSilence
+
     
-            opts.on_tail('-h', '--help', '-H', 'Display this help message.') do
-          puts opts
-          exit
-        end
+      def down
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id
+  end
     
-          def fetch(key, default=nil, &block)
-        fetched_keys << key unless fetched_keys.include?(key)
-        peek(key, default, &block)
-      end
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
+end
+
     
-    # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
+    When /^I (?:like|unlike) the post '([^']*)' in the stream$/ do |post_text|
+  like_stream_post(post_text)
+end
     
-                try += 1
-            $stderr.puts('Error #{e.class}, retrying #{try}/#{options[:max_tries]}')
-            $stderr.puts(e.message)
-            sleep(0.5)
-          end
-        end
-      end
-      raise exception if exception
-    
-        if local_gems?
-      gems = extract_local_gems_plugins
-    elsif development?
-      gems = plugins_development_gems
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
     else
-      gems = plugins_gems
-      verify_remote!(gems) if !local? && verify?
-    end
-    
-      option '--installed', :flag, 'List only explicitly installed plugins using bin/logstash-plugin install ...', :default => false
-  option '--verbose', :flag, 'Also show plugin version number', :default => false
-  option '--group', 'NAME', 'Filter plugins per group: input, output, filter or codec' do |arg|
-    raise(ArgumentError, 'should be one of: input, output, filter or codec') unless ['input', 'output', 'filter', 'codec', 'pack'].include?(arg)
-    arg
-  end
-    
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
     end
   end
-end
     
-        # To make sure we have the maximum compatibility
-    # we will ignore theses gems and they won't be included in the pack
-    IGNORE_GEMS_IN_PACK = %w(
-      logstash-core
-      logstash-core-plugin-api
-      jar-dependencies
-    )
-    
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
-      else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
-      end
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
     end
   end
 end
 
     
-      def execute
-    # Turn off any jar dependencies lookup when running with `--local`
-    ENV['JARS_SKIP'] = 'true' if local?
+        attr_writer :caller
+    attr_writer :content
+    attr_writer :selector
     
-      context '#params' do
-    let(:plugin_class) do
-      Class.new(LogStash::Filters::Base)  do
-        config_name 'fake'
-        config :password, :validate => :password
-        config :bad, :validate => :string, :default => 'my default', :obsolete => 'not here'
+          opts.on('--update', 'Compile files or directories to CSS.',
+                          'Locations are set like --watch.') do
+        @options[:update] = true
       end
+    
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
     end
     
-          it 'returns true if the pipeline is a system pipeline' do
-        expect(subject.system?).to be_truthy
-      end
-    end
-    
-    task :spec    => 'spec:all'
-task :default => :spec
+      # Make sure we dont build this gem from a non jruby
+  # environment.
+  if RUBY_PLATFORM == 'java'
+    gem.platform = 'java'
+  else
+    raise 'The logstash-core-api need to be build on jruby'
+  end
+end
