@@ -1,197 +1,343 @@
 
         
-        void DocumentHook2(bool start, content::RenderFrame* frame, Dispatcher* dispatcher) {
-  // ignore the first invocation of this hook for iframe
-  // or we'll trigger creating a context with invalid type
-  // there will follow another one with valid url
-  blink::ScriptForbiddenScope::AllowUserAgentScript script;
-  blink::WebLocalFrame* web_frame = frame->GetWebFrame();
-  GURL frame_url = ScriptContext::GetDocumentLoaderURLForFrame(web_frame);
-  if (web_frame->Parent() && (!frame_url.is_valid() || frame_url.is_empty()))
-    return;
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::HandleScope scope(isolate);
-  blink::WebFrame* f = frame->GetRenderView()->GetWebView()->MainFrame();
-  if (!f->IsWebLocalFrame())
-    return;
-  blink::WebLocalFrame* local_frame = f->ToWebLocalFrame();
-  v8::Local<v8::Context> v8_context = local_frame->MainWorldScriptContext();
-  ScriptContext* script_context =
-      dispatcher->script_context_set().GetByV8Context(v8_context);
-  if (start)
-    TryInjectStartScript(web_frame, script_context ? script_context->extension() : nullptr, true);
-  if (!script_context)
-    return;
-  std::vector<v8::Handle<v8::Value> > arguments;
-  v8::Local<v8::Value> window =
-    web_frame->MainWorldScriptContext()->Global();
-  arguments.push_back(v8::Boolean::New(isolate, start));
-  arguments.push_back(window);
-  if (base::FeatureList::IsEnabled(::features::kNWNewWin)) {
-    content::RenderFrame* main_frame = frame->GetRenderView()->GetMainRenderFrame();
-    arguments.push_back(v8::Integer::New(isolate, main_frame->GetRoutingID()));
-    }
+        Status RunCppShapeInferenceImpl(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    const std::vector<PyObject*>& input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    std::vector<string>* output_tensor_shape_protos,
+    string* input_tensors_needed_out) {
+  tensorflow::NodeDef node;
+  if (!node.ParseFromString(serialized_node_def)) {
+    return errors::InvalidArgument(
+        'Error parsing node_def during cpp shape inference');
+  }
+  DCHECK_EQ(output_tensor_shape_protos->size(), 0);
     }
     
-      base::WaitableEvent done(false, false);
-  BrowserThread::PostTask(
-      BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 make_scoped_refptr(context_getter), config));
-  done.Wait();
+    // Convert an AttrValue with type `type` to the Python representation for
+// that value.
+string AttrValueToPython(const string& type, const AttrValue& value,
+                         const string& dtype_module = 'tf.');
     
-    namespace nw {
+    class TestRandomAccessFile : public RandomAccessFile {
+  // The file contents is 10 bytes of all A's
+  Status Read(uint64 offset, size_t n, StringPiece* result,
+              char* scratch) const override {
+    Status s;
+    for (int i = 0; i < n; ++i) {
+      if (offset + i >= 10) {
+        n = i;
+        s = errors::OutOfRange('EOF');
+        break;
+      }
+      scratch[i] = 'A';
+    }
+    *result = StringPiece(scratch, n);
+    return s;
+  }
+};
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // Safe containers for an owned TF_Status. On destruction, the handle
+// will be deleted by TF_DeleteStatus.
+using Safe_TF_StatusPtr = std::unique_ptr<TF_Status, detail::TFStatusDeleter>;
+Safe_TF_StatusPtr make_safe(TF_Status* status);
+    
+    #include 'atom/common/node_includes.h'
+    
+    bool GlobalShortcut::Register(const ui::Accelerator& accelerator,
+                              const base::Closure& callback) {
+  if (!GlobalShortcutListener::GetInstance()->RegisterAccelerator(accelerator,
+                                                                  this)) {
+    return false;
+  }
     }
     
-      gfx::Point* point = reinterpret_cast<gfx::Point*>(userdata);
-  *x = point->x();
-  *y = point->y();
     
-        std::string label;
-    if (option.GetString('label', &label))
-      SetLabel(label);
+    {}  // namespace api
     
-    
-    {  run_loop_.Run();
-  remover->RemoveObserver(this);
-  return true;
+    // static
+mate::Handle<RenderProcessPreferences>
+RenderProcessPreferences::ForAllWebContents(v8::Isolate* isolate) {
+  return mate::CreateHandle(isolate,
+                            new RenderProcessPreferences(
+                                isolate, base::Bind(&IsWebContents, isolate)));
 }
+    
+    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
+                        CanGenericSignature Generics,
+                        ArrayRef<SILField> Fields) {
+  id.AddPointer(Generics.getPointer());
+  for (auto &field : Fields) {
+    id.AddPointer(field.getLoweredType().getPointer());
+    id.AddBoolean(field.isMutable());
+  }
+}
+
+    
+    private:
+  unsigned getNumReplacementTypes() const {
+    return genericSig->getGenericParams().size();
+  }
+    
+        if (info.status == serialization::Status::Valid) {
+      assert(info.bytes != 0);
+      if (!info.name.empty()) {
+        StringRef moduleData = buf.substr(0, info.bytes);
+        std::unique_ptr<llvm::MemoryBuffer> bitstream(
+          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
+    }
+    }
+    
+    
+    {  if (!lhs.hasOutOfLineData()) {
+    assert(lhs.Data == 0 || lhs.getLengthInChunks() == 1);
+    for (auto chunk : rhs.getOutOfLineChunks())
+      if (chunk != lhs.Data)
+        return false;
+    return true;
+  } else if (!rhs.hasOutOfLineData()) {
+    assert(rhs.Data == 0 || rhs.getLengthInChunks() == 1);
+    for (auto chunk : lhs.getOutOfLineChunks())
+      if (chunk != rhs.Data)
+        return false;
+    return true;
+  } else {
+    auto lhsChunks = lhs.getOutOfLineChunks();
+    auto rhsChunks = rhs.getOutOfLineChunks();
+    assert(lhsChunks.size() == rhsChunks.size());
+    return lhsChunks == rhsChunks;
+  }
+}
+    
+    #ifndef DIRECTIONAL_PREPOSITION
+#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
+#endif
+    
+    /// Determine whether the preposition in a split is 'vacuous', and
+/// should be removed.
+static bool isVacuousPreposition(StringRef beforePreposition,
+                                 StringRef preposition,
+                                 StringRef afterPreposition,
+                                 const OmissionTypeName &paramType) {
+  // Only consider 'with' or 'using' to be potentially vacuous.
+  if (!camel_case::sameWordIgnoreFirstCase(preposition, 'with') &&
+      !camel_case::sameWordIgnoreFirstCase(preposition, 'using'))
+    return false;
+    }
+    
+      const llvm::UTF8 *SourceStart =
+    reinterpret_cast<const llvm::UTF8 *>(S.data());
+    
+    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
+    
+      static CFPointeeInfo forConstVoid() {
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = true;
+    info.Decl = nullptr;
+    return info;
+  }
+    
+    IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_AllocateId, int)
+    
+    namespace content {
+class RenderFrameHost;
+}
+    
+    base::StringPiece GetStringResource(int resource_id) {
+  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
+}
+    
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
+    
+    
+#include 'base/basictypes.h'
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    class ObjectManager;
     
     #include 'base/run_loop.h'
-#include 'content/public/browser/browsing_data_remover.h'
-#include 'extensions/browser/extension_function.h'
-    
-    #include <vector>
-    
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/message_loop/message_loop_current.h'
 #include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/render_frame_host.h'
 #include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/render_widget_host_view.h'
 #include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
+#include 'extensions/browser/app_window/app_window.h'
+#include 'skia/ext/image_operations.h'
+#include 'ui/aura/client/screen_position_client.h'
+#include 'ui/aura/window.h'
+#include 'ui/aura/window_tree_host.h'
+#include 'ui/events/platform/platform_event_source.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+#include 'ui/views/widget/widget.h'
+#include 'ui/views/focus/focus_manager.h'
+#include 'vector'
     
-    #  define EXPECT_DEBUG_DEATH(statement, regex) \
-  EXPECT_DEATH(statement, regex)
+    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
+ public:
+  NwAppClearCacheFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  void OnBrowsingDataRemoverDone() override;
+    }
     
-    // Functions producing parameter generators.
-//
-// Google Test uses these generators to produce parameters for value-
-// parameterized tests. When a parameterized test case is instantiated
-// with a particular generator, Google Test creates and runs tests
-// for each element in the sequence produced by the generator.
-//
-// In the following sample, tests from test case FooTest are instantiated
-// each three times with parameter values 3, 5, and 8:
-//
-// class FooTest : public TestWithParam<int> { ... };
-//
-// TEST_P(FooTest, TestThis) {
-// }
-// TEST_P(FooTest, TestThat) {
-// }
-// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
-//
     
-    template <typename T1>
-void PrintTo(const ::std::tr1::tuple<T1>& t, ::std::ostream* os) {
-  PrintTupleTo(t, os);
+    {}
+    
+    
+    {  private:
+    DISALLOW_COPY_AND_ASSIGN(NwScreenStopMonitorFunction);
+  };
+    
+    struct Options;
+struct FileMetaData;
+    
+    DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
+    : env_(raw_options.env),
+      internal_comparator_(raw_options.comparator),
+      internal_filter_policy_(raw_options.filter_policy),
+      options_(SanitizeOptions(dbname, &internal_comparator_,
+                               &internal_filter_policy_, raw_options)),
+      owns_info_log_(options_.info_log != raw_options.info_log),
+      owns_cache_(options_.block_cache != raw_options.block_cache),
+      dbname_(dbname),
+      table_cache_(new TableCache(dbname_, options_, TableCacheSize(options_))),
+      db_lock_(nullptr),
+      shutting_down_(nullptr),
+      background_work_finished_signal_(&mutex_),
+      mem_(nullptr),
+      imm_(nullptr),
+      logfile_(nullptr),
+      logfile_number_(0),
+      log_(nullptr),
+      seed_(0),
+      tmp_batch_(new WriteBatch),
+      background_compaction_scheduled_(false),
+      manual_compaction_(nullptr),
+      versions_(new VersionSet(dbname_, &options_, table_cache_,
+                               &internal_comparator_)) {
+  has_imm_.Release_Store(nullptr);
 }
     
-    // This helper class can be used to mock out Google Test failure reporting
-// so that we can test Google Test or code that builds on Google Test.
-//
-// An object of this class appends a TestPartResult object to the
-// TestPartResultArray object given in the constructor whenever a Google Test
-// failure is reported. It can either intercept only failures that are
-// generated in the same thread that created this object or it can intercept
-// all generated failures. The scope of this mock object can be controlled with
-// the second argument to the two arguments constructor.
-class GTEST_API_ ScopedFakeTestPartResultReporter
-    : public TestPartResultReporterInterface {
+     public:
+  std::string dbname_;
+  SpecialEnv* env_;
+  DB* db_;
+    
+    class StdoutPrinter : public WritableFile {
  public:
-  // The two possible mocking modes of this object.
-  enum InterceptMode {
-    INTERCEPT_ONLY_CURRENT_THREAD,  // Intercepts only thread local failures.
-    INTERCEPT_ALL_THREADS           // Intercepts all failures.
-  };
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
+  }
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
+};
+    
+     public:
+  LogTest() : reading_(false),
+              writer_(new Writer(&dest_)),
+              reader_(new Reader(&source_, &report_, true/*checksum*/,
+                      0/*initial_offset*/)) {
+  }
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+     private:
+  enum { kMaxHeight = 12 };
+    
+          // Verify that everything in [pos,current) was not present in
+      // initial_state.
+      while (pos < current) {
+        ASSERT_LT(key(pos), K) << pos;
     }
     
-    // A copyable object representing the result of a test part (i.e. an
-// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
-//
-// Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
+      static bool isInitialized6() { return data6_.initialized; }
+    
+      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
+    
+      DHTTaskQueue* taskQueue_;
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+    
+    {  size_t getQueueSize() const { return queue_.size(); }
+};
+    
+    #include <memory>
+    
+    
+    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
+};
+    
+    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+
+    
+    DNSCache::~DNSCache() = default;
+    
+      // Called once for every suite of benchmarks run.
+  // The parameter 'context' contains information that the
+  // reporter may wish to use when generating its report, for example the
+  // platform under which the benchmarks are running. The benchmark run is
+  // never started if this function returns false, allowing the reporter
+  // to skip runs based on the context information.
+  virtual bool ReportContext(const Context& context) = 0;
+    
+    Benchmark* Benchmark::Range(int start, int limit) {
+  CHECK(ArgsCnt() == -1 || ArgsCnt() == 1);
+  std::vector<int> arglist;
+  AddRange(&arglist, start, limit, range_multiplier_);
+    }
+    
+    #include 'check.h'
+#include 'internal_macros.h'
+    
+    int64_t RoundDouble(double v) { return static_cast<int64_t>(v + 0.5); }
+    
+    class Barrier {
  public:
-  // The possible outcomes of a test part (i.e. an assertion or an
-  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
-  enum Type {
-    kSuccess,          // Succeeded.
-    kNonFatalFailure,  // Failed but the test can continue.
-    kFatalFailure      // Failed and the test should be terminated.
-  };
+  Barrier(int num_threads) : running_threads_(num_threads) {}
     }
-    
-    // The helper function for {ASSERT|EXPECT}_STRCASENE.
-//
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-GTEST_API_ AssertionResult CmpHelperSTRCASENE(const char* s1_expression,
-                                              const char* s2_expression,
-                                              const char* s1,
-                                              const char* s2);
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED3.  Don't use
-// this in your code.
-#define GTEST_PRED3_(pred, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred3Helper(#pred, \
-                                             #v1, \
-                                             #v2, \
-                                             #v3, \
-                                             pred, \
-                                             v1, \
-                                             v2, \
-                                             v3), on_failure)
-    
-    // DeathTest is a class that hides much of the complexity of the
-// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
-// returns a concrete class that depends on the prevailing death test
-// style, as defined by the --gtest_death_test_style and/or
-// --gtest_internal_run_death_test flags.
-    
-    // A unique struct template used as the default value for the
-// arguments of class template Templates.  This allows us to simulate
-// variadic templates (e.g. Templates<int>, Templates<int, double>,
-// and etc), which C++ doesn't support directly.
-template <typename T>
-struct NoneT {};
-    
-    // Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
-}
-    
-      struct KeyComparator {
-    const InternalKeyComparator comparator;
-    explicit KeyComparator(const InternalKeyComparator& c) : comparator(c) { }
-    int operator()(const char* a, const char* b) const;
-  };
-  friend class MemTableIterator;
-  friend class MemTableBackwardIterator;
-    
-        // Copy data.
-    Iterator* iter = NewTableIterator(t.meta);
-    int counter = 0;
-    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-      builder->Add(iter->key(), iter->value());
-      counter++;
-    }
-    delete iter;
-    
-      bool empty() const { return head_.next_ == &head_; }
-  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
-  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
