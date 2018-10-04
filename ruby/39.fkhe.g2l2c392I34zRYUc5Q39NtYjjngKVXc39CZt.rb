@@ -1,34 +1,41 @@
 
         
-              def footer
-        if @footer.nil?
-          if page = @page.footer
-            @footer = page.text_data
-          else
-            @footer = false
+                  # Make sure we're only working with one VM if single target
+          if options[:single_target] && vms.length != 1
+            vm = @env.primary_vm
+            raise Errors::MultiVMTargetRequired if !vm
+            vms = [vm]
           end
+    
+              # Make sure we're only working with one VM if single target
+          if options[:single_target] && machines.length != 1
+            @logger.debug('Using primary machine since single target')
+            primary_name = @env.primary_machine_name
+            raise Errors::MultiVMTargetRequired if !primary_name
+            machines = [get_machine.call(primary_name)]
+          end
+    
+            # This contains all the registered guest capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :guest_capabilities
+    
+              hook_name ||= ALL_ACTIONS
+          components.action_hooks[hook_name.to_sym] << block
         end
-        @footer
-      end
     
-      File.write('lib/#{name}.rb', old_file)
-    
-        get %r{/(.+?)/([0-9a-f]{40})} do
-      file_path = params[:captures][0]
-      version   = params[:captures][1]
-      wikip     = wiki_page(file_path, file_path, version)
-      name      = wikip.name
-      path      = wikip.path
-      if page = wikip.page
-        @page    = page
-        @name    = name
-        @content = page.formatted_data
-        @version = version
-        @bar_side = wikip.wiki.bar_side
-        mustache :page
-      elsif file = wikip.wiki.file('#{file_path}', version, true)
-        show_file(file)
-      else
-        halt 404
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
+        end
       end
     end
+  end
+end
