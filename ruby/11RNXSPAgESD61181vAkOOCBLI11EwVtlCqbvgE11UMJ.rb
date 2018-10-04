@@ -1,106 +1,98 @@
 
         
-            # The stdlib recorded in the install receipt is used during dependency
-    # compatibility checks, so we only care about the stdlib that libraries
-    # link against.
-    keg.detect_cxx_stdlibs(:skip_executables => true)
+            if successfully_sent?(resource)
+      respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+    else
+      respond_with(resource)
+    end
   end
     
-        def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+    DeviseCreateUsers.migrate(:up)
+    
+            if options[:bypass]
+          ActiveSupport::Deprecation.warn(<<-DEPRECATION.strip_heredoc, caller)
+          [Devise] bypass option is deprecated and it will be removed in future version of Devise.
+          Please use bypass_sign_in method instead.
+          Example:
+    
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
             end
-          rescue ThreadError # ignore empty queue error
           end
         end
       end
-      workers.map(&:join)
-    end
     
-        if $stdout.tty?
-      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
-      bad_regex = metacharacters.any? do |char|
-        ARGV.any? do |arg|
-          arg.include?(char) && !arg.start_with?('/')
+            # Create an environment so we can determine the active
+        # machines...
+        found = false
+        env = vagrant_env(home_path)
+        env.active_machines.each do |name, provider|
+          if name.to_s == self.name.to_s &&
+            provider.to_s == self.provider.to_s
+            found = true
+            break
+          end
         end
-      end
-      if ARGV.any? && bad_regex
-        ohai 'Did you mean to perform a regular expression search?'
-        ohai 'Surround your query with /slashes/ to search by regex.'
-      end
-    end
     
-      def dump_formula_report(key, title)
-    formulae = select_formula(key).sort.map do |name, new_name|
-      # Format list items of renamed formulae
-      if key == :R
-        name = pretty_installed(name) if installed?(name)
-        new_name = pretty_installed(new_name) if installed?(new_name)
-        '#{name} -> #{new_name}'
-      else
-        installed?(name) ? pretty_installed(name) : name
-      end
-    end
+            # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
+        end
     
-          export JAVA_HOME='$(/usr/libexec/java_home)'
-      export AWS_ACCESS_KEY='<Your AWS Access ID>'
-      export AWS_SECRET_KEY='<Your AWS Secret Key>'
-      export #{home_name}='#{home_value}'
-    EOS
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
+        end
+    
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    
+    When /^I toggle nsfw posts$/ do
+  find('.toggle_nsfw_state', match: :first).click
+end
+    
+      # creates a new user object from the factory with some default attributes
+  # and the given override attributes, adds the standard aspects to it
+  # and returns it
+  def create_user(overrides={})
+    default_attrs = {
+        :password => 'password',
+        :password_confirmation => 'password',
+        :getting_started => false
+    }
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
+    end
   end
 end
 
     
-    puts '\nDone.'
-
-    
-            private
-    
-            # NOTE: feed_token was renamed from rss_token but both needs to be supported because
-        #       users might have already added the feed to their RSS reader before the rename
-        token = current_request.params[:feed_token].presence || current_request.params[:rss_token].presence
-        return unless token
-    
-            scope :latest, -> { where(retried: [false, nil]) }
-        scope :created, -> { where(status: 'created') }
-        scope :running, -> { where(status: 'running') }
-        scope :pending, -> { where(status: 'pending') }
-        scope :success, -> { where(status: 'success') }
-        scope :failed, -> { where(status: 'failed')  }
-        scope :canceled, -> { where(status: 'canceled')  }
-        scope :skipped, -> { where(status: 'skipped')  }
-        scope :manual, -> { where(status: 'manual')  }
-    
-          def to_markdown
-        '[![#{title}](#{image_url})](#{link_url})'
-      end
-    
-    
-    
-        def get_web_content(url)
-      raw_uri           = URI.parse url
-      proxy             = ENV['http_proxy']
-      if proxy
-        proxy_uri       = URI.parse(proxy)
-        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
-      else
-        https           = Net::HTTP.new raw_uri.host, raw_uri.port
-      end
-      https.use_ssl     = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request           = Net::HTTP::Get.new raw_uri.request_uri
-      data              = https.request request
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
     end
   end
-    
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
+end
