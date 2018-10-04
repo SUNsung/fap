@@ -1,96 +1,159 @@
 
         
-            print('Classifier Training')
-    print('===================')
-    accuracy, train_time, test_time = {}, {}, {}
-    for name in sorted(args['estimators']):
-        clf = ESTIMATORS[name]
-        try:
-            clf.set_params(random_state=0)
-        except (TypeError, ValueError):
-            pass
+        FLAGS = flags.FLAGS
     
-        X = get_data(N, DD, dataset)
+    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
+            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N
+nreplications = FLAGS.nreplications
+E = nreplications * C
+train_percentage = FLAGS.train_percentage
+ntimesteps = int(T / FLAGS.dt)
     
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
+      Returns:
+    The dataset structures, with the field alignment_matrix_cxf added.
+    This is # channels x npcs dimension
+'''
+  nchannels_all = 0
+  channel_idxs = {}
+  conditions_all = {}
+  nconditions_all = 0
+  for name, dataset in datasets.items():
+    cidxs = np.where(dataset['P_sxn'])[1] # non-zero entries in columns
+    channel_idxs[name] = [cidxs[0], cidxs[-1]+1]
+    nchannels_all += cidxs[-1]+1 - cidxs[0]
+    conditions_all[name] = np.unique(dataset['condition_labels_train'])
     
-    import codecs
-    
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
-    
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
-    
-    # Author: Peter Prettenhoer <peter.prettenhofer@gmail.com>
-#
-# License: BSD 3 clause
-    
-    The usual covariance maximum likelihood estimate can be regularized
-using shrinkage. Ledoit and Wolf proposed a close formula to compute
-the asymptotically optimal shrinkage parameter (minimizing a MSE
-criterion), yielding the Ledoit-Wolf covariance estimate.
-    
-        =====  =====  =====  ======
-      1      2      3    Color
-    =====  =====  =====  ======
-      Y      N      N    Red
-      N      Y      N    Blue
-      N      N      Y    Yellow
-      Y      Y      N    Purple
-      Y      N      Y    Orange
-      Y      Y      N    Green
-      Y      Y      Y    Brown
-    =====  =====  =====  ======
+      dataset_dict = {}
+  fnames = os.listdir(data_path)
     
     
-# -- Options for LaTeX output --------------------------------------------------
+FLAGS = tf.app.flags.FLAGS
     
     
-  def _AddSyntaxDataIfNeeded( self, extra_data ):
-    if not self._user_options[ 'seed_identifiers_with_syntax' ]:
-      return
-    filetype = vimsupport.CurrentFiletypes()[ 0 ]
-    if filetype in self._filetypes_with_keywords_loaded:
-      return
+_SPECIAL_CHAR_MAP = {
+    '\xe2\x80\x98': '\'',
+    '\xe2\x80\x99': '\'',
+    '\xe2\x80\x9c': ''',
+    '\xe2\x80\x9d': ''',
+    '\xe2\x80\x93': '-',
+    '\xe2\x80\x94': '-',
+    '\xe2\x88\x92': '-',
+    '\xce\x84': '\'',
+    '\xc2\xb4': '\'',
+    '`': '\''
+}
+    
+        # Create the supervisor.  It will take care of initialization, summaries,
+    # checkpoints, and recovery.
+    sv = tf.Supervisor(
+        logdir=log_dir,
+        is_chief=is_chief,
+        saver=model.saver,
+        global_step=model.global_step,
+        recovery_wait_secs=30,
+        summary_op=None,
+        init_fn=init_fn)
     
     
-# Emulates Vim buffer
-# Used to store buffer related information like diagnostics, latest parse
-# request. Stores buffer change tick at the parse request moment, allowing
-# to effectively determine whether reparse is needed for the buffer.
-class Buffer( object ):
+def create_masked_cross_entropy_loss(targets, present, logits):
+  '''Calculate the cross entropy loss matrices for the masked tokens.'''
+  cross_entropy_losses = losses.cross_entropy_loss_matrix(targets, logits)
     
-    from copy import deepcopy
-from hamcrest import assert_that, contains_string, equal_to
+      elif FLAGS.mask_strategy == 'contiguous':
+    masked_length = int((1 - FLAGS.is_present_rate) * FLAGS.sequence_length) - 1
+    # Determine location to start masking.
+    start_mask = np.random.randint(
+        1, FLAGS.sequence_length - masked_length + 1, size=FLAGS.batch_size)
+    p = np.full([FLAGS.batch_size, FLAGS.sequence_length], True, dtype=bool)
+    
+        def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
     
     
-def BuildServerConf():
-  '''Builds a dictionary mapping YCM Vim user options to values. Option names
-  don't have the 'ycm_' prefix.'''
-  # We only evaluate the keys of the vim globals and not the whole dictionary
-  # to avoid unicode issues.
-  # See https://github.com/Valloric/YouCompleteMe/pull/2151 for details.
-  keys = vimsupport.GetVimGlobalsKeys()
-  server_conf = {}
-  for key in keys:
-    if not key.startswith( YCM_VAR_PREFIX ):
-      continue
-    new_key = key[ len( YCM_VAR_PREFIX ): ]
-    new_value = vimsupport.VimExpressionToPythonType( 'g:' + key )
-    server_conf[ new_key ] = new_value
+setup(
+    name='httpie',
+    version=httpie.__version__,
+    description=httpie.__doc__.strip(),
+    long_description=long_description(),
+    url='http://httpie.org/',
+    download_url='https://github.com/jakubroztocil/httpie',
+    author=httpie.__author__,
+    author_email='jakub@roztocil.co',
+    license=httpie.__licence__,
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'http = httpie.__main__:main',
+        ],
+    },
+    extras_require=extras_require,
+    install_requires=install_requires,
+    tests_require=tests_require,
+    cmdclass={'test': PyTest},
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development',
+        'Topic :: System :: Networking',
+        'Topic :: Terminals',
+        'Topic :: Text Processing',
+        'Topic :: Utilities'
+    ],
+)
+
     
-      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
-  if python_interpreter:
-    python_interpreter = utils.FindExecutable( python_interpreter )
-    if python_interpreter:
-      return python_interpreter
+    
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+    
+    from utils import TESTS_ROOT
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    
+    
+def test_GET(httpbin_both):
+    r = http('GET', httpbin_both + '/get')
+    assert HTTP_OK in r
+    
+    
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
+    
+        An instance can be used either as a decorator or as a context manager.
