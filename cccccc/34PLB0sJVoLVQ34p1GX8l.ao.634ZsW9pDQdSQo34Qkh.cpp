@@ -1,117 +1,146 @@
 
         
-               allowSubmatrix || allowInplace || iterations != 1 ||
-       !CAROTENE_NS::isSupportedConfiguration())
-        return CV_HAL_ERROR_NOT_IMPLEMENTED;
-    
-                int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
-            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst0))),
-                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst0))));
-    
-        for (size_t i = 0; i < size.height; ++i)
+        
     {
-        const u8 * src0 = internal::getRowPtr(src0Base, src0Stride, i);
-        const s16 * src1 = internal::getRowPtr(src1Base, src1Stride, i);
-        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-            for (; j < roiw32; j += 32)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src0 = vld1q_u8(src + j), v_src1 = vld1q_u8(src + j + 16);
-            uint8x16_t v_dst0 = vmvnq_u8(v_src0), v_dst1 = vmvnq_u8(v_src1);
-            vst1q_u8(dst + j, v_dst0);
-            vst1q_u8(dst + j + 16, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-            uint8x8_t v_dst = vmvn_u8(v_src);
-            vst1_u8(dst + j, v_dst);
-        }
-    
-    void combineUYVY(const Size2D &size,
-                 const u8 * srcyBase, ptrdiff_t srcyStride,
-                 const u8 * srcuBase, ptrdiff_t srcuStride,
-                 const u8 * srcvBase, ptrdiff_t srcvStride,
-                 u8 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin = 0, size_t endMargin = 0);
-    
-    #endif
-    
-        std::vector<u8> _buf((size.width+16)*3*(sizeof(ptrdiff_t) + sizeof(u8)) + 128);
-    u8* buf[3];
-    buf[0] = &_buf[0]; buf[1] = buf[0] + size.width; buf[2] = buf[1] + size.width;
-    ptrdiff_t* cpbuf[3];
-    cpbuf[0] = (ptrdiff_t*)internal::alignPtr(buf[2] + size.width, sizeof(ptrdiff_t)) + 1;
-    cpbuf[1] = cpbuf[0] + size.width + 1;
-    cpbuf[2] = cpbuf[1] + size.width + 1;
-    memset(buf[0], 0, size.width*3);
-    
-                uint16x8_t v_mask0 = vorrq_u16(vceqq_s16(v_src0, v_maxval8), vceqq_s16(v_src0, v_minval8));
-            uint16x8_t v_mask1 = vorrq_u16(vceqq_s16(v_src1, v_maxval8), vceqq_s16(v_src1, v_minval8));
-    
-    
-    {
-    {        for (jd -= 3; j < size.width; ++j, js += 3, jd -= 3)
-        {
-            dst[jd] = src[js];
-            dst[jd + 1] = src[js + 1];
-            dst[jd + 2] = src[js + 2];
-        }
-    }
-}
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-        for (u32 v = vgetq_lane_u32(prev, 3); j < size.width; ++j)
-        sum[j] = (v += src[j]);
-    
-    bool GodotCollisionDispatcher::needsResponse(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsResponse(body0, body1);
+    {        // For now reusing the shim to allow prefetch.
+        // Please only use a subset of the shim interface that includes
+        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
+        // Shim will be deleted in the future versions.
+        std::shared_ptr<ReaderShim<float>> m_shim;
+        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
+    };
 }
 
     
-    class PinJointBullet : public JointBullet {
-	class btPoint2PointConstraint *p2pConstraint;
+            template<typename OnWriteUpdateFunc>
+        void Update(size_t samples, const ValuePtr& accumulatedLoss, const ValuePtr& accumulatedMetric,
+                    OnWriteUpdateFunc callback)
+        {
+            if (samples == 0)
+            {
+                return;
+            }
     }
     
-            // Poll and handle inputs
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
+        ParameterInitializer HeNormalInitializer(double scale, int outputRank, int filterRank, unsigned long seed)
+    {
+        return CreateInitializer(Microsoft::MSR::CNTK::HeNormalInitializerTypeName, scale, outputRank, filterRank, seed);
+    }
     
-            // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
-        ImGui::NewFrame();
+            VariableFields(const NDShape& shape, VariableKind varType, ::CNTK::DataType type, const std::weak_ptr<Function>& ownerFunction, const NDArrayViewPtr& value, bool needsGradient, const std::vector<Axis>& dynamicAxes, bool isSparse, const std::wstring& name, const std::wstring& uid)
+            : m_shape(shape), m_varKind(varType), m_dataType(type), m_ownerFunction(ownerFunction), m_value(value), m_needsGradient(needsGradient), m_dynamicAxes(dynamicAxes), m_isSparse(isSparse), m_name(name), m_uid(uid), m_valueTimeStamp(0)
+        {
+            if (value && (type != value->GetDataType()))
+                InvalidArgument('The DataType of the Parameter/Constant Variable '%S' does not match the DataType of the associated Value', AsString().c_str());
+    }
+    
+    
+    {        if (singleOutput)
+        {
+            return NodeToConfigValuePtr(clonedNodes.find(outputNodes.begin()->second)->second);
+        }
+        else
+        {
+            auto record = make_shared<ConfigRecord>(nullptr, [](const std::wstring & msg){ RuntimeError('CloneFunction: %ls', msg.c_str()); });
+            for (let& outputNodesKV : outputNodes)
+                record->Add(outputNodesKV.first, [](const wstring&){}, move(NodeToConfigValuePtr(clonedNodes.find(outputNodesKV.second)->second)));
+            auto valuep = ConfigValuePtr(record, [](const std::wstring& msg) { LogicError('CloneFunction: Unexpected failure: %ls', msg.c_str()); }, exprName);
+            return valuep;
+        }
+    }
+    
+    #if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4) && \
+    !defined(__CUDACC__)
+#include <parallel/algorithm>
+#define XGBOOST_PARALLEL_SORT(X, Y, Z) __gnu_parallel::sort((X), (Y), (Z))
+#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) \
+  __gnu_parallel::stable_sort((X), (Y), (Z))
+#elif defined(_MSC_VER) && (!__INTEL_COMPILER)
+#include <ppl.h>
+#define XGBOOST_PARALLEL_SORT(X, Y, Z) concurrency::parallel_sort((X), (Y), (Z))
+#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
+#else
+#define XGBOOST_PARALLEL_SORT(X, Y, Z) std::sort((X), (Y), (Z))
+#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
+#endif
+    
+      /*! \brief return corresponding element set given the node_id */
+  inline const Elem& operator[](unsigned node_id) const {
+    const Elem& e = elem_of_each_node_[node_id];
+    CHECK(e.begin != nullptr)
+        << 'access element that is not in the set';
+    return e;
+  }
+  // clear up things
+  inline void Clear() {
+    row_indices_.clear();
+    elem_of_each_node_.clear();
+  }
+  // initialize node id 0->everything
+  inline void Init() {
+    CHECK_EQ(elem_of_each_node_.size(), 0U);
+    }
+    
+    void SparsePageWriter::PushWrite(std::shared_ptr<SparsePage>&& page) {
+  qworkers_[clock_ptr_].Push(std::move(page));
+  clock_ptr_ = (clock_ptr_ + 1) % workers_.size();
+}
+    
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    /*! \brief pruner that prunes a tree after growing finishes */
+class TreePruner: public TreeUpdater {
+ public:
+  TreePruner() {
+    syncher_.reset(TreeUpdater::Create('sync'));
+  }
+  // set training parameter
+  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
+    syncher_->Init(args);
+  }
+  // update the tree, do pruning
+  void Update(HostDeviceVector<GradientPair> *gpair,
+              DMatrix *p_fmat,
+              const std::vector<RegTree*> &trees) override {
+    // rescale learning rate according to size of trees
+    float lr = param_.learning_rate;
+    param_.learning_rate = lr / trees.size();
+    for (auto tree : trees) {
+      this->DoPrune(*tree);
+    }
+    param_.learning_rate = lr;
+    syncher_->Update(gpair, p_fmat, trees);
+  }
+    }
