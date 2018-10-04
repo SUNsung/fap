@@ -1,437 +1,279 @@
 
         
-        std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status) {
-  if (!PyList_Check(input_constant_tensor_values)) {
-    TF_SetStatus(out_status, TF_INVALID_ARGUMENT, 'Invalid python value');
-    return std::vector<string>();
-  }
-    }
+          // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
     
-    // Get the python wrappers for a list of ops in a OpList.
-// `op_list_buf` should be a pointer to a buffer containing
-// the binary encoded OpList proto, and `op_list_len` should be the
-// length of that buffer.
-string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      void Compute(OpKernelContext* context) override {
-    // Output a scalar string.
-    Tensor* output_tensor = nullptr;
-    OP_REQUIRES_OK(context,
-                   context->allocate_output(0, TensorShape(), &output_tensor));
-    auto output = output_tensor->scalar<string>();
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-    {}  // namespace tensorflow
-
-    
-      // Attempt to get the next record at 'current_offset()'. Populates status
-  // with OK on success, OUT_OF_RANGE for end of file, DATA_LOSS for some
-  // kinds of truncated reads, or another code for other errors
-  // (e.g., filesystem errors).
-  void GetNext(TF_Status* status);
-    
-    void AtomContentClient::AddAdditionalSchemes(Schemes* schemes) {
-  schemes->standard_schemes.push_back('chrome-extension');
-    }
-    
-    // static
-void UvTaskRunner::OnTimeout(uv_timer_t* timer) {
-  UvTaskRunner* self = static_cast<UvTaskRunner*>(timer->data);
-  if (!ContainsKey(self->tasks_, timer))
-    return;
-    }
-    
-    #include 'atom/browser/api/atom_api_web_contents.h'
-#include 'atom/browser/browser.h'
-#include 'atom/browser/native_browser_view.h'
-#include 'atom/common/color_util.h'
-#include 'atom/common/native_mate_converters/gfx_converter.h'
-#include 'atom/common/native_mate_converters/value_converter.h'
-#include 'atom/common/node_includes.h'
-#include 'atom/common/options_switches.h'
-#include 'native_mate/constructor.h'
-#include 'native_mate/dictionary.h'
-#include 'ui/gfx/geometry/rect.h'
-    
-    #endif  // ATOM_BROWSER_API_ATOM_API_BUTTON_H_
-
-    
-        // Downloadable Content Information
-    dict.Set('isDownloadable', val.downloadable);
-    
-    #include 'atom/common/api/constructor.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'native_mate/dictionary.h'
-#include 'ui/views/controls/button/label_button.h'
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return item->is_modified_;
-}
-    
-    
-    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
-                           base::WaitableEvent::InitialState::NOT_SIGNALED);
-  content::BrowserThread::PostTask(
-      content::BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 base::WrapRefCounted(context_getter), config));
-  done.Wait();
-  return true;
-}
-    
-    
-    {  // ExtensionFunction:
-  ResponseAction Run() override;
-  DECLARE_EXTENSION_FUNCTION('nw.App.crashBrowser', UNKNOWN)
-};
-    
-        bool WriteImage(ClipboardData& data) {
-      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
-      std::string content = *(data.data);
-    }
-    
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-    
-    class NwObjCallObjectMethodSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwObjCallObjectMethodSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    
-    {    int n_aux = this->ListAuxiliaryStates().size();
-    aux_type->clear();
-    for (int i = 0; i < n_aux; ++i ) aux_type->push_back(mshadow::default_type_flag);
-    return true;
-  }
-  /*!
-   * \brief Copy this OperatorProperty.
-   * \return a pointer to the copied OperatorProperty
-   */
-  virtual OperatorProperty* Copy() const = 0;
-  /*!
-   * \brief Create a Operator on specific context
-   */
-  virtual Operator* CreateOperator(Context ctx) const = 0;
-  /*!
-   * \brief Create a Operator on specific context and input shape/type
-   * \param ctx context of this operator
-   * \param in_shape shape of the input ndarrays
-   * \param in_type dtype of the input ndarrays
-   * \return the created operator
-   */
-  virtual Operator* CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-    std::vector<int> out_type, aux_type;
-    std::vector<TShape> out_shape, aux_shape;
-    out_type.resize(this->ListOutputs().size());
-    out_shape.resize(this->ListOutputs().size());
-    aux_type.resize(this->ListAuxiliaryStates().size());
-    aux_shape.resize(this->ListAuxiliaryStates().size());
-    CHECK(InferType(in_type, &out_type, &aux_type));
-    CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-    return CreateOperator(ctx);
-  }
-  /*!
-   * \brief return the type string of the Operator
-   *  subclasses override this function.
-   * \return The type string.
-   */
-  virtual std::string TypeString() const = 0;
-  //--------------------------------------------------------
-  // All the below functions are optional to override.
-  //--------------------------------------------------------
-  /*!
-   * \brief Declare additional resource required in forward pass.
-   *  These additional resources will be presented in OpContext.requested
-   *  in the same order of the returned Resource.
-   * \param in_shape The input shape to the operator, corresponds to shapes of in_data.
-   * \return Additional resource request
-   */
-  virtual std::vector<ResourceRequest> ForwardResource(
-      const std::vector<TShape> &in_shape) const {
-    return std::vector<ResourceRequest>();
-  }
-  /*!
-   * \brief Declare additional resource required in backward pass.
-   *  These additional resources will be presented in OpContext.requested
-   *  in the same order of the returned Resource.
-   * \param in_shape The input shape to the operator, corresponds to shapes of in_data.
-   * \return Additional resource request
-   */
-  virtual std::vector<ResourceRequest> BackwardResource(
-      const std::vector<TShape> &in_shape) const {
-    return std::vector<ResourceRequest>();
-  }
-  /*!
-   * \brief Declare the input requirement of Backward pass.
-   *
-   *  Only the returned list of variables will be used in Backward.
-   *  This function is used for memory optimization.
-   *  It is advised to override and only return what is actually needed.
-   *  If this function is not overriden, all the variables will be valid in Backward.
-   *
-   * \code
-   *  // The following code declares Backward need out_grad[0], in_data[0],in_data[1]
-   *  vector<int> BackwardInputs(const vector<int> &out_grad,
-   *                             const vector<int> &in_data,
-   *                             const vector<int> &out_data) const {
-   *    return {out_grad[0], in_data[0], in_data[1]};
-   *  }
-   * \endcode
-   * \param out_grad gradient of outputs in backward pass.
-   * \param in_data the input data in forward pass.
-   * \param out_data the output data in forward pass.
-   * \return an integer vector indicating the input requirments
-   * \sa BackwardInputs
-   */
-  virtual std::vector<int> DeclareBackwardDependency(
-      const std::vector<int> &out_grad,
-      const std::vector<int> &in_data,
-      const std::vector<int> &out_data) const {
-    // By default requires to see all the things.
-    // remember to override this function to get a better performance.
-    std::vector<int> ret = out_grad;
-    ret.insert(ret.end(), in_data.begin(), in_data.end());
-    ret.insert(ret.end(), out_data.begin(), out_data.end());
-    return ret;
-  }
-  /*!
-   * \brief Get possible forward inplace options.
-   *  This function enables optimization to reuse memory of inputs in output.
-   *  Only override when necessary, by default in-place is disabled.
-   *
-   *  The reason for void* type in the out_data is to distinguish the order
-   *  of mappings between the two, compiler will report error when
-   *  in_data and out_data's order in the pair get reversed.
-   *
-   * \code
-   *  // The following code says out_data[0] can share data with in_data[0]
-   *  vector<pair<int, void*> > ForwardInplaceOption(const vector<int> &in_data,
-   *                                                 const vector<void*> &out_data) const {
-   *    return {{in_data[0], out_data[0]}};
-   *  }
-   * \endcode
-   * \param in_data The input data in forward pass.
-   * \param out_data The output data in forward pass.
-   * \return list of pair of that maps input->output,
-   *   indicating possible in place operations.
-   */
-  virtual std::vector<std::pair<int, void*> > ForwardInplaceOption(
-      const std::vector<int> &in_data,
-      const std::vector<void*> &out_data) const {
-    return std::vector<std::pair<int, void*> >();
-  }
-  /*!
-   * \brief Get possible backward inplace options.
-   *  This function enables optimization to reuse memory of inputs in output.
-   *  Only override when necessary, by default in-place is disabled.
-   *
-   *  The reason for void* type in the in_grad is to distinguish the order
-   *  of mappings between the two, compiler will report error when
-   *  in_data and out_data's order in the pair get reversed.
-   *
-   * \code
-   *  // The following code says in_grad[0] can share data with in_data[0]
-   *  vector<pair<int,int> > BackwardInplaceOption(
-   *                 const std::vector<int> &out_grad,
-   *                 const std::vector<int> &in_data,
-   *                 const std::vector<int> &out_data,
-   *                 const std::vector<int> &in_grad) const {
-   *    return {in_data[0], in_grad[0]}};
-   *  }
-   * \endcode
-   * \param in_data The input data in forward pass.
-   * \param out_data The output data in forward pass.
-   * \param in_grad Gradient of inputs in backward pass.
-   * \param out_grad Gradient of outputs in backward pass.
-   * \return list of pair of that maps input->output,
-   *   indicating possible in place operations.
-   */
-  virtual std::vector<std::pair<int, void*> > BackwardInplaceOption(
-      const std::vector<int> &out_grad,
-      const std::vector<int> &in_data,
-      const std::vector<int> &out_data,
-      const std::vector<void*> &in_grad) const {
-    return std::vector<std::pair<int, void*> >();
-  }
-  /*!
-   * \brief Get Backward Input Dependency for generic types of data.
-   *  Normally T can be pointer of Symbol::DataEntry, or NDArray.
-   *  This function will select the result list of T according to DeclareBackwardDependency.
-   *
-   * \param in_data the input data in forward pass.
-   * \param out_data the output data in forward pass.
-   * \param out_grad gradient of outputs in backward pass.
-   * \tparam T the generic type parameter.
-   * \return vector of inputs the Backward Operation depends on.
-   * \sa DeclareBackwardDependency
-   */
-  template<typename T>
-  inline std::vector<T> BackwardInputs(const std::vector<T> &out_grad,
-                                       const std::vector<T> &in_data,
-                                       const std::vector<T> &out_data) const {
-    int counter = 0;
-    std::vector<int> out_grad_index(out_grad.size());
-    std::vector<int> in_data_index(in_data.size());
-    std::vector<int> out_data_index(out_data.size());
-    for (size_t i = 0; i < out_grad_index.size(); ++i) {
-      out_grad_index[i] = counter++;
-    }
-    for (size_t i = 0; i < in_data_index.size(); ++i) {
-      in_data_index[i] = counter++;
-    }
-    for (size_t i = 0; i < out_data_index.size(); ++i) {
-      out_data_index[i] = counter++;
-    }
-    std::vector<T> all_data;
-    all_data.insert(all_data.end(), out_grad.begin(), out_grad.end());
-    all_data.insert(all_data.end(), in_data.begin(), in_data.end());
-    all_data.insert(all_data.end(), out_data.begin(), out_data.end());
-    
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    // Set mode before forward
-    caffe::CaffeMode::SetMode<xpu>();
-    using ::caffe::Blob;
-    using std::vector;
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    for (uint32_t i = 0; i < req.size(); ++i)
-      CHECK_EQ(req[i], kWriteTo);
-    }
-    
-    
-    {
-    {    // really delete
-    if (to_delete_) {
-      VersionedVarBlock *head = pending_write_->next;
-      VersionedVarBlock::Delete(pending_write_);
-      assert(head_ == head);
-      VersionedVarBlock::Delete(head);
-      return true;
-    }
-    // detach pending write
-    old_pending_write = pending_write_;
-    // search for chains to trigger
-    end_of_read_chain = old_pending_write->next;
-    // reset to 0 pending reads
-    num_pending_reads_ = 0;
-    while (end_of_read_chain != head_ &&
-           end_of_read_chain->write == false) {
-      ++num_pending_reads_;
-      end_of_read_chain = end_of_read_chain->next;
-    }
-    if (end_of_read_chain == head_) {
-      pending_write_ = nullptr;
+    namespace {
+// Whether two fields have conflicting accessors (assuming name1 and name2
+// are different). name1 and name2 are field1 and field2's camel-case name
+// respectively.
+bool IsConflicting(const FieldDescriptor* field1, const string& name1,
+                   const FieldDescriptor* field2, const string& name2,
+                   string* info) {
+  if (field1->is_repeated()) {
+    if (field2->is_repeated()) {
+      // Both fields are repeated.
+      return false;
     } else {
-      // check if there is pending reads, if not trigger write
-      assert(end_of_read_chain->write == true);
-      pending_write_ = end_of_read_chain;
-      if (num_pending_reads_ == 0) {
-        // mark write as already activated in this var
-        num_pending_reads_ = kWriteTriggered;
-        trigger_write = end_of_read_chain->trigger;
+      // field1 is repeated, and field2 is not.
+      if (name1 + 'Count' == name2) {
+        *info = 'both repeated field \'' + field1->name() + '\' and singular ' +
+                'field \'' + field2->name() + '\' generate the method \'' +
+                'get' + name1 + 'Count()\'';
+        return true;
+      }
+      if (name1 + 'List' == name2) {
+        *info = 'both repeated field \'' + field1->name() + '\' and singular ' +
+                'field \'' + field2->name() + '\' generate the method \'' +
+                'get' + name1 + 'List()\'';
+        return true;
+      }
+      // Well, there are obviously many more conflicting cases, but it probably
+      // doesn't worth the effort to exhaust all of them because they rarely
+      // happen and as we are continuing adding new methods/changing existing
+      // methods the number of different conflicting cases will keep growing.
+      // We can just add more cases here when they are found in the real world.
+      return false;
+    }
+  } else {
+    if (field2->is_repeated()) {
+      return IsConflicting(field2, name2, field1, name1, info);
+    } else {
+      // None of the two fields are repeated.
+      return false;
+    }
+  }
+}
+}  // namespace
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_doc_comment.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+      // Limit the number of bytes per line.
+  static const int kBytesPerLine = 40;
+  // Limit the number of lines per string part.
+  static const int kLinesPerPart = 400;
+  // Every block of bytes, start a new string literal, in order to avoid the
+  // 64k length limit. Note that this value needs to be <64k.
+  static const int kBytesPerPart = kBytesPerLine * kLinesPerPart;
+  for (int i = 0; i < file_data.size(); i += kBytesPerLine) {
+    if (i > 0) {
+      if (i % kBytesPerPart == 0) {
+        printer->Print(',\n');
+      } else {
+        printer->Print(' +\n');
       }
     }
+    printer->Print('\'$data$\'',
+      'data', CEscape(file_data.substr(i, kBytesPerLine)));
   }
-  // This is outside of lock scope
-  // Be very carful, pending_write_ and num_pending_reads_
-  // can change now, do not reply ont the two variables.
-  // The linked list \in [old_pending_write, end_of_read_chain)
-  // is already detached from this Var.
-  // So it is safe to modify these
-  VersionedVarBlock *cur_head = old_pending_write->next;
-  VersionedVarBlock::Delete(old_pending_write);
-  // dispatch all the events
-  while (cur_head != end_of_read_chain) {
-    if (cur_head->trigger->decr_wait() == 0) {
-      dispatcher(cur_head->trigger);
-    }
-    auto prev = cur_head;
-    cur_head = cur_head->next;
-    assert(cur_head != nullptr);
-    VersionedVarBlock::Delete(prev);
-  }
-  if (trigger_write != nullptr && trigger_write->decr_wait() == 0) {
-    dispatcher(trigger_write);
-  }
-  return false;
+    
+    void Action::startWithTarget(Node *aTarget)
+{
+    _originalTarget = _target = aTarget;
 }
     
-    class DHTMessageCallback;
-    
-    
-    {  const int clen = bittorrent::getCompactLength(family_);
-  // nodes
-  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
-                                                             eoi = nodes_.end();
-       i != eoi; ++i) {
-    const std::shared_ptr<DHTNode>& node = *i;
-    // Write IP address + port in Compact IP-address/port info form.
-    unsigned char compactPeer[COMPACT_LEN_IPV6];
-    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
-                                             node->getPort());
-    if (compactlen != clen) {
-      memset(compactPeer, 0, clen);
-    }
-    uint8_t clen1 = clen;
-    // 1byte compact peer format length
-    WRITE_CHECK(fp, &clen1, sizeof(clen1));
-    // 7bytes reserved
-    WRITE_CHECK(fp, zero, 7);
-    // clen bytes compact peer
-    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
-    // 24-clen bytes reserved
-    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
-    // 20bytes: node ID
-    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
-    // 4bytes reserved
-    WRITE_CHECK(fp, zero, 4);
-  }
-  if (fp.close() == EOF) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  if (!File(filenameTemp).renameTo(filename)) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  A2_LOG_INFO('DHT routing table was saved successfully');
+    EaseBezierAction* EaseBezierAction::reverse() const
+{
+    EaseBezierAction* reverseAction = EaseBezierAction::create(_inner->reverse());
+    reverseAction->setBezierParamer(_p3,_p2,_p1,_p0);
+    return reverseAction;
 }
     
-      void setNodes(const std::vector<std::shared_ptr<DHTNode>>& nodes);
+    FlipX * FlipX::clone() const
+{
+    // no copy constructor
+    return FlipX::create(_flipX);
+}
+//
+// FlipY
+//
     
-    #endif // D_DHT_TASK_FACTORY_H
+    class CC_DLL __CCCallFuncO : public CallFunc
+{
+public:
+    /** Creates the action with the callback.
+        typedef void (Ref::*SEL_CallFuncO)(Ref*);
+     *
+     * @param target    A certain target.
+     * @param selector  The callback need to be executed.
+     * @param object    An object as the callback's first argument.
+     * @return An autoreleased __CCCallFuncO object.
+     */
+    CC_DEPRECATED_ATTRIBUTE static __CCCallFuncO * create(Ref* target, SEL_CallFuncO selector, Ref* object);
+    //
+    // Overrides
+    //
+    virtual __CCCallFuncO* clone() const override;
+    virtual void execute() override;
+    
+    Ref* getObject() const;
+    void setObject(Ref* obj);
+    
+CC_CONSTRUCTOR_ACCESS:
+    __CCCallFuncO();
+    virtual ~__CCCallFuncO();
+    /** initializes the action with the callback
+    }
+    
+    void ScaleTo::startWithTarget(Node *target)
+{
+    ActionInterval::startWithTarget(target);
+    _startScaleX = target->getScaleX();
+    _startScaleY = target->getScaleY();
+    _startScaleZ = target->getScaleZ();
+    _deltaX = _endScaleX - _startScaleX;
+    _deltaY = _endScaleY - _startScaleY;
+    _deltaZ = _endScaleZ - _startScaleZ;
+}
+    
+    #endif // __ACTION_CCACTION_MANAGER_H__
 
     
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
+    
+    {        return true;
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
+    
+    /**
+@brief FadeOutDownTiles action.
+@details Fades out the target node with many tiles from top to bottom.
+ */
+class CC_DLL FadeOutDownTiles : public FadeOutUpTiles
+{
+public:
+    /** 
+    * @brief Create the action with the grid size and the duration.
+    * @param duration Specify the duration of the FadeOutDownTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @return If the creation success, return a pointer of FadeOutDownTiles action; otherwise, return nil.
+    */
+    static FadeOutDownTiles* create(float duration, const Size& gridSize);
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __CCACTIONTWEEN_H__
+#define __CCACTIONTWEEN_H__
+    
+        /** @deprecated Use getInstance() instead. */
+    CC_DEPRECATED_ATTRIBUTE static AnimationCache* sharedAnimationCache() { return AnimationCache::getInstance(); }
+    
+        static BOOST_FORCEINLINE storage_type exchange(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+#if defined(__clang__)
+        // Clang cannot allocate eax:edx register pairs but it has sync intrinsics
+        storage_type old_val = storage;
+        while (true)
+        {
+            storage_type val = __sync_val_compare_and_swap(&storage, old_val, v);
+            if (val == old_val)
+                return val;
+            old_val = val;
+        }
+#elif !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %%eax, %%ebx\n\t'
+            'movl %%edx, %%ecx\n\t'
+            'movl %[dest], %%eax\n\t'
+            'movl 4+%[dest], %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b %[dest]\n\t'
+            'jne 1b\n\t'
+            'movl %[scratch], %%ebx\n\t'
+            : '+A' (v), [scratch] '=m' (scratch), [dest] '+o' (storage)
+            :
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
+        );
+        return v;
+#else // defined(__PIC__)
+        __asm__ __volatile__
+        (
+            'movl %[dest], %%eax\n\t'
+            'movl 4+%[dest], %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b %[dest]\n\t'
+            'jne 1b\n\t'
+            : '=A' (v), [dest] '+o' (storage)
+            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return v;
+#endif // defined(__PIC__)
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %%eax, %%ebx\n\t'
+            'movl %%edx, %%ecx\n\t'
+            'movl 0(%[dest]), %%eax\n\t'
+            'movl 4(%[dest]), %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            'movl %[scratch], %%ebx\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A' (v), [scratch] '=m,m' (scratch)
+            : [dest] 'D,S' (&storage)
+#else
+            : '+A' (v), [scratch] '=m' (scratch)
+            : [dest] 'D' (&storage)
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
+        );
+        return v;
+#else // defined(__PIC__)
+        __asm__ __volatile__
+        (
+            'movl 0(%[dest]), %%eax\n\t'
+            'movl 4(%[dest]), %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '=A,A' (v)
+            : 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
+#else
+            : '=A' (v)
+            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return v;
+#endif // defined(__PIC__)
+#endif
+    }
+    
+    template< >
+struct make_storage_type< 1u, false >
+{
+    typedef mars_boost::uint8_t type;
+    }
