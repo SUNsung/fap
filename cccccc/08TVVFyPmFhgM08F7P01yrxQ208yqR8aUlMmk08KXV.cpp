@@ -1,116 +1,166 @@
 
         
-        
-    {}  // namespace internal
+          // add two new params for better error handling
+  errorObject->Set(mate::StringToV8(isolate(), 'code'),
+                   v8::Integer::New(isolate(), code));
+  errorObject->Set(mate::StringToV8(isolate(), 'domain'),
+                   mate::StringToV8(isolate(), domain));
     
-      // Appends the TestPartResult object to the TestPartResultArray
-  // received in the constructor.
-  //
-  // This method is from the TestPartResultReporterInterface
-  // interface.
-  virtual void ReportTestPartResult(const TestPartResult& result);
- private:
-  void Init();
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-    // FilePath - a class for file and directory pathname manipulation which
-// handles platform-specific conventions (like the pathname separator).
-// Used for helper functions for naming files in a directory for xml output.
-// Except for Set methods, all methods are const or static, which provides an
-// 'immutable value object' -- useful for peace of mind.
-// A FilePath with a value ending in a path separator ('like/this/') represents
-// a directory, otherwise it is assumed to represent a file. In either case,
-// it may or may not represent an actual file or directory in the file system.
-// Names are NOT checked for syntax correctness -- no checking for illegal
-// characters, malformed paths, etc.
-    
-    #ifndef GTEST_SAMPLES_PRIME_TABLES_H_
-#define GTEST_SAMPLES_PRIME_TABLES_H_
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  BrowserView::SetConstructor(isolate, base::Bind(&BrowserView::New));
+    }
     
     
-#endif  // GTEST_SAMPLES_SAMPLE2_H_
+    {}  // namespace atom
 
     
-    // Tests the copy c'tor.
-TEST(MyString, CopyConstructor) {
-  const MyString s1(kHelloString);
-  const MyString s2 = s1;
-  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
+    // static
+mate::Handle<DownloadItem> DownloadItem::Create(v8::Isolate* isolate,
+                                                download::DownloadItem* item) {
+  auto* existing = TrackableObject::FromWrappedClass(isolate, item);
+  if (existing)
+    return mate::CreateHandle(isolate, static_cast<DownloadItem*>(existing));
+    }
+    
+    void Menu::SetRole(int index, const base::string16& role) {
+  model_->SetRole(index, role);
 }
     
-    	DefaultIdentifierActions actions[VS::SHADER_MAX];
+    #include 'atom/browser/api/event_emitter.h'
+    
+      void Show();
+  void Close();
+    
+    // static
+void PowerMonitor::BuildPrototype(v8::Isolate* isolate,
+                                  v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'PowerMonitor'));
+    }
+    
+    namespace atom {
+    }
+    
+    int RenderProcessPreferences::AddEntry(const base::DictionaryValue& entry) {
+  return preferences_.AddEntry(entry);
+}
+    
+      /// Retrieve the array of protocol conformances, which line up with the
+  /// requirements of the generic signature.
+  ArrayRef<ProtocolConformanceRef> getConformances() const {
+    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
+  }
+  MutableArrayRef<ProtocolConformanceRef> getConformances() {
+    return MutableArrayRef<ProtocolConformanceRef>(
+                              getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
+  }
     
     
-    {	vsyslog(p_err ? LOG_ERR : LOG_INFO, p_format, p_list);
+    {  SyntaxMap[FromNode] = ToNode;
 }
     
     
-    {	TCPServerPosix();
-	~TCPServerPosix();
-};
+    {    buf = buf.substr(info.bytes);
+  }
     
-    Error MutexWindows::try_lock() {
+      // Now, match from the first word up until the end of the type name.
+  auto typeWordIter = typeWordRevIter.base(),
+    typeWordIterEnd = typeWords.end();
+  ++nameWordIter;
+  while (typeWordIter != typeWordIterEnd &&
+         nameWordIter != nameWordIterEnd &&
+         matchNameWordToTypeWord(*nameWordIter, *typeWordIter)) {
+    ++typeWordIter;
+    ++nameWordIter;
+  }
+    
+    using namespace swift;
+    
+    
+    {  return forInvalid();
+}
+    
+    #include <intrin.h>
+#include <boost/memory_order.hpp>
+#include <boost/type_traits/make_signed.hpp>
+#include <boost/atomic/detail/config.hpp>
+#include <boost/atomic/detail/interlocked.hpp>
+#include <boost/atomic/detail/storage_type.hpp>
+#include <boost/atomic/detail/operations_fwd.hpp>
+#include <boost/atomic/capabilities.hpp>
+#include <boost/atomic/detail/ops_msvc_common.hpp>
+    
+      /**
+   * @brief Stop the CAN client.
+   */
+  virtual void Stop() = 0;
+    
+      void SendThreadFunc() {
+    using common::time::Clock;
+    using common::time::AsInt64;
+    using common::time::micros;
+    using common::ErrorCode;
+    AINFO << 'Send thread starting...';
+    TestCanParam *param = param_ptr();
+    CanClient *client = param->can_client;
+    std::vector<CanFrame> frames;
+    frames.resize(MAX_CAN_SEND_FRAME_LEN);
     }
     
-    #ifdef WINDOWS_USE_MUTEX
-	HANDLE mutex;
-#else
-	CRITICAL_SECTION mutex;
-#endif
     
-    	if (bind(sock, (struct sockaddr *)&addr, addr_size) == -1) {
-		close();
-		return ERR_UNAVAILABLE;
-	}
-    
-            ValidateType<T>(dict, typeValue, currentVersion);
-    
-        /*virtual*/ void Value::CopyFrom(const Value& source)
     {
-        // TODO: Check if this is a derived type and throw an exception in that case
-        Data()->CopyFrom(*source.Data());
-        if ((Mask() == nullptr) && (source.Mask() != nullptr))
-            InvalidArgument('Value::CopyFrom: Invalid source object; Cannot copy a Value with a mask into 'this' Value which does not have a mask.');
-    }
-    
-                    if (outputRank == SentinelValueForInferParamInitRank)
-                    outputRank = DefaultParamInitOutputRank;
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
-        {
-            // failed to acquire
-            int rc = ::CloseHandle(m_handle);
-            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
-            {
-                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
-            }
-            m_handle = NULL;
-            return false;
-        }
-    
-    
-    {    bool IsRandomizationDisabled() const
     {
-        return randomizationrange == randomizeDisable;
-    }
-};
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
     
-            // Construct matrices for further computation.
-        const Matrix<ElemType>& gains = Input(0)->ValueFor(fr);
-        const Matrix<ElemType>& preds = Input(1)->ValueFor(fr);
-        const Matrix<ElemType>& queryIds = Input(2)->ValueFor(fr);
+    // System gflags
+DEFINE_string(node_name, 'chassis', 'The chassis module name in proto');
+DEFINE_string(canbus_driver_name, 'canbus', 'Driver name.');
+    
+    
+    {
+    {
+    {      --(*argc);
+      --i;
+    } else if (IsFlag(argv[i], 'help')) {
+      PrintUsageAndExit();
+    }
+  }
+  for (auto const* flag :
+       {&FLAGS_benchmark_format, &FLAGS_benchmark_out_format})
+    if (*flag != 'console' && *flag != 'json' && *flag != 'csv') {
+      PrintUsageAndExit();
+    }
+  if (FLAGS_benchmark_color.empty()) {
+    PrintUsageAndExit();
+  }
+}
+    
+    Benchmark* Benchmark::ThreadPerCpu() {
+  thread_counts_.push_back(CPUInfo::Get().num_cpus);
+  return this;
+}
+    
+    
+    {  *value = value_str;
+  return true;
+}
+    
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
