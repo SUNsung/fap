@@ -1,59 +1,49 @@
 
         
-              def save
-        @changed = identity.save
-      end
-    
-          def find_user_from_access_token
-        return unless access_token
-    
-      desc 'Generate Documentation'
-  task :doc => [:yard, 'doc:add_ids']
-  task :redoc => [:yard, 'doc:add_ids']
-rescue LoadError
-  desc 'Generate Documentation'
-  task :doc => :rdoc
-  task :yard => :rdoc
+        def bottle_receipt_path(bottle_file)
+  Utils.popen_read('/usr/bin/tar', '-tzf', bottle_file, '*/*/INSTALL_RECEIPT.json').chomp
 end
     
-          # Backwards compatibility
-      options[:property_syntax] ||= options[:attribute_syntax]
-      case options[:property_syntax]
-      when :alternate; options[:property_syntax] = :new
-      when :normal; options[:property_syntax] = :old
-      end
-      options[:sourcemap] = :auto if options[:sourcemap] == true
-      options[:sourcemap] = :none if options[:sourcemap] == false
+      def merge(*args)
+    @settings.merge(*args)
+    self
+  end
     
-        # Returns a string representation of the Sass backtrace.
-    #
-    # @param default_filename [String] The filename to use for unknown files
-    # @see #sass_backtrace
-    # @return [String]
-    def sass_backtrace_str(default_filename = 'an unknown file')
-      lines = message.split('\n')
-      msg = lines[0] + lines[1..-1].
-        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
-      'Error: #{msg}' +
-        sass_backtrace.each_with_index.map do |entry, i|
-          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
-            ' of #{entry[:filename] || default_filename}' +
-            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
-        end.join
-    end
+            next unless path.file?
+        file = path
     
-          # Almost any real Unix terminal will support color,
-      # so we just filter for Windows terms (which don't set TERM)
-      # and not-real terminals, which aren't ttys.
-      return str if ENV['TERM'].nil? || ENV['TERM'].empty? || !STDOUT.tty?
-      '\e[#{COLORS[color]}m#{str}\e[0m'
-    end
+      def internal_development_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
+  end
     
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
+            # This clears out all the registered plugins. This is only used by
+        # unit tests and should not be called directly.
+        def reset!
+          @registered.clear
+        end
     
-          @klass.send :define_method, @name do |*args|
-        ivar = '@attachment_#{name}'
-        attachment = instance_variable_get(ivar)
+    module Vagrant
+  module Plugin
+    module V1
+      # This is the superclass for all V1 plugins.
+      class Plugin
+        # Special marker that can be used for action hooks that matches
+        # all action sequences.
+        ALL_ACTIONS = :__all_actions__
+    
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
+        end
