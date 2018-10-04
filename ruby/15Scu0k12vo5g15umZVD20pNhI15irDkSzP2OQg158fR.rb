@@ -1,62 +1,85 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
+        def du_uploadtrailer_preview_correct_jpg
+  mock_jpg = double
+  allow(mock_jpg).to receive(:file_name).and_return('ftl_FAKEMD5_trailer-en-US_preview.jpg')
+  allow(mock_jpg).to receive(:file_size).and_return(12_345)
+  allow(mock_jpg).to receive(:content_type).and_return('image/jpg')
+  allow(mock_jpg).to receive(:bytes).and_return('trailer preview...')
+  mock_jpg
+end
     
-      </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+      context '#builds_for_group' do
+    it 'executes the request' do
+      MockAPI::TestFlightServer.get('/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/builds') {}
+      subject.builds_for_group(app_id: app_id, group_id: 'fake-group-id')
+      expect(WebMock).to have_requested(:get, 'https://appstoreconnect.apple.com/testflight/v2/providers/fake-team-id/apps/some-app-id/groups/fake-group-id/builds')
+    end
+  end
     
-          def after_feature_element(feature_element)
-        @timings[feature_element_timing_key(feature_element)] = Time.now - @timings[feature_element_timing_key(feature_element)]
-        @io.print ' (#{@timings[feature_element_timing_key(feature_element)]}s)'
+          it 'raises an error if something is wrong' do
+        TunesStubbing.itc_stub_applications_broken_first_create
+        expect do
+          Spaceship::Tunes::Application.create!(name: 'My Name',
+                                                sku: 'SKU123',
+                                                bundle_id: 'net.sunapps.123')
+        end.to raise_error('You must provide a company name to use on the App Store. You must provide a company name to use on the App Store.')
       end
-    
-                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
-            Jekyll.logger.debug '', json_message
-            @websockets.each { |ws| ws.send(json_message) }
-          end
-        end
-    
-          # bootstrap requires minimum precision of 8, see https://github.com/twbs/bootstrap-sass/issues/409
-      ::Sass::Script::Number.precision = [8, ::Sass::Script::Number.precision].max
     end
     
-    namespace :bower do
+              zip_build_products_path = Scan.cache[:zip_build_products_path]
+          Actions.lane_context[SharedValues::SCAN_ZIP_BUILD_PRODUCTS_PATH] = zip_build_products_path if zip_build_products_path
     
-            def run
-          if @pod_name.nil?
-            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
-            # Remove all
-            clear_cache
-          else
-            # Remove only cache for this pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            elsif cache_descriptors.count > 1 && !@wipe_all
-              # Ask which to remove
-              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
-              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
-              remove_caches([cache_descriptors[index]])
-            else
-              # Remove all found cache of this pod
-              remove_caches(cache_descriptors)
-            end
-          end
-        end
-    
-        def initialize(filepath)
-      @filepath = filepath
+        def self.regular_expression_for_split_on_whitespace_followed_by_parenthesized_version
+      # %r{
+      #   \s # a whitespace character
+      #   (?= # followed by -- using lookahead
+      #   \( # open parenthesis
+      #   [\d\.]+ # our version -- one or more digits or full stops
+      #   \) # close parenthesis
+      #   $ # end of line
+      #   ) # end of lookahead
+      # }
+      /\s(?=\([\d\.]+\)$)/
     end
+    
+    require 'colored'
+require 'shellwords'
+    
+          run!
+    end
+  end
+end
+
+    
+      def remove_duplicates
+    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
+      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
+    if AppConfig.postgres?
+      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
+    else
+      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
+    end
+  end
+end
+
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
+end
+
+    
+    Capybara.javascript_driver = :poltergeist
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+      describe '#create' do
+    let(:like_hash) {
+      {post_id: @target.id}
+    }
