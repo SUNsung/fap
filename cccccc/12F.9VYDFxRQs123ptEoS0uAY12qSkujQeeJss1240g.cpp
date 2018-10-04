@@ -1,194 +1,215 @@
 
         
-            for (auto &pfd: pollfds) {
-      if (pfd.revents & (POLLERR | POLLHUP)) {
-        // some process died
-        DEBUG('detaching process');
-        auto &session = client_sessions.at(pfd.fd);
-        DEBUG('%d has died', session.pid);
-        to_remove.push_back(pfd.fd);
-      } else if (pfd.revents & POLLIN) {
-        if (pfd.fd == srv_socket->socket_fd) {
-          // someone is joining
-          DEBUG('registered new client');
-          auto client = srv_socket->accept();
-          int fd = client.socket_fd;
-          to_add.push_back(fd);
-          client_sessions.emplace(fd, std::move(client));
+        #include 'base/stl_util.h'
+    
+    #include <string>
+    
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/native_browser_view.h'
+#include 'native_mate/handle.h'
+    
+    void StopRecording(const base::FilePath& path,
+                   const CompletionCallback& callback) {
+  TracingController::GetInstance()->StopTracing(
+      GetTraceDataEndpoint(path, callback));
+}
+    
+    using extensions::GlobalShortcutListener;
+    
+    #endif  // ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
+
+    
+    namespace mate {
+    }
+    
+    #define FARG_LINE(type, n) , type * dst##n##Base, ptrdiff_t dst##n##Stride
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s32, s8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src1]]                              \n\t'
+             'vld1.32 {d2-d3}, [%[src2]]                              \n\t'
+             'vqmovn.s32 d4, q0                                       \n\t'
+             'vqmovn.s32 d5, q1                                       \n\t'
+             'vqmovn.s16  d6, q2                                      \n\t'
+             'vst1.8 {d6}, [%[dst]]                                   \n\t'
+             : /*no output*/
+             : [src1] 'r' (_src + i + 0),
+               [src2] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i)
+             : 'd0','d1','d2','d3','d4','d5','d6'
+         );
+     }
+})
+#else
+CVT_FUNC(s32, s8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         int32x4_t vline1_s32 = vld1q_s32(_src + i);
+         int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+    }
+    }
+    
+    typedef void (* rshiftConstFunc)(const Size2D &size,
+                                const s16 * srcBase, ptrdiff_t srcStride,
+                                u8 * dstBase, ptrdiff_t dstStride,
+                                CONVERT_POLICY cpolicy);
+    
+                    vSum_0_4 = vmlaq_u16(vSum_0_4, vLane2.val[0], vc6u16);
+                vSum_1_5 = vmlaq_u16(vSum_1_5, vLane2.val[1], vc6u16);
+                vSum_2_6 = vmlaq_u16(vSum_2_6, vLane2.val[2], vc6u16);
+    
+    
+    { protected:
+  int n_ = 0;
+  std::mutex m_;
+  std::condition_variable cv_;
+};
+    
+    namespace caffe2 {
+    }
+    
+    namespace caffe2 {
+    }
+    
+    NO_GRADIENT(GivenTensorFill);
+NO_GRADIENT(GivenTensorDoubleFill);
+NO_GRADIENT(GivenTensorBoolFill);
+NO_GRADIENT(GivenTensorIntFill);
+NO_GRADIENT(GivenTensorInt64Fill);
+NO_GRADIENT(GivenTensorStringFill);
+    
+    
+    {     public:
+      DataFile(SpecialEnv* env, WritableFile* base)
+          : env_(env),
+            base_(base) {
+      }
+      ~DataFile() { delete base_; }
+      Status Append(const Slice& data) {
+        if (env_->no_space_.Acquire_Load() != nullptr) {
+          // Drop writes on the floor
+          return Status::OK();
         } else {
-          // someone wants to register a segment
-          DEBUG('got alloc info');
-          auto &session = client_sessions.at(pfd.fd);
-          AllocInfo info = session.socket.receive();
-          session.pid = info.pid;
-          DEBUG('got alloc info: %d %d %s', (int)info.free, info.pid, info.filename);
-          if (info.free) {
-            free_used_object(info.filename);
-          } else {
-            used_objects.insert(info.filename);
-            DEBUG('registered object %s', info.filename);
-            session.socket.confirm();
-          }
+          return base_->Append(data);
         }
       }
-    }
+      Status Close() { return base_->Close(); }
+      Status Flush() { return base_->Flush(); }
+      Status Sync() {
+        if (env_->data_sync_error_.Acquire_Load() != nullptr) {
+          return Status::IOError('simulated data sync error');
+        }
+        while (env_->delay_data_sync_.Acquire_Load() != nullptr) {
+          DelayMilliseconds(100);
+        }
+        return base_->Sync();
+      }
+    };
+    class ManifestFile : public WritableFile {
+     private:
+      SpecialEnv* env_;
+      WritableFile* base_;
+     public:
+      ManifestFile(SpecialEnv* env, WritableFile* b) : env_(env), base_(b) { }
+      ~ManifestFile() { delete base_; }
+      Status Append(const Slice& data) {
+        if (env_->manifest_write_error_.Acquire_Load() != nullptr) {
+          return Status::IOError('simulated writer error');
+        } else {
+          return base_->Append(data);
+        }
+      }
+      Status Close() { return base_->Close(); }
+      Status Flush() { return base_->Flush(); }
+      Status Sync() {
+        if (env_->manifest_sync_error_.Acquire_Load() != nullptr) {
+          return Status::IOError('simulated sync error');
+        } else {
+          return base_->Sync();
+        }
+      }
+    };
     
-    
-    {} // namespace
-    
-    
-<details>
-    
-    #include <grpcpp/support/config.h>
-    
-    class SecureChannelCredentials final : public ChannelCredentials {
- public:
-  explicit SecureChannelCredentials(grpc_channel_credentials* c_creds);
-  ~SecureChannelCredentials() { grpc_channel_credentials_release(c_creds_); }
-  grpc_channel_credentials* GetRawCreds() { return c_creds_; }
-    }
-    
-    const AuthProperty AuthPropertyIterator::operator*() {
-  return std::pair<grpc::string_ref, grpc::string_ref>(
-      property_->name,
-      grpc::string_ref(property_->value, property_->value_length));
+    inline bool ParseInternalKey(const Slice& internal_key,
+                             ParsedInternalKey* result) {
+  const size_t n = internal_key.size();
+  if (n < 8) return false;
+  uint64_t num = DecodeFixed64(internal_key.data() + n - 8);
+  unsigned char c = num & 0xff;
+  result->sequence = num >> 8;
+  result->type = static_cast<ValueType>(c);
+  result->user_key = Slice(internal_key.data(), n - 8);
+  return (c <= static_cast<unsigned char>(kTypeValue));
 }
     
-    void CoreCodegen::grpc_metadata_array_init(grpc_metadata_array* array) {
-  ::grpc_metadata_array_init(array);
-}
-    
-    void CensusClientCallData::StartTransportStreamOpBatch(
-    grpc_call_element* elem, TransportStreamOpBatch* op) {
-  if (op->send_initial_metadata() != nullptr) {
-    census_context* ctxt = op->get_census_context();
-    GenerateClientContext(
-        qualified_method_, &context_,
-        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
-    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
-                                               kMaxTraceContextLen);
-    if (tracing_len > 0) {
-      GRPC_LOG_IF_ERROR(
-          'census grpc_filter',
-          grpc_metadata_batch_add_tail(
-              op->send_initial_metadata()->batch(), &tracing_bin_,
-              grpc_mdelem_from_slices(
-                  GRPC_MDSTR_GRPC_TRACE_BIN,
-                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
-    }
-    grpc_slice tags = grpc_empty_slice();
-    // TODO: Add in tagging serialization.
-    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
-    if (encoded_tags_len > 0) {
-      GRPC_LOG_IF_ERROR(
-          'census grpc_filter',
-          grpc_metadata_batch_add_tail(
-              op->send_initial_metadata()->batch(), &stats_bin_,
-              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
-    }
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
   }
-    }
-    
-    #include <grpc/status.h>
-#include 'absl/memory/memory.h'
-#include 'absl/strings/string_view.h'
-#include 'absl/strings/strip.h'
-#include 'opencensus/trace/span.h'
-#include 'opencensus/trace/span_context.h'
-#include 'opencensus/trace/trace_params.h'
-#include 'src/core/lib/slice/slice_internal.h'
-#include 'src/cpp/common/channel_filter.h'
-#include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    const ViewDescriptor& ClientCompletedRpcsMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/client/completed_rpcs/minute')
-          .set_measure(kRpcClientRoundtripLatencyMeasureName)
-          .set_aggregation(Aggregation::Count())
-          .add_column(ClientMethodTagKey())
-          .add_column(ClientStatusTagKey());
-  return descriptor;
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-        assert(static_cast<uint32_t>(rt) < 32);
-    assert(static_cast<uint32_t>(ra) < 32);
-    assert(static_cast<uint32_t>(rb) < 32);
-    
-      EXCEPTION_COMMON_IMPL(ExtendedException);
-    
-    inline String ExecutionContext::getRawPostData() const {
-  return m_rawPostData;
-}
-    
-    #ifndef HPHP_FILE_STREAM_WRAPPER_H
-#define HPHP_FILE_STREAM_WRAPPER_H
-    
-        bool isPHP = false;
-    const char *p = strrchr(ename, '.');
-    if (p) {
-      isPHP = (strncmp(p + 1, 'php', 3) == 0);
-    } else {
-      try {
-        std::string line;
-        std::ifstream fin(fe.c_str());
-        if (std::getline(fin, line)) {
-          if (line[0] == '#' && line[1] == '!' &&
-              line.find('php') != std::string::npos) {
-            isPHP = true;
-          }
-        }
-      } catch (...) {
-        Logger::Error('FileUtil::find(): unable to read %s', fe.c_str());
-      }
-    }
-    
-    namespace leveldb {
-    }
-    
-      // Recover from all newer log files than the ones named in the
-  // descriptor (new log files may have been added by the previous
-  // incarnation without registering them in the descriptor).
-  //
-  // Note that PrevLogNumber() is no longer used, but we pay
-  // attention to it in case we are recovering a database
-  // produced by an older version of leveldb.
-  const uint64_t min_log = versions_->LogNumber();
-  const uint64_t prev_log = versions_->PrevLogNumber();
-  std::vector<std::string> filenames;
-  s = env_->GetChildren(dbname_, &filenames);
   if (!s.ok()) {
-    return s;
+    env->DeleteFile(tmp);
   }
-  std::set<uint64_t> expected;
-  versions_->AddLiveFiles(&expected);
-  uint64_t number;
-  FileType type;
-  std::vector<uint64_t> logs;
-  for (size_t i = 0; i < filenames.size(); i++) {
-    if (ParseFileName(filenames[i], &number, &type)) {
-      expected.erase(number);
-      if (type == kLogFile && ((number >= min_log) || (number == prev_log)))
-        logs.push_back(number);
-    }
-  }
-  if (!expected.empty()) {
-    char buf[50];
-    snprintf(buf, sizeof(buf), '%d missing files; e.g.',
-             static_cast<int>(expected.size()));
-    return Status::Corruption(buf, TableFileName(dbname_, *(expected.begin())));
-  }
-    
-    class InternalKey;
-    
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+  return s;
 }
     
-    namespace leveldb {
+    
+    {    // Some corruption was detected.  'size' is the approximate number
+    // of bytes dropped due to the corruption.
+    virtual void Corruption(size_t bytes, const Status& status) = 0;
+  };
+    
+      // Compute the crc of the record type and the payload.
+  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
+  crc = crc32c::Mask(crc);                 // Adjust for storage
+  EncodeFixed32(buf, crc);
+    
+      // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+    
+    void IDCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    }
+  }
+}
+    
+    
+    {}  // namespace guetzli
+    
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
+    
+    #ifndef GUETZLI_JPEG_DATA_ENCODER_H_
+#define GUETZLI_JPEG_DATA_ENCODER_H_
+    
+    void BuildHuffmanCodeTable(const int* counts, const int* values,
+                           HuffmanCodeTable* table) {
+  int huffcode[256];
+  int huffsize[256];
+  int p = 0;
+  for (int l = 1; l <= kJpegHuffmanMaxBitLength; ++l) {
+    int i = counts[l];
+    while (i--) huffsize[p++] = l;
+  }
     }
