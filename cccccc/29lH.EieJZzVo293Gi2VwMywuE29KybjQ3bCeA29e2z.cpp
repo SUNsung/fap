@@ -1,37 +1,45 @@
 
         
-        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
-  if (LangOpts.Target.isMacOSX()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::OSXApplicationExtension
-                : PlatformKind::OSX);
+        using namespace swift;
+    
+    
+    {
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
+    }
+    llvm::errs() << '\n=====================================================\n';
   }
-    }
-    
-    using namespace swift;
-    
-    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
-  llvm::SmallString<32> NameBuf(Name);
-  cache_attributes_t Attrs = {
-    CACHE_ATTRIBUTES_VERSION_2,
-    CBs.keyHashCB,
-    CBs.keyIsEqualCB,
-    nullptr,
-    CBs.keyDestroyCB,
-    CBs.valueReleaseCB,
-    nullptr,
-    nullptr,
-    CBs.UserData,
-    CBs.valueRetainCB,
-  };
-    }
-    
-    #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
+}
 
     
-      static ProcessId Pid = 0;
+      if (UnsupportedOS || UnsupportedArch)
+    return { UnsupportedOS, UnsupportedArch };
+    
+    uint64_t swift::unicode::getUTF16Length(StringRef Str) {
+  uint64_t Length;
+  // Transcode the string to UTF-16 to get its length.
+  SmallVector<llvm::UTF16, 128> buffer(Str.size() + 1); // +1 for ending nulls.
+  const llvm::UTF8 *fromPtr = (const llvm::UTF8 *) Str.data();
+  llvm::UTF16 *toPtr = &buffer[0];
+  llvm::ConversionResult Result =
+    ConvertUTF8toUTF16(&fromPtr, fromPtr + Str.size(),
+                       &toPtr, toPtr + Str.size(),
+                       llvm::strictConversion);
+  assert(Result == llvm::conversionOK &&
+         'UTF-8 encoded string cannot be converted into UTF-16 encoding');
+  (void)Result;
+    }
+    
+    swift::unicode::GraphemeClusterBreakProperty
+swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
+  // FIXME: replace linear search with a trie lookup.
+    }
     
     /// Maintain a set of known CF types.
 static bool isKnownCFTypeName(StringRef name) {
@@ -39,282 +47,111 @@ static bool isKnownCFTypeName(StringRef name) {
                             name, SortByLengthComparator());
 }
     
-    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
- *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
- */
-template <typename Dtype>
-class PositiveUnitballFiller : public Filler<Dtype> {
- public:
-  explicit PositiveUnitballFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    DCHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
-    // We expect the filler to not be called very frequently, so we will
-    // just use a simple implementation
-    int dim = blob->count() / blob->shape(0);
-    CHECK(dim);
-    for (int i = 0; i < blob->shape(0); ++i) {
-      Dtype sum = 0;
-      for (int j = 0; j < dim; ++j) {
-        sum += data[i * dim + j];
-      }
-      for (int j = 0; j < dim; ++j) {
-        data[i * dim + j] /= sum;
-      }
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
     
-      /**
-   * @brief Returns the exact number of bottom blobs required by the layer,
-   *        or -1 if no exact number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some exact number of bottom blobs.
-   */
-  virtual inline int ExactNumBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the minimum number of bottom blobs required by the layer,
-   *        or -1 if no minimum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some minimum number of bottom blobs.
-   */
-  virtual inline int MinBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the maximum number of bottom blobs required by the layer,
-   *        or -1 if no maximum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some maximum number of bottom blobs.
-   */
-  virtual inline int MaxBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the exact number of top blobs required by the layer,
-   *        or -1 if no exact number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some exact number of top blobs.
-   */
-  virtual inline int ExactNumTopBlobs() const { return -1; }
-  /**
-   * @brief Returns the minimum number of top blobs required by the layer,
-   *        or -1 if no minimum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some minimum number of top blobs.
-   */
-  virtual inline int MinTopBlobs() const { return -1; }
-  /**
-   * @brief Returns the maximum number of top blobs required by the layer,
-   *        or -1 if no maximum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some maximum number of top blobs.
-   */
-  virtual inline int MaxTopBlobs() const { return -1; }
-  /**
-   * @brief Returns true if the layer requires an equal number of bottom and
-   *        top blobs.
-   *
-   * This method should be overridden to return true if your layer expects an
-   * equal number of bottom and top blobs.
-   */
-  virtual inline bool EqualNumBottomTopBlobs() const { return false; }
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
     
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+      int id() const { return id_; }
+  std::string extension_id_;
+  ObjectManager* object_manager() const { return object_manager_.get(); }
+    
+    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
     }
     
-    /**
- * @brief Abstract base class that factors out the BLAS code common to
- *        ConvolutionLayer and DeconvolutionLayer.
- */
-template <typename Dtype>
-class BaseConvolutionLayer : public Layer<Dtype> {
- public:
-  explicit BaseConvolutionLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/data_transformer.hpp'
-#include 'caffe/internal_thread.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/blocking_queue.hpp'
-    
-    
-    {}  // namespace caffe
-    
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
+    {}  // namespace nw
 
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    #include 'extensions/browser/extension_function.h'
     
-    namespace caffe {
+    )DOC')
+    .Input(0, 'X', '*(type: Tensor`<float>`)* Input tensor.')
+    .Output(
+        0,
+        'Y',
+        '*(type: Tensor`<float>`)* The exponential of the input tensor computed '
+        'element-wise.')
+    .InheritOnnxSchema('Exp');
+    
+    
+    {
+    {    const float* Xdata = X.template data<float>();
+    float* Ydata = Y->template mutable_data<float>();
+    for (int i = 0; i < X.size(); ++i) {
+      Ydata[i] = std::floor(Xdata[i]);
     }
-    
-    namespace caffe {
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    #include <vector>
-    
-      SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
-    
-    std::shared_ptr<ChannelCredentials> InsecureChannelCredentials() {
-  return std::shared_ptr<ChannelCredentials>(
-      new InsecureChannelCredentialsImpl());
-}
-    
-    
-    { private:
-  grpc_call_credentials* const c_creds_;
+    return true;
+  }
 };
     
-    #include <grpcpp/alarm.h>
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
     
-    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
-    const grpc::string& name) const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter =
-      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
-  const grpc_auth_property* property = nullptr;
-  std::vector<grpc::string_ref> values;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    values.push_back(grpc::string_ref(property->value, property->value_length));
-  }
-  return values;
-}
+      // Implementations of the DB interface
+  using DB::Get;
+  virtual Status Get(const ReadOptions& options,
+                     ColumnFamilyHandle* column_family, const Slice& key,
+                     PinnableSlice* value) override;
+  using DB::MultiGet;
+  virtual std::vector<Status> MultiGet(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>&,
+      const std::vector<Slice>& keys, std::vector<std::string>* values)
+    override;
     
-    size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
-                              uint64_t* server_elapsed_time) {
-  return RpcServerStatsEncoding::Decode(absl::string_view(buf, buf_size),
-                                        server_elapsed_time);
-}
+      Options options = CurrentOptions();
+  options.create_if_missing = true;
+  options.merge_operator = MergeOperators::CreateUInt64AddOperator();
+  options.num_levels = 3;
+  // Filter out keys with value is 2.
+  options.compaction_filter_factory =
+      std::make_shared<ConditionalFilterFactory>(two);
+  DestroyAndReopen(options);
     
-    void FilterInitialMetadata(grpc_metadata_batch* b,
-                           ServerMetadataElements* sml) {
-  if (b->idx.named.path != nullptr) {
-    sml->path = grpc_slice_ref_internal(GRPC_MDVALUE(b->idx.named.path->md));
-  }
-  if (b->idx.named.grpc_trace_bin != nullptr) {
-    sml->tracing_slice =
-        grpc_slice_ref_internal(GRPC_MDVALUE(b->idx.named.grpc_trace_bin->md));
-    grpc_metadata_batch_remove(b, b->idx.named.grpc_trace_bin);
-  }
-  if (b->idx.named.grpc_tags_bin != nullptr) {
-    sml->census_proto =
-        grpc_slice_ref_internal(GRPC_MDVALUE(b->idx.named.grpc_tags_bin->md));
-    grpc_metadata_batch_remove(b, b->idx.named.grpc_tags_bin);
-  }
-}
+    namespace rocksdb {
+    }
     
-    DEFINE_bool(populate_cache, false, 'Populate cache before operations');
-DEFINE_int32(insert_percent, 40,
-             'Ratio of insert to total workload (expressed as a percentage)');
-DEFINE_int32(lookup_percent, 50,
-             'Ratio of lookup to total workload (expressed as a percentage)');
-DEFINE_int32(erase_percent, 10,
-             'Ratio of erase to total workload (expressed as a percentage)');
-    
-      // State
+      // Read up to 'n' bytes from the file.  'scratch[0..n-1]' may be
+  // written by this routine.  Sets '*result' to the data that was
+  // read (including if fewer than 'n' bytes were successfully read).
+  // May set '*result' to point at data in 'scratch[0..n-1]', so
+  // 'scratch[0..n-1]' must be live when '*result' is used.
+  // If an error was encountered, returns a non-OK status.
   //
-  // Points to a copy of the current compaction iterator output (current_key_)
-  // if valid_.
-  Slice key_;
-  // Points to the value in the underlying iterator that corresponds to the
-  // current output.
-  Slice value_;
-  // The status is OK unless compaction iterator encounters a merge operand
-  // while not having a merge operator defined.
-  Status status_;
-  // Stores the user key, sequence number and type of the current compaction
-  // iterator output (or current key in the underlying iterator during
-  // NextFromInput()).
-  ParsedInternalKey ikey_;
-  // Stores whether ikey_.user_key is valid. If set to false, the user key is
-  // not compared against the current key in the underlying iterator.
-  bool has_current_user_key_ = false;
-  bool at_next_ = false;  // If false, the iterator
-  // Holds a copy of the current compaction iterator output (or current key in
-  // the underlying iterator during NextFromInput()).
-  IterKey current_key_;
-  Slice current_user_key_;
-  SequenceNumber current_user_key_sequence_;
-  SequenceNumber current_user_key_snapshot_;
+  // REQUIRES: External synchronization
+  virtual Status Read(size_t n, Slice* result, char* scratch) override {
+    assert(scratch);
+    Status status = file_->Read(n, result, scratch);
+    if (!status.ok()) {
+      return status;
+    }
+    status = stream_->Decrypt(offset_, (char*)result->data(), result->size());
+    offset_ += result->size(); // We've already ready data from disk, so update offset_ even if decryption fails.
+    return status;
+  }
     
-    #ifndef ROCKSDB_LITE
+      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
+                          const rocksdb::Slice& existing_value) const override {
+    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
+    ++merge_count_;
+    return existing_value == 'bad';
+  }
     
-    #include <inttypes.h>
-#include <stdio.h>
-#include <string>
-#include <algorithm>
-#include <vector>
-    
-    #include 'rocksdb/slice.h'
-#include 'rocksdb/status.h'
-    
-      virtual Status RenameFile(const std::string& src,
-                            const std::string& target) override;
-    
-      // Write a key OUTSIDE of this transaction.
-  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
-  // here, the transaction would fail to commit.
-  s = db->Put(write_options, 'xyz', 'zzz');
+      // In this example, we set the snapshot multiple times.  This is probably
+  // only necessary if you have very strict isolation requirements to
+  // implement.
