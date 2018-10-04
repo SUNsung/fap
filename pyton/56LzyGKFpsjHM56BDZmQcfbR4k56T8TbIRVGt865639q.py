@@ -1,252 +1,201 @@
 
         
-          # Convert from figure to an numpy array width x height x 3 (last for RGB)
-  f.canvas.draw()
-  data = np.fromstring(f.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-  data_wxhx3 = data.reshape(f.canvas.get_width_height()[::-1] + (3,))
-  plt.close()
+        
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@login_required
+def update(id):
+    '''Update a post if the current user is the author.'''
+    post = get_post(id)
     
     
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-u_rng = np.random.RandomState(seed=FLAGS.synth_data_seed+1)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N  # must be same N as in trained model (provided example is N = 50)
-nreplications = FLAGS.nreplications
-E = nreplications * C  # total number of trials
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
-batch_size = 1  # gives one example per ntrial
+def test_register(client, app):
+    # test that viewing the page renders without template errors
+    assert client.get('/auth/register').status_code == 200
     
-    # generate trials for both RNNs
-rates_a, x0s_a, _ = generate_data(rnn_a, T=T, E=E, x0s=x0s, P_sxn=P_nxn,
-                                  input_magnitude=0.0, input_times=None)
-spikes_a = spikify_data(rates_a, rng, rnn_a['dt'], rnn_a['max_firing_rate'])
+    This typically means that you attempted to use functionality that needed
+an active HTTP request.  Consult the documentation on testing for
+information about how to avoid this problem.\
+'''
+_app_ctx_err_msg = '''\
+Working outside of application context.
     
-      # Visualize this in the morning.
-  all_data_nxtc = np.zeros([nchannels_all, ntime * nconditions_all])
-  for name, dataset in datasets.items():
-    cidx_s = channel_idxs[name][0]
-    cidx_f = channel_idxs[name][1]
-    for cname in conditions_all[name]:
-      cidxs = np.argwhere(all_conditions_list == cname)
-      if cidxs.shape[0] > 0:
-        cidx = cidxs[0][0]
-        all_tidxs = np.arange(0, ntime+1) + cidx*ntime
-        all_data_nxtc[cidx_s:cidx_f, all_tidxs[0]:all_tidxs[-1]] = \
-            avg_data_all[name][cname].T
-    
-      def __init__(self, filename, max_word_length):
-    super(CharsVocabulary, self).__init__(filename)
-    self._max_word_length = max_word_length
-    chars_set = set()
-    
-      return word_to_id
-    
-      Args:
-    values: Value given by the Wasserstein Discriminator of shape [batch_size,
-      sequence_length] to an imputed batch (real and fake).
-    is_real_input: tf.bool Tensor of shape [batch_size, sequence_length]. If
-      true, it indicates that the label is known.
-    
-            r = None
-        try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
-    
-        def create(self):
-        # Because a cache can fail silently (e.g. memcache), we don't know if
-        # we are failing to create a new session because of a key collision or
-        # because the cache is missing. So we try for a (large) number of times
-        # and then raise an exception. That's the risk you shoulder if using
-        # cache backing.
-        for i in range(10000):
-            self._session_key = self._get_new_session_key()
-            try:
-                self.save(must_create=True)
-            except CreateError:
-                continue
-            self.modified = True
-            return
-        raise RuntimeError(
-            'Unable to create a new session key. '
-            'It is likely that the cache is unavailable.')
-    
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
-    
-        def print_row(fields, positions):
-        line = ''
-        for i in range(len(fields)):
-            if i > 0:
-                line = line[:-1] + ' '
-            line += str(fields[i])
-            line = line[:positions[i]]
-            line += ' ' * (positions[i] - len(line))
-        print_fn(line)
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        deserialized = losses.deserialize(serialized)
-    assert isinstance(deserialized, MSE_MAE_loss)
-    assert deserialized.mse_fraction == 0.3
+    (c) 2016, Aaron Christianson
+http://github.com/ninjaaron/fast-entry_points
+'''
+from setuptools.command import easy_install
+import re
+TEMPLATE = '''\
+# -*- coding: utf-8 -*-
+# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
+__requires__ = '{3}'
+import re
+import sys
     
     
-def create_multi_input_model_from(layer1, layer2):
-    input_1 = Input(shape=(data_dim,))
-    input_2 = Input(shape=(data_dim,))
-    out1 = layer1(input_1)
-    out2 = layer2(input_2)
-    out = Average()([out1, out2])
-    model = Model([input_1, input_2], out)
-    model.add_loss(K.mean(out2))
-    model.add_loss(1)
-    model.add_loss(1)
-    return model
+@pytest.fixture(autouse=True)
+def no_cache(monkeypatch):
+    monkeypatch.setattr('thefuck.utils.cache.disabled', True)
     
-        # Masking
-        This layer supports masking for input data with a variable number
-        of timesteps. To introduce masks to your data,
-        use an [Embedding](embeddings.md) layer with the `mask_zero` parameter
-        set to `True`.
+    python_2 = (u'thefuck/python2-bash',
+            u'FROM python:2',
+            u'sh')
     
-    def generate_movies(n_samples=1200, n_frames=15):
-    row = 80
-    col = 80
-    noisy_movies = np.zeros((n_samples, n_frames, row, col, 1), dtype=np.float)
-    shifted_movies = np.zeros((n_samples, n_frames, row, col, 1),
-                              dtype=np.float)
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+'''
     
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument command: Invalid choice, valid choices are:
     
-    # we start off with an efficient embedding layer which maps
-# our vocab indices into embedding_dims dimensions
-model.add(Embedding(max_features,
-                    embedding_dims,
-                    input_length=maxlen))
-model.add(Dropout(0.2))
+    - name: gather facts about Ubuntu 17.04 AMIs published by Canonical (099720109477)
+  ec2_ami_facts:
+    owners: 099720109477
+    filters:
+      name: 'ubuntu/images/ubuntu-zesty-17.04-*'
+'''
     
-    if K.image_data_format() == 'channels_first':
-    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
-    input_shape = (1, img_rows, img_cols)
-else:
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
+    version_added: '1.6'
     
-        web_acls = list_web_acls(client, module)
-    name = module.params['name']
-    if name:
-        web_acls = [web_acl for web_acl in web_acls if
-                    web_acl['Name'] == name]
-        if not web_acls:
-            module.fail_json(msg='WAF named %s not found' % name)
-    module.exit_json(wafs=[get_web_acl(client, module, web_acl['WebACLId'])
-                           for web_acl in web_acls])
+        module = AnsibleModule(argument_spec=argument_spec)
     
-        def get_stack_policy(self, stack_name):
-        try:
-            response = self.client.get_stack_policy(StackName=stack_name)
-            stack_policy = response.get('StackPolicyBody')
-            if stack_policy:
-                return json.loads(stack_policy)
-            return dict()
-        except Exception as e:
-            self.module.fail_json(msg='Error getting stack policy - ' + str(e), exception=traceback.format_exc())
+    RETURN = '''
+image_id:
+    description: AMI id
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'ami-0d75df7e'
+user_data:
+    description: User data used to start instance
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'ZXhwb3J0IENMT1VE'
+name:
+    description: Name of the Launch Configuration
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'myapp-v123'
+arn:
+    description: Name of the AMI
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'arn:aws:autoscaling:eu-west-1:12345:launchConfiguration:d82f050e-e315:launchConfigurationName/yourproject'
+instance_type:
+    description: Type of ec2 instance
+    returned: when Launch Configuration was found
+    type: string
+    sample: 't2.small'
+created_time:
+    description: When it was created
+    returned: when Launch Configuration was found
+    type: string
+    sample: '2016-06-29T14:59:22.222000+00:00'
+ebs_optimized:
+    description: Launch Configuration EBS optimized property
+    returned: when Launch Configuration was found
+    type: boolean
+    sample: False
+instance_monitoring:
+    description: Launch Configuration instance monitoring property
+    returned: when Launch Configuration was found
+    type: string
+    sample: {'Enabled': false}
+classic_link_vpc_security_groups:
+    description: Launch Configuration classic link vpc security groups property
+    returned: when Launch Configuration was found
+    type: list
+    sample: []
+block_device_mappings:
+    description: Launch Configuration block device mappings property
+    returned: when Launch Configuration was found
+    type: list
+    sample: []
+keyname:
+    description: Launch Configuration ssh key
+    returned: when Launch Configuration was found
+    type: string
+    sample: mykey
+security_groups:
+    description: Launch Configuration security groups
+    returned: when Launch Configuration was found
+    type: list
+    sample: []
+kernel_id:
+    description: Launch Configuration kernel to use
+    returned: when Launch Configuration was found
+    type: string
+    sample: ''
+ram_disk_id:
+    description: Launch Configuration ram disk property
+    returned: when Launch Configuration was found
+    type: string
+    sample: ''
+associate_public_address:
+    description: Assign public address or not
+    returned: when Launch Configuration was found
+    type: boolean
+    sample: True
+...
+'''
+import re
     
-        def __init__(self, rule, targets):
-        self.rule = rule
-        self.targets = targets
+        alarms = connection.describe_alarms(alarm_names=[name])
     
-            if dynamo_table_exists(table):
-            result['changed'] = update_dynamo_table(table, throughput=throughput, check_mode=module.check_mode, global_indexes=global_indexes)
+        elif state == 'absent':
+        placement_group = get_placement_group_details(connection, module)
+        if placement_group is None:
+            module.exit_json(changed=False)
         else:
-            if not module.check_mode:
-                Table.create(table_name, connection=connection, schema=schema, throughput=throughput, indexes=indexes, global_indexes=global_indexes)
-            result['changed'] = True
+            delete_placement_group(connection, module)
     
-    - name: create key pair using key_material obtained using 'file' lookup plugin
-  ec2_key:
-    name: my_keypair
-    key_material: '{{ lookup('file', '/path/to/public_key/id_rsa.pub') }}'
+    # List all placement groups.
+- ec2_placement_group_facts:
+  register: all_ec2_placement_groups
     
     
-RETURN = '''
-placement_group:
-  description: Placement group attributes
-  returned: when state != absent
-  type: complex
-  contains:
-    name:
-      description: PG name
-      type: string
-      sample: my-cluster
-    state:
-      description: PG state
-      type: string
-      sample: 'available'
-    strategy:
-      description: PG strategy
-      type: string
-      sample: 'cluster'
+def naughty_strings(filepath=FILEPATH):
+    '''Get the list of naughty_strings.
     
-        By default this will get the strings from the blns.txt file
+    for image in TEST_IMAGES:
+    size = image.split('-')[1].split('.')[0]
+    print('Timings at {}:'.format(size))
     
-        # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
     
-        # Display the results
-    for top, right, bottom, left in face_locations:
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+                # If a match was found in known_face_encodings, just use the first one.
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = known_face_names[first_match_index]
     
-    known_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
     
-    # Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-known_face_names = [
-    'Barack Obama',
-    'Joe Biden'
-]
+        # Let's trace out each facial feature in the image with a line!
+    for facial_feature in face_landmarks.keys():
+        d.line(face_landmarks[facial_feature], width=5)
     
-        # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
