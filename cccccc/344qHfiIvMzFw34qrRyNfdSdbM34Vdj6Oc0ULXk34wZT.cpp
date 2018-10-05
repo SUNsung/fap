@@ -1,140 +1,409 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35>
-internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35> Values(T1 v1, T2 v2, T3 v3, T4 v4,
-    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
-    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
-    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
-    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35) {
-  return internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35>(v1, v2, v3, v4, v5, v6,
-      v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21,
-      v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35);
-}
+        #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
     
-    // Then, use TYPED_TEST_P() to define as many type-parameterized tests
-// for this type-parameterized test case as you want.
-TYPED_TEST_P(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
-  TypeParam n = 0;
-  ...
-}
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
   }
-    }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
     
-      // ============= Accessing data ==============.
-  // Coordinate system:
-  // Integer coordinates are at the cracks between the pixels.
-  // The top-left corner of the top-left pixel in the image is at (0,0).
-  // The bottom-right corner of the bottom-right pixel in the image is at
-  // (width, height).
-  // Every bounding box goes from the top-left of the top-left contained
-  // pixel to the bottom-right of the bottom-right contained pixel, so
-  // the bounding box of the single top-left pixel in the image is:
-  // (0,0)->(1,1).
-  // If an image rectangle has been set in the API, then returned coordinates
-  // relate to the original (full) image, rather than the rectangle.
-    
-    void ResultIterator::CalculateTextlineOrder(
-    bool paragraph_is_ltr,
-    const LTRResultIterator &resit,
-    GenericVector<StrongScriptDirection> *dirs_arg,
-    GenericVectorEqEq<int> *word_indices) const {
-  GenericVector<StrongScriptDirection> dirs;
-  GenericVector<StrongScriptDirection> *directions;
-  directions = (dirs_arg != nullptr) ? dirs_arg : &dirs;
-  directions->truncate(0);
-    }
-    
-    const ICOORD *dirtab = (ICOORD *) idirtab;
-    
-    namespace tesseract {
-/**********************************************************************
- * main_setup
- *
- * Main for mithras demo program. Read the arguments and set up globals.
- **********************************************************************/
-    }
-    
-      // Writes the given float_classes (produced by SetupForFloat2Int) as inttemp
-  // to the given inttemp_file, and the corresponding pffmtable.
-  // The unicharset is the original encoding of graphemes, and shape_set should
-  // match the size of the shape_table, and may possibly be totally fake.
-  void WriteInttempAndPFFMTable(const UNICHARSET& unicharset,
-                                const UNICHARSET& shape_set,
-                                const ShapeTable& shape_table,
-                                CLASS_STRUCT* float_classes,
-                                const char* inttemp_file,
-                                const char* pffmtable_file);
-    
-      // Computes the mean_column_gap_.
-  void ComputeMeanColumnGap(bool any_multi_column);
-    
-    template <typename Stream>
-class buffered_read_stream;
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
-
-    
-      // Obtain the value at the top of the stack.
-  static Value* top()
-  {
-    context* elem = top_;
-    return elem ? elem->value_ : 0;
+      // TODO(jonskeet): Consider a C#-escaping format here instead of just Base64.
+  std::string base64 = FileDescriptorToBase64(file_);
+  while (base64.size() > 60) {
+    printer->Print('\'$base64$\',\n', 'base64', base64.substr(0, 60));
+    base64 = base64.substr(60);
   }
+  printer->Print('\'$base64$\'));\n', 'base64', base64);
+  printer->Outdent();
+  printer->Outdent();
+  printer->Outdent();
     
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
     
-      char* buffer = (char*)malloc(range.length + 1);
-  if (buffer == nullptr) {
-    return '';
-  }
-  memset(buffer, 0, range.length + 1);
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/stubs/substitute.h>
+    
+    #include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
     
     
     {
-    {    // Checking if we are generally in an unprivileged mode.
-    auto dropper2 = DropPrivileges::get();
-    EXPECT_FALSE(dropper2->dropped());
-  }
+    {  if (text_format_decode_data.num_entries() == 0) {
+    printer->Print(
+        '    GPBEnumDescriptor *worker =\n'
+        '        [GPBEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol($name$)\n'
+        '                                       valueNames:valueNames\n'
+        '                                           values:values\n'
+        '                                            count:(uint32_t)(sizeof(values) / sizeof(int32_t))\n'
+        '                                     enumVerifier:$name$_IsValidValue];\n',
+        'name', name_);
+    } else {
+      printer->Print(
+        '    static const char *extraTextFormatInfo = \'$extraTextFormatInfo$\';\n'
+        '    GPBEnumDescriptor *worker =\n'
+        '        [GPBEnumDescriptor allocDescriptorForName:GPBNSStringifySymbol($name$)\n'
+        '                                       valueNames:valueNames\n'
+        '                                           values:values\n'
+        '                                            count:(uint32_t)(sizeof(values) / sizeof(int32_t))\n'
+        '                                     enumVerifier:$name$_IsValidValue\n'
+        '                              extraTextFormatInfo:extraTextFormatInfo];\n',
+        'name', name_,
+        'extraTextFormatInfo', CEscape(text_format_decode_data.Data()));
+    }
+    printer->Print(
+      '    GPBEnumDescriptor *expected = nil;\n'
+      '    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {\n'
+      '      [worker release];\n'
+      '    }\n'
+      '  }\n'
+      '  return descriptor;\n'
+      '}\n\n');
+    
+     public:
+  virtual void FinishInitialization();
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    class JointBullet : public ConstraintBullet {
+    }
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    
+    {	memdelete(resource_loader_dds);
+}
+
+    
+    #include 'image_etc.h'
+#include 'texture_loader_pkm.h'
+    
+    #include 'networked_multiplayer_peer.h'
+    
+    template <class charT, class traits>
+bool basic_regex_parser<charT, traits>::parse_perl_verb()
+{
+   if(++m_position == m_end)
+   {
+      // Rewind to start of (* sequence:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+      fail(regex_constants::error_perl_extension, m_position - m_base);
+      return false;
+   }
+   switch(*m_position)
+   {
+   case 'F':
+      if(++m_position == m_end)
+      {
+         // Rewind to start of (* sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base);
+         return false;
+      }
+      if((this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_mark) || match_verb('AIL'))
+      {
+         if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+         {
+            // Rewind to start of (* sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_perl_extension, m_position - m_base);
+            return false;
+         }
+         ++m_position;
+         this->append_state(syntax_element_fail);
+         return true;
+      }
+      break;
+   case 'A':
+      if(++m_position == m_end)
+      {
+         // Rewind to start of (* sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base);
+         return false;
+      }
+      if(match_verb('CCEPT'))
+      {
+         if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+         {
+            // Rewind to start of (* sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_perl_extension, m_position - m_base);
+            return false;
+         }
+         ++m_position;
+         this->append_state(syntax_element_accept);
+         return true;
+      }
+      break;
+   case 'C':
+      if(++m_position == m_end)
+      {
+         // Rewind to start of (* sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base);
+         return false;
+      }
+      if(match_verb('OMMIT'))
+      {
+         if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+         {
+            // Rewind to start of (* sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_perl_extension, m_position - m_base);
+            return false;
+         }
+         ++m_position;
+         static_cast<re_commit*>(this->append_state(syntax_element_commit, sizeof(re_commit)))->action = commit_commit;
+         this->m_pdata->m_disable_match_any = true;
+         return true;
+      }
+      break;
+   case 'P':
+      if(++m_position == m_end)
+      {
+         // Rewind to start of (* sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base);
+         return false;
+      }
+      if(match_verb('RUNE'))
+      {
+         if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+         {
+            // Rewind to start of (* sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_perl_extension, m_position - m_base);
+            return false;
+         }
+         ++m_position;
+         static_cast<re_commit*>(this->append_state(syntax_element_commit, sizeof(re_commit)))->action = commit_prune;
+         this->m_pdata->m_disable_match_any = true;
+         return true;
+      }
+      break;
+   case 'S':
+      if(++m_position == m_end)
+      {
+         // Rewind to start of (* sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base);
+         return false;
+      }
+      if(match_verb('KIP'))
+      {
+         if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+         {
+            // Rewind to start of (* sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_perl_extension, m_position - m_base);
+            return false;
+         }
+         ++m_position;
+         static_cast<re_commit*>(this->append_state(syntax_element_commit, sizeof(re_commit)))->action = commit_skip;
+         this->m_pdata->m_disable_match_any = true;
+         return true;
+      }
+      break;
+   case 'T':
+      if(++m_position == m_end)
+      {
+         // Rewind to start of (* sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base);
+         return false;
+      }
+      if(match_verb('HEN'))
+      {
+         if((m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_mark))
+         {
+            // Rewind to start of (* sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_perl_extension, m_position - m_base);
+            return false;
+         }
+         ++m_position;
+         this->append_state(syntax_element_then);
+         this->m_pdata->m_disable_match_any = true;
+         return true;
+      }
+      break;
+   }
+   return false;
 }
     
-      /// Restrict to a specific devtype.
-  std::string devtype;
+    template <bool is_pointer_type>
+struct is_random_imp_selector
+{
+   template <class I>
+   struct rebind
+   {
+      typedef is_random_imp<I> type;
+   };
+};
     
-      int fd = open(kLinuxMemPath.c_str(), O_RDONLY);
-  if (fd < 0) {
-    return Status(1, std::string('Cannot open ') + kLinuxMemPath);
-  }
+    template <class BidiIterator, class Allocator, class traits>
+class perl_matcher
+{
+public:
+   typedef typename traits::char_type char_type;
+   typedef perl_matcher<BidiIterator, Allocator, traits> self_type;
+   typedef bool (self_type::*matcher_proc_type)(void);
+   typedef std::size_t traits_size_type;
+   typedef typename is_byte<char_type>::width_type width_type;
+   typedef typename regex_iterator_traits<BidiIterator>::difference_type difference_type;
+   typedef match_results<BidiIterator, Allocator> results_type;
+    }
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::find_restart_word()
+{
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+   // do search optimised for word starts:
+   const unsigned char* _map = re.get_map();
+   if((m_match_flags & match_prev_avail) || (position != base))
+      --position;
+   else if(match_prefix())
+      return true;
+   do
+   {
+      while((position != last) && traits_inst.isctype(*position, m_word_mask))
+         ++position;
+      while((position != last) && !traits_inst.isctype(*position, m_word_mask))
+         ++position;
+      if(position == last)
+         break;
+    }
+    }
+    
+    
+    {   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
+   if(greedy)
+   {
+      // try and take the repeat if we can:
+      if((next_count->get_count() < rep->max) && take_first)
+      {
+         if(take_second)
+         {
+            // store position in case we fail:
+            push_alt(rep->alt.p);
+         }
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         return true;
+      }
+      else if(take_second)
+      {
+         pstate = rep->alt.p;
+         return true;
+      }
+      return false; // can't take anything, fail...
+   }
+   else // non-greedy
+   {
+      // try and skip the repeat if we can:
+      if(take_second)
+      {
+         if((next_count->get_count() < rep->max) && take_first)
+         {
+            // store position in case we fail:
+            push_non_greedy_repeat(rep->next.p);
+         }
+         pstate = rep->alt.p;
+         return true;
+      }
+      if((next_count->get_count() < rep->max) && take_first)
+      {
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         return true;
+      }
+   }
+   return false;
+#ifdef __BORLANDC__
+#pragma option pop
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+}
+    
+    
+    {
+    {}
+} // namespace boost
+    
+    
+    
+    template<>
+struct padding3<8>
+{
+   enum{
+      padding_size = 8,
+      padding_mask = 7
+   };
+};
+    
+    
+    {} // namespace boost
+    
+    #if defined(BOOST_HAS_INT128)
