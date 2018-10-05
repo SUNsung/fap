@@ -1,91 +1,101 @@
 
         
-          def post_superenv_hacks
-    # Only allow Homebrew-approved directories into the PATH, unless
-    # a formula opts-in to allowing the user's path.
-    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
-      ENV.userpaths!
-    end
-  end
+        def global_require
+  JSON.pretty_generate(DATA)
+end
     
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
-      end
-    end
+    require 'benchmark/ips'
+require 'pathutil'
     
-      def print_remaining_files(files, root, other = '')
-    case files.length
-    when 0
-      # noop
-    when 1
-      puts files
+          #
+    
+    Gem::Specification.new do |s|
+  s.specification_version = 2 if s.respond_to? :specification_version=
+  s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
+  s.rubygems_version = '2.2.2'
+  s.required_ruby_version = '>= 2.3.0'
+    
+            def gemfile_contents
+          <<~RUBY
+            source 'https://rubygems.org'
+            # Hello! This is where you manage which Jekyll version is used to run.
+            # When you want to use a different version, change it below, save the
+            # file and run `bundle install`. Run Jekyll with `bundle exec`, like so:
+            #
+            #     bundle exec jekyll serve
+            #
+            # This will help ensure the proper Jekyll version is running.
+            # Happy Jekylling!
+            gem 'jekyll', '~> #{Jekyll::VERSION}'
+            # This is the default theme for new Jekyll sites. You may change this to anything you like.
+            gem 'minima', '~> 2.0'
+            # If you want to use GitHub Pages, remove the 'gem 'jekyll'' above and
+            # uncomment the line below. To upgrade, run `bundle update github-pages`.
+            # gem 'github-pages', group: :jekyll_plugins
+            # If you have any plugins, put them here!
+            group :jekyll_plugins do
+              gem 'jekyll-feed', '~> 0.6'
+            end
+            # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+            gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+            # Performance-booster for watching directories on Windows
+            gem 'wdm', '~> 0.1.0' if Gem.win_platform?
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+            def convert(content)
+          document = Kramdown::Document.new(content, @config)
+          html_output = document.to_html
+          if @config['show_warnings']
+            document.warnings.each do |warning|
+              Jekyll.logger.warn 'Kramdown warning:', warning
+            end
+          end
+          html_output
+        end
+    
+    module Jekyll
+  module Deprecator
+    extend self
+    
+      def remove_duplicates
+    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
+      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
+    if AppConfig.postgres?
+      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
     else
-      puts '#{root}/ (#{files.length} #{other}files)'
+      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
     end
   end
 end
 
     
-    module Homebrew
-  def update_report
-    install_core_tap_if_necessary
-    
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-    desc 'Deploy website via rsync'
-task :rsync do
-  exclude = ''
-  if File.exists?('./rsync-exclude')
-    exclude = '--exclude-from '#{File.expand_path('./rsync-exclude')}''
-  end
-  puts '## Deploying website via Rsync'
-  ok_failed system('rsync -avze 'ssh -p #{ssh_port}' #{exclude} #{rsync_args} #{'--delete' unless rsync_delete == false} #{public_dir}/ #{ssh_user}:#{document_root}')
+    And /^I should be able to friend '([^\']*)'$/ do |email|
+  user = User.find_by_email(email)
+  step 'I should see a '.aspect-dropdown''
+  step 'I should see \'#{user.name}\''
 end
     
-          # Create an Atom-feed for each index.
-      feed = CategoryFeed.new(self, self.source, category_dir, category)
-      feed.render(self.layouts, site_payload)
-      feed.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << feed
+    module UserCukeHelpers
+    
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
     end
     
-          def title
-        'Comparison of #{@page.title}'
-      end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-      test 'retain edit information' do
-    page1 = 'page1'
-    user1 = 'user1'
-    @wiki.write_page(page1, :markdown, '',
-                     { :name => user1, :email => user1 });
-    
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
-  end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
-  end
-    
-              @wiki.sanitizer.clean(result)
-        else
-          ''
-        end
       end
