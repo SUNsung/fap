@@ -1,232 +1,184 @@
 
         
-            # Sorting the libraries
-    inner_blocks = sorted(blocks[0].split('##'))
-    for i in range(1 , len(inner_blocks)):
-        if inner_blocks[i][0] != '#':
-            inner_blocks[i] = '##' + inner_blocks[i]
-    inner_blocks=''.join(inner_blocks)
+        
+@pytest.mark.parametrize('command, packages, which', [
+    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
+     [], None),
+    (Command('vim', ''), [], None),
+    (Command('', ''), [], None),
+    (Command('vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim'),
+    (Command('sudo vim', 'vim: command not found'),
+     ['vim'], '/usr/bin/vim')])
+def test_not_match(mocker, command, packages, which):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
-    from mrjob.job import MRJob
+    no_such_subcommand = '''error: no such subcommand
     
-        if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.update(test_config)
+      - name: create WAF regex condition
+    aws_waf_condition:
+      name: my_regex_condition
+      filters:
+        - field_to_match: query_string
+          regex_pattern:
+            name: greetings
+            regex_strings:
+              - '[hH]ello'
+              - '^Hi there'
+              - '.*Good Day to You'
+      type: regex
     
+    try:
+    import botocore
+except ImportError:
+    pass  # handled by AnsibleAWSModule
     
-@bp.route('/<int:id>/delete', methods=('POST',))
-@login_required
-def delete(id):
-    '''Delete a post.
-    
-        def login(self, username='test', password='test'):
-        return self._client.post(
-            '/auth/login',
-            data={'username': username, 'password': password}
-        )
-    
-    PY2 = sys.version_info[0] == 2
-_identity = lambda x: x
-    
-    from base64 import b64decode, b64encode
-from datetime import datetime
-from uuid import UUID
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    
-    
-def create_model(stateful):
-    model = Sequential()
-    model.add(LSTM(20,
-              input_shape=(lahead, 1),
-              batch_size=batch_size,
-              stateful=stateful))
-    model.add(Dense(1))
-    model.compile(loss='mse', optimizer='adam')
-    return model
-    
-        try:
+        if not asgs:
+        return asgs
+    try:
         region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-        connection = boto3_conn(module, conn_type='client', resource='ec2', region=region, endpoint=ec2_url, **aws_connect_kwargs)
-    except botocore.exceptions.NoRegionError:
-        module.fail_json(msg=('Region must be specified as a parameter in AWS_DEFAULT_REGION environment variable or in boto configuration file.'))
+        elbv2 = boto3_conn(module, conn_type='client', resource='elbv2', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    except ClientError as e:
+        # This is nice to have, not essential
+        elbv2 = None
+    matched_asgs = []
     
-        if 'delete_on_termination' in volume:
-        return_object['Ebs']['DeleteOnTermination'] = volume.get('delete_on_termination', False)
     
-    version_added: '2.2'
-author: 'Jose Armesto (@fiunchinho)'
+DOCUMENTATION = '''
+---
+module: ec2_customer_gateway
+short_description: Manage an AWS customer gateway
+description:
+    - Manage an AWS customer gateway
+version_added: '2.2'
+author: Michael Baydoun (@MichaelBaydoun)
+requirements: [ botocore, boto3 ]
+notes:
+    - You cannot create more than one customer gateway with the same IP address. If you run an identical request more than one time, the
+      first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent
+      requests do not create new customer gateway resources.
+    - Return values contain customer_gateway and customer_gateways keys which are identical dicts. You should use
+      customer_gateway. See U(https://github.com/ansible/ansible-modules-extras/issues/2773) for details.
 options:
-  region:
+  bgp_asn:
     description:
-      - The AWS region to use.
+      - Border Gateway Protocol (BGP) Autonomous System Number (ASN), required when state=present.
+  ip_address:
+    description:
+      - Internet-routable IP address for customers gateway, must be a static address.
     required: true
-    aliases: ['aws_region', 'ec2_region']
-  name_regex:
+  name:
     description:
-      - A Launch Configuration to match
-      - It'll be compiled as regex
-    required: True
-  sort_order:
+      - Name of the customer gateway.
+    required: true
+  routing:
     description:
-      - Order in which to sort results.
-    choices: ['ascending', 'descending']
-    default: 'ascending'
-  limit:
+      - The type of routing.
+    choices: ['static', 'dynamic']
+    default: dynamic
+    version_added: '2.4'
+  state:
     description:
-      - How many results to show.
-      - Corresponds to Python slice notation like list[:limit].
-requirements:
-  - 'python >= 2.6'
-  - boto3
+      - Create or terminate the Customer Gateway.
+    default: present
+    choices: [ 'present', 'absent' ]
 extends_documentation_fragment:
     - aws
+    - ec2
 '''
     
-        connection = boto3_conn(module,
-                            resource='ec2', conn_type='client',
-                            region=region, endpoint=ec2_url, **aws_connect_params)
     
-    Note that LocalOutlierFactor is not meant to predict on a test set and its
-performance is assessed in an outlier detection context:
-1. The model is trained on the whole dataset which is assumed to contain
-outliers.
-2. The ROC curve is computed on the same dataset using the knowledge of the
-labels.
-In this context there is no need to shuffle the dataset because the model
-is trained and tested on the whole dataset. The randomness of this benchmark
-is only caused by the random selection of anomalies in the SA dataset.
+if __name__ == '__main__':
+    main()
+
+    
+        # Here we need to get the zone info for the instance. This covers situation where
+    # instance is specified but zone isn't.
+    # Useful for playbooks chaining instance launch with volume create + attach and where the
+    # zone doesn't matter to the user.
+    inst = None
+    if instance:
+        try:
+            reservation = ec2.get_all_instances(instance_ids=instance)
+        except BotoServerError as e:
+            module.fail_json(msg=e.message)
+        inst = reservation[0].instances[0]
+        zone = inst.placement
+    
+    from ycm.client.base_request import BaseRequest, BuildRequestData
     
     
-def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
-                      Drange=2 ** np.arange(7),
-                      krange=2 ** np.arange(10),
-                      N=1000,
-                      D=64,
-                      k=5,
-                      leaf_size=30,
-                      dataset='digits'):
-    algorithms = ('kd_tree', 'brute', 'ball_tree')
-    fiducial_values = {'N': N,
-                       'D': D,
-                       'k': k}
+def _HandlePollResponse( response, diagnostics_handler ):
+  if isinstance( response, list ):
+    for notification in response:
+      if 'message' in notification:
+        PostVimMessage( notification[ 'message' ],
+                        warning = False,
+                        truncate = True )
+      elif 'diagnostics' in notification:
+        diagnostics_handler.UpdateWithNewDiagnosticsForFile(
+          notification[ 'filepath' ],
+          notification[ 'diagnostics' ] )
+  elif response is False:
+    # Don't keep polling for this file
+    return False
+  # else any truthy response means 'nothing to see here; poll again in a
+  # while'
     
-            all_time[label].append(time)
-        if enable_spectral_norm:
-            A = U.dot(np.diag(s).dot(V))
-            all_spectral[label].append(norm_diff(X - A, norm=2) /
-                                       X_spectral_norm)
-        f = scalable_frobenius_norm_discrepancy(X, U, s, V)
-        all_frobenius[label].append(f / X_fro_norm)
+          BaseRequest().GetDataFromHandler( 'healthy', display_message = False )
+
     
-            for group in groups:
-            small_content = u' '.join(group)
+      if config_entry is None:
+    return []
     
-    IPv6 = CheckNetwork('IPv6')
-IPv6.urls = ['http://[2001:41d0:8:e8ad::1]',
-             'http://[2001:260:401:372::5f]',
-             'http://[2a02:188:3e00::32]',
-             'http://[2804:10:4068::202:82]'
-             ]
-IPv6.triger_check_network()
     
-    '''
-    result_info = '\nThe recommend server is %r.'
-    wait_info = 'Please wait 10 seconds...'
-    resume_info = 'The teredo cilent has resumed.'
-    warn_1 = 'The value of parameter '-p' error: local port must be a number.'
-    warn_2 = 'The value of parameter '-P' error: remote port must be a number.'
-    warn_3 = 'This device may not be able to use teredo tunnel, the NAT type is %s!'
-    warn_4 = 'We can not judge the NAT type.'
-    confirm_stop = 'Stop teredo cilent for run prober, Y/N? '
-    confirm_set = 'Do you want to set recommend teredo server, Y/N? '
-    confirm_reset = 'Do you want to reset refreshinterval to the default value, Y/N? '
-    confirm_over = 'Press enter to over...'
-    confirm_force = 'Do you want to force probe and set the teredo servers, Y/N? '
-    nat_type_result = 'The NAT type is %s.'
+  def _UpdateLocationLists( self ):
+    vimsupport.SetLocationListsForBuffer(
+      self._bufnr,
+      vimsupport.ConvertDiagnosticsToQfList( self._diagnostics ) )
     
-        '''
     
-    def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
-                 input=None, start=None, stop=None, oldToken=None):
-        Token.__init__(self)
-        
-        if oldToken is not None:
-            self.type = oldToken.type
-            self.line = oldToken.line
-            self.charPositionInLine = oldToken.charPositionInLine
-            self.channel = oldToken.channel
-            self.index = oldToken.index
-            self._text = oldToken._text
-            if isinstance(oldToken, CommonToken):
-                self.input = oldToken.input
-                self.start = oldToken.start
-                self.stop = oldToken.stop
-            
-        else:
-            self.type = type
-            self.input = input
-            self.charPositionInLine = -1 # set to invalid position
-            self.line = 0
-            self.channel = channel
-            
-	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
-            self.index = -1
-            
-            # We need to be able to change the text once in a while.  If
-            # this is non-null, then getText should return this.  Note that
-            # start/stop are not affected by changing this.
-            self._text = text
+def WaitUntilReady( timeout = 5 ):
+  expiration = time.time() + timeout
+  while True:
+    try:
+      if time.time() > expiration:
+        raise RuntimeError( 'Waited for the server to be ready '
+                            'for {0} seconds, aborting.'.format( timeout ) )
+      if _IsReady():
+        return
+    except requests.exceptions.ConnectionError:
+      pass
+    finally:
+      time.sleep( 0.1 )
     
-    -u is used to specify which special resource intensive tests to run,
-such as those requiring large file support or network connectivity.
-The argument is a comma-separated list of words indicating the
-resources to test.  Currently only the following are defined:
+      # Other non-False responses mean the same thing
+  assert_that( _HandlePollResponse( '', None ), equal_to( True ) )
+  assert_that( _HandlePollResponse( 1, None ), equal_to( True ) )
+  assert_that( _HandlePollResponse( {}, None ), equal_to( True ) )
     
-            rc, out, err = assert_python_ok('-c', code, PYTHONHASHSEED='0')
-        self.assertIn(b'random is 0', out)
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-    def normpath(path):
-    '''Normalize path, eliminating double slashes, etc.'''
-    path = os.fspath(path)
-    if isinstance(path, bytes):
-        sep = b'\\'
-        altsep = b'/'
-        curdir = b'.'
-        pardir = b'..'
-        special_prefixes = (b'\\\\.\\', b'\\\\?\\')
-    else:
-        sep = '\\'
-        altsep = '/'
-        curdir = '.'
-        pardir = '..'
-        special_prefixes = ('\\\\.\\', '\\\\?\\')
-    if path.startswith(special_prefixes):
-        # in the case of paths with these prefixes:
-        # \\.\ -> device names
-        # \\?\ -> literal paths
-        # do not do any normalization, but return the path unchanged
-        return path
-    path = path.replace(altsep, sep)
-    prefix, path = splitdrive(path)
     
-        def test_exists(self):
-        filename = support.TESTFN
-        bfilename = os.fsencode(filename)
-        self.addCleanup(support.unlink, filename)
+def EndsWithPython_Python2Paths_test():
+  python_paths = [
+    'python',
+    'python2',
+    '/usr/bin/python2.7',
+    '/home/user/.pyenv/shims/python2.7',
+    r'C:\Python27\python.exe',
+    '/Contents/MacOS/Python'
+  ]
     
-            expected = [('__hello__', 139),
-                    ('__phello__', -139),
-                    ('__phello__.spam', 139),
-                    ]
-        self.assertEqual(items, expected, 'PyImport_FrozenModules example '
-            'in Doc/library/ctypes.rst may be out of date')
+    
+def ContentsOfTestFile( test_file ):
+  dir_of_script = os.path.dirname( os.path.abspath( __file__ ) )
+  full_path_to_test_file = os.path.join( dir_of_script, 'testdata', test_file )
+  return ReadFile( full_path_to_test_file )
