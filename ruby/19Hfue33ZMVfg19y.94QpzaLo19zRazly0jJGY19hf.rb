@@ -1,65 +1,75 @@
 
         
-        end
-
-    
-          it 'cuts excessive digits and keeps only 6 ones' do
-        format('%f', 1.123456789).should == '1.123457'
-      end
-    
-      it 'sets the tainted bit' do
-    o = Object.new
-    o.taint
-    o.tainted?.should == true
-  end
-    
-        trace_var :$Kernel_trace_var_global do |value|
-      captured = value
+            def full_lane_name
+      [current_platform, current_lane].reject(&:nil?).join(' ')
     end
     
-    gem 'rake'
-gem 'rack', git: 'https://github.com/rack/rack.git'
-gem 'rack-test', '>= 0.6.2'
-gem 'minitest', '~> 5.0'
-gem 'yard'
+            # Stub out calls related to the execution environment
+        client = double('ingester_client')
+        session = FastlaneCore::AnalyticsSession.new(analytics_ingester_client: client)
+        expect(client).to receive(:post_event).with({
+            client_id: p_hash,
+            category: 'fastlane Client Langauge - ruby',
+            action: :launch,
+            label: nil,
+            value: nil
+        })
     
-    <script>
-  // reading
-  var es = new EventSource('/stream');
-  es.onmessage = function(e) { $('#chat').append(e.data + '\n') };
+          it 'adds docset_platform_family param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_platform_family: 'ios'
+          )
+        end').runner.execute(:test)
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-      # fetch data
-  fields = {
-    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
-    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
-    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
-  }
-    
-            else
-          false # Token is malformed
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add #{path.shellescape}', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: '#{path}')
+          end').runner.execute(:test)
         end
       end
     
-          def deny(env)
-        warn env, 'attack prevented by #{self.class}'
-        [options[:status], {'Content-Type' => 'text/plain'}, [options[:message]]]
+              it 'uses system wide oclint' do
+            expect(result).to include(command)
+          end
+        end
+    
+    # Here be helper
+    
+          it 'should not be fooled by 10 local code signing identities available' do
+        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
+        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
+        expect(FastlaneCore::UI).not_to(receive(:error))
+    
+        export LANG=en_US.UTF-8
+    DOC
+  else
+    STDERR.puts <<-DOC
+    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+    
+          it 'should use the value in the variable' do
+        expect(subject.oneString).to(be == 'fancy')
+        expect(subject.oneBoolean).to(be_truthy)
+        expect(subject.oneArray).to(be == [ 'first array value', 'fancy' ])
+        expect(subject.oneHash).to(be == { 'key1' => 'fancy', 'key2' => 'fancy is true', 'key3' => 'true or false' })
+        expect(subject.nestedHash).to(be == { 'level1' => { 'key1' => 'http://fancy:8080/blah.txt' } })
+        expect(subject.nestedArray).to(be == { 'level1' => [{ 'key1' => 'http://fancy:8080/blah.txt' }, { 'key2' => 'http://fancy:8080/foo.txt' }] })
+        expect(subject.deepHash).to(be == { 'level1' => { 'level2' => { 'level3' => { 'key1' => 'http://fancy:8080/blah.txt' } } } })
       end
     
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
-      end
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+    shared_examples 'logstash list' do |logstash|
+  describe 'logstash-plugin list on #{logstash.hostname}' do
+    before(:all) do
+      logstash.install({:version => LOGSTASH_VERSION})
+    end
