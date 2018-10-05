@@ -1,113 +1,152 @@
 
         
         
-class DefaultCategories(Enum):
+class Director(Employee):
     
         def reducer(self, key, values):
         total = sum(values)
         if total == 1:
             yield key, total
     
-        def remove(self, key):
+        def set(self, key, value):
         hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
+        for item in self.table[hash_index]:
             if item.key == key:
-                del self.table[hash_index][index]
+                item.value = value
                 return
-        raise KeyError('Key not found')
+        self.table[hash_index].append(Item(key, value))
+    
+        # OPTIMIZATION
+    # train the io matrices only
+    if self.hps.do_train_io_only:
+      self.train_vars = tvars = \
+        tf.get_collection('IO_transformations',
+                          scope=tf.get_variable_scope().name)
+    # train the encoder only
+    elif self.hps.do_train_encoder_only:
+      tvars1 = \
+        tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,
+                          scope='LFADS/ic_enc_*')
+      tvars2 = \
+        tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,
+                          scope='LFADS/z/ic_enc_*')
+    
+    spiking_data_e = spikify_data(truth_data_e, rng, dt=FLAGS.dt,
+                              max_firing_rate=FLAGS.max_firing_rate)
+train_inds, valid_inds = get_train_n_valid_inds(E, train_percentage,
+                                                nreplications)
+    
+        if np.isnan(log_perp):
+      sys.stderr.error('log_perplexity is Nan.\n')
+    else:
+      sum_num += log_perp * weights.mean()
+      sum_den += weights.mean()
+    if sum_den > 0:
+      perplexity = np.exp(sum_num / sum_den)
+    
+      def __init__(self, test_data_name='wsc273'):
+    vocab_file = os.path.join(FLAGS.data_dir, 'vocab.txt')
+    self.vocab = utils.CharsVocabulary(vocab_file, 50)
+    assert test_data_name in ['pdp60', 'wsc273'], (
+        'Test data must be pdp60 or wsc273, got {}'.format(test_data_name))
+    self.test_data_name = test_data_name
+    
+      def word_to_id(self, word):
+    if word in self._word_to_id:
+      return self._word_to_id[word]
+    else:
+      if word.lower() in self._word_to_id:
+        return self._word_to_id[word.lower()]
+    return self.unk
+    
+    
+def percent_correct(real_sequence, fake_sequences):
+  '''Determine the percent of tokens correctly generated within a batch.'''
+  identical = 0.
+  for fake_sequence in fake_sequences:
+    for real, fake in zip(real_sequence, fake_sequence):
+      if real == fake:
+        identical += 1.
+  return identical / recursive_length(fake_sequences)
 
     
-                    condition_insert = dict(FieldToMatch=dict(Type=filtr.get('field_to_match').upper()),
-                                        TextTransformation=filtr.get('transformation', 'none').upper())
+        if FLAGS.critic_update_dis_vars:
+      if FLAGS.discriminator_model == 'bidirectional_vd':
+        critic_vars = [
+            v for v in tf.trainable_variables()
+            if v.op.name.startswith('dis/rnn')
+        ]
+      elif FLAGS.discriminator_model == 'seq2seq_vd':
+        critic_vars = [
+            v for v in tf.trainable_variables()
+            if v.op.name.startswith('dis/decoder/rnn/multi_rnn_cell')
+        ]
+      critic_vars.extend(output_vars)
+    else:
+      critic_vars = output_vars
+    print('\nOptimizing Critic vars:')
+    for v in critic_vars:
+      print(v)
+    critic_grads = tf.gradients(critic_loss, critic_vars)
+    critic_grads_clipped, _ = tf.clip_by_global_norm(critic_grads,
+                                                     FLAGS.grad_clipping)
+    critic_train_op = critic_optimizer.apply_gradients(
+        zip(critic_grads_clipped, critic_vars), global_step=global_step)
+    return critic_train_op, critic_grads_clipped, critic_vars
+
     
-        desired_tags = module.params.get('tags')
-    if desired_tags is not None:
-        current_tags = boto3_tag_list_to_ansible_dict(image.get('Tags'))
-        tags_to_add, tags_to_remove = compare_aws_tags(current_tags, desired_tags, purge_tags=module.params.get('purge_tags'))
-    
-    - name: associate an elastic IP with a device
-  ec2_eip:
-    device_id: eni-c8ad70f3
-    ip: 93.184.216.119
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import (ansible_dict_to_boto3_filter_list,
-                                      boto3_tag_list_to_ansible_dict,
-                                      camel_dict_to_snake_dict)
-try:
-    from botocore.exceptions import (BotoCoreError, ClientError)
-except ImportError:
-    pass  # caught by imported AnsibleAWSModule
-    
-    - ec2_lc:
-    name: special
-    image_id: ami-XXX
-    key_name: default
-    security_groups: ['group', 'group2' ]
-    instance_type: t1.micro
-    volumes:
-    - device_name: /dev/sdf
-      no_device: true
-'''
+        ## Discriminator Models.
+    if (FLAGS.discriminator_model == 'rnn_nas' or
+        FLAGS.discriminator_model == 'rnn_zaremba' or
+        FLAGS.discriminator_model == 'rnn_vd' or
+        FLAGS.discriminator_model == 'cnn'):
+      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      print('Restoring Discriminator from %s.' % load_ckpt)
+      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
+      dis_init_saver = init_savers['dis_init_saver']
+      dis_init_saver.restore(sess, load_ckpt)
     
     
-@AWSRetry.exponential_backoff()
-def get_placement_group_details(connection, module):
-    name = module.params.get('name')
-    try:
-        response = connection.describe_placement_groups(
-            Filters=[{
-                'Name': 'group-name',
-                'Values': [name]
-            }])
-    except (BotoCoreError, ClientError) as e:
-        module.fail_json_aws(
-            e,
-            msg='Couldn't find placement group named [%s]' % name)
+@pytest.fixture(autouse=True)
+def functional(request):
+    if request.node.get_marker('functional') \
+            and not request.config.getoption('enable_functional'):
+        pytest.skip('functional tests are disabled')
     
-        if not HAS_BOTO:
-        module.fail_json(msg='boto required for this module')
+        proc.sendline(u'ehco test')
     
-                elif opt in ('-f', '--force'):
-                # Force download.
-                conf['force'] = True
+    python_2 = (u'thefuck/python2-bash',
+            u'FROM python:2',
+            u'sh')
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
+    proc.sendline(u'fish')
+    return proc
     
-    __all__ = ['ehow_download']
+    # TODO: ensure that history changes.
+
     
-    from ..common import *
+    apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
+Usage: apt-get [options] command
+       apt-get [options] install|remove pkg1 [pkg2 ...]
+       apt-get [options] source pkg1 [pkg2 ...]
     
-    while True:
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
     
-        # Draw a label with a name below the face
-    text_width, text_height = draw.textsize(name)
-    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
     
-        # Scale down image if it's giant so things run a little faster
-    if max(unknown_image.shape) > 1600:
-        pil_img = PIL.Image.fromarray(unknown_image)
-        pil_img.thumbnail((1600, 1600), PIL.Image.LANCZOS)
-        unknown_image = np.array(pil_img)
+                group.append(HTML('htmlout.html').render())
+            print('Rendered page {} of the directory {}'.format(str(i), operating_sys))
+            i += 1
+        
+        allmd.clear()
