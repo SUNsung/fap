@@ -1,390 +1,130 @@
 
         
-        SILLayout::SILLayout(CanGenericSignature Sig,
-                     ArrayRef<SILField> Fields)
-  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
-    NumFields(Fields.size())
-{
-#ifndef NDEBUG
-  verifyFields(Sig, Fields);
-#endif
-  auto FieldsMem = getTrailingObjects<SILField>();
-  for (unsigned i : indices(Fields)) {
-    new (FieldsMem + i) SILField(Fields[i]);
-  }
-}
-    
-    
-    {  SyntaxMap[FromNode] = ToNode;
-}
-    
-    uint64_t swift::unicode::getUTF16Length(StringRef Str) {
-  uint64_t Length;
-  // Transcode the string to UTF-16 to get its length.
-  SmallVector<llvm::UTF16, 128> buffer(Str.size() + 1); // +1 for ending nulls.
-  const llvm::UTF8 *fromPtr = (const llvm::UTF8 *) Str.data();
-  llvm::UTF16 *toPtr = &buffer[0];
-  llvm::ConversionResult Result =
-    ConvertUTF8toUTF16(&fromPtr, fromPtr + Str.size(),
-                       &toPtr, toPtr + Str.size(),
-                       llvm::strictConversion);
-  assert(Result == llvm::conversionOK &&
-         'UTF-8 encoded string cannot be converted into UTF-16 encoding');
-  (void)Result;
-    }
-    
-      // FIXME: Map over source ranges in the diagnostic.
-  auto emitDiag = [&ctx, this](clang::FullSourceLoc clangNoteLoc,
-                      clang::DiagnosticsEngine::Level clangDiagLevel,
-                      StringRef message) {
-    decltype(diag::error_from_clang) diagKind;
-    switch (clangDiagLevel) {
-    case clang::DiagnosticsEngine::Ignored:
-      return;
-    case clang::DiagnosticsEngine::Note:
-      diagKind = diag::note_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Remark:
-      // FIXME: We don't handle remarks yet.
-      return;
-    case clang::DiagnosticsEngine::Warning:
-      diagKind = diag::warning_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Error:
-    case clang::DiagnosticsEngine::Fatal:
-      // FIXME: What happens after a fatal error in the importer?
-      diagKind = diag::error_from_clang;
-      break;
-    }
-    }
-    
-        static AGInfo& Get(const nnvm::NodePtr& node) {
-      return dmlc::get<AGInfo>(node->info);
-    }
-    
-    /*! \brief a single data instance */
-struct DataInst {
-  /*! \brief unique id for instance */
-  unsigned index;
-  /*! \brief content of data */
-  std::vector<TBlob> data;
-  /*! \brief extra data to be fed to the network */
-  std::string extra_data;
-};  // struct DataInst
-    
-    /*!
- * \brief Unary function that takes a src and save result to ret.
- *  The result container is pre-allocated with the correct shape.
- * \param src The source data.
- * \param env The Environment arguments.
- * \param ret The containter to store return value.
- * \param req The requirement to stroe the ret.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryFunction)(const TBlob& src,
-                              const EnvArguments& env,
-                              TBlob* ret,
-                              OpReqType req,
-                              RunContext ctx);
-/*!
- * \brief Shape inference function to get the correct shape given source.
- * \param src The source shape
- * \param env The Environment arguments.
- * \return The inferred result shape.
- */
-typedef TShape (*UnaryShapeFunction)(const TShape& src,
-                                     const EnvArguments& env);
-    
-    #include <vector>
-#include <string>
-#include <memory>
-#include <utility>
-#include <unordered_map>
-#include <unordered_set>
-#include './ndarray.h'
-    
-    template<>
-void SetDataGradToBlob<mshadow::gpu, float>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<float>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_gpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, float)->set_gpu_diff(data_ptr);
-}
-    
-    
-    {  /*! \brief MNISTCass iter params */
-  CaffeDataParam param_;
-  /*! \brief Shape scalar values */
-  index_t batch_size_, channels_, width_, height_;
-  /*! \brief Caffe data layer */
-  boost::shared_ptr<caffe::Layer<Dtype> >  caffe_data_layer_;
-  /*! \brief batch data blob */
-  mxnet::TBlob batch_data_;
-  /*! \brief batch label blob */
-  mxnet::TBlob batch_label_;
-  /*! \brief Output blob data for this iteration */
-  TBlobBatch out_;
-  /*! \brief Bottom and top connection-point blob data */
-  std::vector<::caffe::Blob<Dtype>*> bottom_, top_;
-  /*! \brief Cleanup these blobs on exit */
-  std::list<std::unique_ptr<::caffe::Blob<Dtype>>> cleanup_blobs_;
-  /*! \brief type flag of the tensor blob */
-  const int type_flag_;
-  /*! \brief Blobs done so far */
-  std::atomic<size_t>  loc_;
-};  // class CaffeDataIter
-    
-      /**
-   * /brief Customize set method for LayerParameter
-   * /tparam value string of caffe's layer configuration
-   * */
-  virtual void Set(void *head, const std::string &value) const {
-    caffe::NetParameter net_param;
-    if (!ReadProtoFromTextContent(value, &net_param))
-      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
-    }
-    
-    
-    {
-    {
-    {  /*!
-   * \brief Worker threads.
-   */
-  std::vector<std::thread> worker_threads_;
-  /*!
-   * \brief Startup synchronization objects
-   */
-  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
-  /*!
-   * \brief Disallow default construction.
-   */
-  ThreadPool() = delete;
-  /*!
-   * \brief Disallow copy construction and assignment.
-   */
-  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
-};
-}  // namespace engine
-}  // namespace mxnet
-#endif  // MXNET_ENGINE_THREAD_POOL_H_
-
-    
-    Graph DetectInplaceAddTo(Graph g) {
-  nnvm::StorageVector storage_id =
-      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
-  std::vector<int> storage_inplace_index =
-      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
-  static const Op* ewise_plus_op = Op::Get('_grad_add');
-  auto& idx = g.indexed_graph();
-  // reference cont.
-  std::vector<int> ref_count(idx.num_node_entries(), 0);
-  std::vector<int> addto_entry(idx.num_node_entries(), 0);
-  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
-    }
-    
-    
-    {/**
- * @brief Compute a hash digest from the contents of a buffer.
- *
- * @param hash_type The osquery-supported hash algorithm.
- * @param buffer A caller-controlled buffer (already allocated).
- * @param size The length of buffer in bytes.
- * @return A string (hex) representation of the hash digest.
- */
-std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
-} // namespace osquery
-
-    
-    #include <osquery/query.h>
-    
-      Row r3;
-  std::string msg2 = '0A001F9100000000FE80000000000000022522FFFEB03684000000';
-  parseSockAddr(msg2, r3, unix_socket);
-  ASSERT_FALSE(r3['remote_address'].empty());
-  EXPECT_EQ(r3['remote_address'], 'fe80:0000:0000:0000:0225:22ff:feb0:3684');
-  EXPECT_EQ(r3['remote_port'], '8081');
-    
-        /** Replace the interior action.
-     *
-     * @param action The new action, it will replace the running action.
-     */
-    void setInnerAction(ActionInterval *action);
-    /** Return the interior action.
-     *
-     * @return The interior action.
-     */
-    ActionInterval* getInnerAction() const { return _innerAction; }
-    
-        float x = _eye.x - _center.x;
-    float y = _eye.y - _center.y;
-    float z = _eye.z - _center.z;
-    
-        //
-    // convert 'absolutes' to 'diffs'
-    //
-    Vec2 p = copyConfig->getControlPointAtIndex(0);
-    for (ssize_t i = 1; i < copyConfig->count(); ++i)
-    {
-        Vec2 current = copyConfig->getControlPointAtIndex(i);
-        Vec2 diff = current - p;
-        copyConfig->replaceControlPoint(diff, i);
         
-        p = current;
-    }
-    
-    /** An Array that contain control points.
- * Used by CardinalSplineTo and (By) and CatmullRomTo (and By) actions.
- * @ingroup Actions
- * @js NA
- */
-class CC_DLL PointArray : public Ref, public Clonable
-{
-public:
-    }
-    
-    void ActionEase::startWithTarget(Node *target)
-{
-    if (target && _inner)
-    {
-        ActionInterval::startWithTarget(target);
-        _inner->startWithTarget(_target);
-    }
-    else
-    {
-        log('ActionEase::startWithTarget error: target or _inner is nullptr!');
-    }
+    {  // Reorder to the correct output order.
+  // TODO(szabadka): Modify the above computation so that this is not needed.
+  Complex tmp = a[2];
+  a[2] = a[3];
+  a[3] = a[5];
+  a[5] = a[7];
+  a[7] = a[4];
+  a[4] = a[1];
+  a[1] = a[6];
+  a[6] = tmp;
 }
     
-    StopGrid* StopGrid::reverse() const
-{
-    // no reverse, just clone it
-    return this->clone();
-}
+      void ComputeBlockErrorAdjustmentWeights(
+      int direction, int max_block_dist, double target_mul, int factor_x,
+      int factor_y, const std::vector<float>& distmap,
+      std::vector<float>* block_weight) override;
     
-    
-    {    for (i = 0; i < (_gridSize.width+1); ++i)
-    {
-        for (j = 0; j < (_gridSize.height+1); ++j)
-        {
-            Vec3 v = getOriginalVertex(Vec2(i, j));
-            Vec2 vect = _position - Vec2(v.x,v.y);
-            float r = vect.getLength();
-            
-            if (r < _radius)
-            {
-                r = _radius - r;
-                float rate = powf(r / _radius, 2);
-                v.z += (sinf( time*(float)M_PI * _waves * 2 + r * 0.1f) * _amplitude * _amplitudeRate * rate);
-            }
-            
-            setVertex(Vec2(i, j), v);
-        }
-    }
-}
-    
-    ProgressFromTo* ProgressFromTo::create(float duration, float fromPercentage, float toPercentage)
-{
-    ProgressFromTo *progressFromTo = new (std::nothrow) ProgressFromTo();
-    if (progressFromTo && progressFromTo->initWithDuration(duration, fromPercentage, toPercentage)) {
-        progressFromTo->autorelease();
-        return progressFromTo;
-    }
-    
-    delete progressFromTo;
-    return nullptr;
-}
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    /**
-@brief JumpTiles3D action.
-@details Move the tiles of a target node across the Z axis.
-*/
-class CC_DLL JumpTiles3D : public TiledGrid3DAction
-{
-public:
-    /** 
-     * @brief Create the action with the number of jumps, the sin amplitude, the grid size and the duration.
-     * @param duration Specify the duration of the JumpTiles3D action. It's a value in seconds.
-     * @param gridSize Specify the size of the grid.
-     * @param numberOfJumps Specify the jump tiles count.
-     * @param amplitude Specify the amplitude of the JumpTiles3D action.
-     * @return If the creation success, return a pointer of JumpTiles3D action; otherwise, return nil.
-     */
-    static JumpTiles3D* create(float duration, const Size& gridSize, unsigned int numberOfJumps, float amplitude);
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    
-    {  size_t getQueueSize() const { return queue_.size(); }
+    static const int kCrToGreenTable[256] = {
+  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
+  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
+  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
+  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
+  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
+  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
+  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
+  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
+  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
+  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
+  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
+  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
+  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
+  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
+   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
+   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
+        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
+  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
+  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
+ -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
+ -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
+ -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
+ -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
+ -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
+ -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
+ -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
+ -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
+ -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
+ -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
+ -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
+ -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
+ -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
 };
     
-      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+};
     
-    bool DNSCache::CacheEntry::add(const std::string& addr)
-{
-  for (std::vector<AddrEntry>::const_iterator i = addrEntries_.begin(),
-                                              eoi = addrEntries_.end();
-       i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return false;
-    }
+    #endif  // GUETZLI_DCT_DOUBLE_H_
+
+    
+        // The nodes are:
+    // [0, n): the sorted leaf nodes that we start with.
+    // [n]: we add a sentinel here.
+    // [n + 1, 2n): new parent nodes are added here, starting from
+    //              (n+1). These are naturally in ascending order.
+    // [2n]: we add a sentinel at the end as well.
+    // There will be (2n+1) elements at the end.
+    const HuffmanTree sentinel(~static_cast<uint32_t>(0), -1, -1);
+    tree[n] = sentinel;
+    tree[n + 1] = sentinel;
+    
+    // A node of a Huffman tree.
+struct HuffmanTree {
+  HuffmanTree() {}
+  HuffmanTree(uint32_t count, int16_t left, int16_t right)
+      : total_count_(count),
+        index_left_(left),
+        index_right_or_value_(right) {
   }
-  addrEntries_.push_back(AddrEntry(addr));
-  return true;
+  uint32_t total_count_;
+  int16_t index_left_;
+  int16_t index_right_or_value_;
+};
+    
+    #include <cmath>
+    
+    // Single pixel rgb to 16-bit yuv conversion.
+// The returned yuv values are signed integers in the
+// range [-128, 127] inclusive.
+inline static void RGBToYUV16(const uint8_t* const rgb,
+                              coeff_t *out) {
+  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
+  const int r = rgb[0];
+  const int g = rgb[1];
+  const int b = rgb[2];
+  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
+  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
+  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
 }
     
-      typedef std::set<std::shared_ptr<CacheEntry>,
-                   DerefLess<std::shared_ptr<CacheEntry>>>
-      CacheEntrySet;
-  CacheEntrySet entries_;
-    
-      void is_receiving(bool val) { is_receiving_ = val; }
-    
-      const int32_t ret = canRead(dev_handler_, recv_frames_, frame_num, nullptr);
-  // rx timeout not log
-  if (ret == NTCAN_RX_TIMEOUT) {
-    return ErrorCode::OK;
-  }
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'receive message failed, error code: ' << ret << ', '
-           << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-    
-    TEST(CanReceiverTest, ReceiveOne) {
-  can::FakeCanClient can_client;
-  MessageManager<::apollo::canbus::ChassisDetail> pm;
-  CanReceiver<::apollo::canbus::ChassisDetail> receiver;
+    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
+// parsed data.
+bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  const size_t start_pos = *pos;
+  VERIFY_LEN(3);
+  size_t marker_len = ReadUint16(data, pos);
+  int comps_in_scan = ReadUint8(data, pos);
+  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
+               COMPS_IN_SCAN);
     }
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-    constexpr int32_t BYTE_LENGTH = sizeof(int8_t) * 8;
-    
-      /**
-   * @brief Transform an integer with the size of 4 bytes to its hexadecimal
-   *        represented by a string.
-   * @param value The target integer to transform.
-   * @return Hexadecimal representing the target integer.
-   */
-  static std::string byte_to_hex(const uint32_t value);
-    
-    #endif  // MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
