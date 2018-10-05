@@ -1,119 +1,59 @@
 
         
-            # Determine the layout for a given name, taking into account the name type.
-    #
-    # ==== Parameters
-    # * <tt>name</tt> - The name of the template
-    def _layout_for_option(name)
-      case name
-      when String     then _normalize_layout(name)
-      when Proc       then name
-      when true       then Proc.new { |formats| _default_layout(formats, true)  }
-      when :default   then Proc.new { |formats| _default_layout(formats, false) }
-      when false, nil then nil
-      else
-        raise ArgumentError,
-          'String, Proc, :default, true, or false, expected for `layout'; you passed #{name.inspect}'
-      end
+        invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
     end
-    
-          def instrument(name, **options) # :doc:
-        options[:identifier] ||= (@template && @template.identifier) || @path
-    
-    def name
-  'jekyll'
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
+  end
 end
     
-    Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
-    
-          def step_name(_keyword, _step_match, status, _source_indent, _background, _file_colon_line)
-        @io.print CHARS[status]
-        @io.print ' '
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
       end
-      # rubocop:enable Metrics/ParameterLists
+    end
     
-    def run_jekyll(args)
-  args = args.strip.split(' ') # Shellwords?
-  process = run_in_shell('ruby', Paths.jekyll_bin.to_s, *args, '--trace')
-  process.exitstatus.zero?
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+    Devise.setup do |config|
+  require 'devise/orm/active_record'
+  config.secret_key = 'secret_key_base'
 end
     
-            def running?
-          EM.reactor_running?
-        end
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-                hsh[cleaned_key] = val
-          end
-        end
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
-    end
+        export LANG=en_US.UTF-8
+    DOC
+  else
+    STDERR.puts <<-DOC
+    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-        def self.package(plugins_args, target)
-      OfflinePluginPackager.new(plugins_args, target).execute
-    end
-  end
-end end
-
-    
-          def pack_uri(plugin_name)
-        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
-        URI.parse(url)
-      end
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
-  end
-    
-      # We compare the before the update and after the update
-  def display_updated_plugins(previous_gem_specs_map)
-    update_count = 0
-    find_latest_gem_specs.values.each do |spec|
-      name = spec.name.downcase
-      if previous_gem_specs_map.has_key?(name)
-        if spec.version != previous_gem_specs_map[name].version
-          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
-          update_count += 1
-        end
-      else
-        puts('Installed #{spec.name} #{spec.version.to_s}')
-        update_count += 1
-      end
-    end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
-        end
-      end
-    end
-    
-        let(:plugin_name) { 'logstash-filter-qatest' }
-    let(:previous_version) { '0.1.0' }
+          def resolve
+        return if scm_name.nil?
+        set(:scm, :git) if using_default_scm?
