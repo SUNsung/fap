@@ -1,59 +1,88 @@
 
         
-          # If a given extension is listed multiple times, prefer the first one listed
-  extensions.reject! { |extension| mimes.values.flatten.include?(extension) }
+            gu = GroupUser.find_by(user_id: moderator.id, group_id: group.id)
+    expect(gu.notification_level).to eq(NotificationLevels.all[:watching])
     
-    Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
+        # The category for users with trust level 3 has been created.
+    # Add initial permissions and description. They can be changed later.
     
-      [before || '.',
-    after || '.',]
-end
-    
-          private
-    
-        # Check whether a gem plugin is allowed to be used during this build.
-    #
-    # plugin_name - the name of the plugin
-    #
-    # Returns true if the plugin name is in the whitelist or if the site is not
-    #   in safe mode.
-    def plugin_allowed?(plugin_name)
-      !site.safe || whitelist.include?(plugin_name)
+        def finalize_session
+      @threads.map(&:join)
     end
-    
-    end
-
-    
-      protected
-    
-      def name
-    ':#{object.shortcode}:'
   end
 end
 
     
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
+          it 'does not add a verbose flag to command if verbose is set to false' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              verbose: false
+            )
+          end').runner.execute(:test)
+    
+            expect(result.size).to eq(3)
+        expect(result[0]).to eq(%(security create-keychain -p #{password.shellescape} ~/Library/Keychains/test.keychain))
       end
+    
+          it 'handles the exclude_dirs parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+            FastlaneCore::CertChecker.wwdr_certificate_installed?
+      end
+    
+    When /^I (?:log|sign) out manually$/ do
+  manual_logout
+end
+    
+    # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
+# order to ease the transition to Capybara we set the default here. If you'd
+# prefer to use XPath just remove this line and adjust any selectors in your
+# steps to use the XPath syntax.
+Capybara.default_selector = :css
+    
+          get :index, params: {a_id: @aspect.id, page: '1'}, format: :json
+      save_fixture(response.body, 'aspects_manage_contacts_json')
     end
     
-    module Homebrew
-  module_function
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
     
-            def stock_location
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
         end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      # Escapes CDATA sections in post content
+  def cdata_escape(input)
+    input.gsub(/<!\[CDATA\[/, '&lt;![CDATA[').gsub(/\]\]>/, ']]&gt;')
+  end
+    
+    module Jekyll
