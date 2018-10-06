@@ -1,188 +1,130 @@
 
         
-            doc
-  rescue NameError => error
-    if error.name.to_s == const
-      raise DocNotFound.new(%(could not find doc '#{name}'), name)
+        task :spec => :test
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_*.rb'
+  test.verbose = true
+end
+    
+    def pre_pr(url)
+  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
+end
+    
+    Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
+
+    
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    Given(%r!^I have the following documents? under the (.*) collection:$!) do |folder, table|
+  table.hashes.each do |input_hash|
+    title = slug(input_hash['title'])
+    filename = '#{title}.md'
+    dest_folder = '_#{folder}'
+    
+            def initialize(_opts)
+          # If EventMachine SSL support on Windows ever gets better, the code below will
+          # set up the reactor to handle SSL
+          #
+          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
+          # if @ssl_enabled
+          #   em_opts[:tls_options] = {
+          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
+          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
+          #   }
+          #   em_opts[:secure] = true
+          # end
+    
+              @highlighter = begin
+            if @config.key?('enable_coderay') && @config['enable_coderay']
+              Jekyll::Deprecator.deprecation_message(
+                'You are using 'enable_coderay', ' \
+                'use syntax_highlighter: coderay in your configuration file.'
+              )
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
+    end
+    
+          puts_columns Array(result)
     else
-      raise error
-    end
-  end
+      query = ARGV.first
+      rx = query_regexp(query)
+      local_results = search_formulae(rx)
+      puts_columns(local_results)
+      tap_results = search_taps(rx)
+      puts_columns(tap_results)
     
-        def request_all(urls, &block)
-      if options[:rate_limit]
-        if @@rate_limiter
-          @@rate_limiter.limit = options[:rate_limit]
-        else
-          @@rate_limiter = RateLimiter.new(options[:rate_limit])
-          Typhoeus.before(&@@rate_limiter.to_proc)
-        end
+    links.each do |link|
+  href = link.attribute('href').to_s
+  uri = URI.join(BASE_URI, href)
+  if map[uri]
+    dups <<  href
+  end
+  map[uri] = href
+end
+    
+        def initial_page?
+      root_page? || context[:initial_paths].include?(subpath)
+    end
+    
+        def request(urls, options = {}, &block)
+      requests = [urls].flatten.map do |url|
+        build_and_queue_request(url, options, &block)
       end
+      requests.length == 1 ? requests.first : requests
+    end
     
-            css('a.is-button > h3').each do |node|
-          node.parent.content = node.content
+    require 'active_support/subscriber'
+    
+            # Remove root-level <div>
+        while div = at_css('h1 + div')
+          div.before(div.children)
+          div.remove
         end
     
-            css('.api-profile-header-structure > li').each do |node|
-          node.inner_html = node.inner_html.remove('- ')
-        end
-    
-        if PostRequests.include?(self.method)
-      return param_string
-    end
-    ''
-  end
-    
-    IAX_IE_CALLED_NUMBER  = 1
-IAX_IE_CALLING_NUMBER = 2
-IAX_IE_AUTH_METHODS   = 3
-IAX_IE_CALLING_NAME   = 4
-IAX_IE_USERNAME       = 6
-IAX_IE_DESIRED_CODEC  = 9
-IAX_IE_ORIGINAL_DID   = 10
-IAX_IE_ACTUAL_CODECS  = 8
-IAX_IE_PROTO_VERSION  = 11
-IAX_IE_REG_REFRESH    = 19
-IAX_IE_CHALLENGE_DATA = 15
-IAX_IE_CHALLENGE_RESP = 16
-IAX_IE_APPARENT_ADDR  = 18
-IAX_IE_REGREJ_CAUSE   = 22
-IAX_IE_HANGUP_CAUSE   = 42
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
-          end
-    
-                seq = OpenSSL::ASN1::Sequence.new(seqs)
-    
-              # Decodes the till field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_till(input)
-            input.value[0].value
-          end
-    
-              # Decodes the crealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_crealm(input)
-            input.value[0].value
-          end
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
-    end
-  end
-end
-
-    
-    When /^I toggle all nsfw posts$/ do
-  all('a.toggle_nsfw_state').each &:click
-end
-    
-    Before do |scenario|
-  Devise.mailer.deliveries = []
-  page.driver.headers = if scenario.source_tag_names.include? '@mobile'
-                          {'User-Agent' => 'Mozilla/5.0 (Mobile; rv:18.0) Gecko/18.0 Firefox/18.0'}
-                        else
-                          {}
-                        end
-    
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
-    end
-  end
-end
-
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      get :index, params: {conversation_id: @conv1.id}
-      save_fixture(html_for('body'), 'conversations_unread')
-    
-          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
-      expect(response.status).to eq(404)
-      expect(response.body).to eq(I18n.t('likes.destroy.error'))
-      expect(Like.count).to eq(like_count)
-    end
-  end
-end
-
-    
-      require 'cocoapods/gem_version'
-  require 'cocoapods-core'
-  require 'cocoapods/config'
-  require 'cocoapods/downloader'
-    
-      SPREE_GEMS.each do |gem_name|
-    rm_f  '#{gem_name}/Gemfile.lock'
-    rm_rf '#{gem_name}/pkg'
-    rm_rf '#{gem_name}/spec/dummy'
+    Given(/^(\d+) valid existing releases$/) do |num|
+  a_day = 86_400 # in seconds
+  offset = -(a_day * num.to_i)
+  num.to_i.times do
+    run_vagrant_command('mkdir -p #{TestApp.release_path(TestApp.timestamp(offset))}')
+    offset += a_day
   end
 end
     
-          def invalid_resource!(resource)
-        @resource = resource
-        render 'spree/api/errors/invalid_resource', status: 422
+      def symlinked?(symlink_path, target_path)
+    '[ #{symlink_path} -ef #{target_path} ]'
+  end
+    
+        def add_filter(filter=nil, &block)
+      if block
+        raise ArgumentError, 'Both a block and an object were given' if filter
+    
+          def trusted?
+        @trusted
       end
-    
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@return_authorization)
-        end
-    
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
-          else
-            State.accessible_by(current_ability, :read).order('name ASC')
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-    When /^(?:|I )choose '([^']*)'$/ do |field|
-  choose(field)
-end
-    
-      def framework_version
-    @framework_version ||= `rails -v`[/^Rails (.+)$/, 1]
-  end
-    
-      def migration_file_name
-    '#{migration_name}.rb'
-  end
