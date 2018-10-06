@@ -1,174 +1,221 @@
 
         
-          // Convert output shapes.
-  output_tensor_shape_protos->resize(c.num_outputs());
-  CppShapeInferenceResult out;
-  for (int i = 0; i < c.num_outputs(); ++i) {
-    out.Clear();
-    ProtoFromShapeHandle(c.output(i), &c, out.mutable_shape());
-    }
-    
-    class TestRandomAccessFile : public RandomAccessFile {
-  // The file contents is 10 bytes of all A's
-  Status Read(uint64 offset, size_t n, StringPiece* result,
-              char* scratch) const override {
-    Status s;
-    for (int i = 0; i < n; ++i) {
-      if (offset + i >= 10) {
-        n = i;
-        s = errors::OutOfRange('EOF');
-        break;
-      }
-      scratch[i] = 'A';
-    }
-    *result = StringPiece(scratch, n);
-    return s;
-  }
-};
-    
-    
-    {  if (debug) {
-    const OpRegistrationData* op_reg_data;
-    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
-    if (!status.ok()) {
-      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
-    } else if (!op_reg_data->shape_inference_fn) {
-      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
-    } else if (properties.HasInputProperties(node->name())) {
-      const std::vector<OpInfo::TensorProperties>& props =
-          properties.GetInputProperties(node->name());
-      for (int i = 0; i < props.size(); ++i) {
-        const OpInfo::TensorProperties& prop = props[i];
-        if (prop.has_value()) {
-          os << '\t'
-             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
-             << ') has known value' << std::endl;
-        }
-      }
-    }
-  }
-}
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+        #endif  // ATOM_APP_ATOM_CONTENT_CLIENT_H_
 
     
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
+    bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
+  const base::CommandLine::StringType dashdash(2, '-');
+  bool block_args = false;
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i] == dashdash)
+      break;
+    if (block_args) {
+      return false;
+    } else if (IsUrlArg(argv[i])) {
+      block_args = true;
+    }
+  }
+  return true;
 }
     
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
+    GlobalShortcut::GlobalShortcut(v8::Isolate* isolate) {
+  Init(isolate);
+}
+    
+    #include 'atom/common/node_includes.h'
+    
+     protected:
+  Menu(v8::Isolate* isolate, v8::Local<v8::Object> wrapper);
+  ~Menu() override;
+    
+    class Net : public mate::EventEmitter<Net> {
  public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
     }
     
-    struct PyDecrefDeleter {
-  void operator()(PyObject* p) const { Py_DECREF(p); }
+    #include 'atom/browser/api/atom_api_web_contents.h'
+#include 'atom/browser/atom_browser_client.h'
+#include 'atom/common/native_mate_converters/value_converter.h'
+#include 'content/public/browser/render_process_host.h'
+#include 'native_mate/dictionary.h'
+#include 'native_mate/object_template_builder.h'
+    
+      virtual void Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh = nullptr);
+  virtual void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result);
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
     
-    #include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/format.hpp'
-#include 'caffe/util/math_functions.hpp'
     
-    /*!
-@brief Fills a Blob with coefficients for bilinear interpolation.
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
+  }
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                       views::MENU_ANCHOR_TOPRIGHT,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
+  {
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
+  
+    //base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
+  
+    run_loop.Run();
+  }
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
+}
     
-      virtual inline const char* type() const { return 'AbsVal'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+      if (type == 'separator') {
+    menu_item_ = gtk_separator_menu_item_new();
+  } else {
+    if (type == 'checkbox') {
+      menu_item_ = gtk_check_menu_item_new();
+      bool checked;
+      if (option.GetBoolean('checked', &checked))
+        SetChecked(checked);
+    } else {
+      menu_item_ = gtk_image_menu_item_new();
+      std::string icon;
+      if (option.GetString('icon', &icon))
+        SetIcon(icon);
+    }
+    }
     
-    namespace caffe {
+          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
+      if (data.type == TYPE_PNG &&
+        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
+        error_ = 'Failed to decode as PNG';
+        return false;
+      } else if (data.type == TYPE_JPEG) {
+        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
+        if (tmp_bitmap == NULL) {
+          error_ = 'Failed to decode as JPEG';
+          return false;
+        }
+        bitmap = std::move(tmp_bitmap);
+      }
+    
+    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardGetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
     #include <vector>
     
+      static vector<string> LayerTypeList() {
+    CreatorRegistry& registry = Registry();
+    vector<string> layer_types;
+    for (typename CreatorRegistry::iterator iter = registry.begin();
+         iter != registry.end(); ++iter) {
+      layer_types.push_back(iter->first);
+    }
+    return layer_types;
+  }
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-      virtual inline const char* type() const { return 'Concat'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    {  int size_;
-  Dtype alpha_, beta_, k_;
-};
-#endif
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
     
      protected:
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -176,320 +223,357 @@ limitations under the License.
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    {
-    {}}
+    namespace caffe {
+    }
     
+        void NDArrayView::CopyFrom(const NDArrayView& source)
+    {
+        if ((source.Shape() != Shape()) && (AsTensorShape(source.Shape()) != AsTensorShape(Shape())))
+            InvalidArgument('NDArrayView::CopyFrom: The source view shape '%S' is not same as the shape '%S' of this NDArrayView.', 
+                            source.Shape().AsString().c_str(), Shape().AsString().c_str());
+    }
     
+        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
     {
+        m_test->Update(samples, nullptr, accumulatedMetric,
+            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
+                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
+            {
+                OnWriteTestUpdate(samples, updates, aggregateMetric);
+            });
+    }
+    
+        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
+    // function waits until mutex is released
+    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
+    bool Acquire(bool wait)
     {
-    {
-    {          std::transform(
-            begin(inputs) + start, begin(inputs) + stop,
-            retMem + start,
-            func
-          );
+        assert(m_handle == NULL);
+        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
+        if (m_handle == NULL)
+        {
+            if (!wait)
+                return false;   // can't lock due to access permissions: lock already exists, consider not available
+            else
+                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
         }
-      } catch (const std::runtime_error& e) {
-        std::fprintf(stderr,
-          'worker thread exited with exception: %s\n', e.what());
-        failed = true;
-      }
-    }));
-  }
+    }
     
-    
+        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
+    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
+    size_t currentseed;             // seed for current sequence
+    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
+                                    // special values (randomizeDisable)
+    void Invalidate()
     {
-    {}}
-    
-      if (HPHP::jit::deltaFits(imm64, HPHP::sz::word)) {
-    // immediate has only low 16 bits set, use simple load immediate
-    li(rt, static_cast<int16_t>(imm64));
-    if (imm64 & (1ULL << 15) && !(imm64 & (1ULL << 16))) {
-      // clear extended sign that should not be set
-      // (32bits number. Sets the 16th bit but not the 17th, it's not negative!)
-      clrldi(rt, rt, 48);
-      missing = kLi64Len - 2 * instr_size_in_bytes;
-    } else {
-      missing = kLi64Len - 1 * instr_size_in_bytes;
+        currentseed = (size_t) -1;
     }
-  } else if (HPHP::jit::deltaFits(imm64, HPHP::sz::dword)) {
-    // immediate has only low 32 bits set
-    lis(rt, static_cast<int16_t>(imm64 >> 16));
-    ori(rt, rt, static_cast<int16_t>(imm64 & UINT16_MAX));
-    if (imm64 & (1ULL << 31) && !(imm64 & (1ULL << 32))) {
-      // clear extended sign
-      // (64bits number. Sets the 32th bit but not the 33th, it's not negative!)
-      clrldi(rt, rt, 32);
-      missing = kLi64Len - 3 * instr_size_in_bytes;
-    } else {
-      missing = kLi64Len - 2 * instr_size_in_bytes;
-    }
-  } else if (imm64 >> 48 == 0) {
-    // immediate has only low 48 bits set
-    lis(rt, static_cast<int16_t>(imm64 >> 32));
-    ori(rt, rt, static_cast<int16_t>((imm64 >> 16) & UINT16_MAX));
-    sldi(rt,rt,16);
-    ori(rt, rt, static_cast<int16_t>(imm64 & UINT16_MAX));
-    if (imm64 & (1ULL << 47)) {
-      // clear extended sign
-      clrldi(rt, rt, 16);
-    } else {
-      missing = kLi64Len - 4 * instr_size_in_bytes;
-    }
-  } else {
-    // load all 64 bits
-    lis(rt, static_cast<int16_t>(imm64 >> 48));
-    ori(rt, rt, static_cast<int16_t>((imm64 >> 32) & UINT16_MAX));
-    sldi(rt,rt,32);
-    oris(rt, rt, static_cast<int16_t>((imm64 >> 16) & UINT16_MAX));
-    ori(rt, rt, static_cast<int16_t>(imm64 & UINT16_MAX));
-  }
-    
-    template <class Action>
-bool runRelative(std::string suffix, String cmd,
-                 const char* currentDir, Action action) {
-  suffix = '/' + suffix;
-  auto cwd = resolve_include(
-    cmd,
-    currentDir,
-    [] (const String& f, void*) { return access(f.data(), R_OK) == 0; },
-    nullptr
-  );
-  if (cwd.isNull()) return false;
-  do {
-    cwd = f_dirname(cwd);
-    auto const f = String::attach(
-      StringData::Make(cwd.data(), suffix.data())
-    );
-    if (action(f)) return true;
-  } while (!cwd.empty() && !cwd.equal(s_slash));
-  return false;
-}
-    
-    
-    
-    
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    
-    {   ~mem_block_cache()
-   {
-      while(next)
-      {
-         mem_block_node* old = next;
-         next = next->next;
-         ::operator delete(old);
-      }
-   }
-   void* get()
-   {
-#ifdef BOOST_HAS_THREADS
-      boost::static_mutex::scoped_lock g(mut);
-#endif
-     if(next)
-      {
-         mem_block_node* result = next;
-         next = next->next;
-         --cached_blocks;
-         return result;
-      }
-      return ::operator new(BOOST_REGEX_BLOCKSIZE);
-   }
-   void put(void* p)
-   {
-#ifdef BOOST_HAS_THREADS
-      boost::static_mutex::scoped_lock g(mut);
-#endif
-      if(cached_blocks >= BOOST_REGEX_MAX_CACHE_BLOCKS)
-      {
-         ::operator delete(p);
-      }
-      else
-      {
-         mem_block_node* old = static_cast<mem_block_node*>(p);
-         old->next = next;
-         next = old;
-         ++cached_blocks;
-      }
-   }
-};
-    
-    template <class traits, class charT, class Formatter>
-std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
-                         const basic_regex<charT, traits>& e, 
-                         Formatter fmt,
-                         match_flag_type flags = match_default)
-{
-   std::basic_string<charT> result;
-   BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<charT> > i(result);
-   regex_replace(i, s.begin(), s.end(), e, fmt, flags);
-   return result;
-}
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_PREFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    template <class BaseT>
-struct default_wrapper : public BaseT
-{
-   typedef typename BaseT::char_type char_type;
-   std::string error_string(::boost::regex_constants::error_type e)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::get_default_error_string(e);
-   }
-   ::boost::regex_constants::syntax_type syntax_type(char_type c)const
-   {
-      return ((c & 0x7f) == c) ? get_default_syntax_type(static_cast<char>(c)) : ::boost::regex_constants::syntax_char;
-   }
-   ::boost::regex_constants::escape_syntax_type escape_syntax_type(char_type c)const
-   {
-      return ((c & 0x7f) == c) ? get_default_escape_syntax_type(static_cast<char>(c)) : ::boost::regex_constants::escape_type_identity;
-   }
-   int toi(const char_type*& p1, const char_type* p2, int radix)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::global_toi(p1, p2, radix, *this);
-   }
-   char_type translate(char_type c, bool icase)const
-   {
-      return (icase ? this->translate_nocase(c) : this->translate(c));
-   }
-   char_type translate(char_type c)const
-   {
-      return BaseT::translate(c);
-   }
-   char_type tolower(char_type c)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::global_lower(c);
-   }
-   char_type toupper(char_type c)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::global_upper(c);
-   }
-};
-    
-      Status update(const std::string& source, const ParserConfig& config) override;
-    
-    #include 'osquery/tests/test_util.h'
-    
-    #include 'osquery/tests/test_util.h'
-    
-    
-    { private:
-  const std::string kConfigViews = 'config_views.';
-};
-    
-    class CompactedDBImpl : public DBImpl {
- public:
-  CompactedDBImpl(const DBOptions& options, const std::string& dbname);
-  virtual ~CompactedDBImpl();
-    }
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-      // Write 100K keys, these are written to a few files in L0.
-  const std::string value(10, 'x');
-  for (int i = 0; i < 100000; i++) {
-    char key[100];
-    snprintf(key, sizeof(key), 'B%010d', i);
-    Put(1, key, value);
-  }
-  ASSERT_OK(Flush(1));
-    
-      rocksdb::SyncPoint::GetInstance()->LoadDependency({
-      {'CompactionJob::Run():Start', 'DynamicLevelMaxBytesBase2:0'},
-      {'DynamicLevelMaxBytesBase2:1', 'CompactionJob::Run():End'},
-      {'DynamicLevelMaxBytesBase2:compact_range_finish',
-       'FlushJob::WriteLevel0Table'},
-  });
-  rocksdb::SyncPoint::GetInstance()->EnableProcessing();
-    
-      using DBImpl::Flush;
-  virtual Status Flush(const FlushOptions& /*options*/,
-                       ColumnFamilyHandle* /*column_family*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-    
-    class WriteControllerToken {
- public:
-  explicit WriteControllerToken(WriteController* controller)
-      : controller_(controller) {}
-  virtual ~WriteControllerToken() {}
-    }
-    
-    class TimeSetEnv : public EnvWrapper {
- public:
-  explicit TimeSetEnv() : EnvWrapper(nullptr) {}
-  uint64_t now_micros_ = 6666;
-  virtual uint64_t NowNanos() override { return now_micros_ * std::milli::den; }
-};
-    
-    // Used for reading a file from HDFS. It implements both sequential-read
-// access methods as well as random read access methods.
-class HdfsReadableFile : virtual public SequentialFile,
-                         virtual public RandomAccessFile {
- private:
-  hdfsFS fileSys_;
-  std::string filename_;
-  hdfsFile hfile_;
-    }
-    
-    bool IsSectorAligned(const size_t off, size_t sector_size) {
-  return off % sector_size == 0;
-}
-    
-    class DHTMessageCallback;
-    
-      Time getSerializedTime() const { return serializedTime_; }
-    
-      // localnode
-  // 8bytes reserved
-  WRITE_CHECK(fp, zero, 8);
-  // 20bytes localnode ID
-  WRITE_CHECK(fp, localNode_->getID(), DHT_ID_LENGTH);
-  // 4bytes reserved
-  WRITE_CHECK(fp, zero, 4);
-    
-    
-    {} // namespace aria2
-    
-        factory->setRoutingTable(routingTable.get());
-    factory->setConnection(connection.get());
-    factory->setMessageDispatcher(dispatcher.get());
-    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
-    factory->setTokenTracker(tokenTracker.get());
-    factory->setLocalNode(localNode);
-    factory->setBtRegistry(e->getBtRegistry().get());
-    
-    #endif // D_DHT_SETUP_H
-
     
     public:
-  DHTTokenTracker();
-    
-    namespace aria2 {
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
     }
+    
+        virtual void DumpNodeInfo(const bool printValues, const bool printMetadata, File& fstream) const override
+    {
+        Base::DumpNodeInfo(printValues, printMetadata, fstream);
+        if (printMetadata)
+        {
+            fstream << '[' << string(GetSampleLayout()) << ']';
+        }
+    }
+    
+    /*!
+ * \brief Check if alignas(*) keyword is supported. (g++ 4.8 or higher)
+ */
+#if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4)
+#define XGBOOST_ALIGNAS(X) alignas(X)
+#else
+#define XGBOOST_ALIGNAS(X)
+#endif
+    
+      /**
+   * \brief Updates linear model given gradients.
+   *
+   * \param in_gpair            The gradient pair statistics of the data.
+   * \param data                Input data matrix.
+   * \param model               Model to be updated.
+   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
+   */
+    
+    
+    {#define XGBOOST_REGISTER_PREDICTOR(UniqueId, Name)      \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::PredictorReg& \
+      __make_##PredictorReg##_##UniqueId##__ =          \
+          ::dmlc::Registry<::xgboost::PredictorReg>::Get()->__REGISTER__(Name)
+}  // namespace xgboost
+
+    
+    
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
+    }
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
+  }
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar() = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd() = 0;
+    
+    namespace xgboost {
+namespace gbm {
+/*! \brief model parameters */
+struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
+  /*! \brief number of trees */
+  int num_trees;
+  /*! \brief number of roots */
+  int num_roots;
+  /*! \brief number of features to be used by trees */
+  int num_feature;
+  /*! \brief pad this space, for backward compatibility reason.*/
+  int pad_32bit;
+  /*! \brief deprecated padding space. */
+  int64_t num_pbuffer_deprecated;
+  /*!
+   * \brief how many output group a single instance can produce
+   *  this affects the behavior of number of output we have:
+   *    suppose we have n instance and k group, output will be k * n
+   */
+  int num_output_group;
+  /*! \brief size of leaf vector needed in tree */
+  int size_leaf_vector;
+  /*! \brief reserved parameters */
+  int reserved[32];
+  /*! \brief constructor */
+  GBTreeModelParam() {
+    std::memset(this, 0, sizeof(GBTreeModelParam));
+    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
+                  '64/32 bit compatibility issue');
+  }
+  // declare parameters, only declare those that need to be set.
+  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
+    DMLC_DECLARE_FIELD(num_output_group)
+        .set_lower_bound(1)
+        .set_default(1)
+        .describe(
+            'Number of output groups to be predicted,'
+            ' used for multi-class classification.');
+    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
+        'Tree updater sequence.');
+    DMLC_DECLARE_FIELD(num_feature)
+        .set_lower_bound(0)
+        .describe('Number of features used for training and prediction.');
+    DMLC_DECLARE_FIELD(size_leaf_vector)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('Reserved option for vector tree.');
+  }
+};
+    }
+    }
+    
+    static const uint8_t kRangeLimitLut[4 * 256] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+ 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+ 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+ 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+ 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+ 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+ 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+ 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+ 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
+    
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+};
+    
+      // performs: {a,b} <- {a-b, a+b}, without saturation
+#define BUTTERFLY(a, b) do {   \
+  SUB((a), (b));               \
+  ADD((b), (b));               \
+  ADD((b), (a));               \
+} while (0)
+    
+    // Reads the DRI marker and saved the restart interval into *jpg.
+bool ProcessDRI(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  if (jpg->restart_interval > 0) {
+    fprintf(stderr, 'Duplicate DRI marker.\n');
+    jpg->error = JPEG_DUPLICATE_DRI;
+    return false;
+  }
+  const size_t start_pos = *pos;
+  VERIFY_LEN(4);
+  size_t marker_len = ReadUint16(data, pos);
+  int restart_interval = ReadUint16(data, pos);
+  jpg->restart_interval = restart_interval;
+  VERIFY_MARKER_END();
+  return true;
+}
+    
+    #ifndef GUETZLI_JPEG_DATA_READER_H_
+#define GUETZLI_JPEG_DATA_READER_H_
+    
+    #endif  // GUETZLI_JPEG_DATA_WRITER_H_
