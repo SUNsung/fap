@@ -1,104 +1,126 @@
 
         
-          # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
-  # <pre>args << '--some-new-stuff' if build.head?</pre>
-  # <pre># If there are multiple conditional arguments use a block instead of lines.
-  #  if build.head?
-  #    args << '--i-want-pizza'
-  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
-  #  end</pre>
-  def head?
-    include? 'HEAD'
-  end
+                    @machine_locks[id] = lock_file
+          end
     
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
-    
-        root.children.sort.each do |pn|
-      if pn.directory?
-        dirs << pn
-      elsif block_given? && yield(pn)
-        puts pn
-        other = 'other '
-      else
-        remaining_root_files << pn unless pn.basename.to_s == '.DS_Store'
-      end
-    end
-    
-      def shorten_revision(revision)
-    Utils.popen_read('git', '-C', HOMEBREW_REPOSITORY, 'rev-parse', '--short', revision).chomp
-  end
-    
-        context 'with keywords' do
-      let(:options) do
-        {
-          name: { 'en-US' => 'Fastlane Demo' },
-          description: { 'en-US' => 'Demo description' },
-          keywords: { 'en-US' => 'Some, key, words' }
-        }
-      end
-    
-        describe 'with an IPA file for iOS' do
-      it 'uploads the IPA for the iOS platform' do
-        expect_any_instance_of(FastlaneCore::IpaUploadPackageBuilder).to receive(:generate)
-          .with(app_id: 'YI8C2AS', ipa_path: 'ACME.ipa', package_path: '/tmp', platform: 'ios')
-          .and_return('path')
-        expect(transporter).to receive(:upload).with('YI8C2AS', 'path').and_return(true)
-        runner.upload_binary
-      end
-    end
-    
-          before do
-        base_dir = FileUtils.mkdir_p(File.join(tmpdir, 'review_information'))
-        {
-          first_name: 'Alice',
-          last_name: 'Smith',
-          phone_number: '+819012345678',
-          email_address: 'deliver@example.com',
-          demo_user: 'user',
-          demo_password: 'password',
-          notes: 'This is a note from file'
-        }.each do |prefix, text|
-          create_metadata(File.join(base_dir, '#{prefix}.txt'), text)
+              result
         end
-      end
     
-            return link + '?' + url_params.join('&')
-      end
+              @registered.each do |plugin|
+            plugin.config.each do |key, klass|
+              result[key] = klass
+            end
+          end
     
-          it 'requires the passwords to match' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Create User'
-        expect(page).to have_text('Password confirmation doesn't match')
-      end
+            # Yields a VM for each target VM for the command.
+        #
+        # This is a convenience method for easily implementing methods that
+        # take a target VM (in the case of multi-VM) or every VM if no
+        # specific VM name is specified.
+        #
+        # @param [String] name The name of the VM. Nil if every VM.
+        # @param [Hash] options Additional tweakable settings.
+        # @option options [Symbol] :provider The provider to back the
+        #   machines with. All machines will be backed with this
+        #   provider. If none is given, a sensible default is chosen.
+        # @option options [Boolean] :reverse If true, the resulting order
+        #   of machines is reversed.
+        # @option options [Boolean] :single_target If true, then an
+        #   exception will be raised if more than one target is found.
+        def with_target_vms(names=nil, options=nil)
+          @logger.debug('Getting target VMs for command. Arguments:')
+          @logger.debug(' -- names: #{names.inspect}')
+          @logger.debug(' -- options: #{options.inspect}')
+    
+            # This returns all the registered communicators.
+        #
+        # @return [Hash]
+        def communicators
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.communicator)
+            end
+          end
+        end
+    
+            # This should return the state of the machine within this provider.
+        # The state must be an instance of {MachineState}. Please read the
+        # documentation of that class for more information.
+        #
+        # @return [MachineState]
+        def state
+          nil
+        end
+    
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
+    end
+  end
+end
+    
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
     end
     
-      it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+    module UserCukeHelpers
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
   end
 end
 
     
-      describe 'up' do
-    it 'should update extract and template options for an existing WebsiteAgent' do
-      expect(agent.options).to include('extract' => old_extract,
-                                       'template' => old_template)
-      ConvertWebsiteAgentTemplateForMerge.new.up
-      agent.reload
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
+        export LANG=en_US.UTF-8
+    DOC
+  else
+    STDERR.puts <<-DOC
+    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+    
+      def prefixes
+    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
+    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+    
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
+    
+        # Checks that the git version is at least 1.8.5
+    #
+    # @raise If the git version is older than 1.8.5
+    #
+    # @return [void]
+    #
+    def self.verify_minimum_git_version!
+      if git_version < Gem::Version.new('1.8.5')
+        raise Informative, 'You need at least git version 1.8.5 to use CocoaPods'
+      end
     end
-  end
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
