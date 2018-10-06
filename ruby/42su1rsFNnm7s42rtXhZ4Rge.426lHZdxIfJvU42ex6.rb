@@ -1,57 +1,82 @@
 
         
-          def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
+        class Formula
+  include FormulaCompat
+  extend FormulaCompat
+    
+      def to_str
+    @paths.join(File::PATH_SEPARATOR)
+  end
+  alias to_s to_str
+    
+        ff = if ARGV.named.empty?
+      Formula.installed.sort
+    else
+      ARGV.resolved_formulae.sort
+    end
+    
+        def assets_path
+      @assets_path ||= File.join gem_path, 'assets'
+    end
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
   end
     
-      def sign_in_params
-    devise_parameter_sanitizer.sanitize(:sign_in)
+        def replace_all(file, regex, replacement = nil, &block)
+      log_transform regex, replacement
+      new_file = file.gsub(regex, replacement, &block)
+      raise 'replace_all #{regex}, #{replacement} NO MATCH' if file == new_file
+      new_file
+    end
+    
+      # Disable Rails's static asset server (Apache or nginx will already do this).
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
     
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
+        # Checks that the git version is at least 1.8.5
+    #
+    # @raise If the git version is older than 1.8.5
+    #
+    # @return [void]
+    #
+    def self.verify_minimum_git_version!
+      if git_version < Gem::Version.new('1.8.5')
+        raise Informative, 'You need at least git version 1.8.5 to use CocoaPods'
+      end
+    end
     
-          # Given a callable that provides a value, wrap the callable with another
-      # object that responds to `call`. This new object will perform validation
-      # and then return the original callable's value.
-      #
-      # If the callable is a `Question`, the object returned by this method will
-      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
-      # ensures that `is_a?(Question)` remains true even after the validation
-      # wrapper is applied. This is needed so that `Configuration#is_question?`
-      # works as expected.
-      #
-      def assert_valid_later(key, callable)
-        validation_callback = lambda do
-          value = callable.call
-          assert_valid_now(key, value)
-          value
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
         end
     
-            check(node)
-      end
+            def destroy
+          authorize! :destroy, @product
+          @product.destroy
+          respond_with(@product, status: 204)
+        end
     
-      context 'when arguments to a method' do
-    let(:prefix) { 'bar(' }
-    let(:suffix) { ')' }
-    let(:source) { construct(false, true) }
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
     
-          # Checks whether this node body is a void context.
-      #
-      # @return [Boolean] whether the `def` node body is a void context
-      def void_context?
-        method?(:initialize) || assignment_method?
-      end
-    
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
-      end
+            def show
+          @state = scope.find(params[:id])
+          respond_with(@state)
+        end
