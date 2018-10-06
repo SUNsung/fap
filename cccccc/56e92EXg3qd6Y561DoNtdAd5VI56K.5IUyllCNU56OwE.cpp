@@ -1,309 +1,143 @@
 
         
-        SILLayout::SILLayout(CanGenericSignature Sig,
-                     ArrayRef<SILField> Fields)
-  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
-    NumFields(Fields.size())
-{
-#ifndef NDEBUG
-  verifyFields(Sig, Fields);
-#endif
-  auto FieldsMem = getTrailingObjects<SILField>();
-  for (unsigned i : indices(Fields)) {
-    new (FieldsMem + i) SILField(Fields[i]);
-  }
-}
-    
-    void ClusteredBitVector::appendReserved(size_t numBits,
-                llvm::function_ref<ChunkType(size_t numBitsWanted)> generator) {
-  assert(LengthInBits + numBits <= getCapacityInBits());
-  assert(numBits > 0);
-    }
-    
-      // Set the 'targetEnvironment' platform condition if targeting a simulator
-  // environment. Otherwise _no_ value is present for targetEnvironment; it's
-  // an optional disambiguating refinement of the triple.
-  if (swift::tripleIsAnySimulator(Target))
-    addPlatformConditionValue(PlatformConditionKind::TargetEnvironment,
-                              'simulator');
-    
-    StringRef camel_case::getLastWord(StringRef string) {
-  if (string.empty())
-    return '';
-    }
-    
-    DummyTaskQueue::~DummyTaskQueue() = default;
-    
-    /// The list of known CF types.  We use 'constexpr' to verify that this is
-/// emitted as a constant.  Note that this is expected to be sorted in
-/// quasi-lexicographic order.
-static constexpr const llvm::StringLiteral KnownCFTypes[] = {
-#define CF_TYPE(NAME) #NAME,
-#define NON_CF_TYPE(NAME)
-#include 'SortedCFDatabase.def'
-};
-const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
-    
-        template <typename ElementType>
-    std::tuple<const void *, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers() const
-    {
-        return _SparseBlockColumnDataBuffers<ElementType, ElementType>();
-    }
-    
-                m_totalSummaries++;
-            auto now = std::chrono::high_resolution_clock::now();
-            size_t durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_lastResetTime).count();
-    
-            std::vector<DictionaryPtr> remoteState;
-        communicator->Gather(state, remoteState, communicator->Workers());
-    
-    
-    {
-    {    private:
-        static bool IsNativeUDF(const Dictionary& dict);
-    };
-}
-
-    
-    TEST(CorruptionTest, MissingDescriptor) {
-  Build(1000);
-  RepairDB();
-  Reopen();
-  Check(1000, 1000);
-}
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
-    
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
-    
-      size_t WrittenBytes() const {
-    return dest_.contents_.size();
-  }
-    
-    
-    {
-    {      // Install new manifest
-      status = env_->RenameFile(tmp, DescriptorFileName(dbname_, 1));
-      if (status.ok()) {
-        status = SetCurrentFile(env_, dbname_, 1);
-      } else {
-        env_->DeleteFile(tmp);
-      }
-    }
-    return status;
-  }
-    
-    class TestState {
+        /**
+ * @brief A wrapper around SyncedMemory holders serving as the basic
+ *        computational unit through which Layer%s, Net%s, and Solver%s
+ *        interact.
+ *
+ * TODO(dox): more thorough description.
+ */
+template <typename Dtype>
+class Blob {
  public:
-  ConcurrentTest t_;
-  int seed_;
-  port::AtomicPointer quit_flag_;
+  Blob()
+       : data_(), diff_(), count_(0), capacity_(0) {}
+    }
+    
+      /**
+   * Caffe's thread local state will be initialized using the current
+   * thread values, e.g. device id, solver index etc. The random seed
+   * is initialized using caffe_rng_rand.
+   */
+  void StartInternalThread();
+    
+      vector<shared_ptr<Batch<Dtype> > > prefetch_;
+  BlockingQueue<Batch<Dtype>*> prefetch_free_;
+  BlockingQueue<Batch<Dtype>*> prefetch_full_;
+  Batch<Dtype>* prefetch_current_;
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      void wait(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    while (n_ < n) {
+      cv_.wait(lock);
+    }
+    n_ -= n;
+  }
+    
+    ```
+    
+    **Result**
+    
+    REGISTER_CPU_OPERATOR(GivenTensorFill, GivenTensorFillOp<float, CPUContext>);
+REGISTER_CPU_OPERATOR(
+    GivenTensorDoubleFill,
+    GivenTensorFillOp<double, CPUContext>);
+REGISTER_CPU_OPERATOR(GivenTensorBoolFill, GivenTensorFillOp<bool, CPUContext>);
+REGISTER_CPU_OPERATOR(GivenTensorIntFill, GivenTensorFillOp<int, CPUContext>);
+REGISTER_CPU_OPERATOR(
+    GivenTensorInt64Fill,
+    GivenTensorFillOp<int64_t, CPUContext>);
+REGISTER_CPU_OPERATOR(
+    GivenTensorStringFill,
+    GivenTensorFillOp<std::string, CPUContext>);
+    
+    
+    {
+    {}}
+    
+    std::string show(SrcLoc);
+    
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
+    
+    namespace ppc64_asm {
     }
     
     
-    {}  // namespace leveldb
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
+    {///////////////////////////////////////////////////////////////////////////////
 }
-    
-      void onTimeout(const std::shared_ptr<DHTNode>& node);
-    
-    const std::string& DHTResponseMessage::getType() const { return R; }
-    
-    #endif // D_DHT_RESPONSE_MESSAGE_H
 
     
-      std::shared_ptr<DHTBucket> getBucketFor(const unsigned char* nodeID) const;
+    #include <string>
+#include <utility>
+#include <vector>
     
-    public:
-  DHTRoutingTableSerializer(int family);
+    #ifndef incl_HPHP_EXECUTION_CONTEXT_INL_H_
+#define incl_HPHP_EXECUTION_CONTEXT_INL_H_
     
-        uint16_t port;
-    auto connection = make_unique<DHTConnectionImpl>(family);
+    //////////////////////////////////////////////////////////////////////
+    
+        static BOOST_FORCEINLINE bool compare_exchange_strong(
+        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order, memory_order) BOOST_NOEXCEPT
     {
-      port = e->getBtRegistry()->getUdpPort();
-      const std::string& addr = e->getOption()->get(
-          family == AF_INET ? PREF_DHT_LISTEN_ADDR : PREF_DHT_LISTEN_ADDR6);
-      // If UDP port is already used, use the same port
-      // number. Normally IPv4 port is available, then IPv6 port is
-      // (especially for port >= 1024). We don't loose much by doing
-      // this. We did the same thing in TCP socket. See BtSetup.cc.
-      bool rv;
-      if (port == 0) {
-        auto sgl =
-            util::parseIntSegments(e->getOption()->get(PREF_DHT_LISTEN_PORT));
-        sgl.normalize();
-        rv = connection->bind(port, addr, sgl);
-      }
-      else {
-        rv = connection->bind(port, addr);
-      }
-      if (!rv) {
-        throw DL_ABORT_EX('Error occurred while binding UDP port for DHT');
-      }
-      localNode->setPort(port);
+        storage_type previous = expected;
+        storage_type old_val = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64(&storage, desired, previous));
+        expected = old_val;
+        return (previous == old_val);
     }
-    A2_LOG_DEBUG(fmt('Initialized local node ID=%s',
-                     util::toHex(localNode->getID(), DHT_ID_LENGTH).c_str()));
-    auto tracker = std::make_shared<DHTMessageTracker>();
-    auto routingTable = make_unique<DHTRoutingTable>(localNode);
-    auto factory = make_unique<DHTMessageFactoryImpl>(family);
-    auto dispatcher = make_unique<DHTMessageDispatcherImpl>(tracker);
-    auto receiver = make_unique<DHTMessageReceiver>(tracker);
-    auto taskQueue = make_unique<DHTTaskQueueImpl>();
-    auto taskFactory = make_unique<DHTTaskFactoryImpl>();
-    auto peerAnnounceStorage = make_unique<DHTPeerAnnounceStorage>();
-    auto tokenTracker = make_unique<DHTTokenTracker>();
-    // For now, UDPTrackerClient was enabled along with DHT
-    auto udpTrackerClient = std::make_shared<UDPTrackerClient>();
-    const auto messageTimeout =
-        e->getOption()->getAsInt(PREF_DHT_MESSAGE_TIMEOUT);
-    // wiring up
-    tracker->setRoutingTable(routingTable.get());
-    tracker->setMessageFactory(factory.get());
-    
-    
-    {  virtual std::shared_ptr<DHTTask>
-  createReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                        const std::shared_ptr<DHTNode>& newNode) = 0;
-};
-    
-    void DHTTaskFactoryImpl::setCommonProperty(
-    const std::shared_ptr<DHTAbstractTask>& task)
-{
-  task->setRoutingTable(routingTable_);
-  task->setMessageDispatcher(dispatcher_);
-  task->setMessageFactory(factory_);
-  task->setTaskQueue(taskQueue_);
-  task->setLocalNode(localNode_);
-}
-    
-    
-    {  virtual void
-  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-};
-    
-    class DHTTokenTracker;
-    
-    #include <cstring>
-#include <cstdlib>
-    
-    void DNSCache::markBad(const std::string& hostname, const std::string& ipaddr,
-                       uint16_t port)
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.find(target);
-  if (i != entries_.end()) {
-    (*i)->markBad(ipaddr);
-  }
-}
-    
-    namespace benchmark {
-enum LogColor {
-  COLOR_DEFAULT,
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_YELLOW,
-  COLOR_BLUE,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  COLOR_WHITE
-};
-    }
-    
-      // Is the parsed value in the range of an Int32?
-  const int32_t result = static_cast<int32_t>(long_value);
-  if (long_value == std::numeric_limits<long>::max() ||
-      long_value == std::numeric_limits<long>::min() ||
-      // The parsed value overflows as a long.  (strtol() returns
-      // LONG_MAX or LONG_MIN when the input overflows.)
-      result != long_value
-      // The parsed value overflows as an Int32.
-      ) {
-    std::cerr << src_text << ' is expected to be a 32-bit integer, '
-              << 'but actually has value \'' << str << '\', '
-              << 'which overflows.\n';
-    return false;
-  }
-    
-    // Parses a string for an Int32 flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseInt32Flag(const char* str, const char* flag, int32_t* value);
-    
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
-  }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
-}
-    
-    #include <cstdint>
     
     
     {
-    {#if defined(NDEBUG)
-  const char build_type[] = 'release';
-#else
-  const char build_type[] = 'debug';
-#endif
-  out << indent << FormatKV('library_build_type', build_type) << '\n';
-  // Close context block and open the list of benchmarks.
-  out << inner_indent << '},\n';
-  out << inner_indent << '\'benchmarks\': [\n';
-  return true;
-}
+    {
+    {} // namespace detail
+} // namespace atomics
+} // namespace mars_boost
     
-    inline int& LogLevel() {
-  static int log_level = 0;
-  return log_level;
-}
+    // Remove all registered benchmarks. All pointers to previously registered
+// benchmarks are invalidated.
+void ClearRegisteredBenchmarks();
     
-    namespace benchmark {
+    
+    {    printed_header_ = true;
+  } else {
+    // check that all the current counters are saved in the name set
+    for (const auto& run : reports) {
+      for (const auto& cnt : run.counters) {
+        CHECK(user_counter_names_.find(cnt.first) != user_counter_names_.end())
+              << 'All counters must be present in each run. '
+              << 'Counter named \'' << cnt.first
+              << '\' was not in a run after being added to the header';
+      }
     }
+  }
+    
+      // Open context block and print context information.
+  out << inner_indent << '\'context\': {\n';
+  std::string indent(4, ' ');
+    }
+    
+    #include <iostream>
+#include <tuple>
+#include <vector>
