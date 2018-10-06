@@ -1,207 +1,115 @@
 
         
-              def find_sessionless_user
-        find_user_from_access_token || find_user_from_feed_token
-      rescue Gitlab::Auth::AuthenticationError
-        nil
-      end
+        User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
+end
     
-            def key_width
-          62
+          return did_show if did_show
+    
+            tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
+        message = options[:message] || '#{tag} (fastlane)'
+    
+          it 'works with all params' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: 'testpassword',
+            default_keychain: true,
+            unlock: true,
+            timeout: 600,
+            lock_when_sleeps: true,
+            lock_after_timeout: true,
+            add_to_search_list: false,
+          })
+        end').runner.execute(:test)
+    
+            allow(File).to receive(:file?).and_return(false)
+        allow(File).to receive(:file?).with(keychain_path).and_return(true)
+        allow(File).to receive(:exist?).and_return(false)
+        expect(File).to receive(:exist?).with(cert_name).and_return(true)
+        allow(FastlaneCore::Helper).to receive(:backticks).with(allowed_command, print: false)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_command, print: false)
+    
+            it 'deprecated boolean changes the description' do
+          config_item = FastlaneCore::ConfigItem.new(key: :foo,
+                                                     description: 'foo. use bar instead',
+                                                     deprecated: true)
+          expect(config_item.description).to eq('**DEPRECATED!** foo. use bar instead')
         end
     
+    gem 'rake'
+gem 'thor'
+gem 'pry', '~> 0.11.0'
+gem 'activesupport', '~> 5.2', require: false
+gem 'yajl-ruby', require: false
     
-# Codecs
-IAX_CODEC_G711_MULAW  = 0x00000004
-IAX_CODEC_G711_ALAW   = 0x00000008
-IAX_CODEC_LINEAR_PCM  = 0x00000040
+        def filter_const(name)
+      if name.is_a? Array
+        name.map &method(:filter_const)
+      else
+        Docs.const_get '#{name}_filter'.camelize
+      end
+    end
     
+        def path
+      @path ||= url.path
+    end
+    
+        def justify(str)
+      return str unless terminal_width
+      str = str.dup
+    
+      it 'accepts a Float' do
+    sleep(0.1).should be_close(0, 2)
+  end
+    
+      it 'raises a TypeError when passed a String' do
+    lambda { srand('7') }.should raise_error(TypeError)
+  end
+end
+    
+        after :each do
+      @tmp_file.close
+      rm_r @tmp_file
+    end
+    
+            -> { w.f4('foo', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: foo|)
+        -> { w.f4('foo', 1) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f1_call_lineno}: warning: foo|)
+        -> { w.f4('foo', 2) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f2_call_lineno}: warning: foo|)
+        -> { w.f4('foo', 3) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f3_call_lineno}: warning: foo|)
+      end
+    
+    require 'formula'
+require 'keg'
+    
+          keg.lock do
+        print 'Unlinking #{keg}... '
+        puts if ARGV.verbose?
+        puts '#{keg.unlink(mode)} symlinks removed'
+      end
+    end
+  end
+end
+
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
       #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
-    
-    
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
-    
-                res = checksum + encrypted
-            res
-          end
-        end
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
-    end
-  end
-end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
-    
-              # Decodes the till field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_till(input)
-            input.value[0].value
-          end
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes the susec field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_susec(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
-    
-    post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
-end
-    
-          def warn(env, message)
-        return unless options[:logging]
-        l = options[:logger] || env['rack.logger'] || ::Logger.new(env['rack.errors'])
-        l.warn(message)
-      end
-    
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
-      end
-    end
-  end
-end
-
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-      class PostFilters < Octopress::Hooks::Post
-    def pre_render(post)
-      OctopressFilters::pre_filter(post)
-    end
-    
-    # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
-    
-      require ARGV.shift
-  exit_status = LogStash::Runner.run('bin/logstash', ARGV)
-  exit(exit_status || 0)
-end
-
-    
-        signal_error('No plugins found') if filtered_specs.empty?
-    
-    module LogStash
-  module PluginManager
-    class Error < StandardError; end
-    
-      private
-    
-          subject do
-        plugin_class.new(
-          'oneString' => '${FunString:foo}',
-          'oneBoolean' => '${FunBool:false}',
-          'oneArray' => [ 'first array value', '${FunString:foo}' ],
-          'oneHash' => { 'key1' => '${FunString:foo}', 'key2' => '${FunString} is ${FunBool}', 'key3' => '${FunBool:false} or ${funbool:false}' },
-          'nestedHash' => { 'level1' => { 'key1' => 'http://${FunString}:8080/blah.txt' } },
-          'nestedArray' => { 'level1' => [{ 'key1' => 'http://${FunString}:8080/blah.txt' }, { 'key2' => 'http://${FunString}:8080/foo.txt' }] },
-          'deepHash' => { 'level1' => { 'level2' => {'level3' => { 'key1' => 'http://${FunString}:8080/blah.txt' } } } }
-        )
-      end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
-        end
-      end
-    end
-    
-    desc 'Start an IRB session with all necessary files required.'
-task :shell do |t|
-  chdir File.dirname(__FILE__)
-  exec 'irb -I lib/ -I lib/paperclip -r rubygems -r active_record -r tempfile -r init'
-end
-    
-    When /^(?:|I )select '([^']*)' from '([^']*)'$/ do |value, field|
-  select(value, :from => field)
-end
-    
-        # Extracts the Geometry from a file (or path to a file)
-    def self.from_file(file)
-      GeometryDetector.new(file).make
-    end
-    
-        def make
-      geometry = GeometryParser.new(geometry_string.strip).make
-      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
-    end
