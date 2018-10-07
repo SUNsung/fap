@@ -1,116 +1,173 @@
 
         
-            scrapy runspider qpsclient.py --loglevel=INFO --set RANDOMIZE_DOWNLOAD_DELAY=0 --set CONCURRENT_REQUESTS=50 -a qps=10 -a latency=0.3
-    
-        def add_options(self, parser):
-        '''
-        Populate option parse with options available for this command
-        '''
-        group = OptionGroup(parser, 'Global Options')
-        group.add_option('--logfile', metavar='FILE',
-            help='log file. if omitted stderr will be used')
-        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
-            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
-        group.add_option('--nolog', action='store_true',
-            help='disable logging completely')
-        group.add_option('--profile', metavar='FILE', default=None,
-            help='write python cProfile stats to FILE')
-        group.add_option('--pidfile', metavar='FILE',
-            help='write process ID to FILE')
-        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
-            help='set/override setting (may be repeated)')
-        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
-    
-                if not callable(cb):
-                cb_method = getattr(spider, cb, None)
-                if callable(cb_method):
-                    cb = cb_method
-                else:
-                    logger.error('Cannot find callback %(callback)r in spider: %(spider)s',
-                                 {'callback': cb, 'spider': spider.name})
-                    return
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-        def short_desc(self):
-        return 'Get settings values'
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
-        else:
-            print('Scrapy %s' % scrapy.__version__)
-    
-            #Creating directory title page for current directory
-        with open('dir_title.html', 'w') as os_html:
-            os_html.write(header + dir_title)
         
-        group.append(HTML('dir_title.html').render())
+EXIT_STATUS_LABELS = {
+    value: key
+    for key, value in ExitStatus.__dict__.items()
+    if key.isupper()
+}
+
+    
+        return kwargs
+
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
-    
-        poll_again = _HandlePollResponse( response, diagnostics_handler )
-    if poll_again:
-      self._SendRequest()
-      return True
+class HTTPMessage(object):
+    '''Abstract class for HTTP messages.'''
     
     
-  def Response( self ):
-    return {
-      'completions': self._results,
-      'completion_start_column': self.request_data[ 'start_column' ]
+install_requires = [
+    'requests>=2.18.4',
+    'Pygments>=2.1.3'
+]
+    
+    
+with open(BIN_FILE_PATH, 'rb') as f:
+    BIN_FILE_CONTENT = f.read()
+    
+        try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+
+    
+    
+def test_POST_JSON_data(httpbin_both):
+    r = http('POST', httpbin_both + '/post', 'foo=bar')
+    assert HTTP_OK in r
+    assert r.json['json']['foo'] == 'bar'
+    
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
+    
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''CaseInsensitiveDict instance with 'Accept' header.'''
+        self.case_insensitive_dict = CaseInsensitiveDict()
+        self.case_insensitive_dict['Accept'] = 'application/json'
+    
+            content += new_content
+    
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
     }
     
+        # Sometimes, urllib3 only reports its version as 16.1.
+    if len(urllib3_version) == 2:
+        urllib3_version.append('0')
     
-  def _ConvertDiagListToDict( self ):
-    self._line_to_diags = defaultdict( list )
-    for diag in self._diagnostics:
-      location = diag[ 'location' ]
-      bufnr = vimsupport.GetBufferNumberForFilename( location[ 'filepath' ] )
-      if bufnr == self._bufnr:
-        line_number = location[ 'line_num' ]
-        self._line_to_diags[ line_number ].append( diag )
+            #: Dictionary mapping protocol or protocol and host to the URL of the proxy
+        #: (e.g. {'http': 'foo.bar:3128', 'http://host.name': 'foo.bar:4012'}) to
+        #: be used on each :class:`Request <Request>`.
+        self.proxies = {}
     
-      return request
+        if args.show_plot:
+        plt.plot(*zip(*timings))
+        plt.title('Average time taken running isotonic regression')
+        plt.xlabel('Number of observations')
+        plt.ylabel('Time (s)')
+        plt.axis('tight')
+        plt.loglog()
+        plt.show()
+
     
     
-def EndsWithPython_Python2Paths_test():
-  python_paths = [
-    'python',
-    'python2',
-    '/usr/bin/python2.7',
-    '/home/user/.pyenv/shims/python2.7',
-    r'C:\Python27\python.exe',
-    '/Contents/MacOS/Python'
-  ]
+def compute_bench_2(chunks):
+    results = defaultdict(lambda: [])
+    n_features = 50000
+    means = np.array([[1, 1], [-1, -1], [1, -1], [-1, 1],
+                      [0.5, 0.5], [0.75, -0.5], [-1, 0.75], [1, 0]])
+    X = np.empty((0, 2))
+    for i in range(8):
+        X = np.r_[X, means[i] + 0.8 * np.random.randn(n_features, 2)]
+    max_it = len(chunks)
+    it = 0
+    for chunk in chunks:
+        it += 1
+        print('==============================')
+        print('Iteration %03d of %03d' % (it, max_it))
+        print('==============================')
+        print()
     
-      def _adjust_thread_count( self ):
-    # When the executor gets lost, the weakref callback will wake up
-    # the worker threads.
-    def weakref_cb( _, q=self._work_queue ):
-      q.put( None )
-    # TODO(bquinlan): Should avoid creating new threads if there are more
-    # idle threads than items in the work queue.
-    if len( self._threads ) < self._max_workers:
-      t = threading.Thread( target=_worker,
-                            args=( weakref.ref( self, weakref_cb ),
-                                   self._work_queue ) )
-      t.daemon = True
-      t.start()
-      self._threads.add( t )
+    
+def variable_batch_size_comparison(data):
+    batch_sizes = [i.astype(int) for i in np.linspace(data.shape[0] // 10,
+                                                      data.shape[0], num=10)]
+    
+    
+text = fetch_20newsgroups(subset='train').data
+    
+        xx = np.arange(start_dim, start_dim + n * step, step)
+    plt.subplot(212)
+    plt.title('Learning in high dimensional spaces')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of dimensions')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
+    
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+DATA_FOLDER = 'txt_sentoken'
+    
+    PROJ_METADATA = '%s.json' % PROJ_NAME
+    
+                elif opt in ('-V', '--version'):
+                # Display version.
+                log.println('you-get:', log.BOLD)
+                log.println('    version:  {}'.format(__version__))
+                if head is not None:
+                    log.println('    branch:   {}\n    commit:   {}'.format(*head))
+                else:
+                    log.println('    branch:   {}\n    commit:   {}'.format('(stable)', '(tag v{})'.format(__version__)))
+    
+        def p_playlist(self, stream_id=None):
+        maybe_print('site:                %s' % self.__class__.name)
+        print('playlist:            %s' % self.title)
+        print('videos:')
+    
+            link_list = self.get_streams_by_id(account_number, video_id)
+    
+    
+def get_loop_file_path(title, output_dir):
+    return os.path.join(output_dir, get_output_filename([], title, 'txt', None, False))
+    
+        vids = matchall(content, youku_embed_patterns)
+    for vid in set(vids):
+        found = True
+        youku_download_by_vid(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+    from ..common import *
+from hashlib import md5
+from urllib.parse import urlparse
+import re
