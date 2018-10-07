@@ -1,53 +1,88 @@
 
         
-                    case options[:default]
-            when nil
-              Time.current
-            when Date, Time
-              options[:default]
-            else
-              default = options[:default].dup
+        
+IAX_TYPE_VOICE   = 2
+IAX_TYPE_CONTROL = 4
+IAX_TYPE_IAX     = 6
+IAX_TYPE_DTMF_BEGIN = 1
+IAX_TYPE_DTMF_END   = 12
     
-        include ActionView::Rendering
+      # open rmcpplus_request
+  def self.create_ipmi_session_open_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
     
-        group = Group.create!(name: 'bob')
-    group.add(moderator)
-    group.save
-    
-    # User for the smoke tests
-if ENV['SMOKE'] == '1'
-  UserEmail.seed do |ue|
-    ue.id = 0
-    ue.email = 'smoke_user@discourse.org'
-    ue.primary = true
-    ue.user_id = 0
-  end
-    
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
-      end
-    
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
+            end
       end
     end
   end
 end
 
     
-        def insert(index, *names)
-      @filters.insert assert_index(index), *filter_const(names)
-    end
+                decrypted
+          end
     
-        def parse_as_document
-      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
-      @title = document.at_css('title').try(:content)
-      document
+              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def encode
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+        end
+      end
     end
+  end
+end
     
-        def html?
-      mime_type.include? 'html'
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+        #--------------------------------------#
+    
+        def self.verify_xcode_license_approved!
+      if `/usr/bin/xcrun clang 2>&1` =~ /license/ && !$?.success?
+        raise Informative, 'You have not agreed to the Xcode license, which ' \
+          'you must do to use CocoaPods. Agree to the license by running: ' \
+          '`xcodebuild -license`.'
+      end
     end
+  end
+end
+
+    
+          explicit_plugins_specs.each do |spec|
+        packet_gem.add(spec.name)
+      end
+    
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+      end
+    end
+  end
+end
