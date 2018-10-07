@@ -1,181 +1,141 @@
 
         
-            platforms = 'any',
-    zip_safe = True,
-    include_package_data = True,
-    
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+            if args.show_plot:
+        plt.plot(*zip(*timings))
+        plt.title('Average time taken running isotonic regression')
+        plt.xlabel('Number of observations')
+        plt.ylabel('Time (s)')
+        plt.axis('tight')
+        plt.loglog()
+        plt.show()
+
     
     
-    def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            # Extract the stream
-            stream_id = kwargs['stream_id']
+def rbf_kernels(X, n_jobs):
+    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
     
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
     '''
+Benchmark for SGD regression
     
-        if '_text' in dictified['flashvars'][0]:
-        video_dict['flashvars'] = dictified['flashvars'][0]['_text'].strip()
+            :issue:`123`
+        :issue:`42,45`
+    '''
+    options = options or {}
+    content = content or []
+    issue_nos = [each.strip() for each in utils.unescape(text).split(',')]
+    config = inliner.document.settings.env.app.config
+    ret = []
+    for i, issue_no in enumerate(issue_nos):
+        node = _make_issue_node(issue_no, config, options=options)
+        ret.append(node)
+        if i != len(issue_nos) - 1:
+            sep = nodes.raw(text=', ', format='html')
+            ret.append(sep)
+    return ret, []
     
-        CNTV().download_by_vid(rid, **kwargs)
+    for lang, page in pages.items():
     
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
     
-def download_url(url, merge, output_dir, title, info_only):
-    mime, ext, size = url_info(url)
-    print_info(site_info, title, mime, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+            if args:
+            self.url = args[0]
     
-    __all__ = ['dailymotion_download']
+    class BokeCC(VideoExtractor):
+    name = 'BokeCC'
     
-                if not info_only:
-                try:
-                    download_urls([real_url], title, ext, size, output_dir, merge = merge)
-                except:
-                    pass
+    __all__ = ['dilidili_download']
     
-        sd_urls = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'sd_src_no_ratelimit:'([^']*)'', html)
-    ]))
-    hd_urls = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'hd_src_no_ratelimit:'([^']*)'', html)
-    ]))
-    urls = hd_urls if hd_urls else sd_urls
-    
-    #----------------------------------------------------------------------
-def makeMimi(upid):
-    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
-    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
-    L110'''
-    strSeed = 'gGddgPfeaf_gzyr'
-    prehash = upid + '_' + strSeed
-    return md5(prehash.encode('utf-8')).hexdigest()
-    
-        @unittest.skipIf(sys.flags.optimize >= 2,
-                     'Docstrings are omitted with -OO and above')
-    def test_synopsis_sourceless(self):
-        expected = os.__doc__.splitlines()[0]
-        filename = os.__cached__
-        synopsis = pydoc.synopsis(filename)
-    
-    # Create the base text message.
-msg = EmailMessage()
-msg['Subject'] = 'Ayons asperges pour le déjeuner'
-msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
-msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
-             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
-msg.set_content('''\
-Salut!
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
-    else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
-    
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
-        else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
-    
-    def handleSlideshowTitle(title):
-    print('<title>%s</title>' % getText(title.childNodes))
-    
-            print('Testing ApplyResult.get() with timeout:', end=' ')
-        res = pool.apply_async(calculate, TASKS[0])
-        while 1:
-            sys.stdout.flush()
+            for i in range(len(titles)):
+            title = titles[i]
+            datas = {
+                'sid': song_id[i],
+                'ssid': song_ssid[i]
+            }
+            post_params = urllib.parse.urlencode(datas).encode('utf-8')
             try:
-                sys.stdout.write('\n\t%s' % res.get(0.02))
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
+                resp = urllib.request.urlopen(get_song_url, post_params)
+                resp_data = json.loads(resp.read().decode('utf-8'))
+                real_url = resp_data['r']
+                type, ext, size = url_info(real_url)
+                print_info(site_info, title, type, size)
+            except:
+                pass
     
-    #
-#
-#
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
     
-                if buffer.lstrip().upper().startswith('SELECT'):
-                print(cur.fetchall())
-        except sqlite3.Error as e:
-            print('An error occurred:', e.args[0])
-        buffer = ''
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
+    
+    # looks that flickr won't return urls for all sizes
+# we required in 'extras field without a acceptable header
+dummy_header = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
+}
+def get_content_headered(url):
+    return get_content(url, dummy_header)
+    
+            #Required string to create directory title pages
+        dir_title = '<h2 class=titledir>' + operating_sys.capitalize() + '</h2></body></html>'
+    
+    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    
+                affected_projects = set()
+            for release in releases:
+                affected_projects.update(
+                    [p for p in release.projects.values_list('slug', flat=True)]
+                )
+            has_prod = False
+            has_staging = False
+            has_dev = False
+            for p in affected_projects:
+                if 'prod' in p:
+                    has_prod = True
+                elif 'stag' in p or 'stg' in p:
+                    has_staging = True
+                elif 'dev' in p:
+                    has_dev = True
+            # assume projects are split by environment if there
+            # are at least prod/staging or prod/dev, etc
+            projects_split_by_env = len([x for x in [has_prod, has_dev, has_staging] if x]) >= 2
+    
+            dupe_release_envs = orm.ReleaseEnvironment.objects.values(
+            'release_id', 'organization_id', 'environment_id'
+        ).annotate(recount=models.Count('id')).filter(recount__gt=1)
+    
+            # Adding field 'ApiKey.scope_list'
+        db.add_column(
+            'sentry_apikey',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
+    
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+    
+            # Deleting model 'Distribution'
+        db.delete_table('sentry_distribution')
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'UserOption.organization'
+        db.add_column(
+            'sentry_useroption',
+            'organization',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Organization'], null=True
+            ),
+            keep_default=False
+        )
