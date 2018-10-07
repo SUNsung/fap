@@ -1,224 +1,148 @@
 
         
-        module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
+                def self.find_by_dn(dn, adapter)
+          adapter.user('dn', dn)
         end
     
-            # Helper method that will set a value if a value is given, or otherwise
-        # return the already set value.
-        #
-        # @param [Symbol] key Key for the data
-        # @param [Object] value Value to store.
-        # @return [Object] Stored value.
-        def self.get_or_set(key, value=UNSET_VALUE)
-          # If no value is to be set, then return the value we have already set
-          return data[key] if value.eql?(UNSET_VALUE)
+          def perform(start_id, stop_id)
+        status_sql = Build
+          .where('ci_builds.commit_id = ci_stages.pipeline_id')
+          .where('ci_builds.stage = ci_stages.name')
+          .status_sql
     
-            # This method is expected to return a class that is used for
-        # configuring the provisioner. This return value is expected to be
-        # a subclass of {Config}.
-        #
-        # @return [Config]
-        def self.config_class
+            def metadata
+          @metadata ||= Coverage::Metadata.new(self)
         end
     
-            # wait_for_ready waits until the communicator is ready, blocking
-        # until then. It will wait up to the given duration or raise an
-        # exception if something goes wrong.
-        #
-        # @param [Integer] duration Timeout in seconds.
-        # @return [Boolean] Will return true on successful connection
-        #   or false on timeout.
-        def wait_for_ready(duration)
-          # By default, we implement a naive solution.
-          begin
-            Timeout.timeout(duration) do
-              while true
-                return true if ready?
-                sleep 0.5
-              end
-            end
-          rescue Timeout::Error
-            # We timed out, we failed.
-          end
-    
-            # This returns all the registered configuration classes.
-        #
-        # @return [Hash]
-        def config
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:top])
-            end
-          end
+            def initialize(badge)
+          @entity = badge.entity
+          @status = badge.status
         end
     
-      #
-  # HTTP POST request class wrapper.
-  #
-  class Post < Request
-    def initialize(uri = '/', proto = DefaultProtocol)
-      super('POST', uri, proto)
-    end
-  end
-    
-              self.connection = nil
+            def value_width
+          54
         end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def encode
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
-        end
+          it 'requires the passwords to match when changing them' do
+        visit edit_admin_user_path(users(:bob))
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Update User'
+        expect(page).to have_text('Password confirmation doesn't match')
       end
     end
+    
+      context 'successful dry runs' do
+    before do
+      stub_request(:get, 'http://xkcd.com/').
+        with(:headers => {'Accept-Encoding'=>'gzip,deflate', 'User-Agent'=>'Huginn - https://github.com/huginn/huginn'}).
+        to_return(:status => 200, :body => File.read(Rails.root.join('spec/data_fixtures/xkcd.html')), :headers => {})
+    end
+    
+      it 'schould clean up expired events' do
+    mock(Event).cleanup_expired!
+    stub.instance_of(IO).puts
+    @scheduler.send(:cleanup_expired_events!)
   end
-end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos EncryptionKey data
-        # definition
-        class EncryptionKey < Element
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
     
-              # Decodes the value from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_value(input)
-            input.value[0].value
-          end
-        end
+        it 'html_safes the output unless :skip_safe is passed in' do
+      expect(Utils.jsonify({:foo => 'bar'})).to be_html_safe
+      expect(Utils.jsonify({:foo => 'bar'}, :skip_safe => false)).to be_html_safe
+      expect(Utils.jsonify({:foo => 'bar'}, :skip_safe => true)).not_to be_html_safe
+    end
+  end
+    
+        ARGV.kegs.each do |keg|
+      if mode.dry_run
+        puts 'Would remove:'
+        keg.unlink(mode)
+        next
       end
-    end
-  end
-end
     
-          configure_sass
-    end
+          old_name = name
+      old_path = path
+      old_remote = path.git_origin
     
-        # Returns a new {Installer} parametrized from the {Config}.
-    #
-    # @return [Installer]
-    #
-    def installer_for_config
-      Installer.new(config.sandbox, config.podfile, config.lockfile)
-    end
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
-    end
-  end
-end
+    World(VagrantHelpers)
 
     
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+        def handle_options
+      options.rakelib = ['rakelib']
+      options.trace_output = $stderr
     
-    Then(/^references in the remote repo are listed$/) do
-  expect(@output).to include('refs/heads/master')
-end
+          def call
+        ask_question
+        value_or_default
+      end
     
-        def filter(list)
-      setup_filters if @filters.nil?
-      @filters.reduce(list) { |l, f| f.filter l }
     end
     
-            def fetch(key)
-          @properties[key]
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
         end
-    
-        <div id='rack'>
-      <h3 id='env-info'>Rack ENV</h3>
-      <table class='req'>
-        <tr>
-          <th>Variable</th>
-          <th>Value</th>
-        </tr>
-         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
-         <tr>
-           <td><%=h key %></td>
-           <td class='code'><div><%=h val %></div></td>
-         </tr>
-         <% } %>
-      </table>
-      <div class='clear'></div>
-    </div> <!-- /RACK ENV -->
-    
-          def origin(env)
-        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
       end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+    module Jekyll
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+      class PostFilters < Octopress::Hooks::Post
+    def pre_render(post)
+      OctopressFilters::pre_filter(post)
+    end
+    
+    Liquid::Template.register_tag('video', Jekyll::VideoTag)
