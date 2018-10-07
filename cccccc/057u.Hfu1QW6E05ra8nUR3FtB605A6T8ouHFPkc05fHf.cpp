@@ -1,215 +1,375 @@
 
         
-        
-    {private Q_SLOTS:
-    void handleSelectionChanged(int idx);
-};
+        /** Generate blocks (mine) */
+UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGenerate, uint64_t nMaxTries, bool keepScript);
     
-        {
-        LOCK(wallet->cs_wallet);
-        wallet->SetAddressBook(r_key_dest, r_label.toStdString(), 'receive');
-        wallet->SetAddressBook(s_key_dest, s_label.toStdString(), 'send');
+    static void secp256k1_gej_add_zinv_var(secp256k1_gej *r, const secp256k1_gej *a, const secp256k1_ge *b, const secp256k1_fe *bzinv) {
+    /* 9 mul, 3 sqr, 4 normalize, 12 mul_int/add/negate */
+    secp256k1_fe az, z12, u1, u2, s1, s2, h, i, i2, h2, h3, t;
     }
-    
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
-    } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
-    }
-    
-    static void secp256k1_ecdsa_recoverable_signature_save(secp256k1_ecdsa_recoverable_signature* sig, const secp256k1_scalar* r, const secp256k1_scalar* s, int recid) {
-    if (sizeof(secp256k1_scalar) == 32) {
-        memcpy(&sig->data[0], r, 32);
-        memcpy(&sig->data[32], s, 32);
-    } else {
-        secp256k1_scalar_get_b32(&sig->data[0], r);
-        secp256k1_scalar_get_b32(&sig->data[32], s);
-    }
-    sig->data[64] = recid;
-}
-    
-    BOOST_FIXTURE_TEST_SUITE(bech32_tests, BasicTestingSetup)
-    
-    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
-{
-    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
-    auto ret = ParseTorReplyMapping(input);
-    BOOST_CHECK_EQUAL(ret.size(), expected.size());
-    auto r_it = ret.begin();
-    auto e_it = expected.begin();
-    while (r_it != ret.end() && e_it != expected.end()) {
-        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
-        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
-        r_it++;
-        e_it++;
-    }
-}
-    
-    
-    {	typedef T type;
-};
-    
-    // Bullet to Godot
-extern void B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void INVERT_B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void INVERT_B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void B_TO_G(btTransform const &inVal, Transform &outVal);
     
     /**
-	@author AndreaCatania
-*/
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
+template <typename Dtype>
+class DataTransformer {
+ public:
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
+    }
     
-    	real_t getSoftnessDirLin() const;
-	real_t getRestitutionDirLin() const;
-	real_t getDampingDirLin() const;
-	real_t getSoftnessDirAng() const;
-	real_t getRestitutionDirAng() const;
-	real_t getDampingDirAng() const;
-	real_t getSoftnessLimLin() const;
-	real_t getRestitutionLimLin() const;
-	real_t getDampingLimLin() const;
-	real_t getSoftnessLimAng() const;
-	real_t getRestitutionLimAng() const;
-	real_t getDampingLimAng() const;
-	real_t getSoftnessOrthoLin() const;
-	real_t getRestitutionOrthoLin() const;
-	real_t getDampingOrthoLin() const;
-	real_t getSoftnessOrthoAng() const;
-	real_t getRestitutionOrthoAng() const;
-	real_t getDampingOrthoAng() const;
-	void setSoftnessDirLin(real_t softnessDirLin);
-	void setRestitutionDirLin(real_t restitutionDirLin);
-	void setDampingDirLin(real_t dampingDirLin);
-	void setSoftnessDirAng(real_t softnessDirAng);
-	void setRestitutionDirAng(real_t restitutionDirAng);
-	void setDampingDirAng(real_t dampingDirAng);
-	void setSoftnessLimLin(real_t softnessLimLin);
-	void setRestitutionLimLin(real_t restitutionLimLin);
-	void setDampingLimLin(real_t dampingLimLin);
-	void setSoftnessLimAng(real_t softnessLimAng);
-	void setRestitutionLimAng(real_t restitutionLimAng);
-	void setDampingLimAng(real_t dampingLimAng);
-	void setSoftnessOrthoLin(real_t softnessOrthoLin);
-	void setRestitutionOrthoLin(real_t restitutionOrthoLin);
-	void setDampingOrthoLin(real_t dampingOrthoLin);
-	void setSoftnessOrthoAng(real_t softnessOrthoAng);
-	void setRestitutionOrthoAng(real_t restitutionOrthoAng);
-	void setDampingOrthoAng(real_t dampingOrthoAng);
-	void setPoweredLinMotor(bool onOff);
-	bool getPoweredLinMotor();
-	void setTargetLinMotorVelocity(real_t targetLinMotorVelocity);
-	real_t getTargetLinMotorVelocity();
-	void setMaxLinMotorForce(real_t maxLinMotorForce);
-	real_t getMaxLinMotorForce();
-	void setPoweredAngMotor(bool onOff);
-	bool getPoweredAngMotor();
-	void setTargetAngMotorVelocity(real_t targetAngMotorVelocity);
-	real_t getTargetAngMotorVelocity();
-	void setMaxAngMotorForce(real_t maxAngMotorForce);
-	real_t getMaxAngMotorForce();
-	real_t getLinearPos();
+    #include <vector>
     
-    	io.opaque = f;
-	io.zopen_file = godot_open;
-	io.zread_file = godot_read;
-	io.zwrite_file = godot_write;
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-        stb_out4(stb__running_adler);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-        // Create texture
-    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
-    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
-    atlas->TexPixelsAlpha8 = (unsigned char*)ImGui::MemAlloc(atlas->TexWidth * atlas->TexHeight);
-    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
+    namespace caffe {
+    }
     
+    #endif  // CAFFE_CUDNN_CONV_LAYER_HPP_
+
     
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-        // Main loop
-    while (!glfwWindowShouldClose(window))
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace CNTK
+{
+    CNTK_API const std::wstring Learner::MinibatchSizeKey = L'MinibatchSize';
+    ///
+    /// A special value that can be used for the minibatchSize to indicate that the reference minibatch size is not specified.
+    ///
+    CNTK_API const size_t Learner::IgnoredMinibatchSize = TrainingParameterSchedule<double>::IgnoredMinibatchSize;
+    }
+    
+        template <>
+    std::tuple<const void *, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<float16>() const
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
+        return _SparseBlockColumnDataBuffers<float16, half>();
     }
     
-    int main(int, char**)
+            template<typename OnWriteUpdateFunc>
+        void Update(size_t samples, const ValuePtr& accumulatedLoss, const ValuePtr& accumulatedMetric,
+                    OnWriteUpdateFunc callback)
+        {
+            if (samples == 0)
+            {
+                return;
+            }
+    }
+    
+    #  ifdef template
+#     undef template
+#  endif
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         mem_block_cache.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: memory block cache used by the non-recursive matcher.
+  */
+    
+    
+    {   // remember where we got to if this is a leading repeat:
+   if((rep->leading) && (count < rep->max))
+      restart = position;
+   if(position == last)
+   {
+      // can't repeat any more, remove the pushed state: 
+      destroy_single_repeat();
+      if((m_match_flags & match_partial) && (position == last) && (position != search_base))
+         m_has_partial_match = true;
+      if(0 == (rep->can_be_null & mask_skip))
+         return true;
+   }
+   else if(count == rep->max)
+   {
+      // can't repeat any more, remove the pushed state: 
+      destroy_single_repeat();
+      if(!can_start(*position, rep->_map, mask_skip))
+         return true;
+   }
+   else
+   {
+      pmp->count = count;
+      pmp->last_position = position;
+   }
+   pstate = rep->alt.p;
+   return false;
+}
+    
+    
+    {
+    {}
+} // namespace boost
+    
+    #ifndef BOOST_REGEX_V4_CHAR_REGEX_TRAITS_HPP
+#include <boost/regex/v4/char_regex_traits.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_STATES_HPP
+#include <boost/regex/v4/states.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGBASE_HPP
+#include <boost/regex/v4/regbase.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_ITERATOR_TRAITS_HPP
+#include <boost/regex/v4/iterator_traits.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_BASIC_REGEX_HPP
+#include <boost/regex/v4/basic_regex.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_BASIC_REGEX_CREATOR_HPP
+#include <boost/regex/v4/basic_regex_creator.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_BASIC_REGEX_PARSER_HPP
+#include <boost/regex/v4/basic_regex_parser.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_SUB_MATCH_HPP
+#include <boost/regex/v4/sub_match.hpp>
+#endif
+#ifndef BOOST_REGEX_FORMAT_HPP
+#include <boost/regex/v4/regex_format.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_MATCH_RESULTS_HPP
+#include <boost/regex/v4/match_results.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
+#include <boost/regex/v4/protected_call.hpp>
+#endif
+#ifndef BOOST_REGEX_MATCHER_HPP
+#include <boost/regex/v4/perl_matcher.hpp>
+#endif
+//
+// template instances:
+//
+#define BOOST_REGEX_CHAR_T char
+#ifdef BOOST_REGEX_NARROW_INSTANTIATE
+#  define BOOST_REGEX_INSTANTIATE
+#endif
+#include <boost/regex/v4/instances.hpp>
+#undef BOOST_REGEX_CHAR_T
+#ifdef BOOST_REGEX_INSTANTIATE
+#  undef BOOST_REGEX_INSTANTIATE
+#endif
+    
+    template <class Base, class Match>
+struct format_functor3
 {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    }
+   format_functor3(Base b) : func(b) {}
+   template <class OutputIter>
+   OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f)
+   {
+      return boost::unwrap_ref(func)(m, i, f);
+   }
+   template <class OutputIter, class Traits>
+   OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits&)
+   {
+      return (*this)(m, i, f);
+   }
+private:
+   Base func;
+   format_functor3(const format_functor3&);
+   format_functor3& operator=(const format_functor3&);
+};
     
-    int main(int, char**)
+       pimpl pdata;
+    
+    template <class BidiIterator, class Allocator, class charT, class traits>
+bool regex_search(BidiIterator first, BidiIterator last, 
+                  match_results<BidiIterator, Allocator>& m, 
+                  const basic_regex<charT, traits>& e, 
+                  match_flag_type flags = match_default)
 {
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+   return regex_search(first, last, m, e, flags, first);
+}
+    
+    template<>
+inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetGrad() const {
+  return grad_ * 1e-4f;
+}
+template<>
+inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetHess() const {
+  return hess_ * 1e-4f;
+}
+template<>
+inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetGrad(float g) {
+  grad_ = static_cast<int64_t>(std::round(g * 1e4));
+}
+template<>
+inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetHess(float h) {
+  hess_ = static_cast<int64_t>(std::round(h * 1e4));
+}
+    
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct TreeUpdaterReg
+    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
+                                        std::function<TreeUpdater* ()> > {
+};
+    
+    
+    { private:
+  std::istream &fin_;
+};
+    
+    /*!
+ * \brief Input stream that support additional PeekRead
+ *  operation, besides read.
+ */
+class PeekableInStream : public dmlc::Stream {
+ public:
+  explicit PeekableInStream(dmlc::Stream* strm)
+      : strm_(strm), buffer_ptr_(0) {}
     }
     
-            g_pd3dCommandList->Reset(frameCtxt->CommandAllocator, NULL);
-        g_pd3dCommandList->ResourceBarrier(1, &barrier);
-        g_pd3dCommandList->ClearRenderTargetView(g_mainRenderTargetDescriptor[backBufferIdx], (float*)&clear_color, 0, NULL);
-        g_pd3dCommandList->OMSetRenderTargets(1, &g_mainRenderTargetDescriptor[backBufferIdx], FALSE, NULL);
-        g_pd3dCommandList->SetDescriptorHeaps(1, &g_pd3dSrvDescHeap);
-        ImGui::Render();
-        ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), g_pd3dCommandList);
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PRESENT;
-        g_pd3dCommandList->ResourceBarrier(1, &barrier);
-        g_pd3dCommandList->Close();
     
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    {
+    {XGBOOST_REGISTER_TREE_UPDATER(TreePruner, 'prune')
+.describe('Pruner that prune the tree according to statistics.')
+.set_body([]() {
+    return new TreePruner();
+  });
+}  // namespace tree
+}  // namespace xgboost
+
+    
+    template <
+    class Iterator = const char*,
+    class Base = folly::Range<boost::u8_to_u32_iterator<Iterator>>>
+class UTF8Range : public Base {
+ public:
+  /* implicit */ UTF8Range(const folly::Range<Iterator> baseRange)
+      : Base(
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.begin(),
+                baseRange.begin(),
+                baseRange.end()),
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.end(),
+                baseRange.begin(),
+                baseRange.end())) {}
+  /* implicit */ UTF8Range(const std::string& baseString)
+      : Base(folly::Range<Iterator>(baseString)) {}
+};
+    
+    template <class String>
+String Uri::toString() const {
+  String str;
+  if (hasAuthority_) {
+    toAppend(scheme_, '://', &str);
+    if (!password_.empty()) {
+      toAppend(username_, ':', password_, '@', &str);
+    } else if (!username_.empty()) {
+      toAppend(username_, '@', &str);
     }
-    
-    bool ImGui_Marmalade_CreateDeviceObjects()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    toAppend(host_, &str);
+    if (port_ != 0) {
+      toAppend(':', port_, &str);
     }
-    
-    
-    {}  // namespace guetzli
-    
-    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
-  if (jpg.components.size() == 1 ||
-      (jpg.components.size() == 3 &&
-       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
-    OutputImage img(jpg.width, jpg.height);
-    img.CopyFromJpegData(jpg);
-    return img.ToSRGB();
+  } else {
+    toAppend(scheme_, ':', &str);
   }
-  return std::vector<uint8_t>();
+  toAppend(path_, &str);
+  if (!query_.empty()) {
+    toAppend('?', query_, &str);
+  }
+  if (!fragment_.empty()) {
+    toAppend('#', fragment_, &str);
+  }
+  return str;
 }
     
-    void AddApp0Data(JPEGData* jpg) {
-  const unsigned char kApp0Data[] = {
-      0xe0, 0x00, 0x10,              // APP0
-      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
-      0x01, 0x01,                    // v1.01
-      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
-      0x00, 0x00                     // thumbnail width/height
-  };
-  jpg->app_data.push_back(
-      std::string(reinterpret_cast<const char*>(kApp0Data),
-                                 sizeof(kApp0Data)));
+    
+    {  using thirteen_thirds = std::chrono::duration<double, std::ratio<13, 3>>;
+  ts.tv_sec = 39;
+  ts.tv_nsec = 0;
+  EXPECT_NEAR(9.0, to<thirteen_thirds>(ts).count(), 0.000000001);
+  ts.tv_sec = 1;
+  ts.tv_nsec = 0;
+  EXPECT_NEAR(0.230769230, to<thirteen_thirds>(ts).count(), 0.000000001);
 }
+    
+    
+    {  bool initialized_{false};
+  folly::Function<folly::Function<void(double)>()> initialize_;
+  folly::Function<void(double)> increment_;
+};
+    
+    template <typename T>
+typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
+prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  prefix = Endian::little(prefix);
+  std::string result;
+  result.resize(n);
+  memcpy(&result[0], &prefix, n);
+  return result;
+}
+    
+    /**
+ * Get the default options for gzip compression.
+ * A codec created with these options will have type CodecType::GZIP.
+ */
+Options defaultGzipOptions();
+    
+    
+    {} // namespace folly
+
+    
+    bool IsZero(double n);
+    
+    namespace benchmark {
+// Parses 'str' for a 32-bit signed integer.  If successful, writes
+// the result to *value and returns true; otherwise leaves *value
+// unchanged and returns false.
+bool ParseInt32(const std::string& src_text, const char* str, int32_t* value) {
+  // Parses the environment variable as a decimal integer.
+  char* end = nullptr;
+  const long long_value = strtol(str, &end, 10);  // NOLINT
+    }
+    }
+    
+    struct LeastSq {
+  LeastSq() : coef(0.0), rms(0.0), complexity(oNone) {}
+    }
+    
+    #endif  // BENCHMARK_CYCLECLOCK_H_
+
+    
+    inline LogType& GetErrorLogInstance() {
+  static LogType log(&std::clog);
+  return log;
+}
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
+    }
