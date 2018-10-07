@@ -1,531 +1,429 @@
 
         
-        namespace swig {
-namespace {
-    }
-    }
+        // Implementation of str() for PyBfloat16.
+PyObject* PyBfloat16_Str(PyObject* self) {
+  bfloat16 x = reinterpret_cast<PyBfloat16*>(self)->value;
+  string v = strings::StrCat(static_cast<float>(x));
+  return MakePyString(v);
+}
     
-    #include <string>
-#include <vector>
-#include 'tensorflow/core/framework/op_def.pb.h'
-#include 'tensorflow/core/framework/op_gen_lib.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    // Convert an AttrValue with type `type` to the Python representation for
-// that value.
-string AttrValueToPython(const string& type, const AttrValue& value,
-                         const string& dtype_module = 'tf.');
-    
-    class TestFileSystem : public NullFileSystem {
- public:
-  Status NewRandomAccessFile(
-      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
-    result->reset(new TestRandomAccessFile);
-    return Status::OK();
-  }
-  // Always return size of 10
-  Status GetFileSize(const string& fname, uint64* file_size) override {
-    *file_size = 10;
-    return Status::OK();
-  }
-};
-    
-    REGISTER_OP('IntAttr')
-    .Output('out: int64')
-    .Attr('foo: int = 1')
-    .SetShapeFn(shape_inference::UnknownShape);
+    #include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/lib/core/status.h'
     
         http://www.apache.org/licenses/LICENSE-2.0
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_ACTIVATION_H_
+
     
-    // Must be included first.
-#include 'tensorflow/python/lib/core/numpy.h'
+    // Asserts that a given statement causes the program to exit, either by
+// explicitly exiting with a nonzero exit code or being killed by a
+// signal, and emitting error output that matches regex.
+# define ASSERT_DEATH(statement, regex) \
+    ASSERT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
     
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
-    
-    namespace tensorflow {
-    }
-    
-    // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    void SetProxyConfigCallback(
-    base::WaitableEvent* done,
-    net::URLRequestContextGetter* url_request_context_getter,
-    const net::ProxyConfig& proxy_config) {
-  net::ProxyService* proxy_service =
-      url_request_context_getter->GetURLRequestContext()->proxy_service();
-  proxy_service->ResetConfigService(
-      new net::ProxyConfigServiceFixed(proxy_config));
-  done->Signal();
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49>
+internal::ValueArray49<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+    T44, T45, T46, T47, T48, T49> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5,
+    T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14,
+    T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22,
+    T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30,
+    T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38,
+    T39 v39, T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46,
+    T47 v47, T48 v48, T49 v49) {
+  return internal::ValueArray49<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
+      T40, T41, T42, T43, T44, T45, T46, T47, T48, T49>(v1, v2, v3, v4, v5, v6,
+      v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21,
+      v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35,
+      v36, v37, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47, v48, v49);
 }
     
-      scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-  converter->SetStripNullFromObjects(true);
+      // Returns true if the death test passed; that is, the test process
+  // exited during the test, its exit status matches a user-supplied
+  // predicate, and its stderr output matches a user-supplied regular
+  // expression.
+  // The user-supplied predicate may be a macro expression rather
+  // than a function pointer or functor, or else Wait and Passed could
+  // be combined.
+  virtual bool Passed(bool exit_status_ok) = 0;
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25>
+class ValueArray25 {
+ public:
+  ValueArray25(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24,
+      T25 v25) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
+      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25) {}
+    }
     
     
-#ifndef CONTENT_NW_SRC_API_EVENT_EVENT_H_
-#define CONTENT_NW_SRC_API_EVENT_EVENT_H_
+    {    return -1;
+  }
+    
+      const size_t len = strlen(a_c_string);
+  char* const clone = new char[ len + 1 ];
+  memcpy(clone, a_c_string, len + 1);
+    
+    
+    {  // Sets the 0-terminated C string this MyString object represents.
+  void Set(const char* c_string);
+};
+    
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
+    
+    
+    {   while(m_position != m_end)
+   {
+      switch(this->m_traits.syntax_type(*m_position))
+      {
+      case regex_constants::syntax_caret:
+         if(m_position == base)
+         {
+            char_set.negate();
+            ++m_position;
+            item_base = m_position;
+         }
+         else
+            parse_set_literal(char_set);
+         break;
+      case regex_constants::syntax_close_set:
+         if(m_position == item_base)
+         {
+            parse_set_literal(char_set);
+            break;
+         }
+         else
+         {
+            ++m_position;
+            if(0 == this->append_set(char_set))
+            {
+               fail(regex_constants::error_ctype, m_position - m_base);
+               return false;
+            }
+         }
+         return true;
+      case regex_constants::syntax_open_set:
+         if(parse_inner_set(char_set))
+            break;
+         return true;
+      case regex_constants::syntax_escape:
+         {
+            // 
+            // look ahead and see if this is a character class shortcut
+            // \d \w \s etc...
+            //
+            ++m_position;
+            if(this->m_traits.escape_syntax_type(*m_position)
+               == regex_constants::escape_type_class)
+            {
+               char_class_type m = this->m_traits.lookup_classname(m_position, m_position+1);
+               if(m != 0)
+               {
+                  char_set.add_class(m);
+                  ++m_position;
+                  break;
+               }
+            }
+            else if(this->m_traits.escape_syntax_type(*m_position)
+               == regex_constants::escape_type_not_class)
+            {
+               // negated character class:
+               char_class_type m = this->m_traits.lookup_classname(m_position, m_position+1);
+               if(m != 0)
+               {
+                  char_set.add_negated_class(m);
+                  ++m_position;
+                  break;
+               }
+            }
+            // not a character class, just a regular escape:
+            --m_position;
+            parse_set_literal(char_set);
+            break;
+         }
+      default:
+         parse_set_literal(char_set);
+         break;
+      }
+   }
+   return m_position != m_end;
+}
+    
+    #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+//
+// Provide an unsigned short version as well, so the user can link to this
+// no matter whether they build with /Zc:wchar_t or not (MSVC specific).
+//
+template<>
+struct BOOST_REGEX_DECL c_regex_traits<unsigned short>
+{
+   c_regex_traits(){}
+   typedef unsigned short char_type;
+   typedef std::size_t size_type;
+   typedef std::basic_string<unsigned short> string_type;
+   struct locale_type{};
+   typedef boost::uint32_t char_class_type;
+    }
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         char_regex_traits.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares deprecated traits classes char_regex_traits<>.
+  */
     
     
     {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
+    {
+} // namespace BOOST_REGEX_DETAIL_NS
+using boost::BOOST_REGEX_DETAIL_NS::directory_iterator;
+using boost::BOOST_REGEX_DETAIL_NS::file_iterator;
+using boost::BOOST_REGEX_DETAIL_NS::mapfile;
+} // namespace boost
     
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    NwObjDestroyFunction::NwObjDestroyFunction() {
-}
-    
-    TEST(CorruptionTest, TableFile) {
-  Build(100);
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-  dbi->TEST_CompactMemTable();
-  dbi->TEST_CompactRange(0, nullptr, nullptr);
-  dbi->TEST_CompactRange(1, nullptr, nullptr);
-    }
-    
-     private:
-  friend class DB;
-  struct CompactionState;
-  struct Writer;
-    
-    // Called on every log record (each one of which is a WriteBatch)
-// found in a kDescriptorFile.
-static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  VersionEdit edit;
-  Status s = edit.DecodeFrom(record);
-  if (!s.ok()) {
-    r += s.ToString();
-    r.push_back('\n');
-  } else {
-    r += edit.DebugString();
-  }
-  dst->Append(r);
-}
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(filename);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-    #include <stdint.h>
-    
-      // crc32c values for all supported record types.  These are
-  // pre-computed to reduce the overhead of computing the crc of the
-  // record type stored in the header.
-  uint32_t type_crc_[kMaxRecordType + 1];
-    
-    int MemTable::KeyComparator::operator()(const char* aptr, const char* bptr)
-    const {
-  // Internal keys are encoded as length-prefixed strings.
-  Slice a = GetLengthPrefixedSlice(aptr);
-  Slice b = GetLengthPrefixedSlice(bptr);
-  return comparator.Compare(a, b);
-}
-    
-        Key pos = RandomTarget(rnd);
-    SkipList<Key, Comparator>::Iterator iter(&list_);
-    iter.Seek(pos);
-    while (true) {
-      Key current;
-      if (!iter.Valid()) {
-        current = MakeKey(K, 0);
-      } else {
-        current = iter.key();
-        ASSERT_TRUE(IsValidKey(current)) << current;
-      }
-      ASSERT_LE(pos, current) << 'should not go backwards';
-    }
-    
-    #ifdef __cplusplus
-namespace boost{
-   namespace regex_constants{
-#endif
-    }
-    }
-    
-    extern mem_block_cache block_cache;
-    
-    class BOOST_REGEX_DECL abstract_protected_call
+    template <class BidiIterator>
+struct saved_position : public saved_state
 {
-public:
-   bool BOOST_REGEX_CALL execute()const;
-   // this stops gcc-4 from complaining:
-   virtual ~abstract_protected_call(){}
-private:
-   virtual bool call()const = 0;
+   const re_syntax_base* pstate;
+   BidiIterator position;
+   saved_position(const re_syntax_base* ps, BidiIterator pos, int i) : saved_state(i), pstate(ps), position(pos){};
 };
     
     
-    {
-    {
-    {
-    {
-    {
-    {
-    {   if((max_len >= 5) && std::equal(m_position, m_position + 5, MATCH))
-   {
-      m_position += 5;
-      if(have_brace)
-      {
-         if((m_position != m_end) && (*m_position == '}'))
-            ++m_position;
-         else
-         {
-            m_position -= 5;
-            return false;
-         }
-      }
-      put(this->m_results[0]);
-      return true;
-   }
-   if((max_len >= 8) && std::equal(m_position, m_position + 8, PREMATCH))
-   {
-      m_position += 8;
-      if(have_brace)
-      {
-         if((m_position != m_end) && (*m_position == '}'))
-            ++m_position;
-         else
-         {
-            m_position -= 8;
-            return false;
-         }
-      }
-      put(this->m_results.prefix());
-      return true;
-   }
-   if((max_len >= 9) && std::equal(m_position, m_position + 9, POSTMATCH))
-   {
-      m_position += 9;
-      if(have_brace)
-      {
-         if((m_position != m_end) && (*m_position == '}'))
-            ++m_position;
-         else
-         {
-            m_position -= 9;
-            return false;
-         }
-      }
-      put(this->m_results.suffix());
-      return true;
-   }
-   if((max_len >= 16) && std::equal(m_position, m_position + 16, LAST_PAREN_MATCH))
-   {
-      m_position += 16;
-      if(have_brace)
-      {
-         if((m_position != m_end) && (*m_position == '}'))
-            ++m_position;
-         else
-         {
-            m_position -= 16;
-            return false;
-         }
-      }
-      put((this->m_results)[this->m_results.size() > 1 ? static_cast<int>(this->m_results.size() - 1) : 1]);
-      return true;
-   }
-   if((max_len >= 20) && std::equal(m_position, m_position + 20, LAST_SUBMATCH_RESULT))
-   {
-      m_position += 20;
-      if(have_brace)
-      {
-         if((m_position != m_end) && (*m_position == '}'))
-            ++m_position;
-         else
-         {
-            m_position -= 20;
-            return false;
-         }
-      }
-      put(this->m_results.get_last_closed_paren());
-      return true;
-   }
-   if((max_len >= 2) && std::equal(m_position, m_position + 2, LAST_SUBMATCH_RESULT_ALT))
-   {
-      m_position += 2;
-      if(have_brace)
-      {
-         if((m_position != m_end) && (*m_position == '}'))
-            ++m_position;
-         else
-         {
-            m_position -= 2;
-            return false;
-         }
-      }
-      put(this->m_results.get_last_closed_paren());
-      return true;
-   }
-   return false;
-}
+    {      basic = ::boost::regbase::basic,
+      extended = ::boost::regbase::extended,
+      normal = ::boost::regbase::normal,
+      emacs = ::boost::regbase::emacs,
+      awk = ::boost::regbase::awk,
+      grep = ::boost::regbase::grep,
+      egrep = ::boost::regbase::egrep,
+      sed = basic,
+      perl = normal,
+      ECMAScript = normal,
+      JavaScript = normal,
+      JScript = normal
+   };
+   typedef ::boost::regbase::flag_type syntax_option_type;
     
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
+    #endif
     
     template <class OutputIterator, class Iterator, class traits, class charT>
 inline OutputIterator regex_merge(OutputIterator out,
                          Iterator first,
                          Iterator last,
                          const basic_regex<charT, traits>& e, 
-                         const charT* fmt, 
+                         const std::basic_string<charT>& fmt,
                          match_flag_type flags = match_default)
 {
-   return regex_replace(out, first, last, e, fmt, flags);
+   return regex_merge(out, first, last, e, fmt.c_str(), flags);
 }
     
-    #endif
-    
-    //
-// regex_search convenience interfaces:
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-//
-// this isn't really a partial specialisation, but template function
-// overloading - if the compiler doesn't support partial specialisation
-// then it really won't support this either:
-template <class charT, class Allocator, class traits>
-inline bool regex_search(const charT* str, 
-                        match_results<const charT*, Allocator>& m, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
+    template <class traits, class charT, class Formatter>
+std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
+                         const basic_regex<charT, traits>& e, 
+                         Formatter fmt,
+                         match_flag_type flags = match_default)
 {
-   return regex_search(str, str + traits::length(str), m, e, flags);
+   std::basic_string<charT> result;
+   BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<charT> > i(result);
+   regex_replace(i, s.begin(), s.end(), e, fmt, flags);
+   return result;
 }
     
-    //---- Include imgui_user.h at the end of imgui.h as a convenience
-//#define IMGUI_INCLUDE_IMGUI_USER_H
-    
-        // stream signature
-    stb_out(0x57); stb_out(0xbc);
-    stb_out2(0);
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX10 sample code but remove this dependency you can: 
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
-    
-            D3D12_RESOURCE_BARRIER barrier = {};
-        barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-        barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-        barrier.Transition.pResource   = pTexture;
-        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+      /**
+   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
+   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
+   * ntree_limit = 0) = 0;
+   *
+   * \brief predict the leaf index of each tree, the output will be nsample *
+   * ntree vector this is only valid in gbtree predictor.
+   *
+   * \param [in,out]  dmat        The input feature matrix.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       Model to make predictions from.
+   * \param           ntree_limit (Optional) The ntree limit.
+   */
     
     
-    {    // Store letters in KeysDown[] array as both uppercase and lowercase + Handle GLUT translating CTRL+A..CTRL+Z as 1..26. 
-    // This is a hacky mess but GLUT is unable to distinguish e.g. a TAB key from CTRL+I so this is probably the best we can do here.
-    if (c >= 1 && c <= 26)
-        io.KeysDown[c] = io.KeysDown[c - 1 + 'a'] = io.KeysDown[c - 1 + 'A'] = true;
-    else if (c >= 'a' && c <= 'z')
-        io.KeysDown[c] = io.KeysDown[c - 'a' + 'A'] = true;
-    else if (c >= 'A' && c <= 'Z')
-        io.KeysDown[c] = io.KeysDown[c - 'A' + 'a'] = true;
-    else
-        io.KeysDown[c] = true;
-    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
-    (void)x; (void)y; // Unused
-}
-    
-      static Data& getMutableData() { return data_; }
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
-    
-    void DHTRoutingTableDeserializer::deserialize(const std::string& filename)
-{
-  A2_LOG_INFO(fmt('Loading DHT routing table from %s.', filename.c_str()));
-  BufferedFile fp(filename.c_str(), BufferedFile::READ);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to load DHT routing table from %s', filename.c_str()));
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
   }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
+}
+}  // namespace data
+}  // namespace xgboost
+    
+    
+    {
+    {}  // namespace data
+}  // namespace xgboost
+#endif  // XGBOOST_DATA_SPARSE_PAGE_WRITER_H_
+
+    
+    TreeUpdater* TreeUpdater::Create(const std::string& name) {
+  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
+  if (e == nullptr) {
+    LOG(FATAL) << 'Unknown tree updater ' << name;
+  }
+  return (e->body)();
+}
+    
+      void SetStart() {
+    start_ = true;
+  }
+    
+      // Implementations of the DB interface
+  using DB::Get;
+  virtual Status Get(const ReadOptions& options,
+                     ColumnFamilyHandle* column_family, const Slice& key,
+                     PinnableSlice* value) override;
+  using DB::MultiGet;
+  virtual std::vector<Status> MultiGet(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>&,
+      const std::vector<Slice>& keys, std::vector<std::string>* values)
+    override;
+    
+        virtual ~CompactionProxy() = default;
+    virtual int level(size_t /*compaction_input_level*/ = 0) const {
+      return compaction_->level();
+    }
+    virtual bool KeyNotExistsBeyondOutputLevel(
+        const Slice& user_key, std::vector<size_t>* level_ptrs) const {
+      return compaction_->KeyNotExistsBeyondOutputLevel(user_key, level_ptrs);
+    }
+    virtual bool bottommost_level() const {
+      return compaction_->bottommost_level();
+    }
+    virtual int number_levels() const { return compaction_->number_levels(); }
+    virtual Slice GetLargestUserKey() const {
+      return compaction_->GetLargestUserKey();
+    }
+    virtual bool allow_ingest_behind() const {
+      return compaction_->immutable_cf_options()->allow_ingest_behind;
+    }
+    virtual bool preserve_deletes() const {
+      return compaction_->immutable_cf_options()->preserve_deletes;
     }
     
+    Status WriteBatchBase::Merge(const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
+    }
     
-    {} // namespace aria2
-
+    TEST_F(WriteControllerTest, ChangeDelayRateTest) {
+  TimeSetEnv env;
+  WriteController controller(40000000u);  // also set max delayed rate
+  controller.set_delayed_write_rate(10000000u);
+  auto delay_token_0 =
+      controller.GetDelayToken(controller.delayed_write_rate());
+  ASSERT_EQ(static_cast<uint64_t>(2000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_1 = controller.GetDelayToken(2000000u);
+  ASSERT_EQ(static_cast<uint64_t>(10000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_2 = controller.GetDelayToken(1000000u);
+  ASSERT_EQ(static_cast<uint64_t>(20000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_3 = controller.GetDelayToken(20000000u);
+  ASSERT_EQ(static_cast<uint64_t>(1000000),
+            controller.GetDelay(&env, 20000000u));
+  // This is more than max rate. Max delayed rate will be used.
+  auto delay_token_4 =
+      controller.GetDelayToken(controller.delayed_write_rate() * 3);
+  ASSERT_EQ(static_cast<uint64_t>(500000),
+            controller.GetDelay(&env, 20000000u));
+}
     
     
-    {} // namespace aria2
-
-    
-    #endif // D_DHT_TASK_H
-
-    
-    class DownloadContext;
-class PeerStorage;
-class DHTTask;
-class DHTNode;
-class DHTBucket;
-    
-    
-    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
+    {  // Remove any kind of caching of data from the offset to offset+length
+  // of this file. If the length is 0, then it refers to the end of file.
+  // If the system is not caching the file contents, then this is a noop.
+  virtual Status InvalidateCache(size_t offset, size_t length) override {
+    return file_->InvalidateCache(offset + prefixLength_, length);
+  }
 };
     
+      bool isValid() {
+    return hfile_ != nullptr;
+  }
     
-    {} // namespace aria2
+    Status PosixWritableFile::Truncate(uint64_t size) {
+  Status s;
+  int r = ftruncate(fd_, size);
+  if (r < 0) {
+    s = IOError('While ftruncate file to size ' + ToString(size), filename_,
+                errno);
+  } else {
+    filesize_ = size;
+  }
+  return s;
+}
     
-      void put(const std::string& hostname, const std::string& ipaddr,
-           uint16_t port);
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+        static BOOST_FORCEINLINE storage_type fetch_and(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        return static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND64(&storage, v));
+    }
+    
+        struct aligned
+    {
+        type value;
+    }
