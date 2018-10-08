@@ -1,145 +1,116 @@
 
         
-            it 'sends escape characters correctly to the backend' do
-      emitter.events << Event.new(payload: {data: 'Line 1\nLine 2\nLine 3'})
-      formatting_agent.sources << emitter
-      formatting_agent.options.merge!('instructions' => {'data' => '{{data | newline_to_br | strip_newlines | split: '<br />' | join: ','}}'})
-      formatting_agent.save!
+                  def value
+            if @allow_method_names_outside_object
+              object.public_send @method_name if object && object.respond_to?(@method_name)
+            else
+              object.public_send @method_name if object
+            end
+          end
     
-      describe '#omniauth_provider_icon' do
-    it 'returns a correct icon tag for Twitter' do
-      icon = omniauth_provider_icon(:twitter)
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-twitter')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-        it 'outputs a structure containing name, description, the date, all agents & their links' do
-      data = exporter.as_json
-      expect(data[:name]).to eq(name)
-      expect(data[:description]).to eq(description)
-      expect(data[:source_url]).to eq(source_url)
-      expect(data[:guid]).to eq(guid)
-      expect(data[:schema_version]).to eq(1)
-      expect(data[:tag_fg_color]).to eq(tag_fg_color)
-      expect(data[:tag_bg_color]).to eq(tag_bg_color)
-      expect(data[:icon]).to eq(icon)
-      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
-      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
-      expect(data[:control_links]).to eq([])
-      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
-      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
-    
-    describe LiquidMigrator do
-  describe 'converting JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
-      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
-      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
-    end
-    
-      describe 'changes to type' do
-    it 'validates types' do
-      source = Agent.new
-      source.type = 'Agents::WeatherAgent'
-      expect(source).to have(0).errors_on(:type)
-      source.type = 'Agents::WebsiteAgent'
-      expect(source).to have(0).errors_on(:type)
-      source.type = 'Agents::Fake'
-      expect(source).to have(1).error_on(:type)
-    end
-    
-        describe '-' do
-      it 'left-justifies the result of conversion if width is specified' do
-        format('%-10b', 10).should == '1010      '
-        format('%-10B', 10).should == '1010      '
-        format('%-10d', 112).should == '112       '
-        format('%-10i', 112).should == '112       '
-        format('%-10o', 87).should == '127       '
-        format('%-10u', 112).should == '112       '
-        format('%-10x', 196).should == 'c4        '
-        format('%-10X', 196).should == 'C4        '
-    
-      it 'transfers control to the innermost catch block waiting for the same sympol' do
-    one = two = three = 0
-    catch :duplicate do
-      catch :duplicate do
-        catch :duplicate do
-          one = 1
-          throw :duplicate
-        end
-        two = 2
-        throw :duplicate
+              def hidden_field_for_checkbox(options)
+            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
+          end
       end
-      three = 3
-      throw :duplicate
     end
-    [one, two, three].should == [1, 2, 3]
   end
+end
+
     
-        $Kernel_trace_var_global = nil
-    $Kernel_trace_var_extra  = nil
-  end
-    
-        def replace_vars(less)
-      less = less.dup
-      # skip header comment
-      less =~ %r(\A/\*(.*?)\*/)m
-      from           = $~ ? $~.to_s.length : 0
-      less[from..-1] = less[from..-1].
-          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
-          # variables that would be ignored by gsub above: e.g. @page-header-border-color
-          gsub(/@(page[\w-]+)/, '$\1')
-      less
+          if _include_layout?(options)
+        layout = options.delete(:layout) { :default }
+        options[:layout] = _layout_for_option(layout)
+      end
     end
     
-            def log_state_changes
-          if @order.previous_changes[:state]
-            @order.log_state_changes(
-              state_name: 'order',
-              old_state: @order.previous_changes[:state].first,
-              new_state: @order.previous_changes[:state].last
-            )
-          end
+        initializer 'action_view.caching' do |app|
+      ActiveSupport.on_load(:action_view) do
+        if app.config.action_view.cache_template_loading.nil?
+          ActionView::Resolver.caching = app.config.cache_classes
         end
+      end
+    end
     
-            def update
-          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
-          if @option_type.update_attributes(option_type_params)
-            render :show
-          else
-            invalid_resource!(@option_type)
-          end
+              details[key] = Array(value) if value
         end
+      end
     
-            def mine
-          if current_api_user.persisted?
-            @orders = current_api_user.orders.reverse_chronological.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          else
-            render 'spree/api/errors/unauthorized', status: :unauthorized
-          end
+      # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
+  end
+    
+    gemfile(true) do
+  source 'https://rubygems.org'
+  # Activate the gem you are reporting the issue against.
+  gem 'rails', '~> 4.2.0'
+  gem 'devise', '~> 4.0'
+  gem 'sqlite3'
+  gem 'byebug'
+end
+    
+        def xpath(*args)
+      doc.xpath(*args)
+    end
+    
+        def initialize_stubs
+      self.class.stubs.each do |path, block|
+        Typhoeus.stub(url_for(path)).and_return do
+          Typhoeus::Response.new \
+            effective_url: url_for(path),
+            code: 200,
+            headers: { 'Content-Type' => 'text/html' },
+            body: self.instance_exec(&block)
         end
+      end
+    end
     
-            def index
-          @product_properties = @product.product_properties.accessible_by(current_ability, :read).
-                                ransack(params[:q]).result.
-                                page(params[:page]).per(params[:per_page])
-          respond_with(@product_properties)
+        private
+    
+        def format_path(path)
+      path.to_s.remove File.join(File.expand_path('.'), '')
+    end
+    
+        # See {CapabilityHost#capability}
+    def capability(*args)
+      super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
+    end
+    
+            # Defines additional configuration keys to be available in the
+        # Vagrantfile. The configuration class should be returned by a
+        # block passed to this method. This is done to ensure that the class
+        # is lazy loaded, so if your class inherits from any classes that
+        # are specific to Vagrant 1.0, then the plugin can still be defined
+        # without breaking anything in future versions of Vagrant.
+        #
+        # @param [String] name Configuration key.
+        # @param [Boolean] upgrade_safe If this is true, then this configuration
+        #   key is safe to load during an upgrade, meaning that it depends
+        #   on NO Vagrant internal classes. Do _not_ set this to true unless
+        #   you really know what you're doing, since you can cause Vagrant
+        #   to crash (although Vagrant will output a user-friendly error
+        #   message if this were to happen).
+        def self.config(name=UNSET_VALUE, upgrade_safe=false, &block)
+          data[:config] ||= Registry.new
+    
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
         end
-    
-            private
-    
-            def index
-          authorize! :admin, ReturnAuthorization
-          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
-                                   ransack(params[:q]).result.
-                                   page(params[:page]).per(params[:per_page])
-          respond_with(@return_authorizations)
-        end
-    
-            private
