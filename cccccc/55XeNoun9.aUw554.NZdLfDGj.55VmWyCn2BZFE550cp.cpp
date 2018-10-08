@@ -1,205 +1,285 @@
 
         
-        bool NwCurrentWindowInternalGetZoomFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::WebContents* web_contents = GetSenderWebContents();
-  if (!web_contents)
-    return false;
-  double zoom_level =
-      ZoomController::FromWebContents(web_contents)->GetZoomLevel();
-  response->AppendDouble(zoom_level);
-  return true;
-}
-    
-    // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
+        // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
 #include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+
     
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
     
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-       void ExecuteCommand(int command_id, int event_flags) override;
+    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+
     
     #include 'content/nw/src/api/menuitem/menuitem.h'
     
-      std::string key;
-  std::string modifiers;
-  option.GetString('key',&key);
-  option.GetString('modifiers',&modifiers);
+     protected:
+  ~NwAppClearAppCacheFunction() override;
     
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    #endif  // CAFFE_INTERNAL_THREAD_HPP_
-
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
+    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+      // This random number generator facade hides boost and CUDA rng
+  // implementation from one another (for cross-platform compatibility).
+  class RNG {
+   public:
+    RNG();
+    explicit RNG(unsigned int seed);
+    explicit RNG(const RNG&);
+    RNG& operator=(const RNG&);
+    void* generator();
+   private:
+    class Generator;
+    shared_ptr<Generator> generator_;
+  };
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
+/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
+template <typename Dtype>
+class ConstantFiller : public Filler<Dtype> {
+ public:
+  explicit ConstantFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    const int count = blob->count();
+    const Dtype value = this->filler_param_.value();
+    CHECK(count);
+    for (int i = 0; i < count; ++i) {
+      data[i] = value;
+    }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
+};
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
  */
 template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
+class AbsValLayer : public NeuronLayer<Dtype> {
  public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
     }
     
-        for (int fd: to_add)
-      register_fd(fd);
-    to_add.clear();
+    #ifndef CPU_ONLY
+  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_gpu_bias(Dtype* output, const Dtype* bias);
+  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* col_output);
+  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
+      weights);
+  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+#endif
+    
+    template <typename Dtype>
+class BasePrefetchingDataLayer :
+    public BaseDataLayer<Dtype>, public InternalThread {
+ public:
+  explicit BasePrefetchingDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden.
+  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
     
-    {      vector<TensorShape> out(1);
-      std::vector<int> newDims =
-          SqueezeOp<CPUContext>::ComputeDims(GetDimsVector(in[0]), dims);
-      out[0] = CreateTensorShape(newDims, in[0].data_type());
-      return out;
-    })
-    .InheritOnnxSchema('Squeeze');
+    {}  // namespace caffe
     
-      bool RunOnDevice() override {
-    return DispatchHelper<TensorTypes<float, double, int, long, std::string>>::
-        call(this, Input(0));
-  }
     
-    // implementation of inline functions.
-inline void Learner::Predict(const SparsePage::Inst& inst,
-                             bool output_margin,
-                             HostDeviceVector<bst_float>* out_preds,
-                             unsigned ntree_limit) const {
-  gbm_->PredictInstance(inst, &out_preds->HostVector(), ntree_limit);
-  if (!output_margin) {
-    obj_->PredTransform(out_preds);
-  }
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        if ((((uint32_t)&storage) & 0x00000007) == 0)
+        {
+#if defined(__SSE2__)
+            __asm__ __volatile__
+            (
+#if defined(__AVX__)
+                'vmovq %1, %%xmm4\n\t'
+                'vmovq %%xmm4, %0\n\t'
+#else
+                'movq %1, %%xmm4\n\t'
+                'movq %%xmm4, %0\n\t'
+#endif
+                : '=m' (storage)
+                : 'm' (v)
+                : 'memory', 'xmm4'
+            );
+#else
+            __asm__ __volatile__
+            (
+                'fildll %1\n\t'
+                'fistpll %0\n\t'
+                : '=m' (storage)
+                : 'm' (v)
+                : 'memory'
+            );
+#endif
+        }
+        else
+        {
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+            uint32_t scratch;
+            __asm__ __volatile__
+            (
+                'movl %%ebx, %[scratch]\n\t'
+                'movl %[value_lo], %%ebx\n\t'
+                'movl %[dest], %%eax\n\t'
+                'movl 4+%[dest], %%edx\n\t'
+                '.align 16\n\t'
+                '1: lock; cmpxchg8b %[dest]\n\t'
+                'jne 1b\n\t'
+                'movl %[scratch], %%ebx\n\t'
+                : [scratch] '=m' (scratch), [dest] '=o' (storage)
+                : [value_lo] 'a' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
+                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'edx', 'memory'
+            );
+#else // defined(__PIC__)
+            __asm__ __volatile__
+            (
+                'movl %[dest], %%eax\n\t'
+                'movl 4+%[dest], %%edx\n\t'
+                '.align 16\n\t'
+                '1: lock; cmpxchg8b %[dest]\n\t'
+                'jne 1b\n\t'
+                : [dest] '=o' (storage)
+                : [value_lo] 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
+                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'eax', 'edx', 'memory'
+            );
+#endif // defined(__PIC__)
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+            uint32_t scratch;
+            __asm__ __volatile__
+            (
+                'movl %%ebx, %[scratch]\n\t'
+                'movl %[value_lo], %%ebx\n\t'
+                'movl 0(%[dest]), %%eax\n\t'
+                'movl 4(%[dest]), %%edx\n\t'
+                '.align 16\n\t'
+                '1: lock; cmpxchg8b 0(%[dest])\n\t'
+                'jne 1b\n\t'
+                'movl %[scratch], %%ebx\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+                : [scratch] '=m,m' (scratch)
+                : [value_lo] 'a,a' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
+#else
+                : [scratch] '=m' (scratch)
+                : [value_lo] 'a' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
+#endif
+                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'edx', 'memory'
+            );
+#else // defined(__PIC__)
+            __asm__ __volatile__
+            (
+                'movl 0(%[dest]), %%eax\n\t'
+                'movl 4(%[dest]), %%edx\n\t'
+                '.align 16\n\t'
+                '1: lock; cmpxchg8b 0(%[dest])\n\t'
+                'jne 1b\n\t'
+                :
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+                : [value_lo] 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
+#else
+                : [value_lo] 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
+#endif
+                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'eax', 'edx', 'memory'
+            );
+#endif // defined(__PIC__)
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        }
+    }
+    
+        static BOOST_FORCEINLINE storage_type fetch_and(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+        base_type::fence_before(order);
+        int backup;
+        __asm
+        {
+            mov backup, ebx
+            xor edx, edx
+            mov edi, storage
+            movzx ebx, v
+            movzx eax, byte ptr [edi]
+            align 16
+        again:
+            mov dl, al
+            and dl, bl
+            lock cmpxchg byte ptr [edi], dl
+            jne again
+            mov v, al
+            mov ebx, backup
+        };
+        base_type::fence_after(order);
+        return v;
+    }
+    
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
+{
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
 }
     
-      /**
-   * \fn  virtual void Predictor::UpdatePredictionCache( const gbm::GBTreeModel
-   * &model, std::vector<std::unique_ptr<TreeUpdater> >* updaters, int
-   * num_new_trees) = 0;
-   *
-   * \brief Update the internal prediction cache using newly added trees. Will
-   * use the tree updater to do this if possible. Should be called as a part of
-   * the tree boosting process to facilitate the look up of predictions
-   * at a later time.
-   *
-   * \param           model         The model.
-   * \param [in,out]  updaters      The updater sequence for gradient boosting.
-   * \param           num_new_trees Number of new trees.
-   */
-    
-    
+        BOOST_FORCEINLINE bool operator== (buffer_storage const& that) const BOOST_NOEXCEPT
     {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
-    
-    #endif  // DMLC_ENABLE_STD_THREAD
-
-    
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-    
-    {
-    {  ThreadState(uint32_t index, SharedState* _shared)
-      : tid(index), rnd(1000 + index), shared(_shared) {}
-};
-}  // namespace
-    
-    class KeepFilterFactory : public CompactionFilterFactory {
- public:
-  explicit KeepFilterFactory(bool check_context = false,
-                             bool check_context_cf_id = false)
-      : check_context_(check_context),
-        check_context_cf_id_(check_context_cf_id),
-        compaction_filter_created_(false) {}
+        return BOOST_ATOMIC_DETAIL_MEMCMP(data, that.data, Size) == 0;
     }
     
-    #ifndef ROCKSDB_LITE
-    
-    namespace rocksdb {
-    }
-    
-      env.now_micros_ += 1999900u;  // sleep debt 1000
-    
-    class MyFilter : public rocksdb::CompactionFilter {
- public:
-  bool Filter(int level, const rocksdb::Slice& key,
-              const rocksdb::Slice& existing_value, std::string* new_value,
-              bool* value_changed) const override {
-    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
-    ++count_;
-    assert(*value_changed == false);
-    return false;
-  }
-    }
+    #if BOOST_ATOMIC_SIGNAL_FENCE > 0
+BOOST_FORCEINLINE void atomic_signal_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::signal_fence(order);
+}
+#else
+BOOST_FORCEINLINE void atomic_signal_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::signal_fence();
+}
+#endif
