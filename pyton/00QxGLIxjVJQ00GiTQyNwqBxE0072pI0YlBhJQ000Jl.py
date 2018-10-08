@@ -1,47 +1,30 @@
 
         
-            def from_mapping(self, *mapping, **kwargs):
-        '''Updates the config like :meth:`update` ignoring items with non-upper
-        keys.
+            test_suite = 'tests',
     
-        with pytest.raises(AttributeError):
-        import unimportable
+    if __name__ == '__main__':
+    main()
 
     
-    
-def test_wsgi_errors_stream(app, client):
-    @app.route('/')
-    def index():
-        app.logger.error('test')
-        return ''
-    
+        if not info_only and not dry_run:
+        if not kwargs['caption']:
+            print('Skipping danmaku.')
+            return
         try:
-        with app.test_request_context('/', environ_overrides={'HTTP_HOST': 'localhost'}):
+            title = get_filename(title)
+            print('Downloading %s ...\n' % (title + '.cmt.json'))
+            cmt = get_srt_json(vid)
+            with open(os.path.join(output_dir, title + '.cmt.json'), 'w', encoding='utf-8') as x:
+                x.write(cmt)
+        except:
             pass
-    except ValueError as e:
-        assert str(e) == (
-            'the server name provided '
-            '('localhost.localdomain:5000') does not match the '
-            'server name from the WSGI environment ('localhost')'
-        )
     
-        def __enter__(self):
-        from scrapy.utils.test import get_testenv
-        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
-        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
-                                     env=get_testenv())
-        self.proc.stdout.readline()
+            self.prepare(vid = vid, title = title, **kwargs)
     
-            try:
-            self.min_bound = int(self.args[1])
-        except IndexError:
-            self.min_bound = 1
+    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads Dailymotion videos by URL.
+    '''
     
-        def fetch(self, request, spider):
-        def _deactivate(response):
-            self.active.remove(request)
-            return response
-    
-        def process_request(self, request, spider):
-        for k, v in self._headers:
-            request.headers.setdefault(k, v)
+            print_info(site_info, title, type, size)
+        if not info_only:
+            download_urls([real_url], title, ext, size, output_dir, merge = merge)
