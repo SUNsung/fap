@@ -1,261 +1,210 @@
 
         
-        
-    {  if (failed) throw std::runtime_error('parallel::for_each failed');
-}
-    
-    CONFIG_BODY(bool, Bool)
-CONFIG_BODY(char, Byte)
-CONFIG_BODY(unsigned char, UByte)
-CONFIG_BODY(int16_t, Int16)
-CONFIG_BODY(uint16_t, UInt16)
-CONFIG_BODY(int32_t, Int32)
-CONFIG_BODY(uint32_t, UInt32)
-CONFIG_BODY(int64_t, Int64)
-CONFIG_BODY(uint64_t, UInt64)
-CONFIG_BODY(double, Double)
-CONFIG_BODY(std::string, String)
-    
-    req::ptr<File>
-DataStreamWrapper::open(const String& filename, const String& /*mode*/,
-                        int /*options*/,
-                        const req::ptr<StreamContext>& /*context*/) {
-    }
-    
-    #endif // incl_HPHP_DEBUGGABLE_H_
+        #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
 
     
-    //////////////////////////////////////////////////////////////////////
+    // The 'Types' template argument below must have spaces around it
+// since some compilers may choke on '>>' when passing a template
+// instance (e.g. Types<int>)
+# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
+  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
+      ::testing::internal::TypeParameterizedTestCase<CaseName, \
+          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
+          ::testing::internal::TypeList< Types >::type>::Register(\
+              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
     
-    namespace HPHP { namespace FileUtil {
-    }
-    }
     
-    // stb_compress* from stb.h - declaration
-typedef unsigned int stb_uint;
-typedef unsigned char stb_uchar;
-stb_uint stb_compress(stb_uchar *out,stb_uchar *in,stb_uint len);
+    {  // This version will be picked when the second argument to ASSERT_EQ() is a
+  // pointer, e.g. ASSERT_EQ(NULL, a_pointer).
+  template <typename T>
+  static AssertionResult Compare(
+      const char* expected_expression,
+      const char* actual_expression,
+      // We used to have a second template parameter instead of Secret*.  That
+      // template parameter would deduce to 'long', making this a better match
+      // than the first overload even without the first overload's EnableIf.
+      // Unfortunately, gcc with -Wconversion-null warns when 'passing NULL to
+      // non-pointer argument' (even a deduced integral argument), so the old
+      // implementation caused warnings in user code.
+      Secret* /* expected (NULL) */,
+      T* actual) {
+    // We already know that 'expected' is a null pointer.
+    return CmpHelperEQ(expected_expression, actual_expression,
+                       static_cast<T*>(NULL), actual);
+  }
+};
     
-        // Setup GLUT display function
-    // We will also call ImGui_ImplFreeGLUT_InstallFuncs() to get all the other functions installed for us, 
-    // otherwise it is possible to install our own functions and call the imgui_impl_freeglut.h functions ourselves.
-    glutDisplayFunc(glut_display_func);
+    #include 'gtest/internal/gtest-port.h'
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-06-12: DirectX12: Moved the ID3D12GraphicsCommandList* parameter from NewFrame() to RenderDrawData().
-//  2018-06-08: Misc: Extracted imgui_impl_dx12.cpp/.h away from the old combined DX12+Win32 example.
-//  2018-06-08: DirectX12: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle (to ease support for future multi-viewport).
-//  2018-02-22: Merged into master with all Win32 code synchronized to other examples.
-    
-    #pragma once
-#ifndef ROCKSDB_LITE
-#include 'db/db_impl.h'
-#include <vector>
-#include <string>
-    
-    #ifndef __STDC_FORMAT_MACROS
-#define __STDC_FORMAT_MACROS
+      // Creates an ANSI string from the given wide string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the ANSI string, or NULL if the
+  // input is NULL.
+  //
+  // The returned string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
 #endif
     
-    
-    {
-    {  // Get wal file in wal_dir
-  if (dbname.compare(options.wal_dir) != 0) {
-    if (!env->GetChildren(options.wal_dir, &files).ok()) {
-      Error(options.info_log,
-          'Error when reading %s dir\n',
-          options.wal_dir.c_str());
-      return;
+      virtual int GetNextPrime(int p) const {
+    for (int n = p + 1; n > 0; n++) {
+      if (IsPrime(n)) return n;
     }
-    wal_info.clear();
-    for (std::string file : files) {
-      if (ParseFileName(file, &number, &type)) {
-        if (type == kLogFile) {
-          env->GetFileSize(options.wal_dir + '/' + file, &file_size);
-          char str[16];
-          snprintf(str, sizeof(str), '%' PRIu64, file_size);
-          wal_info.append(file).append(' size: ').
-              append(str).append(' ; ');
+    }
+    
+    // This event listener monitors how many Water objects are created and
+// destroyed by each test, and reports a failure if a test leaks some Water
+// objects. It does this by comparing the number of live Water objects at
+// the beginning of a test and at the end of a test.
+class LeakChecker : public EmptyTestEventListener {
+ private:
+  // Called before a test starts.
+  virtual void OnTestStart(const TestInfo& /* test_info */) {
+    initially_allocated_ = Water::allocated();
+  }
+    }
+    
+    namespace CNTK
+{
+    Value::Value(const NDArrayViewPtr& data)
+        : Value(data, nullptr)
+    {
+    }
+    }
+    
+            void Unpack() const;
+    
+    
+    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+};
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
         }
-      }
     }
-  }
-  Header(options.info_log, 'Write Ahead Log file in %s: %s\n',
-         options.wal_dir.c_str(), wal_info.c_str());
-}
-}  // namespace rocksdb
-
+};
     
-    class DB;
+    //
+// define BOOST_REGEX_NO_FWD if this
+// header doesn't work!
+//
+#ifdef BOOST_REGEX_NO_FWD
+#  ifndef BOOST_RE_REGEX_HPP
+#     include <boost/regex.hpp>
+#  endif
+#else
     
-    int main() {
-  Options options;
-  options.create_if_missing = true;
-  // Disable RocksDB background compaction.
-  options.compaction_style = kCompactionStyleNone;
-  // Small slowdown and stop trigger for experimental purpose.
-  options.level0_slowdown_writes_trigger = 3;
-  options.level0_stop_writes_trigger = 5;
-  options.IncreaseParallelism(5);
-  options.listeners.emplace_back(new FullCompactor(options));
-    }
+       void BOOST_REGEX_CALL clear()
+   {
+      end = start;
+   }
     
-    #include <algorithm>
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
-    
-    #ifndef GUETZLI_FDCT_H_
-#define GUETZLI_FDCT_H_
-    
-    #include <cmath>
-    
-      guetzli::Params params;
-  params.butteraugli_target = static_cast<float>(
-      guetzli::ButteraugliScoreForQuality(quality));
-    
-    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
-
-    
-      // Read sampling factors and quant table index for each component.
-  std::vector<bool> ids_seen(256, false);
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    const int id = ReadUint8(data, pos);
-    if (ids_seen[id]) {   // (cf. section B.2.2, syntax of Ci)
-      fprintf(stderr, 'Duplicate ID %d in SOF.\n', id);
-      jpg->error = JPEG_DUPLICATE_COMPONENT_ID;
-      return false;
-    }
-    ids_seen[id] = true;
-    jpg->components[i].id = id;
-    int factor = ReadUint8(data, pos);
-    int h_samp_factor = factor >> 4;
-    int v_samp_factor = factor & 0xf;
-    VERIFY_INPUT(h_samp_factor, 1, 15, SAMP_FACTOR);
-    VERIFY_INPUT(v_samp_factor, 1, 15, SAMP_FACTOR);
-    jpg->components[i].h_samp_factor = h_samp_factor;
-    jpg->components[i].v_samp_factor = v_samp_factor;
-    jpg->components[i].quant_idx = ReadUint8(data, pos);
-    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor, h_samp_factor);
-    jpg->max_v_samp_factor = std::max(jpg->max_v_samp_factor, v_samp_factor);
-  }
-    
-      // Cluster DC histograms.
-  size_t num_dc_histo = ncomps;
-  int dc_histo_indexes[kMaxComponents];
-  std::vector<uint8_t> depths(ncomps * JpegHistogram::kSize);
-  ClusterHistograms(&histograms[0], &num_dc_histo, dc_histo_indexes,
-                    &depths[0]);
-    
-    /**
- * @namespace apollo::drivers::canbus
- * @brief apollo::drivers::canbus
- */
-namespace apollo {
-namespace drivers {
-namespace canbus {
-    }
-    }
-    }
-    
-      if (!is_started_) {
-    AERROR << 'Esd can client has not been initiated! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
-  }
-  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
-    send_frames_[i].id = frames[i].id;
-    send_frames_[i].len = frames[i].len;
-    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
-  }
-    
-    #include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/can_client.h'
-    
-    
-    {
-    {
-    {
-    {
-    {  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  CanFrame frame;
-  // frame.id = 0x60;
-  // frame.len = 8;
-  // frame.data[0] = 0;
-  // frames.push_back(frame);
-  // num = 1;
-  EXPECT_EQ(hermes_can.Start(), ErrorCode::OK);
-  EXPECT_EQ(hermes_can.Receive(&frames, &num), ErrorCode::OK);
-}
-*/
-}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-    
-    
-    {
-    {    if (ret < 0) {
-      AERROR << 'receive message failed, error code: ' << ret;
-      return ErrorCode::CAN_CLIENT_ERROR_BASE;
-    }
-    if (recv_frames_[i].can_dlc != CANBUS_MESSAGE_LENGTH) {
-      AERROR << 'recv_frames_[' << i
-             << '].can_dlc = ' << recv_frames_[i].can_dlc
-             << ', which is not equal to can message data length ('
-             << CANBUS_MESSAGE_LENGTH << ').';
-      return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
-    }
-    cf.id = recv_frames_[i].can_id;
-    cf.len = recv_frames_[i].can_dlc;
-    std::memcpy(cf.data, recv_frames_[i].data, recv_frames_[i].can_dlc);
-    frames->push_back(cf);
-  }
-  return ErrorCode::OK;
+    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
+inline std::size_t regex_split(OutputIterator out,
+                   std::basic_string<charT, Traits1, Alloc1>& s, 
+                   const basic_regex<charT, Traits2>& e,
+                   match_flag_type flags = match_default)
+{
+   return regex_split(out, s, e, flags, UINT_MAX);
 }
     
-    TEST(CanReceiverTest, ReceiveOne) {
-  can::FakeCanClient can_client;
-  MessageManager<::apollo::canbus::ChassisDetail> pm;
-  CanReceiver<::apollo::canbus::ChassisDetail> receiver;
+    
+    {
+    {}  // end namespace internal
+}  // end namespace benchmark
+    
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
+    
+      // Calculate RMS
+  double rms = 0.0;
+  for (size_t i = 0; i < n.size(); ++i) {
+    double fit = result.coef * fitting_curve(n[i]);
+    rms += pow((time[i] - fit), 2);
+  }
+    
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
     }
     
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-    /**
- * @class ProtocolData
- *
- * @brief This is the base class of protocol data.
- */
-template <typename SensorType>
-class ProtocolData {
- public:
-  /**
-   * @brief static function, used to calculate the checksum of input array.
-   * @param input the pointer to the start position of input array
-   * @param length the length of the input array
-   * @return the value of checksum
-   */
-  static std::uint8_t CalculateCheckSum(const uint8_t *input,
-                                        const uint32_t length);
-  /**
-   * @brief construct protocol data.
-   */
-  ProtocolData() = default;
-    }
-    
-    #include <string>
+      // Compile a regular expression matcher from spec.  Returns true on success.
+  //
+  // On failure (and if error is not nullptr), error is populated with a human
+  // readable error message if an error occurs.
+  bool Init(const std::string& spec, std::string* error);
