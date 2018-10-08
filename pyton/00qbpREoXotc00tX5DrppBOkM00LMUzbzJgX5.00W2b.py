@@ -1,218 +1,168 @@
 
         
-        if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
-    from collections import Callable, Mapping, MutableMapping
-    
-        return {
-        'platform': platform_info,
-        'implementation': implementation_info,
-        'system_ssl': system_ssl_info,
-        'using_pyopenssl': pyopenssl is not None,
-        'pyOpenSSL': pyopenssl_info,
-        'urllib3': urllib3_info,
-        'chardet': chardet_info,
-        'cryptography': cryptography_info,
-        'idna': idna_info,
-        'requests': {
-            'version': requests_version,
-        },
-    }
+        if os.environ.get('CONVERT_README'):
+    import pypandoc
     
     
-class LookupDict(dict):
-    '''Dictionary lookup object.'''
-    
-        def run(self):
-        try:
-            self.server_sock = self._create_socket_and_bind()
-            # in case self.port = 0
-            self.port = self.server_sock.getsockname()[1]
-            self.ready_event.set()
-            self._handle_requests()
-    
-        def __init__(self, pool_connections=DEFAULT_POOLSIZE,
-                 pool_maxsize=DEFAULT_POOLSIZE, max_retries=DEFAULT_RETRIES,
-                 pool_block=DEFAULT_POOLBLOCK):
-        if max_retries == DEFAULT_RETRIES:
-            self.max_retries = Retry(0, read=False)
-        else:
-            self.max_retries = Retry.from_int(max_retries)
-        self.config = {}
-        self.proxy_manager = {}
-    
-        :rtype: str
-    '''
-    safe_with_percent = '!#$%&'()*+,/:;=?@[]~'
-    safe_without_percent = '!#$&'()*+,/:;=?@[]~'
-    try:
-        # Unquote only the unreserved characters
-        # Then quote only illegal characters (do not quote reserved,
-        # unreserved, or '%')
-        return quote(unquote_unreserved(uri), safe=safe_with_percent)
-    except InvalidURL:
-        # We couldn't unquote the given URI, so let's try quoting it, but
-        # there may be unquoted '%'s in the URI. We need to make sure they're
-        # properly quoted so they do not cause issues elsewhere.
-        return quote(uri, safe=safe_without_percent)
+@pytest.fixture(autouse=True)
+def functional(request):
+    if request.node.get_marker('functional') \
+            and not request.config.getoption('enable_functional'):
+        pytest.skip('functional tests are disabled')
     
     
-@pytest.mark.skipif(os.name != 'nt', reason='Test only on Windows')
-@pytest.mark.parametrize(
-    'url, expected, override', (
-            ('http://192.168.0.1:5000/', True, None),
-            ('http://192.168.0.1/', True, None),
-            ('http://172.16.1.1/', True, None),
-            ('http://172.16.1.1:5000/', True, None),
-            ('http://localhost.localdomain:5000/v1.0/', True, None),
-            ('http://172.16.1.22/', False, None),
-            ('http://172.16.1.22:5000/', False, None),
-            ('http://google.com:5000/v1.0/', False, None),
-            ('http://mylocalhostname:5000/v1.0/', True, '<local>'),
-            ('http://192.168.0.1/', False, ''),
-    ))
-def test_should_bypass_proxies_win_registry(url, expected, override,
-                                            monkeypatch):
-    '''Tests for function should_bypass_proxies to check if proxy
-    can be bypassed or not with Windows registry settings
-    '''
-    if override is None:
-        override = '192.168.*;127.0.0.1;localhost.localdomain;172.16.1.1'
-    if compat.is_py3:
-        import winreg
-    else:
-        import _winreg as winreg
+@pytest.fixture(autouse=True)
+def shell(mocker):
+    shell = mocker.patch('thefuck.entrypoints.not_configured.shell',
+                         new_callable=MagicMock)
+    shell.get_history.return_value = []
+    shell.how_to_configure.return_value = ShellConfiguration(
+        content='eval $(thefuck --alias)',
+        path='/tmp/.bashrc',
+        reload='bash',
+        can_configure_automatically=True)
+    return shell
     
-        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-    client = boto3_conn(module, conn_type='client', resource='waf', region=region, endpoint=ec2_url, **aws_connect_kwargs)
     
-    try:
-    import botocore
-    from botocore.signers import CloudFrontSigner
-    from botocore.exceptions import ClientError, BotoCoreError
-except ImportError:
-    pass  # caught by imported AnsibleAWSModule
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
-    # Gather facts about all launch configurations
-- ec2_lc_facts:
     
-        entry_points = {'console_scripts': proj_info['console_scripts']}
-)
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
+    
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-        def p_stream(self, stream_id):
-        if stream_id in self.streams:
-            stream = self.streams[stream_id]
+        @staticmethod
+    def verify_certificate(ca, cert):
+        if hasattr(OpenSSL.crypto, 'X509StoreContext'):
+            store = OpenSSL.crypto.X509Store()
+            store.add_cert(ca)
+            try:
+                OpenSSL.crypto.X509StoreContext(store, cert).verify_certificate()
+            except:
+                return False
+            else:
+                return True
         else:
-            stream = self.dash_streams[stream_id]
+            # A fake verify, just check generated time.
+            return ca.get_subject().OU == cert.get_issuer().OU
     
-    def douban_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    
+class CheckIp(front_base.check_ip.CheckIp):
+    def check_response(self, response):
+        server_type = response.headers.get('Server', '')
+        self.logger.debug('status:%d', response.status)
+        self.logger.debug('Server type:%s', server_type)
+    
+    
+def get_line_value(r, n):
+    rls = r.split('\r\n')
+    if len(rls) < n + 1:
+        return None
+    
+    from cert_util import CertUtil
+import simple_http_server
+import proxy_handler
+import env_info
+from front import front, direct_front
+    
+    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
+# by parser.
+HIDDEN_CHANNEL = 99
+    
+            Using setter/getter methods is deprecated. Use o.text instead.
+        '''
+        raise NotImplementedError
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
     html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-    #----------------------------------------------------------------------
-def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
-    ''''''
-    fake_headers = {
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
-        'Accept': '*/*',
-        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
-        'Connection': 'keep-alive',
-    }
-    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
-    html = get_content(api_base, headers=fake_headers)
+    __all__ = ['cbs_download']
     
-        def do_action(self):
-        print(self.name, self.action.name, end=' ')
-        return self.action
-    
-    print('Counting to five...')
-for number in count_to_five():
-    print(number, end=' ')
-    
-        def notify(self, modifier=None):
-        for observer in self._observers:
-            if modifier != observer:
-                observer.update(self)
+    __all__ = ['douban_download']
     
     
-if __name__ == '__main__':
-    print('Specification')
-    andrey = User()
-    ivan = User(super_user=True)
-    vasiliy = 'not User instance'
+class DebugInfoRequest( BaseRequest ):
+  def __init__( self, extra_data = None ):
+    super( DebugInfoRequest, self ).__init__()
+    self._extra_data = extra_data
+    self._response = None
     
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+    import logging
     
-    production code which is untestable:
+      return completion_data
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      return filters
+
+    
+        diags = self._line_to_diags[ line_num ]
+    if not diags:
+      if self._diag_message_needs_clearing:
+        # Clear any previous diag echo
+        vimsupport.PostVimMessage( '', warning = False )
+        self._diag_message_needs_clearing = False
+      return
+    
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
+    
+      # Ignore 'syntax region' lines (see ':h syn-region'). They always start
+  # with matchgroup= or start= in the syntax list.
+  if SYNTAX_REGION_ARGUMENT_REGEX.match( words[ 0 ] ):
+    return []
+    
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
     
     
-class Delegate(object):
-    def do_something(self, something):
-        return 'Doing %s' % something
+def EndsWithPython_Python2Paths_test():
+  python_paths = [
+    'python',
+    'python2',
+    '/usr/bin/python2.7',
+    '/home/user/.pyenv/shims/python2.7',
+    r'C:\Python27\python.exe',
+    '/Contents/MacOS/Python'
+  ]
     
-    '''
-@author: Eugene Duboviy <eugene.dubovoy@gmail.com> | github.com/duboviy
     
-    
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
-    
-    from homeassistant.core import callback
-from homeassistant.const import CONF_PLATFORM
-import homeassistant.helpers.config_validation as cv
-import homeassistant.util.dt as dt_util
-from homeassistant.helpers.event import track_point_in_utc_time
-    
-        @callback
-    def call_action():
-        '''Call action with right context.'''
-        hass.async_run_job(action, {
-            'trigger': {
-                'platform': 'sun',
-                'event': event,
-                'offset': offset,
-            },
-        })
-    
-    from homeassistant.core import callback
-from homeassistant.const import CONF_AT, CONF_PLATFORM
-from homeassistant.helpers import config_validation as cv
-from homeassistant.helpers.event import async_track_time_change
-    
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/browser/
-'''
-import voluptuous as vol
-    
-        def scan_devices(self):
-        '''Scan for new devices and return a list of found device ids.'''
-        self._update_info()
-        active_hosts = []
-        for known_host in self.last_results:
-            if known_host['status'] == '1' and known_host.get('mac'):
-                active_hosts.append(known_host['mac'])
-        return active_hosts
-    
-            device = data['device'].replace('-', '')
-        gps_location = (data['latitude'], data['longitude'])
-        accuracy = 200
-        battery = -1
-    
-    _LOGGER = logging.getLogger(__name__)
+def KeywordsFromSyntaxListOutput_Function_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+foogroup xxx foo bar
+             zoo goo
+             links to Function''' ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
