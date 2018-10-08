@@ -1,560 +1,284 @@
 
         
-        REGISTER_OP('ShapelessOp');
+        /*!
+ * \brief Registry entry for linear updater.
+ */
+struct LinearUpdaterReg
+    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
+                                        std::function<LinearUpdater*()> > {};
     
-    
-    {}  // namespace tensorflow
-
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-    {}  // namespace tensorflow
-
-    
-    PyExceptionRegistry* PyExceptionRegistry::singleton_ = nullptr;
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Safe containers for an owned TF_Tensor. On destruction, the tensor will be
-// deleted by TF_DeleteTensor.
-using Safe_TF_TensorPtr = std::unique_ptr<TF_Tensor, detail::TFTensorDeleter>;
-Safe_TF_TensorPtr make_safe(TF_Tensor* tensor);
-    
-    // ValuesIn() function allows generation of tests with parameters coming from
-// a container.
-//
-// Synopsis:
-// ValuesIn(const T (&array)[N])
-//   - returns a generator producing sequences with elements from
-//     a C-style array.
-// ValuesIn(const Container& container)
-//   - returns a generator producing sequences with elements from
-//     an STL-style container.
-// ValuesIn(Iterator begin, Iterator end)
-//   - returns a generator producing sequences with elements from
-//     a range [begin, end) defined by a pair of STL-style iterators. These
-//     iterators can also be plain C pointers.
-//
-// Please note that ValuesIn copies the values from the containers
-// passed in and keeps them to generate tests in RUN_ALL_TESTS().
-//
-// Examples:
-//
-// This instantiates tests from test case StringTest
-// each with C-string values of 'foo', 'bar', and 'baz':
-//
-// const char* strings[] = {'foo', 'bar', 'baz'};
-// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
-//
-// This instantiates tests from test case StlStringTest
-// each with STL strings with values 'a' and 'b':
-//
-// ::std::vector< ::std::string> GetParameterStrings() {
-//   ::std::vector< ::std::string> v;
-//   v.push_back('a');
-//   v.push_back('b');
-//   return v;
-// }
-//
-// INSTANTIATE_TEST_CASE_P(CharSequence,
-//                         StlStringTest,
-//                         ValuesIn(GetParameterStrings()));
-//
-//
-// This will also instantiate tests from CharTest
-// each with parameter values 'a' and 'b':
-//
-// ::std::list<char> GetParameterChars() {
-//   ::std::list<char> list;
-//   list.push_back('a');
-//   list.push_back('b');
-//   return list;
-// }
-// ::std::list<char> l = GetParameterChars();
-// INSTANTIATE_TEST_CASE_P(CharSequence2,
-//                         CharTest,
-//                         ValuesIn(l.begin(), l.end()));
-//
-template <typename ForwardIterator>
-internal::ParamGenerator<
-  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
-ValuesIn(ForwardIterator begin, ForwardIterator end) {
-  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
-      ::value_type ParamType;
-  return internal::ParamGenerator<ParamType>(
-      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
-}
-    
-    #include <stdio.h>
-#include <stdlib.h>
-    
-      ////////////////////////////////////////////////////////////
-  //
-  // D'tor.  MyString is intended to be a final class, so the d'tor
-  // doesn't need to be virtual.
-  ~MyString() { delete[] c_string_; }
-    
-    **Result**
-    
-      [[0.87226421 0.49045439]
-   [0.92470531 0.30935077]]]]
-Y: [[0.53432311 0.23734561 0.56481598 0.52152617 0.33662627 0.32472711
-  0.17939016 0.97175851 0.87226421 0.49045439 0.92470531 0.30935077]]
-```
-    
-            virtual Dictionary GetCheckpointState() const override;
-        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
-    
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
-            {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-            }
-        }
-    
-        public:
-        template <typename ElementType>
-        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
-            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
-        {
-            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
-            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
-            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
-    }
-    
-        void VariableFields::SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device)
-    {
-        if (m_value != nullptr)
-            LogicError('Variable '%S': Value initialization config cannot be set if a value already exists', AsString().c_str());
-    }
-    
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Start();
-        }
-    }
-    
-            // all cloned nodes' inputs must be redirected if they reference a node that has been cloned as well
-        size_t numRelinks = 0; // (statistics: how many inputs have we relinked?)
-        for (let& clonedNodesKV : clonedNodes)
-        {
-            let& node = clonedNodesKV.second;
-            let& inputs2 = node->GetInputs();
-            for (size_t i = 0; i < inputs2.size(); i++)
-            {
-                fprintf(stderr, '%ls.inputs[%d] = %ls (%d)', node->NodeName().c_str(), (int)i, inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
-                let iter = clonedNodes.find(inputs2[i]);
-                if (iter == clonedNodes.end())
-                    continue;
-                // input is also a cloned node: relink
-                node->SetInput(i, iter->second);
-                fprintf(stderr, ' ==>  %ls (%d)\n', inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
-                numRelinks++;
-            }
-        }
-    
-    
-    {        SetDims(sampleLayout, HasMBLayout()); // also called when reloading a file. Then we have an MBLayout, otherwise not yet
-        UpdateFunctionValuesSize();           // we must allocate the matrix so that the readers get objects with valid row dimensions (some readers expect that)
-        SetLearningRateMultiplier(learningRateMultiplier);
-        m_dynamicAxisNodeName = axisName;
-    }
-    
-       file_iterator();
-   file_iterator(const char* wild);
-   ~file_iterator();
-   file_iterator(const file_iterator&);
-   file_iterator& operator=(const file_iterator&);
-   const char* root()const { return _root; }
-   const char* path()const { return _path; }
-   const char* name()const { return ptr; }
-   _fi_find_data* data() { return &(ref->_data); }
-   void next();
-   file_iterator& operator++() { next(); return *this; }
-   file_iterator operator++(int);
-   const char* operator*() { return path(); }
-    
-    #  ifndef BOOST_REGEX_INSTANTIATE
-#     ifdef __GNUC__
-#        define template __extension__ extern template
-#     else
-#        if BOOST_MSVC > 1310
-#           define BOOST_REGEX_TEMPLATE_DECL
-#        endif
-#        define template extern template
-#     endif
-#  endif
-    
-    template <class I>
-struct is_random_imp
-{
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-private:
-   typedef typename std::iterator_traits<I>::iterator_category cat;
-public:
-   BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<cat*, std::random_access_iterator_tag*>::value));
-#else
-   BOOST_STATIC_CONSTANT(bool, value = false);
-#endif
-};
-    
-    struct mem_block_cache
-{
-   // this member has to be statically initialsed:
-   mem_block_node* next;
-   unsigned cached_blocks;
-#ifdef BOOST_HAS_THREADS
-   boost::static_mutex mut;
-#endif
-    }
-    
-    template <class BidiIterator, class Allocator, class traits>
-inline void perl_matcher<BidiIterator, Allocator, traits>::push_assertion(const re_syntax_base* ps, bool positive)
-{
-   saved_assertion<BidiIterator>* pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
-   --pmp;
-   if(pmp < m_stack_base)
-   {
-      extend_stack();
-      pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
-      --pmp;
-   }
-   (void) new (pmp)saved_assertion<BidiIterator>(positive, ps, position);
-   m_backup_state = pmp;
-}
-    
-    #ifdef BOOST_REGEX_USE_WIN32_LOCALE
-template <class charT, class implementationT = w32_regex_traits<charT> >
-struct regex_traits;
-#elif defined(BOOST_REGEX_USE_CPP_LOCALE)
-template <class charT, class implementationT = cpp_regex_traits<charT> >
-struct regex_traits;
-#else
-template <class charT, class implementationT = c_regex_traits<charT> >
-struct regex_traits;
-#endif
-    
-    template <class ST, class SA, class charT, class traits>
-inline bool regex_match(const std::basic_string<charT, ST, SA>& s, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   typedef typename std::basic_string<charT, ST, SA>::const_iterator iterator;
-   match_results<iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#else  // partial ordering
-inline bool regex_match(const char* str, 
-                        cmatch& m, 
-                        const regex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const char* str, 
-                        const regex& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const char*> m;
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#ifndef BOOST_NO_STD_LOCALE
-inline bool regex_match(const char* str, 
-                        cmatch& m, 
-                        const basic_regex<char, cpp_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const char* str, 
-                        const basic_regex<char, cpp_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const char*> m;
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#endif
-inline bool regex_match(const char* str, 
-                        cmatch& m, 
-                        const basic_regex<char, c_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const char* str, 
-                        const basic_regex<char, c_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const char*> m;
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
-inline bool regex_match(const char* str, 
-                        cmatch& m, 
-                        const basic_regex<char, w32_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const char* str, 
-                        const basic_regex<char, w32_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const char*> m;
-   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#endif
-#ifndef BOOST_NO_WREGEX
-inline bool regex_match(const wchar_t* str, 
-                        wcmatch& m, 
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const wchar_t* str, 
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const wchar_t*> m;
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#ifndef BOOST_NO_STD_LOCALE
-inline bool regex_match(const wchar_t* str, 
-                        wcmatch& m, 
-                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const wchar_t* str, 
-                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const wchar_t*> m;
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#endif
-inline bool regex_match(const wchar_t* str, 
-                        wcmatch& m, 
-                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const wchar_t* str, 
-                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const wchar_t*> m;
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
-inline bool regex_match(const wchar_t* str, 
-                        wcmatch& m, 
-                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_match(const wchar_t* str, 
-                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const wchar_t*> m;
-   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
-}
-#endif
-#endif
-inline bool regex_match(const std::string& s, 
-                        smatch& m,
-                        const regex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::string& s, 
-                        const regex& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::string::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#ifndef BOOST_NO_STD_LOCALE
-inline bool regex_match(const std::string& s, 
-                        smatch& m,
-                        const basic_regex<char, cpp_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::string& s, 
-                        const basic_regex<char, cpp_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::string::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#endif
-inline bool regex_match(const std::string& s, 
-                        smatch& m,
-                        const basic_regex<char, c_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::string& s, 
-                        const basic_regex<char, c_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::string::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
-inline bool regex_match(const std::string& s, 
-                        smatch& m,
-                        const basic_regex<char, w32_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::string& s, 
-                        const basic_regex<char, w32_regex_traits<char> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::string::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#endif
-#if !defined(BOOST_NO_WREGEX)
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::basic_string<wchar_t>::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#ifndef BOOST_NO_STD_LOCALE
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
-                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::basic_string<wchar_t>::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#endif
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
-                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::basic_string<wchar_t>::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
-                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-inline bool regex_match(const std::basic_string<wchar_t>& s, 
-                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<std::basic_string<wchar_t>::const_iterator> m;
-   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
-}
-#endif
-#endif
-    
-      TestCanParam() = default;
-    
-    
-    {  thread_.reset(new std::thread([this] { RecvThreadFunc(); }));
-  if (thread_ == nullptr) {
-    AERROR << 'Unable to create can client receiver thread.';
-    return ::apollo::common::ErrorCode::CANBUS_ERROR;
-  }
-  return ::apollo::common::ErrorCode::OK;
-}
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
- public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
-  }
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct TreeUpdaterReg
+    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
+                                        std::function<TreeUpdater* ()> > {
 };
     
     
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
+    }
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
+  }
     
-    TEST(ByteTest, SetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
+      size_t Read(void* dptr, size_t size) override {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer == 0) return strm_->Read(dptr, size);
+    if (nbuffer < size) {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
+      buffer_ptr_ += nbuffer;
+      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
+                                   size - nbuffer);
+    } else {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      buffer_ptr_ += size;
+      return size;
+    }
+  }
+    
+    /*!
+ * \brief Registry entry for sparse page format.
+ */
+struct SparsePageFormatReg
+    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
+                                        std::function<SparsePageFormat* ()> > {
+};
+    
+    #include <xgboost/tree_updater.h>
+#include <string>
+#include <memory>
+#include './param.h'
+#include '../common/sync.h'
+#include '../common/io.h'
+    
+        Mat4 mv = Mat4::IDENTITY;
+    
+        if (action)
+    {
+        if (action->initWithDuration(duration))
+        {
+            action->autorelease();
+        }
+        else
+        {
+            CC_SAFE_RELEASE_NULL(action);
+        }
+    }
+    
+        /**
+    @brief Initializes the action with center position, radius, grid size and duration.
+    @param duration Specify the duration of the Lens3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param position Specify the center position of the lens effect.
+    @param radius Specify the radius of the lens effect.
+    @return If the initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius);
+    
+    bool TintBy::initWithDuration(float duration, GLshort deltaRed, GLshort deltaGreen, GLshort deltaBlue)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _deltaR = deltaRed;
+        _deltaG = deltaGreen;
+        _deltaB = deltaBlue;
+    }
+    }
+    
+        /** Removes an action given its tag and the target.
+     *
+     * @param tag       The action's tag.
+     * @param target    A certain target.
+     */
+    virtual void removeActionByTag(int tag, Node *target);
+    
+    /** Removes all actions given its tag and the target.
+     *
+     * @param tag       The actions' tag.
+     * @param target    A certain target.
+     * @js NA
+     */
+    virtual void removeAllActionsByTag(int tag, Node *target);
+    
+    /*
+ * Update each tick
+ * Time is the percentage of the way through the duration
+ */
+void PageTurn3D::update(float time)
+{
+    float tt = MAX(0, time - 0.25f);
+    float deltaAy = (tt * tt * 500);
+    float ay = -100 - deltaAy;
+    
+    float deltaTheta = sqrtf(time);
+    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
+    
+    float rotateByYAxis = (2-time)* M_PI;
+    
+    float sinTheta = sinf(theta);
+    float cosTheta = cosf(theta);
+    
+    for (int i = 0; i <= _gridSize.width; ++i)
+    {
+        for (int j = 0; j <= _gridSize.height; ++j)
+        {
+            // Get original vertex
+            Vec3 p = getOriginalVertex(Vec2(i ,j));
+            
+            p.x -= getGridRect().origin.x;
+            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
+            float r = R * sinTheta;
+            float alpha = asinf( p.x / R );
+            float beta = alpha / sinTheta;
+            float cosBeta = cosf( beta );
+            
+            // If beta > PI then we've wrapped around the cone
+            // Reduce the radius to stop these points interfering with others
+            if (beta <= M_PI)
+            {
+                p.x = ( r * sinf(beta));
+            }
+            else
+            {
+                // Force X = 0 to stop wrapped
+                // points
+                p.x = 0;
+            }
+    }
+    }
+    }
+    
+            if ( frameArray.empty() )
+        {
+            CCLOG('cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to animation cache.', name.c_str());
+            continue;
+        }
+    
+      void OperateCache(ThreadState* thread) {
+    for (uint64_t i = 0; i < FLAGS_ops_per_thread; i++) {
+      uint64_t rand_key = thread->rnd.Next() % FLAGS_max_key;
+      // Cast uint64* to be char*, data would be copied to cache
+      Slice key(reinterpret_cast<char*>(&rand_key), 8);
+      int32_t prob_op = thread->rnd.Uniform(100);
+      if (prob_op >= 0 && prob_op < FLAGS_insert_percent) {
+        // do insert
+        cache_->Insert(key, new char[10], 1, &deleter);
+      } else if (prob_op -= FLAGS_insert_percent &&
+                 prob_op < FLAGS_lookup_percent) {
+        // do lookup
+        auto handle = cache_->Lookup(key);
+        if (handle) {
+          cache_->Release(handle);
+        }
+      } else if (prob_op -= FLAGS_lookup_percent &&
+                 prob_op < FLAGS_erase_percent) {
+        // do erase
+        cache_->Erase(key);
+      }
+    }
+  }
+    
+      void SetFlushReason(FlushReason flush_reason) {
+    flush_reason_ = flush_reason;
+  }
+  FlushReason GetFlushReason() const { return flush_reason_; }
+  // thread-safe
+  const EnvOptions* soptions() const;
+  const ImmutableCFOptions* ioptions() const { return &ioptions_; }
+  // REQUIRES: DB mutex held
+  // This returns the MutableCFOptions used by current SuperVersion
+  // You should use this API to reference MutableCFOptions most of the time.
+  const MutableCFOptions* GetCurrentMutableCFOptions() const {
+    return &(super_version_->mutable_cf_options);
+  }
+  // REQUIRES: DB mutex held
+  // This returns the latest MutableCFOptions, which may be not in effect yet.
+  const MutableCFOptions* GetLatestMutableCFOptions() const {
+    return &mutable_cf_options_;
+  }
+    
+      Options options = CurrentOptions();
+  options.create_if_missing = true;
+  options.write_buffer_size = 20480;
+  options.max_write_buffer_number = 2;
+  options.level0_file_num_compaction_trigger = 2;
+  options.level0_slowdown_writes_trigger = 9999;
+  options.level0_stop_writes_trigger = 9999;
+  options.target_file_size_base = 9102;
+  options.level_compaction_dynamic_level_bytes = true;
+  options.max_bytes_for_level_base = 40960;
+  options.max_bytes_for_level_multiplier = 4;
+  options.max_background_compactions = 2;
+  options.num_levels = 5;
+  options.max_compaction_bytes = 0;  // Force not expanding in compactions
+  BlockBasedTableOptions table_options;
+  table_options.block_size = 1024;
+  options.table_factory.reset(NewBlockBasedTableFactory(table_options));
+    
+    #ifndef ROCKSDB_LITE
+    
+    Status WriteBatchBase::DeleteRange(ColumnFamilyHandle* column_family,
+                                   const SliceParts& begin_key,
+                                   const SliceParts& end_key) {
+  std::string begin_key_buf, end_key_buf;
+  Slice begin_key_slice(begin_key, &begin_key_buf);
+  Slice end_key_slice(end_key, &end_key_buf);
+  return DeleteRange(column_family, begin_key_slice, end_key_slice);
 }
     
-    // data file
-DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
+      env.now_micros_ += 200u;  // sleep debt 624
+  // Out of bound sleep, still 10480 left
+  ASSERT_EQ(static_cast<uint64_t>(3000624u),
+            controller.GetDelay(&env, 30000000u));
+    
+    
+    {  // Encrypt the prefix, starting from block 2 (leave block 0, 1 with initial counter & IV unencrypted)
+  CTRCipherStream cipherStream(cipher_, prefixIV.data(), initialCounter);
+  auto status = cipherStream.Encrypt(0, prefix + (2 * blockSize), prefixLength - (2 * blockSize));
+  if (!status.ok()) {
+    return status;
+  }
+  return Status::OK();
+}
+    
+    struct PosixMemoryMappedFileBuffer : public MemoryMappedFileBuffer {
+  PosixMemoryMappedFileBuffer(void* _base, size_t _length)
+      : MemoryMappedFileBuffer(_base, _length) {}
+  virtual ~PosixMemoryMappedFileBuffer();
+};
+    
+      // put and get from non-default column family
+  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
+  assert(s.ok());
+  std::string value;
+  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
+  assert(s.ok());
+    
+    
+    {  // Cleanup
+  delete txn_db;
+  DestroyDB(kDBPath, options);
+  return 0;
+}
+    
+      // destroy and open DB
+  DB* db;
+  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
+  assert(s.ok());
+  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
+  assert(s.ok());
