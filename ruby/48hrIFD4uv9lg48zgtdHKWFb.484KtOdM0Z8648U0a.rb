@@ -1,78 +1,9 @@
 
         
-                  def sanitized_object_name
-            @sanitized_object_name ||= @object_name.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').sub(/_$/, '')
-          end
-    
-              def hidden_field_for_checkbox(options)
-            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
-          end
+                @status = status
       end
-    end
-  end
-end
-
-    
-                  Time.utc(
-                default[:year], default[:month], default[:day],
-                default[:hour], default[:min], default[:sec]
-              )
-            end
-          end
-      end
-    end
-  end
-end
-
-    
-              add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
-    
-    require 'action_view/helpers/tags/placeholderable'
-    
-                if only = conditions[:only]
-              only.include?(action_name)
-            elsif except = conditions[:except]
-              !except.include?(action_name)
-            else
-              true
-            end
-          end
-      end
-    
-        def cache_message(payload) # :doc:
-      case payload[:cache_hit]
-      when :hit
-        '[cache hit]'
-      when :miss
-        '[cache miss]'
-      end
-    end
-    
-            def #{name}=(value)
-          value = value.present? ? Array(value) : default_#{name}
-          _set_detail(:#{name}, value) if value != @details[:#{name}]
-        end
-      METHOD
-    end
-    
-    def docs_name
-  '#{name}-docs'
-end
-    
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
-    
-    def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
     
     #
-    
-      def self.status_file; test_dir.join('jekyll_status.txt'); end
     
             # rubocop:disable Metrics/AbcSize
         def process(args, opts)
@@ -80,41 +11,138 @@ end
             raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
           end
     
-    require 'cucumber/rails'
+            def make_accessible(hash = @config)
+          hash.keys.each do |key|
+            hash[key.to_sym] = hash[key]
+            make_accessible(hash[key]) if hash[key].is_a?(Hash)
+          end
+        end
     
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
-    end
-  end
+    describe 'Kernel.sleep' do
+  it 'needs to be reviewed for spec completeness'
 end
+
     
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
+            -> { w.f4('foo', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: foo|)
+        -> { w.f4('foo', 1) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f1_call_lineno}: warning: foo|)
+        -> { w.f4('foo', 2) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f2_call_lineno}: warning: foo|)
+        -> { w.f4('foo', 3) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f3_call_lineno}: warning: foo|)
+      end
     
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
+      def ==(other)
+    if other.respond_to?(:to_ary)
+      return true if to_ary == other.to_ary
+    end
+    
+      #
+  # If there were CGI parameters in the URI, this will hold a hash of each
+  # variable to value.  If there is more than one value for a given variable,
+  # an array of each value is returned.
+  #
+  def qstring
+    self.uri_parts['QueryString']
+  end
+    
+        if res[1] == IAX_SUBTYPE_REGREJ
+      reason = res[2][IAX_IE_REGREJ_CAUSE] || 'Unknown Reason'
+      dprint('REGREJ: #{reason}')
+      # Acknowledge the REGREJ
+      self.client.send_ack(self)
+      return
+    end
+    
+    IAX_IE_CALLED_NUMBER  = 1
+IAX_IE_CALLING_NUMBER = 2
+IAX_IE_AUTH_METHODS   = 3
+IAX_IE_CALLING_NAME   = 4
+IAX_IE_USERNAME       = 6
+IAX_IE_DESIRED_CODEC  = 9
+IAX_IE_ORIGINAL_DID   = 10
+IAX_IE_ACTUAL_CODECS  = 8
+IAX_IE_PROTO_VERSION  = 11
+IAX_IE_REG_REFRESH    = 19
+IAX_IE_CHALLENGE_DATA = 15
+IAX_IE_CHALLENGE_RESP = 16
+IAX_IE_APPARENT_ADDR  = 18
+IAX_IE_REGREJ_CAUSE   = 22
+IAX_IE_HANGUP_CAUSE   = 42
+    
+        head + [data.length].pack('v') + data
+  end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos Checksum definition.
+        class Checksum < Element
+    
+              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
+          def decode_asn1_req_body(input)
+            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
+          end
+        end
+      end
     end
   end
 end
 
     
-      def migration_name
-    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
-  end
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an String
+          #
+          # @param input [String] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
-        def self.register(klass, attachment_name, attachment_options)
-      instance.register(klass, attachment_name, attachment_options)
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          def decode_asn1(input)
+            seq_values = input.value
+            self.type = decode_type(seq_values[0])
+            self.value = decode_value(seq_values[1])
+          end
+    
+    lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'capistrano/version'
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+        it 'ignores heredocs that could share a last line' do
+      expect_no_offenses(construct(false, a, make_multi(heredoc), true))
     end
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
+    
+          # Checks whether this node is an `if` statement. (This is not true of
+      # ternary operators and `unless` statements.)
+      #
+      # @return [Boolean] whether the node is an `if` statement
+      def if?
+        keyword == 'if'
+      end
+    
+            def index
+          authorize! :admin, ReturnAuthorization
+          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
+                                   ransack(params[:q]).result.
+                                   page(params[:page]).per(params[:per_page])
+          respond_with(@return_authorizations)
+        end
