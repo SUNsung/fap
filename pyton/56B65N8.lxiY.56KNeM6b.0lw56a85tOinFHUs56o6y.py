@@ -1,222 +1,230 @@
 
         
-            if RESULT and ('info_dict' not in test or 'age_limit' not in test['info_dict'] or
-                   test['info_dict']['age_limit'] != 18):
-        print('\nPotential missing age_limit check: {0}'.format(test['name']))
+        try:
+    # https://urllib3.readthedocs.io/en/latest/security.html
+    # noinspection PyPackageRequirements
+    import urllib3
+    urllib3.disable_warnings()
+except (ImportError, AttributeError):
+    # In some rare cases, the user may have an old version of the requests
+    # or urllib3, and there is no method called 'disable_warnings.' In these
+    # cases, we don't need to call the method.
+    # They may get some noisy output but execution shouldn't die. Move on.
+    pass
+    
+        @property
+    def encoding(self):
+        return self._orig.encoding or 'utf8'
     
     
-iv = key = [0x20, 0x15] + 14 * [0]
-    
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
-    
-    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-import youtube_dl
-    
-        # Are checkable fields missing from the test case definition?
-    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
-                          for key, value in got_dict.items()
-                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
-    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
-    if missing_keys:
-        def _repr(v):
-            if isinstance(v, compat_str):
-                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
-            else:
-                return repr(v)
-        info_dict_str = ''
-        if len(missing_keys) != len(expected_dict):
-            info_dict_str += ''.join(
-                '    %s: %s,\n' % (_repr(k), _repr(v))
-                for k, v in test_info_dict.items() if k not in missing_keys)
-    
-            password = intlist_to_bytes(self.key).decode('utf-8')
-        encrypted = base64.b64encode(
-            intlist_to_bytes(self.iv[:8]) +
-            b'\x0b\xe6\xa4\xd9z\x0e\xb8\xb9\xd0\xd4i_\x85\x1d\x99\x98_\xe5\x80\xe7.\xbf\xa5\x83'
-        ).decode('utf-8')
-        decrypted = (aes_decrypt_text(encrypted, password, 32))
-        self.assertEqual(decrypted, self.secret_msg)
-    
-        results = defaultdict(lambda: [])
-    
-        print('============================================')
-    print('Warning: this is going to take a looong time')
-    print('============================================')
-    
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-    
-def issue_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'https://github.com/scrapy/scrapy/issues/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, 'issue ' + text, refuri=ref, **options)
-    return [node], []
-    
-        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
-    max_concurrent_requests = 8
-    # Requests per second goal
-    qps = None # same as: 1 / download_delay
-    download_delay = None
-    # time in seconds to delay server responses
-    latency = None
-    # number of slots to create
-    slots = 1
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-    import scrapy
-from scrapy.crawler import CrawlerProcess
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.misc import walk_modules
-from scrapy.utils.project import inside_project, get_project_settings
-from scrapy.utils.python import garbage_collect
-from scrapy.settings.deprecated import check_deprecated_settings
-    
-        def __exit__(self, exc_type, exc_value, traceback):
-        self.proc.kill()
-        self.proc.wait()
-        time.sleep(0.2)
-    
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
-
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
-    
-    
-def sanitize_module_name(module_name):
-    '''Sanitize the given module name, by replacing dashes and points
-    with underscores and prefixing it with a letter if it doesn't start
-    with one
+class AuthPlugin(BasePlugin):
     '''
-    module_name = module_name.replace('-', '_').replace('.', '_')
-    if module_name[0] not in string.ascii_letters:
-        module_name = 'a' + module_name
-    return module_name
-    
-            # The crawler is created this way since the Shell manually handles the
-        # crawling engine, so the set up in the crawl method won't work
-        crawler = self.crawler_process._create_crawler(spidercls)
-        # The Shell class needs a persistent engine in the crawler
-        crawler.engine = crawler._create_engine()
-        crawler.engine.start()
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
-        else:
-            print('Scrapy %s' % scrapy.__version__)
-    
-        def adjust_request_args(self, args):
-        args['url'] = self.args[0]
-        return args
-    
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
-    
-        _multiprocess_can_split_ = True
-    
-        @unittest.skipUnless(hasattr(socket, 'socketpair'), 'needs socketpair()')
-    def _test_recv(self, recv_func):
-        rd, wr = socket.socketpair()
-        self.addCleanup(rd.close)
-        # wr closed explicitly by parent
+    Base auth plugin class.
     
     
-# Is a path a directory?
-# This follows symbolic links, so both islink() and isdir()
-# can be true for the same path on systems that support symlinks
-def isdir(s):
-    '''Return true if the pathname refers to an existing directory.'''
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    
+        def test_verbose_form(self, httpbin):
+        # https://github.com/jakubroztocil/httpie/issues/53
+        r = http('--verbose', '--form', 'POST', httpbin.url + '/post',
+                 'A=B', 'C=D')
+        assert HTTP_OK in r
+        assert 'A=B&C=D' in r
+    
+    RETURN = '''
+wafs:
+  description: The WAFs that match the passed arguments
+  returned: success
+  type: complex
+  contains:
+    name:
+      description: A friendly name or description of the WebACL
+      returned: always
+      type: string
+      sample: test_waf
+    default_action:
+      description: The action to perform if none of the Rules contained in the WebACL match.
+      returned: always
+      type: int
+      sample: BLOCK
+    metric_name:
+      description: A friendly name or description for the metrics for this WebACL
+      returned: always
+      type: string
+      sample: test_waf_metric
+    rules:
+      description: An array that contains the action for each Rule in a WebACL , the priority of the Rule
+      returned: always
+      type: complex
+      contains:
+        action:
+          description: The action to perform if the Rule matches
+          returned: always
+          type: string
+          sample: BLOCK
+        metric_name:
+          description: A friendly name or description for the metrics for this Rule
+          returned: always
+          type: string
+          sample: ipblockrule
+        name:
+          description: A friendly name or description of the Rule
+          returned: always
+          type: string
+          sample: ip_block_rule
+        predicates:
+          description: The Predicates list contains a Predicate for each
+            ByteMatchSet, IPSet, SizeConstraintSet, SqlInjectionMatchSet or XssMatchSet
+            object in a Rule
+          returned: always
+          type: list
+          sample:
+            [
+              {
+                'byte_match_set_id': '47b822b5-abcd-1234-faaf-1234567890',
+                'byte_match_tuples': [
+                  {
+                    'field_to_match': {
+                      'type': 'QUERY_STRING'
+                    },
+                    'positional_constraint': 'STARTS_WITH',
+                    'target_string': 'bobbins',
+                    'text_transformation': 'NONE'
+                  }
+                ],
+                'name': 'bobbins',
+                'negated': false,
+                'type': 'ByteMatch'
+              }
+            ]
+'''
+    
+            # normalize stack description API output
+        facts['stack_description'] = camel_dict_to_snake_dict(facts['stack_description'])
+    
+    
+def get_indexes(all_indexes):
+    indexes = []
+    global_indexes = []
+    for index in all_indexes:
+        name = index['name']
+        schema = get_schema_param(index.get('hash_key_name'), index.get('hash_key_type'), index.get('range_key_name'), index.get('range_key_type'))
+        throughput = {
+            'read': index.get('read_capacity', 1),
+            'write': index.get('write_capacity', 1)
+        }
+    
+        try:
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+        autoscaling = boto3_conn(module, conn_type='client', resource='autoscaling', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    except ClientError as e:
+        module.fail_json(msg=e.message, **camel_dict_to_snake_dict(e.response))
+    
+    
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['stableinterface'],
+                    'supported_by': 'certified'}
+    
+    PY_MAJOR, PY_MINOR, PY_PATCH = sys.version_info[ 0 : 3 ]
+if not ( ( PY_MAJOR == 2 and PY_MINOR == 7 and PY_PATCH >= 1 ) or
+         ( PY_MAJOR == 3 and PY_MINOR >= 4 ) or
+         PY_MAJOR > 3 ):
+  sys.exit( 'YouCompleteMe requires Python >= 2.7.1 or >= 3.4; '
+            'your version of Python is ' + sys.version )
+    
+        self._response_future = self.PostDataToHandlerAsync( request_data,
+                                                         'event_notification' )
+    
+    
+def WaitUntilReady( timeout = 5 ):
+  expiration = time.time() + timeout
+  while True:
     try:
-        st = os.stat(s)
-    except (OSError, ValueError):
-        return False
-    return stat.S_ISDIR(st.st_mode)
+      if time.time() > expiration:
+        raise RuntimeError( 'Waited for the server to be ready '
+                            'for {0} seconds, aborting.'.format( timeout ) )
+      if _IsReady():
+        return
+    except requests.exceptions.ConnectionError:
+      pass
+    finally:
+      time.sleep( 0.1 )
     
-        def run(self):
-        node = addnodes.versionmodified()
-        node.document = self.state.document
-        node['type'] = 'deprecated-removed'
-        version = (self.arguments[0], self.arguments[1])
-        node['version'] = version
-        label = translators['sphinx'].gettext(self._label)
-        text = label.format(deprecated=self.arguments[0], removed=self.arguments[1])
-        if len(self.arguments) == 3:
-            inodes, messages = self.state.inline_text(self.arguments[2],
-                                                      self.lineno+1)
-            para = nodes.paragraph(self.arguments[2], '', *inodes, translatable=False)
-            node.append(para)
-        else:
-            messages = []
-        if self.content:
-            self.state.nested_parse(self.content, self.content_offset, node)
-        if len(node):
-            if isinstance(node[0], nodes.paragraph) and node[0].rawsource:
-                content = nodes.inline(node[0].rawsource, translatable=True)
-                content.source = node[0].source
-                content.line = node[0].line
-                content += node[0].children
-                node[0].replace_self(nodes.paragraph('', '', content, translatable=False))
-            node[0].insert(0, nodes.inline('', '%s: ' % text,
-                                           classes=['versionmodified']))
-        else:
-            para = nodes.paragraph('', '',
-                                   nodes.inline('', '%s.' % text,
-                                                classes=['versionmodified']),
-                                   translatable=False)
-            node.append(para)
-        env = self.state.document.settings.env
-        env.note_versionchange('deprecated', version[0], node, self.lineno)
-        return [node] + messages
+    
+@patch( 'ycm.vimsupport.GetVariableValue',
+        GetVariableValue_CompleteItemIs( 'Test' ) )
+def PostCompleteCsharp_ValueDoesInsertNamespace_test( *args ):
+  namespace = 'A_NAMESPACE'
+  completions = [ BuildCompletionNamespace( namespace ) ]
+  with _SetupForCsharpCompletionDone( completions ) as request:
+    request._OnCompleteDone_Csharp()
+    vimsupport.InsertNamespace.assert_called_once_with( namespace )
+    
+    
+def ExtractKeywordsFromGroup_WithLinksTo_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'zoo goo',
+                   'links to Statement'
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+    
+    try:
+  import queue
+except ImportError:
+  import Queue as queue
+    
+    # Additional templates that should be rendered to pages, maps page names to
+# template names.
+#
+# html_additional_pages = {}
+    
+        try:
+        cognito.initiate_forgot_password()
+    except ClientError as err:
+        raise _map_aws_exception(err)
+    
+            # parsing response
+        for info in result:
+            mac = info['macAddr']
+            name = info['hostName']
+            # No address = no item :)
+            if mac is None:
+                continue
+    
+        for device in new_devices:
+        dev_id = (
+            id(device.gateway), device.node_id, device.child_id,
+            device.value_type)
+        async_dispatcher_connect(
+            hass, mysensors.const.SIGNAL_CALLBACK.format(*dev_id),
+            device.async_update_callback)
+    
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+        self.last_results = {}
