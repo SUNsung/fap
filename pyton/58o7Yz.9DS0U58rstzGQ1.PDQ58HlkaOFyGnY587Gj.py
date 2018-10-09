@@ -1,140 +1,165 @@
 
         
-        
-@pytest.fixture(autouse=True)
-def usage_tracker_io(usage_tracker):
-    io = StringIO()
-    usage_tracker.return_value \
-                 .open.return_value \
-                 .__enter__.return_value = io
-    return io
+            def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
     
-    
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
-    
-    
-def default_hooks():
-    return dict((event, []) for event in HOOKS)
-    
-    
-class VersionedPackage(object):
-    def __init__(self, version):
-        self.__version__ = version
-    
-        proxy_keys = [
-        urlparts.scheme + '://' + urlparts.hostname,
-        urlparts.scheme,
-        'all://' + urlparts.hostname,
-        'all',
-    ]
-    proxy = None
-    for proxy_key in proxy_keys:
-        if proxy_key in proxies:
-            proxy = proxies[proxy_key]
-            break
-    
-        def __getstate__(self):
-        '''Unlike a normal CookieJar, this class is pickleable.'''
-        state = self.__dict__.copy()
-        # remove the unpickleable RLock object
-        state.pop('_cookies_lock')
-        return state
-    
-    # build the model
-model = Sequential()
-model.add(layers.Dense(256, input_shape=(784,)))
-model.add(Antirectifier())
-model.add(layers.Dropout(0.1))
-model.add(layers.Dense(256))
-model.add(Antirectifier())
-model.add(layers.Dropout(0.1))
-model.add(layers.Dense(num_classes))
-model.add(layers.Activation('softmax'))
-    
-    
-def test_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          validation_data=(x_test, y_test))
-score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
-print('Test score:', score)
-print('Test accuracy:', acc)
-
-    
-        if not info_only and not dry_run:
-        if not kwargs['caption']:
-            print('Skipping danmaku.')
-            return
+        def save(self, must_create=False):
+        '''
+        Save the current session data to the database. If 'must_create' is
+        True, raise a database error if the saving operation doesn't create a
+        new entry (as opposed to possibly updating an existing entry).
+        '''
+        if self.session_key is None:
+            return self.create()
+        data = self._get_session(no_load=must_create)
+        obj = self.create_model_instance(data)
+        using = router.db_for_write(self.model, instance=obj)
         try:
-            title = get_filename(title)
-            print('Downloading %s ...\n' % (title + '.cmt.json'))
-            cmt = get_srt_json(vid)
-            with open(os.path.join(output_dir, title + '.cmt.json'), 'w', encoding='utf-8') as x:
-                x.write(cmt)
-        except:
-            pass
+            with transaction.atomic(using=using):
+                obj.save(force_insert=must_create, force_update=not must_create, using=using)
+        except IntegrityError:
+            if must_create:
+                raise CreateError
+            raise
+        except DatabaseError:
+            if not must_create:
+                raise UpdateError
+            raise
+    
+    _FH_SIGNATURE = 0
+_FH_EXTRACT_VERSION = 1
+_FH_EXTRACT_SYSTEM = 2
+_FH_GENERAL_PURPOSE_FLAG_BITS = 3
+_FH_COMPRESSION_METHOD = 4
+_FH_LAST_MOD_TIME = 5
+_FH_LAST_MOD_DATE = 6
+_FH_CRC = 7
+_FH_COMPRESSED_SIZE = 8
+_FH_UNCOMPRESSED_SIZE = 9
+_FH_FILENAME_LENGTH = 10
+_FH_EXTRA_FIELD_LENGTH = 11
+    
+        # Test an invalid call (bpo-34125)
+    def test_unbound_method_invalid_args(self):
+        kwargs = {}
+        def f(p):
+            dict.get(print, 42, **kwargs)
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident)])
+    
+            self.assertIsInstance(sys.maxsize, int)
+        self.assertIsInstance(sys.maxunicode, int)
+        self.assertEqual(sys.maxunicode, 0x10FFFF)
+        self.assertIsInstance(sys.platform, str)
+        self.assertIsInstance(sys.prefix, str)
+        self.assertIsInstance(sys.base_prefix, str)
+        self.assertIsInstance(sys.version, str)
+        vi = sys.version_info
+        self.assertIsInstance(vi[:], tuple)
+        self.assertEqual(len(vi), 5)
+        self.assertIsInstance(vi[0], int)
+        self.assertIsInstance(vi[1], int)
+        self.assertIsInstance(vi[2], int)
+        self.assertIn(vi[3], ('alpha', 'beta', 'candidate', 'final'))
+        self.assertIsInstance(vi[4], int)
+        self.assertIsInstance(vi.major, int)
+        self.assertIsInstance(vi.minor, int)
+        self.assertIsInstance(vi.micro, int)
+        self.assertIn(vi.releaselevel, ('alpha', 'beta', 'candidate', 'final'))
+        self.assertIsInstance(vi.serial, int)
+        self.assertEqual(vi[0], vi.major)
+        self.assertEqual(vi[1], vi.minor)
+        self.assertEqual(vi[2], vi.micro)
+        self.assertEqual(vi[3], vi.releaselevel)
+        self.assertEqual(vi[4], vi.serial)
+        self.assertTrue(vi > (1,0,0))
+        self.assertIsInstance(sys.float_repr_style, str)
+        self.assertIn(sys.float_repr_style, ('short', 'legacy'))
+        if not sys.platform.startswith('win'):
+            self.assertIsInstance(sys.abiflags, str)
+    
+            if username:
+            # Try to guess user home directory.  By default all users
+            # directories are located in the same place and are named by
+            # corresponding usernames.  If current user home directory points
+            # to nonstandard place, this guess is likely wrong.
+            if os.environ['USERNAME'] != username:
+                drv, root, parts = self.parse_parts((userhome,))
+                if parts[-1] != os.environ['USERNAME']:
+                    raise RuntimeError('Can't determine home directory '
+                                       'for %r' % username)
+                parts[-1] = username
+                if drv or root:
+                    userhome = drv + root + self.join(parts[1:])
+                else:
+                    userhome = self.join(parts)
+        return userhome
+    
+        @classmethod
+    def find_spec(cls, fullname, path=None, target=None):
+        filepath = cls._search_registry(fullname)
+        if filepath is None:
+            return None
+        try:
+            _path_stat(filepath)
+        except OSError:
+            return None
+        for loader, suffixes in _get_supported_file_loaders():
+            if filepath.endswith(tuple(suffixes)):
+                spec = _bootstrap.spec_from_loader(fullname,
+                                                   loader(fullname, filepath),
+                                                   origin=filepath)
+                return spec
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def get_coub_data(html):
-    coub_data = r1(r'<script id=\'coubPageCoubJson\' type=\'text/json\'>([^<]+)</script>', html)
-    json_data = json.loads(coub_data)
-    return json_data
+@patch( 'ycm.client.messages_request.PostVimMessage',
+        new_callable = ExtendedMock )
+def HandlePollResponse_SingleMessage_test( post_vim_message ):
+  assert_that( _HandlePollResponse( [ { 'message': 'this is a message' } ] ,
+                                    None ),
+               equal_to( True ) )
     
-    import urllib.request, urllib.parse
-from ..common import *
+      # We don't want the requests to actually be sent to the server, just have it
+  # return success.
+  with patch( 'ycm.client.completer_available_request.'
+              'CompleterAvailableRequest.PostDataToHandler',
+              return_value = True ):
+    with patch( 'ycm.client.completion_request.CompletionRequest.'
+                'PostDataToHandlerAsync',
+                return_value = MagicMock( return_value=True ) ):
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
-    
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
-    
-    __all__ = ['fc2video_download']
+      opts = { 'filter_diagnostics' : {
+    'java,c,cs' : { 'regex' : '.*taco.*' } } }
     
     
-def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
-    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
-    execution_time = fastest_execution / iterations_per_test
-    fps = 1.0 / execution_time
-    return execution_time, fps
-    
-    for i, face_distance in enumerate(face_distances):
-    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
-    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
-    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
-    print()
-
-    
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
-    
-    # Open video file
-video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
+# This file provides an UnsafeThreadPoolExecutor, which operates exactly like
+# the upstream Python version of ThreadPoolExecutor with one exception: it
+# doesn't wait for worker threads to finish before shutting down the Python
+# interpreter.
+#
+# This is dangerous for many workloads, but fine for some (like when threads
+# only send network requests). The YCM workload is one of those workloads where
+# it's safe (the aforementioned network requests case).
