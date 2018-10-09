@@ -1,95 +1,141 @@
 
         
-        # puts '\nDone.'
+        end
 
     
-        context 'creating new users' do
-      it 'follow the 'new user' link' do
-        visit admin_users_path
-        click_on('New User')
-        expect(page).to have_text('Create new User')
-      end
-    
-        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
-      open_dry_run_modal(agent)
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
-    
-      it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe '#nav_link' do
-    it 'returns a nav link' do
-      stub(self).current_page?('/things') { false }
-      nav = nav_link('Things', '/things')
-      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
-      expect(a.text.strip).to eq('Things')
-    end
-    
-        it 'returns true if a ShellCommandAgent is present' do
-      valid_parsed_data[:agents][0][:type] = 'Agents::ShellCommandAgent'
-      expect(ScenarioImport.new(:data => valid_parsed_data.to_json)).to be_dangerous
+        it 'should have the data within the json' do
+      expect(notification.data_hash[:poison]).to eq('ivy')
     end
   end
     
-            agent_runner.stop
+        def display_user_error!(e, message)
+      if FastlaneCore::Globals.verbose?
+        # with stack trace
+        reraise_formatted!(e, message)
+      else
+        # without stack trace
+        action_completed(@program[:name], status: FastlaneCore::ActionCompletionStatus::USER_ERROR, exception: e)
+        abort('\n[!] #{message}'.red)
       end
     end
     
-      describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
-    end
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            grouping: 'grouping',
+            build_number: 'build_number',
+            prefix: 'prefix',
+          })
+        end').runner.execute(:test)
     
-      describe '#log_for_agent' do
-    it 'creates AgentLogs' do
-      log = AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(log).not_to be_new_record
-      expect(log.agent).to eq(agents(:jane_website_agent))
-      expect(log.outbound_event).to eq(events(:jane_website_agent_event))
-      expect(log.message).to eq('some message')
-      expect(log.level).to eq(4)
-    end
+          it 'sets the platform to watchOS' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              platform: 'watchOS'
+            )
+          end').runner.execute(:test)
     
-        def filter_params
-      params.permit(
-        :domain_name
-      )
+          it 'handles extension and extensions parameters correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
+      end
+    
+            describe 'verify_block' do
+          it 'throws an error if the key doesn't exist' do
+            expect do
+              @config.set(:non_existing, 'value')
+            end.to raise_error('Could not find option 'non_existing' in the list of available options: cert_name, output, wait_processing_interval')
+          end
+    
+      get '/' => 'test#index'
+end
+    
+          def remember_key(resource, scope)
+        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
+      end
     end
   end
 end
 
     
-      def hub_topic
-    params['hub.topic']
-  end
-    
-    RSpec::Matchers.define :have_path do |expected|
-  match do |actual|
-    await_condition { actual.current_path == expected }
-  end
-    
-          it 'should not be catched when it is unexpected' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        allow(alice).to receive(:like!).and_raise('something')
-        allow(@controller).to receive(:current_user).and_return(alice)
-        expect { post :create, params: like_hash, format: :json }.to raise_error('something')
+        def respond
+      if http_auth?
+        http_auth
+      elsif warden_options[:recall]
+        recall
+      else
+        redirect
       end
     end
-  end
+    
+        each_pair { |var, val|
+      if self.fold
+        str << '#{var}:\r\n\t#{val}\r\n'
+      else
+        str << '#{var}: #{val}\r\n'
+      end
+    }
+    
+    
+# Codecs
+IAX_CODEC_G711_MULAW  = 0x00000004
+IAX_CODEC_G711_ALAW   = 0x00000008
+IAX_CODEC_LINEAR_PCM  = 0x00000040
+    
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
+            end
+          end
+    
+              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
+            elems << etype_asn1
+    
+              # Encodes the nonce
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_nonce
+            bn = OpenSSL::BN.new(nonce.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    
+    Given /^a user with email '([^']*)' is connected with '([^']*)'$/ do |arg1, arg2|
+  user1 = User.where(:email => arg1).first
+  user2 = User.where(:email => arg2).first
+  connect_users(user1, user1.aspects.where(:name => 'Besties').first, user2, user2.aspects.where(:name => 'Besties').first)
+end
+    
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
+    end
+    
+          @conv2 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
+             .increase_unread(alice)
+    
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+    
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
