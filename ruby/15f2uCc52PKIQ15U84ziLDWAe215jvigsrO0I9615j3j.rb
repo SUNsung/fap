@@ -1,92 +1,164 @@
 
         
-          def command
-    abort 'This command requires a command argument' if ARGV.empty?
+        def gemspec_file
+  '#{name}.gemspec'
+end
     
-        mode = OpenStruct.new
-    mode.dry_run = true if ARGV.dry_run?
+    #
     
-              private
+    #
     
-              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_e_data(input)
-            input.value[0].value
-          end
-        end
+      all_files       = `git ls-files -z`.split('\x0')
+  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
+  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
+  s.bindir        = 'exe'
+  s.require_paths = ['lib']
+    
+              # WebSockets requests will have a Connection: Upgrade header
+          if parser.http_method != 'GET' || parser.upgrade?
+            super
+          elsif parser.request_url =~ %r!^\/livereload.js!
+            headers = [
+              'HTTP/1.1 200 OK',
+              'Content-Type: application/javascript',
+              'Content-Length: #{reload_size}',
+              '',
+              '',
+            ].join('\r\n')
+            send_data(headers)
+    
+    class DeviseCreateUsers < ActiveRecord::Migration
+  def change
+    create_table(:users) do |t|
+      t.string :email,              null: false
+      t.string :encrypted_password, null: true
+      t.timestamps null: false
+    end
+    
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
+      end
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+        # Choose whether we should respond in an HTTP authentication fashion,
+    # including 401 and optional headers.
+    #
+    # This method allows the user to explicitly disable HTTP authentication
+    # on AJAX requests in case they want to redirect on failures instead of
+    # handling the errors on their own. This is useful in case your AJAX API
+    # is the same as your public API and uses a format like JSON (so you
+    # cannot mark JSON as a navigational format).
+    def http_auth?
+      if request.xhr?
+        Devise.http_authenticatable_on_xhr
+      else
+        !(request_format && is_navigational_format?)
       end
     end
+    
+      before_action :set_filters, only: :index
+  before_action :set_filter, only: [:edit, :update, :destroy]
+    
+      private
+    
+      before_action :set_account
+  before_action :set_statuses
+    
+        def show
+      authorize @user, :change_email?
+    end
+    
+        def copy
+      authorize @custom_emoji, :copy?
+    
+        def set_domain_block
+      @domain_block = DomainBlock.find(params[:id])
+    end
+    
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
+      end
+    end
+    
+      private
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
   end
 end
+    
+      # create a new @me user, if not present, and log in using the
+  # integration_sessions controller (automatic)
+  def automatic_login
+    @me ||= FactoryGirl.create(:user_with_aspect, :getting_started => false)
+    visit(new_integration_sessions_path(user_id: @me.id))
+    click_button 'Login'
+  end
+    
+        sign_in(alice, scope: :user)
+  end
     
         # we assume that the first file that requires 'sinatra' is the
     # app_file. all other path related options are calculated based
     # on this path by default.
     set :app_file, caller_files.first || $0
     
-      task :all => [:readmes, :index]
+    begin
+  require 'bundler'
+  Bundler::GemHelper.install_tasks
+rescue LoadError => e
+  $stderr.puts e
 end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
       end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
   end
-  output += '></#{tag}>'
 end
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
 
     
-        def poster
-      'poster='#{@poster}'' if @poster
+      it 'accepts post requests with masked X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
+    expect(last_response).to be_ok
+  end
+    
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
     end
