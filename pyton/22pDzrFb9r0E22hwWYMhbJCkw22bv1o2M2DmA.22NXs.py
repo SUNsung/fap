@@ -1,78 +1,57 @@
 
         
-            def move_to_front(self, node):
-        pass
+            # Loop through the 2D matrix of word_patches and score each.
+    for i, row in enumerate(word_patches):
+      print('Reset RNN states.')
+      self.reset()  # reset states before processing each row.
+      row_probs = np.zeros([batch_size, 0])
+      for j, word_patch in enumerate(row):
+        print('Processing patch '
+              '({}, {}) / ({}, {})'.format(i+1, j+1, nrow, ncol))
+        patch_probs = (self._score(word_patch) if word_patch else
+                       np.zeros([batch_size, num_timesteps]))
+        row_probs = np.concatenate([row_probs, patch_probs], 1)
+      probs = np.concatenate([probs, row_probs], 0)
+    return probs
     
-    from mrjob.job import MRJob
+    '''Generate samples from the MaskGAN.
     
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
+      Returns:
+    loss:  Scalar tf.float32 loss.
     
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
+        # We map all indices greater than the vocabulary size to an unknown
+    # character.
+    indices_batch = np.where(indices_batch < vocab_size, indices_batch,
+                             vocab_size - 1)
     
-            if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+      elif FLAGS.baseline_method is None:
+    num_missing = tf.reduce_sum(missing)
+    final_gen_objective += tf.reduce_sum(rewards) / (num_missing + eps)
+    baselines = tf.zeros_like(rewards)
+    critic_loss = None
+    maintain_averages_op = None
+    advantages = cumulative_rewards
+    
+      # *Total* number of n-grams produced by the generator.
+  total_ngrams_produced = 0
+    
+        def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
             )
-            db.commit()
-            return redirect(url_for('blog.index'))
-    
-        with app.app_context():
-        db = get_db()
-        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
-        assert post['title'] == 'updated'
-    
-        def from_pyfile(self, filename, silent=False):
-        '''Updates the values in the config from a Python file.  This function
-        behaves as if the file was imported as module with the
-        :meth:`from_object` function.
-    
-        def push(self):
-        '''Binds the app context to the current context.'''
-        self._refcnt += 1
-        if hasattr(sys, 'exc_clear'):
-            sys.exc_clear()
-        _app_ctx_stack.push(self)
-        appcontext_pushed.send(self.app)
-    
-    
-class UnexpectedUnicodeError(AssertionError, UnicodeError):
-    '''Raised in places where we want some better error reporting for
-    unexpected unicode or binary data.
-    '''
-    
-        :param cache_timeout: the timeout in seconds for the headers. When ``None``
-                          (default), this value is set by
-                          :meth:`~Flask.get_send_file_max_age` of
-                          :data:`~flask.current_app`.
-    :param last_modified: set the ``Last-Modified`` header to this value,
-        a :class:`~datetime.datetime` or timestamp.
-        If a file was passed, this overrides its mtime.
-    '''
-    mtime = None
-    fsize = None
-    if isinstance(filename_or_fp, string_types):
-        filename = filename_or_fp
-        if not os.path.isabs(filename):
-            filename = os.path.join(current_app.root_path, filename)
-        file = None
-        if attachment_filename is None:
-            attachment_filename = os.path.basename(filename)
-    else:
-        file = filename_or_fp
-        filename = None
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
     
         def __init__(self, get_response=None):
         if not apps.is_installed('django.contrib.sites'):
@@ -82,79 +61,116 @@ class UnexpectedUnicodeError(AssertionError, UnicodeError):
             )
         super().__init__(get_response)
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
-    
-        def __get(self, name, obj, default=None):
+        def load(self):
         try:
-            attr = getattr(self, name)
-        except AttributeError:
-            return default
-        if callable(attr):
-            return attr(obj)
-        return attr
+            session_data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            session_data = None
+        if session_data is not None:
+            return session_data
+        self._session_key = None
+        return {}
     
-        # Check chardet for compatibility.
-    major, minor, patch = chardet_version.split('.')[:3]
-    major, minor, patch = int(major), int(minor), int(patch)
-    # chardet >= 3.0.2, < 3.1.0
-    assert major == 3
-    assert minor < 1
-    assert patch >= 2
     
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
     
-        Implements all methods and operations of
-    ``MutableMapping`` as well as dict's ``copy``. Also
-    provides ``lower_items``.
+    DOCUMENTATION = '''
+module: aws_waf_condition
+short_description: create and delete WAF Conditions
+description:
+  - Read the AWS documentation for WAF
+    U(https://aws.amazon.com/documentation/waf/)
+version_added: '2.5'
     
-        def _close_server_sock_ignore_errors(self):
+    
+def ensure_web_acl_absent(client, module):
+    web_acl_id = get_web_acl_by_name(client, module, module.params['name'])
+    if web_acl_id:
+        web_acl = get_web_acl(client, module, web_acl_id)
+        if web_acl['Rules']:
+            remove_rules_from_web_acl(client, module, web_acl_id)
         try:
-            self.server_sock.close()
-        except IOError:
-            pass
+            run_func_with_change_token_backoff(client, module, {'WebACLId': web_acl_id}, client.delete_web_acl, wait=True)
+            return True, {}
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, msg='Could not delete Web ACL')
+    return False, {}
     
-    def _init():
-    for code, titles in _codes.items():
-        for title in titles:
-            setattr(codes, title, code)
-            if not title.startswith(('\\', '/')):
-                setattr(codes, title.upper(), code)
-    
-        def test_binary_put(self):
-        request = requests.Request('PUT', 'http://example.com',
-                                   data=u'ööö'.encode('utf-8')).prepare()
-        assert isinstance(request.body, bytes)
-    
-        def __init__(self, request):
-        self._r = request
-        self._new_headers = {}
-        self.type = urlparse(self._r.url).scheme
+            try:
+            current_config = self.client.get_cloud_front_origin_access_identity_config(
+                Id=origin_access_identity_id)['CloudFrontOriginAccessIdentityConfig']
+        except (ClientError, BotoCoreError) as e:
+            self.module.fail_json_aws(e, msg='Error getting Origin Access Identity config.')
     
     
-logger = logging.getLogger(__name__)
+def _delete_dp_with_check(dp_id, client, timeout):
+    client.delete_pipeline(pipelineId=dp_id)
+    try:
+        pipeline_status_timeout(client=client, dp_id=dp_id, status=[PIPELINE_DOESNT_EXIST], timeout=timeout)
+    except DataPipelineNotFound:
+        return True
     
     
-def _split_aug_path(vhost_path):
-    '''Splits an Augeas path into a file path and an internal path.
+@AWSRetry.exponential_backoff()
+def get_placement_group_details(connection, module):
+    name = module.params.get('name')
+    try:
+        response = connection.describe_placement_groups(
+            Filters=[{
+                'Name': 'group-name',
+                'Values': [name]
+            }])
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Couldn't find placement group named [%s]' % name)
     
-        def test_revert_challenge_config(self):
-        mock_load = mock.Mock()
-        self.config.aug.load = mock_load
     
-        def setUp(self):
-        self.base_dir = '/example_path'
-        self.vhosts = util.get_vh_truth(
-            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
+def get_github_url(app, view, path):
+    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
+    return (
+        github_fmt.format(app.config.edit_on_github_project, view,
+                          app.config.edit_on_github_branch,
+                          app.config.edit_on_github_src_path, path))
     
-            with mock.patch('certbot.util.get_os_info') as mock_info:
-            for distro in entrypoint.OVERRIDE_CLASSES.keys():
-                mock_info.return_value = (distro, 'whatever')
-                self.assertEqual(entrypoint.get_configurator(),
-                                 entrypoint.OVERRIDE_CLASSES[distro])
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = __short_version__
+# The full version, including alpha/beta/rc tags.
+release = __version__
     
-            Result: Apache config includes virtual servers for issued challs
+    
+class UnknownError(CloudError):
+    '''Raised when an unknown error occurs.'''
+    
+    REQUIREMENTS = ['datadog==0.15.0']
+    
+            devices = {}
+        for lease in leases_result:
+            match = _LEASES_REGEX.search(lease.decode('utf-8'))
+            if match is not None:
+                devices[match.group('ip')] = {
+                    'ip': match.group('ip'),
+                    'mac': match.group('mac').upper(),
+                    'timevalid': int(match.group('timevalid'))
+                    }
+        return devices
+
+    
+    DEFAULT_TIMEOUT = 10
+    
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/device_tracker.mysensors/
+'''
+from homeassistant.components import mysensors
+from homeassistant.components.device_tracker import DOMAIN
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
+from homeassistant.util import slugify
+    
+        _interrupted = False
