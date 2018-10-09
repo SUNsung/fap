@@ -1,146 +1,128 @@
 
         
-                  method_tag = \
-            case method
-            when 'get'
-              html_options['method'] = 'get'
-              ''
-            when 'post', ''
-              html_options['method'] = 'post'
-              token_tag(authenticity_token, form_options: {
-                action: html_options['action'],
-                method: 'post'
-              })
-            else
-              html_options['method'] = 'post'
-              method_tag(method) + token_tag(authenticity_token, form_options: {
-                action: html_options['action'],
-                method: method
-              })
-            end
+                render template: 'admin/accounts/show'
+      end
+    end
     
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
+        def resend
+      authorize @user, :confirm?
     
-                # If we were told this is an upgrade safe configuration class
-            # then we add it to the set.
-            if upgrade_safe
-              data[:config_upgrade_safe] ||= Set.new
-              data[:config_upgrade_safe].add(name.to_sym)
-            end
+        def show
+      authorize @domain_block, :show?
+    end
+    
+        def filtered_instances
+      InstanceFilter.new(filter_params).results
+    end
+    
+        def form_status_batch_params
+      params.require(:form_status_batch).permit(status_ids: [])
+    end
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
+  end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
+    
+          super
+    end
+    
+    module Jekyll
+    
+          # private
+    
+          def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          def escaped_name
+        CGI.escape(@name)
+      end
+    
+          # Returns page content without title if it was extracted.
+      #
+      def content_without_page_header(content)
+        doc = build_document(content)
+          if @h1_title
+            title = find_header_node(doc)
+            title.remove unless title.empty?
           end
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
-        end
+        # .inner_html will cause href escaping on UTF-8
+        doc.css('div#gollum-root').children.to_xml(@@to_xml)
       end
     end
   end
 end
 
     
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
+        @wiki.clear_cache
+    page = @wiki.page(name)
+    assert_equal nil, page
+  end
+    
+        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+         :format                            => 'markdown', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+      # replace name version and date
+  replace_header(head, :name)
+  replace_header(head, :version)
+  replace_header(head, :date)
+  #comment this out if your rubyforge_project has a different name
+  replace_header(head, :rubyforge_project)
+    
+    module Precious
+  module Helpers
+    
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
+    
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) do
+      <<-RUBY.strip_indent.chomp
+        [
+        1
+        ]
+      RUBY
+    end
+  end
+    
+                  expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                        '#{b}#{close}',
+                                        suffix].join($RS))
+            end
+          end
         end
-    
-            # This contains all the registered host capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :host_capabilities
-    
-              # Persist through the set of invalid methods
-          this_invalid  = @__invalid_methods || Set.new
-          other_invalid = other.instance_variable_get(:'@__invalid_methods') || Set.new
-          result.instance_variable_set(:'@__invalid_methods', this_invalid + other_invalid)
-    
-          if @account_moderation_note.save
-        redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.created_msg')
-      else
-        @account          = @account_moderation_note.target_account
-        @moderation_notes = @account.targeted_moderation_notes.latest
-    
-            render template: 'admin/reports/show'
       end
     end
     
-      def account_from_topic
-    if hub_topic.present? && local_domain? && account_feed_path?
-      Account.find_local(hub_topic_params[:username])
-    end
-  end
+        context 'but no comment after the last element' do
+      it 'autocorrects the closing brace' do
+        new_source = autocorrect_source(source)
     
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
-    end
-  end
-    
-    desc 'Test the paperclip plugin under all supported Rails versions.'
-task :all do |t|
-  if ENV['BUNDLE_GEMFILE']
-    exec('rake spec && cucumber')
-  else
-    exec('rm -f gemfiles/*.lock')
-    Rake::Task['appraisal:gemfiles'].execute
-    Rake::Task['appraisal:install'].execute
-    exec('rake appraisal')
-  end
-end
-    
-    When /^(?:|I )attach the file '([^']*)' to '([^']*)'$/ do |path, field|
-  attach_file(field, File.expand_path(path))
-end
-    
-    After do
-  ORIGINAL_BUNDLE_VARS.each_pair do |key, value|
-    ENV[key] = value
-  end
-end
-    
-      # Provides configurability to Paperclip. The options available are:
-  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
-  #   an uploaded image. Defaults to true.
-  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
-  #   log levels, etc. Defaults to true.
-  # * command_path: Defines the path at which to find the command line
-  #   programs if they are not visible to Rails the system's search path. Defaults to
-  #   nil, which uses the first executable found in the user's search path.
-  # * use_exif_orientation: Whether to inspect EXIF data to determine an
-  #   image's orientation. Defaults to true.
-  def self.options
-    @options ||= {
-      command_path: nil,
-      content_type_mappings: {},
-      log: true,
-      log_command: true,
-      read_timeout: nil,
-      swallow_stderr: true,
-      use_exif_orientation: true,
-      whiny: true,
-      is_windows: Gem.win_platform?
-    }
-  end
-    
-        def define_instance_getter
-      name = @name
-      options = @options
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
