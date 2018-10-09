@@ -1,195 +1,191 @@
 
         
-          # @private
-  def unused_options
-    @options - @args
-  end
-    
-        def self.cleanup_logs
-      return unless HOMEBREW_LOGS.directory?
-      HOMEBREW_LOGS.subdirs.each do |dir|
-        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
+                  def hidden_field_for_checkbox(options)
+            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
+          end
       end
     end
-    
-      private
-    
-        # Unbrewed uses the PREFIX, which will exist
-    # Things below use the CELLAR, which doesn't until the first formula is installed.
-    unless HOMEBREW_CELLAR.exist?
-      raise NoSuchKegError.new(ARGV.named.first) if ARGV.named.any?
-      return
-    end
-    
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-      private
-    
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
   end
-  alias_method :python2, :python
-  alias_method :python3, :python
 end
 
     
-        o = Object.new
-    assert_warn(/circular argument reference - var/) do
-      o.instance_eval('def foo(var: bar {var}) var end')
-    end
+                  accept = if current_value.respond_to?(:call)
+                current_value.call(item)
+              else
+                Array(current_value).map(&:to_s).include?(value.to_s)
+              end
     
-      it 'wraps and unwraps data' do
-    a = @s.typed_wrap_struct(1024)
-    @s.typed_get_struct(a).should == 1024
-  end
-    
-        use_ui @ui do
-      @cmd.execute
-    end
-    
-      def test_debug
-    assert_in_out_err(['--disable-gems', '-de', 'p $DEBUG'], '', %w(true), [])
-    
-            unless password_matches
-          error('%s: password unmatch.', userid)
-          challenge(req, res)
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
-        info('%s: authentication succeeded.', userid)
-        req.user = userid
+    
+        private
+    
+    DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
+    
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
+    
+          def print_worst_offenders
+        @io.puts
+        @io.puts 'Worst offenders:'
+        @timings.sort_by { |_f, t| -t }.take(10).each do |(f, t)|
+          @io.puts '  #{t}s for #{f}'
+        end
+        @io.puts
       end
     
-    $packages &&= $packages.split(/[, ]+/).tap {|pkg|
-  if all = pkg.index('all')
-    pkg[all, 1] = PACKAGES.keys - pkg
-  end
-  pkg -= PACKAGES.keys
-  pkg.empty? or abort '#{File.basename $0}: unknown packages - #{pkg.join(', ')}'
-}
-$packages ||= PACKAGES.keys
-    
-          result << 0
-      condvar.wait(mutex)
-      result << 2
-      t.join
-    end
-    assert_equal([0, 1, 2], result)
-  end
-    
-          next if path.symlink? || path.directory?
-    
-      def cleanup
-    if ARGV.named.empty?
-      Cleanup.cleanup
-    else
-      Cleanup.cleanup_cellar(ARGV.resolved_formulae)
-    end
-    
-      File.unlink(out) if (File.size(out) == 0)
-    
-          when :login_pass
-        if(s[:user] and s[:pass])
-          report_auth_info(s)
-          print_status('Successful FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
-          # Remove it form the session objects so freeup memory
-          sessions.delete(s[:session])
-          return
+              RUBY
         end
     
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
+    require 'em-websocket'
     
-    require 'openssl'
-require 'rex'
+    module Jekyll
+  module Converters
+    class Markdown
+      class KramdownParser
+        CODERAY_DEFAULTS = {
+          'css'               => 'style',
+          'bold_every'        => 10,
+          'line_numbers'      => 'inline',
+          'line_number_start' => 1,
+          'tab_width'         => 4,
+          'wrap'              => 'div',
+        }.freeze
     
-      when '6.1.3'
-    __NR_execve      = 7
-    __NR_getpeername = 205
-    __NR_accept      = 232
-    __NR_listen      = 235
-    __NR_bind        = 237
-    __NR_socket      = 238
-    __NR_connect     = 239
-    __NR_close       = 272
-    __NR_kfcntl      = 644
+    Badge.seed do |b|
+  b.id = Badge::FirstMention
+  b.name = 'First Mention'
+  b.badge_type_id = BadgeType::Bronze
+  b.multiple_grant = false
+  b.target_posts = true
+  b.show_posts = true
+  b.query = BadgeQueries::FirstMention
+  b.badge_grouping_id = BadgeGrouping::GettingStarted
+  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
+  b.trigger = Badge::Trigger::PostRevision
+  b.system = true
+end
     
-    		# End the last block
-		unless block_size == 0
-			block_end
-		end
-	end
+        Category.transaction do
+      lounge.group_names = ['trust_level_3']
+      unless lounge.save
+        puts lounge.errors.full_messages
+        raise 'Failed to set permissions on trust level 3 lounge category!'
+      end
     
-      def ruby_prefix
-    RbConfig::CONFIG['prefix']
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
+    
+      # Small method that adds a mapping to Devise.
+  def self.add_mapping(resource, options)
+    mapping = Devise::Mapping.new(resource, options)
+    @@mappings[mapping.name] = mapping
+    @@default_scope ||= mapping.name
+    @@helpers.each { |h| h.define_helpers(mapping) }
+    mapping
   end
     
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
+        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
+  end
     
-        mkdir_p page_dir
-    file = '#{page_dir}/#{filename}.#{extension}'
-    if File.exist?(file)
-      abort('rake aborted!') if ask('#{file} already exists. Do you want to overwrite?', ['y', 'n']) == 'n'
+          @user.resend_confirmation_instructions
+    
+        def copy
+      authorize @custom_emoji, :copy?
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
+    
+        def status_params
+      params.require(:status).permit(:sensitive)
     end
-    puts 'Creating new page: #{file}'
-    open(file, 'w') do |page|
-      page.puts '---'
-      page.puts 'layout: page'
-      page.puts 'title: \'#{title}\''
-      page.puts 'date: #{Time.now.strftime('%Y-%m-%d %H:%M')}'
-      page.puts 'comments: true'
-      page.puts 'sharing: true'
-      page.puts 'footer: true'
-      page.puts '---'
+    
+      private
+    
+        '#{self.method} #{self.uri} #{proto_str}\r\n'
+  end
+    
+      #
+  # Resets the parsing state.
+  #
+  def reset_cli
+    self.request.reset
+  end
+    
+    require 'rex/proto/ipmi/utils'
+    
+                if OpenSSL::HMAC.digest('MD5', k1, decrypted) != checksum
+              raise ::RuntimeError, 'RC4-HMAC decryption failed, incorrect checksum verification'
+            end
+    
+                seq.to_der
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 0
+                self.pvno = decode_pvno(val)
+              when 1
+                self.msg_type = decode_msg_type(val)
+              when 3
+                self.crealm = decode_crealm(val)
+              when 4
+                self.cname = decode_cname(val)
+              when 5
+                self.ticket = decode_ticket(val)
+              when 6
+                self.enc_part = decode_enc_part(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KDC-RESPONSE SEQUENCE'
+              end
+            end
+          end
+    
+              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_e_data(input)
+            input.value[0].value
+          end
+        end
+      end
     end
-  else
-    puts 'Syntax error: #{args.filename} contains unsupported characters'
   end
 end
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+          # @see Base#\_retrieve
+      def _retrieve(key, version, sha)
+        return unless File.readable?(path_to(key))
+        begin
+          File.open(path_to(key), 'rb') do |f|
+            if f.readline('\n').strip == version && f.readline('\n').strip == sha
+              return f.read
+            end
           end
+          File.unlink path_to(key)
+        rescue Errno::ENOENT
+          # Already deleted. Race condition?
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
+        nil
+      rescue EOFError, TypeError, ArgumentError => e
+        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
       end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
     
-    end
+      require 'cocoapods/core_overrides'
+end
