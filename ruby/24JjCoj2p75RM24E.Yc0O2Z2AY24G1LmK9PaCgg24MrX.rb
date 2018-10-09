@@ -1,113 +1,63 @@
 
         
-            if version.present?
-      doc = doc.versions.find { |klass| klass.version == version || klass.version_slug == version }
-      raise DocNotFound.new(%(could not find version '#{version}' for doc '#{name}'), name) unless doc
-    elsif version != false
-      doc = doc.versions.first
-    end
-    
-        def initialize(filters = nil)
-      @filters = filters ? filters.dup : []
-    end
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-  end
-end
-
-    
-            def with_internal_urls
-          @internal_urls = new.fetch_internal_urls
-          yield
-        ensure
-          @internal_urls = nil
+              # we readlink because this path probably doesn't exist since caveats
+      # occurs before the link step of installation
+      # Yosemite security measures mildly tighter rules:
+      # https://github.com/Homebrew/homebrew/issues/33815
+      if !plist_path.file? || !plist_path.symlink?
+        if f.plist_startup
+          s << 'To have launchd start #{f.full_name} at startup:'
+          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
+          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
+          s << '  sudo chown root #{plist_link}'
+        else
+          s << 'To have launchd start #{f.full_name} at login:'
+          s << '  mkdir -p #{destination}' unless destination_path.directory?
+          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
         end
+        s << 'Then to load #{f.full_name} now:'
+        if f.plist_startup
+          s << '  sudo launchctl load #{plist_link}'
+        else
+          s << '  launchctl load #{plist_link}'
+        end
+      # For startup plists, we cannot tell whether it's running on launchd,
+      # as it requires for `sudo launchctl list` to get real result.
+      elsif f.plist_startup
+        s << 'To reload #{f.full_name} after an upgrade:'
+        s << '  sudo launchctl unload #{plist_link}'
+        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
+        s << '  sudo chown root #{plist_link}'
+        s << '  sudo launchctl load #{plist_link}'
+      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
+        s << 'To reload #{f.full_name} after an upgrade:'
+        s << '  launchctl unload #{plist_link}'
+        s << '  launchctl load #{plist_link}'
+      else
+        s << 'To load #{f.full_name}:'
+        s << '  launchctl load #{plist_link}'
       end
     
-            css('img[src]').each do |node|
-          node['src'] = node['src'].gsub(%r{angularjs\.org/([\d\.]+)/docs/partials/(\w+)/}, 'angularjs.org/\1/docs/\2/')
-        end
+      # Clean the keg of formula @f
+  def clean
+    ObserverPathnameExtension.reset_counts!
     
-        # /%3faaa=bbbbb
-    # which could possibly decode to '/?aaa=bbbbb', which if the IDS normalizes first, then splits the URI on ?, then it can be bypassed
-    if self.junk_param_start
-      str.sub!(/\//, '/%3f' + Rex::Text.rand_text_alpha(rand(5) + 1) + '=' + Rex::Text.rand_text_alpha(rand(10) + 1) + '/../')
-    end
+      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
+    %w[Caskroom cask],
+    %w[Caskroom versions]
+  ]
     
-    
-end
-end
-end
-
-    
-      def self.verify_rakp_hmac_sha1(salt, hash, password)
-    OpenSSL::HMAC.digest('sha1', password, salt) == hash
+      def std_cmake_parameters
+    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
   end
     
-            # Sends a kerberos request, and reads the response through the connection
-        #
-        # @param req [Rex::Proto::Kerberos::Model::KdcRequest] the request to send
-        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] The kerberos message
-        # @raise [RuntimeError] if the transport protocol is unknown or the response can't be parsed.
-        # @raise [NotImplementedError] if the transport protocol isn't supported
-        def send_recv(req)
-          send_request(req)
-          res = recv_response
+        if other.respond_to?(:to_str)
+      return true if to_str == other.to_str
+    end
     
-              # Encodes the realm field
-          #
-          # @return [String]
-          def encode_realm
-            encoded = ''
-            encoded << [realm.length].pack('N')
-            encoded << realm
+    module Homebrew
+  module_function
     
-              # Encodes the auth_time field
-          #
-          # @return [String]
-          def encode_auth_time
-            [auth_time].pack('N')
-          end
-    
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-    class Rack::Builder
-  include Sinatra::Delegator
-end
-
-    
-          private
-    
-          it 'detects closing brace on same line as last multiline element' do
-        src = construct(false, a, make_multi(multi), false)
-        inspect_source(src)
-    
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
-      end
-    
-          # Checks whether the `if` node has an `else` clause.
-      #
-      # @note This returns `true` for nodes containing an `elsif` clause.
-      #       This is legacy behavior, and many cops rely on it.
-      #
-      # @return [Boolean] whether the node has an `else` clause
-      def else?
-        loc.respond_to?(:else) && loc.else
-      end
+          new_name = name
+      new_path = path
+      new_remote = default_remote
