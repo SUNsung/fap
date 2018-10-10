@@ -1,125 +1,218 @@
 
         
-              def make_test_case_available_to_view!
-        test_case_instance = self
-        _helpers.module_eval do
-          unless private_method_defined?(:_test_case)
-            define_method(:_test_case) { test_case_instance }
-            private :_test_case
-          end
-        end
-      end
-    
-              # Bubbled up from the adapter require. Prefix the exception message
-          # with some guidance about how to address it and reraise.
+                  content_is_options = content_or_options.is_a?(Hash)
+          if content_is_options
+            options.merge! content_or_options
+            @content = nil
           else
-            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
-          end
-        end
-    
-              def add_channel(channel, on_success)
-            @subscription_lock.synchronize do
-              ensure_listener_running
-              @subscribe_callbacks[channel] << on_success
-              when_connected { send_command('subscribe', channel) }
-            end
+            @content = content_or_options
           end
     
-        def build(attribute, value)
-      if table.type(attribute.name).force_equality?(value)
-        bind = build_bind_attribute(attribute.name, value)
-        attribute.eq(bind)
-      else
-        handler_for(value).call(attribute, value)
-      end
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class TextField < Base # :nodoc:
+        include Placeholderable
+    
+        def _conditional_layout?
+      true
     end
     
-          def serialize(value)
-        return if value.nil?
-        unless default_value?(value)
-          super coder.dump(value)
-        end
-      end
+    Mercenary.program(:jekyll) do |p|
+  p.version Jekyll::VERSION
+  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
+  p.syntax 'jekyll <subcommand> [options]'
     
-      has_many :clients, -> { order 'id' }, dependent: :destroy, before_remove: :log_before_remove, after_remove: :log_after_remove
-  has_many :unsorted_clients, class_name: 'Client'
-  has_many :unsorted_clients_with_symbol, class_name: :Client
-  has_many :clients_sorted_desc, -> { order 'id DESC' }, class_name: 'Client'
-  has_many :clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', inverse_of: :firm
-  has_many :clients_ordered_by_name, -> { order 'name' }, class_name: 'Client'
-  has_many :unvalidated_clients_of_firm, foreign_key: 'client_of', class_name: 'Client', validate: false
-  has_many :dependent_clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', dependent: :destroy
-  has_many :exclusively_dependent_clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', dependent: :delete_all
-  has_many :limited_clients, -> { limit 1 }, class_name: 'Client'
-  has_many :clients_with_interpolated_conditions, ->(firm) { where 'rating > #{firm.rating}' }, class_name: 'Client'
-  has_many :clients_like_ms, -> { where('name = 'Microsoft'').order('id') }, class_name: 'Client'
-  has_many :clients_like_ms_with_hash_conditions, -> { where(name: 'Microsoft').order('id') }, class_name: 'Client'
-  has_many :plain_clients, class_name: 'Client'
-  has_many :clients_using_primary_key, class_name: 'Client',
-           primary_key: 'name', foreign_key: 'firm_name'
-  has_many :clients_using_primary_key_with_delete_all, class_name: 'Client',
-           primary_key: 'name', foreign_key: 'firm_name', dependent: :delete_all
-  has_many :clients_grouped_by_firm_id, -> { group('firm_id').select('firm_id') }, class_name: 'Client'
-  has_many :clients_grouped_by_name, -> { group('name').select('name') }, class_name: 'Client'
+    Given(%r!^I have an? '(.*)' page(?: with (.*) '(.*)')? that contains '(.*)'$!) do |file, key, value, text|
+  File.write(file, Jekyll::Utils.strip_heredoc(<<-DATA))
+    ---
+    #{key || 'layout'}: #{value || 'none'}
+    ---
     
-        def unsubscribed
-      @room = nil
-    end
-    
-    class RedisAdapterTest::Hiredis < RedisAdapterTest
-  def cable_config
-    super.merge(driver: 'hiredis')
+    def jekyll_run_status
+  if Paths.status_file.file?
+    then return Paths.status_file.read
   end
 end
     
-          def with_broadcast_connection(&block) # :nodoc:
-        ActiveRecord::Base.connection_pool.with_connection do |ar_conn|
-          pg_conn = ar_conn.raw_connection
-          verify!(pg_conn)
-          yield pg_conn
+      s.rdoc_options = ['--charset=UTF-8']
+  s.extra_rdoc_files = %w(README.markdown LICENSE)
+    
+                c.option 'force', '--force', 'Force creation even if PATH already exists'
+            c.option 'blank', '--blank', 'Creates scaffolding but with empty files'
+            c.option 'skip-bundle', '--skip-bundle', 'Skip 'bundle install''
+    
+        group.add(moderator)
+    group.save
+    
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
+    
+    describe Admin::UsersController do
+  it 'requires to be signed in as an admin' do
+    login_as(users(:bob))
+    visit admin_users_path
+    expect(page).to have_text('Admin access required to view that page.')
+  end
+    
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+      describe '#nav_link' do
+    it 'returns a nav link' do
+      stub(self).current_page?('/things') { false }
+      nav = nav_link('Things', '/things')
+      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
+      expect(a.text.strip).to eq('Things')
+    end
+    
+              existing_scenario.reload
+          expect(existing_scenario.guid).to eq(guid)
+          expect(existing_scenario.tag_fg_color).to eq(tag_fg_color)
+          expect(existing_scenario.tag_bg_color).to eq(tag_bg_color)
+          expect(existing_scenario.icon).to eq(icon)
+          expect(existing_scenario.description).to eq(description)
+          expect(existing_scenario.name).to eq(name)
+          expect(existing_scenario.source_url).to eq(source_url)
+          expect(existing_scenario.public).to be_falsey
+        end
+    
+        context 'running workers' do
+      before do
+        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
+        stub.instance_of(HuginnScheduler).setup
+        stub.instance_of(DelayedJobWorker).setup
+      end
+    
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
+    end
+  end
+    
+      it 'ignores invalid values' do
+    location2 = Location.new(
+      lat: 2,
+      lng: 3,
+      radius: -1,
+      speed: -1,
+      course: -1)
+    expect(location2.radius).to be_nil
+    expect(location2.speed).to be_nil
+    expect(location2.course).to be_nil
+  end
+    
+              expect {
+            @agent.options[:foo] = 'bar2'
+            @agent.keep_events_for = 3.days
+            @agent.save!
+          }.to change { @event.reload.expires_at }
+          expect(@event.expires_at.to_i).to be_within(60 * 61).of(1.days.from_now.to_i) # The larger time is to deal with daylight savings
+        end
+    
+      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
+  name 'Adobe Photoshop Lightroom'
+  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
+    
+    When /^I (?:sign|log) in as '([^']*)'( on the mobile website)?$/ do |email, mobile|
+  @me = User.find_by_email(email)
+  @me.password ||= 'password'
+  automatic_login
+  confirm_login mobile
+end
+    
+    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
+  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+end
+    
+      people.each do |person|
+    contacts << Contact.new(:person_id => person.id, :user_id => @me.id, :sharing => true, :receiving => true)
+  end
+  Contact.import(contacts)
+  contacts = @me.contacts.limit(n.to_i)
+    
+          @conv2 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
+             .increase_unread(alice)
+    
+        context 'but no comment after the last element' do
+      it 'autocorrects the closing brace' do
+        new_source = autocorrect_source(source)
+    
+          # users should be able to set price when importing orders via api
+      def permitted_line_item_attributes
+        if @current_user_roles.include?('admin')
+          super + [:price, :variant_id, :sku]
+        else
+          super
         end
       end
     
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow_request
-  def follow_request
-    f = Follow.last
-    NotificationMailer.follow_request(f.target_account, Notification.find_by(activity: f))
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
+        end
+      end
+    end
   end
+end
+
     
-      def scope
-    root_url
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
+          end
+        end
+      end
+    end
   end
+end
+
     
-      sidekiq_options queue: 'mailers'
-    
-                  if(inp.attributes[ikey] =~ /^http/i)
-                inp[ikey] = ''
-                next
-              end
-    
-          when :banner
-        # Because some ftp server send multiple banner we take only the first one and ignore the rest
-        if not (s[:info])
-          s[:info] = matches
-          report_service(s)
+            def find_order(lock = false)
+          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
         end
     
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
+            @country.states.accessible_by(current_ability, :read).order('name ASC')
+          else
+            State.accessible_by(current_ability, :read).order('name ASC')
+          end
+        end
+      end
+    end
+  end
+end
+
     
-# replace the stuff
-replaces.uniq!
-replaces.each { |arr|
-	#puts '%32s: %s -> %s' % arr
-	asm.gsub!(arr[1], arr[2])
-}
-    
-    outputJar = 'output.jar'
-    
-        @execve      = ''
-    @getpeername = ''
-    @accept      = ''
-    @listen      = ''
-    @bind        = ''
-    @socket      = ''
-    @connect     = ''
-    @close       = ''
-    @kfcntl      = ''
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
