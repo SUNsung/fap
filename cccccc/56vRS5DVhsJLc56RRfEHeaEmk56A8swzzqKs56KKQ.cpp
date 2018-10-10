@@ -1,201 +1,303 @@
 
         
-        #if GTEST_OS_SYMBIAN
-  // These are needed as the Nokia Symbian Compiler cannot decide between
-  // const T& and const T* in a function template. The Nokia compiler _can_
-  // decide between class template specializations for T and T*, so a
-  // tr1::type_traits-like is_pointer works, and we can overload on that.
-  template <typename T>
-  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
-    }
-  }
-  template <typename T>
-  inline void StreamHelper(internal::false_type /*is_pointer*/,
-                           const T& value) {
-    // See the comments in Message& operator <<(const T&) above for why
-    // we need this using statement.
-    using ::operator <<;
-    *ss_ << value;
-  }
-#endif  // GTEST_OS_SYMBIAN
-    
-    #if !GTEST_OS_SYMBIAN
-# include <utility>
-#endif
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedFakeTestPartResultReporter);
-};
-    
-    // Macros that test for HRESULT failure and success, these are only useful
-// on Windows, and rely on Windows SDK macros and APIs to compile.
-//
-//    * {ASSERT|EXPECT}_HRESULT_{SUCCEEDED|FAILED}(expr)
-//
-// When expr unexpectedly fails or succeeds, Google Test prints the
-// expected result and the actual result with both a human-readable
-// string representation of the error, if available, as well as the
-// hex result code.
-# define EXPECT_HRESULT_SUCCEEDED(expr) \
-    EXPECT_PRED_FORMAT1(::testing::internal::IsHRESULTSuccess, (expr))
-    
-    // Helper function for implementing {EXPECT|ASSERT}_PRED4.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4>
-AssertionResult AssertPred4Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4) {
-  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
-    }
-    
-      // Returns true if the death test passed; that is, the test process
-  // exited during the test, its exit status matches a user-supplied
-  // predicate, and its stderr output matches a user-supplied regular
-  // expression.
-  // The user-supplied predicate may be a macro expression rather
-  // than a function pointer or functor, or else Wait and Passed could
-  // be combined.
-  virtual bool Passed(bool exit_status_ok) = 0;
-    
-      T* value_;
-  linked_ptr_internal link_;
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31>
-struct Templates31 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates30<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31> Tail;
-};
-    
-    using ::testing::EmptyTestEventListener;
-using ::testing::InitGoogleTest;
-using ::testing::Test;
-using ::testing::TestCase;
-using ::testing::TestEventListeners;
-using ::testing::TestInfo;
-using ::testing::TestPartResult;
-using ::testing::UnitTest;
-    
-    #include <string.h>
-    
-    
-// A simple string class.
-class MyString {
- private:
-  const char* c_string_;
-  const MyString& operator=(const MyString& rhs);
-    }
-    
-      // Removes the head of the queue and returns it.  Returns NULL if
-  // the queue is empty.
-  E* Dequeue() {
-    if (size_ == 0) {
-      return NULL;
-    }
+        namespace tensorflow {
     }
     
     
     {
-    {
-    { private:
-  std::ifstream fi_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_CONFIG_H_
+    {}  // end namespace grappler
+}  // end namespace tensorflow
 
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+    // Mutex used to serialize accesses to cached vector of pointers to python
+// arrays to be dereferenced.
+static mutex* DelayedDecrefLock() {
+  static mutex* decref_lock = new mutex;
+  return decref_lock;
+}
+    
+    #include 'tensorflow/python/lib/core/py_exception_registry.h'
+    
+    string DiagonalString(Diagonal d) {
+  switch (d) {
+    case Diagonal::kUnit:
+      return 'Unit';
+    case Diagonal::kNonUnit:
+      return 'NonUnit';
+    default:
+      LOG(FATAL) << 'Unknown diagonal ' << static_cast<int32>(d);
   }
 }
     
-    exception_wrapper::exception_wrapper(std::exception_ptr ptr) noexcept
-    : exception_wrapper{} {
-  if (ptr) {
-    if (auto e = get_std_exception_(ptr)) {
-      LOG(DFATAL)
-          << 'Performance error: Please construct exception_wrapper with a '
-             'reference to the std::exception along with the '
-             'std::exception_ptr.';
-      *this = exception_wrapper{std::move(ptr), *e};
-    } else {
-      Unknown uk;
-      *this = exception_wrapper{ptr, uk};
+    bool swift::isPlatformActive(PlatformKind Platform, LangOptions &LangOpts) {
+  if (Platform == PlatformKind::none)
+    return true;
+  
+  if (Platform == PlatformKind::OSXApplicationExtension ||
+      Platform == PlatformKind::iOSApplicationExtension)
+    if (!LangOpts.EnableAppExtensionRestrictions)
+      return false;
+  
+  // FIXME: This is an awful way to get the current OS.
+  switch (Platform) {
+    case PlatformKind::OSX:
+    case PlatformKind::OSXApplicationExtension:
+      return LangOpts.Target.isMacOSX();
+    case PlatformKind::iOS:
+    case PlatformKind::iOSApplicationExtension:
+      return LangOpts.Target.isiOS() && !LangOpts.Target.isTvOS();
+    case PlatformKind::tvOS:
+    case PlatformKind::tvOSApplicationExtension:
+      return LangOpts.Target.isTvOS();
+    case PlatformKind::watchOS:
+    case PlatformKind::watchOSApplicationExtension:
+      return LangOpts.Target.isWatchOS();
+    case PlatformKind::none:
+      llvm_unreachable('handled above');
+  }
+  llvm_unreachable('bad PlatformKind');
+}
+    
+      reqToSyntheticEnvMap = SubstitutionMap::get(reqSig,
+    [selfType, substConcreteType, depth, covariantSelf, &ctx]
+    (SubstitutableType *type) -> Type {
+      // If the conforming type is a class, the protocol 'Self' maps to
+      // the class-constrained 'Self'. Otherwise, it maps to the concrete
+      // type.
+      if (type->isEqual(selfType)) {
+        if (covariantSelf)
+          return GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
+        return substConcreteType;
+      }
+      // Other requirement generic parameters map 1:1 with their depth
+      // increased appropriately.
+      auto *genericParam = cast<GenericTypeParamType>(type);
+      // In a protocol requirement, the only generic parameter at depth 0
+      // should be 'Self', and all others at depth 1. Anything else is
+      // invalid code.
+      if (genericParam->getDepth() != 1)
+        return Type();
+      auto substGenericParam =
+        GenericTypeParamType::get(depth, genericParam->getIndex(), ctx);
+      return substGenericParam;
+    },
+    [selfType, substConcreteType, conformance, conformanceDC, &ctx](
+        CanType type, Type replacement, ProtocolDecl *proto)
+          -> Optional<ProtocolConformanceRef> {
+      // The protocol 'Self' conforms concretely to the conforming type.
+      if (type->isEqual(selfType)) {
+        ProtocolConformance *specialized = conformance;
+        if (conformance && conformance->getGenericSignature()) {
+          auto concreteSubs =
+            substConcreteType->getContextSubstitutionMap(
+              conformanceDC->getParentModule(), conformanceDC);
+          specialized =
+            ctx.getSpecializedConformance(substConcreteType, conformance,
+                                          concreteSubs);
+        }
+    }
+    }
+    
+    /// Pretty-print the vector.
+void ClusteredBitVector::print(llvm::raw_ostream &out) const {
+  // Print in 8 clusters of 8 bits per row.
+  for (size_t i = 0, e = size(); ; ) {
+    out << ((*this)[i++] ? '1' : '0');
+    if (i == e) {
+      return;
+    } else if ((i & 64) == 0) {
+      out << '\n';
+    } else if ((i & 8) == 0) {
+      out << ' ';
     }
   }
 }
+
+    
+    #endif  // CAFFE_COMMON_HPP_
+
+    
+    /**
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
+template <typename Dtype>
+class DataTransformer {
+ public:
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
+    }
+    
+      static CreatorRegistry& Registry() {
+    static CreatorRegistry* g_registry_ = new CreatorRegistry();
+    return *g_registry_;
+  }
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
       /**
-   * Returns true 1/n of the time. If n == 0, always returns false
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
    */
-  static bool oneIn(uint32_t n) {
-    return oneIn(n, ThreadLocalPRNG());
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+};
+#endif
+    
+    #define READ_CHECK(fp, ptr, count)                                             \
+  if (fp.read((ptr), (count)) != (count)) {                                    \
+    throw DL_ABORT_EX('Failed to load DHT routing table.');                    \
   }
     
     
-    {} // namespace folly
+    {} // namespace aria2
+    
+    class DHTRoutingTableSerializer {
+private:
+  int family_;
+    }
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
+                       uint16_t tcpPort,
+                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
+    
+    namespace aria2 {
+    }
+    
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
+}
+    
+    void DHTUnknownMessage::doReceivedAction() {}
+    
+      // do nothing
+  virtual void doReceivedAction() CXX11_OVERRIDE;
+    
+    DNSCache::CacheEntry::~CacheEntry() = default;
+    
+    
+    {        state.PauseTiming();
+        delete j;
+        state.ResumeTiming();
+    }
+    
+    #define BENCHMARK_PRIVATE_DECLARE_F(BaseClass, Method)        \
+  class BaseClass##_##Method##_Benchmark : public BaseClass { \
+   public:                                                    \
+    BaseClass##_##Method##_Benchmark() : BaseClass() {        \
+      this->SetName(#BaseClass '/' #Method);                  \
+    }                                                         \
+                                                              \
+   protected:                                                 \
+    virtual void BenchmarkCase(::benchmark::State&);          \
+  };
+    
+    DEFINE_bool(benchmark_report_aggregates_only, false,
+            'Report the result of each benchmark repetitions. When 'true' is '
+            'specified only the mean, standard deviation, and other statistics '
+            'are reported for repeated benchmarks.');
+    
+      LogType& GetLog() { return log_; }
+    
+    #endif  // BENCHMARK_COLORPRINT_H_
 
     
-    #pragma once
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
     
-      void operator+=(double sum) {
-    performLazyInit();
-    if (increment_) {
-      increment_(sum);
+    
+    {} // end namespace benchmark
+
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
     }
-  }
+    
+        struct aligned
+    {
+        BOOST_ALIGNMENT(4) type value;
+    }
