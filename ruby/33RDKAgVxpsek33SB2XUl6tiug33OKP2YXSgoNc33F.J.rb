@@ -1,100 +1,268 @@
 
         
-            version '3' do
-      self.release = '3.3.7'
-      self.base_url = 'https://getbootstrap.com/docs/3.3/'
-      self.root_path = 'getting-started/'
-    
-        def as_json
-      @pages
-    end
-    
-          # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
+              # From https://github.com/orta/danger/blob/master/lib/danger/Dangerfile.rb
+      if content.tr!('“”‘’‛', %('''''))
+        UI.error('Your #{File.basename(path)} has had smart quotes sanitised. ' \
+                'To avoid issues in the future, you should not use ' \
+                'TextEdit for editing it. If you are not using TextEdit, ' \
+                'you should turn off smart quotes in your editor of choice.')
       end
     
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp if argv.length != 3
+        context 'action launch' do
+      let(:launch_context) do
+        FastlaneCore::ActionLaunchContext.new(
+          action_name: action_name,
+          p_hash: p_hash,
+          platform: 'ios',
+          fastlane_client_language: fastlane_client_language
+        )
+      end
     
-        if true then 123; else 456; end.should == 123
+            cmd << ['-am #{message.shellescape}']
+        cmd << '--force' if options[:force]
+        cmd << '-s' if options[:sign]
+        cmd << tag.shellescape
+        cmd << options[:commit].to_s if options[:commit]
+    
+          context 'as string with wildcards' do
+        it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add *.txt', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: '*.txt', shell_escape: false)
+          end').runner.execute(:test)
+        end
+      end
+    
+          describe '#configuration_available?' do
+        let(:param) { { use_bundle_exec: false } }
+        let(:version) { '' }
+        before do
+          allow(action).to receive(:slather_version).and_return(Gem::Version.create(version))
+        end
+    
+        context 'external commands are failed' do
+      context 'with error_callback' do
+        it 'doesn't raise shell_error' do
+          allow(FastlaneCore::UI).to receive(:error)
+          called = false
+          expect_command('exit 1', exitstatus: 1)
+          Fastlane::Actions.sh('exit 1', error_callback: ->(_) { called = true })
+    
+    shellescape_testcases = [
+  # baseline
+  {
+    'it' => '(#1) on simple string',
+    'it_result' => {
+      'windows' => 'doesn't change it',
+      'other'   => 'doesn't change it'
+    },
+    'str' => 'normal_string_without_spaces',
+    'expect' => {
+      'windows' => 'normal_string_without_spaces',
+      'other'   => 'normal_string_without_spaces'
+    }
+  },
+  {
+    'it' => '(#2) on empty string',
+    'it_result' => {
+      'windows' => 'wraps it in double quotes',
+      'other'   => 'wraps it in single quotes'
+    },
+    'str' => '',
+    'expect' => {
+      'windows' => '''',
+      'other'   => '\'\''
+    }
+  },
+  # spaces
+  {
+    'it' => '(#3) on string with spaces',
+    'it_result' => {
+      'windows' => 'wraps it in double quotes',
+      'other'   => 'escapes spaces with <backslash>'
+    },
+    'str' => 'string with spaces',
+    'expect' => {
+      'windows' => ''string with spaces'',
+      'other'   => 'string\ with\ spaces'
+    }
+  },
+  # double quotes
+  {
+    'it' => '(#4) on simple string that is already wrapped in double quotes',
+    'it_result' => {
+      'windows' => 'doesn't touch it',
+      'other'   => 'escapes the double quotes with <backslash>'
+    },
+    'str' => ''normal_string_without_spaces'',
+    'expect' => {
+      'windows' => ''normal_string_without_spaces'',
+      'other'   => '\'normal_string_without_spaces\''
+    }
+  },
+  {
+    'it' => '(#5) on string with spaces that is already wrapped in double quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and duplicates existing double quotes',
+      'other'   => 'escapes the double quotes and spaces with <backslash>'
+    },
+    'str' => ''string with spaces already wrapped in double quotes'',
+    'expect' => {
+      'windows' => ''''string with spaces already wrapped in double quotes'''',
+      'other'   => '\'string\ with\ spaces\ already\ wrapped\ in\ double\ quotes\''
+    }
+  },
+  {
+    'it' => '(#6) on string with spaces and double quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and duplicates existing double quotes',
+      'other'   => 'escapes the double quotes and spaces with <backslash>'
+    },
+    'str' => 'string with spaces and 'double' quotes',
+    'expect' => {
+      'windows' => ''string with spaces and ''double'' quotes'',
+      'other'   => 'string\ with\ spaces\ and\ \'double\'\ quotes'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L64-L65
+  {
+    'it' => '(#7) on simple int',
+    'it_result' => {
+      'windows' => 'doesn't change it',
+      'other'   => 'doesn't change it'
+    },
+    'str' => 3,
+    'expect' => {
+      'windows' => '3',
+      'other'   => '3'
+    }
+  },
+  # single quotes
+  {
+    'it' => '(#8) on simple string that is already wrapped in single quotes',
+    'it_result' => {
+      'windows' => 'doesn't touch it',
+      'other'   => 'escapes the single quotes with <backslash>'
+    },
+    'str' => ''normal_string_without_spaces'',
+    'expect' => {
+      'windows' => ''normal_string_without_spaces'',
+      'other'   => '\\'normal_string_without_spaces\\''
+    }
+  },
+  {
+    'it' => '(#9) on string with spaces that is already wrapped in single quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the single quotes and spaces with <backslash>'
+    },
+    'str' => ''string with spaces already wrapped in single quotes'',
+    'expect' => {
+      'windows' => '\''string with spaces already wrapped in single quotes'\'',
+      'other'   => '\\'string\\ with\\ spaces\\ already\\ wrapped\\ in\\ single\\ quotes\\''
+    }
+  },
+  {
+    'it' => '(#10) string with spaces and single quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and leaves single quotes',
+      'other'   => 'escapes the single quotes and spaces with <backslash>'
+    },
+    'str' => 'string with spaces and 'single' quotes',
+    'expect' => {
+      'windows' => '\'string with spaces and 'single' quotes\'',
+      'other'   => 'string\ with\ spaces\ and\ \\\'single\\\'\ quotes'
+    }
+  },
+  {
+    'it' => '(#11) string with spaces and <backslash>',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and escapes the backslash with backslash',
+      'other'   => 'escapes the spaces and the backslash (which in results in quite a lot of them)'
+    },
+    'str' => 'string with spaces and \\ in it',
+    'expect' => {
+      'windows' => '\'string with spaces and \\ in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\\\\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#12) string with spaces and <slash>',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces'
+    },
+    'str' => 'string with spaces and / in it',
+    'expect' => {
+      'windows' =>  '\'string with spaces and / in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ /\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#13) string with spaces and parens',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces and parens'
+    },
+    'str' => 'string with spaces and (parens) in it',
+    'expect' => {
+      'windows' => '\'string with spaces and (parens) in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\(parens\\)\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#14) string with spaces, single quotes and parens',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces, single quotes and parens'
+    },
+    'str' => 'string with spaces and 'quotes' (and parens) in it',
+    'expect' => {
+      'windows' => '\'string with spaces and 'quotes' (and parens) in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\'quotes\\'\\ \\(and\\ parens\\)\\ in\\ it'
+    }
+  }
+]
+    
+      before_action :set_filters, only: :index
+  before_action :set_filter, only: [:edit, :update, :destroy]
+    
+      def set_account
+    @account = Account.find_local!(params[:account_username]) if params[:account_username]
   end
     
-      def test_hidden_key
-    bug6899 = '[ruby-core:47253]'
-    foo = 'foor'
-    bar = 'bar'
-    assert_nothing_raised(NotImplementedError, bug6899) do
-      2000.times {eval %[(foo..bar) ? 1 : 2]}
+        def resource_params
+      params.require(:account_moderation_note).permit(
+        :content,
+        :target_account_id
+      )
     end
-    foo = bar
-  end
     
-        # This spec is probably system-dependent.
-    it 'waits for a child whose process group ID is that of the calling process' do
-      pid1 = Process.spawn(ruby_cmd('exit'), pgroup: true)
-      pid2 = Process.spawn(ruby_cmd('exit'))
-    
-      after :each do
-    ENV['RUBYLIB'] = @rubylib
-  end
-    
-        @io.write header
-    
-        assert_equal 'hello', File.read(path)
-  end
-    
-            htdigest = WEBrick::HTTPAuth::Htdigest.new(tmpfile.path)
-        users = []
-        htdigest.each{|user, pass| users << user }
-        assert_equal(2, users.size, log.call)
-        assert(users.member?('webrick'), log.call)
-        assert(users.member?('foo'), log.call)
-    
-        assert_in_out_err(%w(-00 -e) + ['p gets, gets'], 'foo\nbar\n\n\n\nbaz\n', %w('foo\nbar\n\n' 'baz\n'), [])
-  end
-    
-          s.delete(IRB::Context) if defined?(IRB::Context)
-    
-        Thread.new do
-      assert_raise(ThreadError) {condvar.wait(mutex)}
-    end.join
-  end
-    
-      def self.hangul_comp_one(string)
-    length = string.length
-    if length>1 and 0 <= (lead =string[0].ord-LBASE) and lead  < LCOUNT and
-                    0 <= (vowel=string[1].ord-VBASE) and vowel < VCOUNT
-      lead_vowel = SBASE + (lead * VCOUNT + vowel) * TCOUNT
-      if length>2 and 0 < (trail=string[2].ord-TBASE) and trail < TCOUNT
-        (lead_vowel + trail).chr(Encoding::UTF_8) + string[3..-1]
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
       else
-        lead_vowel.chr(Encoding::UTF_8) + string[2..-1]
-      end
-    else
-      string
-    end
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
   end
     
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
+    load './tasks/bower.rake'
+    
+          spec['version'] = Bootstrap::VERSION
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
     end
     
-          def markdown_podfile
-        UI::ErrorReport.markdown_podfile
-      end
+      # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
     
-            self.description = <<-DESC
-          Creates a scaffold for the development of a new Pod named `NAME`
-          according to the CocoaPods best practices.
-          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
-          template, is specified, it will be used in place of the default one.
-        DESC
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
