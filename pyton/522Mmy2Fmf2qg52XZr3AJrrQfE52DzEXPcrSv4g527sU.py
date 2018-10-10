@@ -1,83 +1,167 @@
 
         
-            ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
+            builtin_str = str
+    bytes = str
+    str = unicode
+    basestring = basestring
+    numeric_types = (int, long, float)
+    integer_types = (int, long)
     
-        def __init__(self, msg, with_headers=True, with_body=True,
-                 on_body_chunk_downloaded=None):
-        '''
-        :param msg: a :class:`models.HTTPMessage` subclass
-        :param with_headers: if `True`, headers will be included
-        :param with_body: if `True`, body will be included
+    from . import __version__ as requests_version
     
-        def __init__(self):
-        self._plugins = []
-    
-        def test_binary_suppresses_when_not_terminal_but_pretty(self):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--pretty=all', 'GET', self.url,
-                 env=env)
-        assert BINARY_SUPPRESSED_NOTICE.decode() in r
+    # TODO: response is the only one
     
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
+    
+        def test_repr(self):
+        assert repr(self.case_insensitive_dict) == '{'Accept': 'application/json'}'
+    
+            String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
+    
+        def doc(code):
+        names = ', '.join('``%s``' % n for n in _codes[code])
+        return '* %d: %s' % (code, names)
+    
+    ]
+test_requirements = [
+    'pytest-httpbin==0.0.7',
+    'pytest-cov',
+    'pytest-mock',
+    'pytest-xdist',
+    'PySocks>=1.5.6, !=1.5.7',
+    'pytest>=2.8.0'
+]
+    
+    from . import utils
+from . import packages
+from .models import Request, Response, PreparedRequest
+from .api import request, get, head, post, patch, put, delete, options
+from .sessions import session, Session
+from .status_codes import codes
+from .exceptions import (
+    RequestException, Timeout, URLRequired,
+    TooManyRedirects, HTTPError, ConnectionError,
+    FileModeWarning, ConnectTimeout, ReadTimeout
+)
+    
+        # By using the 'with' statement we are sure the session is closed, thus we
+    # avoid leaving sockets open which can trigger a ResourceWarning in some
+    # cases, and look like a memory leak in others.
+    with sessions.Session() as session:
+        return session.request(method=method, url=url, **kwargs)
+    
+    from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
+    
+    
+METRICS = {
+    'f1': partial(f1_score, average='micro'),
+    'f1-by-sample': partial(f1_score, average='samples'),
+    'accuracy': accuracy_score,
+    'hamming': hamming_loss,
+    'jaccard': jaccard_similarity_score,
+}
+    
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
 
     
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
     
-class Response(object):
-    # noinspection PyDefaultArgument
-    def __init__(self, url, headers={}, status_code=200):
-        self.url = url
-        self.headers = CaseInsensitiveDict(headers)
-        self.status_code = status_code
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-def test_json_input_preserve_order(httpbin_both):
-    r = http('PATCH', httpbin_both + '/patch',
-             'order:={'map':{'1':'first','2':'second'}}')
-    assert HTTP_OK in r
-    assert r.json['data'] == \
-        '{'order': {'map': {'1': 'first', '2': 'second'}}}'
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
 
     
-        def test_CRLF_formatted_request(self, httpbin):
-        r = http('--pretty=format', '--print=HB', 'GET', httpbin.url + '/get')
-        self._validate_crlf(r)
-
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
+            self.title = match1(html, r'<meta property='og:title' content='([^']*)'')
     
-        if re.match(r'https?://movie', url):
-        title = match1(html, 'name='description' content='([^']+)')
-        tid = match1(url, 'trailer/(\d+)')
-        real_url = 'https://movie.douban.com/trailer/video_url?tid=%s' % tid
-        type, ext, size = url_info(real_url)
+        return video_dict
     
-        vids = matchall(content, yinyuetai_embed_patterns)
-    for vid in vids:
-        found = True
-        yinyuetai_download_by_id(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
+    
+    
+def get_title_and_urls(json_data):
+    title = legitimize(re.sub('[\s*]', '_', json_data['title']))
+    video_info = json_data['file_versions']['html5']['video']
+    if 'high' not in video_info:
+        if 'med' not in video_info:
+            video_url = video_info['low']['url']
+        else:
+            video_url = video_info['med']['url']
+    else:
+        video_url = video_info['high']['url']
+    audio_info = json_data['file_versions']['html5']['audio']
+    if 'high' not in audio_info:
+        if 'med' not in audio_info:
+            audio_url = audio_info['low']['url']
+        else:
+            audio_url = audio_info['med']['url']
+    else:
+        audio_url = audio_info['high']['url']
+    return title, video_url, audio_url
+    
+        if title is None:
+      title = url
     
     
     {
@@ -86,40 +170,3 @@ pattern_inline_api_key = r'api\.site_key\s*=\s*'([^']+)''
 pattern_inline_img_url = r''url':'([^']+)','key':'[^']+'}}'
 pattern_inline_NSID = r''nsid'\s*:\s*'([^']+)''
 pattern_inline_video_mark = r'('mediaType':'video')'
-    
-    
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
-
-    
-      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
-  if python_interpreter:
-    python_interpreter = utils.FindExecutable( python_interpreter )
-    if python_interpreter:
-      return python_interpreter
-    
-      # Ignore 'contained' argument in first position.
-  if words[ 0 ] == 'contained':
-    words = words[ 1: ]
-    
-    
-class FakeResponse( object ):
-  '''A fake version of a requests response object, just about suitable for
-  mocking a server response. Not usually used directly. See
-  MockServerResponse* methods'''
-  def __init__( self, response, exception ):
-    self._json = response
-    self._exception = exception
-    self.status_code = requests.codes.ok
-    self.text = not exception
-    
-        try:
-      result = self.fn( *self.args, **self.kwargs )
-    except BaseException:
-      e = sys.exc_info()[ 1 ]
-      self.future.set_exception( e )
-    else:
-      self.future.set_result( result )
