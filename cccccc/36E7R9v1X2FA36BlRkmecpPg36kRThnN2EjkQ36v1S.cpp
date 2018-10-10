@@ -1,398 +1,234 @@
 
         
-            void setModel(WalletModel *model);
-    void setAddress_SM(const QString &address);
-    void setAddress_VM(const QString &address);
+        namespace tesseract {
+    }
     
-    #include 'univalue.h'
+      // Search the nearest neighbor of part in one vertical direction as defined in
+  // search_bottom. It returns the neighbor found that major x overlap with it,
+  // or nullptr when not found.
+  ColPartition* SearchNNVertical(const bool search_bottom,
+                                 const ColPartition* part);
     
-    bool NwCurrentWindowInternalGetZoomFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::WebContents* web_contents = GetSenderWebContents();
-  if (!web_contents)
-    return false;
-  double zoom_level =
-      ZoomController::FromWebContents(web_contents)->GetZoomLevel();
-  response->AppendDouble(zoom_level);
-  return true;
-}
-    
-    
-    
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
-    
-    
-namespace nwapi {
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
     }
     
     
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+    {  if (word->word->flag(W_DONT_CHOP)) {
+    saved_enable_assoc = wordrec_enable_assoc;
+    saved_chop_enable = chop_enable;
+    wordrec_enable_assoc.set_value(0);
+    chop_enable.set_value(0);
+  }
+  if (pass_n == 1)
+    set_pass1();
+  else
+    set_pass2();
+  recog_word(word);
+  if (word->best_choice == nullptr)
+    word->SetupFake(*word->uch_set);
+  if (word->word->flag(W_DONT_CHOP)) {
+    wordrec_enable_assoc.set_value(saved_enable_assoc);
+    chop_enable.set_value(saved_chop_enable);
   }
 }
     
-    namespace nw {
-    }
-    
-    MenuItem::MenuItem(int id,
-                   const base::WeakPtr<ObjectManager>& object_manager,
-                   const base::DictionaryValue& option,
-                   const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id) {
-  Create(option);
-}
-    
-    bool AnyMetadata::InternalIs(const Descriptor* descriptor) const {
-  const string type_url = type_url_->GetNoArena();
-  string full_name;
-  if (!ParseAnyTypeUrl(type_url, &full_name)) {
-    return false;
-  }
-  return full_name == descriptor->full_name();
-}
-    
-      protobuf_unittest::TestAllTypes message2;
-  message2 = std::move(message1);
-  TestUtil::ExpectAllFieldsSet(message2);
-    
-    void WritePropertyDocComment(io::Printer* printer, const FieldDescriptor* field) {
-    WriteDocCommentBody(printer, field);
-}
-    
-    void EnumOneofFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if ($has_property_check$) {\n'
-    '  output.WriteRawTag($tag_bytes$);\n'
-    '  output.WriteEnum((int) $property_name$);\n'
-    '}\n');
-}
-    
-      virtual void GenerateCodecCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    // Format the enum value name in a pleasant way for C#:
-// - Strip the enum name as a prefix if possible
-// - Convert to PascalCase.
-// For example, an enum called Color with a value of COLOR_BLUE should
-// result in an enum value in C# called just Blue
-std::string GetEnumValueName(const std::string& enum_name, const std::string& enum_value_name) {
-  std::string stripped = TryRemovePrefix(enum_name, enum_value_name);
-  std::string result = ShoutyToPascalCase(stripped);
-  // Just in case we have an enum name of FOO and a value of FOO_2... make sure the returned
-  // string is a valid identifier.
-  if (ascii_isdigit(result[0])) {
-    result = '_' + result;
-  }
-  return result;
-}
-    
-    void MapFieldGenerator::GenerateCloningCode(io::Printer* printer) {
-  printer->Print(variables_,
-    '$name$_ = other.$name$_.Clone();\n');
-}
-    
-    // Generator options (used by csharp_generator.cc):
-struct Options {
-  Options() :
-      file_extension('.cs'),
-      base_namespace(''),
-      base_namespace_specified(false),
-      internal_access(false) {
-  }
-  // Extension of the generated file. Defaults to '.cs'
-  string file_extension;
-  // Base namespace to use to create directory hierarchy. Defaults to ''.
-  // This option allows the simple creation of a conventional C# file layout,
-  // where directories are created relative to a project-specific base
-  // namespace. For example, in a project with a base namespace of PetShop, a
-  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
-  // generate Model/Shared/User.cs underneath the specified --csharp_out
-  // directory.
-  //
-  // If no base namespace is specified, all files are generated in the
-  // --csharp_out directory, with no subdirectories created automatically.
-  string base_namespace;
-  // Whether the base namespace has been explicitly specified by the user.
-  // This is required as the base namespace can be explicitly set to the empty
-  // string, meaning 'create a full directory hierarchy, starting from the first
-  // segment of the namespace.'
-  bool base_namespace_specified;
-  // Whether the generated classes should have accessibility level of 'internal'.
-  // Defaults to false that generates 'public' classes.
-  bool internal_access;
-};
-    
-    struct Options;
-    
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-      // Getters for boost rng, curand, and cublas handles
-  inline static RNG& rng_stream() {
-    if (!Get().random_generator_) {
-      Get().random_generator_.reset(new RNG());
-    }
-    return *(Get().random_generator_);
-  }
-#ifndef CPU_ONLY
-  inline static cublasHandle_t cublas_handle() { return Get().cublas_handle_; }
-  inline static curandGenerator_t curand_generator() {
-    return Get().curand_generator_;
-  }
-#endif
-    
-      virtual inline const char* type() const { return 'AbsVal'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
-#endif
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-    
-    {}  // namespace caffe
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
-    
-    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
-
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-    namespace {
-class InsecureChannelCredentialsImpl final : public ChannelCredentials {
+    /// Base class for all tesseract image thresholding classes.
+/// Specific classes can add new thresholding methods by
+/// overriding ThresholdToPix.
+/// Each instance deals with a single image, but the design is intended to
+/// be useful for multiple calls to SetRectangle and ThresholdTo* if
+/// desired.
+class TESS_API ImageThresholder {
  public:
-  std::shared_ptr<grpc::Channel> CreateChannel(
-      const string& target, const grpc::ChannelArguments& args) override {
-    grpc_channel_args channel_args;
-    args.SetChannelArgs(&channel_args);
-    return CreateChannelInternal(
-        '',
-        grpc_insecure_channel_create(target.c_str(), &channel_args, nullptr));
+  ImageThresholder();
+  virtual ~ImageThresholder();
+    }
+    
+      enum FieldSize {
+    kServerElapsedTimeSize = 8,
+  };
+    
+    const ViewDescriptor& ServerReceivedBytesPerRpcMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/server/received_bytes_per_rpc/minute')
+          .set_measure(kRpcServerReceivedBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+    void ProtoServerReflection::FillErrorResponse(const Status& status,
+                                              ErrorResponse* error_response) {
+  error_response->set_error_code(status.error_code());
+  error_response->set_error_message(status.error_message());
+}
+    
+      Status GetFileContainingExtension(
+      ServerContext* context,
+      const reflection::v1alpha::ExtensionRequest* request,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    bool ProtoServerReflectionPlugin::has_sync_methods() const {
+  if (reflection_service_) {
+    return reflection_service_->has_synchronous_methods();
   }
+  return false;
+}
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetInt(name_, value_);
     }
-    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
     
-    AuthPropertyIterator& AuthPropertyIterator::operator++() {
-  grpc_auth_property_iterator iter = {ctx_, index_, name_};
-  property_ = grpc_auth_property_iterator_next(&iter);
-  ctx_ = iter.ctx;
-  index_ = iter.index;
-  name_ = iter.name;
-  return *this;
-}
-    
-      grpc_error* Init(grpc_call_element* elem,
-                   const grpc_call_element_args* args) override;
-    
-    void GenerateServerContext(absl::string_view tracing, absl::string_view stats,
-                           absl::string_view primary_role,
-                           absl::string_view method, CensusContext* context) {
-  GrpcTraceContext trace_ctxt;
-  TraceContextEncoding::Decode(tracing, &trace_ctxt);
-  SpanContext parent_ctx = trace_ctxt.ToSpanContext();
-  new (context) CensusContext(method, parent_ctx);
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-    #include <string.h>
-    
-    template <typename T>
-inline StringName __constant_get_enum_name(T param, const String &p_constant) {
-	if (GetTypeInfo<T>::VARIANT_TYPE == Variant::NIL)
-		ERR_PRINTS('Missing VARIANT_ENUM_CAST for constant's enum: ' + p_constant);
-	return GetTypeInfo<T>::get_class_info().class_name;
-}
-    
-    // Godot TO Bullet
-extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
-extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
-extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
-extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
-extern void G_TO_B(Transform const &inVal, btTransform &outVal);
-    
-    // This class is responsible to move kinematic actor
-// and sincronize rendering engine with Bullet
-/// DOC:
-/// http://www.bulletphysics.org/mediawiki-1.5.8/index.php/MotionStates#What.27s_a_MotionState.3F
-class GodotMotionState : public btMotionState {
-    }
-    
-    	const btRayShape *ray_shape;
-	btTransform ray_transform;
-    
-    class RigidBodyBullet;
-class btTypedConstraint;
-    
-    void SliderJointBullet::setRestitutionDirAng(real_t restitutionDirAng) {
-	sliderConstraint->setRestitutionDirAng(restitutionDirAng);
-}
-    
-    	ClassDB::register_virtual_class<CSGShape>();
-	ClassDB::register_virtual_class<CSGPrimitive>();
-	ClassDB::register_class<CSGMesh>();
-	ClassDB::register_class<CSGSphere>();
-	ClassDB::register_class<CSGBox>();
-	ClassDB::register_class<CSGCylinder>();
-	ClassDB::register_class<CSGTorus>();
-	ClassDB::register_class<CSGPolygon>();
-	ClassDB::register_class<CSGCombiner>();
-    
-    	jclass activityThread = env->FindClass('android/app/ActivityThread');
-	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
-	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
-	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
-	jobject context = env->CallObjectMethod(at, getApplication);
-    
-    	ERR_FAIL_NULL(p_obj);
-	id = p_obj->get_instance_id();
-}
-void FuncRef::set_function(const StringName &p_func) {
-    
-    class DHTResponseMessage : public DHTAbstractMessage {
-protected:
-  virtual std::string toStringOptional() const { return A2STR::NIL; }
-    }
-    
-    #include 'DHTNode.h'
-#include 'DHTBucket.h'
-#include 'DHTBucketTree.h'
-#include 'DHTTaskQueue.h'
-#include 'DHTTaskFactory.h'
-#include 'DHTTask.h'
-#include 'util.h'
-#include 'LogFactory.h'
-#include 'Logger.h'
-#include 'fmt.h'
-    
-    DHTRoutingTableSerializer::DHTRoutingTableSerializer(int family)
-    : family_(family)
+    PointArray* PointArray::reverse() const
 {
+    vector<Vec2> newArray;
+    newArray.reserve(_controlPoints.size());
+    for (auto iter = _controlPoints.rbegin(), iterRend = _controlPoints.rend(); iter != iterRend; ++iter)
+    {
+        newArray.push_back(*iter);
+    }
+    PointArray *config = PointArray::create(0);
+    config->setControlPoints(std::move(newArray));
+    
+    return config;
 }
     
-    class DHTTask {
+    void AccelAmplitude::update(float time)
+{
+    ((AccelAmplitude*)(_other))->setAmplitudeRate(powf(time, _rate));
+    _other->update(time);
+}
+    
+        /**
+    @brief Get the amplitude of ripple effect.
+    @return The amplitude of ripple effect.
+    */
+    float getAmplitude() const { return _amplitude; }
+    /**
+    @brief Set the amplitude of ripple effect.
+    @param fAmplitude The amplitude of ripple effect.
+    */
+    void setAmplitude(float fAmplitude) { _amplitude = fAmplitude; }
+    
+    
+    {    return ret;
+}
+    
+    /** @class BezierBy
+ * @brief An action that moves the target with a cubic Bezier curve by a certain distance.
+ */
+class CC_DLL BezierBy : public ActionInterval
+{
 public:
-  virtual ~DHTTask() = default;
+    /** Creates the action with a duration and a bezier configuration.
+     * @param t Duration time, in seconds.
+     * @param c Bezier config.
+     * @return An autoreleased BezierBy object.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * in js: var create(var t,var table)
+     * in lua: local create(local t, local table)
+     * @endcode
+     */
+    static BezierBy* create(float t, const ccBezierConfig& c);
     }
     
-    void DHTTaskExecutor::update()
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    ProgressFromTo* ProgressFromTo::create(float duration, float fromPercentage, float toPercentage)
 {
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
+    ProgressFromTo *progressFromTo = new (std::nothrow) ProgressFromTo();
+    if (progressFromTo && progressFromTo->initWithDuration(duration, fromPercentage, toPercentage)) {
+        progressFromTo->autorelease();
+        return progressFromTo;
     }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
+    
+    delete progressFromTo;
+    return nullptr;
 }
     
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
-{
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
+    NS_CC_BEGIN
+    
+    
+    {    return true;
 }
     
-    class DHTTaskQueue {
-public:
-  virtual ~DHTTaskQueue() = default;
+      virtual Status DisableFileDeletions() override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status EnableFileDeletions(bool /*force*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status GetLiveFiles(std::vector<std::string>&,
+                              uint64_t* /*manifest_file_size*/,
+                              bool /*flush_memtable*/ = true) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Flush;
+  virtual Status Flush(const FlushOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DB::IngestExternalFile;
+  virtual Status IngestExternalFile(
+      ColumnFamilyHandle* /*column_family*/,
+      const std::vector<std::string>& /*external_files*/,
+      const IngestExternalFileOptions& /*ingestion_options*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+    
+      CompactionIterator(InternalIterator* input, const Comparator* cmp,
+                     MergeHelper* merge_helper, SequenceNumber last_sequence,
+                     std::vector<SequenceNumber>* snapshots,
+                     SequenceNumber earliest_write_conflict_snapshot,
+                     const SnapshotChecker* snapshot_checker, Env* env,
+                     bool report_detailed_time, bool expect_valid_internal_key,
+                     RangeDelAggregator* range_del_agg,
+                     const Compaction* compaction = nullptr,
+                     const CompactionFilter* compaction_filter = nullptr,
+                     const std::atomic<bool>* shutting_down = nullptr,
+                     const SequenceNumber preserve_deletes_seqnum = 0);
+    
+    namespace rocksdb {
     }
+    
+    #endif // ROCKSDB_LITE
+    
+    // This is an example interface of external-compaction algorithm.
+// Compaction algorithm can be implemented outside the core-RocksDB
+// code by using the pluggable compaction APIs that RocksDb provides.
+class Compactor : public EventListener {
+ public:
+  // Picks and returns a compaction task given the specified DB
+  // and column family.  It is the caller's responsibility to
+  // destroy the returned CompactionTask.  Returns 'nullptr'
+  // if it cannot find a proper compaction task.
+  virtual CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) = 0;
+    }
+    
+      ////////////////////////////////////////////////////////
+  //
+  // Simple OptimisticTransaction Example ('Read Committed')
+  //
+  ////////////////////////////////////////////////////////
+    
+      {
+    std::string string_val;
+    // If it cannot pin the value, it copies the value to its internal buffer.
+    // The intenral buffer could be set during construction.
+    PinnableSlice pinnable_val(&string_val);
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
+    // If the value is not pinned, the internal buffer must have the value.
+    assert(pinnable_val.IsPinned() || string_val == 'value');
+  }
