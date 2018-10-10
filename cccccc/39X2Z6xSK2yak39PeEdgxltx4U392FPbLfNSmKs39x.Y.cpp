@@ -1,269 +1,117 @@
 
         
-        std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status) {
-  if (!PyList_Check(input_constant_tensor_values)) {
-    TF_SetStatus(out_status, TF_INVALID_ARGUMENT, 'Invalid python value');
-    return std::vector<string>();
-  }
-    }
+        static const char* kModuleName = '_api_implementation';
+static const char kModuleDocstring[] =
+'_api_implementation is a module that exposes compile-time constants that\n'
+'determine the default API implementation to use for Python proto2.\n'
+'\n'
+'It complements api_implementation.py by setting defaults using compile-time\n'
+'constants defined in C, such that one can set defaults at compilation\n'
+'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
     
-    #include <vector>
-#include 'tensorflow/c/tf_status_helper.h'
-#include 'tensorflow/core/platform/types.h'
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/compiler/plugin.pb.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
     
-    REGISTER_OP('AttrEnum')
-    .Attr('a: {'apples', 'oranges'}')
-    .SetShapeFn(shape_inference::UnknownShape);
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/stubs/strutil.h>
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    
-    {  return Status::OK();
-}
-    
-      // We lie shamelessly and say that a cast from half to bfloat16 is safe.
-  // Numpy frequently uses the smallest legal representation type for small
-  // float constants (e.g., 1.0), which is often float16. Things break if these
-  // cannot be converted transparently to bfloat16.
-  if (!RegisterBfloat16Cast<Eigen::half>(NPY_HALF, /*cast_is_safe=*/true)) {
-    return false;
-  }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Called by python code on initialization.
-//
-// 'trampoline' must represent a python function which has the
-// following signature:
-//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
-//     ndarray | list(ndarray) | python scalar |
-//     EagerTensor | list(EagerTensor) | None
-//
-// The trampoline takes two arguments, the first is a string token
-// used by the python frontend's dispatching logic; the second is a
-// list of numpy ndarrays or EagerTensor objects. It can return a
-// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
-// EagerTensor, a list of EagerTensors, or None.
-//
-// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
-// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
-// of EagerTensors, or None.
-//
-// The C++ runtime converts outputs back to Tensor objects.
-//
-// This function is called by script_ops.py during its module initialization.
-//
-// TODO(zhifengc): Support distributed runtime.
-void InitializePyTrampoline(PyObject* trampoline);
-    
-    class RecordReader;
-    
-    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
-#include 'tensorflow/stream_executor/stream_executor.h'
-#include 'tensorflow/stream_executor/stream_executor_internal.h'
-    
-        struct Margin {
-        Margin() : left(0), right(0), top(0), bottom(0) {}
-        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
-            : left(left_), right(right_), top(top_), bottom(bottom_) {}
-    }
-    
-                prevx[1] = currx[1];
-            currx[1] = nextx[1];
-    
-    
-    {    return 0;
-#endif
-}
-    
-    #include 'common.hpp'
-    
-    INRANGEFUNC(u8)
-INRANGEFUNC(s8)
-INRANGEFUNC(u16)
-INRANGEFUNC(s16)
-INRANGEFUNC(s32)
-INRANGEFUNC(f32)
+    ExtensionGenerator::~ExtensionGenerator() {}
     
     
     {
-    {        for (; j < size.width; ++j)
-            sqsum[j] = (prev += src[j]*src[j]) + prevSqSum[j];
+    {
+    {
+    {
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ExtensionGenerator);
+};
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_OBJECTIVEC_MESSAGE_H__
+
+    
+    ```
+    
+    class GetMergeSingleScalarFeatureTensorsGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    vector<string> input_blob_names{};
+    vector<string> output_blob_names{};
     }
+    }
+    
+    
+    {  bool RunOnDevice() override;
+};
+    
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
+    
+    namespace internal {
+    }
+    
+    bool IsColorTerminal() {
+#if BENCHMARK_OS_WINDOWS
+  // On Windows the TERM variable is usually not set, but the
+  // console there does support colors.
+  return 0 != _isatty(_fileno(stdout));
 #else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)sqsumBase;
-    (void)sqsumStride;
-#endif
-}
-    
-    // Common functions and classes from std that caffe often uses.
-using std::fstream;
-using std::ios;
-using std::isnan;
-using std::isinf;
-using std::iterator;
-using std::make_pair;
-using std::map;
-using std::ostringstream;
-using std::pair;
-using std::set;
-using std::string;
-using std::stringstream;
-using std::vector;
-    
-      /**
-   * @brief Returns the exact number of bottom blobs required by the layer,
-   *        or -1 if no exact number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some exact number of bottom blobs.
-   */
-  virtual inline int ExactNumBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the minimum number of bottom blobs required by the layer,
-   *        or -1 if no minimum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some minimum number of bottom blobs.
-   */
-  virtual inline int MinBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the maximum number of bottom blobs required by the layer,
-   *        or -1 if no maximum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some maximum number of bottom blobs.
-   */
-  virtual inline int MaxBottomBlobs() const { return -1; }
-  /**
-   * @brief Returns the exact number of top blobs required by the layer,
-   *        or -1 if no exact number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some exact number of top blobs.
-   */
-  virtual inline int ExactNumTopBlobs() const { return -1; }
-  /**
-   * @brief Returns the minimum number of top blobs required by the layer,
-   *        or -1 if no minimum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some minimum number of top blobs.
-   */
-  virtual inline int MinTopBlobs() const { return -1; }
-  /**
-   * @brief Returns the maximum number of top blobs required by the layer,
-   *        or -1 if no maximum number is required.
-   *
-   * This method should be overridden to return a non-negative value if your
-   * layer expects some maximum number of top blobs.
-   */
-  virtual inline int MaxTopBlobs() const { return -1; }
-  /**
-   * @brief Returns true if the layer requires an equal number of bottom and
-   *        top blobs.
-   *
-   * This method should be overridden to return true if your layer expects an
-   * equal number of bottom and top blobs.
-   */
-  virtual inline bool EqualNumBottomTopBlobs() const { return false; }
-    
-    template <typename Dtype>
-class Batch {
- public:
-  Blob<Dtype> data_, label_;
-};
-    
-    #endif  // CAFFE_BATCHNORM_LAYER_HPP_
-
-    
-      bool handles_setup_;
-  cudnnHandle_t* handle_;
-  cudaStream_t*  stream_;
-    
-    namespace caffe {
+  // On non-Windows platforms, we rely on the TERM variable. This list of
+  // supported TERM values is copied from Google Test:
+  // <https://github.com/google/googletest/blob/master/googletest/src/gtest.cc#L2925>.
+  const char* const SUPPORTED_TERM_VALUES[] = {
+      'xterm',         'xterm-color',     'xterm-256color',
+      'screen',        'screen-256color', 'tmux',
+      'tmux-256color', 'rxvt-unicode',    'rxvt-unicode-256color',
+      'linux',         'cygwin',
+  };
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    
-    {}  // namespace grpc
-
-    
-    #include <grpc/grpc_security.h>
-    
-    #include <grpc/support/log.h>
-#include 'src/core/lib/debug/trace.h'
-    
-    int CoreCodegen::grpc_byte_buffer_reader_init(grpc_byte_buffer_reader* reader,
-                                              grpc_byte_buffer* buffer) {
-  return ::grpc_byte_buffer_reader_init(reader, buffer);
-}
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
   }
-  return '';
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
 }
     
-    namespace {
-    }
+    #if defined(BENCHMARK_OS_MACOSX)
+#include <mach/mach_time.h>
+#endif
+// For MSVC, we want to use '_asm rdtsc' when possible (since it works
+// with even ancient MSVC compilers), and when not possible the
+// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
+// environments, <windows.h> and <intrin.h> have conflicting
+// declarations of some other intrinsics, breaking compilation.
+// Therefore, we simply declare __rdtsc ourselves. See also
+// http://connect.microsoft.com/VisualStudio/feedback/details/262047
+#if defined(COMPILER_MSVC) && !defined(_M_IX86)
+extern 'C' uint64_t __rdtsc();
+#pragma intrinsic(__rdtsc)
+#endif
     
-    
-    {  TraceContextEncoding() = delete;
-  TraceContextEncoding(const TraceContextEncoding&) = delete;
-  TraceContextEncoding(TraceContextEncoding&&) = delete;
-  TraceContextEncoding operator=(const TraceContextEncoding&) = delete;
-  TraceContextEncoding operator=(TraceContextEncoding&&) = delete;
-};
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H */
+    #define TRY_ACQUIRE_SHARED(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(try_acquire_shared_capability(__VA_ARGS__))
