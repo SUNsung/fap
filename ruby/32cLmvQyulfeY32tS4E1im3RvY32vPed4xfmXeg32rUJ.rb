@@ -1,125 +1,88 @@
 
         
-                case array.length
-        when 0
-          ''.html_safe
-        when 1
-          ERB::Util.html_escape(array[0])
-        when 2
-          safe_join([array[0], array[1]], options[:two_words_connector])
-        else
-          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
-        end
-      end
-    end
+          it 'calls #to_path on second argument when passed ?d and a directory' do
+    p = mock('path')
+    p.should_receive(:to_path).and_return @dir
+    Kernel.test(?d, p)
   end
 end
-
     
-            private
+      it 'can throw an object' do
+    lambda {
+      obj = Object.new
+      catch obj do
+        throw obj
+      end
+    }.should_not raise_error(NameError)
+  end
+end
     
-          def typecast(paths)
-        paths.map do |path|
-          case path
-          when Pathname, String
-            OptimizedFileSystemResolver.new path.to_s
-          else
-            path
+      after :each do
+    Object.send :remove_method, :boom
+  end
+    
+        def assets_path
+      @assets_path ||= File.join gem_path, 'assets'
+    end
+    
+    # This is the script used to automatically convert all of twbs/bootstrap LESS to Sass.
+#
+# Most differences are fixed by regexps and other forms of string substitution.
+# There are Bootstrap-specific workarounds for the lack of parent selectors, recursion, mixin namespaces, extend within @media, etc in Sass 3.2.
+class Converter
+  module LessConversion
+    # Some regexps for matching bits of SCSS:
+    SELECTOR_CHAR               = '\[\]$\w\-{}#,.:&>@'
+    # 1 selector (the part before the {)
+    SELECTOR_RE                 = /[#{SELECTOR_CHAR}]+[#{SELECTOR_CHAR}\s]*/
+    # 1 // comment
+    COMMENT_RE                  = %r((?:^[ \t]*//[^\n]*\n))
+    # 1 {, except when part of @{ and #{
+    RULE_OPEN_BRACE_RE          = /(?<![@#\$])\{/
+    # same as the one above, but in reverse (on a reversed string)
+    RULE_OPEN_BRACE_RE_REVERSE  = /\{(?![@#\$])/
+    # match closed brace, except when \w precedes }, or when }[.'']. a heurestic to exclude } that are not selector body close }
+    RULE_CLOSE_BRACE_RE         = /(?<!\w)\}(?![.''])/
+    RULE_CLOSE_BRACE_RE_REVERSE = /(?<![.''])\}(?!\w)/
+    # match any brace that opens or closes a properties body
+    BRACE_RE                    = /#{RULE_OPEN_BRACE_RE}|#{RULE_CLOSE_BRACE_RE}/m
+    BRACE_RE_REVERSE            = /#{RULE_OPEN_BRACE_RE_REVERSE}|#{RULE_CLOSE_BRACE_RE_REVERSE}/m
+    # valid characters in mixin definitions
+    SCSS_MIXIN_DEF_ARGS_RE      = /[\w\-,\s$:#%()]*/
+    LESS_MIXIN_DEF_ARGS_RE      = /[\w\-,;.\s@:#%()]*/
+    
+          @options = options.merge(:_convert => true)
+      # Backwards compatibility
+      @options[:old] = true if @options[:alternate] == false
+      @template = template
+      @checked_encoding = false
+    end
+    
+          if !colon_path?(@args[0]) && probably_dest_dir?(@args[1])
+        flag = @options[:update] ? '--update' : '--watch'
+        err =
+          if !File.exist?(@args[1])
+            'doesn't exist'
+          elsif @args[1] =~ /\.css$/
+            'is a CSS file'
           end
-        end
-      end
-  end
-end
-
-    
-      def key?(key)
-    @checksums.key?(key)
-  end
-    
-      def describe_x11
-    return 'N/A' unless MacOS::XQuartz.installed?
-    '#{MacOS::XQuartz.version} => #{describe_path(MacOS::XQuartz.prefix)}'
-  end
-    
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
+        raise <<MSG if err
+File #{@args[1]} #{err}.
+    Did you mean: #{@default_syntax} #{flag} #{@args[0]}:#{@args[1]}
+MSG
       end
     
-            # Using the LDAP attributes configuration, find and return the first
-        # attribute with a value. For example, by default, when given 'email',
-        # this method looks for 'mail', 'email' and 'userPrincipalName' and
-        # returns the first with a value.
-        def attribute_value(attribute)
-          attributes = Array(config.attributes[attribute.to_s])
-          selected_attr = attributes.find { |attr| entry.respond_to?(attr) }
+          # @see Base#find_relative
+      def find_relative(name, base, options)
+        _find(File.dirname(base), name, options)
+      end
     
-    module Gitlab
-  module BackgroundMigration
-    class PopulateMergeRequestsLatestMergeRequestDiffId
-      BATCH_SIZE = 1_000
-    
-            def entity
-          'pipeline'
-        end
-    
-            def key_width
-          62
-        end
-    
-        def generate(site)
-      site.write_category_indexes
-    end
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
+          # Returns the body of the `for` loop.
+      #
+      # @return [Node, nil] The body of the `for` loop.
+      def body
+        node_parts[2]
       end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-        def render(context)
-      includes_dir = File.join(context.registers[:site].source, '_includes')
-    
-    end
-    
-      require ARGV.shift
-  exit_status = LogStash::Runner.run('bin/logstash', ARGV)
-  exit(exit_status || 0)
-end
-
-    
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
-    end
   end
 end
-    
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
