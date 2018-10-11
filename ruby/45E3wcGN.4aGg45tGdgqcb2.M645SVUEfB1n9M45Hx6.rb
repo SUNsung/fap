@@ -1,161 +1,158 @@
 
         
-                def render(&block)
-          options = @options.stringify_keys
-          tag_value = options.delete('value')
-          name_and_id = options.dup
+        require 'benchmark/ips'
+require 'jekyll'
+require 'json'
     
-          []
-    end
+          def print_worst_offenders
+        @io.puts
+        @io.puts 'Worst offenders:'
+        @timings.sort_by { |_f, t| -t }.take(10).each do |(f, t)|
+          @io.puts '  #{t}s for #{f}'
+        end
+        @io.puts
+      end
     
-      UserOption.where(user_id: smoke_user.id).update_all(
-    email_direct: false,
-    email_digests: false,
-    email_private_messages: false,
-  )
+            # Internal: Gets the filename of the sample post to be created
+        #
+        # Returns the filename of the sample post, as a String
+        def initialized_post_name
+          '_posts/#{Time.now.strftime('%Y-%m-%d')}-welcome-to-jekyll.markdown'
+        end
     
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
+            # If our highlighter is CodeRay we go in to merge the CodeRay defaults
+        # with your 'coderay' key if it's there, deprecating it in the
+        # process of you using it.
+        def modernize_coderay_config
+          unless @config['coderay'].empty?
+            Jekyll::Deprecator.deprecation_message(
+              'You are using 'kramdown.coderay' in your configuration, ' \
+              'please use 'syntax_highlighter_opts' instead.'
+            )
+    
+        # User defines a new private lane, which can't be called from the CLI
+    def private_lane(lane_name, &block)
+      UI.user_error!('You have to pass a block using 'do' for lane '#{lane_name}'. Make sure you read the docs on GitHub.') unless block
+    
+          def self.is_supported?(platform)
+        true
       end
     end
   end
 end
 
     
-            it 'fails to find the live_version of a bundle' do
-          expect do
-            bundle.live_version
-          end.to raise_error('We do not support BUNDLE types right now')
-        end
+            message = '#{grouping}/test/#{specified_build_number} (fastlane)'
+        tag = '#{grouping}/test/#{specified_build_number}'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
       end
+    
+          it 'accepts an array of input paths' do
+        input_dir_with_spaces = 'second/input dir with spaces'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: ['input/dir', '#{input_dir_with_spaces}', 'third/input/file.h']
+          )
+        end').runner.execute(:test)
+    
+          it 'bootstraps with a single dependency' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              command: 'bootstrap',
+              dependencies: ['TestDependency']
+            )
+          end').runner.execute(:test)
+    
+        def doc_default_value
+      return '[*](#parameters-legend-dynamic)' if self.default_value_dynamic
+      return '' if self.default_value.nil?
+      return '`''`' if self.default_value.instance_of?(String) && self.default_value.empty?
+      return '`:#{self.default_value}`' if self.default_value.instance_of?(Symbol)
+    
+          @report_note = current_account.report_notes.new(resource_params)
+      @report = @report_note.report
+    
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
     end
+  end
     
-        it 'has authType of non-sa' do
-      response = double
-      allow(response).to receive(:status).and_return(412)
-      allow(response).to receive(:body).and_return({ 'authType' => 'non-sa' })
-      allow_any_instance_of(Spaceship::Client).to receive(:request).and_return(response)
+            # Decodes a Kerberos response
+        #
+        # @param data [String] the raw response message
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
+        # @raise [RuntimeError] if the response can't be processed
+        def decode_kerb_response(data)
+          asn1 = OpenSSL::ASN1.decode(data)
+          msg_type = asn1.value[0].value[1].value[0].value
     
-              return true
-        rescue FastlaneCore::Interface::FastlaneBuildFailure => ex
-          # Specifically catching FastlaneBuildFailure to prevent build/compile errors from being
-          # silenced when :fail_build is set to false
-          # :fail_build should only suppress testing failures
-          raise ex
-        rescue => ex
-          if values[:fail_build]
-            raise ex
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
+    
+                decrypted
           end
-        ensure
-          unless values[:derived_data_path].to_s.empty?
-            Actions.lane_context[SharedValues::SCAN_DERIVED_DATA_PATH] = values[:derived_data_path]
-            plist_files_after = test_summary_filenames(values[:derived_data_path])
-            all_test_summaries = (plist_files_after - plist_files_before)
-            Actions.lane_context[SharedValues::SCAN_GENERATED_PLIST_FILES] = all_test_summaries
-            Actions.lane_context[SharedValues::SCAN_GENERATED_PLIST_FILE] = all_test_summaries.last
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the start_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_start_time(input)
+            input.value[0].value
           end
-        end
-      end
     
-          unless result
-        error_string = 'Could not set team ID to '#{team_id}', only found the following available teams:\n\n#{available_teams.map { |team| '- #{team[:team_id]} (#{team[:team_name]})' }.join('\n')}\n'
-        raise Tunes::Error.new, error_string
-      end
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
-            set_of_simulators.to_a
-      end
+        def pos=(i)
+      @s.pos = str_to_byte_pos i
+      i
+    end
     
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+      # log-levels from the diaspora.yml for SQL and federation debug-logging
+  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
+  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
+  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
+    AppConfig.environment.logging.debug.federation? ? :debug : :info
     
-      def set_statuses
-    @statuses = scope_for_collection
-    @statuses = cache_collection(@statuses, Status)
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
   end
-    
-        def update
-      authorize @user, :change_email?
-    
-        def enable
-      authorize @custom_emoji, :enable?
-      @custom_emoji.update!(disabled: false)
-      log_action :enable, @custom_emoji
-      flash[:notice] = I18n.t('admin.custom_emojis.enabled_msg')
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
-    end
-    
-        def resource_params
-      params.require(:email_domain_block).permit(:domain)
-    end
-  end
-end
-
-    
-        def resubscribe
-      authorize :instance, :resubscribe?
-      params.require(:by_domain)
-      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
-      redirect_to admin_instances_path
-    end
-    
-            format('%*e', 20, 109.52).should == '        1.095200e+02'
-        format('%*E', 20, 109.52).should == '        1.095200E+02'
-        format('%*f', 20, 10.952).should == '           10.952000'
-        format('%*g', 20, 12.1234).should == '             12.1234'
-        format('%*G', 20, 12.1234).should == '             12.1234'
-        format('%*a', 20, 196).should == '           0x1.88p+7'
-        format('%*A', 20, 196).should == '           0X1.88P+7'
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
   end
 end
     
-        $Kernel_trace_var_global = 'foo'
-    
-    def source_version
-  @source_version ||= File.read(File.expand_path('../VERSION', __FILE__)).strip
-end
-    
-    # usage rake new_post[my-new-post] or rake new_post['my new post'] or rake new_post (defaults to 'new-post')
-desc 'Begin a new post in #{source_dir}/#{posts_dir}'
-task :new_post, :title do |t, args|
-  if args.title
-    title = args.title
-  else
-    title = get_stdin('Enter a title for your post: ')
-  end
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  mkdir_p '#{source_dir}/#{posts_dir}'
-  filename = '#{source_dir}/#{posts_dir}/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}'
-  if File.exist?(filename)
-    abort('rake aborted!') if ask('#{filename} already exists. Do you want to overwrite?', ['y', 'n']) == 'n'
-  end
-  puts 'Creating new post: #{filename}'
-  open(filename, 'w') do |post|
-    post.puts '---'
-    post.puts 'layout: post'
-    post.puts 'title: \'#{title.gsub(/&/,'&amp;')}\''
-    post.puts 'date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}'
-    post.puts 'comments: true'
-    post.puts 'categories: '
-    post.puts '---'
-  end
-end
-    
-    module Jekyll
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
     end
+  end
+    
+        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
+      # adds one not mutual contact
+      bob.share_with(FactoryGirl.create(:person), @aspect)
+    
+      end
