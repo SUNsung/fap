@@ -1,276 +1,250 @@
 
         
-        
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+        GetRenderProcessHosts(rphs);
+    for (it = rphs.begin(); it != rphs.end(); it++) {
+      RenderProcessHost* rph = *it;
+      DCHECK(rph != NULL);
+    }
+    
+      // Try to close all windows (then will cause whole app to quit).
+  static void CloseAllWindows(bool force = false, bool quit = false);
+    
+    
+    {}  // namespace remote
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    NwAppGetArgvSyncFunction::~NwAppGetArgvSyncFunction() {
+}
+    
+    
+    {  // The name of the source file where the test part took place, or
+  // '' if the source file is unknown.
+  std::string file_name_;
+  // The line in the source file where the test part took place, or -1
+  // if the line number is unknown.
+  int line_number_;
+  std::string summary_;  // The test failure summary.
+  std::string message_;  // The test failure message.
+};
+    
+    // Helper template function for comparing floating-points.
+//
+// Template parameter:
+//
+//   RawType: the raw floating-point type (either float or double)
+//
+// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+template <typename RawType>
+AssertionResult CmpHelperFloatingPointEQ(const char* expected_expression,
+                                         const char* actual_expression,
+                                         RawType expected,
+                                         RawType actual) {
+  const FloatingPoint<RawType> lhs(expected), rhs(actual);
+    }
+    
+    // Helper function for implementing {EXPECT|ASSERT}_PRED4.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2,
+          typename T3,
+          typename T4>
+AssertionResult AssertPred4Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  const char* e3,
+                                  const char* e4,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2,
+                                  const T3& v3,
+                                  const T4& v4) {
+  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
+    }
+    
+    #include <limits.h>
+#include 'sample1.h'
+#include 'gtest/gtest.h'
+    
+      ////////////////////////////////////////////////////////////
+  //
+  // C'tors
+    
+    DEFINE_int32(threads, 16, 'Number of concurrent threads to run.');
+DEFINE_int64(cache_size, 8 * KB * KB,
+             'Number of bytes to use as a cache of uncompressed data.');
+DEFINE_int32(num_shard_bits, 4, 'shard_bits.');
+    
+      // Cannot be called while another thread is calling Seek().
+  // REQUIRES: use this function of DBImpl::column_family_memtables_ should be
+  //           under a DB mutex OR from a write thread
+  virtual ColumnFamilyData* current() override { return current_; }
+    
+    class TimeSetEnv : public EnvWrapper {
+ public:
+  explicit TimeSetEnv() : EnvWrapper(nullptr) {}
+  uint64_t now_micros_ = 6666;
+  virtual uint64_t NowNanos() override { return now_micros_ * std::milli::den; }
+};
+    
+    #include 'rocksdb/env.h'
+#include 'util/testharness.h'
+    
+      // Read a key OUTSIDE this transaction. Does not affect txn.
+  s = txn_db->Get(read_options, 'abc', &value);
+    
+      /**
+   * @brief Constructor
+   */
+  CanFrame() : id(0), len(0), timestamp{0} {
+    std::memset(data, 0, sizeof(data));
+  }
+    
+    struct TestCanParam {
+  CANCardParameter conf;
+  bool is_first_agent = false;
+  int32_t recv_cnt = 0;
+  int32_t recv_err_cnt = 0;
+  int32_t send_cnt = 0;
+  int32_t send_err_cnt = 0;
+  int32_t send_lost_cnt = 0;
+  int32_t send_time = 0;
+  int32_t recv_time = 0;
+  CanClient *can_client = nullptr;
+    }
+    
+    void EsdCanClient::Stop() {
+  if (is_started_) {
+    is_started_ = false;
+    int32_t ret = canClose(dev_handler_);
+    if (ret != NTCAN_SUCCESS) {
+      AERROR << 'close error code:' << ret << ', ' << GetErrorString(ret);
+    } else {
+      AINFO << 'close esd can ok. port:' << port_;
+    }
+  }
+}
+    
+      /**
+   * @brief Get the error string.
+   * @param status The status to get the error string.
+   */
+  std::string GetErrorString(const int32_t status) override;
+    
+      /**
+   * @brief Destructor
+   */
+  virtual ~FakeCanClient() = default;
+    
+      int32_t ret = bcan_recv(_dev_handler, _recv_frames, *frame_num);
+  // don't log timeout
+  if (ret == RX_TIMEOUT) {
+    *frame_num = 0;
+    return ErrorCode::OK;
+  }
+  if (ret < 0) {
+    int ret_rece_error = bcan_get_status(_dev_handler);
+    AERROR << 'receive message failed, error code:' << ret
+           << 'receive error:' << ret_rece_error;
+    return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
+  }
+  *frame_num = ret;
+    
+    
     {
-    {} // namespace test
-} // namespace c10d
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
 
     
-    #include <string>
-#include <vector>
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/message_manager.h'
     
-        for (int inputIdx = 0; inputIdx < def_.input_size() / 4; ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * 4));
-      input_blob_names.push_back(I(inputIdx * 4 + 3));
-      output_blob_names.push_back(GI(inputIdx * 4 + 2));
-    }
-    input_blob_names.push_back(GO(4));
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
     
-    template <typename T, class Context>
-class FloorOp final : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  USE_SIMPLE_CTOR_DTOR(FloorOp);
-    }
+    #ifndef MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
+#define MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
     
-    // FreeOp frees the content of the output blob. We allow it to take in input
-// blobs purely for the reason that it can 'wait' on the input blobs to be
-// produced by some of the earlier operators before a free is called.
-template <class Context>
-class FreeOp : public Operator<Context> {
- public:
-  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
-    }
-    
-    
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
 }
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
+    const int32_t CAN_FRAME_SIZE = 8;
+const int32_t MAX_CAN_SEND_FRAME_LEN = 1;
+const int32_t MAX_CAN_RECV_FRAME_LEN = 10;
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-    D3DMATRIX last_world, last_view, last_projection;
-    g_pd3dDevice->GetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
-    
-        if (pEvent->m_Pressed == 1)
-    {
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
-            g_MousePressed[0] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
-            g_MousePressed[1] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
-            g_MousePressed[2] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
-            io.MouseWheel += pEvent->m_y;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
-            io.MouseWheel += pEvent->m_y;
-    }
-    
-    void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h)
-{
-    uint32_t min_image_count = 2;	// FIXME: this should become a function parameter
-    }
-    
-        void FreeTypeFont::Shutdown()
-    {
-        if (FreetypeFace) 
-        {
-            FT_Done_Face(FreetypeFace);
-            FreetypeFace = NULL;
-            FT_Done_FreeType(FreetypeLibrary);
-            FreetypeLibrary = NULL;
-        }
-    }
-    
-      // Implementations of the DB interface
-  using DB::Get;
-  virtual Status Get(const ReadOptions& options,
-                     ColumnFamilyHandle* column_family, const Slice& key,
-                     PinnableSlice* value) override;
-  using DB::MultiGet;
-  virtual std::vector<Status> MultiGet(
-      const ReadOptions& options,
-      const std::vector<ColumnFamilyHandle*>&,
-      const std::vector<Slice>& keys, std::vector<std::string>* values)
-    override;
-    
-        uint64_t fileSize;
-    status = defaultEnv->GetFileSize(filePath, &fileSize);
-    ASSERT_OK(status);
-    
-      using DBImpl::Flush;
-  virtual Status Flush(const FlushOptions& /*options*/,
-                       ColumnFamilyHandle* /*column_family*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-    
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
-    
-      env.now_micros_ += 100u;  // sleep credit 100
-  // 1000 used, 7240 left
-  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 1000u));
-    
-    Status HdfsEnv::NewDirectory(const std::string& name,
-                             unique_ptr<Directory>* result) {
-  int value = hdfsExists(fileSys_, name.c_str());
-  switch (value) {
-    case HDFS_EXISTS:
-      result->reset(new HdfsDirectory(0));
-      return Status::OK();
-    default:  // fail if the directory doesn't exist
-      ROCKS_LOG_FATAL(mylog, 'NewDirectory hdfsExists call failed');
-      throw HdfsFatalException('hdfsExists call failed with error ' +
-                               ToString(value) + ' on path ' + name +
-                               '.\n');
-  }
-}
-    
-    // file_name can be left empty if it is not unkown.
-static Status IOError(const std::string& context, const std::string& file_name,
-                      int err_number) {
-  switch (err_number) {
-  case ENOSPC:
-    return Status::NoSpace(IOErrorMsg(context, file_name),
-                           strerror(err_number));
-  case ESTALE:
-    return Status::IOError(Status::kStaleFile);
-  default:
-    return Status::IOError(IOErrorMsg(context, file_name),
-                           strerror(err_number));
-  }
-}
-    
-      // initialize column families options
-  std::unique_ptr<CompactionFilter> compaction_filter;
-  compaction_filter.reset(new DummyCompactionFilter());
-  cf_descs[0].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
-  cf_descs[0].options.compaction_filter = compaction_filter.get();
-  cf_descs[1].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
-    
-      virtual std::unique_ptr<Dict> getResponse() = 0;
-    
-    
-    {} // namespace aria2
-    
-    class DHTTask;
-    
-    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
-{
-  memcpy(secret_[0], initialSecret, SECRET_SIZE);
-  memcpy(secret_[1], initialSecret, SECRET_SIZE);
-}
-    
-    #include 'DHTNode.h'
-#include 'util.h'
-#include 'a2functional.h'
-    
-    
-    {  EXPECT_EQ(0, exec.refCount);
-}
-    
-    #include <folly/Expected.h>
-#include <folly/Portability.h>
-#include <folly/ScopeGuard.h>
-#include <folly/portability/GTest.h>
-    
-      FunctionRef<int(int, int)> variant3 = of;
-  EXPECT_EQ(100 + 3 * 17, variant3(17, 0));
-  FunctionRef<int(int, int)> const cvariant3 = of;
-  EXPECT_EQ(100 + 3 * 17, cvariant3(17, 0));
-    
-    // Templates to reference the arguments from operands in note section.
-#define FOLLY_SDT_ARGFMT(no)        %n[FOLLY_SDT_S##no]@%[FOLLY_SDT_A##no]
-#define FOLLY_SDT_ARG_TEMPLATE_0    /*No arguments*/
-#define FOLLY_SDT_ARG_TEMPLATE_1    FOLLY_SDT_ARGFMT(1)
-#define FOLLY_SDT_ARG_TEMPLATE_2    FOLLY_SDT_ARG_TEMPLATE_1 FOLLY_SDT_ARGFMT(2)
-#define FOLLY_SDT_ARG_TEMPLATE_3    FOLLY_SDT_ARG_TEMPLATE_2 FOLLY_SDT_ARGFMT(3)
-#define FOLLY_SDT_ARG_TEMPLATE_4    FOLLY_SDT_ARG_TEMPLATE_3 FOLLY_SDT_ARGFMT(4)
-#define FOLLY_SDT_ARG_TEMPLATE_5    FOLLY_SDT_ARG_TEMPLATE_4 FOLLY_SDT_ARGFMT(5)
-#define FOLLY_SDT_ARG_TEMPLATE_6    FOLLY_SDT_ARG_TEMPLATE_5 FOLLY_SDT_ARGFMT(6)
-#define FOLLY_SDT_ARG_TEMPLATE_7    FOLLY_SDT_ARG_TEMPLATE_6 FOLLY_SDT_ARGFMT(7)
-#define FOLLY_SDT_ARG_TEMPLATE_8    FOLLY_SDT_ARG_TEMPLATE_7 FOLLY_SDT_ARGFMT(8)
-    
-    TEST(StaticTracepoint, TestSemaphoreLocal) {
-  manyArgTypesTestFunc();
-    }
-    
-    
-    {} // namespace detail
-    
-    template <
-    class Iterator = const char*,
-    class Base = folly::Range<boost::u8_to_u32_iterator<Iterator>>>
-class UTF8Range : public Base {
- public:
-  /* implicit */ UTF8Range(const folly::Range<Iterator> baseRange)
-      : Base(
-            boost::u8_to_u32_iterator<Iterator>(
-                baseRange.begin(),
-                baseRange.begin(),
-                baseRange.end()),
-            boost::u8_to_u32_iterator<Iterator>(
-                baseRange.end(),
-                baseRange.begin(),
-                baseRange.end())) {}
-  /* implicit */ UTF8Range(const std::string& baseString)
-      : Base(folly::Range<Iterator>(baseString)) {}
-};
-    
-    #include <string>
-    
-      void add(Func f) override {
-    executor_->add(wrapFunc(std::move(f)));
-  }
-    
-    
-    {  bool initialized_{false};
-  folly::Function<folly::Function<void(double)>()> initialize_;
-  folly::Function<void(double)> increment_;
-};
-    
-    struct Options {
-  /**
-   * ZLIB: default option -- write a zlib wrapper as documented in RFC 1950.
-   *
-   * GZIP: write a simple gzip header and trailer around the compressed data
-   * instead of a zlib wrapper.
-   *
-   * RAW: deflate will generate raw deflate data with no zlib header or
-   * trailer, and will not compute a check value.
-   *
-   * AUTO: enable automatic header detection for decoding gzip or zlib data.
-   * For deflation, ZLIB will be used.
-   */
-  enum class Format { ZLIB, GZIP, RAW, AUTO };
-    }
+    // method implementations
