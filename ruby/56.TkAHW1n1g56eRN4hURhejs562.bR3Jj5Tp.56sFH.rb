@@ -1,102 +1,91 @@
 
         
-            context 'a private message' do
-      it 'doesn't increase unread_notifications' do
-        expect { Fabricate(:private_message_notification, user: user); user.reload }.not_to change(user, :unread_notifications)
-      end
+            s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
     
-    BadgeGrouping.seed do |g|
-  g.id = BadgeGrouping::Community
-  g.name = 'Community'
-  g.default_position = 11
+    Badge.seed do |b|
+  b.id = Badge::FirstLink
+  b.name = 'First Link'
+  b.badge_type_id = BadgeType::Bronze
+  b.multiple_grant = false
+  b.target_posts = true
+  b.show_posts = true
+  b.query = BadgeQueries::FirstLink
+  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
+  b.trigger = Badge::Trigger::PostRevision
+  b.system = true
 end
     
-          def testers_for_app(app_id: nil)
-        assert_required_params(__method__, binding)
-        page_size = 40 # that's enforced by the iTC servers
-        resulting_array = []
-        initial_url = 'providers/#{team_id}/apps/#{app_id}/testers?limit=#{page_size}&sort=email&order=asc'
-        response = request(:get, initial_url)
-        link_from_response = proc do |r|
-          # I weep for Swift nil chaining
-          (l = r.headers['link']) && (m = l.match(/<(.*)>/)) && m.captures.first
+              if @job.blank?
+            @pipeline.coverage
+          else
+            @pipeline.builds
+              .find_by(name: @job)
+              .try(:coverage)
+          end
         end
-        next_link = link_from_response.call(response)
-        result = Array(handle_response(response))
-        resulting_array += result
-        return resulting_array if result.count == 0
+      end
+    end
+  end
+end
+
     
-        describe '#build_trains failing' do
-      # it 'automatically re-tries the request when getting a ITC.response.error.OPERATION_FAILED when receive build trains' do
-      #   # Ensuring the fix for https://github.com/fastlane/fastlane/issues/6419
+            def metadata
+          @metadata ||= Pipeline::Metadata.new(self)
+        end
     
-              result = Array(
-            simulators
-              .select { |sim| sim.name == default_device_name }
-              .reverse # more efficient, because `simctl` prints higher versions first
-              .sort_by! { |sim| Gem::Version.new(sim.os_version) }
-              .last || simulators.first
-          )
+            def key_width
+          62
+        end
     
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      end
+    end
+    
+              if arg.braces?
+            unless braces_around_second_from_end
+              add_arg_offense(arg, :redundant)
+            end
+          elsif braces_around_second_from_end
+            add_arg_offense(arg, :missing)
           end
         end
     
-                    @env.machine_names.each do |machine_name|
-                  if machine_name =~ regex
-                    machines << get_machine.call(machine_name)
-                  end
-                end
+        context 'but no comment after the last element' do
+      it 'autocorrects the closing brace' do
+        new_source = autocorrect_source(source)
     
-            # This returns any automatically detected errors.
-        #
-        # @return [Array<String>]
-        def _detected_errors
-          return [] if !@__invalid_methods || @__invalid_methods.empty?
-          return [I18n.t('vagrant.config.common.bad_field',
-                         fields: @__invalid_methods.to_a.sort.join(', '))]
+          # Returns the inverse keyword of the `if` node as a string. Returns `if`
+      # for `unless` nodes and vice versa. Returns an empty string for ternary
+      # operators.
+      #
+      # @return [String] the inverse keyword of the `if` statement
+      def inverse_keyword
+        if keyword == 'if'
+          'unless'
+        elsif keyword == 'unless'
+          'if'
+        else
+          ''
         end
-    
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V2 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
-          end
-        end
-    
-            # Defines additional configuration keys to be available in the
-        # Vagrantfile. The configuration class should be returned by a
-        # block passed to this method. This is done to ensure that the class
-        # is lazy loaded, so if your class inherits from any classes that
-        # are specific to Vagrant 1.0, then the plugin can still be defined
-        # without breaking anything in future versions of Vagrant.
-        #
-        # @param [String] name Configuration key.
-        def self.config(name, scope=nil, &block)
-          scope ||= :top
-          components.configs[scope].register(name.to_sym, &block)
-          nil
-        end
-    
-            # This method is called if the underlying machine ID changes. Providers
-        # can use this method to load in new data for the actual backing
-        # machine or to realize that the machine is now gone (the ID can
-        # become `nil`). No parameters are given, since the underlying machine
-        # is simply the machine instance given to this object. And no
-        # return value is necessary.
-        def machine_id_changed
-        end
+      end
