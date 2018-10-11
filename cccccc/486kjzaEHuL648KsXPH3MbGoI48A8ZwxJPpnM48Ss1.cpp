@@ -1,304 +1,276 @@
 
         
-        #include 'common.hpp'
-#include 'vtransform.hpp'
-    
-    #include <carotene/functions.hpp>
-#include 'saturate_cast.hpp'
-    
-    CVT_FUNC(u8, s8, 16,
-     uint8x16_t v127 = vdupq_n_u8(127);,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         uint8x16_t vu8 = vld1q_u8(_src + i);
-         int8x16_t vu1 = vreinterpretq_s8_u8(vminq_u8(vu8, v127));
-         vst1q_s8(_dst + i, vu1);
-     }
-})
-    
-    #define CVTS_FUNC1(T1, SIMD_SIZE, CVTSINIT, CVTSROW)                             \
-    void convertScale(const Size2D &,                                            \
-                      const T1 *, ptrdiff_t,                                     \
-                      T1 *, ptrdiff_t,                                           \
-                      f64, f64)                                                  \
-    {                                                                            \
-        internal::assertSupportedConfiguration();                                \
-    }
-    
-    
-    {                    for( k = 0; k < N; k++ )
-                    {
-                        s32 x = ptr[pixel[k]];
-                        if(x < vt)
-                        {
-                            if( ++count > K )
-                            {
-                                cornerpos[ncorners++] = j;
-                                if(nonmax_suppression)
-                                    curr[j] = cornerScore(ptr, pixel);
-                                break;
-                            }
-                        }
-                        else
-                            count = 0;
-                    }
-                }
-    
-      ~Carver();
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+        
+    {
+    {} // namespace test
+} // namespace c10d
 
     
-    /**
- * @brief Compute multiple hashes from a files contents simultaneously.
- *
- * @param mask Bitmask specifying target osquery-supported algorithms.
- * @param path Filesystem path (the hash target).
- * @return A struct containing string (hex) representations
- *         of the hash digests.
- */
-MultiHashes hashMultiFromFile(int mask, const std::string& path);
+    #include <string>
+#include <vector>
     
-      /// Begin the worker-watcher process.
-  virtual bool watch(const PlatformProcess& child) const;
+        for (int inputIdx = 0; inputIdx < def_.input_size() / 4; ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * 4));
+      input_blob_names.push_back(I(inputIdx * 4 + 3));
+      output_blob_names.push_back(GI(inputIdx * 4 + 2));
+    }
+    input_blob_names.push_back(GO(4));
     
-    void INotifyEventPublisher::removeSubscriptions(const std::string& subscriber) {
-  WriteLock lock(subscription_lock_);
-  std::for_each(subscriptions_.begin(),
-                subscriptions_.end(),
-                [&subscriber](const SubscriptionRef& sub) {
-                  if (sub->subscriber_name == subscriber) {
-                    getSubscriptionContext(sub->context)->mark_for_deletion =
-                        true;
-                  }
-                });
+    template <typename T, class Context>
+class FloorOp final : public Operator<Context> {
+ public:
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  USE_SIMPLE_CTOR_DTOR(FloorOp);
+    }
+    
+    // FreeOp frees the content of the output blob. We allow it to take in input
+// blobs purely for the reason that it can 'wait' on the input blobs to be
+// produced by some of the earlier operators before a free is called.
+template <class Context>
+class FreeOp : public Operator<Context> {
+ public:
+  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
+    }
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
 }
     
-    class ExampleTable : public TablePlugin {
- private:
-  TableColumns columns() const {
-    return {
-        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
-        std::make_tuple(
-            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
-    };
-  }
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
+    D3DMATRIX last_world, last_view, last_projection;
+    g_pd3dDevice->GetTransform(D3DTS_WORLD, &last_world);
+    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
+    g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
+    
+        if (pEvent->m_Pressed == 1)
+    {
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
+            g_MousePressed[0] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
+            g_MousePressed[1] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
+            g_MousePressed[2] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
+            io.MouseWheel += pEvent->m_y;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
+            io.MouseWheel += pEvent->m_y;
     }
     
-      t2 = t4 - t5;
-  t4 += t5;
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
-    
-    bool ReadPNG(const std::string& data, int* xsize, int* ysize,
-             std::vector<uint8_t>* rgb) {
-  png_structp png_ptr =
-      png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-  if (!png_ptr) {
-    return false;
-  }
-    }
-    
-      void WriteBits(int nbits, uint64_t bits) {
-    put_bits -= nbits;
-    put_buffer |= (bits << put_bits);
-    if (put_bits <= 16) {
-      // At this point we are ready to emit the most significant 6 bytes of
-      // put_buffer_ to the output.
-      // The JPEG format requires that after every 0xff byte in the entropy
-      // coded section, there is a zero byte, therefore we first check if any of
-      // the 6 most significant bytes of put_buffer_ is 0xff.
-      if (HasZeroByte(~put_buffer | 0xffff)) {
-        // We have a 0xff byte somewhere, examine each byte and append a zero
-        // byte if necessary.
-        EmitByte((put_buffer >> 56) & 0xff);
-        EmitByte((put_buffer >> 48) & 0xff);
-        EmitByte((put_buffer >> 40) & 0xff);
-        EmitByte((put_buffer >> 32) & 0xff);
-        EmitByte((put_buffer >> 24) & 0xff);
-        EmitByte((put_buffer >> 16) & 0xff);
-      } else if (pos + 6 < len) {
-        // We don't have any 0xff bytes, output all 6 bytes without checking.
-        data[pos] = (put_buffer >> 56) & 0xff;
-        data[pos + 1] = (put_buffer >> 48) & 0xff;
-        data[pos + 2] = (put_buffer >> 40) & 0xff;
-        data[pos + 3] = (put_buffer >> 32) & 0xff;
-        data[pos + 4] = (put_buffer >> 24) & 0xff;
-        data[pos + 5] = (put_buffer >> 16) & 0xff;
-        pos += 6;
-      } else {
-        overflow = true;
-      }
-      put_buffer <<= 48;
-      put_bits += 48;
-    }
-  }
-    
-    namespace guetzli {
-    }
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg);
-    
-      static Data data_;
-  static Data data6_;
-    
-      void onReceived(const DHTPingReplyMessage* message);
-    
-    void DHTResponseMessage::fillMessage(Dict* msgDict)
+    void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h)
 {
-  msgDict->put(R, getResponse());
+    uint32_t min_image_count = 2;	// FIXME: this should become a function parameter
+    }
+    
+        void FreeTypeFont::Shutdown()
+    {
+        if (FreetypeFace) 
+        {
+            FT_Done_Face(FreetypeFace);
+            FreetypeFace = NULL;
+            FT_Done_FreeType(FreetypeLibrary);
+            FreetypeLibrary = NULL;
+        }
+    }
+    
+      // Implementations of the DB interface
+  using DB::Get;
+  virtual Status Get(const ReadOptions& options,
+                     ColumnFamilyHandle* column_family, const Slice& key,
+                     PinnableSlice* value) override;
+  using DB::MultiGet;
+  virtual std::vector<Status> MultiGet(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>&,
+      const std::vector<Slice>& keys, std::vector<std::string>* values)
+    override;
+    
+        uint64_t fileSize;
+    status = defaultEnv->GetFileSize(filePath, &fileSize);
+    ASSERT_OK(status);
+    
+      using DBImpl::Flush;
+  virtual Status Flush(const FlushOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+      env.now_micros_ += 100u;  // sleep credit 100
+  // 1000 used, 7240 left
+  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 1000u));
+    
+    Status HdfsEnv::NewDirectory(const std::string& name,
+                             unique_ptr<Directory>* result) {
+  int value = hdfsExists(fileSys_, name.c_str());
+  switch (value) {
+    case HDFS_EXISTS:
+      result->reset(new HdfsDirectory(0));
+      return Status::OK();
+    default:  // fail if the directory doesn't exist
+      ROCKS_LOG_FATAL(mylog, 'NewDirectory hdfsExists call failed');
+      throw HdfsFatalException('hdfsExists call failed with error ' +
+                               ToString(value) + ' on path ' + name +
+                               '.\n');
+  }
 }
     
-      std::shared_ptr<DHTBucket>
-  getBucketFor(const std::shared_ptr<DHTNode>& node) const;
+    // file_name can be left empty if it is not unkown.
+static Status IOError(const std::string& context, const std::string& file_name,
+                      int err_number) {
+  switch (err_number) {
+  case ENOSPC:
+    return Status::NoSpace(IOErrorMsg(context, file_name),
+                           strerror(err_number));
+  case ESTALE:
+    return Status::IOError(Status::kStaleFile);
+  default:
+    return Status::IOError(IOErrorMsg(context, file_name),
+                           strerror(err_number));
+  }
+}
+    
+      // initialize column families options
+  std::unique_ptr<CompactionFilter> compaction_filter;
+  compaction_filter.reset(new DummyCompactionFilter());
+  cf_descs[0].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
+  cf_descs[0].options.compaction_filter = compaction_filter.get();
+  cf_descs[1].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
+    
+      virtual std::unique_ptr<Dict> getResponse() = 0;
+    
+    
+    {} // namespace aria2
+    
+    class DHTTask;
+    
+    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
+{
+  memcpy(secret_[0], initialSecret, SECRET_SIZE);
+  memcpy(secret_[1], initialSecret, SECRET_SIZE);
+}
     
     #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
 #include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    #include 'DHTTask.h'
-#include 'Logger.h'
-#include 'LogFactory.h'
 #include 'a2functional.h'
-#include 'fmt.h'
     
-    namespace aria2 {
-    }
     
-    #include 'common.h'
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
-{
-  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
-  setCommonProperty(task);
-  return task;
+    {  EXPECT_EQ(0, exec.refCount);
 }
     
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
+    #include <folly/Expected.h>
+#include <folly/Portability.h>
+#include <folly/ScopeGuard.h>
+#include <folly/portability/GTest.h>
+    
+      FunctionRef<int(int, int)> variant3 = of;
+  EXPECT_EQ(100 + 3 * 17, variant3(17, 0));
+  FunctionRef<int(int, int)> const cvariant3 = of;
+  EXPECT_EQ(100 + 3 * 17, cvariant3(17, 0));
+    
+    // Templates to reference the arguments from operands in note section.
+#define FOLLY_SDT_ARGFMT(no)        %n[FOLLY_SDT_S##no]@%[FOLLY_SDT_A##no]
+#define FOLLY_SDT_ARG_TEMPLATE_0    /*No arguments*/
+#define FOLLY_SDT_ARG_TEMPLATE_1    FOLLY_SDT_ARGFMT(1)
+#define FOLLY_SDT_ARG_TEMPLATE_2    FOLLY_SDT_ARG_TEMPLATE_1 FOLLY_SDT_ARGFMT(2)
+#define FOLLY_SDT_ARG_TEMPLATE_3    FOLLY_SDT_ARG_TEMPLATE_2 FOLLY_SDT_ARGFMT(3)
+#define FOLLY_SDT_ARG_TEMPLATE_4    FOLLY_SDT_ARG_TEMPLATE_3 FOLLY_SDT_ARGFMT(4)
+#define FOLLY_SDT_ARG_TEMPLATE_5    FOLLY_SDT_ARG_TEMPLATE_4 FOLLY_SDT_ARGFMT(5)
+#define FOLLY_SDT_ARG_TEMPLATE_6    FOLLY_SDT_ARG_TEMPLATE_5 FOLLY_SDT_ARGFMT(6)
+#define FOLLY_SDT_ARG_TEMPLATE_7    FOLLY_SDT_ARG_TEMPLATE_6 FOLLY_SDT_ARGFMT(7)
+#define FOLLY_SDT_ARG_TEMPLATE_8    FOLLY_SDT_ARG_TEMPLATE_7 FOLLY_SDT_ARGFMT(8)
+    
+    TEST(StaticTracepoint, TestSemaphoreLocal) {
+  manyArgTypesTestFunc();
+    }
+    
+    
+    {} // namespace detail
+    
+    template <
+    class Iterator = const char*,
+    class Base = folly::Range<boost::u8_to_u32_iterator<Iterator>>>
+class UTF8Range : public Base {
+ public:
+  /* implicit */ UTF8Range(const folly::Range<Iterator> baseRange)
+      : Base(
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.begin(),
+                baseRange.begin(),
+                baseRange.end()),
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.end(),
+                baseRange.begin(),
+                baseRange.end())) {}
+  /* implicit */ UTF8Range(const std::string& baseString)
+      : Base(folly::Range<Iterator>(baseString)) {}
+};
+    
+    #include <string>
+    
+      void add(Func f) override {
+    executor_->add(wrapFunc(std::move(f)));
   }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
-}
     
-      virtual ~DHTTokenUpdateCommand();
     
-    bool DHTUnknownMessage::isReply() const { return false; }
+    {  bool initialized_{false};
+  folly::Function<folly::Function<void(double)>()> initialize_;
+  folly::Function<void(double)> increment_;
+};
     
-        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
-    {
-        uint64_t const* p_value = (uint64_t const*)&v;
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq %[dest], %%rax\n\t'
-            'movq 8+%[dest], %%rdx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg16b %[dest]\n\t'
-            'jne 1b\n\t'
-            : [dest] '=o' (storage)
-            : 'b' (p_value[0]), 'c' (p_value[1])
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
-        );
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq 0(%[dest]), %%rax\n\t'
-            'movq 8(%[dest]), %%rdx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg16b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-            :
-            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
-        );
-#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-    }
-    
-            storage_type volatile* p = &storage;
-        if (((uint32_t)p & 0x00000007) == 0)
-        {
-#if defined(_M_IX86_FP) && _M_IX86_FP >= 2
-#if defined(__AVX__)
-            __asm
-            {
-                mov edx, p
-                vmovq xmm4, v
-                vmovq qword ptr [edx], xmm4
-            };
-#else
-            __asm
-            {
-                mov edx, p
-                movq xmm4, v
-                movq qword ptr [edx], xmm4
-            };
-#endif
-#else
-            __asm
-            {
-                mov edx, p
-                fild v
-                fistp qword ptr [edx]
-            };
-#endif
-        }
-        else
-        {
-            int backup;
-            __asm
-            {
-                mov backup, ebx
-                mov edi, p
-                mov ebx, dword ptr [v]
-                mov ecx, dword ptr [v + 4]
-                mov eax, dword ptr [edi]
-                mov edx, dword ptr [edi + 4]
-                align 16
-            again:
-                lock cmpxchg8b qword ptr [edi]
-                jne again
-                mov ebx, backup
-            };
-        }
-    
-    template< >
-struct make_storage_type< 4u, true >
-{
-    typedef mars_boost::int32_t type;
+    struct Options {
+  /**
+   * ZLIB: default option -- write a zlib wrapper as documented in RFC 1950.
+   *
+   * GZIP: write a simple gzip header and trailer around the compressed data
+   * instead of a zlib wrapper.
+   *
+   * RAW: deflate will generate raw deflate data with no zlib header or
+   * trailer, and will not compute a check value.
+   *
+   * AUTO: enable automatic header detection for decoding gzip or zlib data.
+   * For deflation, ZLIB will be used.
+   */
+  enum class Format { ZLIB, GZIP, RAW, AUTO };
     }
