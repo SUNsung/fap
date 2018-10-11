@@ -1,86 +1,89 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
-    
-        self.path_embeddings = path_embeddings
-    self.relata_embeddings = relata_embeddings
-    self.nc_embeddings = nc_embeddings
-    
-    if S < N:
-  # Note that this isn't necessary for this synthetic example, but
-  # it's useful to see how the input factor matrices were initialized
-  # for actual neurophysiology data.
-  datasets = add_alignment_projections(datasets, npcs=FLAGS.npcs)
-    
-      if not FLAGS.dis_share_embedding:
-    decoder_embedding = [
-        v for v in tf.trainable_variables()
-        if v.op.name == 'dis/decoder/rnn/embedding'
-    ][0]
-    
-            if not any(os.path.isfile('%s/certutil' % x) for x in os.environ['PATH'].split(os.pathsep)):
-            xlog.warn('please install *libnss3-tools* package to import GoAgent root ca')
-            return False
-    
-    log_file = os.path.join(data_path, 'ipv6_tunnel.log')
-    
-        def nat_type_probe(self):
-        print('Starting probe NAT type...')
-        self.nat_type = 'probing'
-        server_ip_list = self.server_ip_list.copy()
-        self.rs_cone_flag = 1
-        for server_ip in server_ip_list:
-            qualified = self.qualify_loop(server_ip)
-            if qualified:
-                break
-        if qualified is None:
-            self.rs_cone_flag = 0
-            while server_ip_list:
-                server_ip = server_ip_list.pop()
-                qualified = self.qualify_loop(server_ip)
-                if qualified:
-                    break
-        if qualified is None:
-            self.qualified = False
-            return 'offline'
-        ra_cone_flag, first_indicate = qualified
-        if ra_cone_flag:
-            self.qualified = True
-            return 'cone'
-        qualified = None
-        for server_ip in  server_ip_list:
-            qualified = self.qualify_loop(server_ip)
-            if qualified:
-                break
-        if qualified is None:
-            self.last_server_ip = server_ip
-            self.qualified = True
-            return 'unknown'
-        ra_cone_flag, second_indicate = qualified
-        if first_indicate == second_indicate:
-            self.qualified = True
-            return 'restricted'
-        else:
-            self.qualified = False
-            return 'symmetric'
-    
-    \note Please be warned that the line numbers in the API documentation do not
-match the real locations in the source code of the package. This is an
-unintended artifact of doxygen, which I could only convince to use the
-correct module names by concatenating all files from the package into a single
-module file...
-    
-    EOF = -1
+        
+EXIT_STATUS_LABELS = {
+    value: key
+    for key, value in ExitStatus.__dict__.items()
+    if key.isupper()
+}
+
     
     
-    def __str__(self):
-        if self.inserted is not None and self.token is not None:
-            return 'MissingTokenException(inserted %r at %r)' % (
-                self.inserted, self.token.text)
+def get_stream_type(env, args):
+    '''Pick the right stream type based on `env` and `args`.
+    Wrap it in a partial with the type-specific args so that
+    we don't need to think what stream we are dealing with.
+    
+    
+class BasicAuthPlugin(BuiltinAuthPlugin):
+    
+        def load_installed_plugins(self):
+        for entry_point_name in ENTRY_POINT_NAMES:
+            for entry_point in iter_entry_points(entry_point_name):
+                plugin = entry_point.load()
+                plugin.package_name = entry_point.dist.key
+                self.register(entry_point.load())
+    
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
+
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
+    
+      For instance ('|' represents the cursor):
+    1. Buffer state: 'foo.|bar'
+    2. A completion candidate of 'zoobar' is shown and the user selects it.
+    3. Buffer state: 'foo.zoobar|bar' instead of 'foo.zoo|bar' which is what the
+    user wanted.
+    
+    # The default options which are only relevant to the client, not the server and
+# thus are not part of default_options.json, but are required for a working
+# YouCompleteMe object.
+DEFAULT_CLIENT_OPTIONS = {
+  'g:ycm_server_python_interpreter': '',
+  'g:ycm_log_level': 'info',
+  'g:ycm_keep_logfiles': 0,
+  'g:ycm_extra_conf_vim_data': [],
+  'g:ycm_show_diagnostics_ui': 1,
+  'g:ycm_echo_current_diagnostic': 1,
+  'g:ycm_enable_diagnostic_signs': 1,
+  'g:ycm_enable_diagnostic_highlighting': 0,
+  'g:ycm_always_populate_location_list': 0,
+}
+    
+      def ServerResponse( *args ):
+    return {
+      'completions': [ {
+        'insertion_text': 'insertion_text',
+        'menu_text': 'menu_text',
+        'extra_menu_info': 'extra_menu_info',
+        'detailed_info': 'detailed_info',
+        'kind': 'kind',
+        'extra_data': {
+           'doc_string': 'doc_string'
+        }
+      } ],
+      'completion_start_column': 3,
+      'errors': [ {
+        'exception': {
+           'TYPE': 'Exception'
+        },
+        'message': 'message',
+        'traceback': 'traceback'
+      } ]
+    }
+    
+    
+def EndsWithPython_Python2Paths_test():
+  python_paths = [
+    'python',
+    'python2',
+    '/usr/bin/python2.7',
+    '/home/user/.pyenv/shims/python2.7',
+    r'C:\Python27\python.exe',
+    '/Contents/MacOS/Python'
+  ]
