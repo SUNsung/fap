@@ -1,46 +1,24 @@
 
         
-          def expand_reqs
-    formula.recursive_requirements do |dependent, req|
-      build = effective_build_options_for(dependent)
-      if (req.optional? || req.recommended?) && build.without?(req)
-        Requirement.prune
-      elsif req.build? && dependent != formula
-        Requirement.prune
-      elsif req.satisfied? && req.default_formula? && (dep = req.to_dependency).installed?
-        deps << dep
-        Requirement.prune
+            case params
+    when EventFilter.push
+      events.where(action: Event::PUSHED)
+    when EventFilter.merged
+      events.where(action: Event::MERGED)
+    when EventFilter.comments
+      events.where(action: Event::COMMENTED)
+    when EventFilter.team
+      events.where(action: [Event::JOINED, Event::LEFT, Event::EXPIRED])
+    when EventFilter.issue
+      events.where(action: [Event::CREATED, Event::UPDATED, Event::CLOSED, Event::REOPENED])
+    end
+  end
+    
+          def rss_request?
+        current_request.path.ends_with?('.atom') || current_request.format.atom?
       end
-    end
-  end
     
-      # True if a {Formula} is being built in C++11 mode.
-  def cxx11?
-    include?('c++11') && option_defined?('c++11')
-  end
-    
-      def internal_development_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
-  end
-    
-      def clang
-    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
-  end
-    
-          GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    end
-    
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
-      end
-    end
-  end
-end
-
-    
-              return [main_args, sub_command, sub_args]
+              relation.update_all(update)
         end
       end
     end
@@ -48,105 +26,130 @@ end
 end
 
     
-            # Upload a file to the remote machine.
-        #
-        # @param [String] from Path of the file locally to upload.
-        # @param [String] to Path of where to save the file on the remote
-        #   machine.
-        def upload(from, to)
-        end
+    desc 'Dumps output to a CSS file for testing'
+task :debug do
+  require 'sass'
+  path = Bootstrap.stylesheets_path
+  %w(bootstrap).each do |file|
+    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
+  end
+end
     
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
-          end
-        end
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
     
-            # Capture all bad configuration calls and save them for an error
-        # message later during validation.
-        def method_missing(name, *args, &block)
-          return super if @__finalized
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
     
-            # Defines a capability for the given provider. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] provider The name of the provider
-        # @param [String] cap The name of the capability
-        def self.provider_capability(provider, cap, &block)
-          components.provider_capabilities[provider.to_sym].register(cap.to_sym, &block)
-          nil
-        end
+    Given /^I have (\d+) contacts$/ do |n|
+  count = n.to_i - @me.contacts.count
     
-        def name
-      'cap'
+    # We have a ridiculously high wait time to account for build machines of various beefiness.
+Capybara.default_max_wait_time = 30
+    
+    module UserCukeHelpers
+    
+        context 'on my own post' do
+      it 'succeeds' do
+        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
+        post :create, params: like_hash, format: :json
+        expect(response.code).to eq('201')
+      end
     end
     
-          def primary
-        self if fetch(:primary)
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
+    end
+  end
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+          env['rack.errors'] = errors
+    
+          def drop_session(env)
+        session(env).clear if session? env
       end
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
-          end
-        end
-        block_given? ? nil : rps
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
       end
     
-    module Sinatra
-  class Application < Base
+      [jekyllPid, compassPid, rackupPid].each { |pid| Process.wait(pid) }
+end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+      def render(context)
+    config_tag(context.registers[:site].config, @key, @tag, @classname)
+  end
+end
+    
+    end
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
