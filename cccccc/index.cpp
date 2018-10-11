@@ -1,416 +1,410 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-
+        #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
+#include 'swift/Basic/Dwarf.h'
+#include 'swift/Serialization/SerializedModuleLoader.h'
+#include 'swift/Serialization/Validation.h'
+#include 'llvm/Support/Debug.h'
+#include 'llvm/Support/raw_ostream.h'
     
-        http://www.apache.org/licenses/LICENSE-2.0
+      Allocated = new char[capacity];
+  End = Allocated + capacity;
+  Begin = End - oldSize;
+  std::memcpy(Begin, oldBegin, oldSize);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      public:
+    ClangDiagRenderer(const clang::LangOptions &langOpts,
+                      clang::DiagnosticOptions *diagOpts,
+                      decltype(callback) fn)
+       : DiagnosticNoteRenderer(langOpts, diagOpts),
+         callback(fn) {}
     
-    #include 'tensorflow/python/lib/core/py_exception_registry.h'
+        /** Colorize an icon (given object) with the text color */
+    QIcon TextColorIcon(const QIcon& icon) const;
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    namespace Ui {
+    class TransactionDescDialog;
+}
     
-        http://www.apache.org/licenses/LICENSE-2.0
+        ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
+    }
     
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
-                         void (*printNodeData)(raw_ostream &out, void *node)) {
-  auto root = reinterpret_cast<Node*>(_root);
-  if (!root) {
-    out << '(empty)\n';
-    return;
-  }
-  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
+    {    r->infinity = 0;
+    secp256k1_fe_sqr(&z22, &b->z);
+    secp256k1_fe_sqr(&z12, &a->z);
+    secp256k1_fe_mul(&u1, &a->x, &z22);
+    secp256k1_fe_mul(&u2, &b->x, &z12);
+    secp256k1_fe_mul(&s1, &a->y, &z22); secp256k1_fe_mul(&s1, &s1, &b->z);
+    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
+    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
+    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
+    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
+        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
+            secp256k1_gej_double_var(r, a, rzr);
+        } else {
+            if (rzr != NULL) {
+                secp256k1_fe_set_int(rzr, 0);
+            }
+            r->infinity = 1;
+        }
+        return;
+    }
+    secp256k1_fe_sqr(&i2, &i);
+    secp256k1_fe_sqr(&h2, &h);
+    secp256k1_fe_mul(&h3, &h, &h2);
+    secp256k1_fe_mul(&h, &h, &b->z);
+    if (rzr != NULL) {
+        *rzr = h;
+    }
+    secp256k1_fe_mul(&r->z, &a->z, &h);
+    secp256k1_fe_mul(&t, &u1, &h2);
+    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
+    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
+    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
+    secp256k1_fe_add(&r->y, &h3);
 }
     
     
-    {    RawText = RawText.drop_front(Pos);
-    unsigned NewlineBytes = measureNewline(RawText);
-    RawText = RawText.drop_front(NewlineBytes);
-  }
-    
-    StringRef camel_case::dropPrefix(StringRef string) {
-    }
-    
-    #include 'swift/Basic/TaskQueue.h'
-    
-    
-    {  memcpy(Value, &uuid, Size);
-#else
-  uuid_generate_time(Value);
-#endif
+    {    s[0] += a;
+    s[1] += b;
+    s[2] += c;
+    s[3] += d;
+    s[4] += e;
+    s[5] += f;
+    s[6] += g;
+    s[7] += h;
 }
     
-      // Getters for boost rng, curand, and cublas handles
-  inline static RNG& rng_stream() {
-    if (!Get().random_generator_) {
-      Get().random_generator_.reset(new RNG());
+    
+    {        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, y, sizeof(y));
+        secp256k1_sha256_write(&sha, x, sizeof(x));
+        secp256k1_sha256_finalize(&sha, result);
+        ret = 1;
     }
-    return *(Get().random_generator_);
+    
+    
+    {    /* Try to multiply it by bad values */
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_zero) == 0);
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 0);
+    /* ...and a good one */
+    s_overflow[31] -= 1;
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 1);
+}
+    
+    
+    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
+    /* Fail if the secret key is invalid. */
+    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
+        unsigned char nonce32[32];
+        unsigned int count = 0;
+        secp256k1_scalar_set_b32(&msg, msg32, NULL);
+        while (1) {
+            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
+            if (!ret) {
+                break;
+            }
+            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
+            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
+                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
+                    break;
+                }
+            }
+            count++;
+        }
+        memset(nonce32, 0, 32);
+        secp256k1_scalar_clear(&msg);
+        secp256k1_scalar_clear(&non);
+        secp256k1_scalar_clear(&sec);
+    }
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
+    } else {
+        memset(signature, 0, sizeof(*signature));
+    }
+    return ret;
+}
+    
+    class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+    }
+    
+    workspace.ResetWorkspace()
+    
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+    Each feature has fixed lengths which are passed as lengths argument and a
+separate tensor will be produced for each feature.
+i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
+    
+        template <typename ElementType>
+    /*static*/ NDArrayViewPtr NDArrayView::RandomNormal(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device)
+    {
+        return NDArrayView::_RandomNormal<ElementType, ElementType>(shape, mean, stdDev, seed, device);
+    }
+    
+    namespace CNTK
+{
+    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
+    {
+        auto matrixDims = GetMatrixDimensions(viewShape);
+        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
+    }
+    }
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include 'Utils.h'
+    
+            bool emptyMinibatch = arguments.empty() || (arguments.begin()->second == nullptr);
+        NDArrayViewPtr trainingLoss = nullptr;
+        NDArrayViewPtr evalCriterion = nullptr;
+        if (emptyMinibatch)
+        {
+            m_prevMinibatchNumSamples = 0;
+            // Gradients are not existing.
+            for (const auto& parameter : m_learnerParameters)
+                gradients[parameter] = nullptr;
+    }
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+    
+    bool DataReader::SetNetOutput(
+    const std::vector<std::vector<std::pair<wstring, size_t>>>& uttInfo,
+    const MatrixBase& outputs,
+    const MBLayoutPtr pMBLayout)
+{
+    bool ans = false;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        ans = (m_dataReaders[m_ioNames[i]]->SetNetOutput(uttInfo, outputs, pMBLayout) || ans);
+    return ans;
+}
+    
+    // Rand based on Mersenne Twister.
+// We use our own distribution in order to match baselines between different operating systems,
+// because uniform_distribution is not guaranteed to provide the same numbers on different platforms.
+// TODO: Switching to Boost would eliminate this problem.
+static inline size_t RandMT(const size_t begin, const size_t end, std::mt19937_64& rng)
+{
+    const size_t randomNumber = rng();
+    return begin + randomNumber % (end - begin);
+}
+    
+      uint64_t Size(const Slice& start, const Slice& limit) {
+    Range r(start, limit);
+    uint64_t size;
+    db_->GetApproximateSizes(&r, 1, &size);
+    return size;
   }
-#ifndef CPU_ONLY
-  inline static cublasHandle_t cublas_handle() { return Get().cublas_handle_; }
-  inline static curandGenerator_t curand_generator() {
-    return Get().curand_generator_;
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
   }
-#endif
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
     
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
+     private:
+  // We construct a char array of the form:
+  //    klength  varint32               <-- start_
+  //    userkey  char[klength]          <-- kstart_
+  //    tag      uint64
+  //                                    <-- end_
+  // The array is a suitable MemTable key.
+  // The suffix starting with 'userkey' can be used as an InternalKey.
+  const char* start_;
+  const char* kstart_;
+  const char* end_;
+  char space_[200];      // Avoid allocation for short keys
     
-      /**
-   * @brief Returns the layer parameter.
-   */
-  const LayerParameter& layer_param() const { return layer_param_; }
+    // Called on every item found in a WriteBatch.
+class WriteBatchItemPrinter : public WriteBatch::Handler {
+ public:
+  WritableFile* dst_;
+  virtual void Put(const Slice& key, const Slice& value) {
+    std::string r = '  put '';
+    AppendEscapedStringTo(&r, key);
+    r += '' '';
+    AppendEscapedStringTo(&r, value);
+    r += ''\n';
+    dst_->Append(r);
+  }
+  virtual void Delete(const Slice& key) {
+    std::string r = '  del '';
+    AppendEscapedStringTo(&r, key);
+    r += ''\n';
+    dst_->Append(r);
+  }
+};
     
-    #include <vector>
+    std::string TableFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'ldb');
+}
     
-      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+      fname = DescriptorFileName('bar', 100);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(100, number);
+  ASSERT_EQ(kDescriptorFile, type);
     
     
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
+    {
+    {      return Status::OK();
     }
   };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
     
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
+    #include <stdint.h>
+#include 'db/log_format.h'
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
     
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    REGISTER_GRADIENT(Sub, GetSubGradient);
-    
-    
-    { private:
-  const int kNumTensorsPerInput = 3;
-};
-    
-    
-    {} // namespace caffe2
-    
-    REGISTER_CUDA_OPERATOR_WITH_ENGINE(
-    FCTransposed,
-    TENSORCORE,
-    FullyConnectedOp<
-        CUDAContext,
-        TensorCoreEngine,
-        false /* don't transpose weight */>);
-REGISTER_CUDA_OPERATOR_WITH_ENGINE(
-    FCTransposedGradient,
-    TENSORCORE,
-    FullyConnectedGradientOp<
-        CUDAContext,
-        TensorCoreEngine,
-        false /* don't transpose weight */>);
-#endif
-    
-    // Godot TO Bullet
-extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
-extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
-extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
-extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
-extern void G_TO_B(Transform const &inVal, btTransform &outVal);
-    
-    
-    {		owner->scratch();
-	}
-    
-    static ResourceFormatDDS *resource_loader_dds = NULL;
-    
-    
-    {		allocs[i].free_list = &allocs[i + 1];
-	}
-    
-    void FuncRef::set_instance(Object *p_obj) {
-    }
-    
-    
-    {
-    {			if (PathFileExists(szArgList[i + 1]))
-			{
-				cmderOptions.cmderStart = szArgList[i + 1];
-				i++;
-			}
-			else {
-				MessageBox(NULL, szArgList[i + 1], L'/START - Folder does not exist!', MB_OK);
-			}
-		}
-		else if (_wcsicmp(L'/task', szArgList[i]) == 0)
-		{
-			cmderOptions.cmderTask = szArgList[i + 1];
-			i++;
-		}
-		else if (_wcsicmp(L'/single', szArgList[i]) == 0)
-		{
-			cmderOptions.cmderSingle = true;
-		}
-		else if (_wcsicmp(L'/register', szArgList[i]) == 0)
-		{
-			cmderOptions.registerApp = true;
-			cmderOptions.unRegisterApp = false;
-			if (szArgList[i + 1] != NULL)
-			{
-				if (_wcsicmp(L'all', szArgList[i + 1]) == 0 || _wcsicmp(L'user', szArgList[i + 1]) == 0)
-				{
-					cmderOptions.cmderRegScope = szArgList[i + 1];
-					i++;
-				}
-			}
-		}
-		else if (_wcsicmp(L'/unregister', szArgList[i]) == 0)
-		{
-			cmderOptions.unRegisterApp = true;
-			cmderOptions.registerApp = false;
-			if (szArgList[i + 1] != NULL) 
-			{
-				if (_wcsicmp(L'all', szArgList[i + 1]) == 0 || _wcsicmp(L'user', szArgList[i + 1]) == 0)
-				{
-					cmderOptions.cmderRegScope = szArgList[i + 1];
-					i++;
-				}
-			}
-		}
-		else if (cmderOptions.cmderStart == L'')
-		{
-			int len = wcslen(szArgList[i]);
-			if (wcscmp(&szArgList[i][len - 1], L'\'') == 0)
-			{
-				szArgList[i][len - 1] = '\0';
-			}
-		
-			if (PathFileExists(szArgList[i]))
-			{
-				cmderOptions.cmderStart = szArgList[i];
-				i++;
-			}
-			else {
-				MessageBox(NULL, szArgList[i], L'Folder does not exist!', MB_OK);
-			}
-		}
-		else {
-			MessageBox(NULL, L'Unrecognized parameter.\n\nValid options:\n\n    /c [CMDER User Root Path]\n\n    /task [ConEmu Task Name]\n\n    [/start [Start in Path] | [Start in Path]]\n\n    /single\n\nor\n\n    /register [USER | ALL]\n\nor\n\n    /unregister [USER | ALL]\n', MB_TITLE, MB_OK);
-			cmderOptions.error = true;
-		}
-	}
-    
-        // Finish and check for file errors
-    if (s.ok()) {
-      s = file->Sync();
-    }
-    if (s.ok()) {
-      s = file->Close();
-    }
-    delete file;
-    file = nullptr;
-    
-      void Crc32c(ThreadState* thread) {
-    // Checksum about 500MB of data total
-    const int size = 4096;
-    const char* label = '(4K per op)';
-    std::string data(size, 'x');
-    int64_t bytes = 0;
-    uint32_t crc = 0;
-    while (bytes < 500 * 1048576) {
-      crc = crc32c::Value(data.data(), size);
-      thread->stats.FinishedSingleOp();
-      bytes += size;
-    }
-    // Print so result is not dead
-    fprintf(stderr, '... crc=0x%x\r', static_cast<unsigned int>(crc));
-    }
-    
-      // Replace immutable memtable with the generated Table
-  if (s.ok()) {
-    edit.SetPrevLogNumber(0);
-    edit.SetLogNumber(logfile_number_);  // Earlier logs no longer needed
-    s = versions_->LogAndApply(&edit, &mutex_);
-  }
-    
-      FillLevels('A', 'Z');
-    
-      ASSERT_TRUE(ParseInternalKey(in, &decoded));
-  ASSERT_EQ(key, decoded.user_key.ToString());
-  ASSERT_EQ(seq, decoded.sequence);
-  ASSERT_EQ(vt, decoded.type);
-    
-    std::string DescriptorFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/MANIFEST-%06llu',
-           static_cast<unsigned long long>(number));
-  return dbname + buf;
-}
-    
-      scratch->clear();
-  record->clear();
-  bool in_fragmented_record = false;
-  // Record offset of the logical record that we're reading
-  // 0 is a dummy value to make compilers happy
-  uint64_t prospective_record_offset = 0;
-    
-    TEST(LogTest, AlignedEof) {
-  const int n = kBlockSize - 2*kHeaderSize + 4;
-  Write(BigString('foo', n));
-  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
-  ASSERT_EQ(BigString('foo', n), Read());
-  ASSERT_EQ('EOF', Read());
-}
-    
-      // Add an entry into memtable that maps key to value at the
-  // specified sequence number and with the specified type.
-  // Typically value will be empty if type==kTypeDeletion.
-  void Add(SequenceNumber seq, ValueType type,
-           const Slice& key,
-           const Slice& value);
-    
-      Status OpenWithStatus(Options* options = nullptr) {
-    Close();
-    Options opts;
-    if (options != nullptr) {
-      opts = *options;
-    } else {
-      opts.reuse_logs = true;  // TODO(sanjay): test both ways
-      opts.create_if_missing = true;
-    }
-    if (opts.env == nullptr) {
-      opts.env = env_;
-    }
-    return DB::Open(opts, dbname_, &db_);
-  }
-    
-    class Repairer {
- public:
-  Repairer(const std::string& dbname, const Options& options)
-      : dbname_(dbname),
-        env_(options.env),
-        icmp_(options.comparator),
-        ipolicy_(options.filter_policy),
-        options_(SanitizeOptions(dbname, &icmp_, &ipolicy_, options)),
-        owns_info_log_(options_.info_log != options.info_log),
-        owns_cache_(options_.block_cache != options.block_cache),
-        next_file_number_(1) {
-    // TableCache can be small since we expect each table to be opened once.
-    table_cache_ = new TableCache(dbname_, options_, 10);
-  }
-    }
-    
-    template<typename Key, class Comparator>
-void SkipList<Key,Comparator>::Insert(const Key& key) {
-  // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
-  // here since Insert() is externally synchronized.
-  Node* prev[kMaxHeight];
-  Node* x = FindGreaterOrEqual(key, prev);
-    }
-    
-      for (int i = 0; i < R; i++) {
-    if (list.Contains(i)) {
-      ASSERT_EQ(keys.count(i), 1);
-    } else {
-      ASSERT_EQ(keys.count(i), 0);
+    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
+  Slice memkey = key.memtable_key();
+  Table::Iterator iter(&table_);
+  iter.Seek(memkey.data());
+  if (iter.Valid()) {
+    // entry format is:
+    //    klength  varint32
+    //    userkey  char[klength]
+    //    tag      uint64
+    //    vlength  varint32
+    //    value    char[vlength]
+    // Check that it belongs to same user key.  We do not check the
+    // sequence number since the Seek() call above should have skipped
+    // all entries with overly large sequence numbers.
+    const char* entry = iter.key();
+    uint32_t key_length;
+    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
+    if (comparator_.comparator.user_comparator()->Compare(
+            Slice(key_ptr, key_length - 8),
+            key.user_key()) == 0) {
+      // Correct user key
+      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
+      switch (static_cast<ValueType>(tag & 0xff)) {
+        case kTypeValue: {
+          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
+          value->assign(v.data(), v.size());
+          return true;
+        }
+        case kTypeDeletion:
+          *s = Status::NotFound(Slice());
+          return true;
+      }
     }
   }
-    
-    
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
-    
-    
-    {
-    {#if XGBOOST_STRICT_R_MODE
-// check nan
-bool CheckNAN(double v);
-double LogGamma(double v);
-#else
-template<typename T>
-inline bool CheckNAN(T v) {
-#ifdef _MSC_VER
-  return (_isnan(v) != 0);
-#else
-  return std::isnan(v);
-#endif
+  return false;
 }
-template<typename T>
-inline T LogGamma(T v) {
-#ifdef _MSC_VER
-#if _MSC_VER >= 1800
-  return lgamma(v);
-#else
-#pragma message('Warning: lgamma function was not available until VS2013'\
-                ', poisson regression will be disabled')
-  utils::Error('lgamma function was not available until VS2013');
-  return static_cast<T>(1.0);
-#endif
-#else
-  return lgamma(v);
-#endif
-}
-#endif  // XGBOOST_STRICT_R_MODE_
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_MATH_H_
-
     
-    #include <dmlc/omp.h>
-#include <xgboost/logging.h>
-#include <algorithm>
-#include '../common/math.h'
+      Iterator* NewTableIterator(const FileMetaData& meta) {
+    // Same as compaction iterators: if paranoid_checks are on, turn
+    // on checksum verification.
+    ReadOptions r;
+    r.verify_checksums = options_.paranoid_checks;
+    return table_cache_->NewIterator(r, meta.number, meta.file_size);
+  }
+    
+    BENCHMARK(skip_overhead, iter) {
+  auto prev = FLAGS_minloglevel;
+  FLAGS_minloglevel = 2;
+    }
+    
+    static uint32_t manyArgTypesTestFunc() {
+  uint32_t a = folly::Random::rand32();
+  uint32_t b = folly::Random::rand32();
+  bool bool_ = (a % 2) == (b % 2);
+  char char_ = a & 255;
+  short short_ = b & 32767;
+  long long_ = a;
+  float float_ = float(a) / float(b);
+  double double_ = double(a) / double(b);
+  FOLLY_SDT(
+      folly,
+      test_static_tracepoint_many_arg_types,
+      a,
+      b,
+      bool_,
+      char_,
+      short_,
+      long_,
+      float_,
+      double_);
+  FOLLY_SDT_WITH_SEMAPHORE(folly, test_semaphore_local, long_, short_);
+  return a + b;
+}
+    
+    // Check a Linux kernel-style return code (>= 0 on success, negative error
+// number on error), throw on error.
+template <class... Args>
+void checkKernelError(ssize_t ret, Args&&... args) {
+  if (UNLIKELY(ret < 0)) {
+    throwSystemErrorExplicit(int(-ret), std::forward<Args>(args)...);
+  }
+}
+    
+      /**
+   * Returns a secure random uint64_t in [0, max). If max == 0, returns 0.
+   */
+  static uint64_t secureRand64(uint64_t max) {
+    SecureRNG<uint64_t> srng;
+    return rand64(max, srng);
+  }
+    
+    namespace detail {
+    }
+    
+      /**
+   * windowSize is the base two logarithm of the window size (the size of the
+   * history buffer). It should be in the range 9..15. Larger values of this
+   * parameter result in better compression at the expense of memory usage.
+   *
+   * The default value is 15.
+   *
+   * NB: when inflating/uncompressing data, the windowSize must be greater than
+   * or equal to the size used when deflating/compressing.
+   */
+  int windowSize;
+    
+    /// Returns the best real CacheLocality information available
+static CacheLocality getSystemLocalityInfo() {
+  if (kIsLinux) {
+    try {
+      return CacheLocality::readFromSysfs();
+    } catch (...) {
+      // keep trying
+    }
+  }
+    }
