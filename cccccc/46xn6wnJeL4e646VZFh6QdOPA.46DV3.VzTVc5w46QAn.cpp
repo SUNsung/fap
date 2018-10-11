@@ -1,106 +1,198 @@
 
         
-        template <class charT, class traits>
-bool basic_regex_parser<charT, traits>::unwind_alts(std::ptrdiff_t last_paren_start)
-{
-   //
-   // If we didn't actually add any states after the last 
-   // alternative then that's an error:
-   //
-   if((this->m_alt_insert_point == static_cast<std::ptrdiff_t>(this->m_pdata->m_data.size()))
-      && m_alt_jumps.size() && (m_alt_jumps.back() > last_paren_start)
-      &&
-      !(
-         ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group)
-           &&
-         ((this->flags() & regbase::no_empty_expressions) == 0)
-        )
-      )
-   {
-      fail(regex_constants::error_empty, this->m_position - this->m_base, 'Can't terminate a sub-expression with an alternation operator |.');
-      return false;
-   }
-   // 
-   // Fix up our alternatives:
-   //
-   while(m_alt_jumps.size() && (m_alt_jumps.back() > last_paren_start))
-   {
-      //
-      // fix up the jump to point to the end of the states
-      // that we've just added:
-      //
-      std::ptrdiff_t jump_offset = m_alt_jumps.back();
-      m_alt_jumps.pop_back();
-      this->m_pdata->m_data.align();
-      re_jump* jmp = static_cast<re_jump*>(this->getaddress(jump_offset));
-      BOOST_ASSERT(jmp->type == syntax_element_jump);
-      jmp->alt.i = this->m_pdata->m_data.size() - jump_offset;
-   }
-   return true;
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8>
+internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8> Values(T1 v1, T2 v2,
+    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8) {
+  return internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8>(v1, v2, v3, v4,
+      v5, v6, v7, v8);
 }
     
-    namespace boost{
+    // The variables defined in the type-parameterized test macros are
+// static as typically these macros are used in a .h file that can be
+// #included in multiple translation units linked together.
+# define TYPED_TEST_CASE_P(CaseName) \
+  static ::testing::internal::TypedTestCasePState \
+      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName)
+    
+    // Makes sure this header is not included before gtest.h.
+#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
+# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
+#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
+    
+      // RemoveFileName returns the directory path with the filename removed.
+  // Example: FilePath('path/to/file').RemoveFileName() returns 'path/to/'.
+  // If the FilePath is 'a_file' or '/a_file', RemoveFileName returns
+  // FilePath('./') or, on Windows, FilePath('.\\'). If the filepath does
+  // not have a file, like 'just/a/dir/', it returns the FilePath unmodified.
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveFileName() const;
+    
+    // The following family of struct and struct templates are used to
+// represent type lists.  In particular, TypesN<T1, T2, ..., TN>
+// represents a type list with N types (T1, T2, ..., and TN) in it.
+// Except for Types0, every struct in the family has two member types:
+// Head for the first type in the list, and Tail for the rest of the
+// list.
+    
+      // Called after a test ends.
+  virtual void OnTestEnd(const TestInfo& /* test_info */) {
+    int difference = Water::allocated() - initially_allocated_;
     }
     
-    class BOOST_REGEX_DECL abstract_protected_call
-{
-public:
-   bool BOOST_REGEX_CALL execute()const;
-   // this stops gcc-4 from complaining:
-   virtual ~abstract_protected_call(){}
-private:
-   virtual bool call()const = 0;
+    #include <limits.h>
+#include 'sample1.h'
+#include 'gtest/gtest.h'
+    
+    
+    {} // namespace caffe2
+
+    
+    REGISTER_CPU_OPERATOR(
+    MergeMultiMapFeatureTensors,
+    MergeMultiMapFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiMapFeatureTensors)
+    .SetDoc(
+        'Merge given multi-feature tensors with map features into one.' + doc)
+    .NumInputs([](int n) { return n >= 5 && n % 5 == 0; })
+    .NumOutputs(5)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_keys', '.keys')
+    .Input(2, 'in1_values_lengths', '.values.lengths')
+    .Input(3, 'in1_values_keys', '.values.keys')
+    .Input(4, 'in1_values_values', '.values.values')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values_lengths')
+    .Output(3, 'out_values_keys', '.values.keys')
+    .Output(4, 'out_values_values', '.values.values');
+    
+    
+<details>
+    
+    op = core.CreateOperator(
+    'Floor',
+    ['X'],
+    ['X'],
+)
+    
+    
+    {} // namespace caffe2
+    
+    OPERATOR_SCHEMA(GivenTensorInt64Fill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT64>);
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+    grpc_slice CoreCodegen::grpc_slice_new_with_user_data(void* p, size_t len,
+                                                      void (*destroy)(void*),
+                                                      void* user_data) {
+  return ::grpc_slice_new_with_user_data(p, len, destroy, user_data);
+}
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+    
+    void CensusClientCallData::Destroy(grpc_call_element* elem,
+                                   const grpc_call_final_info* final_info,
+                                   grpc_closure* then_call_closure) {
+  const uint64_t request_size = GetOutgoingDataSize(final_info);
+  const uint64_t response_size = GetIncomingDataSize(final_info);
+  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
+  ::opencensus::stats::Record(
+      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
+       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
+       {RpcClientRoundtripLatency(), latency_ms},
+       {RpcClientServerLatency(),
+        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
+       {RpcClientSentMessagesPerRpc(), sent_message_count_},
+       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
+      {{ClientMethodTagKey(), method_},
+       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
+  grpc_slice_unref_internal(path_);
+  context_.EndSpan();
+}
+    
+    
+    {        return true;
+    }
+    
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(Waves);
 };
     
+    const std::string& DHTResponseMessage::getType() const { return R; }
     
-    {} // namespace boost
+    public:
+  DHTResponseMessage(const std::shared_ptr<DHTNode>& localNode,
+                     const std::shared_ptr<DHTNode>& remoteNode,
+                     const std::string& transactionID);
     
-    #endif  // BOOST_REGEX_V4_REGEX_GREP_HPP
-    
-    //
-// proc regex_match
-// returns true if the specified regular expression matches
-// the whole of the input.  Fills in what matched in m.
-//
-template <class BidiIterator, class Allocator, class charT, class traits>
-bool regex_match(BidiIterator first, BidiIterator last, 
-                 match_results<BidiIterator, Allocator>& m, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
+    DHTRoutingTable::DHTRoutingTable(const std::shared_ptr<DHTNode>& localNode)
+    : localNode_(localNode),
+      root_(make_unique<DHTBucketTreeNode>(
+          std::make_shared<DHTBucket>(localNode_))),
+      numBucket_(1),
+      taskQueue_{nullptr},
+      taskFactory_{nullptr}
 {
-   BOOST_REGEX_DETAIL_NS::perl_matcher<BidiIterator, Allocator, traits> matcher(first, last, m, e, flags, first);
-   return matcher.match();
-}
-template <class iterator, class charT, class traits>
-bool regex_match(iterator first, iterator last, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   match_results<iterator> m;
-   return regex_match(first, last, m, e, flags | regex_constants::match_any);
-}
-//
-// query_match convenience interfaces:
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-//
-// this isn't really a partial specialisation, but template function
-// overloading - if the compiler doesn't support partial specialisation
-// then it really won't support this either:
-template <class charT, class Allocator, class traits>
-inline bool regex_match(const charT* str, 
-                        match_results<const charT*, Allocator>& m, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + traits::length(str), m, e, flags);
 }
     
-    #endif
+      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
     
-    #include <string>
-#include <vector>
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port) const
+{
+  return generateToken(infoHash, ipaddr, port, secret_[0]);
+}
     
-    class ViewsConfigParserPluginTests : public testing::Test {};
+        const std::string& getGoodAddr() const;
     
-      /// Keep a list of resolved extension paths and their managed pids.
-  ExtensionMap extensions_;
+    #ifndef V8_BUILTINS_BUILTINS_ASYNC_GEN_H_
+#define V8_BUILTINS_BUILTINS_ASYNC_GEN_H_
+    
+      auto if_throw_undefined = [=](Node* const native_context, Node* const promise,
+                                Label* if_exception) { Goto(if_exception); };
+    
+    #include 'src/code-stub-assembler.h'
+    
+        BIND(&if_numisheapnumber);
+    {
+      // Check if {num} contains a NaN.
+      Node* num_value = LoadHeapNumberValue(num);
+      BranchIfFloat64IsNaN(num_value, &return_true, &return_false);
+    }
+    
+        // Check if the optimized code is marked for deopt. If it is, call the
+    // runtime to clear it.
+    Label found_deoptimized_code(this);
+    TNode<CodeDataContainer> code_data_container =
+        CAST(LoadObjectField(optimized_code, Code::kCodeDataContainerOffset));
+    
+    
+    {  Node* value = ToThisValue(context, receiver, PrimitiveType::kSymbol,
+                            'Symbol.prototype.description');
+  Node* result = LoadObjectField(value, Symbol::kNameOffset);
+  Return(result);
+}
