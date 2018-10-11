@@ -1,125 +1,252 @@
 
         
-            To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
+                  def checked?(value)
+            case value
+            when TrueClass, FalseClass
+              value == !!@checked_value
+            when NilClass
+              false
+            when String
+              value == @checked_value
+            else
+              if value.respond_to?(:include?)
+                value.include?(@checked_value)
+              else
+                value.to_i == @checked_value.to_i
+              end
+            end
+          end
     
-    module Homebrew
-  module Cleanup
-    @@disk_cleanup_size = 0
+            def initialize(object_name, method_name, template_object, content_or_options = nil, options = nil)
+          options ||= {}
     
-            $stderr.puts
-        opoo out
-        Homebrew.failed = true
-        first_warning = false
-      end
+        attr_reader :paths
+    
+        keys.each do |key|
+      value = options[key]
+    
+      describe '#relative_distance_of_time_in_words' do
+    it 'in the past' do
+      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
     end
     
-      def self.path(name)
-    Formulary.core_path(name)
-  end
-    
-            def username_and_email
-          @username_and_email ||= begin
-            username  = get_info(:username).presence || get_info(:nickname).presence
-            email     = get_info(:email).presence
-    
-        private
-    
-        def log_status(status)
-      puts bold status
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
     end
-    
-    # The module that contains everything Sass-related:
-#
-# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
-# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
-# * {Sass::SyntaxError} is raised when Sass encounters an error.
-# * {Sass::CSS} handles conversion of CSS to Sass.
-#
-# Also see the {file:SASS_REFERENCE.md full Sass reference}.
-module Sass
-  class << self
-    # @private
-    attr_accessor :tests_running
   end
     
-        # Parses the command-line arguments and runs the executable.
-    # This does not handle exceptions or exit the program.
-    #
-    # @see #parse!
-    def parse
-      @opts = OptionParser.new(&method(:set_opts))
-      @opts.parse!(@args)
+      describe '#interpolate_jsonpaths' do
+    let(:payload) { { :there => { :world => 'WORLD' }, :works => 'should work' } }
     
-          opts.on('-C', '--no-cache', 'Don't cache to sassc files.') do
-        @options[:for_engine][:read_cache] = false
-      end
-    
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
+        it 'should revert extract and template options for an updated WebsiteAgent' do
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+      ConvertWebsiteAgentTemplateForMerge.new.down
+      agent.reload
+      expect(agent.options).to include('extract' => reverted_extract,
+                                       'template' => reverted_template)
+    end
   end
-    
-    # It is very likely that we'll need these and as some of those paths will atm
-# result in a I18n deprecation warning, we load those here now so that we can
-# get rid of that warning.
-require 'active_support/core_ext/string/strip'
-require 'active_support/core_ext/string/inflections'
-require 'active_support/core_ext/array/conversions'
-# TODO: check what this actually does by the time we're going to add support for
-# other locales.
-require 'i18n'
-if I18n.respond_to?(:enforce_available_locales=)
-  I18n.enforce_available_locales = false
-end
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-          private
-    
-      require ARGV.shift
-  exit_status = LogStash::Runner.run('bin/logstash', ARGV)
-  exit(exit_status || 0)
 end
 
     
-      # We compare the before the update and after the update
-  def display_updated_plugins(previous_gem_specs_map)
-    update_count = 0
-    find_latest_gem_specs.values.each do |spec|
-      name = spec.name.downcase
-      if previous_gem_specs_map.has_key?(name)
-        if spec.version != previous_gem_specs_map[name].version
-          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
-          update_count += 1
-        end
-      else
-        puts('Installed #{spec.name} #{spec.version.to_s}')
-        update_count += 1
+    gem 'rails', '~> 5.2'
+gem 'omniauth', '~> 1.3'
+gem 'oauth2'
+gem 'omniauth-oauth2'
+gem 'rdoc'
+    
+          def expire_data_after_sign_out!
+        Devise.mappings.each { |_,m| instance_variable_set('@current_#{m.name}', nil) }
+        super
       end
+    end
+  end
+    
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
+      end
+    end
+  end
+end
+
+    
+        # advance scanner to pos after the next match of pattern and return the match
+    def scan_next(pattern)
+      return unless @s.scan_until(pattern)
+      @s.matched
     end
     
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
-      end
+      # Version of your assets, change this if you want to expire all your assets.
+  config.assets.version = '1.0'
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+      # Compile a file on disk to CSS.
+  #
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  #
+  # @overload compile_file(filename, options = {})
+  #   Return the compiled CSS rather than writing it to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @return [String] The compiled CSS.
+  #
+  # @overload compile_file(filename, css_filename, options = {})
+  #   Write the compiled CSS to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @param css_filename [String] The location to which to write the compiled CSS.
+  def self.compile_file(filename, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    css_filename = args.shift
+    result = Sass::Engine.for_file(filename, options).render
+    if css_filename
+      options[:css_filename] ||= css_filename
+      open(css_filename, 'w') {|css_file| css_file.write(result)}
+      nil
+    else
+      result
     end
+  end
+end
+    
+        # Converts the CSS template into Sass or SCSS code.
+    #
+    # @param fmt [Symbol] `:sass` or `:scss`, designating the format to return.
+    # @return [String] The resulting Sass or SCSS code
+    # @raise [Sass::SyntaxError] if there's an error parsing the CSS template
+    def render(fmt = :sass)
+      check_encoding!
+      build_tree.send('to_#{fmt}', @options).strip + '\n'
+    rescue Sass::SyntaxError => err
+      err.modify_backtrace(:filename => @options[:filename] || '(css)')
+      raise err
+    end
+    
+        # @return [String] The error message
+    def to_s
+      @message
+    end
+    
+        # Parses the command-line arguments and runs the executable.
+    # Calls `Kernel#exit` at the end, so it never returns.
+    #
+    # @see #parse
+    def parse!
+      # rubocop:disable RescueException
+      begin
+        parse
+      rescue Exception => e
+        # Exit code 65 indicates invalid data per
+        # http://www.freebsd.org/cgi/man.cgi?query=sysexits. Setting it via
+        # at_exit is a bit of a hack, but it allows us to rethrow when --trace
+        # is active and get both the built-in exception formatting and the
+        # correct exit code.
+        at_exit {exit Sass::Util.windows? ? 13 : 65} if e.is_a?(Sass::SyntaxError)
+    
+    Given(/^the configuration is in a custom location$/) do
+  TestApp.move_configuration_to_custom_location('app')
+end
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+        private
+    
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+          </ul>
+    </div> <!-- /BACKTRACE -->
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+          def encrypt(value)
+        options[:encryptor].hexdigest value.to_s
+      end
+    
+            directives.compact.sort.join('; ')
+      end
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+    desc 'Deploy website via rsync'
+task :rsync do
+  exclude = ''
+  if File.exists?('./rsync-exclude')
+    exclude = '--exclude-from '#{File.expand_path('./rsync-exclude')}''
+  end
+  puts '## Deploying website via Rsync'
+  ok_failed system('rsync -avze 'ssh -p #{ssh_port}' #{exclude} #{rsync_args} #{'--delete' unless rsync_delete == false} #{public_dir}/ #{ssh_user}:#{document_root}')
+end
+    
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
+    
+    end
+Liquid::Template.register_filter OctopressLiquidFilters
+    
+    require_relative '../lib/bootstrap/environment'
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
