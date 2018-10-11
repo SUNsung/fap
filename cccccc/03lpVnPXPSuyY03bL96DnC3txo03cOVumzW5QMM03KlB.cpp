@@ -1,200 +1,168 @@
 
         
-        #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
+        void absDiff(const Size2D &size,
+             const u8 *src0Base, ptrdiff_t src0Stride,
+             const u8 *src1Base, ptrdiff_t src1Stride,
+             u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<u8>());
 #else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
 #endif
-    
-    /* Enum lookups:
- * - ntoi:  look up a name with specified length.
- * - ntoiz: look up a name provided as a null-terminated string.
- * - iton:  look up an integer, returning the name as a null-terminated
- *          string. */
-bool upb_enumdef_ntoi(const upb_enumdef *e, const char *name, size_t len,
-                      int32_t *num);
-UPB_INLINE bool upb_enumdef_ntoiz(const upb_enumdef *e,
-                                  const char *name, int32_t *num) {
-  return upb_enumdef_ntoi(e, name, strlen(name), num);
-}
-const char *upb_enumdef_iton(const upb_enumdef *e, int32_t num);
-    
-      virtual bool Generate(const FileDescriptor* file, const string& parameter,
-                        GeneratorContext* context, string* error) const {
-    file->CopyTo(file_);
-    return true;
-  }
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/compiler/plugin.pb.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    #include <sstream>
-    
-    #include <string>
-    
-    // Does this message class have generated parsing, serialization, and other
-// standard methods for which reflection-based fallback implementations exist?
-bool Context::HasGeneratedMethods(const Descriptor* descriptor) const {
-  return options_.enforce_lite ||
-         descriptor->file()->options().optimize_for() != FileOptions::CODE_SIZE;
 }
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
+            u8* _map = map + mapstep*i + 1;
+        _map[-1] = _map[size.width] = 1;
     
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
+    #define SPLIT(sgn,bits,n) void split##n(const Size2D &_size,                                            \
+                                    const sgn##bits * srcBase, ptrdiff_t srcStride                      \
+                                    FILL_LINES##n(FARG, sgn##bits) )                                    \
+{                                                                                                       \
+    internal::assertSupportedConfiguration();                                                           \
+    Size2D size(_size);                                                                                 \
+    if (CONTDST##n                                                                                      \
+        dst0Stride == (ptrdiff_t)(size.width))                                                          \
+    {                                                                                                   \
+        size.width *= size.height;                                                                      \
+        size.height = 1;                                                                                \
+    }                                                                                                   \
+    typedef internal::VecTraits<sgn##bits, n>::vec128 vec128;                                           \
+    size_t roiw16 = size.width >= (16/sizeof(sgn##bits)-1) ? size.width - (16/sizeof(sgn##bits)-1) : 0; \
+    typedef internal::VecTraits<sgn##bits, n>::vec64 vec64;                                             \
+    size_t roiw8 = size.width >= (8/sizeof(sgn##bits)-1) ? size.width - (8/sizeof(sgn##bits)-1) : 0;    \
+                                                                                                        \
+    for (size_t i = 0u; i < size.height; ++i)                                                           \
+    {                                                                                                   \
+        const sgn##bits * src = internal::getRowPtr(srcBase, srcStride, i);                             \
+        FILL_LINES##n(VROW, sgn##bits)                                                                  \
+        size_t sj = 0u, dj = 0u;                                                                        \
+                                                                                                        \
+        for (; dj < roiw16; sj += MUL##n(16)/sizeof(sgn##bits), dj += 16/sizeof(sgn##bits))             \
+            SPLIT_QUAD(sgn, bits, n)                                                                    \
+                                                                                                        \
+        if (dj < roiw8)                                                                                 \
+        {                                                                                               \
+            vec64 v_src = vld##n##_##sgn##bits(src + sj);                                               \
+            FILL_LINES##n(VST1, sgn##bits)                                                              \
+            sj += MUL##n(8)/sizeof(sgn##bits);                                                          \
+            dj += 8/sizeof(sgn##bits);                                                                  \
+        }                                                                                               \
+                                                                                                        \
+        for (; dj < size.width; sj += n, ++dj)                                                          \
+        {                                                                                               \
+            FILL_LINES##n(SST, sgn##bits)                                                               \
+        }                                                                                               \
+    }                                                                                                   \
 }
     
-    AuthPropertyIterator::AuthPropertyIterator(
-    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
-    : property_(property),
-      ctx_(iter->ctx),
-      index_(iter->index),
-      name_(iter->name) {}
-    
-    bool CompletionQueue::CompletionQueueTLSCache::Flush(void** tag, bool* ok) {
-  int res = 0;
-  void* res_tag;
-  flushed_ = true;
-  if (grpc_completion_queue_thread_local_cache_flush(cq_->cq_, &res_tag,
-                                                     &res)) {
-    auto cq_tag = static_cast<internal::CompletionQueueTag*>(res_tag);
-    *ok = res == 1;
-    if (cq_tag->FinalizeResult(tag, ok)) {
-      return true;
-    }
-  }
-  return false;
-}
-    
-    
-    {}  // namespace grpc
-
-    
-    namespace mxnet {
+                {
+                // combine 3 'shifted' vectors
+                t0 = vext_u8(tprev[1], tcurr[1], 7);
+                t1 = tcurr[1];
+                t2 = vext_u8(tcurr[1], tnext[1], 1);
     }
     
-    #if defined(__i386__) || defined(_M_X86) || defined(_M_X64) || defined(__x86_64__)
-#define ARCH_IS_INTEL_X86
-#endif
+            float32x4_t vc0 = vmovq_n_f32(0);
+        int32x4_t vs = vmovq_n_s32(0);
     
+    #include <cstring>
     
-    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
-            }
-            else if (!sampleDynamicAxes.empty())
-                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+      // These two overloads allow streaming a wide C string to a Message
+  // using the UTF-8 encoding.
+  Message& operator <<(const wchar_t* wide_c_str);
+  Message& operator <<(wchar_t* wide_c_str);
     
-            // 'initializer' must be a random initializer
-        auto initializerType = initializer[InitializerTypeAttributeName].Value<std::wstring>();
-        if ((initializerType != Microsoft::MSR::CNTK::UniformInitializerTypeName) &&
-            (initializerType != Microsoft::MSR::CNTK::BilinearInitializerTypeName) &&
-            (initializerType != Microsoft::MSR::CNTK::ConstantInitializerTypeName))
-        {
-            int oldOutputRank = initializer[OutputRankAttributeName].Value<int>();
-            int oldFilterRank = initializer[FilterRankAttributeName].Value<int>();
-    }
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5, typename Generator6,
+    typename Generator7, typename Generator8>
+internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
+    Generator4, Generator5, Generator6, Generator7, Generator8> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5, const Generator6& g6,
+        const Generator7& g7, const Generator8& g8) {
+  return internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
+      Generator4, Generator5, Generator6, Generator7, Generator8>(
+      g1, g2, g3, g4, g5, g6, g7, g8);
+}
     
-        // computation functions don't do anything for parameter nodes
-    virtual void UpdateFunctionMBSize() override;
-    virtual void /*ComputationNode::*/ ForwardProp(const FrameRange&) override;
-    virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange&) override;
-    virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override;
+    #ifndef GTEST_INCLUDE_GTEST_GTEST_SPI_H_
+#define GTEST_INCLUDE_GTEST_GTEST_SPI_H_
     
-    BENCHMARK_PARAM(BENCHFUN(pushBack), 16)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 128)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 1024)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 10240)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 102400)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 1024000)
-
-    
-    
-    {  // Synchronous transmission of CAN messages
-  int32_t ret = canWrite(dev_handler_, send_frames_, frame_num, nullptr);
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'send message failed, error code: ' << ret << ', '
-           << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+    // Traps C++ exceptions escaping statement and reports them as test
+// failures. Note that trapping SEH exceptions is not implemented here.
+# if GTEST_HAS_EXCEPTIONS
+#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
+  try { \
+    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } catch (const ::std::exception& gtest_exception) { \
+    fprintf(\
+        stderr, \
+        '\n%s: Caught std::exception-derived exception escaping the ' \
+        'death test statement. Exception message: %s\n', \
+        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
+        gtest_exception.what()); \
+    fflush(stderr); \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  } catch (...) { \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
   }
-  return ErrorCode::OK;
+    
+    // A function to convert T* into linked_ptr<T>
+// Doing e.g. make_linked_ptr(new FooBarBaz<type>(arg)) is a shorter notation
+// for linked_ptr<FooBarBaz<type> >(new FooBarBaz<type>(arg))
+template <typename T>
+linked_ptr<T> make_linked_ptr(T* ptr) {
+  return linked_ptr<T>(ptr);
 }
     
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    
-    {  // Synchronous transmission of CAN messages
-  int32_t send_num = *frame_num;
-  int32_t ret = bcan_send(_dev_handler, _send_frames, send_num);
-  if (ret < 0) {
-    int ret_send_error = bcan_get_status(_dev_handler);
-    AERROR << 'send message failed, error code: ' << ret
-           << ', send error: ' << ret_send_error;
-    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+      template <GTEST_6_TYPENAMES_(U)>
+  tuple& CopyFrom(const GTEST_6_TUPLE_(U)& t) {
+    f0_ = t.f0_;
+    f1_ = t.f1_;
+    f2_ = t.f2_;
+    f3_ = t.f3_;
+    f4_ = t.f4_;
+    f5_ = t.f5_;
+    return *this;
   }
-  *frame_num = ret;
-  return ErrorCode::OK;
-}
     
-    #include 'gtest/gtest.h'
+    // The following family of struct and struct templates are used to
+// represent template lists.  In particular, TemplatesN<T1, T2, ...,
+// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
+// for Templates0, every struct in the family has two member types:
+// Head for the selector of the first template in the list, and Tail
+// for the rest of the list.
     
-    
-    {  std::condition_variable cvar_;
+    template <typename T>
+struct TypeList {
+  typedef Types1<T> type;
 };
     
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
+            template <typename ElemType>
+        void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const;
+    
+            if (bufferSizeInBytes < (viewShape.TotalSize() * sizeof(V1ElemType)))
+            InvalidArgument('Size (%d) of the specified buffer for creating the NDArrayView is smaller than the specified view shape '%S'.',
+                            (int)bufferSizeInBytes, viewShape.AsString().c_str());
+    
+        /*virtual*/ ValuePtr Value::Alias(bool readOnly/* = false*/) const
+    {
+        // TODO: Check if this is a derived type and throw an exception in that case
+        return MakeSharedObject<Value>(Data()->Alias(readOnly), (Mask() != nullptr) ? Mask()->Alias() : nullptr);
+    }
+    
+    
+    {
+    {
+    {}}}
