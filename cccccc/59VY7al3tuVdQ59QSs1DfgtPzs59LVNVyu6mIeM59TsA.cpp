@@ -1,452 +1,310 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-
+        #if !GTEST_OS_SYMBIAN
+# include <utility>
+#endif
     
-    #include <Python.h>
-    
-    #include 'tensorflow/core/framework/graph.pb.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    // This file contains APIs that assume a StreamExecutor is backed by CUDA.
-// It reaches into the CUDA implementation to activate an underlying CUDA
-// context.
-//
-// Having this file separate from cuda_gpu_executor.h means that dependent
-// code does not also have to depend on cuda.h.
-    
-    // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
-#else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
-    
-    #include <google/protobuf/testing/file.h>
-#include <google/protobuf/testing/file.h>
-#include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-    
-    void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
-    string comments = location.leading_comments.empty() ?
-        location.trailing_comments : location.leading_comments;
-    if (comments.empty()) {
-        return;
-    }
-    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
-    // node of a summary element, not part of an attribute.
-    comments = StringReplace(comments, '&', '&amp;', true);
-    comments = StringReplace(comments, '<', '&lt;', true);
-    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
-    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
-    // but that needs to be part of a bigger effort to understand the markdown better anyway.
-    printer->Print('/// <summary>\n');
-    bool last_was_empty = false;
-    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
-    // to preserve the blank lines themselves, as this is relevant in the markdown.
-    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
-    // (We don't skip 'just whitespace' lines, either.)
-    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-        string line = *it;
-        if (line.empty()) {
-            last_was_empty = true;
-        } else {
-            if (last_was_empty) {
-                printer->Print('///\n');
-            }
-            last_was_empty = false;
-            printer->Print('///$line$\n', 'line', *it);
-        }
-    }
-    printer->Print('/// </summary>\n');
-}
-    
-    SourceGeneratorBase::~SourceGeneratorBase() {
-}
-    
-    /**
- * @brief Computes the classification accuracy for a one-of-many
- *        classification task.
- */
-template <typename Dtype>
-class AccuracyLayer : public Layer<Dtype> {
+    // A helper class for implementing EXPECT_FATAL_FAILURE() and
+// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
+// TestPartResultArray contains exactly one failure that has the given
+// type and contains the given substring.  If that's not the case, a
+// non-fatal failure will be generated.
+class GTEST_API_ SingleFailureChecker {
  public:
-  /**
-   * @param param provides AccuracyParameter accuracy_param,
-   *     with AccuracyLayer options:
-   *   - top_k (\b optional, default 1).
-   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
-   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
-   *     correct if the correct label is among the top 5 predicted labels.
-   */
-  explicit AccuracyLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  // The constructor remembers the arguments.
+  SingleFailureChecker(const TestPartResultArray* results,
+                       TestPartResult::Type type,
+                       const string& substr);
+  ~SingleFailureChecker();
+ private:
+  const TestPartResultArray* const results_;
+  const TestPartResult::Type type_;
+  const string substr_;
     }
     
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+    template <>
+class tuple<> {
  public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-    /**
-	@author AndreaCatania
-*/
-    
-    public:
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
-    
-    		} else if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
-			if (!part_found) {
-				parts[parts_idx++] = i;
-				part_found = true;
-				++parts_count;
-			};
-		} else {
-    
-    	static void _bind_methods();
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
+  tuple() {}
+  tuple(const tuple& /* t */)  {}
+  tuple& operator=(const tuple& /* t */) { return *this; }
 };
-} // namespace osquery
+    
+      // Now, we have that n is odd and n >= 3.
+    
+    
+    {  return clone;
+}
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
+    
+    IntSimdMatrixAVX2::IntSimdMatrixAVX2() {
+#ifdef __AVX2__
+  num_outputs_per_register_ = kNumOutputsPerRegister;
+  max_output_registers_ = kMaxOutputRegisters;
+  num_inputs_per_register_ = kNumInputsPerRegister;
+  num_inputs_per_group_ = kNumInputsPerGroup;
+  num_input_groups_ = kNumInputGroups;
+  partial_funcs_ = {PartialMatrixDotVector64, PartialMatrixDotVector32,
+                    PartialMatrixDotVector16, PartialMatrixDotVector8};
+#endif  // __AVX2__
+}
+    
+    // Constructor.
+// Tests the architecture in a system-dependent way to detect AVX, SSE and
+// any other available SIMD equipment.
+// __GNUC__ is also defined by compilers that include GNU extensions such as
+// clang.
+SIMDDetect::SIMDDetect() {
+#if defined(X86_BUILD)
+#if defined(__GNUC__)
+  unsigned int eax, ebx, ecx, edx;
+  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
+    // Note that these tests all use hex because the older compilers don't have
+    // the newer flags.
+    sse_available_ = (ecx & 0x00080000) != 0;
+    avx_available_ = (ecx & 0x10000000) != 0;
+    if (avx_available_) {
+      // There is supposed to be a __get_cpuid_count function, but this is all
+      // there is in my cpuid.h. It is a macro for an asm statement and cannot
+      // be used inside an if.
+      __cpuid_count(7, 0, eax, ebx, ecx, edx);
+      avx2_available_ = (ebx & 0x00000020) != 0;
+      avx512F_available_ = (ebx & 0x00010000) != 0;
+      avx512BW_available_ = (ebx & 0x40000000) != 0;
+    }
+  }
+#elif defined(_WIN32)
+  int cpuInfo[4];
+  __cpuid(cpuInfo, 0);
+  if (cpuInfo[0] >= 1) {
+    __cpuid(cpuInfo, 1);
+    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
+    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
+  }
+#else
+#error 'I don't know how to test for SIMD with this compiler'
+#endif
+#endif  // X86_BUILD
+}
 
     
+    #ifndef TESSERACT_CCMAIN_OSDETECT_H_
+#define TESSERACT_CCMAIN_OSDETECT_H_
     
-    {  c.reset();
+      // ============= Accessing data ==============.
+  // Coordinate system:
+  // Integer coordinates are at the cracks between the pixels.
+  // The top-left corner of the top-left pixel in the image is at (0,0).
+  // The bottom-right corner of the bottom-right pixel in the image is at
+  // (width, height).
+  // Every bounding box goes from the top-left of the top-left contained
+  // pixel to the bottom-right of the bottom-right contained pixel, so
+  // the bounding box of the single top-left pixel in the image is:
+  // (0,0)->(1,1).
+  // If an image rectangle has been set in the API, then returned coordinates
+  // relate to the original (full) image, rather than the rectangle.
+    
+      WERD_RES *word2 = nullptr;
+  BlamerBundle *orig_bb = nullptr;
+  split_word(word, split_index, &word2, &orig_bb);
+    
+      /// Threshold the rectangle, taking everything except the src_pix
+  /// from the class, using thresholds/hi_values to the output pix.
+  /// NOTE that num_channels is the size of the thresholds and hi_values
+  // arrays and also the bytes per pixel in src_pix.
+  void ThresholdRectToPix(Pix* src_pix, int num_channels,
+                          const int* thresholds, const int* hi_values,
+                          Pix** pix) const;
+    
+    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
+  return !operator==(rhs);
 }
     
+    #include <grpcpp/support/channel_arguments.h>
     
-    {  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
-  EXPECT_FALSE(fpack.shouldPackExecute());
-}
-    
-    namespace osquery {
-    }
-    
-      pid_t result = ::waitpid(nativeHandle(), &process_status, WNOHANG);
-  if (result < 0) {
-    if (errno == ECHILD) {
-      return PROCESS_EXITED;
-    }
-    process_status = -1;
-    return PROCESS_ERROR;
+      const protobuf::Descriptor* desc =
+      descriptor_pool_->FindMessageTypeByName(type);
+  if (desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Type not found.');
   }
     
-    void Initializer::platformTeardown() {
-  // Before we shutdown, we must insure to free the COM libs in windows
-  ::CoUninitialize();
-}
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+    }
     
-    Status serializeDistributedQueryRequestJSON(const DistributedQueryRequest& r,
-                                            std::string& json) {
-  auto doc = JSON::newObject();
-  auto s = serializeDistributedQueryRequest(r, doc, doc.doc());
+      // Check for input iterator errors
+  if (!iter->status().ok()) {
+    s = iter->status();
+  }
+    
+      Status RecoverLogFile(uint64_t log_number, bool last_log, bool* save_manifest,
+                        VersionEdit* edit, SequenceNumber* max_sequence)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+    
+      // When start user key is prefix of limit user key
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foobar', 200, kTypeValue)));
+    
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
   if (!s.ok()) {
     return s;
   }
-    }
-    
-    
-    {  auto status = EventFactory::deregisterEventSubscriber(sub->getName());
-  EXPECT_TRUE(status.ok());
-  status = EventFactory::deregisterEventPublisher(pub->type());
-  EXPECT_TRUE(status.ok());
-}
-    
-    
-/* CatmullRomBy
- */
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    void GridAction::startWithTarget(Node *target)
-{
-    ActionInterval::startWithTarget(target);
-    cacheTargetAsGridNode();
-    }
-    
-    __CCCallFuncO * __CCCallFuncO::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) __CCCallFuncO();
-    
-    if( _selectorTarget)
-    {
-        a->initWithTarget(_selectorTarget, _callFuncO, _object);
-    }
-    
-    a->autorelease();
-    return a;
-}
-    
-    
-    {        // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
-        if (_currentTargetSalvaged && _currentTarget->actions->num == 0)
-        {
-            deleteHashElement(_currentTarget);
-        }
-        //if some node reference 'target', it's reference count >= 2 (issues #14050)
-        else if (_currentTarget->target->getReferenceCount() == 1)
-        {
-            deleteHashElement(_currentTarget);
-        }
-    }
-    
-    
-    {// end of actions group
-/// @}
-    
-    
-    {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
-            {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
-        }
-    }
-}
-    
-    protected:
-    int _randrange;
-    bool _shakeZ;
-    
-    class Texture2D;
-class SpriteFrame;
-    
-        // Select GPU
-    {
-        uint32_t gpu_count;
-        err = vkEnumeratePhysicalDevices(g_Instance, &gpu_count, NULL);
-        check_vk_result(err);
-    }
-    
-    static void stb_out2(stb_uint v) { stb_out(v >> 8); stb_out(v); }
-static void stb_out3(stb_uint v) { stb_out(v >> 16); stb_out(v >> 8); stb_out(v); }
-static void stb_out4(stb_uint v) { stb_out(v >> 24); stb_out(v >> 16); stb_out(v >> 8 ); stb_out(v); }
-    
-    
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
-    }
-    
-    int main(int argc, char** argv)
-{ 
-    // Create GLUT window
-    glutInit(&argc, argv);
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-    glutInitWindowSize(1280, 720);
-    glutCreateWindow('Dear ImGui FreeGLUT+OpenGL2 Example');
-    }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    
-    {        s3eDeviceYield(0);
-    }
-    
-    // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include <GL/gl3w.h>    // Initialize with gl3wInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include <GL/glew.h>    // Initialize with glewInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad/glad.h>  // Initialize with gladLoadGL()
-#else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif
-    
-            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_4_0', 0, 0, &g_pVertexShaderBlob, NULL);
-        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
-            return false;
-        if (g_pd3dDevice->CreateVertexShader((DWORD*)g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), NULL, &g_pVertexShader) != S_OK)
-            return false;
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {        if (cap.currentExtent.width == 0xffffffff)
-        {
-            info.imageExtent.width = wd->Width = w;
-            info.imageExtent.height = wd->Height = h;
-        }
-        else
-        {
-            info.imageExtent.width = wd->Width = cap.currentExtent.width;
-            info.imageExtent.height = wd->Height = cap.currentExtent.height;
-        }
-        err = vkCreateSwapchainKHR(device, &info, allocator, &wd->Swapchain);
-        check_vk_result(err);
-        err = vkGetSwapchainImagesKHR(device, wd->Swapchain, &wd->BackBufferCount, NULL);
-        check_vk_result(err);
-        err = vkGetSwapchainImagesKHR(device, wd->Swapchain, &wd->BackBufferCount, wd->BackBuffer);
-        check_vk_result(err);
-    }
-    if (old_swapchain)
-        vkDestroySwapchainKHR(device, old_swapchain, allocator);
-    
-        // Logging
-    bool                    LogEnabled;
-    FILE*                   LogFile;                            // If != NULL log to stdout/ file
-    ImGuiTextBuffer         LogClipboard;                       // Accumulation buffer when log to clipboard. This is pointer so our GImGui static constructor doesn't call heap allocators.
-    int                     LogStartDepth;
-    int                     LogAutoExpandMaxDepth;
-    
-    #endif  // GUETZLI_COMPARATOR_H_
-
-    
-    #define GUETZLI_LOG(stats, ...)                                    \
-  do {                                                             \
-    char debug_string[1024];                                       \
-    int res = snprintf(debug_string, sizeof(debug_string),         \
-                       __VA_ARGS__);                               \
-    assert(res > 0 && 'expected successful printing');             \
-    (void)res;                                                     \
-    debug_string[sizeof(debug_string) - 1] = '\0';                 \
-    ::guetzli::PrintDebug(                      \
-         stats, std::string(debug_string));        \
-  } while (0)
-#define GUETZLI_LOG_QUANT(stats, q)                    \
-  for (int y = 0; y < 8; ++y) {                        \
-    for (int c = 0; c < 3; ++c) {                      \
-      for (int x = 0; x < 8; ++x)                      \
-        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
-      GUETZLI_LOG(stats, '   ');                       \
-    }                                                  \
-    GUETZLI_LOG(stats, '\n');                          \
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
   }
+  delete file;
+  return Status::OK();
+}
     
-    // A node of a Huffman tree.
-struct HuffmanTree {
-  HuffmanTree() {}
-  HuffmanTree(uint32_t count, int16_t left, int16_t right)
-      : total_count_(count),
-        index_left_(left),
-        index_right_or_value_(right) {
+    class StdoutPrinter : public WritableFile {
+ public:
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
   }
-  uint32_t total_count_;
-  int16_t index_left_;
-  int16_t index_right_or_value_;
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
 };
     
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
+    namespace leveldb {
+namespace log {
+    }
+    }
+    
+      Status FindFiles() {
+    std::vector<std::string> filenames;
+    Status status = env_->GetChildren(dbname_, &filenames);
+    if (!status.ok()) {
+      return status;
+    }
+    if (filenames.empty()) {
+      return Status::IOError(dbname_, 'repair found no files');
+    }
+    }
+    
+    // Simple test that does single-threaded testing of the ConcurrentTest
+// scaffolding.
+TEST(SkipTest, ConcurrentWithoutThreads) {
+  ConcurrentTest test;
+  Random rnd(test::RandomSeed());
+  for (int i = 0; i < 10000; i++) {
+    test.ReadStep(&rnd);
+    test.WriteStep(&rnd);
+  }
 }
     
-    // Represents one component of a jpeg file.
-struct JPEGComponent {
-  JPEGComponent() : id(0),
-                    h_samp_factor(1),
-                    v_samp_factor(1),
-                    quant_idx(0),
-                    width_in_blocks(0),
-                    height_in_blocks(0) {}
+            // Get the function pointer (required for any extensions)
+        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkCreateDebugReportCallbackEXT');
+        IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
+    
+        // Rendering
+    ImGui::Render();
+    ImGuiIO& io = ImGui::GetIO();
+    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+    
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_Marmalade_Init(true);
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
+{
+    // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
+    ImGuiIO& io = ImGui::GetIO();
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
     }
+    
+    // OpenGL2 Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
+void ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
+    ImGuiIO& io = ImGui::GetIO();
+    int fb_width = (int)(draw_data->DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fb_height = (int)(draw_data->DisplaySize.y * io.DisplayFramebufferScale.y);
+    if (fb_width == 0 || fb_height == 0)
+        return;
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+    // About OpenGL function loaders: 
+// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
+// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
+// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+    
+      // init config and state
+  // After a CAN handle is created with canOpen() the CAN-ID filter is
+  // cleared
+  // (no CAN messages
+  // will pass the filter). To receive a CAN message with a certain CAN-ID
+  // or an
+  // NTCAN-Event with
+  // a certain Event-ID it is required to enable this ID in the handle
+  // filter as
+  // otherwise a
+  // received  message or event is discarded by the driver for this handle.
+  // 1. set receive message_id filter, ie white list
+  int32_t id_count = 0x800;
+  ret = canIdRegionAdd(dev_handler_, 0, &id_count);
+  if (ret != NTCAN_SUCCESS) {
+    AERROR << 'add receive msg id filter error code: ' << ret << ', '
+           << GetErrorString(ret);
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+    
+      /**
+   * @brief Stop the fake CAN client.
+   */
+  void Stop() override;
+    
+    void HermesCanClient::Stop() {
+  if (_is_init) {
+    _is_init = false;
+    int32_t ret = bcan_close(_dev_handler);
+    if (ret != ErrorCode::OK) {
+      AERROR << 'close error code: ' << ret;
+    }
+  }
+}
+    
+    #include 'gtest/gtest.h'
     
     /**
  * @namespace apollo::drivers::canbus
@@ -458,41 +316,3 @@ namespace canbus {
     }
     }
     }
-    
-      void SendThreadFunc() {
-    using common::time::Clock;
-    using common::time::AsInt64;
-    using common::time::micros;
-    using common::ErrorCode;
-    AINFO << 'Send thread starting...';
-    TestCanParam *param = param_ptr();
-    CanClient *client = param->can_client;
-    std::vector<CanFrame> frames;
-    frames.resize(MAX_CAN_SEND_FRAME_LEN);
-    }
-    
-    /**
- * @class FakeCanClient
- * @brief The class which defines a fake CAN client which inherits CanClient.
- *        This fake CAN client is used for testing.
- */
-class FakeCanClient : public CanClient {
- public:
-  /// Interval of sleeping
-  static const int32_t USLEEP_INTERVAL = 10000;
-    }
-    
-    int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  int ret = RUN_ALL_TESTS();
-  return ret;
-}
-
-    
-      /**
-   * @brief destruct protocol data.
-   */
-  virtual ~ProtocolData() = default;
-    
-    
-    {}  // namespace
