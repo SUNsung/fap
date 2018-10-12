@@ -1,141 +1,117 @@
 
         
-            if args.show_plot:
-        plt.plot(*zip(*timings))
-        plt.title('Average time taken running isotonic regression')
-        plt.xlabel('Number of observations')
-        plt.ylabel('Time (s)')
-        plt.axis('tight')
-        plt.loglog()
-        plt.show()
-
+            region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    client = boto3_conn(module, conn_type='client', resource='waf', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    
+    requirements:
+  - boto3 >= 1.0.0
+  - python >= 2.6
+    
+        client = boto3_conn(module=module, conn_type='client', resource='autoscaling', region=region, **aws_connect_params)
+    find_launch_configs(client, module)
+    
+        try:
+        response = conn.create_egress_only_internet_gateway(DryRun=module.check_mode, VpcId=vpc_id)
+    except botocore.exceptions.ClientError as e:
+        # When boto3 method is run with DryRun=True it returns an error on success
+        # We need to catch the error and return something valid
+        if e.response.get('Error', {}).get('Code') == 'DryRunOperation':
+            changed = True
+        elif e.response.get('Error', {}).get('Code') == 'InvalidVpcID.NotFound':
+            module.fail_json_aws(e, msg='invalid vpc ID '{0}' provided'.format(vpc_id))
+        else:
+            module.fail_json_aws(e, msg='Could not create Egress-Only Internet Gateway for vpc ID {0}'.format(vpc_id))
+    except botocore.exceptions.BotoCoreError as e:
+        module.fail_json_aws(e, msg='Could not create Egress-Only Internet Gateway for vpc ID {0}'.format(vpc_id))
     
     
-def rbf_kernels(X, n_jobs):
-    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
+class EcsEcr:
+    def __init__(self, module):
+        region, ec2_url, aws_connect_kwargs = \
+            get_aws_connection_info(module, boto3=True)
     
-    '''
-Benchmark for SGD regression
+    author:
+  - Will Thames (@willthames)
+extends_documentation_fragment:
+  - aws
+  - ec2
+'''
     
-            :issue:`123`
-        :issue:`42,45`
-    '''
-    options = options or {}
-    content = content or []
-    issue_nos = [each.strip() for each in utils.unescape(text).split(',')]
-    config = inliner.document.settings.env.app.config
-    ret = []
-    for i, issue_no in enumerate(issue_nos):
-        node = _make_issue_node(issue_no, config, options=options)
-        ret.append(node)
-        if i != len(issue_nos) - 1:
-            sep = nodes.raw(text=', ', format='html')
-            ret.append(sep)
-    return ret, []
-    
-    for lang, page in pages.items():
-    
-    import os, json, imp
-here = os.path.abspath(os.path.dirname(__file__))
-proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
-try:
-    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
-except:
-    README = ''
-CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
-VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+        try:
+        elbs = list_elbs(connection, module.params.get('names'))
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Failed to get load balancer facts.')
     
             if args:
             self.url = args[0]
     
-    class BokeCC(VideoExtractor):
-    name = 'BokeCC'
+    #----------------------------------------------------------------------
+def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
+    if is_xml:  #URL is XML URL
+        try:
+            title = kwargs['title']
+        except:
+            title = ''
+        try:
+            headers = kwargs['headers']  #headers provided
+            ckinfo = get_content(url, headers = headers)
+        except NameError:
+            ckinfo = get_content(url)
+        
+        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
+                                info_only, title = title)
     
-    __all__ = ['dilidili_download']
+    #----------------------------------------------------------------------
+def dilidili_parser_data_to_stream_types(typ ,vid ,hd2 ,sign, tmsign, ulk):
+    '''->list'''
+    another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    html = get_content(another_url, headers=headers)
     
-            for i in range(len(titles)):
-            title = titles[i]
-            datas = {
-                'sid': song_id[i],
-                'ssid': song_ssid[i]
-            }
-            post_params = urllib.parse.urlencode(datas).encode('utf-8')
-            try:
-                resp = urllib.request.urlopen(get_song_url, post_params)
-                resp_data = json.loads(resp.read().decode('utf-8'))
-                real_url = resp_data['r']
-                type, ext, size = url_info(real_url)
-                print_info(site_info, title, type, size)
-            except:
-                pass
+    info = re.search(r'(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})', html).groups()
+    info = [i.strip('{}').split('->') for i in info]
+    info = {i[0]: i [1] for i in info}
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    stream_types = []
+    for i in zip(info['deft'].split('|'), info['defa'].split('|')):
+        stream_types.append({'id': str(i[1][-1]), 'container': 'mp4', 'video_profile': i[0]})
+    return stream_types
+    }
+    }
+    }
+    }
+    }
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
     
-    # looks that flickr won't return urls for all sizes
-# we required in 'extras field without a acceptable header
-dummy_header = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
-}
-def get_content_headered(url):
-    return get_content(url, dummy_header)
+        tvId = q['tvId'][0]
+    channelId = q['channelId'][0]
     
-            #Required string to create directory title pages
-        dir_title = '<h2 class=titledir>' + operating_sys.capitalize() + '</h2></body></html>'
+        point = readme_soup.find_all('h1')[1]
     
-    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    # If false, no module index is generated.
+#
+# html_domain_indices = True
     
-                affected_projects = set()
-            for release in releases:
-                affected_projects.update(
-                    [p for p in release.projects.values_list('slug', flat=True)]
-                )
-            has_prod = False
-            has_staging = False
-            has_dev = False
-            for p in affected_projects:
-                if 'prod' in p:
-                    has_prod = True
-                elif 'stag' in p or 'stg' in p:
-                    has_staging = True
-                elif 'dev' in p:
-                    has_dev = True
-            # assume projects are split by environment if there
-            # are at least prod/staging or prod/dev, etc
-            projects_split_by_env = len([x for x in [has_prod, has_dev, has_staging] if x]) >= 2
+    from homeassistant.util import slugify
+from homeassistant.helpers.dispatcher import (
+    dispatcher_connect, dispatcher_send)
+from homeassistant.components.volvooncall import DATA_KEY, SIGNAL_VEHICLE_SEEN
     
-            dupe_release_envs = orm.ReleaseEnvironment.objects.values(
-            'release_id', 'organization_id', 'environment_id'
-        ).annotate(recount=models.Count('id')).filter(recount__gt=1)
+                        # Do we want to download to subdir, create if needed
+                    if subdir:
+                        subdir_path = os.path.join(download_path, subdir)
     
-            # Adding field 'ApiKey.scope_list'
-        db.add_column(
-            'sentry_apikey',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_NAME): cv.string,
+        vol.Required(CONF_WHITELIST, default=[]):
+            vol.All(cv.ensure_list, [cv.entity_id]),
+    }),
+}, extra=vol.ALLOW_EXTRA)
     
-        def _forwards(self, orm):
-        'Write your forwards methods here.'
-    
-            # Deleting model 'Distribution'
-        db.delete_table('sentry_distribution')
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'UserOption.organization'
-        db.add_column(
-            'sentry_useroption',
-            'organization',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.Organization'], null=True
-            ),
-            keep_default=False
-        )
+    from homeassistant import core
+from homeassistant.components.http import HomeAssistantView
