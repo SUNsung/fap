@@ -1,171 +1,189 @@
 
         
-        AuthPropertyIterator::~AuthPropertyIterator() {}
+          std::vector<string> output;
+  string input_tensors_needed_out;
+  tensorflow::Status status = RunCppShapeInferenceImpl(
+      graph_def_version, serialized_node_def, input_serialized_shapes,
+      input_constant_tensor_values_v, input_constant_tensor_as_shape_values,
+      &output, &input_tensors_needed_out);
     
-    void ChannelArguments::SetSocketMutator(grpc_socket_mutator* mutator) {
-  if (!mutator) {
-    return;
-  }
-  grpc_arg mutator_arg = grpc_socket_mutator_to_arg(mutator);
-  bool replaced = false;
-  grpc_core::ExecCtx exec_ctx;
-  for (auto it = args_.begin(); it != args_.end(); ++it) {
-    if (it->type == mutator_arg.type &&
-        grpc::string(it->key) == grpc::string(mutator_arg.key)) {
-      GPR_ASSERT(!replaced);
-      it->value.pointer.vtable->destroy(it->value.pointer.p);
-      it->value.pointer = mutator_arg.value.pointer;
-      replaced = true;
-    }
-  }
+    namespace tensorflow {
     }
     
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
+    // This file contains APIs that assume a StreamExecutor is backed by CUDA.
+// It reaches into the CUDA implementation to activate an underlying CUDA
+// context.
+//
+// Having this file separate from cuda_gpu_executor.h means that dependent
+// code does not also have to depend on cuda.h.
+    
+    namespace tesseract {
+double DotProductAVX(const double* u, const double* v, int n) {
+  fprintf(stderr, 'DotProductAVX can't be used on Android\n');
+  abort();
+}
+}  // namespace tesseract
+    
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
+        }
+      }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
     }
   }
-  return '';
 }
     
-      static void OnDoneRecvInitialMetadataCb(void* user_data, grpc_error* error);
+    #ifdef __SSE4_1__
+// Computes part of matrix.vector v = Wu. Computes 1 result.
+static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
+                                    const int8_t* u, int num_in, int num_out,
+                                    double* v) {
+  int total = IntDotProductSSE(u, wi, num_in);
+  // Add in the bias and correct for integer values.
+  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
+}
+#endif  // __SSE4_1__
     
-        template <typename ElementType, typename V1ElemType>
-    /*static*/ NDArrayViewPtr NDArrayView::_RandomUniform(const NDShape& shape, double rangeBegin, double rangeEnd, unsigned long seed, const DeviceDescriptor& device/* = DeviceDescriptor::UseDefaultDevice()*/)
-    {
-        auto matrixDims = GetMatrixDimensions(shape);
-        auto randomUniformMatrix = std::make_shared<Matrix<V1ElemType>>(Matrix<V1ElemType>::RandomUniform(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device), (V1ElemType)rangeBegin, (V1ElemType)rangeEnd, seed));
-        auto tensorView = new TensorView<V1ElemType>(randomUniformMatrix, AsTensorViewShape(shape));
+    bool PageIterator::IsWithinFirstTextlineOfParagraph() const {
+  PageIterator p_start(*this);
+  p_start.RestartParagraph();
+  return p_start.it_->row() == it_->row();
+}
+    
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
+    
+      WERD_RES *word2 = new WERD_RES(*word);
+    
+    
+    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
+            }
+            else if (!sampleDynamicAxes.empty())
+                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+    
+    template <class ElemType>
+class InputValueBase : public ComputationNode<ElemType>, public NumInputs<0>, public ITakesDynamicAxis
+{
+    typedef ComputationNode<ElemType> Base;
+    UsingComputationNodeMembers;
     }
     
-        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
-    {
-        m_test->Update(samples, nullptr, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
-            {
-                OnWriteTestUpdate(samples, updates, aggregateMetric);
-            });
+    CardinalSplineBy* CardinalSplineBy::reverse() const
+{
+    PointArray *copyConfig = _points->clone();
     }
     
-            size_t MaskedCount() const override
-        {
-            if (m_isPacked)
-                // Compute the number of masked samples after the data will be unpacked
-                return m_packedDataLayout ? ((m_packedDataLayout->GetNumTimeSteps() * m_packedDataLayout->GetNumSequences()) - m_packedDataLayout->GetActualNumSamples()) : 0;
-            else
-                return Value::MaskedCount();
-        }
-    
-    public:
-    CrossProcessMutex(const std::string& name)
-        : m_fd(-1),
-          m_fileName('/var/lock/' + name)
-    {
-    }
-    
-    #include <string>
-    
-        virtual void /*ComputationNode::*/ BackpropTo(const size_t inputIndex, const FrameRange& fr) override
-    {
-        if (inputIndex == 0) // left derivative
-        {
-            Matrix<ElemType> sliceOutputGrad = MaskedGradientFor(fr); // use Masked- version since this is reducing over frames
-            Matrix<ElemType> sliceInput1Value = Input(1)->MaskedValueFor(fr);
-            m_innerproduct->AssignInnerProductOf(sliceOutputGrad, sliceInput1Value, false);
-            InputRef(0).GradientAsMatrix() += *m_innerproduct;
-        }
-        else // right derivative
-        {
-            Matrix<ElemType> sliceOutputGrad = GradientFor(fr);
-            Matrix<ElemType> sliceInput1Grad = Input(1)->GradientFor(fr);
-            m_rightGradient->SetValue(sliceOutputGrad);
-            m_rightGradient->ColumnElementMultiplyWith(InputRef(0).ValueAsMatrix());
-            sliceInput1Grad += *m_rightGradient;
-        }
-    }
-    
-    
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
-    
-    
-    {
-    {}  // namespace common
-}  // namespace xgboost
-    
-    #include <xgboost/base.h>
-#include <xgboost/data.h>
-#include <dmlc/threadediter.h>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <string>
-#include '../common/common.h'
-#include './sparse_page_writer.h'
-    
+        //
+    // Overrides
+    //
+    virtual MoveBy* clone() const override;
+    virtual MoveBy* reverse() const  override;
+    virtual void startWithTarget(Node *target) override;
     /**
- * @file
- * @brief Defines the EsdCanClient class which inherits CanClient.
- */
+     * @param time in seconds
+     */
+    virtual void update(float time) override;
     
-    #include <vector>
+CC_CONSTRUCTOR_ACCESS:
+    MoveBy():_is3D(false) {}
+    virtual ~MoveBy() {}
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
+    void ActionManager::removeActionByTag(int tag, Node *target)
+{
+    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
+    CCASSERT(target != nullptr, 'target can't be nullptr!');
+    if (target == nullptr)
+    {
+        return;
     }
     }
-    }
-    }
     
-    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
- public:
-  static const int32_t ID = 0x111;
-  MockProtocolData() {}
-};
-    
-    /**
- * @class ProtocolData
- *
- * @brief This is the base class of protocol data.
- */
-template <typename SensorType>
-class ProtocolData {
- public:
-  /**
-   * @brief static function, used to calculate the checksum of input array.
-   * @param input the pointer to the start position of input array
-   * @param length the length of the input array
-   * @return the value of checksum
-   */
-  static std::uint8_t CalculateCheckSum(const uint8_t *input,
-                                        const uint32_t length);
-  /**
-   * @brief construct protocol data.
-   */
-  ProtocolData() = default;
+    ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
+{
+    ActionTween* ret = new (std::nothrow) ActionTween();
+    if (ret && ret->initWithDuration(duration, key, from, to))
+    {
+        ret->autorelease();
+        return ret;
     }
     
-    std::string Byte::byte_to_hex(const uint8_t value) {
-  uint8_t high = value >> 4;
-  uint8_t low = value & 0x0F;
-  std::string result = '';
-  result += HEX[high];
-  result += HEX[low];
-  return result;
+    delete ret;
+    return nullptr;
+}
+    
+    void AtlasNode::setOpacityModifyRGB(bool value)
+{
+    Color3B oldColor = this->getColor();
+    _isOpacityModifyRGB = value;
+    this->setColor(oldColor);
+}
+    
+    using folly::Function;
+using folly::FunctionRef;
+    
+    BENCHMARK(skip_overhead, iter) {
+  auto prev = FLAGS_minloglevel;
+  FLAGS_minloglevel = 2;
+    }
+    
+    // clang-format off
+#include <cstddef>
+    
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
+{
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
 }
