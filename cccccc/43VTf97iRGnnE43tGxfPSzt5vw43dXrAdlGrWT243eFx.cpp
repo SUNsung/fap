@@ -1,368 +1,366 @@
 
         
-        #include <unordered_map>
+        // A CodeGenerator that captures the FileDescriptor it's passed as a
+// FileDescriptorProto.
+class DescriptorCapturingGenerator : public CodeGenerator {
+ public:
+  // Does not own file; file must outlive the Generator.
+  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
+      : file_(file) {}
+    }
     
-    REGISTER_OP('FloatOutputStringOutput')
-    .Output('a: float32')
-    .Output('b: string')
-    .SetShapeFn(shape_inference::UnknownShape);
+      // Limit the number of bytes per line.
+  static const int kBytesPerLine = 40;
+  // Limit the number of lines per string part.
+  static const int kLinesPerPart = 400;
+  // Every block of bytes, start a new string literal, in order to avoid the
+  // 64k length limit. Note that this value needs to be <64k.
+  static const int kBytesPerPart = kBytesPerLine * kLinesPerPart;
+  for (int i = 0; i < file_data.size(); i += kBytesPerLine) {
+    if (i > 0) {
+      if (i % kBytesPerPart == 0) {
+        printer->Print(',\n');
+      } else {
+        printer->Print(' +\n');
+      }
+    }
+    printer->Print('\'$data$\'',
+      'data', CEscape(file_data.substr(i, kBytesPerLine)));
+  }
     
-    #include <iomanip>
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/tensor_shape.pb.h'
-#include 'tensorflow/core/grappler/costs/graph_properties.h'
-#include 'tensorflow/core/grappler/grappler_item.h'
+     public:
+  virtual void FinishInitialization();
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
     
-    // Register the bfloat16 numpy type.
-void RegisterNumpyBfloat16();
+    {
+    {
+    {
+    {
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ExtensionGenerator);
+};
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_OBJECTIVEC_MESSAGE_H__
+
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/platform/mutex.h'
-#include 'tensorflow/python/lib/core/bfloat16.h'
-#include 'tensorflow/python/lib/core/ndarray_tensor_bridge.h'
+    // DeathTest is a class that hides much of the complexity of the
+// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
+// returns a concrete class that depends on the prevailing death test
+// style, as defined by the --gtest_death_test_style and/or
+// --gtest_internal_run_death_test flags.
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    string DiagonalString(Diagonal d) {
-  switch (d) {
-    case Diagonal::kUnit:
-      return 'Unit';
-    case Diagonal::kNonUnit:
-      return 'NonUnit';
-    default:
-      LOG(FATAL) << 'Unknown diagonal ' << static_cast<int32>(d);
+    {
+    {      // Marks all multiples of i (except i itself) as non-prime.
+      for (int j = 2*i; j <= max; j += i) {
+        is_prime_[j] = false;
+      }
+    }
+  }
+    
+    
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
+    
+      // Constructs a MyString by cloning a 0-terminated C string.
+  explicit MyString(const char* a_c_string) : c_string_(NULL) {
+    Set(a_c_string);
+  }
+    
+    #include <cstdint>      // for int32_t
+    
+    // Computes matrix.vector v = Wu.
+// u is of size W.dim2() - 1 and the output v is of size W.dim1().
+// u is imagined to have an extra element at the end with value 1, to
+// implement the bias, but it doesn't actually have it.
+void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                                    const GenericVector<double>& scales,
+                                    const int8_t* u, double* v) const {
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  if (partial_funcs_.empty()) {
+    // Base implementation.
+    for (int i = 0; i < num_out; ++i) {
+      const int8_t* wi = w[i];
+      int total = 0;
+      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
+      // Add in the bias and correct for integer values.
+      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
+    }
+  } else {
+    const int8_t* w_data = shaped_w_.data();
+    const double* scales_data = &scales[0];
+    // Each call to a partial_func_ produces group_size outputs, except the
+    // last one, which can produce less.
+    int group_size = num_outputs_per_register_ * max_output_registers_;
+    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+    int rounded_num_out = RoundOutputs(num_out);
+    int output = 0;
+    for (auto fn : partial_funcs_) {
+      // The amount of w_data consumed by each call to fn.
+      int w_step = (rounded_num_in + 1) * group_size;
+      // Run with this group size, until it would produce too much output, then
+      // switch to a smaller size.
+      for (; output + group_size <= rounded_num_out; output += group_size) {
+        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
+        w_data += w_step;
+        scales_data += group_size;
+        v += group_size;
+      }
+      group_size /= 2;
+    }
   }
 }
     
-    #define VOID_LINE(type, n) (void)dst##n##Base; (void)dst##n##Stride;
-    
-    #ifdef CAROTENE_NEON
-    
-    s32 countNonZero(const Size2D &_size,
-                 const u8 * srcBase, ptrdiff_t srcStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
+    // Constructor.
+// Tests the architecture in a system-dependent way to detect AVX, SSE and
+// any other available SIMD equipment.
+// __GNUC__ is also defined by compilers that include GNU extensions such as
+// clang.
+SIMDDetect::SIMDDetect() {
+#if defined(X86_BUILD)
+#if defined(__GNUC__)
+  unsigned int eax, ebx, ecx, edx;
+  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
+    // Note that these tests all use hex because the older compilers don't have
+    // the newer flags.
+    sse_available_ = (ecx & 0x00080000) != 0;
+    avx_available_ = (ecx & 0x10000000) != 0;
+    if (avx_available_) {
+      // There is supposed to be a __get_cpuid_count function, but this is all
+      // there is in my cpuid.h. It is a macro for an asm statement and cannot
+      // be used inside an if.
+      __cpuid_count(7, 0, eax, ebx, ecx, edx);
+      avx2_available_ = (ebx & 0x00000020) != 0;
+      avx512F_available_ = (ebx & 0x00010000) != 0;
+      avx512BW_available_ = (ebx & 0x40000000) != 0;
     }
-    size_t roiw16 = size.width & ~15u;
-    s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
-    {
-        const u8* src = internal::getRowPtr( srcBase,  srcStride, k);
-        size_t i = 0;
-    }
-    }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35>
-internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35> Values(T1 v1, T2 v2, T3 v3, T4 v4,
-    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
-    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
-    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
-    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35) {
-  return internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35>(v1, v2, v3, v4, v5, v6,
-      v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21,
-      v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35);
+  }
+#elif defined(_WIN32)
+  int cpuInfo[4];
+  __cpuid(cpuInfo, 0);
+  if (cpuInfo[0] >= 1) {
+    __cpuid(cpuInfo, 1);
+    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
+    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
+  }
+#else
+#error 'I don't know how to test for SIMD with this compiler'
+#endif
+#endif  // X86_BUILD
 }
-    
-      // Appends an event listener to the end of the list. Google Test assumes
-  // the ownership of the listener (i.e. it will delete the listener when
-  // the test program finishes).
-  void Append(TestEventListener* listener);
-    
-    
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ', '
-                            << e3 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2
-                            << '\n' << e3 << ' evaluates to ' << v3;
-}
-    
-    
-    {  const T1 v1_;
-  const T2 v2_;
-  const T3 v3_;
-  const T4 v4_;
-  const T5 v5_;
-  const T6 v6_;
-  const T7 v7_;
-  const T8 v8_;
-  const T9 v9_;
-  const T10 v10_;
-  const T11 v11_;
-  const T12 v12_;
-  const T13 v13_;
-  const T14 v14_;
-  const T15 v15_;
-  const T16 v16_;
-  const T17 v17_;
-  const T18 v18_;
-  const T19 v19_;
-  const T20 v20_;
-  const T21 v21_;
-  const T22 v22_;
-  const T23 v23_;
-  const T24 v24_;
-  const T25 v25_;
-  const T26 v26_;
-  const T27 v27_;
-  const T28 v28_;
-  const T29 v29_;
-  const T30 v30_;
-  const T31 v31_;
-  const T32 v32_;
-  const T33 v33_;
-  const T34 v34_;
-  const T35 v35_;
-};
-    
-    
-    {  T0 f0_;
-  T1 f1_;
-  T2 f2_;
-  T3 f3_;
-  T4 f4_;
-  T5 f5_;
-};
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47, typename T48, typename T49>
-struct Types49 {
-  typedef T1 Head;
-  typedef Types48<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-      T44, T45, T46, T47, T48, T49> Tail;
-};
-    
-        for (int i = 2; i <= max; i++) {
-      if (!is_prime_[i]) continue;
-    }
-    
-    
-    {  return clone;
-}
-    
-    // Tests the default c'tor.
-TEST(MyString, DefaultConstructor) {
-  const MyString s;
-    }
-    
-    data.shape: (100, 100)
-expanded.shape: (1, 1, 100, 100)
-    
-    namespace caffe2 {
-std::vector<TensorShape> FCShapeInference(
-    const OperatorDef& def,
-    const vector<TensorShape>& in,
-    bool pretransposed_weight) {
-  vector<TensorShape> out(1);
-  ArgumentHelper helper(def);
-    }
-    }
-    
-        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
-         ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
-      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 3));
-    }
-    input_blob_names.push_back(GO(3));
-    
-    
-  )DOC')
-    .Input(0, 'data', 'a 1-D tensor.')
-    .Output(
-        0,
-        'indices',
-        'Indices of duplicate elements in data, excluding first occurrences.');
-    
-    
-    {  bool RunOnDevice() override;
-};
-    
-    ```
-    
-    #endif // CAFFE2_OPERATORS_FLOOR_OP_H_
 
     
-    namespace caffe2 {
+      // Debugger function that renders ColPartitions on the input image, where:
+  // parts labeled as PT_EQUATION will be painted in red, PT_INLINE_EQUATION
+  // will be painted in green, and other parts will be painted in blue.
+  void PaintColParts(const STRING& outfile) const;
+    
+    class ScriptDetector {
+ public:
+  ScriptDetector(const GenericVector<int>* allowed_scripts,
+                 OSResults* osr, tesseract::Tesseract* tess);
+  void detect_blob(BLOB_CHOICE_LIST* scores);
+  bool must_stop(int orientation);
+ private:
+  OSResults* osr_;
+  static const char* korean_script_;
+  static const char* japanese_script_;
+  static const char* fraktur_script_;
+  int korean_id_;
+  int japanese_id_;
+  int katakana_id_;
+  int hiragana_id_;
+  int han_id_;
+  int hangul_id_;
+  int latin_id_;
+  int fraktur_id_;
+  tesseract::Tesseract* tess_;
+  const GenericVector<int>* allowed_scripts_;
+};
+    
+    /** Returns the type of the current block. See apitypes.h for PolyBlockType. */
+PolyBlockType PageIterator::BlockType() const {
+  if (it_->block() == nullptr || it_->block()->block == nullptr)
+    return PT_UNKNOWN;  // Already at the end!
+  if (it_->block()->block->pdblk.poly_block() == nullptr)
+    return PT_FLOWING_TEXT;  // No layout analysis used - assume text.
+  return it_->block()->block->pdblk.poly_block()->isA();
+}
+    
+    #include 'mfoutline.h'
+#include 'tesseractclass.h'
+    
+      // Try to adjust the blamer bundle.
+  if (orig_bb != nullptr) {
+    // TODO(rays) Looks like a leak to me.
+    // orig_bb should take, rather than copy.
+    word->blamer_bundle = new BlamerBundle();
+    word2->blamer_bundle = new BlamerBundle();
+    orig_bb->SplitBundle(chopped->blobs.back()->bounding_box().right(),
+                         word2->chopped_word->blobs[0]->bounding_box().left(),
+                         wordrec_debug_blamer,
+                         word->blamer_bundle, word2->blamer_bundle);
+  }
+    
+    #include <grpc/grpc.h>
+#include <grpc/support/log.h>
+#include <grpcpp/impl/grpc_library.h>
+#include <grpcpp/support/time.h>
+    
+    bool SecureAuthContext::IsPeerAuthenticated() const {
+  if (!ctx_) return false;
+  return grpc_auth_context_peer_is_authenticated(ctx_) != 0;
+}
+    
+    class SecureAuthContext final : public AuthContext {
+ public:
+  SecureAuthContext(grpc_auth_context* ctx, bool take_ownership);
     }
     
-    namespace grpc {
-    }
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
     
-    AuthPropertyIterator& AuthPropertyIterator::operator++() {
-  grpc_auth_property_iterator iter = {ctx_, index_, name_};
-  property_ = grpc_auth_property_iterator_next(&iter);
-  ctx_ = iter.ctx;
-  index_ = iter.index;
-  name_ = iter.name;
-  return *this;
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+      void FillErrorResponse(const Status& status,
+                         reflection::v1alpha::ErrorResponse* error_response);
+    
+    void ProtoServerReflectionPlugin::Finish(grpc::ServerInitializer* si) {
+  reflection_service_->SetServiceList(si->GetServiceList());
 }
     
     namespace grpc {
     }
     
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
+    namespace osquery {
+    }
     
-      grpc_error* Init(grpc_call_element* elem,
-                   const grpc_call_element_args* args) override;
+    class DecoratorsConfigParserPluginTests : public testing::Test {
+ public:
+  void SetUp() override {
+    // Read config content manually.
+    readFile(kTestDataPath + 'test_parse_items.conf', content_);
+    }
+    }
     
-    #define MAKE_TEMPLATE_TYPE_INFO(m_template, m_type, m_var_type) \
-	template <>                                                 \
-	struct GetTypeInfo<m_template<m_type> > {                   \
-		static const Variant::Type VARIANT_TYPE = m_var_type;   \
-		static inline PropertyInfo get_class_info() {           \
-			return PropertyInfo(VARIANT_TYPE, String());        \
-		}                                                       \
-	};                                                          \
-	template <>                                                 \
-	struct GetTypeInfo<const m_template<m_type> &> {            \
-		static const Variant::Type VARIANT_TYPE = m_var_type;   \
-		static inline PropertyInfo get_class_info() {           \
-			return PropertyInfo(VARIANT_TYPE, String());        \
-		}                                                       \
-	};
-    
-    		const btDiscreteDynamicsWorld *m_world;
-		CreateFunc(const btDiscreteDynamicsWorld *world);
+    #include <gtest/gtest.h>
     
     /**
-	@author AndreaCatania
-*/
+ * @brief The supported hashing algorithms in osquery
+ *
+ * These are usually used as a constructor argument to osquery::Hash
+ */
+enum HashType {
+  HASH_TYPE_MD5 = 2,
+  HASH_TYPE_SHA1 = 4,
+  HASH_TYPE_SHA256 = 8,
+};
     
-    #include 'modules/gdnative/gdnative.h'
+    // INotifySubscriptionContext containers
+using PathDescriptorMap = std::map<std::string, int>;
+using DescriptorPathMap = std::map<int, std::string>;
+using PathStatusChangeTimeMap = std::map<std::string, time_t>;
     
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     
-    {	id = 0;
-}
-
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
     
-    
-    {        const auto& type = dict[typeKey].Value<std::wstring>();
-        if (type != typeValue) 
-        {
-            const auto& version = GetVersion(dict);
-            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
-                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        }
+    int main(int, char**)
+{
+    IwGxInit();
     }
     
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
-#include 'Learner.h'
-#include 'PerformanceProfiler.h'
-#include 'CompositeFunction.h'
-#include 'Serialization.h'
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
     
-        private:
-        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const NDArrayViewPtr& packedData, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
-            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(packedData), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
-        {
-            // Determine unpacked shape
-            m_unpackedShape = GetUnpackedShape(sampleShape, sampleDynamicAxes, packedDataLayout);
-        }
-    
-    #endif
-
-    
-    BENCHMARK_RELATIVE(sformat_short_string_safe, iters) {
-  BenchmarkSuspender suspender;
-  auto const& shortString = getShortString();
-  while (iters--) {
-    std::string out;
-    suspender.dismissing([&] { out = sformat('{}', shortString); });
-  }
-}
-    
-    #include <folly/Benchmark.h>
-#include <folly/FileUtil.h>
-#include <folly/init/Init.h>
-#include <folly/json.h>
-    
-      /**
-   * Returns true 1/n of the time. If n == 0, always returns false
-   */
-  static bool oneIn(uint32_t n) {
-    return oneIn(n, ThreadLocalPRNG());
-  }
-    
-    
-    {} // namespace uri_detail
-    
-        ts.tv_sec = std::numeric_limits<int64_t>::min();
-    ts.tv_nsec = std::numeric_limits<int64_t>::min();
-    EXPECT_THROW(to<nsec_i64>(ts), std::range_error);
-    
-    
+        // Create the vertex shader
     {
-    {} // namespace detail
-} // namespace folly
-
+        static const char* vertexShader =
+            'cbuffer vertexBuffer : register(b0) \
+            {\
+            float4x4 ProjectionMatrix; \
+            };\
+            struct VS_INPUT\
+            {\
+            float2 pos : POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            PS_INPUT main(VS_INPUT input)\
+            {\
+            PS_INPUT output;\
+            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+            output.col = input.col;\
+            output.uv  = input.uv;\
+            return output;\
+            }';
+    }
     
-    #endif // D_DHT_REGISTRY_H
-
-    
-    std::shared_ptr<DHTBucket>
-DHTRoutingTable::getBucketFor(const std::shared_ptr<DHTNode>& node) const
-{
-  return getBucketFor(node->getID());
-}
-    
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
-    
-    #endif // D_DHT_TASK_H
-
-    
-      virtual void executeTask() = 0;
-    
-    
-    {  void updateTokenSecret();
-};
+            D3D12_RESOURCE_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+        desc.Alignment = 0;
+        desc.Width = width;
+        desc.Height = height;
+        desc.DepthOrArraySize = 1;
+        desc.MipLevels = 1;
+        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc.SampleDesc.Count = 1;
+        desc.SampleDesc.Quality = 0;
+        desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
