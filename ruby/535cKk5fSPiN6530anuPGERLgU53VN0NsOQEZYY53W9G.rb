@@ -1,179 +1,118 @@
 
         
-        require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = '#{name} #{version}'
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-end
+        class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
     
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
+      # Sets the resource creating an instance variable
+  def resource=(new_resource)
+    instance_variable_set(:'@#{resource_name}', new_resource)
   end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
     
-            def print_message(json_message)
-          msg = JSON.parse(json_message)
-          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
-          # on its purpose.
-          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+    class BugTest < ActionDispatch::IntegrationTest
+  include Rack::Test::Methods
+  include Warden::Test::Helpers
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
         end
     
-              reload_file = File.join(Serve.singleton_class::LIVERELOAD_DIR, 'livereload.js')
-    
-      # Proxy to devise map name
-  def resource_name
-    devise_mapping.name
-  end
-  alias :scope_name :resource_name
-    
-        def warden
-      request.respond_to?(:get_header) ? request.get_header('warden') : request.env['warden']
+      def upgrade_account
+    if signed_request_account.ostatus?
+      signed_request_account.update(last_webfingered_at: nil)
+      ResolveAccountWorker.perform_async(signed_request_account.acct)
     end
     
-    require 'vagrant/capability_host'
-    
-      def edit; end
-    
-          @account_moderation_note = current_account.account_moderation_notes.new(resource_params)
-    
-        def destroy
-      authorize @custom_emoji, :destroy?
-      @custom_emoji.destroy!
-      log_action :destroy, @custom_emoji
-      flash[:notice] = I18n.t('admin.custom_emojis.destroyed_msg')
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+        def resubscribe
+      authorize :instance, :resubscribe?
+      params.require(:by_domain)
+      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
+      redirect_to admin_instances_path
     end
     
-          @report_note = current_account.report_notes.new(resource_params)
-      @report = @report_note.report
-    
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
+      def encoded_challenge
+    HTMLEntities.new.encode(params['hub.challenge'])
   end
     
-      def subscription
-    @_subscription ||= @account.subscription(
-      api_subscription_url(@account.id)
-    )
-  end
+    # Don't use Rake::GemPackageTast because we want prerequisites to run
+# before we load the gemspec.
+desc 'Build all the packages.'
+task :package => [:revision_file, :date_file, :permissions] do
+  version = get_version
+  File.open(scope('VERSION'), 'w') {|f| f.puts(version)}
+  load scope('sass.gemspec')
+  Gem::Package.build(SASS_GEMSPEC)
+  sh %{git checkout VERSION}
     
-    (deny default)
-EOS
+          process_result
     
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
+          output = input_path if @options[:in_place]
+      write_output(out, output)
+    rescue Sass::SyntaxError => e
+      raise e if @options[:trace]
+      file = ' of #{e.sass_filename}' if e.sass_filename
+      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
+    rescue LoadError => err
+      handle_load_error(err)
+    end
     
-        # Checks that the podfile exists.
-    #
-    # @raise  If the podfile does not exists.
-    #
-    # @return [void]
-    #
-    def verify_podfile_exists!
-      unless config.podfile
-        raise Informative, 'No `Podfile' found in the project directory.'
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
       end
-    end
     
-          sh <<-SH
-        git commit --allow-empty -a -m '#{source_version} release'  &&
-        git tag -s v#{source_version} -m '#{source_version} release'  &&
-        git push && (git push origin || true) &&
-        git push --tags && (git push origin --tags || true)
-      SH
-    end
+          # Given an `@import`ed path, returns an array of possible
+      # on-disk filenames and their corresponding syntaxes for that path.
+      #
+      # @param name [String] The filename.
+      # @return [Array(String, Symbol)] An array of pairs.
+      #   The first element of each pair is a filename to look for;
+      #   the second element is the syntax that file would be in (`:sass` or `:scss`).
+      def possible_files(name)
+        name = escape_glob_characters(name)
+        dirname, basename, extname = split(name)
+        sorted_exts = extensions.sort
+        syntax = extensions[extname]
     
-    desc 'run specs'
-task(:spec) { ruby '-S rspec spec' }
-    
-        # execute bundle install and capture any $stdout output. any raised exception in the process will be trapped
-    # and returned. logs errors to $stdout.
-    # @param [Hash] options invoke options with default values, :max_tries => 10, :clean => false, :install => false, :update => false
-    # @option options [Boolean] :max_tries The number of times bundler is going to try the installation before failing (default: 10)
-    # @option options [Boolean] :clean It cleans the unused gems (default: false)
-    # @option options [Boolean] :install Run the installation of a set of gems defined in a Gemfile (default: false)
-    # @option options [Boolean, String, Array] :update Update the current environment, must be either false or a String or an Array of String (default: false)
-    # @option options [Boolean] :local Do not attempt to fetch gems remotely and use the gem cache instead (default: false)
-    # @option options [Boolean] :package Locks and then caches all dependencies to be reused later on (default: false)
-    # @option options [Boolean] :all It packages dependencies defined with :git or :path (default: false)
-    # @option options [Array] :without  Exclude gems that are part of the specified named group (default: [:development])
-    # @return [String, Exception] the installation captured output and any raised exception or nil if none
-    def invoke!(options = {})
-      options = {:max_tries => 10, :clean => false, :install => false, :update => false, :local => false,
-                 :jobs => 12, :all => false, :package => false, :without => [:development]}.merge(options)
-      options[:without] = Array(options[:without])
-      options[:update] = Array(options[:update]) if options[:update]
-    
-    module LogStash
-  module Environment
-    extend self
-    
-        def validate_plugins!
-      @plugins_to_package.each do |plugin_name|
-        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
-          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
-        end
-      end
-    end
-    
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
-    
-    task :spec    => 'spec:all'
-task :default => :spec
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
-      end
-    end
-  end
-end
-
-    
-    
-    {        def right_whole_line_range(loc_end)
-          if range_by_whole_lines(loc_end).source.strip =~ /}\s*,?\z/
-            range_by_whole_lines(loc_end, include_final_newline: true)
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
           else
-            loc_end
+            @sidebar = false
           end
         end
+        @sidebar
+      end
     
-          def check_brace_layout(node)
-        return if ignored_literal?(node)
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
     
-      include_examples 'multiline literal brace layout method argument' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
-    let(:multi_prefix) { 'b: ' }
-    let(:multi) { ['[', '1', ']'] }
+          def author
+        first = page.last_version
+        return DEFAULT_AUTHOR unless first
+        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
+      end
+    
+      test 'h1 title sanitizes correctly' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+      def self.assets_path
+    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
   end
-    
-          it 'detects closing brace on separate line from last element' do
-        inspect_source(source)
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
