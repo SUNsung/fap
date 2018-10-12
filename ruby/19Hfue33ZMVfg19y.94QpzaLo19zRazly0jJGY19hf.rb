@@ -1,221 +1,144 @@
 
         
-            context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
-      end
-    
-            tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
-        message = options[:message] || '#{tag} (fastlane)'
-    
-            message = '#{tag} (fastlane)'
-        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
-      end
-    
-            expect(result[3]).to start_with('security set-keychain-settings')
-        expect(result[3]).to include('-t 600')
-        expect(result[3]).to include('-l')
-        expect(result[3]).to include('-u')
-        expect(result[3]).to include('~/Library/Keychains/test.keychain')
-      end
-    end
-  end
+        # Mimic how the proposed change would first execute a couple of checks and
+# proceed to process with Liquid if necessary
+def conditional_liquid(content)
+  return content if content.nil? || content.empty?
+  return content unless content.include?('{%') || content.include?('{{')
+  always_liquid(content)
 end
-
+    }
+    }
+    }
     
-          it 'handles the exclude_dirs parameter with multiple  elements correctly' do
+    FORWARD_SLASH = '/'.freeze
+    
+            # If our highlighter is CodeRay we go in to merge the CodeRay defaults
+        # with your 'coderay' key if it's there, deprecating it in the
+        # process of you using it.
+        def modernize_coderay_config
+          unless @config['coderay'].empty?
+            Jekyll::Deprecator.deprecation_message(
+              'You are using 'kramdown.coderay' in your configuration, ' \
+              'please use 'syntax_highlighter_opts' instead.'
+            )
+    
+          it 'adds no_create_docset param to command' do
         result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle', 'Packages/'])
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            no_create_docset: true
+          )
         end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle --exclude-dir Packages/')
+    
+          it 'works with all params' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: 'testpassword',
+            default_keychain: true,
+            unlock: true,
+            timeout: 600,
+            lock_when_sleeps: true,
+            lock_after_timeout: true,
+            add_to_search_list: false,
+          })
+        end').runner.execute(:test)
+    
+            Fastlane::FastFile.new.parse('lane :test do
+          import_certificate ({
+            keychain_name: '#{keychain}',
+            keychain_password: '#{password}',
+            certificate_path: '#{cert_name}',
+            certificate_password: '#{password}'
+          })
+        end').runner.execute(:test)
       end
+    
+          it 'should not be fooled by 10 local code signing identities available' do
+        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
+        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
+        expect(FastlaneCore::UI).not_to(receive(:error))
+    
+    invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
     end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
   end
 end
-
     
-          describe 'validation' do
-        it 'raises an exception if the data type is not as expected' do
-          config_item = FastlaneCore::ConfigItem.new(key: :foo,
-                                                     description: 'foo',
-                                                     type: Float)
-    
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
-    end
-  end
-end
-    
-        def translation_scope
-      'devise.confirmations'
-    end
-end
-
-    
-      def translation_scope
-    'devise.sessions'
-  end
-    
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
-    
-      if respond_to?(:helper_method)
-    helpers = %w(resource scope_name resource_name signed_in_resource
-                 resource_class resource_params devise_mapping)
-    helper_method(*helpers)
-  end
-    
-      # Defines which key will be used when recovering the password for an account
-  mattr_accessor :reset_password_keys
-  @@reset_password_keys = [:email]
-    
-                def current_#{group_name}(favourite=nil)
-              mappings = #{mappings}
-              mappings.unshift mappings.delete(favourite.to_sym) if favourite
-              mappings.each do |mapping|
-                current = warden.authenticate(scope: mapping)
-                return current if current
-              end
-              nil
-            end
-    
-          def expire_data_after_sign_in!
-        # session.keys will return an empty array if the session is not yet loaded.
-        # This is a bug in both Rack and Rails.
-        # A call to #empty? forces the session to be loaded.
-        session.empty?
-        session.keys.grep(/^devise\./).each { |k| session.delete(k) }
-      end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-        def javascripts_path
-      File.join assets_path, 'javascripts'
+        def initialize(options = {})
+      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
+      options[:max_concurrency] ||= 20
+      options[:pipelining] = false
+      super
     end
     
-        def pos
-      byte_to_str_pos @s.pos
+        def subpath_to(url, options = nil)
+      url = self.class.parse(url)
+      return unless origin == url.origin
+    
+        def initialize(machine, guests, capabilities)
+      @capabilities = capabilities
+      @guests       = guests
+      @machine      = machine
     end
     
-    # The module that contains everything Sass-related:
-#
-# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
-# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
-# * {Sass::SyntaxError} is raised when Sass encounters an error.
-# * {Sass::CSS} handles conversion of CSS to Sass.
-#
-# Also see the {file:SASS_REFERENCE.md full Sass reference}.
-module Sass
-  class << self
-    # @private
-    attr_accessor :tests_running
-  end
-    
-        # Whether path is likely to be meant as the destination
-    # in a source:dest pair.
-    def probably_dest_dir?(path)
-      return false unless path
-      return false if colon_path?(path)
-      Sass::Util.glob(File.join(path, '*.s[ca]ss')).empty?
-    end
-    
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
-Gem.use_paths(LogStash::Environment.logstash_gem_home)
-    
-          explicit_plugins_specs.each do |spec|
-        packet_gem.add(spec.name)
-      end
-    
-          include_examples('safe URI', :exclude_password_specs => true)
-    end
-    
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
-      end
-    end
-    
-            def update
-          authorize! :update, @order, order_token
-          @address = find_address
-    
-            def inventory_unit_params
-          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
-        end
-      end
-    end
-  end
-end
-
-    
-            def order_id
-          super || params[:id]
-        end
-      end
-    end
-  end
-end
-
-    
-            def create
-          @order.validate_payments_attributes([payment_params])
-          @payment = @order.payments.build(payment_params)
-          if @payment.save
-            respond_with(@payment, status: 201, default_template: :show)
-          else
-            invalid_resource!(@payment)
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
           end
         end
     
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@return_authorization)
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
         end
     
-            def create
-          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
-          authorize! :read, @order
-          authorize! :create, Shipment
-          quantity = params[:quantity].to_i
-          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
+      # create a new @me user, if not present, and log in using the
+  # integration_sessions controller (automatic)
+  def automatic_login
+    @me ||= FactoryGirl.create(:user_with_aspect, :getting_started => false)
+    visit(new_integration_sessions_path(user_id: @me.id))
+    click_button 'Login'
+  end
     
-            def scope
-          @stock_location.stock_movements.accessible_by(current_ability, :read)
-        end
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
+    end
+    
+        it 'returns likes for a public post without login' do
+      post = alice.post(:status_message, text: 'hey', public: true)
+      bob.like!(post)
+      sign_out :user
+      get :index, params: {post_id: post.id}, format: :json
+      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(post.likes.map(&:id))
+    end
