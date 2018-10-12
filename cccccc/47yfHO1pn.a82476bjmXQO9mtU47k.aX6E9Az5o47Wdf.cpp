@@ -1,616 +1,567 @@
-    http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      const TfLiteTensor* input = GetInput(context, node, kInputTensor);
-  const TfLiteTensor* axis = GetInput(context, node, kAxis);
-  // Make sure the axis is only 1 dimension.
-  TF_LITE_ENSURE_EQ(context, NumElements(axis), 1);
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    class WritableFile;
-    
-    
-    {
-    {}  // namespace port
-}  // namespace tensorflow
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-     private:
-  // a length value of kFullExtent (-1) means we have a full slice at this
-  // dimension. It's defined in tensor_slice.cc.
-  static const int64 kFullExtent;
-    
-    REGISTER_COMPLEX(CPU, float, complex64);
-REGISTER_COMPLEX(CPU, double, complex128);
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Adds resource events for a single device.
-void AddResourceMetadata(uint32 device_id,
-                         const std::map<uint32, const Resource *> &resources,
-                         string *json) {
-  for (const auto &pair : resources) {
-    uint32 resource_id = pair.first;
-    const Resource &resource = *pair.second;
-    if (!resource.name().empty()) {
-      Appendf(json,
-              R'({'ph':'M','pid':%u,'tid':%u,)'
-              R'('name':'thread_name','args':{)',
-              device_id, resource_id);
-      AppendEscapedName(json, resource.name());
-      Appendf(json, '}},');
+
+        
+        struct DefaultCache {
+  llvm::sys::Mutex Mux;
+  CacheImpl::CallBacks CBs;
+  llvm::DenseMap<DefaultCacheKey, void *> Entries;
     }
-    Appendf(json,
-            R'({'ph':'M','pid':%u,'tid':%u,)'
-            R'('name':'thread_sort_index','args':{'sort_index':%u}},)',
-            device_id, resource_id, resource_id);
+    
+    
+    {  cache_t *cache_out = nullptr;
+  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
+  assert(cache_out);
+  return cache_out;
+}
+    
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
+    
+    bool LangOptions::isCustomConditionalCompilationFlagSet(StringRef Name) const {
+  return std::find(CustomConditionalCompilationFlags.begin(),
+                   CustomConditionalCompilationFlags.end(), Name)
+      != CustomConditionalCompilationFlags.end();
+}
+    
+      while (!RawText.empty()) {
+    size_t Pos = RawText.find_first_of('\n\r');
+    if (Pos == StringRef::npos)
+      Pos = RawText.size();
+    }
+    
+    // Include the correct TaskQueue implementation.
+#if LLVM_ON_UNIX && !defined(__CYGWIN__) && !defined(__HAIKU__)
+#include 'Unix/TaskQueue.inc'
+#else
+#include 'Default/TaskQueue.inc'
+#endif
+    
+      using SourceManagerRef = llvm::IntrusiveRefCntPtr<const clang::SourceManager>;
+  auto iter = std::lower_bound(sourceManagersWithDiagnostics.begin(),
+                               sourceManagersWithDiagnostics.end(),
+                               &clangSrcMgr,
+                               [](const SourceManagerRef &inArray,
+                                  const clang::SourceManager *toInsert) {
+    return std::less<const clang::SourceManager *>()(inArray.get(), toInsert);
+  });
+  if (iter == sourceManagersWithDiagnostics.end() ||
+      iter->get() != &clangSrcMgr) {
+    sourceManagersWithDiagnostics.insert(iter, &clangSrcMgr);
   }
-}
     
-    #include 'atom/browser/api/trackable_object.h'
-#include 'base/callback.h'
-#include 'chrome/browser/extensions/global_shortcut_listener.h'
-#include 'native_mate/handle.h'
-#include 'ui/base/accelerators/accelerator.h'
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-      // URLRequestJob:
-  void GetResponseInfo(net::HttpResponseInfo* info) override;
-    
-    void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view);
+    #include <vector>
     
     
-    {}  // namespace printing
+    { protected:
+  TransformationParameter transform_param_;
+  shared_ptr<DataTransformer<Dtype> > data_transformer_;
+  bool output_labels_;
+};
     
-      // When gfx::Size is used as a min/max size, a zero represents an unbounded
-  // component. This method checks whether either component is specified.
-  // Note we can't use gfx::Size::IsEmpty as it returns true if either width
-  // or height is zero.
-  bool HasMinimumSize() const;
-  bool HasMaximumSize() const;
+      Blob<Dtype> mean_, variance_, temp_, x_norm_;
+  bool use_global_stats_;
+  Dtype moving_average_fraction_;
+  int channels_;
+  Dtype eps_;
     
-    // static
-void App::CloseAllWindows(bool force, bool quit) {
-  std::vector<Shell*> windows = Shell::windows();
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/sigmoid_layer.hpp'
+    
+    
+    {}  // namespace tesseract.
+    
+    // Constructor.
+// Tests the architecture in a system-dependent way to detect AVX, SSE and
+// any other available SIMD equipment.
+// __GNUC__ is also defined by compilers that include GNU extensions such as
+// clang.
+SIMDDetect::SIMDDetect() {
+#if defined(X86_BUILD)
+#if defined(__GNUC__)
+  unsigned int eax, ebx, ecx, edx;
+  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
+    // Note that these tests all use hex because the older compilers don't have
+    // the newer flags.
+    sse_available_ = (ecx & 0x00080000) != 0;
+    avx_available_ = (ecx & 0x10000000) != 0;
+    if (avx_available_) {
+      // There is supposed to be a __get_cpuid_count function, but this is all
+      // there is in my cpuid.h. It is a macro for an asm statement and cannot
+      // be used inside an if.
+      __cpuid_count(7, 0, eax, ebx, ecx, edx);
+      avx2_available_ = (ebx & 0x00000020) != 0;
+      avx512F_available_ = (ebx & 0x00010000) != 0;
+      avx512BW_available_ = (ebx & 0x40000000) != 0;
     }
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    
-    {
-    {    // build keyboard code
-    ui::DomCode domCode = ui::KeycodeConverter::CodeStringToDomCode(keyName.c_str());
-    retval = ui::DomCodeToUsLayoutKeyboardCode(domCode);
   }
-  return retval;
+#elif defined(_WIN32)
+  int cpuInfo[4];
+  __cpuid(cpuInfo, 0);
+  if (cpuInfo[0] >= 1) {
+    __cpuid(cpuInfo, 1);
+    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
+    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
+  }
+#else
+#error 'I don't know how to test for SIMD with this compiler'
+#endif
+#endif  // X86_BUILD
 }
-    
-    using namespace extensions::nwapi::nw__clipboard;
-    
-        if (windows) {
-      std::unique_ptr<DesktopMediaList> window_media_list =
-        std::make_unique<NativeDesktopMediaList>(
-          content::DesktopMediaID::TYPE_WINDOW,
-          webrtc::DesktopCapturer::CreateWindowCapturer(options));
-      media_list_.push_back(std::move(window_media_list));
-    }
-    
-    
-    {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
 
     
-    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
+      enum IndentType {
+    NO_INDENT,
+    LEFT_INDENT,
+    RIGHT_INDENT,
+    BOTH_INDENT,
+    INDENT_TYPE_COUNT
+  };
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
+    namespace tesseract {
+    }
+    
+    namespace tesseract {
+void Tesseract::tess_segment_pass_n(int pass_n, WERD_RES *word) {
+  int saved_enable_assoc = 0;
+  int saved_chop_enable = 0;
+    }
+    }
     
     
-    {  string comments;
-  SourceLocation location;
-  if (descriptor_->GetSourceLocation(&location)) {
-    comments = BuildCommentsString(location, true);
-  } else {
-    comments = '';
-  }
-  variables_['comments'] = comments;
-}
+    {   }
+   //
+   // now recursively add more states, this will terminate when we get to a
+   // matching ')' :
+   //
+   parse_all();
+   //
+   // Unwind alternatives:
+   //
+   if(0 == unwind_alts(last_paren_start))
+   {
+      // Rewind to start of (? sequence:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+      fail(regex_constants::error_perl_extension, m_position - m_base, 'Invalid alternation operators within (?...) block.');
+      return false;
+   }
+   //
+   // we either have a ')' or we have run out of characters prematurely:
+   //
+   if(m_position == m_end)
+   {
+      // Rewind to start of (? sequence:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+      this->fail(regex_constants::error_paren, ::boost::BOOST_REGEX_DETAIL_NS::distance(m_base, m_end));
+      return false;
+   }
+   BOOST_ASSERT(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_mark);
+   ++m_position;
+   //
+   // restore the flags:
+   //
+   if(restore_flags)
+   {
+      // append a case change state if we need it:
+      if(m_has_case_change)
+      {
+         static_cast<re_case*>(
+            this->append_state(syntax_element_toggle_case, sizeof(re_case))
+            )->icase = old_flags & regbase::icase;
+      }
+      this->flags(old_flags);
+   }
+   //
+   // set up the jump pointer if we have one:
+   //
+   if(jump_offset)
+   {
+      this->m_pdata->m_data.align();
+      re_jump* jmp = static_cast<re_jump*>(this->getaddress(jump_offset));
+      jmp->alt.i = this->m_pdata->m_data.size() - this->getoffset(jmp);
+      if((this->m_last_state == jmp) && (markid != -2))
+      {
+         // Oops... we didn't have anything inside the assertion.
+         // Note we don't get here for negated forward lookahead as (?!)
+         // does have some uses.
+         // Rewind to start of (? sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_perl_extension, m_position - m_base, 'Invalid or empty zero width assertion.');
+         return false;
+      }
+   }
+   //
+   // verify that if this is conditional expression, that we do have
+   // an alternative, if not add one:
+   //
+   if(markid == -4)
+   {
+      re_syntax_base* b = this->getaddress(expected_alt_point);
+      // Make sure we have exactly one alternative following this state:
+      if(b->type != syntax_element_alt)
+      {
+         re_alt* alt = static_cast<re_alt*>(this->insert_state(expected_alt_point, syntax_element_alt, sizeof(re_alt)));
+         alt->alt.i = this->m_pdata->m_data.size() - this->getoffset(alt);
+      }
+      else if(this->getaddress(static_cast<re_alt*>(b)->alt.i, b)->type == syntax_element_alt)
+      {
+         // Can't have seen more than one alternative:
+         // Rewind to start of (? sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_bad_pattern, m_position - m_base, 'More than one alternation operator | was encountered inside a conditional expression.');
+         return false;
+      }
+      else
+      {
+         // We must *not* have seen an alternative inside a (DEFINE) block:
+         b = this->getaddress(b->next.i, b);
+         if((b->type == syntax_element_assert_backref) && (static_cast<re_brace*>(b)->index == 9999))
+         {
+            // Rewind to start of (? sequence:
+            --m_position;
+            while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+            fail(regex_constants::error_bad_pattern, m_position - m_base, 'Alternation operators are not allowed inside a DEFINE block.');
+            return false;
+         }
+      }
+      // check for invalid repetition of next state:
+      b = this->getaddress(expected_alt_point);
+      b = this->getaddress(static_cast<re_alt*>(b)->next.i, b);
+      if((b->type != syntax_element_assert_backref)
+         && (b->type != syntax_element_startmark))
+      {
+         // Rewind to start of (? sequence:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
+         fail(regex_constants::error_badrepeat, m_position - m_base, 'A repetition operator cannot be applied to a zero-width assertion.');
+         return false;
+      }
+   }
+   //
+   // append closing parenthesis state:
+   //
+   pb = static_cast<re_brace*>(this->append_state(syntax_element_endmark, sizeof(re_brace)));
+   pb->index = markid;
+   pb->icase = this->flags() & regbase::icase;
+   this->m_paren_start = last_paren_start;
+   //
+   // restore the alternate insertion point:
+   //
+   this->m_alt_insert_point = last_alt_point;
+   //
+   // and the case change data:
+   //
+   m_has_case_change = old_case_change;
+   //
+   // And the mark_reset data:
+   //
+   if(m_max_mark > m_mark_count)
+   {
+      m_mark_count = m_max_mark;
+   }
+   m_mark_reset = mark_reset;
+   m_max_mark = max_mark;
     
-    void MapLiteTestUtil::ExpectMapFieldsModified(
-    const unittest::TestMapLite& message) {
-  MapTestUtilImpl::ExpectMapFieldsModified<unittest::MapEnumLite,
-                                           unittest::MAP_ENUM_BAR_LITE,
-                                           unittest::MAP_ENUM_FOO_LITE>(
-      message);
-}
-    
-    // Run a command that returns a util::Status.  If the called code returns an
-// error status, return that status up out of this method too.
+    namespace deprecated{
 //
-// Example:
-//   RETURN_IF_ERROR(DoThings(4));
-#define RETURN_IF_ERROR(expr) \
-  do { \
-    /* Using _status below to avoid capture problems if expr is 'status'. */ \
-    const ::google::protobuf::util::Status _status = (expr); \
-    if (GOOGLE_PREDICT_FALSE(!_status.ok())) return _status; \
-  } while (0)
+// class char_regex_traits_i
+// provides case insensitive traits classes (deprecated):
+template <class charT>
+class char_regex_traits_i : public regex_traits<charT> {};
+    }
     
-    static void orderContours(const std::vector<std::vector<Point> >& contours, Point2f point, std::vector<std::pair<int, float> >& order)
-{
-    order.clear();
-    size_t i, j, n = contours.size();
-    for(i = 0; i < n; i++)
+       allocator_type get_allocator() const
+   {
+#ifndef BOOST_NO_STD_ALLOCATOR
+      return m_subs.get_allocator();
+#else
+     return allocator_type();
+#endif
+   }
+   void swap(match_results& that)
+   {
+      std::swap(m_subs, that.m_subs);
+      std::swap(m_named_subs, that.m_named_subs);
+      std::swap(m_last_closed_paren, that.m_last_closed_paren);
+      if(m_is_singular)
+      {
+         if(!that.m_is_singular)
+         {
+            m_base = that.m_base;
+            m_null = that.m_null;
+         }
+      }
+      else if(that.m_is_singular)
+      {
+         that.m_base = m_base;
+         that.m_null = m_null;
+      }
+      else
+      {
+         std::swap(m_base, that.m_base);
+         std::swap(m_null, that.m_null);
+      }
+      std::swap(m_is_singular, that.m_is_singular);
+   }
+   bool operator==(const match_results& that)const
+   {
+      if(m_is_singular)
+      {
+         return that.m_is_singular;
+      }
+      else if(that.m_is_singular)
+      {
+         return false;
+      }
+      return (m_subs == that.m_subs) && (m_base == that.m_base) && (m_last_closed_paren == that.m_last_closed_paren);
+   }
+   bool operator!=(const match_results& that)const
+   { return !(*this == that); }
+    
+    
     {
-        size_t ni = contours[i].size();
-        double min_dist = std::numeric_limits<double>::max();
-        for(j = 0; j < ni; j++)
+    {#if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_NO_EXCEPTIONS)
+   }
+   catch(...)
+   {
+      // unwind all pushed states, apart from anything else this
+      // ensures that all the states are correctly destructed
+      // not just the memory freed.
+      while(unwind(true)){}
+      throw;
+   }
+#endif
+}
+    
+    template <class BidiIterator>
+struct saved_matched_paren : public saved_state
+{
+   int index;
+   sub_match<BidiIterator> sub;
+   saved_matched_paren(int i, const sub_match<BidiIterator>& s) : saved_state(1), index(i), sub(s){};
+};
+    
+    class BOOST_REGEX_DECL abstract_protected_call
+{
+public:
+   bool BOOST_REGEX_CALL execute()const;
+   // this stops gcc-4 from complaining:
+   virtual ~abstract_protected_call(){}
+private:
+   virtual bool call()const = 0;
+};
+    
+    
+    {} // namespace boost
+    
+    
+    
+    
+    {} // namespace boost
+    
+    template <class BaseT>
+struct regex_traits_wrapper 
+   : public ::boost::BOOST_REGEX_DETAIL_NS::compute_wrapper_base<
+               BaseT, 
+               ::boost::BOOST_REGEX_DETAIL_NS::has_boost_extensions_tag<BaseT>::value
+            >::type
+{
+   regex_traits_wrapper(){}
+private:
+   regex_traits_wrapper(const regex_traits_wrapper&);
+   regex_traits_wrapper& operator=(const regex_traits_wrapper&);
+};
+    
+    //---- Define assertion handler. Defaults to calling assert().
+//#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)
+//#define IM_ASSERT(_EXPR)  ((void)(_EXPR))     // Disable asserts
+    
+            if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
+    
+        // Main loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+    }
+    
+    
+    {        SIZE_T rtvDescriptorSize = g_pd3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+        D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = g_pd3dRtvDescHeap->GetCPUDescriptorHandleForHeapStart();
+        for (UINT i = 0; i < NUM_BACK_BUFFERS; i++) 
         {
-            double dist = norm(Point2f((float)contours[i][j].x, (float)contours[i][j].y) - point);
-            min_dist = MIN(min_dist, dist);
+            g_mainRenderTargetDescriptor[i] = rtvHandle;
+            rtvHandle.ptr += rtvDescriptorSize;
         }
-        order.push_back(std::pair<int, float>((int)i, (float)min_dist));
-    }
     }
     
-    /** @file
- * @deprecated Use @ref cudev instead.
- */
-    
-        // Extension: 1.5
-    extern void (CODEGEN_FUNCPTR *GenQueries)(GLsizei n, GLuint *ids);
-    extern void (CODEGEN_FUNCPTR *DeleteQueries)(GLsizei n, const GLuint *ids);
-    extern GLboolean (CODEGEN_FUNCPTR *IsQuery)(GLuint id);
-    extern void (CODEGEN_FUNCPTR *BeginQuery)(GLenum target, GLuint id);
-    extern void (CODEGEN_FUNCPTR *EndQuery)(GLenum target);
-    extern void (CODEGEN_FUNCPTR *GetQueryiv)(GLenum target, GLenum pname, GLint *params);
-    extern void (CODEGEN_FUNCPTR *GetQueryObjectiv)(GLuint id, GLenum pname, GLint *params);
-    extern void (CODEGEN_FUNCPTR *GetQueryObjectuiv)(GLuint id, GLenum pname, GLuint *params);
-    extern void (CODEGEN_FUNCPTR *BindBuffer)(GLenum target, GLuint buffer);
-    extern void (CODEGEN_FUNCPTR *DeleteBuffers)(GLsizei n, const GLuint *buffers);
-    extern void (CODEGEN_FUNCPTR *GenBuffers)(GLsizei n, GLuint *buffers);
-    extern GLboolean (CODEGEN_FUNCPTR *IsBuffer)(GLuint buffer);
-    extern void (CODEGEN_FUNCPTR *BufferData)(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage);
-    extern void (CODEGEN_FUNCPTR *BufferSubData)(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data);
-    extern void (CODEGEN_FUNCPTR *GetBufferSubData)(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid *data);
-    extern GLvoid* (CODEGEN_FUNCPTR *MapBuffer)(GLenum target, GLenum access);
-    extern GLboolean (CODEGEN_FUNCPTR *UnmapBuffer)(GLenum target);
-    extern void (CODEGEN_FUNCPTR *GetBufferParameteriv)(GLenum target, GLenum pname, GLint *params);
-    extern void (CODEGEN_FUNCPTR *GetBufferPointerv)(GLenum target, GLenum pname, GLvoid* *params);
-    
-    #endif //HAVE_LAPACK
-#endif //OPENCV_CORE_HAL_INTERNAL_HPP
-
-    
-    // EXPECT_DEBUG_DEATH asserts that the given statements die in debug mode.
-// The death testing framework causes this to have interesting semantics,
-// since the sideeffects of the call are only visible in opt mode, and not
-// in debug mode.
-//
-// In practice, this can be used to test functions that utilize the
-// LOG(DFATAL) macro using the following style:
-//
-// int DieInDebugOr12(int* sideeffect) {
-//   if (sideeffect) {
-//     *sideeffect = 12;
-//   }
-//   LOG(DFATAL) << 'death';
-//   return 12;
-// }
-//
-// TEST(TestCase, TestDieOr12WorksInDgbAndOpt) {
-//   int sideeffect = 0;
-//   // Only asserts in dbg.
-//   EXPECT_DEBUG_DEATH(DieInDebugOr12(&sideeffect), 'death');
-//
-// #ifdef NDEBUG
-//   // opt-mode has sideeffect visible.
-//   EXPECT_EQ(12, sideeffect);
-// #else
-//   // dbg-mode no visible sideeffect.
-//   EXPECT_EQ(0, sideeffect);
-// #endif
-// }
-//
-// This will assert that DieInDebugReturn12InOpt() crashes in debug
-// mode, usually due to a DCHECK or LOG(DFATAL), but returns the
-// appropriate fallback value (12 in this case) in opt mode. If you
-// need to test that a function has appropriate side-effects in opt
-// mode, include assertions against the side-effects.  A general
-// pattern for this is:
-//
-// EXPECT_DEBUG_DEATH({
-//   // Side-effects here will have an effect after this statement in
-//   // opt mode, but none in debug mode.
-//   EXPECT_EQ(12, DieInDebugOr12(&sideeffect));
-// }, 'death');
-//
-# ifdef NDEBUG
-    
-    # if GTEST_HAS_COMBINE
-// Combine() allows the user to combine two or more sequences to produce
-// values of a Cartesian product of those sequences' elements.
-//
-// Synopsis:
-// Combine(gen1, gen2, ..., genN)
-//   - returns a generator producing sequences with elements coming from
-//     the Cartesian product of elements from the sequences generated by
-//     gen1, gen2, ..., genN. The sequence elements will have a type of
-//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
-//     of elements from sequences produces by gen1, gen2, ..., genN.
-//
-// Combine can have up to 10 arguments. This number is currently limited
-// by the maximum number of elements in the tuple implementation used by Google
-// Test.
-//
-// Example:
-//
-// This will instantiate tests in test case AnimalTest each one with
-// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
-// tuple('dog', BLACK), and tuple('dog', WHITE):
-//
-// enum Color { BLACK, GRAY, WHITE };
-// class AnimalTest
-//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
-//
-// TEST_P(AnimalTest, AnimalLooksNice) {...}
-//
-// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
-//                         Combine(Values('cat', 'dog'),
-//                                 Values(BLACK, WHITE)));
-//
-// This will instantiate tests in FlagDependentTest with all variations of two
-// Boolean flags:
-//
-// class FlagDependentTest
-//     : public testing::TestWithParam<tuple<bool, bool> > {
-//   virtual void SetUp() {
-//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
-//     tie(external_flag_1, external_flag_2) = GetParam();
-//   }
-// };
-//
-// TEST_P(FlagDependentTest, TestFeature1) {
-//   // Test your code using external_flag_1 and external_flag_2 here.
-// }
-// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
-//                         Combine(Bool(), Bool()));
-//
-template <typename Generator1, typename Generator2>
-internal::CartesianProductHolder2<Generator1, Generator2> Combine(
-    const Generator1& g1, const Generator2& g2) {
-  return internal::CartesianProductHolder2<Generator1, Generator2>(
-      g1, g2);
-}
-    
-    // The tests from the instantiation above will have these names:
-//
-//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
-//
-// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
-// in the given test case, whether their definitions come before or
-// AFTER the INSTANTIATE_TEST_CASE_P statement.
-//
-// Please also note that generator expressions (including parameters to the
-// generators) are evaluated in InitGoogleTest(), after main() has started.
-// This allows the user on one hand, to adjust generator parameters in order
-// to dynamically determine a set of tests to run and on the other hand,
-// give the user a chance to inspect the generated tests with Google Test
-// reflection API before RUN_ALL_TESTS() is executed.
-//
-// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
-// for more examples.
-//
-// In the future, we plan to publish the API for defining new parameter
-// generators. But for now this interface remains part of the internal
-// implementation and is subject to change.
-//
-//
-// A parameterized test fixture must be derived from testing::Test and from
-// testing::WithParamInterface<T>, where T is the type of the parameter
-// values. Inheriting from TestWithParam<T> satisfies that requirement because
-// TestWithParam<T> inherits from both Test and WithParamInterface. In more
-// complicated hierarchies, however, it is occasionally useful to inherit
-// separately from Test and WithParamInterface. For example:
-    
-     private:
-  // Appends the contents of message to message_.
-  void AppendMessage(const Message& a_message) {
-    if (message_.get() == NULL)
-      message_.reset(new ::std::string);
-    message_->append(a_message.GetString().c_str());
-  }
-    
-      // Returns a pointer to the last occurence of a valid path separator in
-  // the FilePath. On Windows, for example, both '/' and '\' are valid path
-  // separators. Returns NULL if no path separator was found.
-  const char* FindLastPathSeparator() const;
-    
-    
-    { private:
-  friend class ParamGenerator<T>;
-  explicit ParamIterator(ParamIteratorInterface<T>* impl) : impl_(impl) {}
-  scoped_ptr<ParamIteratorInterface<T> > impl_;
-};
-    
-    // Determines the version of gcc that is used to compile this.
-#ifdef __GNUC__
-// 40302 means version 4.3.2.
-# define GTEST_GCC_VER_ \
-    (__GNUC__*10000 + __GNUC_MINOR__*100 + __GNUC_PATCHLEVEL__)
-#endif  // __GNUC__
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-    #define PRINT_MSG(...)                          \
-  switch (m_report) {                           \
-    case Log:                                   \
-      Logger::Info(__VA_ARGS__);                \
-      break;                                    \
-    case Stderr:                                \
-      fprintf(stderr, __VA_ARGS__);             \
-      break;                                    \
-    case Trace:                                 \
-      Trace::traceRelease(__VA_ARGS__);         \
-      break;                                    \
-    default: not_reached();                     \
-  }
-    
-    /**
- * DataBlock is a simple bump-allocating wrapper around a chunk of memory, with
- * basic tracking for unused memory and a simple interface to allocate it.
- *
- * Memory is allocated from the end of the block unless specifically allocated
- * using allocInner.
- *
- * Unused memory can be freed using free(). If the memory is at the end of the
- * block, the frontier will be moved back.
- *
- * Free memory is coalesced and allocation is done by best-fit.
- */
-struct DataBlock {
-  DataBlock() = default;
-    }
-    
-      /*
-   * StringData objects allocated with MakeStatic should be freed
-   * using this function.
-   */
-  void destructStatic();
-    
-    // When you already have the memory mapped in, remap them it to use huge pages,
-// and try to interleave across all enabled numa nodes (no guarantee).  Return
-// the number of pages that are actually backed by huge pages.
-//
-// Beware this function wipes out data on existing pages, and yep, that is what
-// it is designed to do.
-size_t remap_interleaved_2m_pages(void* addr, size_t pages, int prot,
-                                  bool map_shared = false);
-    
-    struct Block;
-struct IRInstruction;
-struct SSATmp;
-    
-      /////////////////////////////////////////////////////////////////////////////
-  // Iterations.
-    
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
-    }
-  }
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    TEST_F(PermissionsTests, test_path_drop) {
-  if (getuid() != 0) {
-    LOG(WARNING) << 'Not root, skipping (path) unprivileged testing';
-    return;
-  }
-    }
-    
-    
-    {  val = getEnvVar('GTEST_OSQUERY');
-  EXPECT_FALSE(val);
-  EXPECT_FALSE(val.is_initialized());
-}
-    
-    class RocksDBDatabasePluginTests : public DatabasePluginTests {
- protected:
-  std::string name() override {
-    return 'rocksdb';
-  }
-};
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    void ImGui_ImplAllegro5_NewFrame()
+    int main(int, char**)
 {
-    if (!g_Texture)
-        ImGui_ImplAllegro5_CreateDeviceObjects();
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
     }
     
-    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
+        // Copy and convert all vertices into a single contiguous buffer
+    void* vtx_resource, *idx_resource;
+    D3D12_RANGE range;
+    memset(&range, 0, sizeof(D3D12_RANGE));
+    if (g_pVB->Map(0, &range, &vtx_resource) != S_OK)
+        return;
+    if (g_pIB->Map(0, &range, &idx_resource) != S_OK)
+        return;
+    ImDrawVert* vtx_dst = (ImDrawVert*)vtx_resource;
+    ImDrawIdx* idx_dst = (ImDrawIdx*)idx_resource;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        vtx_dst += cmd_list->VtxBuffer.Size;
+        idx_dst += cmd_list->IdxBuffer.Size;
+    }
+    g_pVB->Unmap(0, &range);
+    g_pIB->Unmap(0, &range);
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+    // Set default OpenGL loader to be gl3w
+#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
+#define IMGUI_IMPL_OPENGL_LOADER_GL3W
+#endif
     
-        // Rendering
-    ImGui::Render();
+    int ImGui_ImplVulkanH_GetMinImageCountFromPresentMode(VkPresentModeKHR present_mode)
+{
+    if (present_mode == VK_PRESENT_MODE_MAILBOX_KHR)
+        return 3;
+    if (present_mode == VK_PRESENT_MODE_FIFO_KHR || present_mode == VK_PRESENT_MODE_FIFO_RELAXED_KHR)
+        return 2;
+    if (present_mode == VK_PRESENT_MODE_IMMEDIATE_KHR)
+        return 1;
+    IM_ASSERT(0);
+    return 1;
+}
+    
+    void ImGui_ImplFreeGLUT_ReshapeFunc(int w, int h)
+{
     ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    inline int SignedLeftshift(int v, int s) {
-  return (v >= 0) ? (v << s) : -((-v) << s);
+    io.DisplaySize = ImVec2((float)w, (float)h);
 }
     
-      // Returns true if the argument of the last Compare() call (or the baseline
-  // image, if Compare() was not called yet) meets the image acceptance
-  // criteria. The target_mul modifies the acceptance criteria used in this call
-  // the following way:
-  //    = 1.0 : the original acceptance criteria is used,
-  //    < 1.0 : a more strict acceptance criteria is used,
-  //    > 1.0 : a less strict acceptance criteria is used.
-  virtual bool DistanceOK(double target_mul) const = 0;
-    
-    std::string OutputImage::FrameTypeStr() const {
-  char buf[128];
-  int len = snprintf(buf, sizeof(buf), 'f%d%d%d%d%d%d',
-                     component(0).factor_x(), component(0).factor_y(),
-                     component(1).factor_x(), component(1).factor_y(),
-                     component(2).factor_x(), component(2).factor_y());
-  return std::string(buf, len);
-}
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
-}
-    
-    void DCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
+    namespace aria2 {
     }
+    
+    void DHTUnknownMessage::doReceivedAction() {}
+    
+    void DNSCache::put(const std::string& hostname, const std::string& ipaddr,
+                   uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.lower_bound(target);
+  if (i != entries_.end() && *(*i) == *target) {
+    (*i)->add(ipaddr);
+  }
+  else {
+    target->add(ipaddr);
+    entries_.insert(i, target);
   }
 }
     
-    inline int Log2Floor(uint32_t n) {
-  return n == 0 ? -1 : Log2FloorNonZero(n);
+      const std::string& find(const std::string& hostname, uint16_t port) const;
+    
+     protected:
+  explicit Benchmark(const char* name);
+  Benchmark(Benchmark const&);
+  void SetName(const char* name);
+    
+    DEFINE_bool(benchmark_report_aggregates_only, false,
+            'Report the result of each benchmark repetitions. When 'true' is '
+            'specified only the mean, standard deviation, and other statistics '
+            'are reported for repeated benchmarks.');
+    
+    bool FindBenchmarksInternal(const std::string& re,
+                            std::vector<Benchmark::Instance>* benchmarks,
+                            std::ostream* Err);
+    
+    namespace benchmark {
+    }
+    
+    inline AbortHandlerT*& GetAbortHandler() {
+  static AbortHandlerT* handler = &std::abort;
+  return handler;
 }
     
-    // Library to decode jpeg coefficients into an RGB image.
+    #include <cstdarg>
+#include <iostream>
+#include <string>
     
-    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
-// the parsed information.
-// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
-// Returns false if the data is not valid jpeg, or if it contains an unsupported
-// jpeg feature.
-bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg);
-// string variant
-bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg);
+    // Reads and returns a 32-bit integer stored in the environment
+// variable corresponding to the given flag; if it isn't set or
+// doesn't represent a valid 32-bit integer, returns default_value.
+int32_t Int32FromEnv(const char* flag, int32_t default_value) {
+  const std::string env_var = FlagToEnvVar(flag);
+  const char* const string_value = getenv(env_var.c_str());
+  if (string_value == nullptr) {
+    // The environment variable is not set.
+    return default_value;
+  }
+    }
     
-    #include 'guetzli/jpeg_data.h'
+    namespace benchmark {
+// Parses 'str' for a 32-bit signed integer.  If successful, writes the result
+// to *value and returns true; otherwise leaves *value unchanged and returns
+// false.
+bool ParseInt32(const std::string& src_text, const char* str, int32_t* value);
+    }
     
-    
-    {  return total_size;
+    // Function to return an string for the calculated complexity
+std::string GetBigOString(BigO complexity) {
+  switch (complexity) {
+    case oN:
+      return 'N';
+    case oNSquared:
+      return 'N^2';
+    case oNCubed:
+      return 'N^3';
+    case oLogN:
+      return 'lgN';
+    case oNLogN:
+      return 'NlgN';
+    case o1:
+      return '(1)';
+    default:
+      return 'f(N)';
+  }
 }
     
-    
-    {  const int width_;
-  const int height_;
-  int factor_x_;
-  int factor_y_;
-  int width_in_blocks_;
-  int height_in_blocks_;
-  int num_blocks_;
-  std::vector<coeff_t> coeffs_;
-  std::vector<uint16_t> pixels_;
-  // Same as last argument of ApplyGlobalQuantization() (default is all 1s).
-  int quant_[kDCTBlockSize];
-};
+      // Called by each thread
+  bool wait() EXCLUDES(lock_) {
+    bool last_thread = false;
+    {
+      MutexLock ml(lock_);
+      last_thread = createBarrier(ml);
+    }
+    if (last_thread) phase_condition_.notify_all();
+    return last_thread;
+  }
