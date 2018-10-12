@@ -1,148 +1,137 @@
 
         
-                @status = status
-      end
+            if superenv?
+      ENV.keg_only_deps = keg_only_deps
+      ENV.deps = formula_deps
+      ENV.x11 = reqs.any? { |rq| rq.is_a?(X11Requirement) }
+      ENV.setup_build_environment(formula)
+      post_superenv_hacks
+      reqs.each(&:modify_build_environment)
+      deps.each(&:modify_build_environment)
+    else
+      ENV.setup_build_environment(formula)
+      reqs.each(&:modify_build_environment)
+      deps.each(&:modify_build_environment)
     
-    #
-    
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
-    
-            def make_accessible(hash = @config)
-          hash.keys.each do |key|
-            hash[key.to_sym] = hash[key]
-            make_accessible(hash[key]) if hash[key].is_a?(Hash)
-          end
-        end
-    
-    describe 'Kernel.sleep' do
-  it 'needs to be reviewed for spec completeness'
-end
-
-    
-            -> { w.f4('foo', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: foo|)
-        -> { w.f4('foo', 1) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f1_call_lineno}: warning: foo|)
-        -> { w.f4('foo', 2) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f2_call_lineno}: warning: foo|)
-        -> { w.f4('foo', 3) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f3_call_lineno}: warning: foo|)
-      end
-    
-      def ==(other)
-    if other.respond_to?(:to_ary)
-      return true if to_ary == other.to_ary
-    end
-    
-      #
-  # If there were CGI parameters in the URI, this will hold a hash of each
-  # variable to value.  If there is more than one value for a given variable,
-  # an array of each value is returned.
-  #
-  def qstring
-    self.uri_parts['QueryString']
-  end
-    
-        if res[1] == IAX_SUBTYPE_REGREJ
-      reason = res[2][IAX_IE_REGREJ_CAUSE] || 'Unknown Reason'
-      dprint('REGREJ: #{reason}')
-      # Acknowledge the REGREJ
-      self.client.send_ack(self)
-      return
-    end
-    
-    IAX_IE_CALLED_NUMBER  = 1
-IAX_IE_CALLING_NUMBER = 2
-IAX_IE_AUTH_METHODS   = 3
-IAX_IE_CALLING_NAME   = 4
-IAX_IE_USERNAME       = 6
-IAX_IE_DESIRED_CODEC  = 9
-IAX_IE_ORIGINAL_DID   = 10
-IAX_IE_ACTUAL_CODECS  = 8
-IAX_IE_PROTO_VERSION  = 11
-IAX_IE_REG_REFRESH    = 19
-IAX_IE_CHALLENGE_DATA = 15
-IAX_IE_CHALLENGE_RESP = 16
-IAX_IE_APPARENT_ADDR  = 18
-IAX_IE_REGREJ_CAUSE   = 22
-IAX_IE_HANGUP_CAUSE   = 42
-    
-        head + [data.length].pack('v') + data
-  end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos Checksum definition.
-        class Checksum < Element
-    
-              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
-          def decode_asn1_req_body(input)
-            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
-          end
-        end
-      end
-    end
+    module BuildEnvironmentDSL
+  def env(*settings)
+    @env ||= BuildEnvironment.new
+    @env.merge(settings)
   end
 end
-
     
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an String
-          #
-          # @param input [String] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
+      def initialize(f)
+    @f = f
+  end
     
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
-    
-    lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano/version'
-    
-          # rubocop:disable Security/MarshalLoad
-      def add_role(role, hosts, options={})
-        options_deepcopy = Marshal.dump(options.merge(roles: role))
-        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+        def self.cleanup_lockfiles
+      return unless HOMEBREW_CACHE_FORMULA.directory?
+      candidates = HOMEBREW_CACHE_FORMULA.children
+      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
+      lockfiles.each do |file|
+        next unless file.readable?
+        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
       end
-      # rubocop:enable Security/MarshalLoad
-    
-        it 'ignores heredocs that could share a last line' do
-      expect_no_offenses(construct(false, a, make_multi(heredoc), true))
     end
     
-    module RuboCop
-  module AST
-    # A node extension for `case` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `case` nodes within RuboCop.
-    class CaseNode < Node
-      include ConditionalNode
+        it 'creates an agent with a control target' do
+      visit '/'
+      page.find('a', text: 'Agents').trigger(:mouseover)
+      click_on('New Agent')
     
-          # Checks whether this node is an `if` statement. (This is not true of
-      # ternary operators and `unless` statements.)
-      #
-      # @return [Boolean] whether the node is an `if` statement
-      def if?
-        keyword == 'if'
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
+  end
+    
+              valid_parsed_trigger_agent_data.each do |key, value|
+            if key == :type
+              value = value.split('::').last
+            end
+            expect(trigger_agent_diff).to respond_to(key)
+            field = trigger_agent_diff.send(key)
+            expect(field).to be_a(ScenarioImport::AgentDiff::FieldDiff)
+            expect(field.incoming).to eq(value)
+            expect(field.updated).to eq(value)
+            expect(field.current).to be_nil
+          end
+          expect(trigger_agent_diff).not_to respond_to(:schedule)
+        end
+      end
+    end
+    
+    describe ConvertWebsiteAgentTemplateForMerge do
+  let :old_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
+    }
+  end
+    
+    # TODO:
+# group :mongoid do
+#   gem 'mongoid', '~> 4.0.0'
+# end
+
+    
+    require 'minitest/autorun'
+    
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
       end
     
-            def index
-          authorize! :admin, ReturnAuthorization
-          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
-                                   ransack(params[:q]).result.
-                                   page(params[:page]).per(params[:per_page])
-          respond_with(@return_authorizations)
-        end
+          private
+    
+      def self.create_ipmi_getchannel_probe
+    [   # Get Channel Authentication Capabilities
+      0x06, 0x00, 0xff, 0x07, # RMCP Header
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x20, 0x18,
+      0xc8, 0x81, 0x00, 0x38, 0x8e, 0x04, 0xb5
+    ].pack('C*')
+  end
+    
+            # Sends a kerberos request, and reads the response through the connection
+        #
+        # @param req [Rex::Proto::Kerberos::Model::KdcRequest] the request to send
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] The kerberos message
+        # @raise [RuntimeError] if the transport protocol is unknown or the response can't be parsed.
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def send_recv(req)
+          send_request(req)
+          res = recv_response
+    
+                cipher = OpenSSL::Cipher.new('rc4')
+            cipher.decrypt
+            cipher.key = k3
+            decrypted = cipher.update(data) + cipher.final
+    
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
+          end
+    
+          def is_edit_page
+        false
+      end
+    
+        def self.teardown(&block)
+      define_method(:teardown, &block)
+    end
+  end
+  (
+  class << klass;
+    self
+  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
+  $contexts << klass
+  klass.class_eval &block
+end
