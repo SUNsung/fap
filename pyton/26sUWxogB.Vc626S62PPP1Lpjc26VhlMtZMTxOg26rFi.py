@@ -1,113 +1,96 @@
 
         
-        
-@bp.route('/<int:id>/delete', methods=('POST',))
-@login_required
-def delete(id):
-    '''Delete a post.
+                # Insert the import statement to setup.py if not present
+        with open(setup_path, 'a+') as setup:
+            setup.seek(0)
+            setup_content = setup.read()
+            if not 'import fastentrypoints' in setup_content:
+                setup.seek(0)
+                setup.truncate()
+                setup.write('import fastentrypoints\n' + setup_content)
     
-        def __init__(self, blueprint, app, options, first_registration):
-        #: a reference to the current application
-        self.app = app
+    Commands:
+   update - Retrieve new lists of packages
+   upgrade - Perform an upgrade
+   install - Install new packages (pkg is libc6 not libc6.deb)
+   remove - Remove packages
+   autoremove - Remove automatically all unused packages
+   purge - Remove packages and config files
+   source - Download source archives
+   build-dep - Configure build-dependencies for source packages
+   dist-upgrade - Distribution upgrade, see apt-get(8)
+   dselect-upgrade - Follow dselect selections
+   clean - Erase downloaded archive files
+   autoclean - Erase old downloaded archive files
+   check - Verify that there are no broken dependencies
+   changelog - Download and display the changelog for the given package
+   download - Download the binary package into the current directory
     
-        .. describe:: 'key' in g
+      * put-item
+  * get-item
+'''
     
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
     
-        Implements the bridge to Jinja2.
+class ArrayMinLengthValidator(MinLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
+        'limit_value')
     
-        :param app: The Flask application to configure the environment from.
-    :param path: URL path being requested.
-    :param base_url: Base URL where the app is being served, which
-        ``path`` is relative to. If not given, built from
-        :data:`PREFERRED_URL_SCHEME`, ``subdomain``,
-        :data:`SERVER_NAME`, and :data:`APPLICATION_ROOT`.
-    :param subdomain: Subdomain name to append to :data:`SERVER_NAME`.
-    :param url_scheme: Scheme to use instead of
-        :data:`PREFERRED_URL_SCHEME`.
-    :param json: If given, this is serialized as JSON and passed as
-        ``data``. Also defaults ``content_type`` to
-        ``application/json``.
-    :param args: other positional arguments passed to
-        :class:`~werkzeug.test.EnvironBuilder`.
-    :param kwargs: other keyword arguments passed to
-        :class:`~werkzeug.test.EnvironBuilder`.
-    '''
+            if connection.savepoint_ids:
+            sid = connection.savepoint_ids.pop()
+        else:
+            # Prematurely unset this flag to allow using commit or rollback.
+            connection.in_atomic_block = False
     
-            self._checking_lock.acquire()
-        self._checking_num -= 1
-        self._checking_lock.release()
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import boto3_conn, ec2_argument_spec, get_aws_connection_info
+from ansible.module_utils.aws.waf import list_web_acls, get_web_acl
     
+    EXAMPLES = '''
+# Note: These examples do not set authentication details, see the AWS Guide for details.
+    
+    import traceback
+from ansible.module_utils._text import to_native
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
+    
+        gw_mgr = Ec2CustomerGatewayManager(module)
+    
+    ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+            cluster = camel_dict_to_snake_dict(cluster)
+        arn = 'arn:aws:elasticache:%s:%s:cluster:%s' % (region, account_id, cluster['cache_cluster_id'])
         try:
-        # hide console in MS windows
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        startupinfo.wShowWindow = subprocess.SW_HIDE
+            tags = get_elasticache_tags_with_backoff(client, arn)
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, msg='Couldn't get tags for cluster %s')
     
-        
-    def getLine(self):
-        return self.line
     
-    def setLine(self, line):
-        self.line = line
+if __name__ == '__main__':
+    main()
+
     
-        filenames = []
-    for (dirpath, dnames, fnames) in os.walk(path):
-        for fname in fnames:
-            if fname.endswith('.md'):
-                filenames.append(os.sep.join([dirpath, fname]))
-    
-    # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
-    
-            # Print results on the console
-        for name, (top, right, bottom, left) in predictions:
-            print('- Found {} at ({}, {})'.format(name, left, top))
-    
-    # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file('obama.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-    
-    # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file('obama.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-    
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
-    
-        def vapix_service(call):
-        '''Service to send a message.'''
-        for _, device in AXIS_DEVICES.items():
-            if device.name == call.data[CONF_NAME]:
-                response = device.vapix.do_request(
-                    call.data[SERVICE_CGI],
-                    call.data[SERVICE_ACTION],
-                    call.data[SERVICE_PARAM])
-                hass.bus.fire(SERVICE_VAPIX_CALL_RESPONSE, response)
-                return True
-        _LOGGER.info('Couldn't find device %s', call.data[CONF_NAME])
-        return False
-    
-        def _update_info(self):
-        '''Ensure the information from the router is up to date.
-    
-    _LOGGER = logging.getLogger(__name__)
-    
-            if self._userid is None:
-            if not self._login():
-                _LOGGER.error('Could not obtain a user ID from the router')
-                return False
-        last_results = []
-    
-    from homeassistant.util import slugify
-from homeassistant.helpers.dispatcher import (
-    dispatcher_connect, dispatcher_send)
-from homeassistant.components.volvooncall import DATA_KEY, SIGNAL_VEHICLE_SEEN
-    
-            send_data(name, json_body)
+        Basic Usage:
+        >>> import boto3
+        >>> iam = boto3.client('iam')
+        >>> name = 'server-cert-name'
+        >>> results = get_server_certs(iam, name)
+        {
+            'upload_date': '2015-04-25T00:36:40+00:00',
+            'server_certificate_id': 'ADWAJXWTZAXIPIMQHMJPO',
+            'certificate_body': '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----',
+            'server_certificate_name': 'server-cert-name',
+            'expiration': '2017-06-15T12:00:00+00:00',
+            'path': '/',
+            'arn': 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
+        }
+    '''
+    results = dict()
+    try:
+        if name:
+            server_certs = [iam.get_server_certificate(ServerCertificateName=name)['ServerCertificate']]
+        else:
+            server_certs = iam.list_server_certificates()['ServerCertificateMetadataList']
