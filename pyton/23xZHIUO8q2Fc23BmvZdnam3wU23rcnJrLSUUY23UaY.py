@@ -1,215 +1,305 @@
 
         
-            def reject_friend_request(self, from_user_id, to_user_id):
-        pass
+        # build the model
+model = Sequential()
+model.add(layers.Dense(256, input_shape=(784,)))
+model.add(Antirectifier())
+model.add(layers.Dropout(0.1))
+model.add(layers.Dense(256))
+model.add(Antirectifier())
+model.add(layers.Dropout(0.1))
+model.add(layers.Dense(num_classes))
+model.add(layers.Activation('softmax'))
     
-    from mrjob.job import MRJob
+    The test data is embedded using the weights of the final dense layer, just
+before the classification head. This embedding can then be visualized using
+TensorBoard's Embedding Projector.
+'''
     
+        Output will always be a list of tensors
+    (potentially with 1 element).
     
-class Budget(object):
+            if not self.built:
+            # Model is not compilable because
+            # it does not know its number of inputs
+            # and outputs, nor their shapes and names.
+            # We will compile after the first
+            # time the model gets called on training data.
+            return
+        self._is_compiled = True
     
-        for asset in os.listdir(build_path):
-        compat_print('Uploading %s...' % asset)
-        releaser.create_asset(release_id, os.path.join(build_path, asset))
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-        outfile, = args
-    
-    compat_print('total downloads traffic: %s' % format_size(total_bytes))
+        # Returns
+        A normalized copy of the array.
+    '''
+    l2 = np.atleast_1d(np.linalg.norm(x, order, axis))
+    l2[l2 == 0] = 1
+    return x / np.expand_dims(l2, axis)
 
     
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-from youtube_dl.version import __version__
-version = __version__
-# The full version, including alpha/beta/rc tags.
-release = version
+        @property
+    def dropout(self):
+        return self.cell.dropout
     
-    py2exe_options = {
-    'bundle_files': 1,
-    'compressed': 1,
-    'optimize': 2,
-    'dist_dir': '.',
-    'dll_excludes': ['w9xpopen.exe', 'crypt32.dll'],
-}
+            self.bias = self.add_weight(shape=(self.units * 6,),
+                                    name='bias',
+                                    initializer=self.bias_initializer,
+                                    regularizer=self.bias_regularizer,
+                                    constraint=self.bias_constraint)
     
-    
-class TestInfoExtractor(unittest.TestCase):
-    def setUp(self):
-        self.ie = TestIE(FakeYDL())
-    
-            password = intlist_to_bytes(self.key).decode('utf-8')
-        encrypted = base64.b64encode(
-            intlist_to_bytes(self.iv[:8]) +
-            b'\x0b\xe6\xa4\xd9z\x0e\xb8\xb9\xd0\xd4i_\x85\x1d\x99\x98_\xe5\x80\xe7.\xbf\xa5\x83'
-        ).decode('utf-8')
-        decrypted = (aes_decrypt_text(encrypted, password, 32))
-        self.assertEqual(decrypted, self.secret_msg)
-    
+            # Arguments
+            weights: A list of Numpy arrays with shapes and types matching
+                the output of `model.get_weights()`.
         '''
-    is_windows = is_windows
-    config_dir = DEFAULT_CONFIG_DIR
-    stdin = sys.stdin
-    stdin_isatty = stdin.isatty()
-    stdin_encoding = None
-    stdout = sys.stdout
-    stdout_isatty = stdout.isatty()
-    stdout_encoding = None
-    stderr = sys.stderr
-    stderr_isatty = stderr.isatty()
-    colors = 256
-    if not is_windows:
-        if curses:
-            try:
-                curses.setupterm()
-                colors = curses.tigetnum('colors')
-            except curses.error:
-                pass
+        tuples = []
+        for cell in self.cells:
+            if isinstance(cell, Layer):
+                num_param = len(cell.weights)
+                weights = weights[:num_param]
+                for sw, w in zip(cell.weights, weights):
+                    tuples.append((sw, w))
+                weights = weights[num_param:]
+        K.batch_set_value(tuples)
+    
+        existing_conditions = dict((condition_type, dict()) for condition_type in MATCH_LOOKUP)
+    desired_conditions = dict((condition_type, dict()) for condition_type in MATCH_LOOKUP)
+    all_conditions = dict()
+    
+        desc_log_group = describe_log_group(client=logs,
+                                        log_group_name=module.params['log_group_name'],
+                                        module=module)
+    final_log_group_snake = []
+    
+        if region:
+        ec2_client = boto3_conn(module, conn_type='client', resource='ec2', region=region, endpoint=ec2_url, **aws_connect_params)
     else:
-        # noinspection PyUnresolvedReferences
-        import colorama.initialise
-        stdout = colorama.initialise.wrap_stream(
-            stdout, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        stderr = colorama.initialise.wrap_stream(
-            stderr, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        del colorama
+        module.fail_json(msg='region must be specified')
     
-        def get_lexer(self, mime, body):
-        return get_lexer(
-            mime=mime,
-            explicit_json=self.explicit_json,
-            body=body,
-        )
+        launch_config_name = module.params.get('name')
+    sort = module.params.get('sort')
+    sort_order = module.params.get('sort_order')
+    sort_start = module.params.get('sort_start')
+    sort_end = module.params.get('sort_end')
     
+    RETURN = '''
+image_id:
+    description: AMI id
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'ami-0d75df7e'
+user_data:
+    description: User data used to start instance
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'ZXhwb3J0IENMT1VE'
+name:
+    description: Name of the Launch Configuration
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'myapp-v123'
+arn:
+    description: Name of the AMI
+    returned: when Launch Configuration was found
+    type: string
+    sample: 'arn:aws:autoscaling:eu-west-1:12345:launchConfiguration:d82f050e-e315:launchConfigurationName/yourproject'
+instance_type:
+    description: Type of ec2 instance
+    returned: when Launch Configuration was found
+    type: string
+    sample: 't2.small'
+created_time:
+    description: When it was created
+    returned: when Launch Configuration was found
+    type: string
+    sample: '2016-06-29T14:59:22.222000+00:00'
+ebs_optimized:
+    description: Launch Configuration EBS optimized property
+    returned: when Launch Configuration was found
+    type: boolean
+    sample: False
+instance_monitoring:
+    description: Launch Configuration instance monitoring property
+    returned: when Launch Configuration was found
+    type: string
+    sample: {'Enabled': false}
+classic_link_vpc_security_groups:
+    description: Launch Configuration classic link vpc security groups property
+    returned: when Launch Configuration was found
+    type: list
+    sample: []
+block_device_mappings:
+    description: Launch Configuration block device mappings property
+    returned: when Launch Configuration was found
+    type: list
+    sample: []
+keyname:
+    description: Launch Configuration ssh key
+    returned: when Launch Configuration was found
+    type: string
+    sample: mykey
+security_groups:
+    description: Launch Configuration security groups
+    returned: when Launch Configuration was found
+    type: list
+    sample: []
+kernel_id:
+    description: Launch Configuration kernel to use
+    returned: when Launch Configuration was found
+    type: string
+    sample: ''
+ram_disk_id:
+    description: Launch Configuration ram disk property
+    returned: when Launch Configuration was found
+    type: string
+    sample: ''
+associate_public_address:
+    description: Assign public address or not
+    returned: when Launch Configuration was found
+    type: boolean
+    sample: True
+...
+'''
+import re
     
-class DigestAuthPlugin(BuiltinAuthPlugin):
+        module = AnsibleAWSModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True
+    )
     
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
+        def get_repository_policy(self, registry_id, name):
+        try:
+            res = self.ecr.get_repository_policy(
+                repositoryName=name, **build_kwargs(registry_id))
+            text = res.get('policyText')
+            return text and json.loads(text)
+        except ClientError as err:
+            code = err.response['Error'].get('Code', 'Unknown')
+            if code == 'RepositoryPolicyNotFoundException':
+                return None
+            raise
     
+    requirements: [ json, botocore, boto3 ]
+options:
+    state:
+        description:
+          - The desired state of the service
+        required: true
+        choices: ['present', 'absent', 'deleting']
+    name:
+        description:
+          - The name of the service
+        required: true
+    cluster:
+        description:
+          - The name of the cluster in which the service exists
+        required: false
+    task_definition:
+        description:
+          - The task definition the service will run. This parameter is required when state=present
+        required: false
+    load_balancers:
+        description:
+          - The list of ELBs defined for this service
+        required: false
+    desired_count:
+        description:
+          - The count of how many instances of the service. This parameter is required when state=present
+        required: false
+    client_token:
+        description:
+          - Unique, case-sensitive identifier you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.
+        required: false
+    role:
+        description:
+          - The name or full Amazon Resource Name (ARN) of the IAM role that allows your Amazon ECS container agent to make calls to your load balancer
+            on your behalf. This parameter is only required if you are using a load balancer with your service, in a network mode other than `awsvpc`.
+        required: false
+    delay:
+        description:
+          - The time to wait before checking that the service is available
+        required: false
+        default: 10
+    repeat:
+        description:
+          - The number of times to check that the service is available
+        required: false
+        default: 10
+    deployment_configuration:
+        description:
+          - Optional parameters that control the deployment_configuration; format is '{'maximum_percent':<integer>, 'minimum_healthy_percent':<integer>}
+        required: false
+        version_added: 2.3
+    placement_constraints:
+        description:
+          - The placement constraints for the tasks in the service
+        required: false
+        version_added: 2.4
+    placement_strategy:
+        description:
+          - The placement strategy objects to use for tasks in your service. You can specify a maximum of 5 strategy rules per service
+        required: false
+        version_added: 2.4
+    network_configuration:
+        description:
+          - network configuration of the service. Only applicable for task definitions created with C(awsvpc) I(network_mode).
+          - assign_public_ip requires botocore >= 1.8.4
+        suboptions:
+          subnets:
+            description:
+              - A list of subnet IDs to associate with the task
+            version_added: 2.6
+          security_groups:
+            description:
+              - A list of security group names or group IDs to associate with the task
+            version_added: 2.6
+          assign_public_ip:
+            description:
+              - Whether the task's elastic network interface receives a public IP address. This option requires botocore >= 1.8.4.
+            type: bool
+            version_added: 2.7
+    launch_type:
+        description:
+          - The launch type on which to run your service
+        required: false
+        version_added: 2.7
+        choices: ['EC2', 'FARGATE']
+extends_documentation_fragment:
+    - aws
+    - ec2
+'''
     
-def test_headers_empty_value_with_value_gives_error(httpbin):
-    with pytest.raises(ParseError):
-        http('GET', httpbin + '/headers', 'Accept;SYNTAX_ERROR')
+        '''Get an elasticache connection'''
+    try:
+        conn = connect_to_region(region_name=region, **aws_connect_kwargs)
+    except boto.exception.NoAuthHandlerFound as e:
+        module.fail_json(msg=e.message)
     
+    '''
+import os
+import pkg_resources
+import unittest
     
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_zshrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'zsh')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+        def backwards(self, orm):
+        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
+        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
     
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+    import os
+import sys
+import vim
+import re
     
+    from ycm.client.messages_request import _HandlePollResponse
+from ycm.tests.test_utils import ExtendedMock
     
-@pytest.mark.parametrize('before, after', [
-    ('brew install sshfs',
-     'brew cask install osxfuse && brew install sshfs')])
-def test_get_new_command(before, after):
-    command = Command(before, output)
-    assert get_new_command(command) == after
-
+    from ycm.tests.test_utils import ( CurrentWorkingDirectory, ExtendedMock,
+                                   MockVimModule, MockVimBuffers, VimBuffer )
+MockVimModule()
     
-        if args.show_plot:
-        plt.plot(*zip(*timings))
-        plt.title('Average time taken running isotonic regression')
-        plt.xlabel('Number of observations')
-        plt.ylabel('Time (s)')
-        plt.axis('tight')
-        plt.loglog()
-        plt.show()
-
-    
-        n_samples = 2000
-    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
-                                           list_n_features, precompute=False)
-    plt.subplot(212)
-    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
-    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
-    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of features')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
-
-    
-                gc.collect()
-            print('benchmarking lasso_path (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lasso_path(X, y, precompute=False)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lasso_path (without Gram)'].append(delta)
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-            for iteration in xrange(opts.n_times):
-            print('\titer %s...' % iteration, end='')
-            time_to_fit, time_to_transform = bench_scikit_transformer(X_dense,
-              transformers[name])
-            time_fit[name].append(time_to_fit)
-            time_transform[name].append(time_to_transform)
-            print('done')
-    
-        This is called by sphinx.ext.linkcode
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    
-def main(path):
+      assert_that( test_utils.VIM_MATCHES_FOR_WINDOW,
+               has_entries( { 1: empty() } ) )
