@@ -1,114 +1,157 @@
 
         
-                def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
-        end
+            if superenv?
+      ENV.keg_only_deps = keg_only_deps
+      ENV.deps = formula_deps
+      ENV.x11 = reqs.any? { |rq| rq.is_a?(X11Requirement) }
+      ENV.setup_build_environment(formula)
+      post_superenv_hacks
+      reqs.each(&:modify_build_environment)
+      deps.each(&:modify_build_environment)
+    else
+      ENV.setup_build_environment(formula)
+      reqs.each(&:modify_build_environment)
+      deps.each(&:modify_build_environment)
     
-        def find(*args)
-      find_all(*args).first || raise(MissingTemplate.new(self, *args))
-    end
+      def userpaths?
+    @settings.include? :userpaths
+  end
+end
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+        checks.inject_dump_stats! if ARGV.switch? 'D'
     
-          def before_step(step)
-        @current_step = step
+      private
+    
+        results.map do |name|
+      begin
+        formula = Formulary.factory(name)
+        canonical_name = formula.name
+        canonical_full_name = formula.full_name
+      rescue
+        canonical_name = canonical_full_name = name
       end
+      # Ignore aliases from results when the full name was also found
+      if aliases.include?(name) && results.include?(canonical_full_name)
+        next
+      elsif (HOMEBREW_CELLAR/canonical_name).directory?
+        pretty_installed(name)
+      else
+        name
+      end
+    end.compact
+  end
+end
+
     
-      s.rdoc_options = ['--charset=UTF-8']
-  s.extra_rdoc_files = %w(README.markdown LICENSE)
-    
-            # Internal: Gets the filename of the sample post to be created
-        #
-        # Returns the filename of the sample post, as a String
-        def initialized_post_name
-          '_posts/#{Time.now.strftime('%Y-%m-%d')}-welcome-to-jekyll.markdown'
-        end
-    
-    module Jekyll
-  module Commands
-    class NewTheme < Jekyll::Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:'new-theme') do |c|
-            c.syntax 'new-theme NAME'
-            c.description 'Creates a new Jekyll theme scaffold'
-            c.option 'code_of_conduct', \
-                     '-c', '--code-of-conduct', \
-                     'Include a Code of Conduct. (defaults to false)'
-    
-                # stream_file_data would free us from keeping livereload.js in memory
-            # but JRuby blocks on that call and never returns
-            send_data(reload_body)
-            close_connection_after_writing
+            def has_attribute?(attribute)
+          if attribute == :location
+            get_info(:address).present?
           else
-            body = 'This port only serves livereload.js over HTTP.\n'
-            headers = [
-              'HTTP/1.1 400 Bad Request',
-              'Content-Type: text/plain',
-              'Content-Length: #{body.bytesize}',
-              '',
-              '',
-            ].join('\r\n')
-            send_data(headers)
-            send_data(body)
-            close_connection_after_writing
+            get_info(attribute).present?
           end
         end
-        # rubocop:enable Metrics/MethodLength
+    
+      protected
+    
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+    
+      # The realm used in Http Basic Authentication.
+  mattr_accessor :http_authentication_realm
+  @@http_authentication_realm = 'Application'
+    
+            ActiveSupport.on_load(:action_controller) do
+          if respond_to?(:helper_method)
+            helper_method 'current_#{mapping}', '#{mapping}_signed_in?', '#{mapping}_session'
+          end
+        end
+      end
+    
+            users.any?
+      end
+    
+          def add_fragment_back_to_path(uri, path)
+        [path, uri.fragment].compact.join('#')
       end
     end
   end
 end
 
     
-                if key != cleaned_key
-              Jekyll::Deprecator.deprecation_message(
-                'You are using '#{key}'. Normalizing to #{cleaned_key}.'
-              )
-            end
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
-    end
-    
-        # The path used after sending reset password instructions
-    def after_sending_reset_password_instructions_path_for(resource_name)
-      new_session_path(resource_name) if is_navigational_format?
-    end
-    
-    class Devise::SessionsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create]
-  prepend_before_action :allow_params_authentication!, only: :create
-  prepend_before_action :verify_signed_out_user, only: :destroy
-  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
-    
-            class_eval <<-METHODS, __FILE__, __LINE__ + 1
-          def authenticate_#{mapping}!(opts={})
-            opts[:scope] = :#{mapping}
-            warden.authenticate!(opts) if !devise_controller? || opts.delete(:force)
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
           end
+        end
     
-          def _devise_route_context
-        @_devise_route_context ||= send(Devise.available_router_name)
-      end
+            # This returns all the registered commands.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        def commands
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.commands)
+            end
+          end
+        end
+    
+            # Set the name of the plugin. The moment that this is called, the
+        # plugin will be registered and available. Before this is called, a
+        # plugin does not exist. The name must be unique among all installed
+        # plugins.
+        #
+        # @param [String] name Name of the plugin.
+        # @return [String] The name of the plugin.
+        def self.name(name=UNSET_VALUE)
+          # Get or set the value first, so we have a name for logging when
+          # we register.
+          result = get_or_set(:name, name)
+    
+    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
+do |username, password, mobile|
+  @me = User.find_by_username(username)
+  @me.password ||= password
+  manual_login
+  confirm_login mobile
+end
+    
+      links = doc.css('a')
+  link = links.detect{ |link| link.text == link_text }
+  link = links.detect{ |link| link.attributes['href'].value.include?(link_text)} unless link
+  path = link.attributes['href'].value
+  visit URI::parse(path).request_uri
+end
+    
+    require File.join(File.dirname(__FILE__), 'integration_sessions_controller')
+require File.join(File.dirname(__FILE__), 'poor_mans_webmock')
+    
+          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
+      expect(response.status).to eq(404)
+      expect(response.body).to eq(I18n.t('likes.destroy.error'))
+      expect(Like.count).to eq(like_count)
     end
   end
 end
+
+    
+                return if after_update_attributes
+    
+            def index
+          @payments = @order.payments.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@payments)
+        end
+    
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
