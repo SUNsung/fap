@@ -1,213 +1,156 @@
 
         
-          def userpaths?
-    @settings.include? :userpaths
-  end
-end
-    
-      def observe_file_removal(path)
-    path.extend(ObserverPathnameExtension).unlink if path.exist?
-  end
-    
-            if msg = blacklisted?(query)
-          if count > 0
-            puts
-            puts 'If you meant #{query.inspect} precisely:'
-            puts
-          end
-          puts msg
-        elsif count == 0
-          puts 'No formula found for #{query.inspect}.'
-          begin
-            GitHub.print_pull_requests_matching(query)
-          rescue GitHub::Error => e
-            SEARCH_ERROR_QUEUE << e
-          end
-        end
-      end
-    end
-    
-        Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
-      end
-    
-          if @launch_event_sent || launch_context.p_hash.nil?
-        return
-      end
-    
-            session.action_launched(launch_context: launch_context)
-      end
+            # This returns whether the guest is ready to work. If this returns
+    # `false`, then {#detect!} should be called in order to detect the
+    # guest OS.
+    #
+    # @return [Boolean]
+    def ready?
+      !!capability_host_chain
     end
   end
 end
 
     
-              it 'adds multiple frameworks' do
-            result = Fastlane::FastFile.new.parse('lane :test do
-                carthage(command: '#{command}', frameworks: ['myframework', 'myframework2'])
-              end').runner.execute(:test)
-            expect(result).to eq('carthage archive myframework myframework2')
+            # If an active machine of the same name/provider was not
+        # found, it is already false.
+        return false if !found
+    
+                    @env.vms.each do |name, vm|
+                  vms << vm if name =~ regex
+                end
+    
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
           end
         end
     
-            expect(result[1]).to start_with('security set-keychain-settings')
-        expect(result[1]).to include('-t 300')
-        expect(result[1]).to_not(include('-l'))
-        expect(result[1]).to_not(include('-u'))
-        expect(result[1]).to include('~/Library/Keychains/test.keychain')
-        expect(result[2]).to start_with('security list-keychains -s')
-        expect(result[2]).to end_with(File.expand_path('~/Library/Keychains/test.keychain').to_s)
+            # This method is automatically called when the system is available (when
+        # Vagrant can successfully SSH into the machine) to give the system a chance
+        # to determine the distro and return a distro-specific system.
+        #
+        # If this method returns nil, then this instance is assumed to be
+        # the most specific guest implementation.
+        def distro_dispatch
+        end
+    
+                  # Create an environment for this location and yield the
+              # machine in that environment. We silence warnings here because
+              # Vagrantfiles often have constants, so people would otherwise
+              # constantly (heh) get 'already initialized constant' warnings.
+              begin
+                env = entry.vagrant_env(
+                  @env.home_path, ui_class: @env.ui_class)
+              rescue Vagrant::Errors::EnvironmentNonExistentCWD
+                # This means that this environment working directory
+                # no longer exists, so delete this entry.
+                entry = @env.machine_index.get(name.to_s)
+                @env.machine_index.delete(entry) if entry
+                raise
+              end
+    
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
+        end
+    
+            # This contains all the command plugins by name, and returns
+        # the command class and options. The command class is wrapped
+        # in a Proc so that it can be lazy loaded.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        attr_reader :commands
+    
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
+      begin
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
+      ensure
+        ::Process.wait pid
       end
+    end
+    [$? && $?.exitstatus == 0, cmd_with_env]
+  end
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
+  end
+end
     
-          it 'requires project to be specified if .slather.yml is not found' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            slather
-          end').runner.execute(:test)
-        end.to raise_error(FastlaneCore::Interface::FastlaneError)
-      end
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
     
-          context 'when specify output_file, config_file and strict options' do
-        it 'adds config option, strict option and redirect file' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              strict: true,
-              output_file: '#{output_file}',
-              config_file: '#{config_file}'
-            )
-          end').runner.execute(:test)
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
+    end
+  end
+end
     
-    # Here be helper
-    
-    gem 'rails', '~> 5.2'
-gem 'omniauth', '~> 1.3'
-gem 'oauth2'
-gem 'omniauth-oauth2'
-gem 'rdoc'
-    
-        private
-    
-        def filter_const(name)
-      if name.is_a? Array
-        name.map &method(:filter_const)
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
       else
-        Docs.const_get '#{name}_filter'.camelize
+        puts dark cyan s
       end
     end
     
-        attr_accessor :name, :type, :path
+      # Setup a color scheme called 'bright' than can be used to add color codes
+  # to the pattern layout. Color schemes should only be used with appenders
+  # that write to STDOUT or STDERR; inserting terminal color codes into a file
+  # is generally considered bad form.
+  Logging.color_scheme('bright',
+                       levels:  {
+                         info:  :green,
+                         warn:  :yellow,
+                         error: :red,
+                         fatal: %i(white on_red)
+                       },
+                       date:    :blue,
+                       logger:  :cyan,
+                       message: :magenta
+                      )
     
-        def additional_options
-      {}
-    end
-    
-        def request_all(urls)
-      queue = [urls].flatten
-      until queue.empty?
-        result = yield request_one(queue.shift)
-        queue.concat(result) if result.is_a? Array
-      end
-    end
-    
-          def base_urls
-        @base_urls ||= self.class.base_urls.map { |url| URL.parse(url) }
-      end
-    
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
-          end
-        end
-    
-    When /^I should see one less invite$/ do
-  step 'I should see \'#{@inviter_invite_count -1} invites left\''
-end
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
-    end
-  end
-end
-
-    
-          it 'doesn't post multiple times' do
-        alice.like!(@target)
-        post :create, params: like_hash
-        expect(response.code).to eq('422')
-      end
-    end
-    
-        # Converts a Sass options hash into a standard form, filling in
-    # default values and resolving aliases.
-    #
-    # @param options [{Symbol => Object}] The options hash;
-    #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-    # @return [{Symbol => Object}] The normalized options hash.
-    # @private
-    def self.normalize_options(options)
-      options = DEFAULT_OPTIONS.merge(options.reject {|_k, v| v.nil?})
-    
-        # Returns a string representation of the Sass backtrace.
-    #
-    # @param default_filename [String] The filename to use for unknown files
-    # @see #sass_backtrace
-    # @return [String]
-    def sass_backtrace_str(default_filename = 'an unknown file')
-      lines = message.split('\n')
-      msg = lines[0] + lines[1..-1].
-        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
-      'Error: #{msg}' +
-        sass_backtrace.each_with_index.map do |entry, i|
-          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
-            ' of #{entry[:filename] || default_filename}' +
-            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
-        end.join
-    end
-    
-    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
-    
-      def developer_prefix
-    `xcode-select --print-path`.strip
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
   end
     
-      class Command < CLAide::Command
-    require 'cocoapods/command/options/repo_update'
-    require 'cocoapods/command/options/project_directory'
-    include Options
-    
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @short_output = argv.flag?('short')
-          super
-        end
-    
-    Then(/the current symlink points to the previous release/) do
-  previous_release_path = @release_paths[-2]
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
+    When /^I fill out change password section with my password and '([^']*)' and '([^']*)'$/ do |new_pass, confirm_pass|
+  fill_change_password_section(@me.password, new_pass, confirm_pass)
 end
     
-          def show_revert
-        !@message
-      end
-    
-    # Disable the metadata feature
-$METADATA = false
+        it 'lets a user destroy their like' do
+      current_user = controller.send(:current_user)
+      expect(current_user).to receive(:retract).with(@like)
