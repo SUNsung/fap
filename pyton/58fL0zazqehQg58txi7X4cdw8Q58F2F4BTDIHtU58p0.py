@@ -1,59 +1,76 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+            def __init__(self, license_plate):
+        super(Motorcycle, self).__init__(VehicleSize.MOTORCYCLE, license_plate, spot_size=1)
+    
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
+    
+        cert = None
+    if args.cert:
+        cert = args.cert
+        if args.cert_key:
+            cert = cert, args.cert_key
+    
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
-    
-        '''
-    # The value that should be passed to --auth-type
-    # to use this auth plugin. Eg. 'my-auth'
-    auth_type = None
+def load_json_preserve_order(s):
+    return json.loads(s, object_pairs_hook=OrderedDict)
     
     
-@mock.patch('httpie.core.get_response')
-def test_error(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
+tests_require = [
+    # Pytest needs to come last.
+    # https://bitbucket.org/pypa/setuptools/issue/196/
+    'pytest-httpbin',
+    'pytest',
+    'mock',
+]
+    
+        def test_binary_file_form(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=B', '--form', 'POST', httpbin.url + '/post',
+                 'test@' + BIN_FILE_PATH_ARG, env=env)
+        assert bytes(BIN_FILE_CONTENT) in bytes(r)
+    
+        def test_POST_with_data_auto_JSON_headers(self, httpbin):
+        r = http('POST', httpbin.url + '/post', 'a=b')
+        assert HTTP_OK in r
+        assert r.json['headers']['Accept'] == JSON_ACCEPT
+        assert r.json['headers']['Content-Type'] == 'application/json'
     
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
     
-        noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
-    sys.path.append(noarch_lib)
     
-        def get(self):
-        n = random.randint(2, 3)
-        ws = []
-        for i in range(0, n):
-            w = self.slice.get()
-            ws.append(w)
+class Command(ScrapyCommand):
     
-    import urllib
+            shell = Shell(crawler, update_vars=self.update_vars, code=opts.code)
+        shell.start(url=url, redirect=not opts.no_redirect)
     
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-    from ..common import *
-    
-    site_info = 'any.any'
-download = embed_download
-download_playlist = playlist_not_supported('any.any')
+                # trustRoot set to platformTrust() will use the platform's root CAs.
+            #
+            # This means that a website like https://www.cacert.org will be rejected
+            # by default, since CAcert.org CA certificate is seldom shipped.
+            return optionsForClientTLS(hostname.decode('ascii'),
+                                       trustRoot=platformTrust(),
+                                       extraCertificateOptions={
+                                            'method': self._ssl_method,
+                                       })
