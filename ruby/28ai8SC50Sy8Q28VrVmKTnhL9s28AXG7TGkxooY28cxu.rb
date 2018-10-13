@@ -1,162 +1,156 @@
 
         
-            def initialize
-      @root = nil
-      super
-    end
+        # Mimic how the proposed change would first execute a couple of checks and
+# proceed to process with Liquid if necessary
+def conditional_liquid(content)
+  return content if content.nil? || content.empty?
+  return content unless content.include?('{%') || content.include?('{{')
+  always_liquid(content)
+end
+    }
+    }
+    }
     
-          if ARGV.git?
-        system 'git', 'init'
-        system 'git', 'add', '-A'
-      end
-      if ARGV.interactive?
-        ohai 'Entering interactive mode'
-        puts 'Type `exit' to return and finalize the installation'
-        puts 'Install to this prefix: #{formula.prefix}'
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-        keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
-      end
-      f.puts s
-    end
+    Then(%r!^I should (not )?see '(.*)' in the build output$!) do |negative, text|
+  if negative.nil? || negative.empty?
+    expect(jekyll_run_output).to match Regexp.new(text)
+  else
+    expect(jekyll_run_output).not_to match Regexp.new(text)
   end
 end
-
     
-      def caveats
-    caveats = []
-    begin
-      build, f.build = f.build, Tab.for_formula(f)
-      s = f.caveats.to_s
-      caveats << s.chomp + '\n' if s.length > 0
-    ensure
-      f.build = build
-    end
-    caveats << keg_only_text
-    caveats << bash_completion_caveats
-    caveats << zsh_completion_caveats
-    caveats << fish_completion_caveats
-    caveats << plist_caveats
-    caveats << python_caveats
-    caveats << app_caveats
-    caveats << elisp_caveats
-    caveats.compact.join('\n')
-  end
+          def comment_line(comment_line); end
     
-        if $stdout.tty?
-      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
-      bad_regex = metacharacters.any? do |char|
-        ARGV.any? do |arg|
-          arg.include?(char) && !arg.start_with?('/')
+      def self.status_file; test_dir.join('jekyll_status.txt'); end
+    
+            def print_message(json_message)
+          msg = JSON.parse(json_message)
+          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
+          # on its purpose.
+          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
         end
-      end
-      if ARGV.any? && bad_regex
-        ohai 'Did you mean to perform a regular expression search?'
-        ohai 'Surround your query with /slashes/ to search by regex.'
+    
+            # If our highlighter is CodeRay we go in to merge the CodeRay defaults
+        # with your 'coderay' key if it's there, deprecating it in the
+        # process of you using it.
+        def modernize_coderay_config
+          unless @config['coderay'].empty?
+            Jekyll::Deprecator.deprecation_message(
+              'You are using 'kramdown.coderay' in your configuration, ' \
+              'please use 'syntax_highlighter_opts' instead.'
+            )
+    
+        def arg_is_present?(args, deprecated_argument, message)
+      deprecation_message(message) if args.include?(deprecated_argument)
+    end
+    
+        brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
       end
     end
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
+      def core_tap_origin
+    CoreTap.instance.remote || '(none)'
   end
-  alias_method :python2, :python
-  alias_method :python3, :python
-end
-
     
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
+        dirs.each do |d|
+      files = []
+      d.find { |pn| files << pn unless pn.directory? }
+      print_remaining_files files, d
+    end
     
-              it 'cuts fraction part to have only 6 digits at all' do
-            format('%#{f}', 1.1234567).should == '1.12346'
-            format('%#{f}', 12.1234567).should == '12.1235'
-            format('%#{f}', 123.1234567).should == '123.123'
-            format('%#{f}', 1234.1234567).should == '1234.12'
-            format('%#{f}', 12345.1234567).should == '12345.1'
-            format('%#{f}', 123456.1234567).should == '123456'
+      private
+    
+        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
+      require 'securerandom'
+      @session_id = SecureRandom.uuid
+      @client = analytics_ingester_client
+      @threads = []
+      @launch_event_sent = false
+    end
+    
+            # Stub out calls related to the execution environment
+        client = double('ingester_client')
+        session = FastlaneCore::AnalyticsSession.new(analytics_ingester_client: client)
+        expect(client).to receive(:post_event).with({
+            client_id: p_hash,
+            category: 'fastlane Client Langauge - ruby',
+            action: :launch,
+            label: nil,
+            value: nil
+        })
+    
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
+      end
+    
+          it 'specified tag overrides generate tag' do
+        tag = '2.0.0'
+    
+              it 'raises an exception' do
+            expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                  carthage(command: '#{command}', output: 'bla.framework.zip')
+                end').runner.execute(:test)
+            end.to raise_error('Output option is available only for 'archive' command.')
           end
         end
+      end
     
-    describe 'Kernel#srand' do
-  it 'needs to be reviewed for spec completeness'
-end
-
+          it 'Uses pattern matching for tag name if requested' do
+        tag_match_pattern = '*1.8*'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(tag_match_pattern: '#{tag_match_pattern}')
+        end').runner.execute(:test)
     
-      desc 'Updates the last know version of CocoaPods in the specs repo'
-  task :post_release do
-    title 'Updating last known version in Specs repo'
-    specs_branch = 'master'
-    Dir.chdir('../Specs') do
-      puts Dir.pwd
-      sh 'git checkout #{specs_branch}'
-      sh 'git pull'
+            expect(result).to eq('git commit -m message ./fastlane/README.md ./LICENSE')
+      end
     
-      def developer_prefix
-    `xcode-select --print-path`.strip
+    # remove (double and single) quote pairs
+# un-double-double quote resulting string
+def simulate_windows_shell_unwrapping(string)
+  regex = /^('|')(([^'])(\S*)([^']))('|')$/
+  unless string.to_s.match(regex).nil?
+    string = string.to_s.match(regex)[2] # get only part in quotes
+    string.to_s.gsub!('''', ''') # remove double double quotes
   end
-    
-    abstract_target 'Abstract Target' do
-    use_modular_headers!
-    
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @wipe_all = argv.flag?('all')
-          super
-        end
-    
-            private
-    
-          def ask_question
-        $stdout.print question
-        $stdout.flush
-      end
-    
-          def load_built_in_scm
-        require 'capistrano/scm/#{scm_name}'
-        scm_class = Object.const_get(built_in_scm_plugin_class_name)
-        # We use :load_immediately because we are initializing the SCM plugin
-        # late in the load process and therefore can't use the standard
-        # load:defaults technique.
-        install_plugin(scm_class, load_immediately: true)
-      end
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
+  return string
 end
-
     
-      require ARGV.shift
-  exit_status = LogStash::Runner.run('bin/logstash', ARGV)
-  exit(exit_status || 0)
-end
-
-    
-        # Add plugins/gems to the current gemfile
-    puts('Installing' + (install_list.empty? ? '...' : ' ' + install_list.collect(&:first).join(', ')))
-    install_list.each do |plugin, version, options|
-      if preserve?
-        plugin_gem = gemfile.find(plugin)
-        puts('Preserving Gemfile gem options for plugin #{plugin}') if plugin_gem && !plugin_gem.options.empty?
-        gemfile.update(plugin, version, options)
-      else
-        gemfile.overwrite(plugin, version, options)
-      end
+        # Returns the original encoding of the document.
+    #
+    # @return [Encoding, nil]
+    # @raise [Encoding::UndefinedConversionError] if the source encoding
+    #   cannot be converted to UTF-8
+    # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+    def source_encoding
+      check_encoding!
+      @source_encoding
     end
-    
-      gem.add_runtime_dependency 'logstash-core', LOGSTASH_CORE_VERSION.gsub('-', '.')
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
-    end
-  end
-end
