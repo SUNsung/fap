@@ -1,51 +1,57 @@
 
         
         
-class GroupChat(Chat):
+class Transaction(object):
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
-    
-class SalesRanker(MRJob):
-    
-        def bfs(self, source, dest):
-        if source is None:
-            return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
-    
-        # test that successful registration redirects to the login page
-    response = client.post(
-        '/auth/register', data={'username': 'a', 'password': 'a'}
-    )
-    assert 'http://localhost/auth/login' == response.headers['Location']
-    
-                app.config['IMAGE_STORE_TYPE'] = 'fs'
-            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
-            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
-            image_store_config = app.config.get_namespace('IMAGE_STORE_')
+    from flaskr.auth import login_required
+from flaskr.db import get_db
     
     
-_request_ctx_err_msg = '''\
-Working outside of request context.
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+
     
-            return value
+        with pytest.raises(sqlite3.ProgrammingError) as e:
+        db.execute('SELECT 1')
+    
+        def record(self, func):
+        '''Registers a function that is called when the blueprint is
+        registered on the application.  This function is called with the
+        state as argument as returned by the :meth:`make_setup_state`
+        method.
+        '''
+        if self._got_registered_once and self.warn_on_modifications:
+            from warnings import warn
+            warn(Warning('The blueprint was already registered once '
+                         'but is getting modified now.  These changes '
+                         'will not show up.'))
+        self.deferred_functions.append(func)
+    
+        Do not attempt to use this class directly, instead use
+    :meth:`~flask.Flask.test_request_context` and
+    :meth:`~flask.Flask.request_context` to create this object.
+    
+        if args and kwargs:
+        raise TypeError('jsonify() behavior undefined when passed both args and kwargs')
+    elif len(args) == 1:  # single args are passed directly to dumps()
+        data = args[0]
+    else:
+        data = args or kwargs
+    
+        if app.debug and logger.level == logging.NOTSET:
+        logger.setLevel(logging.DEBUG)
+    
+    from flask.helpers import is_ip, total_seconds
+from flask.json.tag import TaggedJSONSerializer
     
     signals_available = False
 try:
@@ -56,94 +62,44 @@ except ImportError:
         def signal(self, name, doc=None):
             return _FakeSignal(name, doc)
     
-        def __exit__(self, exc_type, exc_value, tb):
-        self.preserve_context = False
+    # The name of an image file (relative to this directory) to place at the top of
+# the title page.
+#
+# latex_logo = None
     
-            if (not has_actual_code
-            and not line.strip().startswith('//')
-            and not line.strip().startswith('???')
-            and not line.strip() == ''):
-            has_actual_code = True
+        # Initialize flic client responsible for
+    # connecting to buttons and retrieving events
+    host = config.get(CONF_HOST)
+    port = config.get(CONF_PORT)
+    discovery = config.get(CONF_DISCOVERY)
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
-        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
     
-        complete_apps = ['sentry']
-
+def register(cloud, email, password):
+    '''Register a new account.'''
+    from botocore.exceptions import ClientError
     
-            # Adding model 'EventProcessingIssue'
-        db.create_table(
-            'sentry_eventprocessingissue', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'raw_event', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.RawEvent']
-                    )
-                ), (
-                    'processing_issue',
-                    self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ProcessingIssue']
-                    )
-                ),
-            )
+        def random_see(dev_id, name):
+        '''Randomize a sighting.'''
+        see(
+            dev_id=dev_id,
+            host_name=name,
+            gps=(hass.config.latitude + offset(),
+                 hass.config.longitude + offset()),
+            gps_accuracy=random.randrange(50, 150),
+            battery=random.randrange(10, 90)
         )
-        db.send_create_signal('sentry', ['EventProcessingIssue'])
     
-            for release_project in RangeQuerySetWrapperWithProgressBar(
-            orm.ReleaseProject.objects.all()
-        ):
-            orm.ReleaseProject.objects.filter(id=release_project.id).update(
-                new_groups=orm.Group.objects.filter(
-                    project_id=release_project.project_id,
-                    first_release_id=release_project.release_id,
-                ).count()
-            )
-    
-            # Adding unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
-        db.create_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
-    
-            # Deleting field 'CommitAuthor.external_id'
-        db.delete_column('sentry_commitauthor', 'external_id')
+        return scanner if scanner.success_init else None
     
     
-def setup(app):
-    app.add_config_value('edit_on_github_project', '', True)
-    app.add_config_value('edit_on_github_branch', 'master', True)
-    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
-    app.connect('html-page-context', html_page_context)
-
+def setup_scanner(hass, config, see, discovery_info=None):
+    '''Set up the Volvo tracker.'''
+    if discovery_info is None:
+        return
+    
+    _LOGGER = logging.getLogger(__name__)
     
     
-@asyncio.coroutine
-def async_trigger(hass, config, action):
-    '''Listen for events based on configuration.'''
-    number = config.get(CONF_NUMBER)
-    held_more_than = config.get(CONF_HELD_MORE_THAN)
-    held_less_than = config.get(CONF_HELD_LESS_THAN)
-    pressed_time = None
-    cancel_pressed_more_than = None
-    
-    SERVICE_VAPIX_CALL = 'vapix_call'
-SERVICE_VAPIX_CALL_RESPONSE = 'vapix_call_response'
-SERVICE_CGI = 'cgi'
-SERVICE_ACTION = 'action'
-SERVICE_PARAM = 'param'
-SERVICE_DEFAULT_CGI = 'param.cgi'
-SERVICE_DEFAULT_ACTION = 'update'
-    
-        hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP,
-                         lambda event: client.close())
-    
-    SERVICE_BROWSE_URL_SCHEMA = vol.Schema({
-    # pylint: disable=no-value-for-parameter
-    vol.Required(ATTR_URL, default=ATTR_URL_DEFAULT): vol.Url(),
-})
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        filter_named = [result.name for result in self.last_results
-                        if result.mac == device]
+def setup(hass, config):
+    '''Set up the Dyson parent component.'''
+    _LOGGER.info('Creating new Dyson component')
