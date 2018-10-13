@@ -1,142 +1,155 @@
 
         
-        describe GivenDailyLike do
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
-    
-    
-  # Returns a collection of found hidden inputs
-  #
-  # @return [Array<Hash>] An array, each element represents a form that contains a hash of found hidden inputs
-  #  * 'name' [String] The hidden input's original name. The value is the hidden input's original value.
-  # @example
-  #  res = send_request_cgi('uri'=>'/')
-  #  inputs = res.get_hidden_inputs
-  #  session_id = inputs[0]['sessionid'] # The first form's 'sessionid' hidden input
-  def get_hidden_inputs
-    forms = []
-    noko = get_html_document
-    noko.search('form').each_entry do |form|
-      found_inputs = {}
-      form.search('input').each_entry do |input|
-        input_type = input.attributes['type'] ? input.attributes['type'].value : ''
-        next if input_type !~ /hidden/i
-    
-    
-IAX_SUBTYPE_NEW     = 1
-IAX_SUBTYPE_PING    = 2
-IAX_SUBTYPE_PONG    = 3
-IAX_SUBTYPE_ANSWER  = 4
-IAX_SUBTYPE_ACK     = 4
-IAX_SUBTYPE_HANGUP  = 5
-IAX_SUBTYPE_REJECT  = 6
-IAX_SUBTYPE_ACCEPT  = 7
-IAX_SUBTYPE_AUTHREQ = 8
-IAX_SUBTYPE_AUTHREP = 9
-IAX_SUBTYPE_INVAL   = 10
-IAX_SUBTYPE_LAGRQ   = 11
-IAX_SUBTYPE_LAGRP   = 12
-IAX_SUBTYPE_REGREQ  = 13
-IAX_SUBTYPE_REGAUTH = 14
-IAX_SUBTYPE_REGACK  = 15
-IAX_SUBTYPE_REGREJ  = 16
-IAX_SUBTYPE_REGREL  = 17
-IAX_SUBTYPE_VNAK    = 18
-    
-            end
-      end
-    end
-  end
-end
-
-    
-            end
-      end
-    end
-  end
-end
-    
-              # Decodes the type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_type(input)
-            input.value[0].value.to_i
-          end
-    
-              # Encodes the pvno field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_pvno
-            bn = OpenSSL::BN.new(pvno.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-                seq_values.each do |val|
-              case val.tag
-              when 0
-                self.options = decode_options(val)
-              when 1
-                self.cname = decode_cname(val)
-              when 2
-                self.realm = decode_realm(val)
-              when 3
-                self.sname = decode_sname(val)
-              when 4
-                self.from = decode_from(val)
-              when 5
-                self.till = decode_till(val)
-              when 6
-                self.rtime = decode_rtime(val)
-              when 7
-                self.nonce = decode_nonce(val)
-              when 8
-                self.etype = decode_etype(val)
-              when 10
-                self.enc_auth_data = decode_enc_auth_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequestBody SEQUENCE'
-              end
+                  def name_and_id_index(options)
+            if options.key?('index')
+              options.delete('index') || ''
+            elsif @generate_indexed_names
+              @auto_index || ''
             end
           end
     
-            def log_state_changes
-          if @order.previous_changes[:state]
-            @order.log_state_changes(
-              state_name: 'order',
-              old_state: @order.previous_changes[:state].first,
-              new_state: @order.previous_changes[:state].last
-            )
+              super(object_name, method_name, template_object, options)
+        end
+    
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
           end
         end
     
-            private
+                DateTimeSelector.new(datetime, options, html_options)
+          end
     
-            def payment_params
-          params.require(:payment).permit(permitted_payment_attributes)
-        end
+        initializer 'action_view.setup_action_pack' do |app|
+      ActiveSupport.on_load(:action_controller) do
+        ActionView::RoutingUrlFor.include(ActionDispatch::Routing::UrlFor)
       end
     end
+    
+          def instrument(name, **options) # :doc:
+        options[:identifier] ||= (@template && @template.identifier) || @path
+    
+          def store_meta(store)
+        json = as_json
+        json[:mtime] = Time.now.to_i
+        json[:db_size] = store.size(DB_FILENAME)
+        store.write(META_FILENAME, json.to_json)
+      end
+    end
+    
+        def to_a
+      @filters.dup
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+        def initialize(options = {})
+      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
+      options[:max_concurrency] ||= 20
+      options[:pipelining] = false
+      super
+    end
+    
+        def blank?
+      body.blank?
+    end
+    
+        def merge!(hash)
+      return super unless hash.is_a? Hash
+      hash.assert_valid_keys URI::Generic::COMPONENT
+      hash.each_pair do |key, value|
+        send '#{key}=', value
+      end
+      self
+    end
+    
+      def set_filter
+    @filter = current_account.custom_filters.find(params[:id])
   end
-end
-
     
-            def show
-          expires_in 15.minutes, public: true
-          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
-          headers['Surrogate-Key'] = 'product_id=1'
-          respond_with(@product)
-        end
+      before_action :set_account
+  before_action :set_size
+  before_action :set_statuses
     
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
+      before_action :set_account
+    
+            log_action :change_email, @user
+    
+        def filtered_custom_emojis
+      CustomEmojiFilter.new(filter_params).results
+    end
+    
+        def index
+      authorize :email_domain_block, :index?
+      @email_domain_blocks = EmailDomainBlock.page(params[:page])
+    end
+    
+      def hub_topic
+    params['hub.topic']
+  end
+    
+        # The default options for Sass::Engine.
+    # @api public
+    DEFAULT_OPTIONS = {
+      :style => :nested,
+      :load_paths => [],
+      :cache => true,
+      :cache_location => './.sass-cache',
+      :syntax => :sass,
+      :filesystem_importer => Sass::Importers::Filesystem
+    }.freeze
+    
+        # @param msg [String] The error message
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def initialize(msg, attrs = {})
+      @message = msg
+      @sass_backtrace = []
+      add_backtrace(attrs)
+    end
+    
+          # This double assignment is to prevent an 'unused variable' warning on
+      # Ruby 1.9.3.  Yes, it is dumb, but I don't like Ruby yelling at me.
+      frames = frames = exception.backtrace.map { |line|
+        frame = OpenStruct.new
+        if line =~ /(.*?):(\d+)(:in `(.*)')?/
+          frame.filename = $1
+          frame.lineno = $2.to_i
+          frame.function = $4
+    }
+    
+          def call(env)
+        unless accepts? env
+          instrument env
+          result = react env
         end
+        result or app.call(env)
+      end
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
+    
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
