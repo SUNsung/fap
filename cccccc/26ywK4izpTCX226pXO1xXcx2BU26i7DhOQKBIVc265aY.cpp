@@ -1,375 +1,302 @@
 
         
-        TEST(MovableMessageTest, MoveToArena) {
-  Arena arena;
-    }
-    
-    // Functions to create C# XML documentation comments.
-// Currently this only includes documentation comments containing text specified as comments
-// in the .proto file; documentation comments generated just from field/message/enum/proto names
-// is inlined in the relevant code. If more control is required, that code can be moved here.
-    
-    EnumGenerator::~EnumGenerator() {
-}
-    
-    void FieldGeneratorBase::GenerateCodecCode(io::Printer* printer) {
-    // No-op: expect this to be overridden by appropriate types.
-    // Could fail if we get called here though...
-}
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-    const std::vector<std::string>& MessageGenerator::field_names() {
-  return field_names_;
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    PrimitiveFieldGenerator::PrimitiveFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
-  // TODO(jonskeet): Make this cleaner...
-  is_value_type = descriptor->type() != FieldDescriptor::TYPE_STRING
-      && descriptor->type() != FieldDescriptor::TYPE_BYTES;
-  if (!is_value_type) {
-    variables_['has_property_check'] = variables_['property_name'] + '.Length != 0';
-    variables_['other_has_property_check'] = 'other.' + variables_['property_name'] + '.Length != 0';
-  }
-}
-    
-     private:
-  Type type_;
-    
-      // Gets the vector of TestProperties.
-  const std::vector<TestProperty>& test_properties() const {
-    return test_properties_;
-  }
-    
-    // In describing the results of death tests, these terms are used with
-// the corresponding definitions:
-//
-// exit status:  The integer exit information in the format specified
-//               by wait(2)
-// exit code:    The integer code passed to exit(3), _exit(2), or
-//               returned from main()
-class GTEST_API_ DeathTest {
- public:
-  // Create returns false if there was an error determining the
-  // appropriate action to take for the current death test; for example,
-  // if the gtest_death_test_style flag is set to an invalid value.
-  // The LastMessage method will return a more detailed message in that
-  // case.  Otherwise, the DeathTest pointer pointed to by the 'test'
-  // argument is set.  If the death test should be skipped, the pointer
-  // is set to NULL; otherwise, it is set to the address of a new concrete
-  // DeathTest object that controls the execution of the current test.
-  static bool Create(const char* statement, const RE* regex,
-                     const char* file, int line, DeathTest** test);
-  DeathTest();
-  virtual ~DeathTest() { }
-    }
-    
-    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
-int Factorial(int n) {
-  int result = 1;
-  for (int i = 1; i <= n; i++) {
-    result *= i;
-  }
-    }
-    
-    int Water::allocated_ = 0;
-    
-    #include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/registry.h>
-#include <nnvm/node.h>
-#include <vector>
-#include <map>
-#include <string>
-#include <utility>
-#include './base.h'
-#include './resource.h'
-#include './op_attr_types.h'
-    
-      /*!
-   * \brief Get parallel random number generator.
-   * \tparam xpu the device type of random number generator.
-   * \tparam DType the return type.
-   * \return the parallel random number generator. for gpu, it is allocated on global memory.
-   */
-  template<typename xpu, typename DType>
-  inline common::random::RandGenerator<xpu, DType>* get_parallel_random() const {
-    CHECK_EQ(req.type, ResourceRequest::kParallelRandom);
-    return static_cast<common::random::RandGenerator<xpu, DType>*>(ptr_);
-  }
-    
-     public:
-  /*! \brief cuda kernel argument descriptor */
-  struct ArgType {
-    /*! \brief whether argument is NDArray */
-    bool is_ndarray;
-    /*! \brief whether argument is constant (input) */
-    bool is_const;
-    /*! \brief data type of argument */
-    mshadow::TypeFlag dtype;
-  };
-  /*! \brief Cuda kernel */
-  class Kernel {
-   public:
-    /*! \brief Launch the kernel */
-    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
-                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
-                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
-                uint32_t shared_mem);
-    /*! \brief kernel interface signature */
-    const std::vector<ArgType>& signature() { return signature_; }
-    }
-    
-    
-    {
-    {}  // namespace op
-}  // namespace mxnet
+        #endif
 
     
-    template<>
-Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeOp<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeOp<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
-}
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
     
-    MXNET_DLL int MXCVImdecode(const unsigned char *img, const mx_uint len,
-                           const int flag, NDArrayHandle *out) {
-  API_BEGIN();
-  mx_uint dims[3];
-  CHECK_GE(flag, 0) << 'flag must be 0 (grayscale) or 1 (colored).';
-  dims[2] = flag == 0 ? 1 : 3;
-  if (get_jpeg_size(img, len, dims+1, dims)) {
-  } else if (get_png_size(img, len, dims+1, dims)) {
-  } else {
-    LOG(FATAL) << 'Only supports png and jpg.';
-  }
-  NDArray ndout(TShape(dims, dims+3), Context::CPU(), true, mshadow::kUint8);
-  unsigned char *img_cpy = new unsigned char[len];
-  memcpy(img_cpy, img, sizeof(unsigned char)*len);
-  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(1, len, CV_8U, img_cpy);
-      cv::Mat dst(dims[0], dims[1], flag == 0 ? CV_8U : CV_8UC3, ndout.data().dptr_);
-#if (CV_MAJOR_VERSION > 3 || (CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION >= 3))
-      cv::imdecode(buf, flag | cv::IMREAD_IGNORE_ORIENTATION, &dst);
-#else
-      cv::imdecode(buf, flag, &dst);
-#endif
-      CHECK(!dst.empty());
-      delete[] img_cpy;
-    }, ndout.ctx(), {}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
-}
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
     
+    NO_GRADIENT(GivenTensorFill);
+NO_GRADIENT(GivenTensorDoubleFill);
+NO_GRADIENT(GivenTensorBoolFill);
+NO_GRADIENT(GivenTensorIntFill);
+NO_GRADIENT(GivenTensorInt64Fill);
+NO_GRADIENT(GivenTensorStringFill);
     
-    {
-    {
-    {  /*!
-   * \brief Worker threads.
-   */
-  std::vector<std::thread> worker_threads_;
-  /*!
-   * \brief Startup synchronization objects
-   */
-  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
-  /*!
-   * \brief Disallow default construction.
-   */
-  ThreadPool() = delete;
-  /*!
-   * \brief Disallow copy construction and assignment.
-   */
-  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+    namespace dmlc {
+namespace data {
+    }
+    }
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
 };
-}  // namespace engine
-}  // namespace mxnet
-#endif  // MXNET_ENGINE_THREAD_POOL_H_
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+    /*!
+ * \brief an iterator that iterates over a configure file and gets the configures
+ */
+class ConfigIterator: public ConfigStreamReader {
+ public:
+  /*!
+   * \brief constructor
+   * \param fname name of configure file
+   */
+  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi_) {
+    fi_.open(fname);
+    if (fi_.fail()) {
+      LOG(FATAL) << 'cannot open file ' << fname;
+    }
+    ConfigReaderBase::Init();
+  }
+  /*! \brief destructor */
+  ~ConfigIterator() {
+    fi_.close();
+  }
+    }
+    
+    #include <xgboost/data.h>
+#include <algorithm>
+#include <vector>
+    
+    #endif  // DMLC_ENABLE_STD_THREAD
 
     
     /*!
- * \brief VersionedVarBlock that corresponding to a variable version.
- *  This is a basic unit of LinkedList in the ThreadedVar.
+ * \brief Registry entry for sparse page format.
  */
-struct VersionedVarBlock
-    : public common::ObjectPoolAllocatable<VersionedVarBlock> {
-  /*! \brief next block in the LinkedList */
-  VersionedVarBlock* next{nullptr};
-  /*! \brief the operation this block triggers */
-  OprBlock* trigger{nullptr};
-  /*! \brief whether this operation is a write(mutate) operation. */
-  bool write{false};
-  /*! \brief define possible debug information */
-  DEFINE_ENGINE_DEBUG_INFO(VersionedVarBlock);
-};  // struct VersionedVarBlock
-    
-    nnvm::Graph InferShape(nnvm::Graph&& graph,
-                       nnvm::ShapeVector&& shape_inputs,
-                       const std::string& shape_attr_key) {
-  using dmlc::any;
-  if (shape_inputs.size() != 0) {
-    graph.attrs['shape_inputs'] = std::make_shared<any>(std::move(shape_inputs));
-  }
-  if (shape_attr_key.length() != 0) {
-    graph.attrs['shape_attr_key'] = std::make_shared<any>(std::move(shape_attr_key));
-  }
-  return InferAttr<nnvm::TShape, nnvm::FInferShape>(
-      std::move(graph), nnvm::TShape(),
-      'FInferShape', 'shape_inputs', 'shape_attr_key',
-      'shape', 'shape_num_unknown_nodes',
-      [](const nnvm::TShape& s) { return s.ndim() == 0 || s.Size() == 0; },
-      nullptr, true, nullptr);
-}
-    
-    static const uint8_t kRangeLimitLut[4 * 256] = {
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
- 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
- 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
- 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
- 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
- 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
- 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
- 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
- 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
- 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+struct SparsePageFormatReg
+    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
+                                        std::function<SparsePageFormat* ()> > {
 };
     
-    #ifndef GUETZLI_DCT_DOUBLE_H_
-#define GUETZLI_DCT_DOUBLE_H_
+    #include '../common/host_device_vector.h'
     
-    #endif  // GUETZLI_JPEG_BIT_WRITER_H_
-
     
-    #include 'guetzli/jpeg_data.h'
+    { private:
+  // synchronizer
+  std::unique_ptr<TreeUpdater> syncher_;
+  // training parameter
+  TrainParam param_;
+};
     
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg) {
-  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
-      rgb.size() != 3 * w * h) {
-    return false;
+      // push all files to the highest level L2. This
+  // means that all keys should pass at least once
+  // via the compaction filter
+  cfilter_count = 0;
+  dbfull()->TEST_CompactRange(0, nullptr, nullptr, handles_[1]);
+  ASSERT_EQ(cfilter_count, 100000);
+  cfilter_count = 0;
+  dbfull()->TEST_CompactRange(1, nullptr, nullptr, handles_[1]);
+  ASSERT_EQ(cfilter_count, 100000);
+  ASSERT_EQ(NumTableFilesAtLevel(0, 1), 0);
+  ASSERT_EQ(NumTableFilesAtLevel(1, 1), 0);
+  ASSERT_NE(NumTableFilesAtLevel(2, 1), 0);
+    
+     public:
+  HdfsLogger(HdfsWritableFile* f, uint64_t (*gettid)())
+      : file_(f), gettid_(gettid) {
+    ROCKS_LOG_DEBUG(mylog, '[hdfs] HdfsLogger opened %s\n',
+                    file_->getName().c_str());
   }
-  InitJPEGDataForYUV444(w, h, jpg);
-  AddApp0Data(jpg);
+    
+      // Write a key in this transaction
+  txn->Put('abc', 'def');
+    
+      // Do some reads and writes to key 'y'
+  // Since the snapshot was advanced, the write done outside of the
+  // transaction does not conflict.
+  s = txn->GetForUpdate(read_options, 'y', &value);
+  txn->Put('y', 'y');
+    
+    DEFINE_string(benchmark_filter, '.',
+              'A regular expression that specifies the set of benchmarks '
+              'to execute.  If this flag is empty, no benchmarks are run.  '
+              'If this flag is the string \'all\', all benchmarks linked '
+              'into the process are run.');
+    
+    
+    {
+    {}  // end namespace internal
+}  // end namespace benchmark
+    
+    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
+                 va_list args);
+void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...);
+    
+      // The flag must start with '--'.
+  const std::string flag_str = std::string('--') + std::string(flag);
+  const size_t flag_len = flag_str.length();
+  if (strncmp(str, flag_str.c_str(), flag_len) != 0) return nullptr;
+    
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
+    
+    // Source project : https://github.com/ismaelJimenez/cpp.leastsq
+// Adapted to be used with google benchmark
+    
+      // print results for each run
+  for (const auto& run : reports) {
+    PrintRunData(run);
+  }
+    
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
     }
     
-      static void clearData();
-    
-    #include 'common.h'
-    
-    
-    {} // namespace aria2
-    
-    
-    {} // namespace aria2
-
-    
-    
-    {} // namespace aria2
-    
-    
-    {} // namespace aria2
-
-    
-    public:
-  DHTTaskQueueImpl();
-    
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
-  }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
-  }
+    inline int& LogLevel() {
+  static int log_level = 0;
+  return log_level;
 }
+    
+    BenchmarkReporter::Context::Context() : cpu_info(CPUInfo::Get()) {}
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
+    }
