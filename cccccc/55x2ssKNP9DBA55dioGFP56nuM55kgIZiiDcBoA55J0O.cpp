@@ -1,278 +1,321 @@
 
         
-        
-    {}  // namespace tesseract.
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
+  const base::CommandLine::StringType dashdash(2, '-');
+  bool block_args = false;
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i] == dashdash)
+      break;
+    if (block_args) {
+      return false;
+    } else if (IsUrlArg(argv[i])) {
+      block_args = true;
+    }
+  }
+  return true;
+}
+    
+    #ifndef ATOM_APP_COMMAND_LINE_ARGS_H_
+#define ATOM_APP_COMMAND_LINE_ARGS_H_
+    
+    #include 'base/stl_util.h'
+    
+      std::map<uv_timer_t*, base::OnceClosure> tasks_;
+    
+    template <>
+struct Converter<atom::AutoResizeFlags> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     atom::AutoResizeFlags* auto_resize_flags) {
+    mate::Dictionary params;
+    if (!ConvertFromV8(isolate, val, &params)) {
+      return false;
+    }
+    }
+    }
+    
+    namespace atom {
+    }
+    
+      AcceleratorCallbackMap accelerator_callback_map_;
+    
+      // Fake sending an action from the application menu.
+  static void SendActionToFirstResponder(const std::string& action);
+#endif
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    // static
+void PowerMonitor::BuildPrototype(v8::Isolate* isolate,
+                                  v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'PowerMonitor'));
+    }
+    
+    #if !defined(__SSE4_1__)
+// This code can't compile with '-msse4.1', so use dummy stubs.
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
+    
+      // Iterate over the blobs inside to_block, and set the blobs that we want to
+  // process to BSTT_NONE. (By default, they should be BSTT_SKIP). The function
+  // returns 0 upon success.
+  int LabelSpecialText(TO_BLOCK* to_block);
     
     
-    {}  // namespace tesseract.
+    {  while ((n > 0) && reqd_len < full_length) {
+    reqd_len += strcspn(next_word, '_') + 1;
+    next_word += reqd_len;
+    n--;
+  }
+  strncpy(t, s, reqd_len);
+  t[reqd_len] = '\0';            // ensure null terminal
+}
+    
+    // A rather hackish helper structure which can take any kind of parameter input
+// (defined by ParamType) and do a couple of common operations on them, like
+// comparisond or getting its value. It is used in the context of the
+// ParamsEditor as a bridge from the internal tesseract parameters to the
+// ones displayed by the ScrollView server.
+class ParamContent : public ELIST_LINK {
+ public:
+  // Compare two VC objects by their name.
+  static int Compare(const void* v1, const void* v2);
+    }
+    
+    Speed* Speed::create(ActionInterval* action, float speed)
+{
+    Speed *ret = new (std::nothrow) Speed();
+    if (ret && ret->initWithAction(action, speed))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
+}
+    
+        // Overrides
+    virtual CardinalSplineTo *clone() const override;
+    virtual CardinalSplineTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    
+        _startSkewY = target->getSkewY();
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    
+    {
+    {
+    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
+            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
+            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
+            p.z/=7;
+            //    Stop z coord from dropping beneath underlying page in a transition
+            // issue #751
+            if( p.z < 0.5f )
+            {
+                p.z = 0.5f;
+            }
+            
+            // Set new coords
+            p.x += getGridRect().origin.x;
+            setVertex(Vec2(i, j), p);
+            
+        }
+    }
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+     Another example: ScaleTo action could be rewritten using PropertyAction:
+    
+            float delayPerUnit = animationDict['delayPerUnit'].asFloat();
+        Animation *animation = Animation::create(array, delayPerUnit, loops.getType() != Value::Type::NONE ? loops.asInt() : 1);
+    
+    static const uint8_t kRangeLimitLut[4 * 256] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+ 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+ 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+ 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+ 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+ 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+ 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+ 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+ 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
+    
+        if (n == 1) {
+      depth[tree[0].index_right_or_value_] = 1;      // Only one element.
+      break;
+    }
+    
+    #endif  // GUETZLI_FAST_LOG_H_
 
     
-      // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
+    #include <cmath>
     
-    #include 'db/builder.h'
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
     
-      void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  static void BGWork(void* db);
-  void BackgroundCall();
-  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  void CleanupCompaction(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  Status DoCompactionWork(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
+    }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
     
-      iter->SeekToFirst();
-  ASSERT_EQ(IterStatus(iter), 'a->va');
-  iter->Next();
-  ASSERT_EQ(IterStatus(iter), 'b->vb');
-  iter->Next();
-  ASSERT_EQ(IterStatus(iter), 'c->vc');
-  iter->Next();
-  ASSERT_EQ(IterStatus(iter), '(invalid)');
-  iter->SeekToFirst();
-  ASSERT_EQ(IterStatus(iter), 'a->va');
-  iter->Prev();
-  ASSERT_EQ(IterStatus(iter), '(invalid)');
+    #include 'modules/common/macro.h'
+#include 'modules/common/util/factory.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
     
-    static std::string ShortSuccessor(const std::string& s) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
+      /**
+   * @brief Start the fake CAN client.
+   * @return The status of the start action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Start() override;
+    
+    /*
+TEST(HermesCanClient, send) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::HERMES_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+  HermesCanClient hermes_can;
+  EXPECT_TRUE(hermes_can.Init(param));
+    }
+    
+    #include <vector>
+    
+     private:
+  std::unique_ptr<std::thread> thread_;
+  bool is_running_ = false;
+  // CanClient, MessageManager pointer life is managed by outer program
+  CanClient *can_client_ = nullptr;
+  MessageManager<SensorType> *pt_manager_ = nullptr;
+  bool enable_log_ = false;
+  bool is_init_ = false;
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+      void ClearSensorData();
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    std::string Byte::byte_to_hex(const uint8_t value) {
+  uint8_t high = value >> 4;
+  uint8_t low = value & 0x0F;
+  std::string result = '';
+  result += HEX[high];
+  result += HEX[low];
   return result;
 }
     
-      fname = LockFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kDBLockFile, type);
-    
-    template<typename Key, class Comparator>
-bool SkipList<Key,Comparator>::Contains(const Key& key) const {
-  Node* x = FindGreaterOrEqual(key, nullptr);
-  if (x != nullptr && Equal(key, x->key)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-    
-      // Removes a SnapshotImpl from this list.
-  //
-  // The snapshot must have been created by calling New() on this list.
-  //
-  // The snapshot pointer should not be const, because its memory is
-  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
-  // which is in the API, and currently takes a const Snapshot.
-  void Delete(const SnapshotImpl* snapshot) {
-#if !defined(NDEBUG)
-    assert(snapshot->list_ == this);
-#endif  // !defined(NDEBUG)
-    snapshot->prev_->next_ = snapshot->next_;
-    snapshot->next_->prev_ = snapshot->prev_;
-    delete snapshot;
-  }
-    
-    Status CheckCFPathsSupported(const DBOptions& db_options,
-                             const ColumnFamilyOptions& cf_options) {
-  // More than one cf_paths are supported only in universal
-  // and level compaction styles. This function also checks the case
-  // in which cf_paths is not specified, which results in db_paths
-  // being used.
-  if ((cf_options.compaction_style != kCompactionStyleUniversal) &&
-      (cf_options.compaction_style != kCompactionStyleLevel)) {
-    if (cf_options.cf_paths.size() > 1) {
-      return Status::NotSupported(
-          'More than one CF paths are only supported in '
-          'universal and level compaction styles. ');
-    } else if (cf_options.cf_paths.empty() &&
-               db_options.db_paths.size() > 1) {
-      return Status::NotSupported(
-          'More than one DB paths are only supported in '
-          'universal and level compaction styles. ');
-    }
-  }
-  return Status::OK();
-}
-    
-      Options options = CurrentOptions();
-  options.create_if_missing = true;
-  options.merge_operator = MergeOperators::CreateUInt64AddOperator();
-  options.num_levels = 3;
-  // Filter out keys with value is 2.
-  options.compaction_filter_factory =
-      std::make_shared<ConditionalFilterFactory>(two);
-  DestroyAndReopen(options);
-    
-      virtual Status EnableFileDeletions(bool /*force*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  virtual Status GetLiveFiles(std::vector<std::string>&,
-                              uint64_t* /*manifest_file_size*/,
-                              bool /*flush_memtable*/ = true) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-    
-          // Print the message
-      if (p < limit) {
-        va_list backup_ap;
-        va_copy(backup_ap, ap);
-        p += vsnprintf(p, limit - p, format, backup_ap);
-        va_end(backup_ap);
-      }
-    
-    /*
- * PosixMmapFile
- *
- * We preallocate up to an extra megabyte and use memcpy to append new
- * data to the file.  This is safe since we either properly close the
- * file before reading from it, or for log files, the reading code
- * knows enough to skip zero suffixes.
- */
-Status PosixMmapFile::UnmapCurrentRegion() {
-  TEST_KILL_RANDOM('PosixMmapFile::UnmapCurrentRegion:0', rocksdb_kill_odds);
-  if (base_ != nullptr) {
-    int munmap_status = munmap(base_, limit_ - base_);
-    if (munmap_status != 0) {
-      return IOError('While munmap', filename_, munmap_status);
-    }
-    file_offset_ += limit_ - base_;
-    base_ = nullptr;
-    limit_ = nullptr;
-    last_sync_ = nullptr;
-    dst_ = nullptr;
-    }
-    }
-    
-    namespace rocksdb {
-    }
-    
-      // Transaction could not commit since the write outside of the txn conflicted
-  // with the read!
-  assert(s.IsBusy());
-    
-    static const int kCbToGreenTable[256] = {
-  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
-  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
-  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
-  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
-  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
-  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
-  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
-  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
-  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
-  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
-  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
-   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
-   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
-   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
-   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
-   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
-    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
-  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
-  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
-  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
-  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
-  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
- -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
- -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
- -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
- -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
- -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
- -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
- -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
- -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
- -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
- -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
-};
-    
-      int opt_idx = 1;
-  for(;opt_idx < argc;opt_idx++) {
-    if (strnlen(argv[opt_idx], 2) < 2 || argv[opt_idx][0] != '-' || argv[opt_idx][1] != '-')
-      break;
-    if (!strcmp(argv[opt_idx], '--verbose')) {
-      verbose = 1;
-    } else if (!strcmp(argv[opt_idx], '--quality')) {
-      opt_idx++;
-      if (opt_idx >= argc)
-        Usage();
-      quality = atoi(argv[opt_idx]);
-    } else if (!strcmp(argv[opt_idx], '--memlimit')) {
-      opt_idx++;
-      if (opt_idx >= argc)
-        Usage();
-      memlimit_mb = atoi(argv[opt_idx]);
-    } else if (!strcmp(argv[opt_idx], '--nomemlimit')) {
-      memlimit_mb = -1;
-    } else if (!strcmp(argv[opt_idx], '--')) {
-      opt_idx++;
-      break;
-    } else {
-      fprintf(stderr, 'Unknown commandline flag: %s\n', argv[opt_idx]);
-      Usage();
-    }
-  }
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Decodes the parsed jpeg coefficients into an RGB image.
-// There can be only either 1 or 3 image components, in either case, an RGB
-// output image will be generated.
-// Only YUV420 and YUV444 sampling factors are supported.
-// Vector will be empty if a decoding error occurred.
-std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
-    
-    
-    {  return true;
-}
-    
-    
-    {  std::string arguments;
-  ASSERT_TRUE(getTracepointArguments(
-      'folly', 'test_static_tracepoint_array', 0, arguments));
-  std::array<int, 3> expected{{sizeof(void*), sizeof(int), sizeof(int64_t)}};
-  checkTracepointArguments(arguments, expected);
-}
-    
-    #pragma once
-    
-        template <
-        typename OtherExecutor,
-        typename = typename std::enable_if<
-            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
-    /* implicit */ KeepAlive(KeepAlive<OtherExecutor>&& other) noexcept
-        : KeepAlive(other.get(), other.executorAndDummyFlag_ & kDummyFlag) {
-      other.executorAndDummyFlag_ = 0;
-    }
-    
-    
-    {} // namespace detail
-    
-        // Test the boundaries of conversion to int32_t seconds
-    using sec_i32 = std::chrono::duration<int32_t>;
-    ts.tv_sec = 2147483647;
-    ts.tv_nsec = 0;
-    EXPECT_EQ(std::numeric_limits<int32_t>::max(), to<sec_i32>(ts).count());
-    ts.tv_nsec = 1000000000;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    ts.tv_sec = -2147483648;
-    ts.tv_nsec = 0;
-    EXPECT_EQ(std::numeric_limits<int32_t>::min(), to<sec_i32>(ts).count());
-    ts.tv_sec = -2147483649;
-    ts.tv_nsec = 999999999;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    ts.tv_sec = -2147483649;
-    ts.tv_nsec = 0;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    ts.tv_sec = -2147483650;
-    ts.tv_nsec = 0;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    
-    #endif // D_DHT_ROUTING_TABLE_SERIALIZER_H
-
-    
-    DNSCache::DNSCache(const DNSCache& c) = default;
+    const int32_t CAN_FRAME_SIZE = 8;
+const int32_t MAX_CAN_SEND_FRAME_LEN = 1;
+const int32_t MAX_CAN_RECV_FRAME_LEN = 10;
