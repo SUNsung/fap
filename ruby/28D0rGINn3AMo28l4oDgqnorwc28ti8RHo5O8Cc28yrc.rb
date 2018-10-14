@@ -1,69 +1,46 @@
 
         
-            if DOC_REDIRECTS.key?(doc)
-      return redirect '/#{DOC_REDIRECTS[doc]}#{type}#{rest}', 301
+              select2('SF Weather', from: 'Control targets')
+    
+        it 'returns a Glyphicon icon element with an addidional class' do
+      icon = icon_tag('glyphicon-help', class: 'text-info')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help.text-info')).to be_a Nokogiri::XML::Element
     end
     
-      extend Instrumentable
-    
-        def initialize(options = {})
-      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
-      options[:max_concurrency] ||= 20
-      options[:pipelining] = false
-      super
-    end
-    
-    require 'active_support/subscriber'
-    
-        def subpath_to(url, options = nil)
-      url = self.class.parse(url)
-      return unless origin == url.origin
-    
-              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
-          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
-          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
-          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
-          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
-          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
-    
-    require 'sass/version'
-    
-    module Sass
-  module CacheStores
-    # A backend for the Sass cache using the filesystem.
-    class Filesystem < Base
-      # The directory where the cached files will be stored.
-      #
-      # @return [String]
-      attr_accessor :cache_location
-    
-        # The selector for the current CSS rule, or nil if there is no
-    # current CSS rule.
-    #
-    # @return [Selector::CommaSequence?] The current selector, with any
-    #   nesting fully resolved.
-    def selector
-      @selector || (@caller && @caller.selector) || (@parent && @parent.selector)
-    end
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
+          it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
       end
     
-          # Creates a new filesystem importer that imports files relative to a given path.
-      #
-      # @param root [String] The root path.
-      #   This importer will import files relative to this path.
-      def initialize(root)
-        @root = File.expand_path(root)
-        @real_root = Sass::Util.realpath(@root).to_s
-        @same_name_warnings = Set.new
-      end
+      describe '#pretty_jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('<\\/script>')
+    end
+  end
+    
+        def log_file_info(s)
+      puts '    #{magenta s}'
+    end
+    
+    task :watch_for_update do
+  sh %{ruby extra/update_watch.rb}
+end
+    
+    # Ensure the `pod` bin doesn’t think it needs to use Bundler.
+ENV['COCOAPODS_NO_BUNDLER'] = '1'
