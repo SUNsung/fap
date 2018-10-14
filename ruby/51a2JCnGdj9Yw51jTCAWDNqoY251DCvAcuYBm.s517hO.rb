@@ -1,147 +1,133 @@
 
         
-              # Creates a text field of type 'time'.
-      #
-      # === Options
-      # * <tt>:min</tt> - The minimum acceptable value.
-      # * <tt>:max</tt> - The maximum acceptable value.
-      # * <tt>:step</tt> - The acceptable value granularity.
-      # * Otherwise accepts the same options as text_field_tag.
-      def time_field_tag(name, value = nil, options = {})
-        text_field_tag(name, value, options.merge(type: :time))
+        def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
+      else
+        putc('S')
       end
-    
-          # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
-      #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
-      #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
-    
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class CheckBox < Base #:nodoc:
-        include Checkable
-    
-                  # Rename :minute and :second to :min and :sec
-              default[:min] ||= default[:minute]
-              default[:sec] ||= default[:second]
-    
-              content = if block_given?
-            @template_object.capture(builder, &block)
-          elsif @content.present?
-            @content.to_s
-          else
-            render_component(builder)
-          end
-    
-      private
-    
-          []
     end
-    
-    group :production do
-  gem 'uglifier'
-  gem 'newrelic_rpm'
+  end
 end
     
-    require 'bundler/setup'
-Bundler.require :app
+    class FiltersController < ApplicationController
+  include Authorization
     
-          def store_meta(store)
-        json = as_json
-        json[:mtime] = Time.now.to_i
-        json[:db_size] = store.size(DB_FILENAME)
-        store.write(META_FILENAME, json.to_json)
-      end
-    end
-    
-        def to_a
-      @filters.dup
-    end
-    
-        def parse_as_document
-      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
-      @title = document.at_css('title').try(:content)
-      document
-    end
-    
-        def request_one(url)
-      Request.run url, request_options
-    end
-    
-            css('*[layout]').remove_attr('layout')
-        css('*[layout-xs]').remove_attr('layout-xs')
-        css('*[flex]').remove_attr('flex')
-        css('*[flex-xs]').remove_attr('flex-xs')
-        css('*[ng-class]').remove_attr('ng-class')
-        css('*[align]').remove_attr('align')
-        css('h1, h2, h3').remove_attr('class')
-    
-          private
-    
-      def show
-    render json: collection_presenter,
-           serializer: ActivityPub::CollectionSerializer,
-           adapter: ActivityPub::Adapter,
-           content_type: 'application/activity+json',
-           skip_activities: true
-  end
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-      def status_finder
-    StatusFinder.new(params[:url])
-  end
-    
-      def update
-    if verify_payload?
-      process_salmon
-      head 202
-    elsif payload.present?
-      render plain: signature_verification_failure_reason, status: 401
+      def outbox_presenter
+    if page_requested?
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account, page_params),
+        type: :ordered,
+        part_of: account_outbox_url(@account),
+        prev: prev_page,
+        next: next_page,
+        items: @statuses
+      )
     else
-      head 400
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account),
+        type: :ordered,
+        size: @account.statuses_count,
+        first: account_outbox_url(@account, page: true),
+        last: account_outbox_url(@account, page: true, min_id: 0)
+      )
     end
   end
     
-        # Wraps the given string in terminal escapes
-    # causing it to have the given color.
-    # If terminal escapes aren't supported on this platform,
-    # just returns the string instead.
-    #
-    # @param color [Symbol] The name of the color to use.
-    #   Can be `:red`, `:green`, or `:yellow`.
-    # @param str [String] The string to wrap in the given color.
-    # @return [String] The wrapped string.
-    def color(color, str)
-      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
+        private
     
-          if @options[:to] == @options[:from] && !@options[:in_place]
-        fmt = @options[:from]
-        raise 'Error: converting from #{fmt} to #{fmt} without --in-place'
-      end
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+    end
     
-          opts.on('--precision NUMBER_OF_DIGITS', Integer,
-              'How many digits of precision to use when outputting decimal numbers.',
-              'Defaults to #{Sass::Script::Value::Number.precision}.') do |precision|
-        Sass::Script::Value::Number.precision = precision
-      end
+          if @report_note.save
+        if params[:create_and_resolve]
+          @report.resolve!(current_account)
+          log_action :resolve, @report
     
-          private
+    module Rex
+module Proto
+module Http
     
-      def migration_name
-    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+              case protocol
+          when 'tcp'
+            self.connection = create_tcp_connection
+          when 'udp'
+            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+              # Encrypts the cipher using RC4-HMAC schema
+          #
+          # @param data [String] the data to encrypt
+          # @param key [String] the key to encrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the encrypted data
+          def encrypt_rc4_hmac(data, key, msg_type)
+            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+    
+              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+    
+              # Decodes the renew_till field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_renew_till(input)
+            input.value[0].value
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            seq_values = input.value
+    
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_msg_type(input)
+            input.value[0].value.to_i
+          end
+    
+        def self.package(plugins_args, target)
+      OfflinePluginPackager.new(plugins_args, target).execute
+    end
   end
+end end
+
+    
+      parameter '[PLUGIN] ...', 'Plugin name(s) to upgrade to latest version', :attribute_name => :plugins_arg
+  option '--[no-]verify', :flag, 'verify plugin validity before installation', :default => true
+  option '--local', :flag, 'force local-only plugin update. see bin/logstash-plugin package|unpack', :default => false
+    
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
+    
+        def user_feedback_string_for(action, platform, machines, options={})
+      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
+      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
+      '#{message} for #{platform}: #{machines}' if !platform.nil?
+    end
