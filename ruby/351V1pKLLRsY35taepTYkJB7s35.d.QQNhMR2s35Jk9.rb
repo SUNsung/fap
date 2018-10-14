@@ -1,176 +1,99 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
-    
-    Benchmark.ips do |x|
-  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
-  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
-  x.compare!
+        Badge.seed do |b|
+  b.id = Badge::Anniversary
+  b.name = 'Anniversary'
+  b.default_icon = 'fa-clock-o'
+  b.badge_type_id = BadgeType::Silver
+  b.default_badge_grouping_id = BadgeGrouping::Community
+  b.query = nil
+  b.trigger = Badge::Trigger::None
+  b.auto_revoke = false
+  b.system = true
+  b.multiple_grant = true
 end
     
-    #
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
     
-          #
+          def find_sessionless_user
+        find_user_from_access_token || find_user_from_feed_token
+      rescue Gitlab::Auth::AuthenticationError
+        nil
+      end
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-        end
-        # rubocop:enable Metrics/AbcSize
+          def link_url
+        raise NotImplementedError
       end
     end
   end
 end
 
     
-            def log_error(error)
-          Jekyll.logger.error 'LiveReload experienced an error. ' \
-            'Run with --trace for more information.'
-          raise error
-        end
-      end
-    end
-  end
+    Then (/^I should see the 'getting started' contents$/) do
+  confirm_getting_started_contents
 end
 
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
+    require Rails.root.join('spec', 'helper_methods')
+require Rails.root.join('spec', 'support', 'inlined_jobs')
+require Rails.root.join('spec', 'support', 'user_methods')
+include HelperMethods
     
-            it 'cuts excessive digits and keeps only 6 ones' do
-          format('%#{f}', 1.123456789).should == '1.123457#{exp}+00'
-        end
-    
-      it 'pauses execution indefinitely if not given a duration' do
-    running = false
-    t = Thread.new do
-      running = true
-      sleep
-      5
-    end
-    
-      it 'no raises a RuntimeError on symbols' do
-    v = :sym
-    lambda { v.taint }.should_not raise_error(RuntimeError)
-    v.tainted?.should == false
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
   end
-    
-      platform_is_not :windows do
-    it 'returns true when passed ?l if the argument is a symlink' do
-      link = tmp('file_symlink.lnk')
-      File.symlink(@file, link)
-      begin
-        Kernel.test(?l, link).should be_true
-      ensure
-        rm_r link
-      end
-    end
-  end
-    
-      it 'creates a public method in TOPLEVEL_BINDING' do
-    eval @code, TOPLEVEL_BINDING
-    Object.should have_method :boom
-  end
-    
-    # Supported
-IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
-    
-              res
-        end
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
-          #
-          # @return [String] encoded principal
-          def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
-    
-                int
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-    get '/stream', :provides => 'text/event-stream' do
-  stream :keep_open do |out|
-    connections << out
-    out.callback { connections.delete(out) }
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
   end
 end
     
-          def html?(headers)
-        return false unless header = headers.detect { |k,v| k.downcase == 'content-type' }
-        options[:html_types].include? header.last[/^\w+\/\w+/]
-      end
+        it 'returns a 404 for a post not visible to the user' do
+      sign_in eve
+      expect {
+        get :index, params: {post_id: @message.id}
+      }.to raise_error(ActiveRecord::RecordNotFound)
     end
-  end
-end
-
     
-        assert_equal 'sidebar', side_2.raw_data
-    assert_equal 'def', side_2.version.message
-    assert_not_equal side_1.version.sha, side_2.version.sha
-    assert_equal commits+1, @wiki.repo.commits('master').size
-  end
-    
-      teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
-  end
-    
-      test 'transliteration' do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
-    
-    def date
-  Date.today.to_s
-end
-    
-    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
-    
-          it 'detects closing brace on different line from last element' do
-        src = construct(false, true)
-        inspect_source(src)
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
       #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
+      end
+    
+    
+    {      # Checks whether the `hash` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end && loc.end.is?('}')
       end
     end
   end
 end
+
+    
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
+      #
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
+      end
+    
+                return if after_update_attributes
