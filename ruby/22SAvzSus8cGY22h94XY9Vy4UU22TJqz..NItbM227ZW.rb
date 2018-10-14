@@ -1,53 +1,58 @@
 
         
-        require 'action_view/helpers/tags/checkable'
+                  # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
     
-        def initialize_copy(other)
-      @paths = other.paths.dup
-      self
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos EncryptionKey data
+        # definition
+        class EncryptionKey < Element
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+        task :clean_env => [:clean_vcr, 'fixture_tarballs:unpack', 'ext:cleanbuild']
+  end
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
     end
-    
-        dump_formula_report :A, 'New Formulae'
-    dump_formula_report :M, 'Updated Formulae'
-    dump_formula_report :R, 'Renamed Formulae'
-    dump_formula_report :D, 'Deleted Formulae'
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
-    
-          export JAVA_HOME='$(/usr/libexec/java_home)'
-      export AWS_ACCESS_KEY='<Your AWS Access ID>'
-      export AWS_SECRET_KEY='<Your AWS Secret Key>'
-      export #{home_name}='#{home_value}'
-    EOS
-  end
+else
+  Pod::Command.run(ARGV)
 end
 
     
-            it 'creates new Agents, even if one already exists with the given guid (so that we don't overwrite a user's work outside of the scenario)' do
-          agents(:bob_weather_agent).update_attribute :guid, 'a-weather-agent'
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
     
-    require Rails.root.join('spec', 'helper_methods')
-require Rails.root.join('spec', 'support', 'inlined_jobs')
-require Rails.root.join('spec', 'support', 'user_methods')
-include HelperMethods
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-      describe '#destroy' do
-    before do
-      @message = bob.post(:status_message, text: 'hey', to: @alices_aspect.id)
-      @like = alice.like!(@message)
-    end
-    
-            def add_arg_offense(arg, type)
-          add_offense(arg.parent, location: arg.source_range,
-                                  message: format(MSG,
-                                                  type: type.to_s.capitalize))
-        end
-    
-      include_examples 'multiline literal brace layout trailing comma' do
-    let(:open) { '[' }
-    let(:close) { ']' }
-  end
-end
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
