@@ -1,278 +1,353 @@
 
         
-        /// This class implements a simple type recursive traverser which queries a
-/// user-provided walker class on every node in a type.
-class Traversal : public TypeVisitor<Traversal, bool>
-{
-  using Base = TypeVisitor;
-  friend Base;
+        // hidden_ops should be a list of Op names that should get a leading _
+// in the output. Prints the output to stdout.
+// Optional fourth argument is the name of the original C++ source file
+// where the ops' REGISTER_OP() calls reside.
+void PrintPythonOps(const OpList& ops, const ApiDefMap& api_defs,
+                    const std::vector<string>& hidden_ops, bool require_shapes,
+                    const string& source_file_name = '');
+    
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
+    
+    namespace tensorflow {
     }
     
-      // Check whether the current end of the vector is a clean multiple
-  // of the chunk size.
-  auto offset = LengthInBits % ChunkSizeInBits;
-  ChunkType *nextChunk = &getChunksPtr()[LengthInBits / ChunkSizeInBits];
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
     
-    StringRef
-camel_case::toLowercaseInitialisms(StringRef string,
-                                   SmallVectorImpl<char> &scratch) {
-    }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    // Include the correct TaskQueue implementation.
-#if LLVM_ON_UNIX && !defined(__CYGWIN__) && !defined(__HAIKU__)
-#include 'Unix/TaskQueue.inc'
-#else
-#include 'Default/TaskQueue.inc'
-#endif
+    class RecordReader;
     
-    
-    {}%
-    
-    
-    {    return name;
-  }
-    
-    class MetadataCredentialsPluginWrapper final : private GrpcLibraryCodegen {
- public:
-  static void Destroy(void* wrapper);
-  static int GetMetadata(
-      void* wrapper, grpc_auth_metadata_context context,
-      grpc_credentials_plugin_metadata_cb cb, void* user_data,
-      grpc_metadata creds_md[GRPC_METADATA_CREDENTIALS_PLUGIN_SYNC_MAX],
-      size_t* num_creds_md, grpc_status_code* status,
-      const char** error_details);
-    }
-    
-    namespace grpc {
-    }
-    
-    void CensusClientCallData::Destroy(grpc_call_element* elem,
-                                   const grpc_call_final_info* final_info,
-                                   grpc_closure* then_call_closure) {
-  const uint64_t request_size = GetOutgoingDataSize(final_info);
-  const uint64_t response_size = GetIncomingDataSize(final_info);
-  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
-  ::opencensus::stats::Record(
-      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
-       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
-       {RpcClientRoundtripLatency(), latency_ms},
-       {RpcClientServerLatency(),
-        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
-       {RpcClientSentMessagesPerRpc(), sent_message_count_},
-       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
-      {{ClientMethodTagKey(), method_},
-       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
-  grpc_slice_unref_internal(path_);
-  context_.EndSpan();
-}
+    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
+#include 'tensorflow/stream_executor/stream_executor.h'
+#include 'tensorflow/stream_executor/stream_executor_internal.h'
     
     
-    {}  // namespace
-    
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
-    
-    // Fix user-supplied options to be reasonable
-template <class T, class V>
-static void ClipToRange(T* ptr, V minvalue, V maxvalue) {
-  if (static_cast<V>(*ptr) > maxvalue) *ptr = maxvalue;
-  if (static_cast<V>(*ptr) < minvalue) *ptr = minvalue;
-}
-Options SanitizeOptions(const std::string& dbname,
-                        const InternalKeyComparator* icmp,
-                        const InternalFilterPolicy* ipolicy,
-                        const Options& src) {
-  Options result = src;
-  result.comparator = icmp;
-  result.filter_policy = (src.filter_policy != nullptr) ? ipolicy : nullptr;
-  ClipToRange(&result.max_open_files,    64 + kNumNonTableCacheFiles, 50000);
-  ClipToRange(&result.write_buffer_size, 64<<10,                      1<<30);
-  ClipToRange(&result.max_file_size,     1<<20,                       1<<30);
-  ClipToRange(&result.block_size,        1<<10,                       4<<20);
-  if (result.info_log == nullptr) {
-    // Open a log file in the same directory as the db
-    src.env->CreateDir(dbname);  // In case it does not exist
-    src.env->RenameFile(InfoLogFileName(dbname), OldInfoLogFileName(dbname));
-    Status s = src.env->NewLogger(InfoLogFileName(dbname), &result.info_log);
-    if (!s.ok()) {
-      // No place suitable for logging
-      result.info_log = nullptr;
-    }
-  }
-  if (result.block_cache == nullptr) {
-    result.block_cache = NewLRUCache(8 << 20);
-  }
-  return result;
-}
-    
-    namespace leveldb {
-    }
-    
-    TEST(DBTest, MultiThreaded) {
-  do {
-    // Initialize state
-    MTState mt;
-    mt.test = this;
-    mt.stop.Release_Store(0);
-    for (int id = 0; id < kNumThreads; id++) {
-      mt.counter[id].Release_Store(0);
-      mt.thread_done[id].Release_Store(0);
-    }
-    }
-    }
-    
-    
-    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
-}
-    
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
- public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
-  }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
-  }
-};
-    
-      // Reports dropped bytes to the reporter.
-  // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(uint64_t bytes, const char* reason);
-  void ReportDrop(uint64_t bytes, const Status& reason);
-    
-      // Backward iteration test
-  {
-    SkipList<Key, Comparator>::Iterator iter(&list);
-    iter.SeekToLast();
-    }
-    
-    
-    {    Executor::KeepAlive<Executor> ka2 = std::move(ka); // conversion
-    EXPECT_FALSE(ka);
-    EXPECT_TRUE(ka2);
-    EXPECT_EQ(&exec, ka2.get());
-    EXPECT_EQ(1, exec.refCount);
-  }
-    
-    // ============================================================================
-// folly/test/GLogBenchmark.cpp                    relative  time/iter  iters/s
-// ============================================================================
-// skip_overhead                                               36.37ns   27.49M
-// dev_null_log_overhead                                        2.61us  382.57K
-// ============================================================================
-    
-    // clang-format off
-#include <cstddef>
-    
-    
-    {    static constexpr result_type max() {
-      return std::numeric_limits<result_type>::max();
-    }
-  };
-    
-    /*
- * Decode a single unicode code point from UTF-8 byte sequence.
- */
-char32_t utf8ToCodePoint(
-    const unsigned char*& p,
-    const unsigned char* const e,
-    bool skipOnError);
-    
-    #include <folly/Conv.h>
-#include <folly/Exception.h>
-#include <folly/FileUtil.h>
-#include <folly/Format.h>
-#include <folly/ScopeGuard.h>
-    
-    /**
- * @class CanFrame
- * @brief The class which defines the information to send and receive.
- */
-struct CanFrame {
-  /// Message id
-  uint32_t id;
-  /// Message length
-  uint8_t len;
-  /// Message content
-  uint8_t data[8];
-  /// Time stamp
-  struct timeval timestamp;
-    }
-    
-      /**
-   * @brief Create a pointer to a specified brand of CAN client. The brand is
-   *        set in the parameter.
-   * @param parameter The parameter to create the CAN client.
-   * @return A pointer to the created CAN client.
-   */
-  std::unique_ptr<CanClient> CreateCANClient(const CANCardParameter &parameter);
-    
-    // buf size must be 8 bytes, every time, we receive only one frame
-ErrorCode EsdCanClient::Receive(std::vector<CanFrame> *const frames,
-                                int32_t *const frame_num) {
-  if (!is_started_) {
-    AERROR << 'Esd can client is not init! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
-  }
-    }
-    
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
-#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+    {}  // namespace xgboost
 
     
-      if (_card_port > MAX_CAN_PORT || _card_port < 0) {
-    AERROR << 'can port number [' << _card_port << '] is out of the range [0,'
-           << MAX_CAN_PORT << ']';
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+      inline void ParseStr(std::string *tok) {
+    while ((ch_buf_ = this->GetChar()) != EOF) {
+      switch (ch_buf_) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        case '\r':
+        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
+        default: *tok += ch_buf_;
+      }
+    }
+    LOG(FATAL) << 'ConfigReader: unterminated string';
   }
-  // open device
-  int32_t ret = bcan_open(_card_port, 0,
-                          5,  // 5ms for rx timeout
-                          5,  // 5ms for tx timeout
-                          &_dev_handler);
+  inline void ParseStrML(std::string *tok) {
+    while ((ch_buf_ = this->GetChar()) != EOF) {
+      switch (ch_buf_) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        default: *tok += ch_buf_;
+      }
+    }
+    LOG(FATAL) << 'unterminated string';
+  }
+  // return newline
+  inline bool GetNextToken(std::string *tok) {
+    tok->clear();
+    bool new_line = false;
+    while (ch_buf_ != EOF) {
+      switch (ch_buf_) {
+        case '#' : SkipLine(); new_line = true; break;
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStr(tok); ch_buf_ = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStrML(tok); ch_buf_ = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '=':
+          if (tok->length() == 0) {
+            ch_buf_ = this->GetChar();
+            *tok = '=';
+          }
+          return new_line;
+        case '\r':
+        case '\n':
+          if (tok->length() == 0) new_line = true;
+        case '\t':
+        case ' ' :
+          ch_buf_ = this->GetChar();
+          if (tok->length() != 0) return new_line;
+          break;
+        default:
+          *tok += ch_buf_;
+          ch_buf_ = this->GetChar();
+          break;
+      }
+    }
+    if (tok->length() == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+/*!
+ * \brief an iterator use stream base, allows use all types of istream
+ */
+class ConfigStreamReader: public ConfigReaderBase {
+ public:
+  /*!
+   * \brief constructor
+   * \param fin istream input stream
+   */
+  explicit ConfigStreamReader(std::istream &fin) : fin_(fin) {}
     
-    /*
-TEST(HermesCanClient, send) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::HERMES_CAN);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-  HermesCanClient hermes_can;
-  EXPECT_TRUE(hermes_can.Init(param));
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
+    
+    
+    {}  // namespace xgboost
+    
+    #pragma once
+    
+      uint64_t max_delayed_write_rate() const { return max_delayed_write_rate_; }
+    
+    #pragma once
+    
+    PosixMemoryMappedFileBuffer::~PosixMemoryMappedFileBuffer() {
+  // TODO should have error handling though not much we can do...
+  munmap(this->base_, length_);
+}
+    
+    TEST_F(MockEnvTest, FakeSleeping) {
+  int64_t now = 0;
+  auto s = env_->GetCurrentTime(&now);
+  ASSERT_OK(s);
+  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
+  int64_t after_sleep = 0;
+  s = env_->GetCurrentTime(&after_sleep);
+  ASSERT_OK(s);
+  auto delta = after_sleep - now;
+  // this will be true unless test runs for 2 seconds
+  ASSERT_TRUE(delta == 3 || delta == 4);
+}
+    
+    
+    {  return 0;
+}
+
+    
+    class DHTResponseMessage : public DHTAbstractMessage {
+protected:
+  virtual std::string toStringOptional() const { return A2STR::NIL; }
     }
     
-    #include <linux/can.h>
-#include <linux/can/raw.h>
+    #define READ_CHECK(fp, ptr, count)                                             \
+  if (fp.read((ptr), (count)) != (count)) {                                    \
+    throw DL_ABORT_EX('Failed to load DHT routing table.');                    \
+  }
     
-    #include 'gtest/gtest.h'
     
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
+    {
+    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
+                                                   : PREF_DHT_ENTRY_POINT_HOST6;
+    if (!e->getOption()->get(prefEntryPointHost).empty()) {
+      {
+        PrefPtr prefEntryPointPort = family == AF_INET
+                                         ? PREF_DHT_ENTRY_POINT_PORT
+                                         : PREF_DHT_ENTRY_POINT_PORT6;
+        std::pair<std::string, uint16_t> addr(
+            e->getOption()->get(prefEntryPointHost),
+            e->getOption()->getAsInt(prefEntryPointPort));
+        std::vector<std::pair<std::string, uint16_t>> entryPoints;
+        entryPoints.push_back(addr);
+        auto command = make_unique<DHTEntryPointNameResolveCommand>(
+            e->newCUID(), e, family, entryPoints);
+        command->setBootstrapEnabled(true);
+        command->setTaskQueue(taskQueue.get());
+        command->setTaskFactory(taskFactory.get());
+        command->setRoutingTable(routingTable.get());
+        command->setLocalNode(localNode);
+        tempCommands.push_back(std::move(command));
+      }
+    }
+    else {
+      A2_LOG_INFO('No DHT entry point specified.');
+    }
+    {
+      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
+      command->setMessageDispatcher(dispatcher.get());
+      command->setMessageReceiver(receiver.get());
+      command->setTaskQueue(taskQueue.get());
+      command->setReadCheckSocket(connection->getSocket());
+      command->setConnection(std::move(connection));
+      command->setUDPTrackerClient(udpTrackerClient);
+      tempRoutineCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTTokenUpdateCommand>(
+          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
+      command->setTokenTracker(tokenTracker.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTBucketRefreshCommand>(
+          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
+      command->setTaskQueue(taskQueue.get());
+      command->setRoutingTable(routingTable.get());
+      command->setTaskFactory(taskFactory.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTPeerAnnounceCommand>(
+          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
+      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command =
+          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
+      command->setLocalNode(localNode);
+      command->setRoutingTable(routingTable.get());
+      tempCommands.push_back(std::move(command));
+    }
+    // add deserialized nodes to routing table
+    auto& desnodes = deserializer.getNodes();
+    for (auto& node : desnodes) {
+      routingTable->addNode(node);
+    }
+    if (!desnodes.empty()) {
+      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
+          taskFactory->createBucketRefreshTask());
+      task->setForceRefresh(true);
+      taskQueue->addPeriodicTask1(task);
+    }
+    // assign them into DHTRegistry
+    if (family == AF_INET) {
+      DHTRegistry::getMutableData().localNode = localNode;
+      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData().messageFactory = std::move(factory);
+      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
+      DHTRegistry::setInitialized(true);
+    }
+    else {
+      DHTRegistry::getMutableData6().localNode = localNode;
+      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData6().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
+      DHTRegistry::setInitialized6(true);
+    }
+    if (e->getBtRegistry()->getUdpPort() == 0) {
+      // We assign port last so that no exception gets in the way
+      e->getBtRegistry()->setUdpPort(port);
+    }
+  }
+  catch (RecoverableException& ex) {
+    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
+                        ' DHT is disabled.'),
+                    ex);
+    tempCommands.clear();
+    tempRoutineCommands.clear();
+    if (family == AF_INET) {
+      DHTRegistry::clearData();
+      e->getBtRegistry()->setUDPTrackerClient(
+          std::shared_ptr<UDPTrackerClient>{});
+    }
+    else {
+      DHTRegistry::clearData6();
+    }
+  }
+  return std::make_pair(std::move(tempCommands),
+                        std::move(tempRoutineCommands));
+}
+    
+    class DHTTokenUpdateCommand : public TimeBasedCommand {
+private:
+  DHTTokenTracker* tokenTracker_;
+    }
+    
+    void compareBenchmarkResults(const std::string& base, const std::string& test) {
+  printResultComparison(resultsFromFile(base), resultsFromFile(test));
+}
+    
+    inline std::system_error makeSystemError(const char* msg) {
+  return makeSystemErrorExplicit(errno, msg);
+}
+    
+      /**
+   * Returns a random uint32_t in [min, max) given a specific RNG.
+   * If min == max, returns 0.
+   */
+  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
+  static uint32_t rand32(uint32_t min, uint32_t max, RNG&& rng) {
+    if (min == max) {
+      return 0;
+    }
+    return std::uniform_int_distribution<uint32_t>(min, max - 1)(rng);
+  }
+    
+    namespace folly {
     }
