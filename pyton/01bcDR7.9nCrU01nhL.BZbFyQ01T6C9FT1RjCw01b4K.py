@@ -1,147 +1,209 @@
 
         
-            with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+        
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
+    
+            # if this is not an ip and app is mounted at the root, allow subdomain
+        # matching by adding a '.' prefix
+        if self.get_cookie_path(app) == '/' and not ip:
+            rv = '.' + rv
+    
+    
+def make_test_environ_builder(
+    app, path='/', base_url=None, subdomain=None, url_scheme=None,
+    *args, **kwargs
+):
+    '''Create a :class:`~werkzeug.test.EnvironBuilder`, taking some
+    defaults from the application.
+    
+    
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
+    
+    # TODO: ensure that history changes.
+
+    
+    
+@pytest.mark.parametrize('command, new_command, packages', [
+    (Command('vim', ''), 'sudo apt-get install vim && vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')]),
+    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')])])
+def test_get_new_command(mocker, command, new_command, packages):
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    
+@pytest.mark.parametrize('script, output, help_text, result', [
+    ('apt-get isntall vim', invalid_operation('isntall'),
+     apt_get_help, 'apt-get install vim'),
+    ('apt saerch vim', invalid_operation('saerch'),
+     apt_help, 'apt search vim'),
+])
+def test_get_new_command(set_help, output, script, help_text, result):
+    set_help(help_text)
+    assert get_new_command(Command(script, output))[0] == result
+
+    
+    
+@pytest.mark.parametrize('command', [
+    Command('apt-cache search foo', ''),
+    Command('aptitude search foo', ''),
+    Command('apt search foo', ''),
+    Command('apt-get install foo', ''),
+    Command('apt-get source foo', ''),
+    Command('apt-get clean', ''),
+    Command('apt-get remove', ''),
+    Command('apt-get update', ''),
+    Command('sudo apt update', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+    no_match_output = '''
+Listing... Done
+'''
+    
+    
+@pytest.mark.parametrize('command, result', [
+    (Command('aws dynamdb scan', misspelled_command),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb scn', misspelled_subcommand),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb t-item',
+             misspelled_subcommand_with_multiple_options),
+     ['aws dynamodb put-item', 'aws dynamodb get-item'])])
+def test_get_new_command(command, result):
+    assert get_new_command(command) == result
+
     
     
 @pytest.fixture
-def runner(app):
-    '''A test runner for the app's Click commands.'''
-    return app.test_cli_runner()
+def brew_no_available_formula():
+    return '''Error: No available formula for elsticsearch '''
     
     
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
+logging.basicConfig(level=logging.DEBUG)
     
-        def app_url_value_preprocessor(self, f):
-        '''Same as :meth:`url_value_preprocessor` but application wide.
-        '''
-        self.record_once(lambda s: s.app.url_value_preprocessors
-            .setdefault(None, []).append(f))
-        return f
+        def setup_variables(self):
+        '''Set up variables for parser.'''
+        self.parser.variables.update(
+            {
+                'COMPLEX': '',
+                'tls_port': '1234',
+                'fnmatch_filename': 'test_fnmatch.conf',
+                'tls_port_str': '1234'
+            }
+        )
     
-           It is strongly recommended to activate either ``X-Sendfile`` support in
-       your webserver or (if no authentication happens) to tell the webserver
-       to serve files for the given path on its own without calling into the
-       web application for improved performance.
+        @certbot_util.patch_get_utility()
+    def test_select_correct(self, mock_util):
+        mock_util().checklist.return_value = (
+            display_util.OK, [self.vhosts[3].display_repr(),
+                              self.vhosts[2].display_repr()])
+        vhs = select_vhost_multiple([self.vhosts[3],
+                                     self.vhosts[2],
+                                     self.vhosts[1]])
+        self.assertTrue(self.vhosts[2] in vhs)
+        self.assertTrue(self.vhosts[3] in vhs)
+        self.assertFalse(self.vhosts[1] in vhs)
     
+        def test_conflicts(self):
+        # Note: Defined IP is more important than defined port in match
+        self.assertTrue(self.addr.conflicts(self.addr1))
+        self.assertTrue(self.addr.conflicts(self.addr2))
+        self.assertTrue(self.addr.conflicts(self.addr_defined))
+        self.assertFalse(self.addr.conflicts(self.addr_default))
     
-def tojson_filter(obj, **kwargs):
-    return Markup(htmlsafe_dumps(obj, **kwargs))
-
+            mock_setup_cert = mock.MagicMock(side_effect=acme_responses)
+        # pylint: disable=protected-access
+        self.sni._setup_challenge_cert = mock_setup_cert
     
-    from time import time
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.metrics import roc_curve, auc
-from sklearn.datasets import fetch_kddcup99, fetch_covtype, fetch_mldata
-from sklearn.preprocessing import LabelBinarizer
+    from .theplatform import theplatform_download_by_pid
     
-        ###########################################################################
-    # Set custom tracking based method
-    sampling_algorithm['custom-tracking-selection'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='tracking_selection',
-                                       random_state=random_state)
+    #----------------------------------------------------------------------
+def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
+    #Info XML
+    video_info = ckplayer_get_info_by_xml(ckinfo)
     
-        plt.show()
-
+    try:
+        title = kwargs['title']
+    except:
+        title = ''
+    type_ = ''
+    size = 0
     
-        # decode the payload explicitly as UTF-8 since lxml is confused for some
-    # reason
-    with codecs.open(html_filename,'r','utf-8') as html_file:
-        html_content = html_file.read()
-    tree = ElementTree(lxml.html.document_fromstring(html_content))
-    i = 0
-    j = 0
-    for p in tree.findall('//p'):
-        content = p.text_content()
-        if len(content) < 100:
-            # skip paragraphs that are too short - probably too noisy and not
-            # representative of the actual language
-            continue
+    if len(video_info['links']) > 0:  #has link
+        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
     
-        def report_not_exist(self, appid, ip):
-        self.logger.debug('report_not_exist:%s %s', appid, ip)
-        th = threading.Thread(target=self.process_appid_not_exist, args=(appid, ip))
-        th.start()
+    if 'size' in video_info:
+        size = int(video_info['size'])
+    else:
+        for i in video_info['links'][1:]:  #save 1st one
+            size += url_info(i)[2]
     
-            xlog.info('Add new cert to Firefox in %s', firefox_config_path)
-        cmd_line = 'certutil -d %s -A -t 'C,,' -n '%s' -i '%s'' % (firefox_config_path, common_name, ca_file)
-        os.system(cmd_line) # install new cert
-        return True
-    
-    import sys
-import os
-import threading
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
     
     
-def run_cmds(cmds):
-    log = Log()
-    cmd_pl = cmds.split('\n')
-    outs = []
-    for cmd in cmd_pl:
-        if not cmd:
-            continue
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
     
-            raise NotImplementedError
-    
-    
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
-    
-        '''catalog of multiple methods that are executed depending on an init
-    
-    
-@coroutine
-def coroutine1(target):
-    while True:
-        request = yield
-        if 0 < request <= 10:
-            print('request {} handled in coroutine 1'.format(request))
-        else:
-            target.send(request)
-    
-    
-class Action(object):
-    def __init__(self, name):
-        self.name = name
-    
-    from __future__ import print_function
-import os
-from os.path import lexists
-    
-    ### OUTPUT ###
-# Counting to two...
-# one two
-# Counting to five...
-# one two three four five
-
-    
-        def prepare(self):
-        print('Reporter Class is preparing to report the results')
-        time.sleep(0.1)
-    
-        def notify(self, msg):
-        self.msg_queue.append(msg)
-    
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
+        try:
+        json_data = get_coub_data(html)
+        title, video_url, audio_url = get_title_and_urls(json_data)
+        video_file_name, video_file_path = get_file_path(merge, output_dir, title, video_url)
+        audio_file_name, audio_file_path = get_file_path(merge, output_dir, title, audio_url)
+        download_url(audio_url, merge, output_dir, title, info_only)
+        download_url(video_url, merge, output_dir, title, info_only)
+        if not info_only:
+            try:
+                fix_coub_video_file(video_file_path)
+                audio_duration = float(ffmpeg.ffprobe_get_media_duration(audio_file_path))
+                video_duration = float(ffmpeg.ffprobe_get_media_duration(video_file_path))
+                loop_file_path = get_loop_file_path(title, output_dir)
+                single_file_path = audio_file_path
+                if audio_duration > video_duration:
+                    write_loop_file(int(audio_duration / video_duration), loop_file_path, video_file_name)
+                else:
+                    single_file_path = audio_file_path
+                    write_loop_file(int(video_duration / audio_duration), loop_file_path, audio_file_name)
