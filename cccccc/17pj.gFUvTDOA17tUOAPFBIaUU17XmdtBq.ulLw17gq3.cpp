@@ -1,154 +1,255 @@
 
         
-        struct ClientSession {
-  ClientSession(ManagerSocket s): socket(std::move(s)), pid(0) {}
-    }
+        #include <utility>
     
-    // FreeOp frees the content of the output blob. We allow it to take in input
-// blobs purely for the reason that it can 'wait' on the input blobs to be
-// produced by some of the earlier operators before a free is called.
-template <class Context>
-class FreeOp : public Operator<Context> {
- public:
-  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
-    }
     
-    class BSP_Tree;
-MAKE_TYPE_INFO(BSP_Tree, Variant::DICTIONARY)
+    {  DISALLOW_COPY_AND_ASSIGN(UvTaskRunner);
+};
     
-    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsCollision(body0, body1);
+    AutoUpdater::~AutoUpdater() {
+  auto_updater::AutoUpdater::SetDelegate(nullptr);
 }
     
-    	const RigidBodyBullet *getRigidBodyA() const;
-	const RigidBodyBullet *getRigidBodyB() const;
-	const Transform getCalculatedTransformA() const;
-	const Transform getCalculatedTransformB() const;
-	const Transform getFrameOffsetA() const;
-	const Transform getFrameOffsetB() const;
-	Transform getFrameOffsetA();
-	Transform getFrameOffsetB();
-	real_t getLowerLinLimit() const;
-	void setLowerLinLimit(real_t lowerLimit);
-	real_t getUpperLinLimit() const;
-	void setUpperLinLimit(real_t upperLimit);
-	real_t getLowerAngLimit() const;
-	void setLowerAngLimit(real_t lowerLimit);
-	real_t getUpperAngLimit() const;
-	void setUpperAngLimit(real_t upperLimit);
+    // static
+void GlobalShortcut::BuildPrototype(v8::Isolate* isolate,
+                                    v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'GlobalShortcut'));
+  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
+      .SetMethod('register', &GlobalShortcut::Register)
+      .SetMethod('isRegistered', &GlobalShortcut::IsRegistered)
+      .SetMethod('unregister', &GlobalShortcut::Unregister)
+      .SetMethod('unregisterAll', &GlobalShortcut::UnregisterAll);
+}
     
-    int main(int, char**)
-{
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
+    
+    {}  // namespace
+    
+    #include 'atom/browser/api/event_emitter.h'
+#include 'atom/browser/mac/in_app_purchase.h'
+#include 'atom/browser/mac/in_app_purchase_observer.h'
+#include 'atom/browser/mac/in_app_purchase_product.h'
+#include 'native_mate/handle.h'
+    
+    
+    {}  // namespace atom
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_NOTIFICATION_H_
+#define ATOM_BROWSER_API_ATOM_API_NOTIFICATION_H_
+    
+      // Calculate the depth at which the requirement's generic parameters
+  // appear in the synthetic signature.
+  unsigned depth = 0;
+  if (covariantSelf) {
+    depth++;
+  }
+  if (conformanceSig) {
+    depth += conformanceSig->getGenericParams().back()->getDepth() + 1;
+  }
+    
+    /// When splitting based on a preposition, whether we should place the
+/// preposition on the argument label (vs. on the base name).
+static bool shouldPlacePrepositionOnArgLabel(StringRef beforePreposition,
+                                             StringRef preposition,
+                                             StringRef afterPreposition) {
+  // X/Y/Z often used as coordinates and should be the labels.
+  if (afterPreposition == 'X' ||
+      afterPreposition == 'Y' ||
+      afterPreposition == 'Z')
+    return false;
     }
     
-            // 3. Show another simple window.
-        if (show_another_window)
+      static CFPointeeInfo forRecord(bool isConst, const clang::RecordDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = isConst;
+    info.Decl = decl;
+    return info;
+  }
+    
+      const ASTContext &ctx = ImporterImpl.SwiftContext;
+    
+    /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
+    }
+    
+    #ifndef BITCOIN_QT_QVALUECOMBOBOX_H
+#define BITCOIN_QT_QVALUECOMBOBOX_H
+    
+    public:
+    explicit TrafficGraphWidget(QWidget *parent = 0);
+    void setClientModel(ClientModel *model);
+    int getGraphRangeMins() const;
+    
+    /**
+ * Changelog:
+ * - March 2013, Diederik Huys:    original version
+ * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
+ * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
+ */
+    
+        secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
+    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
+    
+    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
+    (void) msg32;
+    (void) key32;
+    (void) algo16;
+    (void) data;
+    }
+    
+    
+    {} // namespace caffe2
+    
+    namespace caffe2 {
+    }
+    
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
+    
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
+  }
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
+  }
+  return identity;
+}
+    
+    #include <grpcpp/security/auth_context.h>
+    
+    // server cumulative
+const ViewDescriptor& ServerSentBytesPerRpcCumulative() {
+  const static ViewDescriptor descriptor =
+      ViewDescriptor()
+          .set_name('grpc.io/server/received_bytes_per_rpc/cumulative')
+          .set_measure(kRpcServerSentBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+                if (smoothedGradientValue->GetDataType() != checkpointedValue.GetDataType())
+                LogicError('DataType of the smoothed gradient value restored from checkpoint for the parameter '%S' (uid = %ls) does not match the expected value.',
+                            parameter.AsString().c_str(), uid.c_str());
+    
+    namespace CNTK
+{
+    class UDFUtils
+    {
+    public:
+    }
+    }
+    
+            void Erase() override
         {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+            if (IsPacked())
+            {
+                m_packedData = nullptr;
+                m_packedDataLayout = nullptr;
+                m_isPacked = false;
+            }
+            else
+                Value::Erase();
         }
     
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
     
-    
-    {        // Rendering
-        ImGui::Render();
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        SDL_GL_SwapWindow(window);
+    {        auto originalConstantValue = Value();
+        auto constantValueCPU = originalConstantValue->DeepClone(DeviceDescriptor::CPUDevice(), true);
+        NDArrayViewPtr newConstantValue = CloneAsDataType(constantValueCPU, dataType, true);
+        return Constant(newConstantValue->DeepClone(originalConstantValue->Device(), originalConstantValue->IsReadOnly()), Name());
     }
     
-        // Create window with graphics context
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-    SDL_DisplayMode current;
-    SDL_GetCurrentDisplayMode(0, &current);
-    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+OpenGL3 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
-    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-    SDL_GL_SetSwapInterval(1); // Enable vsync
+    // some older code uses this namespace
+namespace DebugUtil
+{
+    void PrintCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+    }
     
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    class ScopeTimer
+{
+    Timer m_aggregateTimer;
+    size_t m_verbosity;
+    std::string m_message;
+    }
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplWin32_Init(hwnd);
-    ImGui_ImplDX9_Init(g_pd3dDevice);
-    
-        // Create the vertex shader
+        //request matrices needed to do node function value evaluation
+    virtual void RequestMatricesBeforeForwardProp(MatrixPool& matrixPool)
     {
-        static const char* vertexShader =
-            'cbuffer vertexBuffer : register(b0) \
-            {\
-            float4x4 ProjectionMatrix; \
-            };\
-            struct VS_INPUT\
-            {\
-            float2 pos : POSITION;\
-            float4 col : COLOR0;\
-            float2 uv  : TEXCOORD0;\
-            };\
-            \
-            struct PS_INPUT\
-            {\
-            float4 pos : SV_POSITION;\
-            float4 col : COLOR0;\
-            float2 uv  : TEXCOORD0;\
-            };\
-            \
-            PS_INPUT main(VS_INPUT input)\
-            {\
-            PS_INPUT output;\
-            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
-            output.col = input.col;\
-            output.uv  = input.uv;\
-            return output;\
-            }';
+        Base::RequestMatricesBeforeForwardProp(matrixPool);
+        RequestMatrixFromPool(m_maxIndexes0, matrixPool);
+        RequestMatrixFromPool(m_maxIndexes1, matrixPool);
+        RequestMatrixFromPool(m_maxValues, matrixPool);
     }
     
+    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
+  int y  = pixel[0];
+  int cb = pixel[1];
+  int cr = pixel[2];
+  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
+  pixel[1] = kRangeLimit[y +
+                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
+  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+}
     
-    {} // namespace aria2
+      // Returns the combined score of the output image in the last Compare() call
+  // (or the baseline image, if Compare() was not called yet), based on output
+  // size and the similarity metric.
+  virtual double ScoreOutputSize(int size) const = 0;
+    
+    void PrintDebug(ProcessStats* stats, std::string s);
+    
+    
+    {}  // namespace guetzli
 
     
-    DHTTaskFactoryImpl::~DHTTaskFactoryImpl() = default;
+      tmp0 = in[3 * stride];
+  tmp1 = kIDCTMatrix[ 3] * tmp0;
+  tmp2 = kIDCTMatrix[11] * tmp0;
+  tmp3 = kIDCTMatrix[19] * tmp0;
+  tmp4 = kIDCTMatrix[27] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
     
-    namespace aria2 {
-    }
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
     
-      template <typename OutputIterator>
-  void findAll(OutputIterator out, const std::string& hostname,
-               uint16_t port) const
-  {
-    auto target = std::make_shared<CacheEntry>(hostname, port);
-    auto i = entries_.find(target);
-    if (i != entries_.end()) {
-      (*i)->getAllGoodAddrs(out);
-    }
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
   }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
