@@ -1,300 +1,182 @@
 
         
-        // Tests that a unicharset that contains double-letter ligatures (eg ff) has
-// no null char in the encoding at all.
-TEST_F(UnicharcompressTest, DoesLigaturesWithDoubles) {
-  LOG(INFO) << 'Testing por with ligatures';
-  LoadUnicharset('por.unicharset');
-  ExpectCorrect('por');
-  // Check that any unichar-id that is encoded with multiple codes has the
-  // correct encoded_nulll_char_ in between.
-  for (int u = 0; u <= unicharset_.size(); ++u) {
-    RecodedCharID code;
-    int len = compressed_.EncodeUnichar(u, &code);
-    if (len > 1) {
-      // The should not be any null char in the code.
-      for (int i = 0; i < len; ++i) {
-        EXPECT_NE(encoded_null_char_, code(i));
-      }
-    }
-  }
-}
-    
-      // Runs backward propagation of errors on the deltas line.
-  // See Network for a detailed discussion of the arguments.
-  bool Backward(bool debug, const NetworkIO& fwd_deltas,
-                NetworkScratch* scratch, NetworkIO* back_deltas) override;
-  // Updates the weights using the given learning rate, momentum and adam_beta.
-  // num_samples is used in the adam computation iff use_adam_ is true.
-  void Update(float learning_rate, float momentum, float adam_beta,
-              int num_samples) override;
-  // Sums the products of weight updates in *this and other, splitting into
-  // positive (same direction) in *same and negative (different direction) in
-  // *changed.
-  void CountAlternators(const Network& other, double* same,
-                        double* changed) const override;
-  // Prints the weights for debug purposes.
-  void PrintW();
-  // Prints the weight deltas for debug purposes.
-  void PrintDW();
-    
-      // Return whether a given text line could be a first paragraph line according
-  // to this paragraph model.
-  bool ValidBodyLine(int lmargin, int lindent, int rindent, int rmargin) const;
-    
-    // Copies the given feature_space and uses it as the index feature map
-// from INT_FEATURE_STRUCT.
-void IntFeatureMap::Init(const IntFeatureSpace& feature_space) {
-  feature_space_ = feature_space;
-  mapping_changed_ = false;
-  int sparse_size = feature_space_.Size();
-  feature_map_.Init(sparse_size, true);
-  feature_map_.Setup();
-  compact_size_ = feature_map_.CompactSize();
-  // Initialize look-up tables if needed.
-  FCOORD dir = FeatureDirection(0);
-  if (dir.x() == 0.0f && dir.y() == 0.0f)
-    InitIntegerFX();
-  // Compute look-up tables to generate offset features.
-  for (int dir = 0; dir < kNumOffsetMaps; ++dir) {
-    delete [] offset_plus_[dir];
-    delete [] offset_minus_[dir];
-    offset_plus_[dir] = new int[sparse_size];
-    offset_minus_[dir] = new int[sparse_size];
-  }
-  for (int dir = 1; dir <= kNumOffsetMaps; ++dir) {
-    for (int i = 0; i < sparse_size; ++i) {
-      int offset_index = ComputeOffsetFeature(i, dir);
-      offset_plus_[dir - 1][i] = offset_index;
-      offset_index = ComputeOffsetFeature(i, -dir);
-      offset_minus_[dir - 1][i] = offset_index;
-    }
-  }
-}
-    
-    
-    {  // Non-serialized data initialized by other means or used temporarily
-  // during loading of training samples.
-  // Number of different class labels in unicharset_.
-  int charsetsize_;
-  // Flag to indicate that we are running shape analysis and need fragments
-  // fixing.
-  bool enable_shape_anaylsis_;
-  // Flag to indicate that sample replication is required.
-  bool enable_replication_;
-  // Array of classids of fragments that replace the correctly segmented chars.
-  int* fragments_;
-  // Classid of previous correctly segmented sample that was added.
-  int prev_unichar_id_;
-  // Debug output control.
-  int debug_level_;
-  // Feature map used to construct reduced feature spaces for compact
-  // classifiers.
-  IntFeatureMap feature_map_;
-  // Vector of Pix pointers used for classifiers that need the image.
-  // Indexed by page_num_ in the samples.
-  // These images are owned by the trainer and need to be pixDestroyed.
-  GenericVector<Pix*> page_images_;
-  // Vector of filenames of loaded tr files.
-  GenericVector<STRING> tr_filenames_;
-};
-    
-      // Tests each blob in the list to see if it is certain non-text using 2
-  // conditions:
-  // 1. blob overlaps a cell with high value in noise_density_ (previously set
-  // by ComputeNoiseDensity).
-  // OR 2. The blob overlaps more than max_blob_overlaps in *this grid. This
-  // condition is disabled with max_blob_overlaps == -1.
-  // If it does, the blob is declared non-text, and is used to mark up the
-  // nontext_mask. Such blobs are fully deleted, and non-noise blobs have their
-  // neighbours reset, as they may now point to deleted data.
-  // WARNING: The blobs list blobs may be in the *this grid, but they are
-  // not removed. If any deleted blobs might be in *this, then this must be
-  // Clear()ed immediately after MarkAndDeleteNonTextBlobs is called.
-  // If the win is not nullptr, deleted blobs are drawn on it in red, and kept
-  void MarkAndDeleteNonTextBlobs(BLOBNBOX_LIST* blobs,
-                                 int max_blob_overlaps,
-                                 ScrollView* win, ScrollView::Color ok_color,
-                                 Pix* nontext_mask);
-  // Returns true if the given blob overlaps more than max_overlaps blobs
-  // in the current grid.
-  bool BlobOverlapsTooMuch(BLOBNBOX* blob, int max_overlaps);
-    
-      // Helper functions for TransformToBlocks.
-  // Add the part to the temp list in the correct order.
-  void AddToTempPartList(ColPartition* part, ColPartition_CLIST* temp_list);
-  // Add everything from the temp list to the work_set assuming correct order.
-  void EmptyTempPartList(ColPartition_CLIST* temp_list,
-                         WorkingPartSet_LIST* work_set);
-    
-      // Refreshes the words in the segmentation block list by using blobs in the
-  // input blob list.
-  // The segmentation block list must be set.
-  void RefreshSegmentationWithNewBlobs(C_BLOB_LIST* new_blobs);
-    
-    /**********************************************************************
- * complete_edge
- *
- * Complete the edge by cleaning it up.
- **********************************************************************/
-    
-    
-    {
-    {  resetDatabase();
-  EXPECT_FALSE(pathExists(path_ + '.backup'));
-}
+        
+    {  // Produce the generic signature and environment.
+  // FIXME: Pass in a source location for the conformance, perhaps? It seems
+  // like this could fail.
+  syntheticSignature =
+    std::move(builder).computeGenericSignature(SourceLoc());
+  syntheticEnvironment = syntheticSignature->createGenericEnvironment();
 }
 
     
-      // Regardless of the status of the kernel extension, if the device node does
-  // not exist then the kernel publisher will silently shutdown.
-  // This is not considered an error, and does not emit an error log.
-  if (!isWritable(kKernelDevice)) {
-    return Status(2, 'Cannot access ' + kKernelDevice);
-  }
+    #include 'swift/AST/GenericSignature.h'
+#include 'swift/AST/SubstitutionMap.h'
+#include 'llvm/Support/TrailingObjects.h'
+#include 'llvm/ADT/FoldingSet.h'
     
-    
-    {  // Too many fields
-  bad_line = R'('2016-03-22T21:17:01.701882+00:00','','6','','','','')';
-  ec = pub.createEventContext();
-  status = pub.populateEventContext(bad_line, ec);
-  ASSERT_FALSE(status.ok());
-  ASSERT_NE(std::string::npos, status.getMessage().find('more'));
-}
-    
-        Node* next() {
-      return next_;
+    void SyntaxASTMap::dumpSyntaxMap() const {
+  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
+    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
+    auto SemanticNode = SyntaxAndSemaNode.getSecond();
+    }
     }
     
-      bool remove(const T& v) {
-    auto prev = &head_;
-    locate_lower_bound(v, prev);
-    auto curr = prev->load(std::memory_order_relaxed);
-    if (!curr || curr->elem_ != v) {
-      return false;
-    }
-    Node* curr_next = curr->next_.load();
-    // Patch up the actual list...
-    prev->store(curr_next, std::memory_order_release);
-    // ...and only then null out the removed node.
-    curr->next_.store(nullptr, std::memory_order_release);
-    curr->retire();
-    return true;
-  }
-    
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (true) {
-      if (nonBlockingTake(item)) {
-        return std::move(item);
-      }
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
-    }
-  }
-    
-        static const void* volatile ptr = malloc(1);
-    if (!ptr) {
-      // wtf, failing to allocate 1 byte
-      return false;
+    struct DefaultCache {
+  llvm::sys::Mutex Mux;
+  CacheImpl::CallBacks CBs;
+  llvm::DenseMap<DefaultCacheKey, void *> Entries;
     }
     
-      // Move from the registration phase to the 'you can actually instantiate
-  // things now' phase.
-  folly::SingletonVault::singleton()->registrationComplete();
+      Begin = new char[capacity];
+  EndOfAllocation = Begin + capacity;
+  End = Begin + oldSize + needed;
+  std::memcpy(Begin, oldBegin, oldSize);
     
-    FOLLY_ALWAYS_INLINE int __builtin_ctzll(unsigned long long x) {
-  unsigned long index;
-  return int(_BitScanForward64(&index, x) ? index : 64);
-}
+      // Set the 'targetEnvironment' platform condition if targeting a simulator
+  // environment. Otherwise _no_ value is present for targetEnvironment; it's
+  // an optional disambiguating refinement of the triple.
+  if (swift::tripleIsAnySimulator(Target))
+    addPlatformConditionValue(PlatformConditionKind::TargetEnvironment,
+                              'simulator');
     
-    inline void hazptr_domain::tryBulkReclaim() {
-  HAZPTR_DEBUG_PRINT(this);
-  do {
-    auto hcount = hcount_.load(std::memory_order_acquire);
-    auto rcount = rcount_.load(std::memory_order_acquire);
-    if (rcount < HAZPTR_SCAN_THRESHOLD || rcount < HAZPTR_SCAN_MULT * hcount) {
-      return;
+    /// Classify a potential CF typedef.
+CFPointeeInfo
+CFPointeeInfo::classifyTypedef(const clang::TypedefNameDecl *typedefDecl) {
+  clang::QualType type = typedefDecl->getUnderlyingType();
     }
-    if (rcount_.compare_exchange_weak(
-            rcount, 0, std::memory_order_release, std::memory_order_relaxed)) {
-      break;
+    
+    namespace tesseract {
     }
-  } while (true);
-  bulkReclaim();
-}
     
+    #endif
+
     
-    {  EXPECT_EQ(1, estimates.quantiles[0].second);
-  EXPECT_EQ(2.0 - 0.5, estimates.quantiles[1].second);
-  EXPECT_EQ(50.375, estimates.quantiles[2].second);
-  EXPECT_EQ(100.0 - 0.5, estimates.quantiles[3].second);
-  EXPECT_EQ(100, estimates.quantiles[4].second);
-}
+    // Helper method to convert an orientation index to its value in degrees.
+// The value represents the amount of clockwise rotation in degrees that must be
+// applied for the text to be upright (readable).
+TESS_API int OrientationIdToValue(const int& id);
     
       /**
-   * String representation of the default value.
-   * (note: string literal default values will be stringified with quotes)
+   * Return whether this iterator points anywhere in the first textline of a
+   * paragraph.
    */
-  folly::StringPiece defaultStr;
+  bool IsWithinFirstTextlineOfParagraph() const;
     
-    #endif /* DUMPCRASHSTACK_H_ */
-
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    ScopeJEnv::~ScopeJEnv() {
-    if (NULL != env_) {
-        env_->PopLocalFrame(NULL);
-    }
-}
-    
-    void AbstractOptionHandler::setEraseAfterParse(bool f)
-{
-  updateFlags(FLAG_ERASE_AFTER_PARSE, f);
-}
-    
-      virtual void allocateChunk() CXX11_OVERRIDE;
-    
-    bool AnnounceList::currentTierAcceptsStoppedEvent() const
-{
-  if (currentTrackerInitialized_) {
-    return FindStoppedAllowedTier()(*currentTier_);
+    // Integrate the parameters editor as popupmenu into the existing scrollview
+// window (usually the pg editor). If sv == null, create a new empty
+// empty window and attach the parameters editor to that window (ugly).
+ParamsEditor::ParamsEditor(tesseract::Tesseract* tess,
+                                 ScrollView* sv) {
+  if (sv == nullptr) {
+    const char* name = 'ParamEditorMAIN';
+    sv = new ScrollView(name, 1, 1, 200, 200, 300, 200);
   }
     }
     
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+        /*virtual*/ void LearnerSGD::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
+                                        const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) /*override*/
+    {
+        DISPATCH_TO_TYPED_UPDATE_FUNCTION;
     }
     
+        protected:
+        // If a gradient is sparse, we skip updating columns with zero gradients. This means some 
+        // columns will receive their updates when their gradient is non-zero. The only exception
+        // is that once every s_SyncInterval updates we will make sure all columns are up to date. 
+        static const int s_SyncInterval;
     
-    {} // namespace aria2
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    #include '2d/CCActionCamera.h'
+#include '2d/CCNode.h'
+#include 'platform/CCStdC.h'
+    
+    Quad3 TiledGrid3DAction::getTile(const Vec2& pos) const
+{
+    TiledGrid3D *g = (TiledGrid3D*)_gridNodeTarget->getGrid();
+    return g->getTile(pos);
+}
+    
+        virtual void transformTile(const Vec2& pos, float distance) override;
+    
+    
+    {        for(const auto &value : spritesheets) {
+            std::string path = FileUtils::getInstance()->fullPathFromRelativeFile(value.asString(),plist);
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
+        }
+    }
+    
+        /** Adds a Animation with a name.
+     *
+     * @param animation An animation.
+     * @param name The name of animation.
+     */
+    void addAnimation(Animation *animation, const std::string& name);
+    
+    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
+// By default the embedded implementations are declared static and not available outside of imgui cpp files.
+//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
+//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
+//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    void ImGui_ImplDX9_InvalidateDeviceObjects()
+{
+    if (!g_pd3dDevice)
+        return;
+    if (g_pVB)
+    {
+        g_pVB->Release();
+        g_pVB = NULL;
+    }
+    if (g_pIB)
+    {
+        g_pIB->Release();
+        g_pIB = NULL;
+    }
+    }
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Create texture
+    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
+    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
+    atlas->TexPixelsAlpha8 = (unsigned char*)ImGui::MemAlloc(atlas->TexWidth * atlas->TexHeight);
+    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
