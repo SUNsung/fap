@@ -1,179 +1,157 @@
 
         
-        bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
+          uv_loop_t* loop_;
+    
+    scoped_refptr<TracingController::TraceDataEndpoint> GetTraceDataEndpoint(
+    const base::FilePath& path,
+    const CompletionCallback& callback) {
+  base::FilePath result_file_path = path;
+  if (result_file_path.empty() && !base::CreateTemporaryFile(&result_file_path))
+    LOG(ERROR) << 'Creating temporary file failed';
     }
     
-    #include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
-    
-    class TreePrinter {
-  llvm::raw_ostream &Out;
-  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
-  SmallString<40> Indent;
-public:
-  TreePrinter(llvm::raw_ostream &out,
-              void (&printNodeData)(llvm::raw_ostream &out, void *node))
-    : Out(out), PrintNodeData(printNodeData) {}
-    }
-    
-    using namespace swift;
-    
-    
-    {  return loc;
+    int64_t DownloadItem::GetTotalBytes() const {
+  return download_item_->GetTotalBytes();
 }
+    
+    using extensions::GlobalShortcutListener;
+    
+    #include 'atom/browser/api/atom_api_web_contents.h'
+#include 'atom/browser/atom_browser_client.h'
+#include 'atom/common/native_mate_converters/value_converter.h'
+#include 'content/public/browser/render_process_host.h'
+#include 'native_mate/dictionary.h'
+#include 'native_mate/object_template_builder.h'
+    
+    static gfx::Rect DIPToScreenRect(atom::NativeWindow* window,
+                                 const gfx::Rect& rect) {
+  HWND hwnd = window ? window->GetAcceleratedWidget() : nullptr;
+  return display::win::ScreenWin::DIPToScreenRect(hwnd, rect);
+}
+    
+    
+    {}
+    
+    namespace nw {
+    }
+    
+      NwScreenDisplayObserver::NwScreenDisplayObserver() {
+    display::Screen* screen = display::Screen::GetScreen();
+    if (screen) {
+      screen->AddObserver(this);
+    }
+  }
+    
+    
+    {} // namespace caffe2
+
+    
+    template <>
+template <typename T>
+bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
+  EnforceOnCPU<T>(Input(0));
+  return true;
+}
+    
+    REGISTER_CPU_OPERATOR(
+    MergeSingleListFeatureTensorsGradient,
+    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleListFeatureTensorsGradient)
+    .SetDoc(
+        'Explode multi-feature tensors with list features into '
+        'single-feature tensors.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_presence', '.presence')
+    .Input(2, 'out_values_values', '.values.values_grad')
+    .Output(0, 'out1_values', '.values_grad');
+REGISTER_GRADIENT(
+    MergeSingleListFeatureTensors,
+    GetMergeSingleListFeatureTensorsGradient);
+    
+    namespace caffe2 {
+namespace {
+REGISTER_CPU_OPERATOR(
+    FindDuplicateElements,
+    FindDuplicateElementsOp<CPUContext>);
+    }
+    }
+    
+    ```
+    
+      XGBOOST_DEVICE GradientPairInternal(float grad, float hess) {
+    SetGrad(grad);
+    SetHess(hess);
+  }
+    
+      virtual void PredictInstance(const SparsePage::Inst& inst,
+                               std::vector<bst_float>* out_preds,
+                               const gbm::GBTreeModel& model,
+                               unsigned ntree_limit = 0,
+                               unsigned root_index = 0) = 0;
     
     
     { private:
-  App();
-  DISALLOW_COPY_AND_ASSIGN(App);
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
 };
     
-    #include 'content/nw/src/api/base/base.h'
+     private:
+  char ch_buf_;
+  std::string s_name_, s_val_, s_buf_;
     
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
-    
-    
-    {} // namespace nwapi
+    #endif  // XGBOOST_OBJECTIVE_REGRESSION_LOSS_H_
 
     
-      static int getUID() {
-    static int id = 0;
-    return ++id;
+      // Compaction filter never applies to merge keys.
+  ASSERT_OK(db_->Put(WriteOptions(), 'foobar', one));
+  ASSERT_OK(Flush());
+  ASSERT_OK(db_->Merge(WriteOptions(), 'foobar', two));
+  ASSERT_OK(Flush());
+  newvalue = Get('foobar');
+  ASSERT_EQ(newvalue, three);
+  dbfull()->CompactRange(CompactRangeOptions(), nullptr, nullptr);
+  newvalue = Get('foobar');
+  ASSERT_EQ(newvalue, three);
+    
+      // Put about 28K to L0
+  for (int i = 0; i < 70; i++) {
+    ASSERT_OK(Put(Key(static_cast<int>(rnd.Uniform(kMaxKey))),
+                  RandomString(&rnd, 380)));
   }
+  ASSERT_OK(dbfull()->SetOptions({
+      {'disable_auto_compactions', 'false'},
+  }));
+  Flush();
+  dbfull()->TEST_WaitForCompact();
+  ASSERT_TRUE(db_->GetIntProperty('rocksdb.base-level', &int_prop));
+  ASSERT_EQ(4U, int_prop);
     
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
+    #include 'rocksdb/status.h'
     
-    EnumGenerator::~EnumGenerator() {
-}
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-    
-    void WriteMethodDocComment(io::Printer* printer,
-                           const MethodDescriptor* method) {
-  printer->Print('/**\n');
-  WriteDocCommentBody(printer, method);
-  printer->Print(
-    ' * <code>$def$</code>\n'
-    ' */\n',
-    'def', EscapeJavadoc(FirstLineOf(method->DebugString())));
-}
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    
-    {  WriteFieldDocComment(printer, descriptor_);
-  if (descriptor_->is_repeated()) {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newRepeatedGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $packed$,\n'
-        '      $singular_type$.class);\n');
-  } else {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newSingularGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $default$,\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $singular_type$.class);\n');
-  }
-  printer->Annotate('name', descriptor_);
-}
-    
-    #include <google/protobuf/compiler/java/java_shared_code_generator.h>
-    
-    ALWAYS_INLINE
-const APCLocalArray* APCLocalArray::asApcArray(const ArrayData* ad) {
-  assertx(ad->kind() == kApcKind);
-  return static_cast<const APCLocalArray*>(ad);
-}
-    
-    const StaticString
-  s_wrapper_type('wrapper_type'),
-  s_stream_type('stream_type'),
-  s_mode('mode'),
-  s_unread_bytes('unread_bytes'),
-  s_seekable('seekable'),
-  s_timed_out('timed_out'),
-  s_blocked('blocked'),
-  s_eof('eof'),
-  s_plainfile('plainfile'),
-  s_dir('dir'),
-  s_r('r');
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    
-    {    if (isPHP == php) {
-      callback(spath + ename, false);
+    namespace rocksdb {
     }
+    
+    
+    {}  // namespace rocksdb
+
+    
+    
+    {    // Pull off the basename temporarily since realname(3) (used by
+    // EncodePath()) requires a path that exists
+    size_t base_sep = path.rfind('/', final_idx);
+    auto status_and_enc_path = EncodePath(path.substr(0, base_sep + 1));
+    status_and_enc_path.second.append(path.substr(base_sep + 1));
+    return status_and_enc_path;
   }
     
-    #include 'hphp/runtime/base/type-string.h'
-    
-        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
-    {
-        uint64_t const* p_value = (uint64_t const*)&v;
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq %[dest], %%rax\n\t'
-            'movq 8+%[dest], %%rdx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg16b %[dest]\n\t'
-            'jne 1b\n\t'
-            : [dest] '=o' (storage)
-            : 'b' (p_value[0]), 'c' (p_value[1])
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
-        );
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq 0(%[dest]), %%rax\n\t'
-            'movq 8(%[dest]), %%rdx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg16b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-            :
-            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
-        );
-#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+    int main() {
+  DBOptions db_opt;
+  db_opt.create_if_missing = true;
     }
