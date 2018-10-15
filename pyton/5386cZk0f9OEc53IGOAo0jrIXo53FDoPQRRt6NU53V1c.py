@@ -1,161 +1,128 @@
 
         
-            @staticmethod
-    def import_windows_ca(certfile):
-        xlog.debug('Begin to import Windows CA')
-        with open(certfile, 'rb') as fp:
-            certdata = fp.read()
-            if certdata.startswith(b'-----'):
-                begin = b'-----BEGIN CERTIFICATE-----'
-                end = b'-----END CERTIFICATE-----'
-                certdata = base64.b64decode(b''.join(certdata[certdata.find(begin)+len(begin):certdata.find(end)].strip().splitlines()))
+        
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
+    
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
+    
+        def __init__(self):
+        self.name = 'btree_gin'
+    
+        def load(self):
         try:
-            common_name = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, certdata).get_subject().CN
-        except Exception as e:
-            logging.error('load_certificate(certfile=%r) 失败：%s', certfile, e)
-            return -1
+            session_data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            session_data = None
+        if session_data is not None:
+            return session_data
+        self._session_key = None
+        return {}
     
-                if fail or self.network_stat != 'OK':
-                # Fail or unknown
-                if time_now - self.last_check_time < 3:
-                    return
-            else:
-                if time_now - self.last_check_time < 10:
-                    return
-    
-        for qualified, server, _, _ in server_list:
-        if qualified:
-            best_server = server[0]
-            break
-    log = Log()
-    if best_server:
-        log.write('best server is: %s.' % best_server)
-    else:
-        xlog.warning('no server detected, return default: teredo.remlab.net.')
-        log.write('no server detected, return default: teredo.remlab.net.')
-        best_server = 'teredo.remlab.net'
-    log.close()
-    return best_server
-    
-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
-sys.path.append(noarch_lib)
-    
-            p = random.choice(self.plus)
-    
-    
-    def specialStateTransition(self, s, input):
-        return -1
-    
-    # Other resources excluded from --use=all:
-#
-# - extralagefile (ex: test_zipfile64): really too slow to be enabled
-#   'by default'
-# - tzdata: while needed to validate fully test_datetime, it makes
-#   test_datetime too slow (15-20 min on some buildbots) and so is disabled by
-#   default (see bpo-30822).
-RESOURCE_NAMES = ALL_RESOURCES + ('extralargefile', 'tzdata')
-    
-            if not self.ns.fromfile:
-            self.selected = self.tests or self.ns.args or alltests
-        else:
-            self.selected = self.tests
-        if self.ns.single:
-            self.selected = self.selected[:1]
-            try:
-                pos = alltests.index(self.selected[0])
-                self.next_single_test = alltests[pos + 1]
-            except IndexError:
-                pass
-    
-            - encoding_details: EncodingDetails for eager decoding
-        - stderr_lines: result of calling splitlines() on the stderr output
-    
-            out = self.get_output('-c', code, PYTHONUTF8='1')
-        self.assertEqual(out, '1')
-    
-    The special characters are:
-    '.'      Matches any character except a newline.
-    '^'      Matches the start of the string.
-    '$'      Matches the end of the string or just before the newline at
-             the end of the string.
-    '*'      Matches 0 or more (greedy) repetitions of the preceding RE.
-             Greedy means that it will match as many repetitions as possible.
-    '+'      Matches 1 or more (greedy) repetitions of the preceding RE.
-    '?'      Matches 0 or 1 (greedy) of the preceding RE.
-    *?,+?,?? Non-greedy versions of the previous three special characters.
-    {m,n}    Matches from m to n repetitions of the preceding RE.
-    {m,n}?   Non-greedy version of the above.
-    '\\'     Either escapes special characters or signals a special sequence.
-    []       Indicates a set of characters.
-             A '^' as the first character indicates a complementing set.
-    '|'      A|B, creates an RE that will match either A or B.
-    (...)    Matches the RE inside the parentheses.
-             The contents can be retrieved or matched later in the string.
-    (?aiLmsux) Set the A, I, L, M, S, U, or X flag for the RE (see below).
-    (?:...)  Non-grouping version of regular parentheses.
-    (?P<name>...) The substring matched by the group is accessible by name.
-    (?P=name)     Matches the text matched earlier by the group named name.
-    (?#...)  A comment; ignored.
-    (?=...)  Matches if ... matches next, but doesn't consume the string.
-    (?!...)  Matches if ... doesn't match next.
-    (?<=...) Matches if preceded by ... (must be fixed length).
-    (?<!...) Matches if not preceded by ... (must be fixed length).
-    (?(id/name)yes|no) Matches yes pattern if the group with id/name matched,
-                       the (optional) no pattern otherwise.
-    
-    
-def split(s):
-    '''Split a pathname into two parts: the directory leading up to the final
-    bit, and the basename (the filename, without colons, in that directory).
-    The result (s, t) is such that join(s, t) yields the original argument.'''
-    
+        def delete(self, session_key=None):
         '''
-    if not module or not isinstance(module, types.ModuleType):
-        raise TypeError('reload() argument must be a module')
-    try:
-        name = module.__spec__.name
-    except AttributeError:
-        name = module.__name__
+        To delete, clear the session key and the underlying data structure
+        and set the modified flag so that the cookie is set on the client for
+        the current request.
+        '''
+        self._session_key = ''
+        self._session_cache = {}
+        self.modified = True
     
-        return result
+        Provide both the name and the version of the Python implementation
+    currently running. For example, on CPython 2.7.5 it will return
+    {'name': 'CPython', 'version': '2.7.5'}.
     
-        complete_apps = ['sentry']
-    symmetrical = True
+    
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or dict()
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
 
     
-            # Adding field 'ApiAuthorization.scope_list'
-        db.add_column(
-            'sentry_apiauthorization',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
     
+@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
+def test_system_ssl_py26():
+    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
+    blow up in this case.
+    '''
+    assert info()['system_ssl'] == {'version': ''}
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'VersionDSymFile'
-        db.create_table(
-            'sentry_versiondsymfile', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ProjectDSymFile'], null=True
-                    )
-                ), (
-                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.DSymApp']
-                    )
-                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
-                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['VersionDSymFile'])
+        def test_copy(self):
+        copy = self.case_insensitive_dict.copy()
+        assert copy is not self.case_insensitive_dict
+        assert copy == self.case_insensitive_dict
+    
+        def _close_server_sock_ignore_errors(self):
+        try:
+            self.server_sock.close()
+        except IOError:
+            pass
+    
+    _codes = {
+    }
+    
+    # General information about the project.
+project = u'Requests'
+copyright = u'MMXVIII. A <a href='http://kennethreitz.com/pages/open-projects.html'>Kenneth Reitz</a> Project'
+author = u'Kenneth Reitz'
+    
+    requires = [
+    'chardet>=3.0.2,<3.1.0',
+    'idna>=2.5,<2.8',
+    'urllib3>=1.21.1,<1.24',
+    'certifi>=2017.4.17'
+    
+        def __getstate__(self):
+        # Consume everything; accessing the content attribute makes
+        # sure the content has been fully read.
+        if not self._content_consumed:
+            self.content
+    
+        for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
