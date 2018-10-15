@@ -1,415 +1,436 @@
 
         
-        #include 'base/callback.h'
-#include 'base/location.h'
-#include 'base/single_thread_task_runner.h'
-#include 'uv.h'  // NOLINT(build/include)
+        Status RunCppShapeInferenceImpl(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    const std::vector<PyObject*>& input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    std::vector<string>* output_tensor_shape_protos,
+    string* input_tensors_needed_out) {
+  tensorflow::NodeDef node;
+  if (!node.ParseFromString(serialized_node_def)) {
+    return errors::InvalidArgument(
+        'Error parsing node_def during cpp shape inference');
+  }
+  DCHECK_EQ(output_tensor_shape_protos->size(), 0);
+    }
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_BROWSER_VIEW_H_
-#define ATOM_BROWSER_API_ATOM_API_BROWSER_VIEW_H_
+    #ifndef TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
+#define TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
     
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
     
-    {}  // namespace atom
-
+    // Register the bfloat16 numpy type.
+void RegisterNumpyBfloat16();
     
+    Status TF_DataType_to_PyArray_TYPE(TF_DataType tf_datatype,
+                                   int* out_pyarray_type) {
+  switch (tf_datatype) {
+    case TF_HALF:
+      *out_pyarray_type = NPY_FLOAT16;
+      break;
+    case TF_FLOAT:
+      *out_pyarray_type = NPY_FLOAT32;
+      break;
+    case TF_DOUBLE:
+      *out_pyarray_type = NPY_FLOAT64;
+      break;
+    case TF_INT32:
+      *out_pyarray_type = NPY_INT32;
+      break;
+    case TF_UINT32:
+      *out_pyarray_type = NPY_UINT32;
+      break;
+    case TF_UINT8:
+      *out_pyarray_type = NPY_UINT8;
+      break;
+    case TF_UINT16:
+      *out_pyarray_type = NPY_UINT16;
+      break;
+    case TF_INT8:
+      *out_pyarray_type = NPY_INT8;
+      break;
+    case TF_INT16:
+      *out_pyarray_type = NPY_INT16;
+      break;
+    case TF_INT64:
+      *out_pyarray_type = NPY_INT64;
+      break;
+    case TF_UINT64:
+      *out_pyarray_type = NPY_UINT64;
+      break;
+    case TF_BOOL:
+      *out_pyarray_type = NPY_BOOL;
+      break;
+    case TF_COMPLEX64:
+      *out_pyarray_type = NPY_COMPLEX64;
+      break;
+    case TF_COMPLEX128:
+      *out_pyarray_type = NPY_COMPLEX128;
+      break;
+    case TF_STRING:
+      *out_pyarray_type = NPY_OBJECT;
+      break;
+    case TF_RESOURCE:
+      *out_pyarray_type = NPY_VOID;
+      break;
+    // TODO(keveman): These should be changed to NPY_VOID, and the type used for
+    // the resulting numpy array should be the custom struct types that we
+    // expect for quantized types.
+    case TF_QINT8:
+      *out_pyarray_type = NPY_INT8;
+      break;
+    case TF_QUINT8:
+      *out_pyarray_type = NPY_UINT8;
+      break;
+    case TF_QINT16:
+      *out_pyarray_type = NPY_INT16;
+      break;
+    case TF_QUINT16:
+      *out_pyarray_type = NPY_UINT16;
+      break;
+    case TF_QINT32:
+      *out_pyarray_type = NPY_INT32;
+      break;
+    case TF_BFLOAT16:
+      *out_pyarray_type = Bfloat16NumpyType();
+      break;
+    default:
+      return errors::Internal('Tensorflow type ', tf_datatype,
+                              ' not convertible to numpy dtype.');
+  }
+  return Status::OK();
+}
     
-    {}  // namespace atom
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    void PowerMonitor::QuerySystemIdleState(v8::Isolate* isolate,
-                                        int idle_threshold,
-                                        const ui::IdleCallback& callback) {
-  if (idle_threshold > 0) {
-    ui::CalculateIdleState(idle_threshold, callback);
-  } else {
-    isolate->ThrowException(v8::Exception::TypeError(mate::StringToV8(
-        isolate, 'Invalid idle threshold, must be greater than 0')));
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
+  }
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
+    
+    string UpperLowerString(UpperLower ul) {
+  switch (ul) {
+    case UpperLower::kUpper:
+      return 'Upper';
+    case UpperLower::kLower:
+      return 'Lower';
+    default:
+      LOG(FATAL) << 'Unknown upperlower ' << static_cast<int32>(ul);
   }
 }
     
-    template <>
-template <typename T>
-bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
-  EnforceOnCPU<T>(Input(0));
-  return true;
+    private Q_SLOTS:
+    void on_selectFileButton_clicked();
+    
+    
+    {private Q_SLOTS:
+    void handleSelectionChanged(int idx);
+};
+    
+        // Initialize relevant QT models.
+    std::unique_ptr<const PlatformStyle> platformStyle(PlatformStyle::instantiate('other'));
+    auto node = interfaces::MakeNode();
+    OptionsModel optionsModel(*node);
+    AddWallet(wallet);
+    WalletModel walletModel(std::move(node->getWallets()[0]), *node, platformStyle.get(), &optionsModel);
+    RemoveWallet(wallet);
+    EditAddressDialog editAddressDialog(EditAddressDialog::NewSendingAddress);
+    editAddressDialog.setModel(walletModel.getAddressTableModel());
+    
+    private:
+    reverse_lock(reverse_lock const&);
+    reverse_lock& operator=(reverse_lock const&);
+    
+    
+    {    /** In case a->infinity == 1, replace r with (b->x, b->y, 1). */
+    secp256k1_fe_cmov(&r->x, &b->x, a->infinity);
+    secp256k1_fe_cmov(&r->y, &b->y, a->infinity);
+    secp256k1_fe_cmov(&r->z, &fe_1, a->infinity);
+    r->infinity = infinity;
 }
     
-      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+    
+    {    /* Try to multiply it by bad values */
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_zero) == 0);
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 0);
+    /* ...and a good one */
+    s_overflow[31] -= 1;
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 1);
+}
+    
+    BOOST_AUTO_TEST_CASE(get_difficulty_for_mid_target)
+{
+    TestDifficulty(0x1df88f6f, 0.004023);
+}
+    
+    #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
+    
+    // Base class for a SIMD function to multiply a matrix by a vector, with sources
+// of 8-bit signed integer, and result in a double, after appropriate scaling.
+// Assumes a specific method of multiplication that can be applied to any size
+// and number of SIMD registers as follows:
+// int32_t results are computed with num_outputs_per_register_ in each of
+// max_output_registers_ result registers, repeatedly until it would make too
+// many results, then the number of registers is halved, and so-on down to a
+// single result register. The last calculation only outputs the required number
+// of results instead of writing beyond the bounds. Eg: matrix has 75 outputs,
+//  num_outputs_per_register_ = 4, and max_output_registers_ = 8,
+// Step 1: 8x4=32 results are computed,
+// Step 2: 8x4=32 again, total 64,
+// Step 3: 2x4=8 (since 8x4 is too many, so is 4x4), total 72,
+// Step 4: 1x3, total 75.
+// Each step above is computed using a PartialFunc, which runs over the input
+// vector once. The input is read one registerful of num_inputs_per_register_
+// at a time (presumably 4x num_outputs_per_register_ since they are int8_t)
+// so the inputs MUST BE PADDED to a multiple of num_inputs_per_register_.
+// Since it is slow (on Intel at least) to horizontally add in a register,
+// provision is made to process num_inputs_per_group_ inputs at a time, with
+// the group being replicated num_input_groups_ times and multiplied by a
+// num_inputs_per_group_ by num_input_groups_ rectangle of the weights matrix.
+// This is most convenient if num_inputs_per_group_ is 4, and the product
+// sign-extends and sums 8x8=16 bit results to 32 bits, adding 4 adjacent
+// results in the process, but it doesn't have to be implemented that way.
+// The weights are re-ordered by Init() to be used sequentially by the above
+// algorithm, followed by the biases, so they can be added at the end.
+// The base class computes the base C++ implementation.
+// NOTE that, although the subclasses execute on different SIMD hardware, no
+// virtual methods are needed, as the constructor sets up everything that
+// is required to allow the base class implementation to do all the work.
+class IntSimdMatrix {
+ public:
+  // Constructor should set the data members to indicate the sizes.
+  // NOTE: Base constructor public only for test purposes.
+  IntSimdMatrix()
+      : num_outputs_per_register_(1),
+        max_output_registers_(1),
+        num_inputs_per_register_(1),
+        num_inputs_per_group_(1),
+        num_input_groups_(1) {}
+    }
+    
+    IntSimdMatrixAVX2::IntSimdMatrixAVX2() {
+#ifdef __AVX2__
+  num_outputs_per_register_ = kNumOutputsPerRegister;
+  max_output_registers_ = kMaxOutputRegisters;
+  num_inputs_per_register_ = kNumInputsPerRegister;
+  num_inputs_per_group_ = kNumInputsPerGroup;
+  num_input_groups_ = kNumInputGroups;
+  partial_funcs_ = {PartialMatrixDotVector64, PartialMatrixDotVector32,
+                    PartialMatrixDotVector16, PartialMatrixDotVector8};
+#endif  // __AVX2__
+}
+    
+    // Constructor.
+// Tests the architecture in a system-dependent way to detect AVX, SSE and
+// any other available SIMD equipment.
+// __GNUC__ is also defined by compilers that include GNU extensions such as
+// clang.
+SIMDDetect::SIMDDetect() {
+#if defined(X86_BUILD)
+#if defined(__GNUC__)
+  unsigned int eax, ebx, ecx, edx;
+  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
+    // Note that these tests all use hex because the older compilers don't have
+    // the newer flags.
+    sse_available_ = (ecx & 0x00080000) != 0;
+    avx_available_ = (ecx & 0x10000000) != 0;
+    if (avx_available_) {
+      // There is supposed to be a __get_cpuid_count function, but this is all
+      // there is in my cpuid.h. It is a macro for an asm statement and cannot
+      // be used inside an if.
+      __cpuid_count(7, 0, eax, ebx, ecx, edx);
+      avx2_available_ = (ebx & 0x00000020) != 0;
+      avx512F_available_ = (ebx & 0x00010000) != 0;
+      avx512BW_available_ = (ebx & 0x40000000) != 0;
+    }
+  }
+#elif defined(_WIN32)
+  int cpuInfo[4];
+  __cpuid(cpuInfo, 0);
+  if (cpuInfo[0] >= 1) {
+    __cpuid(cpuInfo, 1);
+    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
+    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
+  }
+#else
+#error 'I don't know how to test for SIMD with this compiler'
+#endif
+#endif  // X86_BUILD
+}
+
+    
+    #include <string>
+#include <vector>
+    
+      const auto& X = in[0];
+  const auto& W = in[1];
+  const auto& b = in[2];
+  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
   const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
+  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
   auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
   const int canonical_axis_w =
       canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = pretransposed_weight
-      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
-      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
     
-        for (int inputIdx = 0; inputIdx < def_.input_size() / 4; ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * 4));
-      input_blob_names.push_back(I(inputIdx * 4 + 3));
-      output_blob_names.push_back(GI(inputIdx * 4 + 2));
-    }
-    input_blob_names.push_back(GO(4));
+    #include 'caffe2/core/context.h'
     
-      bool RunOnDevice() override {
-    auto& X = Input(0);
-    auto* Y = Output(0);
-    Y->ResizeLike(X);
-    }
+    ```
     
     
-    {
-    {} // namespace
-} // namespace caffe2
+    {} // namespace caffe2
 
     
-    #include 'register_types.h'
-    
-    template <class charT, class traits>
-bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
-{
-   static const char* incomplete_message = 'Missing } in quantified repetition.';
-   //
-   // parse a repeat-range:
-   //
-   std::size_t min, max;
-   int v;
-   // skip whitespace:
-   while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
-      ++m_position;
-   if(this->m_position == this->m_end)
-   {
-      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
-      {
-         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-         return false;
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
       }
-      // Treat the opening '{' as a literal character, rewind to start of error:
-      --m_position;
-      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
-      return parse_literal();
-   }
-   // get min:
-   v = this->m_traits.toi(m_position, m_end, 10);
-   // skip whitespace:
-   if(v < 0)
-   {
-      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
-      {
-         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-         return false;
-      }
-      // Treat the opening '{' as a literal character, rewind to start of error:
-      --m_position;
-      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
-      return parse_literal();
-   }
-   while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
-      ++m_position;
-   if(this->m_position == this->m_end)
-   {
-      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
-      {
-         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-         return false;
-      }
-      // Treat the opening '{' as a literal character, rewind to start of error:
-      --m_position;
-      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
-      return parse_literal();
-   }
-   min = v;
-   // see if we have a comma:
-   if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_comma)
-   {
-      // move on and error check:
-      ++m_position;
-      // skip whitespace:
-      while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
-         ++m_position;
-      if(this->m_position == this->m_end)
-      {
-         if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
-         {
-            fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-            return false;
-         }
-         // Treat the opening '{' as a literal character, rewind to start of error:
-         --m_position;
-         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
-         return parse_literal();
-      }
-      // get the value if any:
-      v = this->m_traits.toi(m_position, m_end, 10);
-      max = (v >= 0) ? (std::size_t)v : (std::numeric_limits<std::size_t>::max)();
-   }
-   else
-   {
-      // no comma, max = min:
-      max = min;
-   }
-   // skip whitespace:
-   while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
-      ++m_position;
-   // OK now check trailing }:
-   if(this->m_position == this->m_end)
-   {
-      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
-      {
-         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-         return false;
-      }
-      // Treat the opening '{' as a literal character, rewind to start of error:
-      --m_position;
-      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
-      return parse_literal();
-   }
-   if(isbasic)
-   {
-      if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_escape)
-      {
-         ++m_position;
-         if(this->m_position == this->m_end)
-         {
-            fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-            return false;
-         }
-      }
-      else
-      {
-         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-         return false;
-      }
-   }
-   if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_brace)
-      ++m_position;
-   else
-   {
-      // Treat the opening '{' as a literal character, rewind to start of error:
-      --m_position;
-      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
-      return parse_literal();
-   }
-   //
-   // finally go and add the repeat, unless error:
-   //
-   if(min > max)
-   {
-      // Backtrack to error location:
-      m_position -= 2;
-      while(this->m_traits.isctype(*m_position, this->m_word_mask)) --m_position;
-         ++m_position;
-      fail(regex_constants::error_badbrace, m_position - m_base);
-      return false;
-   }
-   return parse_repeat(min, max);
-}
     }
-    }
-    }
-    }
-    
-    #  ifndef BOOST_REGEX_INSTANTIATE
-#     pragma option push -Jgx
-#  endif
-    
-    /*
-template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::unwind_parenthesis_pop(bool r)
-{
-   saved_state* pmp = static_cast<saved_state*>(m_backup_state);
-   if(!r)
-   {
-      --parenthesis_stack_position;
-   }
-   boost::BOOST_REGEX_DETAIL_NS::inplace_destroy(pmp++);
-   m_backup_state = pmp;
-   return true;
+  }
 }
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_fast()
-{
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable:4127)
-#endif
-   if(m_match_flags & match_not_dot_null)
-      return match_dot_repeat_slow();
-   if((static_cast<const re_dot*>(pstate->next.p)->mask & match_any_mask) == 0)
-      return match_dot_repeat_slow();
-   //
-   // start by working out how much we can skip:
-   //
-   const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable:4267)
-#endif
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
-   std::size_t count = (std::min)(static_cast<std::size_t>(::boost::BOOST_REGEX_DETAIL_NS::distance(position, last)), static_cast<std::size_t>(greedy ? rep->max : rep->min));
-   if(rep->min > count)
-   {
-      position = last;
-      return false;  // not enough text left to match
-   }
-   std::advance(position, count);
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-   if((rep->leading) && (count < rep->max) && greedy)
-      restart = position;
-   if(greedy)
-      return backtrack_till_match(count - rep->min);
-    }
-    
-    template <class OutputIterator, class Results, class traits, class ForwardIter>
-void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format_all()
-{
-   // over and over:
-   while(m_position != m_end)
-   {
-      switch(*m_position)
-      {
-      case '&':
-         if(m_flags & ::boost::regex_constants::format_sed)
-         {
-            ++m_position;
-            put(m_results[0]);
-            break;
-         }
-         put(*m_position++);
-         break;
-      case '\\':
-         format_escape();
-         break;
-      case '(':
-         if(m_flags & boost::regex_constants::format_all)
-         {
-            ++m_position;
-            bool have_conditional = m_have_conditional;
-            m_have_conditional = false;
-            format_until_scope_end();
-            m_have_conditional = have_conditional;
-            if(m_position == m_end)
-               return;
-            BOOST_ASSERT(*m_position == static_cast<char_type>(')'));
-            ++m_position;  // skip the closing ')'
-            break;
-         }
-         put(*m_position);
-         ++m_position;
-         break;
-      case ')':
-         if(m_flags & boost::regex_constants::format_all)
-         {
-            return;
-         }
-         put(*m_position);
-         ++m_position;
-         break;
-      case ':':
-         if((m_flags & boost::regex_constants::format_all) && m_have_conditional)
-         {
-            return;
-         }
-         put(*m_position);
-         ++m_position;
-         break;
-      case '?':
-         if(m_flags & boost::regex_constants::format_all)
-         {
-            ++m_position;
-            format_conditional();
-            break;
-         }
-         put(*m_position);
-         ++m_position;
-         break;
-      case '$':
-         if((m_flags & format_sed) == 0)
-         {
-            format_perl();
-            break;
-         }
-         // not a special character:
-         BOOST_FALLTHROUGH;
-      default:
-         put(*m_position);
-         ++m_position;
-         break;
-      }
-   }
-}
-    
-       size_type BOOST_REGEX_CALL size()
-   {
-      return end - start;
-   }
-    
-    #ifdef BOOST_MSVC
-#pragma warning(pop)
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
+        //
+    // Override
+    //
+    virtual Follow* clone() const override;
+    virtual Follow* reverse() const override;
     /**
- * @class CanFrame
- * @brief The class which defines the information to send and receive.
- */
-struct CanFrame {
-  /// Message id
-  uint32_t id;
-  /// Message length
-  uint8_t len;
-  /// Message content
-  uint8_t data[8];
-  /// Time stamp
-  struct timeval timestamp;
+     * @param dt in seconds.
+     * @js NA
+     */
+    virtual void step(float dt) override;
+    virtual bool isDone() const override;
+    virtual void stop() override;
+    
+        p = reverse->getControlPointAtIndex(reverse->count()-1);
+    reverse->removeControlPointAtIndex(reverse->count()-1);
+    
+        /** Initializes the action with a duration and an array of points.
+     *
+     * @param dt In seconds.
+     * @param points An PointArray.
+     */
+    bool initWithDuration(float dt, PointArray* points);
+    
+    void ActionInstant::step(float /*dt*/)
+{
+    float updateDt = 1;
+#if CC_ENABLE_SCRIPT_BINDING
+    if (_scriptType == kScriptTypeJavascript)
+    {
+        if (ScriptEngineManager::sendActionEventToJS(this, kActionUpdate, (void *)&updateDt))
+            return;
     }
-    
-    #include 'modules/common/macro.h'
-#include 'modules/common/util/factory.h'
-#include 'modules/drivers/canbus/can_client/can_client.h'
-    
-    using Clock = common::time::Clock;
-using micros = common::time::micros;
-using apollo::common::ErrorCode;
-    
-      /**
-   * @brief Initialize by a CAN client, message manager.
-   * @param can_client The CAN client to use for receiving messages.
-   * @param pt_manager The message manager which can parse and
-   *        get protocol data by message id.
-   * @param enable_log If log the essential information during running.
-   * @return An error code indicating the status of this initialization.
-   */
-  common::ErrorCode Init(CanClient *can_client,
-                         MessageManager<SensorType> *pt_manager,
-                         bool enable_log);
-    
-    TEST(ByteTest, ByteToString) {
-  unsigned char value = 0x34;
-  EXPECT_EQ('34', Byte::byte_to_hex(value));
-  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
-  uint32_t int_value = 0xE13A;
-  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+#endif
+    update(updateDt);
 }
     
-    const int32_t CANBUS_MESSAGE_LENGTH = 8;  // according to ISO-11891-1
-const int32_t MAX_CAN_PORT = 3;
+        //
+    // Overrides
+    //
+    virtual BezierBy* clone() const override;
+    virtual BezierBy* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
     
-     private:
-  void PublishSensorData();
-  void OnTimer(const ros::TimerEvent &event);
-  void DataTrigger();
-  common::Status OnError(const std::string &error_msg);
-  void RegisterCanClients();
+CC_CONSTRUCTOR_ACCESS:
+    BezierBy() {}
+    virtual ~BezierBy() {}
     
-    // Canbus gflags
-DEFINE_double(sensor_freq, 100,
-              'Sensor feedback timer frequency -- 0 means event trigger.');
+        if (action && action->initWithDuration(duration, gridSize))
+    {
+        action->autorelease();
+        return action;
+    }
+    
+    // implementation of Animation
+    
+    class CompactedDBImpl : public DBImpl {
+ public:
+  CompactedDBImpl(const DBOptions& options, const std::string& dbname);
+  virtual ~CompactedDBImpl();
+    }
+    
+      {
+    // Scan the entire database as of the snapshot to ensure
+    // that nothing is left
+    ReadOptions read_options;
+    read_options.snapshot = snapshot;
+    std::unique_ptr<Iterator> iter(db_->NewIterator(read_options));
+    iter->SeekToFirst();
+    int count = 0;
+    while (iter->Valid()) {
+      count++;
+      iter->Next();
+    }
+    ASSERT_EQ(count, 6);
+    read_options.snapshot = nullptr;
+    std::unique_ptr<Iterator> iter1(db_->NewIterator(read_options));
+    iter1->SeekToFirst();
+    count = 0;
+    while (iter1->Valid()) {
+      count++;
+      iter1->Next();
+    }
+    // We have deleted 10 keys from 40 using the compaction filter
+    //  Keys 6-9 before the snapshot and 100-105 after the snapshot
+    ASSERT_EQ(count, 30);
+  }
+    
+      ASSERT_OK(dbfull()->SetOptions({
+      {'disable_auto_compactions', 'false'},
+  }));
+    
+    class PosixRandomRWFile : public RandomRWFile {
+ public:
+  explicit PosixRandomRWFile(const std::string& fname, int fd,
+                             const EnvOptions& options);
+  virtual ~PosixRandomRWFile();
+    }
+    
+    
+    {  std::atomic<int64_t> fake_sleep_micros_;
+};
+    
+    std::string kDBPath = '/tmp/rocksdb_column_families_example';
