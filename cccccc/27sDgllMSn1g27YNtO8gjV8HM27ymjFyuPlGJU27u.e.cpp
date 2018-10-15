@@ -1,291 +1,158 @@
 
         
-        StringRef swift::prettyPlatformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return PrettyName;
-#include 'swift/AST/PlatformKinds.def'
-  }
-  llvm_unreachable('bad PlatformKind');
-}
-    
-      // Finally, add the generic parameters from the requirement.
-  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
-    // The only depth that makes sense is depth == 1, the generic parameters
-    // of the requirement itself. Anything else is from invalid code.
-    if (genericParam->getDepth() != 1) {
-      return;
-    }
-    }
-    
-    #include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
-    
-      std::size_t capacity = EndOfAllocation - Begin;
-  std::size_t requiredCapacity = capacity + needed;
-  do {
-    capacity = 2 * capacity + 16;
-  } while (capacity < requiredCapacity);
-    
-    static const StringRef SupportedConditionalCompilationRuntimes[] = {
-  '_ObjC',
-  '_Native',
-};
-    
-        if (node->Left) {
-      IndentScope ms(this, (childKind == ChildKind::Left ||
-                            childKind == ChildKind::Root) ? '  ' : '| ');
-      print(node->Left, ChildKind::Left);
-    }
-    
-      unsigned i = Position, n = String.size();
-    
-      while ((!QueuedTasks.empty() && !SubtaskFailed) ||
-         !ExecutingTasks.empty()) {
-    // Enqueue additional tasks if we have additional tasks, we aren't already
-    // at the parallel limit, and no earlier subtasks have failed.
-    while (!SubtaskFailed && !QueuedTasks.empty() &&
-           ExecutingTasks.size() < MaxNumberOfParallelTasks) {
-      std::unique_ptr<DummyTask> T(QueuedTasks.front().release());
-      QueuedTasks.pop();
-    }
-    }
-    
-      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
-    if (classifyTypedef(subTypedef->getDecl()))
-      return forTypedef(subTypedef->getDecl());
-    return forInvalid();
-  }
-    
-    /// Determine whether this typedef is a CF type.
-bool isCFTypeDecl(const clang::TypedefNameDecl *Decl);
-    
-    AnyMetadata::AnyMetadata(UrlType* type_url, ValueType* value)
-    : type_url_(type_url), value_(value) {
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-    }
-    }
-    }
-    
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+        #endif // BITCOIN_QT_NETWORKSTYLE_H
 
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    }
+    private:
+    PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing);
     
-    int ImmutableMapFieldGenerator::GetNumBitsForBuilder() const {
-  return 1;
-}
+    private:
+    Ui::SignVerifyMessageDialog *ui;
+    WalletModel *model;
+    const PlatformStyle *platformStyle;
     
-    #include <google/protobuf/compiler/objectivec/objectivec_enum.h>
-#include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    #include <map>
-#include <string>
-    
-    
-    {  printer->Print(vars,
-                 '{\n'
-                 '  .defaultValue.$default_name$ = $default$,\n'
-                 '  .singletonName = GPBStringifySymbol($root_class_and_method_name$),\n'
-                 '  .extendedClass = GPBStringifySymbol($extended_type$),\n'
-                 '  .messageOrGroupClassName = $type$,\n'
-                 '  .enumDescriptorFunc = $enum_desc_func_name$,\n'
-                 '  .fieldNumber = $number$,\n'
-                 '  .dataType = $extension_type$,\n'
-                 '  .options = $options$,\n'
-                 '},\n');
-}
-    
-    #include <google/protobuf/stubs/common.h>
-    
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
-}
-    
-      ASSERT_TRUE(data.doc().HasMember('events'));
-  ASSERT_TRUE(data.doc()['events'].HasMember('environment_variables'));
-  ASSERT_TRUE(data.doc()['events']['environment_variables'].IsArray());
-  for (const auto& var :
-       data.doc()['events']['environment_variables'].GetArray()) {
-    std::string value = var.GetString();
-    EXPECT_TRUE(value == 'foo' || value == 'bar');
-  }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
+        ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
     }
     
-     private:
-  /**
-   * @brief Private default constructor
-   *
-   * The osquery::Hash class should only ever be instantiated with a HashType
-   */
-  Hash(){};
-    
-      EXPECT_TRUE(setEnvVar('GTEST_OSQUERY', 'true'));
-    
-      /// Inspect into the memory and CPU of the watcher process.
-  virtual Status isWatcherHealthy(const PlatformProcess& watcher,
-                                  PerformanceState& watcher_state) const;
-    
-    
-    {void alarm(int /* noop */) {
-  /* This function is a noop. */
-}
-} // namespace osquery
-
-    
-      if (response.size() > 0 && response[0].count('results') > 0) {
-    return acceptWork(response[0]['results']);
-  }
-    
-    extern std::map<int, std::string> kMaskActions;
-    
-      void RemoveAll(std::shared_ptr<INotifyEventPublisher>& pub) {
-    pub->subscriptions_.clear();
-    // Reset monitors.
-    std::vector<int> wds;
-    for (const auto& path : pub->descriptor_inosubctx_) {
-      wds.push_back(path.first);
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
-    for (const auto& wd : wds) {
-      pub->removeMonitor(wd, true);
-    }
-  }
     
-    struct TestSubscriptionContext : public SubscriptionContext {
-  int smallest;
-};
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
+    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
 {
-    (void)flags; (void)object; (void)location; (void)messageCode; (void)pUserData; (void)pLayerPrefix; // Unused arguments
-    fprintf(stderr, '[vulkan] ObjectType: %i\nMessage: %s\n\n', objectType, pMessage);
-    return VK_FALSE;
-}
-#endif // IMGUI_VULKAN_DEBUG_REPORT
-    
-    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
-//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
-//#define IMGUI_DISABLE_DEMO_WINDOWS
-    
-    
-    {    // Start the frame
-    ImGui::NewFrame();
+    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
+    auto ret = ParseTorReplyMapping(input);
+    BOOST_CHECK_EQUAL(ret.size(), expected.size());
+    auto r_it = ret.begin();
+    auto e_it = expected.begin();
+    while (r_it != ret.end() && e_it != expected.end()) {
+        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
+        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
+        r_it++;
+        e_it++;
+    }
 }
     
-    namespace benchmark {
-enum LogColor {
-  COLOR_DEFAULT,
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_YELLOW,
-  COLOR_BLUE,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  COLOR_WHITE
+      /**
+   * @brief Returns the layer type.
+   */
+  virtual inline const char* type() const { return ''; }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
 };
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+    // Initializes Google Test.  This must be called before calling
+// RUN_ALL_TESTS().  In particular, it parses a command line for the
+// flags that Google Test recognizes.  Whenever a Google Test flag is
+// seen, it is removed from argv, and *argc is decremented.
+//
+// No value is returned.  Instead, the Google Test flag variables are
+// updated.
+//
+// Calling the function for the second time has no user-visible effect.
+GTEST_API_ void InitGoogleTest(int* argc, char** argv);
+    
+    // Helper function for implementing {EXPECT|ASSERT}_PRED2.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2>
+AssertionResult AssertPred2Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2) {
+  if (pred(v1, v2)) return AssertionSuccess();
     }
     
-    bool IsFlag(const char* str, const char* flag) {
-  return (ParseFlagValue(str, flag, true) != nullptr);
-}
+      // If input name has a trailing separator character, removes it and returns
+  // the name, otherwise return the name string unmodified.
+  // On Windows platform, uses \ as the separator, other platforms use /.
+  FilePath RemoveTrailingPathSeparator() const;
     
-    // Parses a string for a bool flag, in the form of either
-// '--flag=value' or '--flag'.
-//
-// In the former case, the value is taken as true if it passes IsTruthyValue().
-//
-// In the latter case, the value is taken as true.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseBoolFlag(const char* str, const char* flag, bool* value);
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12>
+struct Types12 {
+  typedef T1 Head;
+  typedef Types11<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Tail;
+};
     
-    
-    {  return best_fit;
-}
-    
-    void ConsoleReporter::PrintRunData(const Run& result) {
-  typedef void(PrinterFn)(std::ostream&, LogColor, const char*, ...);
-  auto& Out = GetOutputStream();
-  PrinterFn* printer = (output_options_ & OO_Color) ?
-                         (PrinterFn*)ColorPrintf : IgnoreColorPrint;
-  auto name_color =
-      (result.report_big_o || result.report_rms) ? COLOR_BLUE : COLOR_GREEN;
-  printer(Out, name_color, '%-*s ', name_field_width_,
-          result.benchmark_name.c_str());
+    // The prime table interface.
+class PrimeTable {
+ public:
+  virtual ~PrimeTable() {}
     }
     
-    #ifndef BENCHMARK_CYCLECLOCK_H_
-#define BENCHMARK_CYCLECLOCK_H_
     
-    #ifdef BENCHMARK_OS_WINDOWS
-#include <Windows.h>
-#endif
+    {  return result;
+}
+    
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    void CoreCodegen::gpr_mu_init(gpr_mu* mu) { ::gpr_mu_init(mu); };
+void CoreCodegen::gpr_mu_destroy(gpr_mu* mu) { ::gpr_mu_destroy(mu); }
+void CoreCodegen::gpr_mu_lock(gpr_mu* mu) { ::gpr_mu_lock(mu); }
+void CoreCodegen::gpr_mu_unlock(gpr_mu* mu) { ::gpr_mu_unlock(mu); }
+void CoreCodegen::gpr_cv_init(gpr_cv* cv) { ::gpr_cv_init(cv); }
+void CoreCodegen::gpr_cv_destroy(gpr_cv* cv) { ::gpr_cv_destroy(cv); }
+int CoreCodegen::gpr_cv_wait(gpr_cv* cv, gpr_mu* mu,
+                             gpr_timespec abs_deadline) {
+  return ::gpr_cv_wait(cv, mu, abs_deadline);
+}
+void CoreCodegen::gpr_cv_signal(gpr_cv* cv) { ::gpr_cv_signal(cv); }
+void CoreCodegen::gpr_cv_broadcast(gpr_cv* cv) { ::gpr_cv_broadcast(cv); }
+    
+    #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
+    
+    MeasureInt64 RpcServerSentMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcServerSentMessagesPerRpcMeasureName,
+                             'Number of messages sent per RPC', kCount);
+  return measure;
+}
+    
+    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
+    
+    #include 'src/cpp/ext/proto_server_reflection.h'
