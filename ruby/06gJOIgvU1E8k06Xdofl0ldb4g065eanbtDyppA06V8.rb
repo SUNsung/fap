@@ -1,63 +1,101 @@
 
         
-        # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
+            keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+      end
+      f.puts s
+    end
+  end
+end
 
     
-          it 'keeps the specified metadata folder' do
-        expect(options[:metadata_path]).to eq('./metadata')
+      # True if a {Formula} is being built with a specific option
+  # (which isn't named `with-*` or `without-*`).
+  # @deprecated
+  def include?(name)
+    @args.include?('--#{name}')
+  end
+    
+      def zsh_completion_caveats
+    if keg && keg.completion_installed?(:zsh) then <<-EOS.undent
+      zsh completion has been installed to:
+        #{HOMEBREW_PREFIX}/share/zsh/site-functions
+      EOS
+    end
+  end
+    
+        # Remove unresolved symlinks
+    symlinks.reverse_each do |s|
+      s.unlink unless s.resolved_path_exists?
+    end
+  end
+    
+    module Homebrew
+  module Cleanup
+    @@disk_cleanup_size = 0
+    
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
+    
+      def filtered_list
+    names = if ARGV.named.empty?
+      Formula.racks
+    else
+      ARGV.named.map { |n| HOMEBREW_CELLAR+n }.select(&:exist?)
+    end
+    if ARGV.include? '--pinned'
+      pinned_versions = {}
+      names.each do |d|
+        keg_pin = (HOMEBREW_LIBRARY/'PinnedKegs'/d.basename.to_s)
+        if keg_pin.exist? || keg_pin.symlink?
+          pinned_versions[d] = keg_pin.readlink.basename.to_s
+        end
+      end
+      pinned_versions.each do |d, version|
+        puts '#{d.basename}'.concat(ARGV.include?('--versions') ? ' #{version}' : '')
+      end
+    else # --versions without --pinned
+      names.each do |d|
+        versions = d.subdirs.map { |pn| pn.basename.to_s }
+        next if ARGV.include?('--multiple') && versions.length < 2
+        puts '#{d.basename} #{versions*' '}'
       end
     end
   end
 end
-
     
-          def self.example_code
-        [
-          'adb_devices.each do |device|
-            model = adb(command: 'shell getprop ro.product.model',
-                        serial: device.serial).strip
-    
-          emoji = CustomEmoji.find_or_initialize_by(domain: nil,
-                                                shortcode: @custom_emoji.shortcode)
-      emoji.image = @custom_emoji.image
-    
-        def set_report
-      @report = Report.find(params[:report_id])
-    end
+        names = @@remote_tap_formulae['#{user}/#{repo}']
+    user = user.downcase if user == 'Homebrew' # special handling for the Homebrew organization
+    names.select { |name| rx === name }.map { |name| '#{user}/#{repo}/#{name}' }
+  rescue GitHub::HTTPNotFoundError => e
+    opoo 'Failed to search tap: #{user}/#{repo}. Please run `brew update`'
+    []
+  rescue GitHub::Error => e
+    SEARCH_ERROR_QUEUE << e
+    []
   end
-end
-
     
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
+      def std_cmake_parameters
+    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
   end
+    
+    Then(/^the failure task will run$/) do
+  failed = TestApp.shared_path.join('failed')
+  run_vagrant_command(test_file_exists(failed))
 end
-
     
-      private
+        require 'capistrano/scm/git'
+    install_plugin Capistrano::SCM::Git
     
-      def migration_version
-    if Rails.version.start_with? '5'
-      '[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]'
-    end
-  end
-end
-
-    
-    # This stuff needs to be run after Paperclip is defined.
-require 'paperclip/io_adapters/registry'
-require 'paperclip/io_adapters/abstract_adapter'
-require 'paperclip/io_adapters/empty_string_adapter'
-require 'paperclip/io_adapters/identity_adapter'
-require 'paperclip/io_adapters/file_adapter'
-require 'paperclip/io_adapters/stringio_adapter'
-require 'paperclip/io_adapters/data_uri_adapter'
-require 'paperclip/io_adapters/nil_adapter'
-require 'paperclip/io_adapters/attachment_adapter'
-require 'paperclip/io_adapters/uploaded_file_adapter'
-require 'paperclip/io_adapters/uri_adapter'
-require 'paperclip/io_adapters/http_url_proxy_adapter'
+          # Decorate Variables#set to add validation behavior.
+      def set(key, value=nil, &block)
+        assert_value_or_block_not_both(value, block)
