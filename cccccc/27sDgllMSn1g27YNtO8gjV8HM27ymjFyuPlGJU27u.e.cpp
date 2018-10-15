@@ -1,280 +1,291 @@
 
         
-        // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/descriptor.h>
+        StringRef swift::prettyPlatformString(PlatformKind platform) {
+  switch (platform) {
+  case PlatformKind::none:
+    return '*';
+#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
+  case PlatformKind::X:                                                        \
+    return PrettyName;
+#include 'swift/AST/PlatformKinds.def'
+  }
+  llvm_unreachable('bad PlatformKind');
+}
+    
+      // Finally, add the generic parameters from the requirement.
+  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
+    // The only depth that makes sense is depth == 1, the generic parameters
+    // of the requirement itself. Anything else is from invalid code.
+    if (genericParam->getDepth() != 1) {
+      return;
+    }
+    }
+    
+    #include 'swift/Basic/Cache.h'
+#include 'llvm/ADT/SmallString.h'
+#include <cache.h>
+    
+      std::size_t capacity = EndOfAllocation - Begin;
+  std::size_t requiredCapacity = capacity + needed;
+  do {
+    capacity = 2 * capacity + 16;
+  } while (capacity < requiredCapacity);
+    
+    static const StringRef SupportedConditionalCompilationRuntimes[] = {
+  '_ObjC',
+  '_Native',
+};
+    
+        if (node->Left) {
+      IndentScope ms(this, (childKind == ChildKind::Left ||
+                            childKind == ChildKind::Root) ? '  ' : '| ');
+      print(node->Left, ChildKind::Left);
+    }
+    
+      unsigned i = Position, n = String.size();
+    
+      while ((!QueuedTasks.empty() && !SubtaskFailed) ||
+         !ExecutingTasks.empty()) {
+    // Enqueue additional tasks if we have additional tasks, we aren't already
+    // at the parallel limit, and no earlier subtasks have failed.
+    while (!SubtaskFailed && !QueuedTasks.empty() &&
+           ExecutingTasks.size() < MaxNumberOfParallelTasks) {
+      std::unique_ptr<DummyTask> T(QueuedTasks.front().release());
+      QueuedTasks.pop();
+    }
+    }
+    
+      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
+    if (classifyTypedef(subTypedef->getDecl()))
+      return forTypedef(subTypedef->getDecl());
+    return forInvalid();
+  }
+    
+    /// Determine whether this typedef is a CF type.
+bool isCFTypeDecl(const clang::TypedefNameDecl *Decl);
+    
+    AnyMetadata::AnyMetadata(UrlType* type_url, ValueType* value)
+    : type_url_(type_url), value_(value) {
+}
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+    }
+    }
+    }
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    
+    {
+    {
+    {
+    {}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
+    
+    int ImmutableMapFieldGenerator::GetNumBitsForBuilder() const {
+  return 1;
+}
+    
+    #include <google/protobuf/compiler/objectivec/objectivec_enum.h>
+#include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
 #include <google/protobuf/io/printer.h>
 #include <google/protobuf/stubs/strutil.h>
     
-    void EnumGenerator::Generate(io::Printer* printer) {
-  WriteEnumDocComment(printer, descriptor_);
-  printer->Print('$access_level$ enum $name$ {\n',
-                 'access_level', class_access_level(),
-                 'name', descriptor_->name());
-  printer->Indent();
-  std::set<string> used_names;
-  std::set<int> used_number;
-  for (int i = 0; i < descriptor_->value_count(); i++) {
-      WriteEnumValueDocComment(printer, descriptor_->value(i));
-      string original_name = descriptor_->value(i)->name();
-      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
-      // Make sure we don't get any duplicate names due to prefix removal.
-      while (!used_names.insert(name).second) {
-        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
-        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
-          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
-        name += '_';
-      }
-      int number = descriptor_->value(i)->number();
-      if (!used_number.insert(number).second) {
-          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
-             'original_name', original_name,
-             'name', name,
-             'number', SimpleItoa(number));
-      } else {
-          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
-             'original_name', original_name,
-             'name', name,
-             'number', SimpleItoa(number));
-      }
-  }
-  printer->Outdent();
-  printer->Print('}\n');
-  printer->Print('\n');
+    #include <map>
+#include <string>
+    
+    
+    {  printer->Print(vars,
+                 '{\n'
+                 '  .defaultValue.$default_name$ = $default$,\n'
+                 '  .singletonName = GPBStringifySymbol($root_class_and_method_name$),\n'
+                 '  .extendedClass = GPBStringifySymbol($extended_type$),\n'
+                 '  .messageOrGroupClassName = $type$,\n'
+                 '  .enumDescriptorFunc = $enum_desc_func_name$,\n'
+                 '  .fieldNumber = $number$,\n'
+                 '  .dataType = $extension_type$,\n'
+                 '  .options = $options$,\n'
+                 '},\n');
 }
     
-    void Context::InitializeFieldGeneratorInfo(const FileDescriptor* file) {
-  for (int i = 0; i < file->message_type_count(); ++i) {
-    InitializeFieldGeneratorInfoForMessage(file->message_type(i));
+    #include <google/protobuf/stubs/common.h>
+    
+    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
+                                             const ParserConfig& config) {
+  auto topics = config.find(kKafkaTopicParserRootKey);
+  if (topics != config.end()) {
+    auto obj = data_.getObject();
+    data_.copyFrom(topics->second.doc(), obj);
+    data_.add(kKafkaTopicParserRootKey, obj);
   }
+  return Status();
 }
     
-    string EscapeJavadoc(const string& input) {
-  string result;
-  result.reserve(input.size() * 2);
+      ASSERT_TRUE(data.doc().HasMember('events'));
+  ASSERT_TRUE(data.doc()['events'].HasMember('environment_variables'));
+  ASSERT_TRUE(data.doc()['events']['environment_variables'].IsArray());
+  for (const auto& var :
+       data.doc()['events']['environment_variables'].GetArray()) {
+    std::string value = var.GetString();
+    EXPECT_TRUE(value == 'foo' || value == 'bar');
+  }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test2.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  std::string query;
+  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
+  EXPECT_EQ(query,
+            'select hash.path as binary, version, hash.sha256 as SHA256, '
+            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
+            ''/Contents/MacOS/' as directory, name, version from '
+            'kernel_extensions) join hash using (directory)');
     }
     
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
-  }
+     private:
+  /**
+   * @brief Private default constructor
+   *
+   * The osquery::Hash class should only ever be instantiated with a HashType
+   */
+  Hash(){};
+    
+      EXPECT_TRUE(setEnvVar('GTEST_OSQUERY', 'true'));
+    
+      /// Inspect into the memory and CPU of the watcher process.
+  virtual Status isWatcherHealthy(const PlatformProcess& watcher,
+                                  PerformanceState& watcher_state) const;
+    
+    
+    {void alarm(int /* noop */) {
+  /* This function is a noop. */
 }
-    
-     public:
-  virtual void GenerateCFunctionDeclarations(io::Printer* printer) const;
-  virtual void GenerateCFunctionImplementations(io::Printer* printer) const;
-  virtual void DetermineForwardDeclarations(std::set<string>* fwd_decls) const;
-    
-    void ExtensionGenerator::GenerateMembersHeader(io::Printer* printer) {
-  std::map<string, string> vars;
-  vars['method_name'] = method_name_;
-  SourceLocation location;
-  if (descriptor_->GetSourceLocation(&location)) {
-    vars['comments'] = BuildCommentsString(location, true);
-  } else {
-    vars['comments'] = '';
-  }
-  // Unlike normal message fields, check if the file for the extension was
-  // deprecated.
-  vars['deprecated_attribute'] = GetOptionalDeprecatedAttribute(descriptor_, descriptor_->file());
-  printer->Print(vars,
-                 '$comments$'
-                 '+ (GPBExtensionDescriptor *)$method_name$$deprecated_attribute$;\n');
-}
-    
-    /**
- * @brief Parser plugin for logger configurations.
- */
-class LoggerConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override {
-    return {kLoggerKey};
-  }
-    }
-    
-    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_run_load_top_level) {
-  // Re-enable the decorators, then update the config.
-  // The 'load' decorator set should run every time the config is updated.
-  FLAGS_disable_decorators = false;
-  // enable top level decorations for the test
-  FLAGS_decorations_top_level = true;
-  Config::get().update(config_data_);
-    }
-    
-    
-    {  // This should work.
-  ASSERT_TRUE(doc.HasMember('custom_fake'));
-  EXPECT_TRUE(doc['custom_fake'].IsNumber());
-  EXPECT_EQ(1U, doc['custom_fake'].GetUint());
-  EXPECT_FALSE(Flag::getValue('custom_fake').empty());
-}
-    
-      /// Paths to autoload extensions.
-  std::vector<std::string> extensions_paths_;
-    
-    Status Distributed::pullUpdates() {
-  auto distributed_plugin = RegistryFactory::get().getActive('distributed');
-  if (!RegistryFactory::get().exists('distributed', distributed_plugin)) {
-    return Status(1, 'Missing distributed plugin: ' + distributed_plugin);
-  }
-    }
-    
-    
-    {  for (const auto& category : doc.doc()['exclude_paths'].GetObject()) {
-    for (const auto& excl_path : category.value.GetArray()) {
-      std::string pattern = excl_path.GetString();
-      if (pattern.empty()) {
-        continue;
-      }
-      exclude_paths_.insert(pattern);
-    }
-  }
-}
-    
-      // In this case we can still add a blank subscription to an existing event
-  // type.
-  status = EventFactory::addSubscription(basic_publisher_type, subscription);
-  EXPECT_TRUE(status.ok());
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
-}
-    
-    
-    {}  // namespace guetzli
-    
-    // A node of a Huffman tree.
-struct HuffmanTree {
-  HuffmanTree() {}
-  HuffmanTree(uint32_t count, int16_t left, int16_t right)
-      : total_count_(count),
-        index_left_(left),
-        index_right_or_value_(right) {
-  }
-  uint32_t total_count_;
-  int16_t index_left_;
-  int16_t index_right_or_value_;
-};
-    
-    ///////////////////////////////////////////////////////////////////////////////
-// Cosine table: C(k) = cos(k.pi/16)/sqrt(2), k = 1..7 using 15 bits signed
-const coeff_t kTable04[7] = { 22725, 21407, 19266, 16384, 12873,  8867, 4520 };
-// rows #1 and #7 are pre-multiplied by 2.C(1) before the 2nd pass.
-// This multiply is merged in the table of constants used during 1st pass:
-const coeff_t kTable17[7] = { 31521, 29692, 26722, 22725, 17855, 12299, 6270 };
-// rows #2 and #6 are pre-multiplied by 2.C(2):
-const coeff_t kTable26[7] = { 29692, 27969, 25172, 21407, 16819, 11585, 5906 };
-// rows #3 and #5 are pre-multiplied by 2.C(3):
-const coeff_t kTable35[7] = { 26722, 25172, 22654, 19266, 15137, 10426, 5315 };
-    
-    // An upper estimate of memory usage of Guetzli. The bound is
-// max(kLowerMemusaeMB * 1<<20, pixel_count * kBytesPerPixel)
-constexpr int kBytesPerPixel = 350;
-constexpr int kLowestMemusageMB = 100; // in MB
-    
-    #endif  // GUETZLI_IDCT_H_
+} // namespace osquery
 
     
-    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
-  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
-  jpg->quant.clear();
-  int num_tables = 0;
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    JPEGComponent* comp = &jpg->components[i];
-    // Check if we have this quant table already.
-    bool found = false;
-    for (int j = 0; j < num_tables; ++j) {
-      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
-        comp->quant_idx = j;
-        found = true;
-        break;
-      }
+      if (response.size() > 0 && response[0].count('results') > 0) {
+    return acceptWork(response[0]['results']);
+  }
+    
+    extern std::map<int, std::string> kMaskActions;
+    
+      void RemoveAll(std::shared_ptr<INotifyEventPublisher>& pub) {
+    pub->subscriptions_.clear();
+    // Reset monitors.
+    std::vector<int> wds;
+    for (const auto& path : pub->descriptor_inosubctx_) {
+      wds.push_back(path.first);
     }
-    if (!found) {
-      JPEGQuantTable table;
-      memcpy(&table.values[0], &q[i][0], kTableSize);
-      table.precision = 0;
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        assert(table.values[k] >= 0);
-        assert(table.values[k] < (1 << 16));
-        if (table.values[k] > 0xff) {
-          table.precision = 1;
-        }
-      }
-      table.index = num_tables;
-      comp->quant_idx = num_tables;
-      jpg->quant.push_back(table);
-      ++num_tables;
+    for (const auto& wd : wds) {
+      pub->removeMonitor(wd, true);
     }
   }
-}
     
-    
-// Adds APP0 header data.
-void AddApp0Data(JPEGData* jpg);
-    
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
-  }
- private:
-  JPEGOutputHook cb;
-  void* data;
+    struct TestSubscriptionContext : public SubscriptionContext {
+  int smallest;
 };
     
-        std::shared_ptr<DHTNode> localNode;
+    #ifdef IMGUI_VULKAN_DEBUG_REPORT
+static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
+{
+    (void)flags; (void)object; (void)location; (void)messageCode; (void)pUserData; (void)pLayerPrefix; // Unused arguments
+    fprintf(stderr, '[vulkan] ObjectType: %i\nMessage: %s\n\n', objectType, pMessage);
+    return VK_FALSE;
+}
+#endif // IMGUI_VULKAN_DEBUG_REPORT
     
-    void DHTReplaceNodeTask::startup() { sendMessage(); }
+    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
+//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
+//#define IMGUI_DISABLE_DEMO_WINDOWS
     
     
-    {  void deserialize(const std::string& filename);
+    {    // Start the frame
+    ImGui::NewFrame();
+}
+    
+    namespace benchmark {
+enum LogColor {
+  COLOR_DEFAULT,
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_YELLOW,
+  COLOR_BLUE,
+  COLOR_MAGENTA,
+  COLOR_CYAN,
+  COLOR_WHITE
 };
-    
-    #endif // D_DHT_TASK_EXECUTOR_H
-
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
-    const std::shared_ptr<DHTBucket>& bucket,
-    const std::shared_ptr<DHTNode>& newNode)
-{
-  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
-    
-      // do nothing; we don't use this message as outgoing message.
-  virtual bool send() CXX11_OVERRIDE;
-    
-    void DNSCache::markBad(const std::string& hostname, const std::string& ipaddr,
-                       uint16_t port)
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.find(target);
-  if (i != entries_.end()) {
-    (*i)->markBad(ipaddr);
-  }
-}
-    
-        template <typename OutputIterator>
-    void getAllGoodAddrs(OutputIterator out) const
-    {
-      for (auto& elem : addrEntries_) {
-        if (elem.good_) {
-          *out++ = elem.addr_;
-        }
-      }
     }
+    
+    bool IsFlag(const char* str, const char* flag) {
+  return (ParseFlagValue(str, flag, true) != nullptr);
+}
+    
+    // Parses a string for a bool flag, in the form of either
+// '--flag=value' or '--flag'.
+//
+// In the former case, the value is taken as true if it passes IsTruthyValue().
+//
+// In the latter case, the value is taken as true.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseBoolFlag(const char* str, const char* flag, bool* value);
+    
+    
+    {  return best_fit;
+}
+    
+    void ConsoleReporter::PrintRunData(const Run& result) {
+  typedef void(PrinterFn)(std::ostream&, LogColor, const char*, ...);
+  auto& Out = GetOutputStream();
+  PrinterFn* printer = (output_options_ & OO_Color) ?
+                         (PrinterFn*)ColorPrintf : IgnoreColorPrint;
+  auto name_color =
+      (result.report_big_o || result.report_rms) ? COLOR_BLUE : COLOR_GREEN;
+  printer(Out, name_color, '%-*s ', name_field_width_,
+          result.benchmark_name.c_str());
+    }
+    
+    #ifndef BENCHMARK_CYCLECLOCK_H_
+#define BENCHMARK_CYCLECLOCK_H_
+    
+    #ifdef BENCHMARK_OS_WINDOWS
+#include <Windows.h>
+#endif
