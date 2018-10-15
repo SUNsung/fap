@@ -1,147 +1,193 @@
 
         
-        namespace printing {
-    }
-    
-      // Return the parent NativeView of the observed WebContents.
-  gfx::NativeView GetParentView();
-    
-      // This returns true if all components are specified, and min and max are
-  // equal.
-  bool HasFixedSize() const;
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-    #ifndef BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
-#define BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
-    
-      // Resize the buffer to the specified length.
-  void resize(size_type length)
-  {
-    BOOST_ASIO_ASSERT(length <= capacity());
-    if (begin_offset_ + length <= capacity())
+        
     {
-      end_offset_ = begin_offset_ + length;
-    }
-    else
-    {
-      using namespace std; // For memmove.
-      memmove(&buffer_[0], &buffer_[0] + begin_offset_, size());
-      end_offset_ = length;
-      begin_offset_ = 0;
-    }
-  }
-    
-    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+    {} // namespace internal
+} // namespace CAROTENE_NS
 
     
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
-#endif
-}
-    
-    bool non_blocking_read(int d, buf* bufs, std::size_t count,
-    boost::system::error_code& ec, std::size_t& bytes_transferred)
-{
-  for (;;)
-  {
-    // Read some data.
-    errno = 0;
-    signed_size_type bytes = error_wrapper(::readv(
-          d, bufs, static_cast<int>(count)), ec);
-    }
-    }
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    
-    {
-    {
-    {      if ((events[i].events & (POLLERR | POLLHUP)) != 0
-            && !more_except && !more_reads && !more_writes)
-      {
-        // If we have an event and no operations associated with the
-        // descriptor then we need to delete the descriptor from /dev/poll.
-        // The poll operation can produce POLLHUP or POLLERR events when there
-        // is no operation pending, so if we do not remove the descriptor we
-        // can end up in a tight polling loop.
-        ::pollfd ev = { 0, 0, 0 };
-        ev.fd = descriptor;
-        ev.events = POLLREMOVE;
-        ev.revents = 0;
-        ::write(dev_poll_fd_, &ev, sizeof(ev));
-      }
-      else
-      {
-        ::pollfd ev = { 0, 0, 0 };
-        ev.fd = descriptor;
-        ev.events = POLLERR | POLLHUP;
-        if (more_reads)
-          ev.events |= POLLIN;
-        if (more_writes)
-          ev.events |= POLLOUT;
-        if (more_except)
-          ev.events |= POLLPRI;
-        ev.revents = 0;
-        int result = ::write(dev_poll_fd_, &ev, sizeof(ev));
-        if (result != sizeof(ev))
+            if (s[0] < 0 || s[1] < 0)//saturate in case of overflow ~ 8GB of non-zeros...
         {
-          boost::system::error_code ec(errno,
-              boost::asio::error::get_system_category());
-          for (int j = 0; j < max_ops; ++j)
-            op_queue_[j].cancel_operations(descriptor, ops, ec);
+            return 0x7fFFffFF;
         }
-      }
+        result += (s[0] += s[1]);
+        if (s[0] < 0 || result < 0)
+        {
+            return 0x7fFFffFF;
+        }
+    
+    f64 dotProduct(const Size2D &_size,
+               const f32 * src0Base, ptrdiff_t src0Stride,
+               const f32 * src1Base, ptrdiff_t src1Stride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width * sizeof(f32)))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    }
+    
+        v0k8 = vextq_s16(d8_15, d16_23, 3);
+    ak8 = vminq_s16(ak8, v0k8);
+    bk8 = vmaxq_s16(bk8, v0k8);
+    
+            uint8x8_t vsrc = vld1_u8(src + j);
+    
+    // Used to print a pointer that is neither a char pointer nor a member
+// pointer, when the user doesn't define PrintTo() for it.  (A member
+// variable pointer or member function pointer doesn't really point to
+// a location in the address space.  Their representation is
+// implementation-defined.  Therefore they will be printed as raw
+// bytes.)
+template <typename T>
+void DefaultPrintTo(IsNotContainer /* dummy */,
+                    true_type /* is a pointer */,
+                    T* p, ::std::ostream* os) {
+  if (p == NULL) {
+    *os << 'NULL';
+  } else {
+    // C++ doesn't allow casting from a function pointer to any object
+    // pointer.
+    //
+    // IsTrue() silences warnings: 'Condition is always true',
+    // 'unreachable code'.
+    if (IsTrue(ImplicitlyConvertible<T*, const void*>::value)) {
+      // T is not a function type.  We just call << to print p,
+      // relying on ADL to pick up user-defined << for their pointer
+      // types, if any.
+      *os << p;
+    } else {
+      // T is a function type, so '*os << p' doesn't do what we want
+      // (it just prints p as bool).  We want to print p as a const
+      // void*.  However, we cannot cast it to const void* directly,
+      // even using reinterpret_cast, as earlier versions of gcc
+      // (e.g. 3.4.5) cannot compile the cast when p is a function
+      // pointer.  Casting to UInt64 first solves the problem.
+      *os << reinterpret_cast<const void*>(
+          reinterpret_cast<internal::UInt64>(p));
     }
   }
-  timer_queues_.get_ready_timers(ops);
 }
     
-    template <typename C>
-struct compare_not_equal_to : detail::cmp_pred<C, ordering::eq, 1> {
-  using detail::cmp_pred<C, ordering::eq, 1>::cmp_pred;
+    #endif  // GTEST_HAS_TYPED_TEST
+    
+    namespace testing {
+namespace internal {
+    }
+    }
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29>
+struct Templates29 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29> Tail;
 };
     
-    template <class T>
-class BlockingQueue {
- public:
-  virtual ~BlockingQueue() = default;
-  // Adds item to the queue (with priority).
-  //
-  // Returns true if an existing thread was able to work on it (used
-  // for dynamically sizing thread pools), false otherwise.  Return false
-  // if this feature is not supported.
-  virtual BlockingQueueAddResult add(T item) = 0;
-  virtual BlockingQueueAddResult addWithPriority(
-      T item,
-      int8_t /* priority */) {
-    return add(std::move(item));
-  }
-  virtual uint8_t getNumPriorities() {
-    return 1;
-  }
-  virtual T take() = 0;
-  virtual folly::Optional<T> try_take_for(std::chrono::milliseconds time) = 0;
-  virtual size_t size() = 0;
-};
     
-    // No major need to implement this, and getting a non-potentially
-// stale ID on windows is a bit involved.
-pid_t getppid() {
-  return (pid_t)1;
+    {# endif  // GTEST_HAS_RTTI
 }
+    
+    
+    {    return true;
+  }
+    
+    
+    {}  // namespace tesseract.
+    
+    #else  // !defined(__SSE4_1__)
+// Non-Android code here
+    
+    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
+#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
+    
+      // Computes matrix.vector v = Wu.
+  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
+  // u is imagined to have an extra element at the end with value 1, to
+  // implement the bias, but it doesn't actually have it.
+  // Computes the base C++ implementation, if there are no partial_funcs_.
+  // NOTE: The size of the input vector (u) must be padded using
+  // RoundInputs above.
+  // The input will be over-read to the extent of the padding. There are no
+  // alignment requirements.
+  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                       const GenericVector<double>& scales, const int8_t* u,
+                       double* v) const;
+    
+    int16_t word_blob_quality(WERD_RES *word, ROW *row);
+void reject_whole_page(PAGE_RES_IT &page_res_it);
+    
+      // Writing direction
+  bool is_vertical_text = (block->classify_rotation().x() == 0.0);
+  bool right_to_left = block->right_to_left();
+  *writing_direction =
+      is_vertical_text
+          ? WRITING_DIRECTION_TOP_TO_BOTTOM
+          : (right_to_left
+                ? WRITING_DIRECTION_RIGHT_TO_LEFT
+                : WRITING_DIRECTION_LEFT_TO_RIGHT);
+    
+    
+    {  ScrollView* sv_window_;
+};
+    
+    #pragma once
+    
+    static void stb_out2(stb_uint v) { stb_out(v >> 8); stb_out(v); }
+static void stb_out3(stb_uint v) { stb_out(v >> 16); stb_out(v >> 8); stb_out(v); }
+static void stb_out4(stb_uint v) { stb_out(v >> 24); stb_out(v >> 16); stb_out(v >> 8 ); stb_out(v); }
+    
+    int main(int, char**)
+{
+    // Setup SDL
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0)
+    {
+        printf('Error: %s\n', SDL_GetError());
+        return -1;
+    }
+    }
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    // Render function
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
+{
+    ID3D11DeviceContext* ctx = g_pd3dDeviceContext;
+    }
+    
+    void ImGui_ImplDX9_Shutdown()
+{
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    g_pd3dDevice = NULL;
+}
+    
+            const float ascent = font_face.Info.Ascender;
+        const float descent = font_face.Info.Descender;
+        ImFontAtlasBuildSetupFont(atlas, dst_font, &cfg, ascent, descent);
+        const float font_off_x = cfg.GlyphOffset.x;
+        const float font_off_y = cfg.GlyphOffset.y + (float)(int)(dst_font->Ascent + 0.5f);
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        storage_type value = const_cast< storage_type& >(storage);
+        while (!BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE128(&storage, v, &value)) {}
+    }
+    
+    
+    {} // namespace atomics
