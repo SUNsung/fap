@@ -1,194 +1,235 @@
 
         
-        namespace atom {
-    }
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    scoped_refptr<TracingController::TraceDataEndpoint> GetTraceDataEndpoint(
-    const base::FilePath& path,
-    const CompletionCallback& callback) {
-  base::FilePath result_file_path = path;
-  if (result_file_path.empty() && !base::CreateTemporaryFile(&result_file_path))
-    LOG(ERROR) << 'Creating temporary file failed';
-    }
+    #include 'content/nw/src/api/menu/menu_delegate.h'
     
+       bool HasIcon(int command_id) override;
     
-    {  // Remove from the global map.
-  g_download_item_objects.erase(weak_map_id());
+    bool NwMenuModel::HasIcons() const {
+  // Always return false, see the comment about |NwMenuModel|.
+  return false;
 }
     
+      if (type == 'separator') {
+    menu_item_ = gtk_separator_menu_item_new();
+  } else {
+    if (type == 'checkbox') {
+      menu_item_ = gtk_check_menu_item_new();
+      bool checked;
+      if (option.GetBoolean('checked', &checked))
+        SetChecked(checked);
+    } else {
+      menu_item_ = gtk_image_menu_item_new();
+      std::string icon;
+      if (option.GetString('icon', &icon))
+        SetIcon(icon);
+    }
+    }
     
-    {  DISALLOW_COPY_AND_ASSIGN(DownloadItem);
+    class NwAppGetDataPathFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppGetDataPathFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwAppGetDataPathFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.App.getDataPath', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppGetDataPathFunction);
 };
     
-    LabelButton::~LabelButton() {}
     
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_layout_manager, Initialize)
-
+    {    ui::Clipboard* clipboard_;
+    std::string error_;
+  };
     
-    #include <QComboBox>
-#include <QVariant>
+    #include 'extensions/browser/extension_function.h'
     
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    }
+    	// Now that we have `commandStr`, it's OK to change `exePath`...
+	PathRemoveFileSpec(exePath);
     
-    static void secp256k1_sha256_write(secp256k1_sha256_t *hash, const unsigned char *data, size_t len) {
-    size_t bufsize = hash->bytes & 0x3F;
-    hash->bytes += len;
-    while (bufsize + len >= 64) {
-        /* Fill the buffer, and process it. */
-        memcpy(((unsigned char*)hash->buf) + bufsize, data, 64 - bufsize);
-        data += 64 - bufsize;
-        len -= 64 - bufsize;
-        secp256k1_sha256_transform(hash->s, hash->buf);
-        bufsize = 0;
-    }
-    if (len) {
-        /* Fill the buffer with what remains. */
-        memcpy(((unsigned char*)hash->buf) + bufsize, data, len);
-    }
+    #include <cstdint>
+#include <tuple>
+    
+          DQ_form_t dq_formater {{
+                             0x0, //Reserved
+                             static_cast<uint32_t>(rtp),
+                             static_cast<uint32_t>(ra),
+                             static_cast<uint32_t>(imm) >> 4,
+                             op
+                            }};
+    
+    
+    {}
+    
+    #include 'hphp/runtime/ext/std/ext_std_file.h'
+#include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/server/static-content-cache.h'
+    
+    inline void ExecutionContext::setTransport(Transport* transport) {
+  m_transport = transport;
 }
     
-    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
-    secp256k1_scalar r, s;
-    secp256k1_scalar sec, non, msg;
-    int recid;
-    int ret = 0;
-    int overflow = 0;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(seckey != NULL);
-    if (noncefp == NULL) {
-        noncefp = secp256k1_nonce_function_default;
-    }
-    }
-    
-    BOOST_AUTO_TEST_SUITE_END()
+    #endif //__CCCAMERA_ACTION_H__
 
     
-    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
+        /** Creates an action with a Cardinal Spline array of points and tension.
+     * @param dt In seconds.
+     * @param points An PointArray.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * In js: var create(var dt,var table).
+     * In lua: local create(local dt, local table).
+     * @endcode
+     */
+    static CatmullRomTo* create(float dt, PointArray* points);
+    
+    void ActionEase::startWithTarget(Node *target)
 {
-    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
-    auto ret = SplitTorReplyLine(input);
-    BOOST_CHECK_EQUAL(ret.first, command);
-    BOOST_CHECK_EQUAL(ret.second, args);
-}
-    
-    
-    {} // namespace
-    
-    template <class Context>
-class ExtendTensorOp final : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  ExtendTensorOp(const OperatorDef& operator_def, Workspace* ws)
-      : Operator<Context>(operator_def, ws),
-        growthPct_(OperatorBase::GetSingleArgument<int>('growthPct', 40)) {}
-    }
-    
-    
-    {  bool RunOnDevice() override;
-};
-    
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
-    
-    static std::string ShortSuccessor(const std::string& s) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
-  return result;
-}
-    
-    // Return the name of the sstable with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string TableFileName(const std::string& dbname, uint64_t number);
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-        // Check crc
-    if (checksum_) {
-      uint32_t expected_crc = crc32c::Unmask(DecodeFixed32(header));
-      uint32_t actual_crc = crc32c::Value(header + 6, 1 + length);
-      if (actual_crc != expected_crc) {
-        // Drop the rest of the buffer since 'length' itself may have
-        // been corrupted and if we trust it, we could find some
-        // fragment of a real log record that just happens to look
-        // like a valid log record.
-        size_t drop_size = buffer_.size();
-        buffer_.clear();
-        ReportCorruption(drop_size, 'checksum mismatch');
-        return kBadRecord;
-      }
-    }
-    
-      bool empty() const { return head_.next_ == &head_; }
-  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
-  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        // Create the vertex shader
+    if (target && _inner)
     {
-        static const char* vertexShader =
-            'cbuffer vertexBuffer : register(b0) \
-            {\
-              float4x4 ProjectionMatrix; \
-            };\
-            struct VS_INPUT\
-            {\
-              float2 pos : POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            \
-            struct PS_INPUT\
-            {\
-              float4 pos : SV_POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            \
-            PS_INPUT main(VS_INPUT input)\
-            {\
-              PS_INPUT output;\
-              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
-              output.col = input.col;\
-              output.uv  = input.uv;\
-              return output;\
-            }';
+        ActionInterval::startWithTarget(target);
+        _inner->startWithTarget(_target);
+    }
+    else
+    {
+        log('ActionEase::startWithTarget error: target or _inner is nullptr!');
+    }
+}
+    
+    ReuseGrid* ReuseGrid::reverse() const
+{
+    // no reverse, just clone it
+    return this->clone();
+}
+    
+    Waves* Waves::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) Waves();
+    a->initWithDuration(_duration, _gridSize, _waves, _amplitude, _horizontal, _vertical);
+    a->autorelease();
+    return a;
+}
+    
+        /**
+    @brief Get the center position of ripple effect.
+    @return The center position of ripple effect.
+    */
+    const Vec2& getPosition() const { return _position; }
+    /**
+    @brief Set the center position of ripple effect.
+    @param position The center position of ripple effect will be set.
+    */
+    void setPosition(const Vec2& position);
+    
+        /** Resumes the target. All queued actions will be resumed.
+     *
+     * @param target    A certain target.
+     */
+    virtual void resumeTarget(Node *target);
+    
+    /** Pauses all running actions, returning a list of targets whose actions were paused.
+     *
+     * @return  A list of targets whose actions were paused.
+     */
+    virtual Vector<Node*> pauseAllRunningActions();
+    
+    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
+     *
+     * @param targetsToResume   A set of targets need to be resumed.
+     */
+    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
+    
+    /** Main loop of ActionManager.
+     * @param dt    In seconds.
+     */
+    virtual void update(float dt);
+    
+protected:
+    // declared in ActionManager.m
+    
+    void SplitRows::startWithTarget(Node *target)
+{
+    TiledGrid3DAction::startWithTarget(target);
+    _winSize = Director::getInstance()->getWinSizeInPixels();
+}
+    
+    
+    {    return false;
+}
+    
+     @since v0.99.2
+ */
+class CC_DLL ActionTween : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
+     */
+    static ActionTween* create(float duration, const std::string& key, float from, float to);
     }
     
-    static void ImGui_Marmalade_SetClipboardText(void* /*user_data*/, const char* text)
+    
+    {}
+    
+    protected:
+    void calculateMaxItems();
+    void updateBlendFunc();
+    void updateOpacityModifyRGB();
+    
+    const std::string DHTResponseMessage::R('r');
+    
+    bool DHTRoutingTable::addNode(const std::shared_ptr<DHTNode>& node)
 {
-    if (s3eClipboardAvailable())
-        s3eClipboardSetText(text);
+  return addNode(node, false);
 }
+    
+      // header
+  readBytes(fp, buf, buf.size(), 8);
+  if (memcmp(header, buf, 8) == 0) {
+    version = 3;
+  }
+  else if (memcmp(headerCompat, buf, 8) == 0) {
+    version = 2;
+  }
+  else {
+    throw DL_ABORT_EX(fmt('Failed to load DHT routing table from %s. cause:%s',
+                          filename.c_str(), 'bad header'));
+  }
+    
+      Time serializedTime_;
+    
+    namespace aria2 {
+    }
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+    DHTTaskExecutor::~DHTTaskExecutor() = default;
+    
+      ~DHTTaskExecutor();
+    
+      bool validateToken(const std::string& token, const unsigned char* infoHash,
+                     const std::string& ipaddr, uint16_t port) const;
+    
+      virtual void process() CXX11_OVERRIDE;
+    
+    const std::string DHTUnknownMessage::E('e');
+    
+        void markBad(const std::string& addr);
