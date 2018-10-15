@@ -1,303 +1,230 @@
 
         
-        namespace tensorflow {
+        // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
     }
     
+      std::string fname = TableFileName(dbname, meta->number);
+  if (iter->Valid()) {
+    WritableFile* file;
+    s = env->NewWritableFile(fname, &file);
+    if (!s.ok()) {
+      return s;
+    }
+    }
     
-    {
-    {}  // end namespace grappler
-}  // end namespace tensorflow
+    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
 
     
-    // Mutex used to serialize accesses to cached vector of pointers to python
-// arrays to be dereferenced.
-static mutex* DelayedDecrefLock() {
-  static mutex* decref_lock = new mutex;
-  return decref_lock;
+    // Maximum number of level-0 files.  We stop writes at this point.
+static const int kL0_StopWritesTrigger = 12;
+    
+    // Called on every item found in a WriteBatch.
+class WriteBatchItemPrinter : public WriteBatch::Handler {
+ public:
+  WritableFile* dst_;
+  virtual void Put(const Slice& key, const Slice& value) {
+    std::string r = '  put '';
+    AppendEscapedStringTo(&r, key);
+    r += '' '';
+    AppendEscapedStringTo(&r, value);
+    r += ''\n';
+    dst_->Append(r);
+  }
+  virtual void Delete(const Slice& key) {
+    std::string r = '  del '';
+    AppendEscapedStringTo(&r, key);
+    r += ''\n';
+    dst_->Append(r);
+  }
+};
+    
+      // Returns the physical offset of the last record returned by ReadRecord.
+  //
+  // Undefined before the first call to ReadRecord.
+  uint64_t LastRecordOffset();
+    
+    TEST(LogTest, Fragmentation) {
+  Write('small');
+  Write(BigString('medium', 50000));
+  Write(BigString('large', 100000));
+  ASSERT_EQ('small', Read());
+  ASSERT_EQ(BigString('medium', 50000), Read());
+  ASSERT_EQ(BigString('large', 100000), Read());
+  ASSERT_EQ('EOF', Read());
 }
     
-    #include 'tensorflow/python/lib/core/py_exception_registry.h'
+    Writer::Writer(WritableFile* dest)
+    : dest_(dest),
+      block_offset_(0) {
+  InitTypeCrc(type_crc_);
+}
     
-    string DiagonalString(Diagonal d) {
-  switch (d) {
-    case Diagonal::kUnit:
-      return 'Unit';
-    case Diagonal::kNonUnit:
-      return 'NonUnit';
-    default:
-      LOG(FATAL) << 'Unknown diagonal ' << static_cast<int32>(d);
+    TEST(RecoveryTest, LogFileReuse) {
+  if (!CanAppend()) {
+    fprintf(stderr, 'skipping test because env does not support appending\n');
+    return;
+  }
+  for (int i = 0; i < 2; i++) {
+    ASSERT_OK(Put('foo', 'bar'));
+    if (i == 0) {
+      // Compact to ensure current log is empty
+      CompactMemTable();
+    }
+    Close();
+    ASSERT_EQ(1, NumLogs());
+    uint64_t number = FirstLogFile();
+    if (i == 0) {
+      ASSERT_EQ(0, FileSize(LogName(number)));
+    } else {
+      ASSERT_LT(0, FileSize(LogName(number)));
+    }
+    Open();
+    ASSERT_EQ(1, NumLogs());
+    ASSERT_EQ(number, FirstLogFile()) << 'did not reuse log file';
+    ASSERT_EQ('bar', Get('foo'));
+    Open();
+    ASSERT_EQ(1, NumLogs());
+    ASSERT_EQ(number, FirstLogFile()) << 'did not reuse log file';
+    ASSERT_EQ('bar', Get('foo'));
   }
 }
     
-    bool swift::isPlatformActive(PlatformKind Platform, LangOptions &LangOpts) {
-  if (Platform == PlatformKind::none)
+      // No-barrier variants that can be safely used in a few locations.
+  Node* NoBarrier_Next(int n) {
+    assert(n >= 0);
+    return reinterpret_cast<Node*>(next_[n].NoBarrier_Load());
+  }
+  void NoBarrier_SetNext(int n, Node* x) {
+    assert(n >= 0);
+    next_[n].NoBarrier_Store(x);
+  }
+    
+      bool empty() const { return head_.next_ == &head_; }
+  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
+  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
+    
+      bool keepAliveAcquire() override {
+    ++refCount;
     return true;
-  
-  if (Platform == PlatformKind::OSXApplicationExtension ||
-      Platform == PlatformKind::iOSApplicationExtension)
-    if (!LangOpts.EnableAppExtensionRestrictions)
-      return false;
-  
-  // FIXME: This is an awful way to get the current OS.
-  switch (Platform) {
-    case PlatformKind::OSX:
-    case PlatformKind::OSXApplicationExtension:
-      return LangOpts.Target.isMacOSX();
-    case PlatformKind::iOS:
-    case PlatformKind::iOSApplicationExtension:
-      return LangOpts.Target.isiOS() && !LangOpts.Target.isTvOS();
-    case PlatformKind::tvOS:
-    case PlatformKind::tvOSApplicationExtension:
-      return LangOpts.Target.isTvOS();
-    case PlatformKind::watchOS:
-    case PlatformKind::watchOSApplicationExtension:
-      return LangOpts.Target.isWatchOS();
-    case PlatformKind::none:
-      llvm_unreachable('handled above');
   }
-  llvm_unreachable('bad PlatformKind');
-}
     
-      reqToSyntheticEnvMap = SubstitutionMap::get(reqSig,
-    [selfType, substConcreteType, depth, covariantSelf, &ctx]
-    (SubstitutableType *type) -> Type {
-      // If the conforming type is a class, the protocol 'Self' maps to
-      // the class-constrained 'Self'. Otherwise, it maps to the concrete
-      // type.
-      if (type->isEqual(selfType)) {
-        if (covariantSelf)
-          return GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
-        return substConcreteType;
-      }
-      // Other requirement generic parameters map 1:1 with their depth
-      // increased appropriately.
-      auto *genericParam = cast<GenericTypeParamType>(type);
-      // In a protocol requirement, the only generic parameter at depth 0
-      // should be 'Self', and all others at depth 1. Anything else is
-      // invalid code.
-      if (genericParam->getDepth() != 1)
-        return Type();
-      auto substGenericParam =
-        GenericTypeParamType::get(depth, genericParam->getIndex(), ctx);
-      return substGenericParam;
-    },
-    [selfType, substConcreteType, conformance, conformanceDC, &ctx](
-        CanType type, Type replacement, ProtocolDecl *proto)
-          -> Optional<ProtocolConformanceRef> {
-      // The protocol 'Self' conforms concretely to the conforming type.
-      if (type->isEqual(selfType)) {
-        ProtocolConformance *specialized = conformance;
-        if (conformance && conformance->getGenericSignature()) {
-          auto concreteSubs =
-            substConcreteType->getContextSubstitutionMap(
-              conformanceDC->getParentModule(), conformanceDC);
-          specialized =
-            ctx.getSpecializedConformance(substConcreteType, conformance,
-                                          concreteSubs);
-        }
-    }
-    }
-    
-    /// Pretty-print the vector.
-void ClusteredBitVector::print(llvm::raw_ostream &out) const {
-  // Print in 8 clusters of 8 bits per row.
-  for (size_t i = 0, e = size(); ; ) {
-    out << ((*this)[i++] ? '1' : '0');
-    if (i == e) {
-      return;
-    } else if ((i & 64) == 0) {
-      out << '\n';
-    } else if ((i & 8) == 0) {
-      out << ' ';
-    }
+    // Check a Linux kernel-style return code (>= 0 on success, negative error
+// number on error), throw on error.
+template <class... Args>
+void checkKernelError(ssize_t ret, Args&&... args) {
+  if (UNLIKELY(ret < 0)) {
+    throwSystemErrorExplicit(int(-ret), std::forward<Args>(args)...);
   }
 }
-
     
-    #endif  // CAFFE_COMMON_HPP_
-
-    
-    /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
- */
-template <typename Dtype>
-class DataTransformer {
- public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
+        template <
+        typename OtherExecutor,
+        typename = typename std::enable_if<
+            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
+    /* implicit */ KeepAlive(KeepAlive<OtherExecutor>&& other) noexcept
+        : KeepAlive(other.get(), other.executorAndDummyFlag_ & kDummyFlag) {
+      other.executorAndDummyFlag_ = 0;
     }
     
-      static CreatorRegistry& Registry() {
-    static CreatorRegistry* g_registry_ = new CreatorRegistry();
-    return *g_registry_;
+    namespace folly {
+    }
+    
+    /**
+ * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
+ * Returns true if the first n bytes are equal to prefix when interpreted as
+ * a little endian T.
+ */
+template <typename T>
+typename std::enable_if<std::is_unsigned<T>::value, bool>::type
+dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  T value;
+  Cursor cursor{data};
+  if (!cursor.tryReadLE(value)) {
+    return false;
   }
-    
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
+  return prefix == (value & mask);
+}
     
       /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
+   * windowSize is the base two logarithm of the window size (the size of the
+   * history buffer). It should be in the range 9..15. Larger values of this
+   * parameter result in better compression at the expense of memory usage.
    *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
+   * The default value is 15.
+   *
+   * NB: when inflating/uncompressing data, the windowSize must be greater than
+   * or equal to the size used when deflating/compressing.
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+  int windowSize;
     
     
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-};
+    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    state.SetBytesProcessed(state.iterations() * file.tellg());
+}
+BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
+BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
+BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
+BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
+BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
+BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
+BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
+    
+    bool IsZero(double n);
+    
+    inline AbortHandlerT*& GetAbortHandler() {
+  static AbortHandlerT* handler = &std::abort;
+  return handler;
+}
+    
+    // Macros for declaring flags.
+#define DECLARE_bool(name) extern bool FLAG(name)
+#define DECLARE_int32(name) extern int32_t FLAG(name)
+#define DECLARE_int64(name) extern int64_t FLAG(name)
+#define DECLARE_double(name) extern double FLAG(name)
+#define DECLARE_string(name) extern std::string FLAG(name)
+    
+    #include 'check.h'
+#include 'colorprint.h'
+#include 'commandlineflags.h'
+#include 'internal_macros.h'
+#include 'string_util.h'
+#include 'timers.h'
+    
+    #if defined(BENCHMARK_OS_MACOSX)
+#include <mach/mach_time.h>
+#endif
+// For MSVC, we want to use '_asm rdtsc' when possible (since it works
+// with even ancient MSVC compilers), and when not possible the
+// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
+// environments, <windows.h> and <intrin.h> have conflicting
+// declarations of some other intrinsics, breaking compilation.
+// Therefore, we simply declare __rdtsc ourselves. See also
+// http://connect.microsoft.com/VisualStudio/feedback/details/262047
+#if defined(COMPILER_MSVC) && !defined(_M_IX86)
+extern 'C' uint64_t __rdtsc();
+#pragma intrinsic(__rdtsc)
 #endif
     
-    #define READ_CHECK(fp, ptr, count)                                             \
-  if (fp.read((ptr), (count)) != (count)) {                                    \
-    throw DL_ABORT_EX('Failed to load DHT routing table.');                    \
+      // Called by each thread
+  bool wait() EXCLUDES(lock_) {
+    bool last_thread = false;
+    {
+      MutexLock ml(lock_);
+      last_thread = createBarrier(ml);
+    }
+    if (last_thread) phase_condition_.notify_all();
+    return last_thread;
   }
     
     
-    {} // namespace aria2
-    
-    class DHTRoutingTableSerializer {
-private:
-  int family_;
-    }
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
-                       uint16_t tcpPort,
-                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
-    
-    namespace aria2 {
-    }
-    
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
-}
-    
-    void DHTUnknownMessage::doReceivedAction() {}
-    
-      // do nothing
-  virtual void doReceivedAction() CXX11_OVERRIDE;
-    
-    DNSCache::CacheEntry::~CacheEntry() = default;
-    
-    
-    {        state.PauseTiming();
-        delete j;
-        state.ResumeTiming();
-    }
-    
-    #define BENCHMARK_PRIVATE_DECLARE_F(BaseClass, Method)        \
-  class BaseClass##_##Method##_Benchmark : public BaseClass { \
-   public:                                                    \
-    BaseClass##_##Method##_Benchmark() : BaseClass() {        \
-      this->SetName(#BaseClass '/' #Method);                  \
-    }                                                         \
-                                                              \
-   protected:                                                 \
-    virtual void BenchmarkCase(::benchmark::State&);          \
-  };
-    
-    DEFINE_bool(benchmark_report_aggregates_only, false,
-            'Report the result of each benchmark repetitions. When 'true' is '
-            'specified only the mean, standard deviation, and other statistics '
-            'are reported for repeated benchmarks.');
-    
-      LogType& GetLog() { return log_; }
-    
-    #endif  // BENCHMARK_COLORPRINT_H_
+    {}  // end namespace benchmark
 
     
-    // Parses a bool/Int32/string from the environment variable
-// corresponding to the given Google Test flag.
-bool BoolFromEnv(const char* flag, bool default_val);
-int32_t Int32FromEnv(const char* flag, int32_t default_val);
-double DoubleFromEnv(const char* flag, double default_val);
-const char* StringFromEnv(const char* flag, const char* default_val);
-    
-    
-    {} // end namespace benchmark
-
-    
-    namespace benchmark {
-#ifdef BENCHMARK_OS_WINDOWS
-// Window's Sleep takes milliseconds argument.
-void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
-void SleepForSeconds(double seconds) {
-  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
-}
-#else   // BENCHMARK_OS_WINDOWS
-void SleepForMicroseconds(int microseconds) {
-  struct timespec sleep_time;
-  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
-  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
-  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
-    ;  // Ignore signals and wait for the full interval to elapse.
-}
-    }
-    
-        struct aligned
-    {
-        BOOST_ALIGNMENT(4) type value;
-    }
+    #include 'internal_macros.h'
