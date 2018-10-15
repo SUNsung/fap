@@ -1,185 +1,85 @@
 
         
-                if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
+                new_content = sock.recv(chunks)
+        if not new_content:
+            break
     
-            .. versionadded:: 0.11
-        '''
-        self.record_once(lambda s: s.app._register_error_handler(
-            self.name, code_or_exception, f))
-
+        # Redirection.
+    300: ('multiple_choices',),
+    301: ('moved_permanently', 'moved', '\\o-'),
+    302: ('found',),
+    303: ('see_other', 'other'),
+    304: ('not_modified',),
+    305: ('use_proxy',),
+    306: ('switch_proxy',),
+    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
+    308: ('permanent_redirect',
+          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
     
-        if args and kwargs:
-        raise TypeError('jsonify() behavior undefined when passed both args and kwargs')
-    elif len(args) == 1:  # single args are passed directly to dumps()
-        data = args[0]
-    else:
-        data = args or kwargs
+        if cryptography_version < [1, 3, 4]:
+        warning = 'Old version of cryptography ({0}) may cause slowdown.'.format(cryptography_version)
+        warnings.warn(warning, RequestsDependencyWarning)
     
-        app.session_interface.serializer.register(TagOrderedDict, index=0)
+            if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using chardet to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(
+                        self.content.decode(encoding), **kwargs
+                    )
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+        return complexjson.loads(self.text, **kwargs)
     
+        for i in range(1, n + 1):
+        print('==================')
+        print('Iteration %02d of %02d' % (i, n))
+        print('==================')
+        n_features = i * step
+        n_informative = n_features / 10
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
+        it = 0
+    results = defaultdict(lambda: [])
+    chunk = 100
     
-        def _get_source_fast(self, environment, template):
-        for srcobj, loader in self._iter_loaders(template):
-            try:
-                return loader.get_source(environment, template)
-            except TemplateNotFound:
-                continue
-        raise TemplateNotFound(template)
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
     
-    This module handles import compatibility issues between Python 2 and
-Python 3.
-'''
+        def setUp(self):
+        from acme.messages import Directory
+        self.dir = Directory({
+            'new-reg': 'reg',
+            mock.MagicMock(resource_type='new-cert'): 'cert',
+            'meta': Directory.Meta(
+                terms_of_service='https://example.com/acme/terms',
+                website='https://www.example.com/',
+                caa_identities=['example.com'],
+            ),
+        })
     
-        if implementation == 'CPython':
-        implementation_version = platform.python_version()
-    elif implementation == 'PyPy':
-        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
-                                               sys.pypy_version_info.minor,
-                                               sys.pypy_version_info.micro)
-        if sys.pypy_version_info.releaselevel != 'final':
-            implementation_version = ''.join([
-                implementation_version, sys.pypy_version_info.releaselevel
-            ])
-    elif implementation == 'Jython':
-        implementation_version = platform.python_version()  # Complete Guess
-    elif implementation == 'IronPython':
-        implementation_version = platform.python_version()  # Complete Guess
-    else:
-        implementation_version = 'Unknown'
+    # Additional templates that should be rendered to pages, maps page names to
+# template names.
+#html_additional_pages = {}
     
-    import pytest
-from requests.compat import urljoin
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
-    
-    
-class TestLookupDict:
-    
-        def test_server_finishes_when_no_connections(self):
-        '''the server thread exits even if there are no connections'''
-        server = Server.basic_response_server()
-        with server:
-            pass
-    
-        # Check urllib3 for compatibility.
-    major, minor, patch = urllib3_version  # noqa: F811
-    major, minor, patch = int(major), int(minor), int(patch)
-    # urllib3 >= 1.21.1, <= 1.23
-    assert major == 1
-    assert minor >= 21
-    assert minor <= 23
-    
-            self.method = method
-        self.url = url
-        self.headers = headers
-        self.files = files
-        self.data = data
-        self.json = json
-        self.params = params
-        self.auth = auth
-        self.cookies = cookies
-    
-        replace_chars = ' \'''
-    
-        def short_desc(self):
-        '''
-        A short description of the command
-        '''
-        return ''
+    UIR_ARGS = ['always', 'set', 'Content-Security-Policy',
+            'upgrade-insecure-requests']
     
     
-class TextTestResult(_TextTestResult):
-    def printSummary(self, start, stop):
-        write = self.stream.write
-        writeln = self.stream.writeln
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
-    
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
-    
-                raise ContractFail('Returned %s %s, expected %s' % \
-                (occurrences, self.obj_name, expected))
-    
-    
-  def Done( self ):
-    return bool( self._response_future ) and self._response_future.done()
-    
-    
-  def Start( self ):
-    self._results = self._omni_completer.ComputeCandidates( self.request_data )
-    
-    
-def EndsWithPython_Good( path ):
-  ok_( _EndsWithPython( path ),
-       'Path {0} does not end with a Python name.'.format( path ) )
-    
-    
-def CompleteItemIs( word, abbr = None, menu = None,
-                    info = None, kind = None, **kwargs ):
-  item = {
-    'word': ToBytes( word ),
-    'abbr': ToBytes( abbr ),
-    'menu': ToBytes( menu ),
-    'info': ToBytes( info ),
-    'kind': ToBytes( kind ),
-  }
-  item.update( **kwargs )
-  return item
-    
-    
-def KeywordsFromSyntaxListOutput_JunkIgnored_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
---- Syntax items ---
-foogroup xxx foo bar
-             zoo goo
-             links to Statement
-Spell        cluster=NONE
-NoSpell      cluster=NONE''' ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-        try:
-      result = self.fn( *self.args, **self.kwargs )
-    except BaseException:
-      e = sys.exc_info()[ 1 ]
-      self.future.set_exception( e )
-    else:
-      self.future.set_result( result )
+class AugeasConfiguratorTest(util.ApacheTest):
+    '''Test for Augeas Configurator base class.'''
