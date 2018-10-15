@@ -1,247 +1,257 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
-#define TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
-    
-    #endif  // TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
-
-    
-    REGISTER_OP('RefIn')
-    .Input('a: Ref(T)')
-    .Attr('T: type')
-    .SetShapeFn(shape_inference::UnknownShape);
-    
-    REGISTER_OP('ShapelessOp');
-    
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    namespace tensorflow {
-    }
-    
-    void NPyBfloat16_CopySwap(void* dst, void* src, int swap, void* arr) {
-  if (!src) {
-    return;
-  }
-  memcpy(dst, src, sizeof(uint16_t));
-  if (swap) {
-    ByteSwap16(dst);
-  }
-}
-    
-    
-    {}  // namespace tensorflow
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    // Converts Python object `obj` representing a rectangular array of
-// Python values (a scalar, a sequence of scalars, a sequence of
-// sequences, etc.) into a C++ TensorFlow Tensor and stores it in
-// *ret.  If dtype is not None it should by a Python integer
-// representing the desired dtype of the resulting Tensor.
-// This is used only as a hint, *ret may not have that dtype on
-// success and may require a cast.
-Status PySeqToTensor(PyObject* obj, PyObject* dtype, Tensor* ret);
-    
-      const tensorflow::OpRegistrationData* op_reg_data;
-  auto status =
-      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+        void CostAnalyzer::PredictCosts(CostEstimator* cost_estimator,
+                                CostGraphDef* cost_graph, int64* total_time) {
+  TF_CHECK_OK(cost_estimator->Initialize(*item_));
+  Costs costs;
+  const Status status =
+      cost_estimator->PredictCosts(item_->graph, cost_graph, &costs);
+  *total_time = costs.execution_time.count();
   if (!status.ok()) {
-    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
-    return '';
-  }
-  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
-    
-    string DiagonalString(Diagonal d) {
-  switch (d) {
-    case Diagonal::kUnit:
-      return 'Unit';
-    case Diagonal::kNonUnit:
-      return 'NonUnit';
-    default:
-      LOG(FATAL) << 'Unknown diagonal ' << static_cast<int32>(d);
-  }
-}
-    
-      std::string fname = TableFileName(dbname, meta->number);
-  if (iter->Valid()) {
-    WritableFile* file;
-    s = env->NewWritableFile(fname, &file);
-    if (!s.ok()) {
-      return s;
-    }
-    }
-    
-    TEST(DBTest, Empty) {
-  do {
-    ASSERT_TRUE(db_ != nullptr);
-    ASSERT_EQ('NOT_FOUND', Get('foo'));
-  } while (ChangeOptions());
-}
-    
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
-    
-    
-// Called on every log record (each one of which is a WriteBatch)
-// found in a kLogFile.
-static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  if (record.size() < 12) {
-    r += 'log record length ';
-    AppendNumberTo(&r, record.size());
-    r += ' is too small\n';
-    dst->Append(r);
+    LOG(ERROR) << 'Could not estimate the cost for item ' << item_->id << ': '
+               << status.error_message();
     return;
   }
-  WriteBatch batch;
-  WriteBatchInternal::SetContents(&batch, record);
-  r += 'sequence ';
-  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
-  r.push_back('\n');
-  dst->Append(r);
-  WriteBatchItemPrinter batch_item_printer;
-  batch_item_printer.dst_ = dst;
-  Status s = batch.Iterate(&batch_item_printer);
-  if (!s.ok()) {
-    dst->Append('  error: ' + s.ToString() + '\n');
-  }
 }
     
-    // Return the name of the info log file for 'dbname'.
-std::string InfoLogFileName(const std::string& dbname);
-    
-    namespace leveldb {
+      void Compute(OpKernelContext* context) override {
+    // Output a scalar string.
+    Tensor* output_tensor = nullptr;
+    OP_REQUIRES_OK(context,
+                   context->allocate_output(0, TensorShape(), &output_tensor));
+    auto output = output_tensor->scalar<string>();
     }
     
-    template<typename Key, class Comparator>
-typename SkipList<Key,Comparator>::Node* SkipList<Key,Comparator>::FindGreaterOrEqual(const Key& key, Node** prev)
-    const {
-  Node* x = head_;
-  int level = GetMaxHeight() - 1;
-  while (true) {
-    Node* next = x->Next(level);
-    if (KeyIsAfterNode(key, next)) {
-      // Keep searching in this list
-      x = next;
-    } else {
-      if (prev != nullptr) prev[level] = x;
-      if (level == 0) {
-        return next;
-      } else {
-        // Switch to next list
-        level--;
-      }
-    }
-  }
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/c/tf_status_helper.h'
+#include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/python/lib/core/safe_ptr.h'
+    
+    Safe_PyObjectPtr make_safe(PyObject* object) {
+  return Safe_PyObjectPtr(object);
 }
     
-    static const int kCbToGreenTable[256] = {
-  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
-  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
-  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
-  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
-  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
-  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
-  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
-  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
-  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
-  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
-  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
-   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
-   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
-   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
-   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
-   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
-    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
-  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
-  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
-  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
-  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
-  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
- -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
- -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
- -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
- -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
- -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
- -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
- -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
- -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
- -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
- -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+    namespace nwapi {
+    }
+    
+    void MenuItem::RemoveKeys() {
+  if (!focus_manager_) return;
+    }
+    
+    #include 'base/run_loop.h'
+#include 'content/public/browser/browsing_data_remover.h'
+#include 'extensions/browser/extension_function.h'
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
 };
     
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    
+    {    private:
+      DISALLOW_COPY_AND_ASSIGN(NwScreenInitEventListenersFunction);      
+  };
+    
+       bool parse_all();
+   bool parse_basic();
+   bool parse_extended();
+   bool parse_literal();
+   bool parse_open_paren();
+   bool parse_basic_escape();
+   bool parse_extended_escape();
+   bool parse_match_any();
+   bool parse_repeat(std::size_t low = 0, std::size_t high = (std::numeric_limits<std::size_t>::max)());
+   bool parse_repeat_range(bool isbasic);
+   bool parse_alt();
+   bool parse_set();
+   bool parse_backref();
+   void parse_set_literal(basic_char_set<charT, traits>& char_set);
+   bool parse_inner_set(basic_char_set<charT, traits>& char_set);
+   bool parse_QE();
+   bool parse_perl_extension();
+   bool parse_perl_verb();
+   bool match_verb(const char*);
+   bool add_emacs_code(bool negate);
+   bool unwind_alts(std::ptrdiff_t last_paren_start);
+   digraph<charT> get_next_set_literal(basic_char_set<charT, traits>& char_set);
+   charT unescape_character();
+   regex_constants::syntax_option_type parse_options();
+    
+    namespace deprecated{
+//
+// class char_regex_traits_i
+// provides case insensitive traits classes (deprecated):
+template <class charT>
+class char_regex_traits_i : public regex_traits<charT> {};
     }
-  }
+    
+    
+    {
+    {} // namespace BOOST_REGEX_DETAIL_NS
+} // namespace boost
+    
+       // initialise our stack if we are non-recursive:
+#ifdef BOOST_REGEX_NON_RECURSIVE
+   save_state_init init(&m_stack_base, &m_backup_state);
+   used_block_count = BOOST_REGEX_MAX_BLOCKS;
+#if !defined(BOOST_NO_EXCEPTIONS)
+   try{
+#endif
+#endif
+    }
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::unwind_fast_dot_repeat(bool r)
+{
+   saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
+    }
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_rep()
+{
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127 4244)
+#endif
+   const re_repeat* rep = static_cast<const re_repeat*>(pstate);
+   //
+   // Always copy the repeat count, so that the state is restored
+   // when we exit this scope:
+   //
+   repeater_count<BidiIterator> r(rep->state_id, &next_count, position, this->recursion_stack.size() ? this->recursion_stack.back().idx : INT_MIN + 3);
+   //
+   // If we've had at least one repeat already, and the last one 
+   // matched the NULL string then set the repeat count to
+   // maximum:
+   //
+   next_count->check_null_repeat(position, rep->max);
+    }
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         basic_regex_creator.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares template class basic_regex_creator which fills in
+  *                the data members of a regex_data object.
+  */
+    
+    //
+// provide std lib proposal compatible constants:
+//
+namespace regex_constants{
+    }
+    
+    
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    template <class charT, class traits>
+inline bool regex_search(const charT* str, 
+                        const basic_regex<charT, traits>& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_search(str, str + traits::length(str), e, flags);
 }
     
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     
-        std::sort(tree, tree + n, SortHuffmanTree);
+            ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+        ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox('Another Window', &show_another_window);
     
-    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_4_0', 0, 0, &g_pVertexShaderBlob, NULL);
+        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
+            return false;
+        if (g_pd3dDevice->CreateVertexShader((DWORD*)g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pVertexShader) != S_OK)
+            return false;
+    
+    
+    {     // Show/hide OSD keyboard
+    if (io.WantTextInput)
+    {
+        // Some text input widget is active?
+        if (!g_osdKeyboardEnabled)
+        {
+            g_osdKeyboardEnabled = true;
+            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 1);    // show OSD keyboard
+        }
+    }
+    else
+    {
+        // No text input widget is active
+        if (g_osdKeyboardEnabled)
+        {
+            g_osdKeyboardEnabled = false;
+            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 0);    // hide OSD keyboard
+        }
+    }
+}
 
     
-    
-    {}  // namespace guetzli
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
+    void ImGui_ImplVulkan_NewFrame()
+{
 }
     
     
-    {}  // namespace guetzli
-
+    {    static BOOST_FORCEINLINE bool is_lock_free(storage_type const volatile&) BOOST_NOEXCEPT
+    {
+        return true;
+    }
+};
     
-    void InitJPEGDataForYUV444(int w, int h, JPEGData* jpg) {
-  jpg->width = w;
-  jpg->height = h;
-  jpg->max_h_samp_factor = 1;
-  jpg->max_v_samp_factor = 1;
-  jpg->MCU_rows = (h + 7) >> 3;
-  jpg->MCU_cols = (w + 7) >> 3;
-  jpg->quant.resize(3);
-  jpg->components.resize(3);
-  for (int i = 0; i < 3; ++i) {
-    JPEGComponent* c = &jpg->components[i];
-    c->id = i;
-    c->h_samp_factor = 1;
-    c->v_samp_factor = 1;
-    c->quant_idx = i;
-    c->width_in_blocks = jpg->MCU_cols;
-    c->height_in_blocks = jpg->MCU_rows;
-    c->num_blocks = c->width_in_blocks * c->height_in_blocks;
-    c->coeffs.resize(c->num_blocks * kDCTBlockSize);
-  }
+    
+    {    static BOOST_FORCEINLINE storage_type fetch_xor(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        return static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_XOR64(&storage, v));
+    }
+};
+    
+        struct aligned
+    {
+        BOOST_ALIGNMENT(2) type value;
+    }
+    
+    #if BOOST_ATOMIC_THREAD_FENCE > 0
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::thread_fence(order);
 }
-    
-    
-    {}  // namespace guetzli
-    
-    #include 'guetzli/jpeg_data.h'
+#else
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::thread_fence();
+}
+#endif
