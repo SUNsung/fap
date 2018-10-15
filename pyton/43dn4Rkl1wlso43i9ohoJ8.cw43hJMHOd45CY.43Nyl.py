@@ -1,262 +1,189 @@
 
         
-            def run_tests(self):
-        import pytest
-        sys.exit(pytest.main(self.test_args))
-    
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME + SEP_CREDENTIALS + PASSWORD,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
-    
-        config['implicit_content_type'] = 'json'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert not config['default_options']
-    
-    
-class TestDownloadUtils:
-    def test_Content_Range_parsing(self):
-        parse = parse_content_range
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-def ensure_rule_absent(client, module):
-    rule_id = get_rule_by_name(client, module, module.params['name'])
-    in_use_web_acls = find_rule_in_web_acls(client, module, rule_id)
-    if in_use_web_acls:
-        web_acl_names = ', '.join(in_use_web_acls)
-        module.fail_json(msg='Rule %s is in use by Web ACL(s) %s' %
-                         (module.params['name'], web_acl_names))
-    if rule_id:
-        remove_rule_conditions(client, module, rule_id)
-        try:
-            return True, run_func_with_change_token_backoff(client, module, {'RuleId': rule_id}, client.delete_rule, wait=True)
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Could not delete rule')
-    return False, {}
-    
-    requirements:
-  - boto3 >= 1.0.0
-  - python >= 2.6
-    
-    '''
-    
-        desc_log_group = describe_log_group(client=logs,
-                                        log_group_name=module.params['log_group_name'],
-                                        module=module)
-    final_log_group_snake = []
-    
-        return matched_asgs
-    
-        interface_info = {'id': interface.id,
-                      'subnet_id': interface.subnet_id,
-                      'vpc_id': interface.vpc_id,
-                      'description': interface.description,
-                      'owner_id': interface.owner_id,
-                      'status': interface.status,
-                      'mac_address': interface.mac_address,
-                      'private_ip_address': interface.private_ip_address,
-                      'source_dest_check': interface.source_dest_check,
-                      'groups': dict((group.id, group.name) for group in interface.groups),
-                      'private_ip_addresses': private_addresses
-                      }
-    
-    
-DOCUMENTATION = '''
----
-module: ec2_lc_find
-short_description: Find AWS Autoscaling Launch Configurations
-description:
-  - Returns list of matching Launch Configurations for a given name, along with other useful information
-  - Results can be sorted and sliced
-  - It depends on boto
-  - Based on the work by Tom Bamford (https://github.com/tombamford)
-    
-    # Create a snapshot only if the most recent one is older than 1 hour
-- local_action:
-    module: ec2_snapshot
-    volume_id: vol-abcdef12
-    last_snapshot_min_age: 60
-'''
-    
-        # Set volume detach flag
-    if instance == 'None' or instance == '':
-        instance = None
-        detach_vol_flag = True
-    else:
-        detach_vol_flag = False
-    
-            print('Training %s ... ' % name, end='')
-        t0 = time()
-        clf.fit(X_train, y_train)
-        train_time[name] = time() - t0
-        t0 = time()
-        y_pred = clf.predict(X_test)
-        test_time[name] = time() - t0
-        accuracy[name] = accuracy_score(y_test, y_pred)
-        print('done')
-    
-        n_features = 10
-    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
-                                            [n_features], precompute=True)
-    
-    
-METRICS = {
-    'f1': partial(f1_score, average='micro'),
-    'f1-by-sample': partial(f1_score, average='samples'),
-    'accuracy': accuracy_score,
-    'hamming': hamming_loss,
-    'jaccard': jaccard_similarity_score,
+        
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
 }
     
-        max_it = len(samples_range) * len(features_range)
-    for i_s, n_samples in enumerate(samples_range):
-        for i_f, n_features in enumerate(features_range):
-            it += 1
-            n_informative = n_features / 10
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            # dataset_kwargs = {
-            #     'n_train_samples': n_samples,
-            #     'n_test_samples': 2,
-            #     'n_features': n_features,
-            #     'n_informative': n_informative,
-            #     'effective_rank': min(n_samples, n_features) / 10,
-            #     #'effective_rank': None,
-            #     'bias': 0.0,
-            # }
-            dataset_kwargs = {
-                'n_samples': 1,
-                'n_components': n_features,
-                'n_features': n_samples,
-                'n_nonzero_coefs': n_informative,
-                'random_state': 0
-            }
-            print('n_samples: %d' % n_samples)
-            print('n_features: %d' % n_features)
-            y, X, _ = make_sparse_coded_signal(**dataset_kwargs)
-            X = np.asfortranarray(X)
+    versions_info['versions'][version] = new_version
+versions_info['latest'] = version
     
-    import time
+    try:
+    input = raw_input
+except NameError:
+    pass
     
-    from scipy.sparse.csr import csr_matrix
-import numpy as np
-from sklearn.linear_model.stochastic_gradient import SGDRegressor
-from sklearn.metrics import r2_score
     
-            for filename in os.listdir(firefox_path):
-            if filename.endswith('.default') and os.path.isdir(os.path.join(firefox_path, filename)):
-                config_path = os.path.join(firefox_path, filename)
-                #xlog.debug('Got Firefox path: %s', config_path)
-                return config_path
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-        if len(sys.argv) > 1:
-        ip = sys.argv[1]
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    module_src = '\n'.join(module_contents) + '\n'
+    
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
+    
+    compat_print('total downloads traffic: %s' % format_size(total_bytes))
+
+    
+    
+def assertGreaterEqual(self, got, expected, msg=None):
+    if not (got >= expected):
+        if msg is None:
+            msg = '%r not greater than or equal to %r' % (got, expected)
+        self.assertTrue(got >= expected, msg)
+    
+            assert_syntax_error('bestvideo,,best')
+        assert_syntax_error('+bestaudio')
+        assert_syntax_error('bestvideo+')
+        assert_syntax_error('/')
+    
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
     else:
-        ip = '46.134.208.94'
-        ip = '2001:ee0:3203:a::12'
-        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
-    print('test ip:%s' % ip)
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
     
-        def get(self):
-        n = random.randint(2, 3)
-        ws = []
-        for i in range(0, n):
-            w = self.slice.get()
-            ws.append(w)
+            else:
+            if 'stream_id' in kwargs and kwargs['stream_id']:
+                # Download the stream
+                stream_id = kwargs['stream_id']
+            else:
+                # Download stream with the best quality
+                from .processor.ffmpeg import has_ffmpeg_installed
+                stream_id = self.streams_sorted[0]['id'] if 'id' in self.streams_sorted[0] else self.streams_sorted[0]['itag']
     
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
+        Download Acfun video by vid.
     
-            self.decisionNumber = decisionNumber
-    
-    
-    def mismatchIsMissingToken(self, input, follow):
-        if follow is None:
-            # we have no information about the follow; we can only consume
-            # a single token and hope for the best
-            return False
-        
-        # compute what can follow this grammar element reference
-        if EOR_TOKEN_TYPE in follow:
-            if len(self._state.following) > 0:
-                # remove EOR if we're not the start symbol
-                follow = follow - set([EOR_TOKEN_TYPE])
-    
-    
-class Header(jose.Header):
-    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
-    '''
-    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
-    kid = jose.Field('kid', omitempty=True)
-    url = jose.Field('url', omitempty=True)
-    
-    from acme import test_util
-    
-        :returns: Dict of Define:Value pairs
-    :rtype: `dict`
-    
-    # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
-    
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
     
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def get_coub_data(html):
+    coub_data = r1(r'<script id=\'coubPageCoubJson\' type=\'text/json\'>([^<]+)</script>', html)
+    json_data = json.loads(coub_data)
+    return json_data
+    
+        mime, ext, size = url_info(real_url)
+    
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
+    
+    import markdown
+    
+    import os
+import sys
+import vim
+import re
+    
+    KEYWORD_REGEX = re.compile( r'^(\w+),?$' )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def compare_faces(known_face_encodings, face_encoding_to_check, tolerance=0.6):
-    '''
-    Compare a list of face encodings against a candidate encoding to see if they match.
+@YouCompleteMeInstance()
+@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
+def SendCompletionRequest_ResponseContainingError_test( ycm, post_vim_message ):
+  current_buffer = VimBuffer( 'buffer' )
     
-        # Resize frame of video to 1/4 size for faster face recognition processing
-    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+      post_data_to_handler_async.reset_mock()
     
-    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
-# the picamera[array] module installed.
-# You can follow this installation instructions to get your RPi set up:
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+      def shutdown( self, wait=True ):
+    with self._shutdown_lock:
+      self._shutdown = True
+      self._work_queue.put( None )
+    if wait:
+      for t in self._threads:
+        t.join()
+  shutdown.__doc__ = _base.Executor.shutdown.__doc__
+
     
-            # Now let's list all the faces we found in all 128 frames
-        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
-            number_of_faces_in_frame = len(face_locations)
+    *References:
+http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
+https://fkromer.github.io/python-pattern-references/design/#factory-method
+https://sourcemaking.com/design_patterns/factory_method
     
-        # Scale down image if it's giant so things run a little faster
-    if max(unknown_image.shape) > 1600:
-        pil_img = PIL.Image.fromarray(unknown_image)
-        pil_img.thumbnail((1600, 1600), PIL.Image.LANCZOS)
-        unknown_image = np.array(pil_img)
+        def __init__(self, delegate):
+        self.delegate = delegate
     
-        def test_fd_command_line_interface_hog_model(self):
-        target_string = 'obama.jpg'
-        runner = CliRunner()
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+        _static_method_choices = {'param_value_1': _static_method_1, 'param_value_2': _static_method_2}
+    
+    
+class ConcreteHandler2(Handler):
+    def _handle(self, request):
+        if 10 < request <= 20:
+            print('request {} handled in handler 2'.format(request))
+            return True
+    
+        def restore():
+        obj.__dict__.clear()
+        obj.__dict__.update(state)
+    
+    
+class Subject(object):
+    def __init__(self):
+        self._observers = []
+    
+    ### OUTPUT ###
+# Scanning... Station is 1380 AM
+# Scanning... Station is 1510 AM
+# Switching to FM
+# Scanning... Station is 89.1 FM
+# Scanning... Station is 103.9 FM
+# Scanning... Station is 81.3 FM
+# Scanning... Station is 89.1 FM
+# Switching to AM
+# Scanning... Station is 1250 AM
+# Scanning... Station is 1380 AM
+
+    
+    *Where is the pattern used practically?
+    
+    class TimeDisplay(object):
