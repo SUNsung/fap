@@ -1,227 +1,209 @@
 
         
-        group :test do
-  gem 'minitest'
-  gem 'rr', require: false
-  gem 'rack-test', require: false
+            def ==(other)
+      other.is_a?(self.class) && filters == other.filters
+    end
+    
+        def pipeline
+      @pipeline ||= ::HTML::Pipeline.new(self.class.filters).tap do |pipeline|
+        pipeline.instrumentation_service = Docs
+      end
+    end
+    
+          def process_response(response)
+        original_scheme = self.base_url.scheme
+        original_host = self.base_url.host
+        original_path = self.base_url.path
+    
+        def log(msg)
+      puts '\r' + justify(msg)
+    end
+    
+        # See {CapabilityHost#capability}
+    def capability(*args)
+      super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
+    end
+    
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
+        end
+    
+              # Return the registry
+          data[:config]
+        end
+    
+              # Creating a shallow copy of the arguments so the OptionParser
+          # doesn't destroy the originals.
+          argv = @argv.dup
+    
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
+        end
+    
+            # This contains all the registered provider capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :provider_capabilities
+    
+            def initialize
+          @logger = Log4r::Logger.new('vagrant::plugin::v2::manager')
+          @registered = []
+        end
+    
+            path = File.join save_to, name.sub(/\.less$/, '.scss')
+        path = File.join File.dirname(path), '_' + File.basename(path)
+        save_file(path, file)
+        log_processed File.basename(path)
+      end
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    module Jekyll
+    
+    
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
+        end
+      end
+    end
+  end
 end
     
-        def user_has_docs?(slug)
-      docs.include?(slug) || begin
-        slug = '#{slug}~'
-        docs.any? { |_slug| _slug.start_with?(slug) }
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+  end
+    
+    
+  test 'broken four space' do
+    page = 'utfh1'
+    text = %(
+    one
+    two
+    three
+    four
+)
+    
+      test 'clean path with double leading slash' do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
+end
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+        class MapGollum
+      def initialize(base_path)
+        @mg = Rack::Builder.new do
+          
+          map '/#{base_path}' do
+            run Precious::App
+          end
+          map '/' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          map '/*' do
+            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
+          end
+          
+        end
       end
-    end
     
-    
-    def initialize
-      raise NotImplementedError, '#{self.class} is an abstract class and cannot be instantiated.' if self.class.abstract
-    end
-    
-        def types_as_json
-      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
-    end
-    
-        def inheritable_copy
-      self.class.new @filters
-    end
-    
-        class << self
-      attr_accessor :dir
-    
-            # Remove ng-* attributes
-        css('*').each do |node|
-          node.attributes.each_key do |attribute|
-            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
-          end
-        end
-    
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Boolean] single_target If true, then an exception will be
-        #   raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          # Using VMs requires a Vagrant environment to be properly setup
-          raise Errors::NoEnvironmentError if !@env.root_path
-    
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
-        end
-    
-              @registered.each do |plugin|
-            plugin.config.each do |key, klass|
-              result[key] = klass
-            end
-          end
-    
-            # This contains all the command plugins by name, and returns
-        # the command class and options. The command class is wrapped
-        # in a Proc so that it can be lazy loaded.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        attr_reader :commands
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a configuration key defined for
-      # V2. Any configuration key plugins for V2 should inherit from this
-      # class.
-      class Config
-        # This constant represents an unset value. This is useful so it is
-        # possible to know the difference between a configuration value that
-        # was never set, and a value that is nil (explicitly). Best practice
-        # is to initialize all variables to this value, then the {#merge}
-        # method below will 'just work' in many cases.
-        UNSET_VALUE = Object.new
-    
-            # This returns all the registered configuration classes.
-        #
-        # @return [Hash]
-        def config
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:top])
-            end
-          end
-        end
-    
-            # Registers a callback to be called when a specific action sequence
-        # is run. This allows plugin authors to hook into things like VM
-        # bootup, VM provisioning, etc.
-        #
-        # @param [String] name Name of the action.
-        # @param [Symbol] hook_name The location to hook. If this isn't
-        #   set, every middleware action is hooked.
-        # @return [Array] List of the hooks for the given action.
-        def self.action_hook(name, hook_name=nil, &block)
-          # The name is currently not used but we want it for the future.
-    
-          doc.css('#filecontents').css('h1, h2, h3, h4, h5, h6').each do |h|
-        next if h.inner_text.empty?
-        h['id'] =
-          case h.inner_text
-          when 'Referencing Parent Selectors: &'; 'parent-selector'
-          when /^Comments:/; 'comments'
-          when 'Strings'; 'sass-script-strings'
-          when 'Division and /'; 'division-and-slash'
-          when /^Subtraction,/; 'subtraction'
-          when '& in SassScript'; 'parent-script'
-          when '@-Rules and Directives'; 'directives'
-          when '@extend-Only Selectors'; 'placeholders'
-          when '@extend-Only Selectors'; 'placeholders'
-          when '@each'; 'each-directive'
-          when 'Multiple Assignment'; 'each-multi-assign'
-          when 'Mixin Directives'; 'mixins'
-          when /^Defining a Mixin:/; 'defining_a_mixin'
-          when /^Including a Mixin:/; 'including_a_mixin'
-          when 'Arguments'; 'mixin-arguments'
-          when 'Passing Content Blocks to a Mixin'; 'mixin-content'
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
           else
-            h.inner_text.downcase.gsub(/[^a-z _-]/, '').gsub(' ', '_')
+            invalid_resource!(@image)
           end
-      end
-    
-          flatten_rules(rule)
-    end
-    
-        # variable
-    # Script::Value
-    inherited_hash_reader :var
-    
-          private
-    
-          def left_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, li                  = *line.match(/\-(\d+)/)
-          @left_diff_line_number = li.to_i
-          @current_line_number   = @left_diff_line_number
-          ret                    = '...'
-        elsif line[0] == ?-
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
-        elsif line[0] == ?+
-          ret = ' '
-        else
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
         end
-        ret
-      end
     
-          def page_name
-        @name.gsub('-', ' ')
-      end
-    
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
+            def option_value_params
+          params.require(:option_value).permit(permitted_option_value_attributes)
         end
-      end
-    
-          # Returns page content without title if it was extracted.
-      #
-      def content_without_page_header(content)
-        doc = build_document(content)
-          if @h1_title
-            title = find_header_node(doc)
-            title.remove unless title.empty?
-          end
-        # .inner_html will cause href escaping on UTF-8
-        doc.css('div#gollum-root').children.to_xml(@@to_xml)
       end
     end
   end
 end
 
     
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
-  end
+            def create
+          authorize! :create, Product
+          params[:product][:available_on] ||= Time.current
+          set_up_shipping_category
     
-          if page = wiki.paged(name, path, exact = true)
-        @page          = page
-        @name          = name
-        @content       = page.formatted_data
-        @upload_dest   = find_upload_dest(path)
-    
-          def files_folders
-        if has_results
-          folders = {}
-          page_files = {}
+              @line_item = Spree::Cart::AddItem.call(order: @order,
+                                                 variant: variant,
+                                                 quantity: quantity,
+                                                 options: { shipment: @shipment }).value
