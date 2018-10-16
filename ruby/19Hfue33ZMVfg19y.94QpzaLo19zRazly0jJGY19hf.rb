@@ -1,84 +1,99 @@
 
         
-                  # Depending on the attribute, multiple values may
-          # be returned. We need only one for username.
-          # Ex. `uid` returns only one value but `mail` may
-          # return an array of multiple email addresses.
-          [username].flatten.first.tap do |username|
-            username.downcase! if config.lowercase_usernames
-          end
-        end
+              Dir.chdir(FastlaneCore::FastlaneFolder.path || Dir.pwd) do # context: fastlane subfolder
+        # create nice path that we want to print in case of some problem
+        relative_path = path.nil? ? '(eval)' : Pathname.new(path).relative_path_from(Pathname.new(Dir.pwd)).to_s
     
-          def save
-        @changed = identity.save
+        context 'action launch' do
+      let(:launch_context) do
+        FastlaneCore::ActionLaunchContext.new(
+          action_name: action_name,
+          p_hash: p_hash,
+          platform: 'ios',
+          fastlane_client_language: fastlane_client_language
+        )
       end
     
-    module Gitlab
-  module BackgroundMigration
-    class PopulateMergeRequestsLatestMergeRequestDiffId
-      BATCH_SIZE = 1_000
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --ignore \'ignored/path\' --exit-threshold \'2\' input/dir')
+      end
     
-            # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
-        end
-    
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
-        end
-    
-      def destroy
-    @filter.destroy
-    redirect_to filters_path
-  end
-    
-        def set_account_moderation_note
-      @account_moderation_note = AccountModerationNote.find(params[:id])
+            expect(result[3]).to start_with('security set-keychain-settings')
+        expect(result[3]).to include('-t 600')
+        expect(result[3]).to include('-l')
+        expect(result[3]).to include('-u')
+        expect(result[3]).to include('~/Library/Keychains/test.keychain')
+      end
     end
   end
 end
 
     
-            @user.send_confirmation_instructions
+          it 'generates the correct git command with an array of paths and/or pathspecs' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+            Fastlane::FastFile.new.parse('lane :test do
+          import_certificate ({
+            keychain_name: '#{keychain}',
+            keychain_password: '#{password}',
+            certificate_path: '#{cert_name}',
+            certificate_password: '#{password}'
+          })
+        end').runner.execute(:test)
       end
     
-        def set_user
-      @user = Account.find(params[:account_id]).user || raise(ActiveRecord::RecordNotFound)
-    end
+              expect(value).to eq(987)
+        end
     
-        def resource_params
-      params.require(:custom_emoji).permit(:shortcode, :image, :visible_in_picker)
-    end
+      def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
+  end
     
-        def destroy
-      authorize @email_domain_block, :destroy?
-      @email_domain_block.destroy!
-      log_action :destroy, @email_domain_block
-      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
+  end
+end
+
     
-        def ordered_instances
-      paginated_instances.map { |account| Instance.new(account) }
+    Then(/^I should not be able to sign up$/) do
+  confirm_not_signed_up
+end
+    
+        sign_in(alice, scope: :user)
+  end
+    
+    Then(/^references in the remote repo are listed$/) do
+  expect(@output).to include('refs/heads/master')
+end
+    
+      # Returns a url without the protocol (http://)
+  def shorthand_url(input)
+    input.gsub /(https?:\/\/)(\S+)/ do
+      $2
     end
+  end
     
-          @report_note = current_account.report_notes.new(resource_params)
-      @report = @report_note.report
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :selected  => @page.version.id == v.id,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+          }
+        end
+      end
     
           # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
       def left_shift(int, shift)
@@ -87,22 +102,73 @@ end
         (r & 2147483648) == 0 ? r : r - 4294967296
       end
     
-        assert_match /New/, last_response.body, ''New' link is blocked in pages template'
+        def self.teardown(&block)
+      define_method(:teardown, &block)
+    end
+  end
+  (
+  class << klass;
+    self
+  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
+  $contexts << klass
+  klass.class_eval &block
+end
     
-      test 'show edit page with header and footer and sidebar of multibyte' do
-    post '/create',
-         :content => 'りんご',
-         :page    => 'Multibyte', :format => :markdown, :message => 'mesg'
+      test 'clean path with double leading slash' do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
+end
     
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
+      teardown do
+    FileUtils.rm_rf(@path)
+  end
+end
+
+    
+      setup do
+    @path = cloned_testpath('examples/revert.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {})
   end
     
-    $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
-    
-        # Extract the 'page' name from the file_path
-    def extract_name(file_path)
-      if file_path[-1, 1] == '/'
-        return nil
+    if options[:irb]
+  require 'irb'
+  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
+  module IRB # :nodoc:
+    def self.start_session(binding)
+      unless @__initialized
+        args = ARGV
+        ARGV.replace(ARGV.dup)
+        IRB.setup(nil)
+        ARGV.replace(args)
+        @__initialized = true
       end
+    
+    LogStash::Bundler.setup!
+    
+        # To make sure we have the maximum compatibility
+    # we will ignore theses gems and they won't be included in the pack
+    IGNORE_GEMS_IN_PACK = %w(
+      logstash-core
+      logstash-core-plugin-api
+      jar-dependencies
+    )
+    
+    Gem::Specification.new do |gem|
+  gem.authors       = ['Elastic']
+  gem.email         = ['info@elastic.co']
+  gem.description   = %q{Logstash plugin API}
+  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
+  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
+  gem.license       = 'Apache License (2.0)'
+    
+      it 'returns the merged `ConfigPart#config_string`' do
+    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
+  end
+    
+    platforms = PlatformConfig.new
+    
+        after :each do
+      logstash.uninstall
+    end
