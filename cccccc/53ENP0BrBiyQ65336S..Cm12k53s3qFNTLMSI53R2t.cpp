@@ -1,386 +1,441 @@
 
         
-          // Run shape inference.
-  tensorflow::shape_inference::InferenceContext c(
-      graph_def_version, &node, op_reg_data->op_def, input_shapes,
-      input_tensors, input_tensor_as_shapes_protos,
-      input_handle_shapes_and_types);
-  TF_RETURN_IF_ERROR(c.construction_status());
-    
-      // Format the Op's descriptions so that it can be a Python docstring.
-  void AddDocStringDescription();
-    
-    void CostAnalyzer::GatherCosts() {
-  CostGraphDef cost_graph_measured;
-  PredictCosts(&measure_estimator_, &cost_graph_measured,
-               &total_time_measured_);
-  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
-  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
+        namespace tensorflow {
     }
     
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
     
+    static void TensorReleaser_dealloc(PyObject* pself) {
+  TensorReleaser* self = reinterpret_cast<TensorReleaser*>(pself);
+  (*self->destructor)();
+  delete self->destructor;
+  TensorReleaserType.tp_free(pself);
+}
     
-    {}  // namespace tensorflow
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {}  // namespace tensorflow
-
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
+    namespace tensorflow {
+    }
     
     Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
     
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n) {
-  int max_offset = n - 2;
-  int offset = 0;
-  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
-  // v, and multiplying them together in parallel.
-  __m128d sum = _mm_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 2;
-    // Aligned load is reputedly faster but requires 16 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
-      // Use aligned load.
-      sum = _mm_load_pd(u);
-      __m128d floats2 = _mm_load_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_load_pd(u + offset);
-        floats2 = _mm_load_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
-    } else {
-      // Use unaligned load.
-      sum = _mm_loadu_pd(u);
-      __m128d floats2 = _mm_loadu_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_loadu_pd(u + offset);
-        floats2 = _mm_loadu_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
-    }
-  }
-  // Add the 2 sums in sum horizontally.
-  sum = _mm_hadd_pd(sum, sum);
-  // Extract the low result.
-  double result = _mm_cvtsd_f64(sum);
-  // Add on any left-over products.
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #include <cstdint>  // for int16_t
-    
-      // The ColPartitions in part_grid_ maybe over-segmented, particularly in the
-  // block equation regions. So we like to identify these partitions and merge
-  // them before we do the searching.
-  void MergePartsByLocation();
-    
-    struct OSResults {
-  OSResults() : unicharset(nullptr) {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < kMaxNumberOfScripts; ++j)
-        scripts_na[i][j] = 0;
-      orientations[i] = 0;
-    }
-  }
-  void update_best_orientation();
-  // Set the estimate of the orientation to the given id.
-  void set_best_orientation(int orientation_id);
-  // Update/Compute the best estimate of the script assuming the given
-  // orientation id.
-  void update_best_script(int orientation_id);
-  // Return the index of the script with the highest score for this orientation.
-  TESS_API int get_best_script(int orientation_id) const;
-  // Accumulate scores with given OSResults instance and update the best script.
-  void accumulate(const OSResults& osr);
-    }
-    
-     private:
-  // Gets the up to the first 3 prefixes from s (split by _).
-  // For example, tesseract_foo_bar will be split into tesseract,foo and bar.
-  void GetPrefixes(const char* s, STRING* level_one,
-                   STRING* level_two, STRING* level_three);
-    
-      /// Threshold the rectangle, taking everything except the src_pix
-  /// from the class, using thresholds/hi_values to the output pix.
-  /// NOTE that num_channels is the size of the thresholds and hi_values
-  // arrays and also the bytes per pixel in src_pix.
-  void ThresholdRectToPix(Pix* src_pix, int num_channels,
-                          const int* thresholds, const int* hi_values,
-                          Pix** pix) const;
-    
-    template <typename T>
-inline StringName __constant_get_enum_name(T param, const String &p_constant) {
-	if (GetTypeInfo<T>::VARIANT_TYPE == Variant::NIL)
-		ERR_PRINTS('Missing VARIANT_ENUM_CAST for constant's enum: ' + p_constant);
-	return GetTypeInfo<T>::get_class_info().class_name;
-}
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_match.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Iterator traits for selecting an iterator type as
-  *                an integral constant expression.
-  */
-    
-       const_reference suffix() const
-   {
-      if(m_is_singular)
-         raise_logic_error();
-      return (*this)[-2];
-   }
-   const_iterator begin() const
-   {
-      return (m_subs.size() > 2) ? (m_subs.begin() + 2) : m_subs.end();
-   }
-   const_iterator end() const
-   {
-      return m_subs.end();
-   }
-   // format:
-   template <class OutputIterator, class Functor>
-   OutputIterator format(OutputIterator out,
-                         Functor fmt,
-                         match_flag_type flags = format_default) const
-   {
-      if(m_is_singular)
-         raise_logic_error();
-      typedef typename BOOST_REGEX_DETAIL_NS::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, OutputIterator>::type F;
-      F func(fmt);
-      return func(*this, out, flags);
-   }
-   template <class Functor>
-   string_type format(Functor fmt, match_flag_type flags = format_default) const
-   {
-      if(m_is_singular)
-         raise_logic_error();
-      std::basic_string<char_type> result;
-      BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<char_type> > i(result);
-    }
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_PREFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
     
     
-    {   enum restart_info
-   {
-      restart_any = 0,
-      restart_word = 1,
-      restart_line = 2,
-      restart_buf = 3,
-      restart_continue = 4,
-      restart_lit = 5,
-      restart_fixed_lit = 6, 
-      restart_count = 7
-   };
-};
-    
-    typedef basic_regex<char, regex_traits<char> > regex;
-#ifndef BOOST_NO_WREGEX
-typedef basic_regex<wchar_t, regex_traits<wchar_t> > wregex;
-#endif
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-    // Remove the debug report callback
-    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkDestroyDebugReportCallbackEXT');
-    vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
-#endif // IMGUI_VULKAN_DEBUG_REPORT
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_Marmalade_Init(true);
-    
-            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-    }
-    
-    // Data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static IDXGISwapChain*          g_pSwapChain = NULL;
-static ID3D11RenderTargetView*  g_mainRenderTargetView = NULL;
-    
-    // Include OpenGL header (without an OpenGL loader) requires a bit of fiddling
-#if defined(_WIN32) && !defined(APIENTRY)
-#define APIENTRY __stdcall                  // It is customary to use APIENTRY for OpenGL function pointer declarations on all platforms.  Additionally, the Windows OpenGL header needs APIENTRY.
-#endif
-#if defined(_WIN32) && !defined(WINGDIAPI)
-#define WINGDIAPI __declspec(dllimport)     // Some Windows OpenGL headers need this
-#endif
+port::StatusOr<DriverVersion> Diagnostician::FindKernelDriverVersion() {
 #if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-    
-    DEFINE_bool(populate_cache, false, 'Populate cache before operations');
-DEFINE_int32(insert_percent, 40,
-             'Ratio of insert to total workload (expressed as a percentage)');
-DEFINE_int32(lookup_percent, 50,
-             'Ratio of lookup to total workload (expressed as a percentage)');
-DEFINE_int32(erase_percent, 10,
-             'Ratio of erase to total workload (expressed as a percentage)');
-    
-      uint64_t single_refill_amount =
-      delayed_write_rate_ * kRefillInterval / kMicrosPerSecond;
-  if (bytes_left_ + single_refill_amount >= num_bytes) {
-    // Wait until a refill interval
-    // Never trigger expire for less than one refill interval to avoid to get
-    // time.
-    bytes_left_ = bytes_left_ + single_refill_amount - num_bytes;
-    last_refill_time_ = time_now + kRefillInterval;
-    return kRefillInterval + sleep_debt;
-  }
-    
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
-    
-        // Remove any kind of caching of data from the offset to offset+length
-  // of this file. If the length is 0, then it refers to the end of file.
-  // If the system is not caching the file contents, then this is a noop.
-  // This call has no effect on dirty pages in the cache.
-  virtual Status InvalidateCache(size_t offset, size_t length) override {
-    return file_->InvalidateCache(offset + prefixLength_, length);
-  }
-    
-    struct PosixMemoryMappedFileBuffer : public MemoryMappedFileBuffer {
-  PosixMemoryMappedFileBuffer(void* _base, size_t _length)
-      : MemoryMappedFileBuffer(_base, _length) {}
-  virtual ~PosixMemoryMappedFileBuffer();
-};
-    
-      // Transaction could not commit since the write outside of the txn conflicted
-  // with the read!
-  assert(s.IsBusy());
-    
-    static const int kCrToGreenTable[256] = {
-  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
-  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
-  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
-  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
-  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
-  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
-  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
-  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
-  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
-  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
-  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
-  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
-  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
-  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
-   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
-   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
-        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
-  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
-  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
- -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
- -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
- -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
- -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
- -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
- -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
- -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
- -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
- -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
- -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
- -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
- -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
- -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
-};
-    
-      // Must be called before any CompareBlock() calls can be called.
-  virtual void StartBlockComparisons() = 0;
-  // No more CompareBlock() calls can be called after this.
-  virtual void FinishBlockComparisons() = 0;
-    
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+  CFStringRef kext_ids[1];
+  kext_ids[0] = kDriverKextIdentifier;
+  CFArrayRef kext_id_query = CFArrayCreate(nullptr, (const void **)kext_ids, 1,
+                                           &kCFTypeArrayCallBacks);
+  CFDictionaryRef kext_infos =
+      KextManagerCopyLoadedKextInfo(kext_id_query, nullptr);
+  CFRelease(kext_id_query);
     }
+    
+     protected:
+  // content::ContentClient:
+  std::string GetProduct() const override;
+  std::string GetUserAgent() const override;
+  base::string16 GetLocalizedString(int message_id) const override;
+  void AddAdditionalSchemes(Schemes* schemes) override;
+  void AddPepperPlugins(
+      std::vector<content::PepperPluginInfo>* plugins) override;
+  void AddContentDecryptionModules(
+      std::vector<content::CdmInfo>* cdms,
+      std::vector<media::CdmHostFilePath>* cdm_host_file_paths) override;
+    
+    #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
+
+    
+    class GlobalShortcut : public extensions::GlobalShortcutListener::Observer,
+                       public mate::TrackableObject<GlobalShortcut> {
+ public:
+  static mate::Handle<GlobalShortcut> Create(v8::Isolate* isolate);
+    }
+    
+    using atom::api::InAppPurchase;
+    
+    
+    {}  // namespace atom
+    
+    
+llvm::Optional<ASTNode>
+SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
+  auto Found = SyntaxMap.find(SyntaxNode.Root);
+  if (Found == SyntaxMap.end()) {
+    return None;
   }
+  return Found->getSecond();
 }
     
     
-    {}  // namespace guetzli
-    
-    void Usage() {
-  fprintf(stderr,
-      'Guetzli JPEG compressor. Usage: \n'
-      'guetzli [flags] input_filename output_filename\n'
-      '\n'
-      'Flags:\n'
-      '  --verbose    - Print a verbose trace of all attempts to standard output.\n'
-      '  --quality Q  - Visual quality to aim for, expressed as a JPEG quality value.\n'
-      '                 Default value is %d.\n'
-      '  --memlimit M - Memory limit in MB. Guetzli will fail if unable to stay under\n'
-      '                 the limit. Default limit is %d MB.\n'
-      '  --nomemlimit - Do not limit memory usage.\n', kDefaultJPEGQuality, kDefaultMemlimitMB);
-  exit(1);
+    {  // For the rest, just generator chunks one at a time.
+  do {
+    auto claimedBits = std::min(numBits, size_t(ChunkSizeInBits));
+    *nextChunk++ = getMoreBits(claimedBits);
+    numBits -= claimedBits;
+  } while (numBits);
 }
     
-    #include 'guetzli/jpeg_data.h'
+    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
+  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
+                                 const_cast<void*>(Key), Value_out);
+  return Ret == 0;
+}
     
-    #include <assert.h>
-#include <string.h>
+      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 1,
+                     llvm::lenientConversion);
+  if (TargetStart == C) {
+    // The source string contains an ill-formed subsequence at the end.
+    return S;
+  }
     
-    #include <atomic>
+        struct Size2D {
+        Size2D() : width(0), height(0) {}
+        Size2D(size_t width_, size_t height_) : width(width_), height(height_) {}
+    }
     
-    exception_wrapper::VTable const exception_wrapper::uninit_{
-    &noop_<void, exception_wrapper const*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*>,
-    &noop_<void, exception_wrapper const*>,
-    &uninit_type_,
-    &noop_<std::exception const*, exception_wrapper const*>,
-    &noop_<exception_wrapper, exception_wrapper const*>};
+    void accumulateSquare(const Size2D &size,
+                      const u8 *srcBase, ptrdiff_t srcStride,
+                      s16 *dstBase, ptrdiff_t dstStride,
+                      u32 shift)
+{
+    if (shift >= 16)
+    {
+        for (size_t i = 0; i < size.height; ++i)
+        {
+            s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
+            std::memset(dst, 0, sizeof(s16) * size.width);
+        }
+        return;
+    }
+    }
     
-    #include <string>
+    void bitwiseAnd(const Size2D &size,
+                const u8 *src0Base, ptrdiff_t src0Stride,
+                const u8 *src1Base, ptrdiff_t src1Stride,
+                u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseAnd());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+    void Canny3x3L2(const Size2D &size,
+                const u8 * srcBase, ptrdiff_t srcStride,
+                u8 * dstBase, ptrdiff_t dstStride,
+                f64 low_thresh, f64 high_thresh,
+                Margin borderMargin)
+{
+    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
+#ifdef CAROTENE_NEON
+    Canny3x3<true, false>(size, 1,
+                          srcBase, srcStride,
+                          dstBase, dstStride,
+                          NULL, 0,
+                          NULL, 0,
+                          low_thresh, high_thresh,
+                          borderMargin);
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)low_thresh;
+    (void)high_thresh;
+    (void)borderMargin;
+#endif
+}
+    
+    void extract3(const Size2D &size,
+              const u8 * srcBase, ptrdiff_t srcStride,
+              u8 * dstBase, ptrdiff_t dstStride,
+              u32 coi)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+    register int16x4_t v_r2y asm ('d31') = vmov_n_s16(R2Y);
+    register int16x4_t v_g2y asm ('d30') = vmov_n_s16(G2Y);
+    register int16x4_t v_b2y asm ('d29') = vmov_n_s16(B2Y);
+#else
+    uint16x4_t v_r2y = vdup_n_u16(R2Y),
+               v_g2y = vdup_n_u16(G2Y),
+               v_b2y = vdup_n_u16(B2Y);
+    
+             int32x4_t vline_s32_lo = vmovl_s16(vget_low_s16(vline_s16));
+         int32x4_t vline_s32_hi = vmovl_s16(vget_high_s16(vline_s16));
+         float32x4_t vline_f32_lo = vcvtq_f32_s32(vline_s32_lo);
+         float32x4_t vline_f32_hi = vcvtq_f32_s32(vline_s32_hi);
+    
+            #define COUNTNONZERO8U_BLOCK_SIZE (16*255)
+        uint8x16_t vc1 = vmovq_n_u8(1);
+        for (; i < roiw16;)
+        {
+            size_t lim = std::min(i + COUNTNONZERO8U_BLOCK_SIZE, size.width) - 16;
+            uint8x16_t vs = vmovq_n_u8(0);
+    }
+    
+    
+    {        for (; i < size.width; ++i)
+            result += s32(src0[i]) * s32(src1[i]);
+    }
+    return result;
+#else
+    (void)_size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    
+                    uint8x16_t v0 = vld1q_u8(ptr);
+                int8x16_t v1 = vreinterpretq_s8_u8(veorq_u8(vqsubq_u8(v0, t), delta));
+                int8x16_t v2 = vreinterpretq_s8_u8(veorq_u8(vqaddq_u8(v0, t), delta));
+    
+        std::vector<u8> _tmp;
+    u8 *tmp = 0;
+    if (borderType == BORDER_MODE_CONSTANT)
+    {
+        _tmp.assign(colsn + 4*cn, borderValue);
+        tmp = &_tmp[cn << 1];
+    }
     
     
     {
-    {    CountedDetail::template release_shared<T>(p, count);
+    {
+    {        for (;;) {
+          auto start = index.fetch_add(work_chunk);
+          auto const stop = std::min(start + work_chunk, inputs.size());
+          if (start >= stop) break;
+          for (auto i = start; i != stop; ++i) func(inputs[i]);
+        }
+      } catch (const std::exception& e) {
+        std::fprintf(stderr,
+          'worker thread exited with exception: %s\n', e.what());
+        failed = true;
+      }
+    }));
   }
-};
+    
+    namespace HPHP {
+    }
+    
+    
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
+        }
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
+    }
+  }
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
+    
+      char** newargv_array = (char**)alloca(sizeof(char*) * (newargv.size() + 1));
+  for (unsigned i = 0; i < newargv.size(); i++) {
+    // printf('%s\n', newargv[i].data());
+    newargv_array[i] = (char *)newargv[i].data();
+  }
+  // NULL-terminate the argument array.
+  newargv_array[newargv.size()] = nullptr;
+    
+    /**
+ * Search for PHP or non-PHP files under a directory.
+ */
+void find(std::vector<std::string> &out,
+          const std::string &root, const std::string& path, bool php,
+          const std::set<std::string> *excludeDirs = nullptr,
+          const std::set<std::string> *excludeFiles = nullptr);
+    
+    #include '2d/CCActionInterval.h'
+#include 'math/CCMath.h'
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        //
+    // Overrides
+    //
+    virtual TintBy* clone() const override;
+    virtual TintBy* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    TintBy() {}
+    virtual ~TintBy() {}
+    
+    
+    {     actionAllocWithHashElement(element);
+ 
+     CCASSERT(! ccArrayContainsObject(element->actions, action), 'action already be added!');
+     ccArrayAppendObject(element->actions, action);
+ 
+     action->startWithTarget(target);
+}
+    
+    // implementation of WavesTiles3D
+    
+    /**
+@brief SplitRows action.
+@details Split the target node in many rows.
+        Then move out some rows from left, move out the other rows from right.
+*/
+class CC_DLL SplitRows : public TiledGrid3DAction
+{
+public :
+    /** 
+     * @brief Create the action with the number of rows and the duration.
+     * @param duration Specify the duration of the SplitRows action. It's a value in seconds.
+     * @param rows Specify the rows count should be split.
+     * @return If the creation success, return a pointer of SplitRows action; otherwise, return nil.
+     */
+    static SplitRows* create(float duration, unsigned int rows);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        
+    // Overrides
+    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual Texture2D* getTexture() const override;
+    virtual void setTexture(Texture2D *texture) override;
+    virtual bool isOpacityModifyRGB() const override;
+    virtual void setOpacityModifyRGB(bool isOpacityModifyRGB) override;
+    virtual const Color3B& getColor(void) const override;
+    virtual void setColor(const Color3B& color) override;
+    virtual void setOpacity(GLubyte opacity) override;
+    /**
+    * @code
+    * When this function bound into js or lua,the parameter will be changed
+    * In js: var setBlendFunc(var src, var dst)
+    * @endcode
+    * @lua NA
+    */
+    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
+    /**
+    * @lua NA
+    */
+    virtual const BlendFunc& getBlendFunc() const override;
+    
+      ColumnFamilyData* cfd_;
+  Version* version_;
+  const Comparator* user_comparator_;
+  LevelFilesBrief files_;
+    
+      // Input statistics
+  // TODO(noetzli): The stats are incomplete. They are lacking everything
+  // consumed by MergeHelper.
+  uint64_t num_input_records = 0;
+  uint64_t num_input_deletion_records = 0;
+  uint64_t num_input_corrupt_records = 0;
+  uint64_t total_input_raw_key_bytes = 0;
+  uint64_t total_input_raw_value_bytes = 0;
+    
+      virtual Status GetAbsolutePath(const std::string& db_path,
+                                 std::string* output_path) override {
+    auto status_and_enc_path = EncodePath(db_path);
+    if (!status_and_enc_path.first.ok()) {
+      return status_and_enc_path.first;
+    }
+    return EnvWrapper::GetAbsolutePath(status_and_enc_path.second, output_path);
+  }
+    
+      // destroy and open DB
+  DB* db;
+  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
+  assert(s.ok());
+  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
+  assert(s.ok());
+    
+      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
+  {
+    return nodes_;
+  }
+    
+    #include <vector>
+#include <deque>
+#include <memory>
+    
+    class DHTNode;
+class DHTRoutingTable;
+class DHTMessageDispatcher;
+class DHTMessageFactory;
+class DHTTaskQueue;
+class DHTAbstractTask;
+    
+    class DHTTokenTracker;
+    
+    void DHTUnknownMessage::doReceivedAction() {}
+    
+    public:
+  // _remoteNode is always null
+  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                    const unsigned char* data, size_t length,
+                    const std::string& ipaddr, uint16_t port);
+    
+    DNSCache::~DNSCache() = default;
