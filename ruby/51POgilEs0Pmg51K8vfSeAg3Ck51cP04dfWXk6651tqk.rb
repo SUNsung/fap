@@ -1,116 +1,330 @@
 
         
-            You can read more about this change at:
-      https://www.playframework.com/documentation/2.3.x/Migration23
-      https://www.playframework.com/documentation/2.3.x/Highlights23
-    EOS
-  when 'haskell-platform' then <<-EOS.undent
-    We no longer package haskell-platform. Consider installing ghc
-    and cabal-install instead:
-      brew install ghc cabal-install
+        FORWARD_SLASH = '/'.freeze
     
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
-    end
-    dirs.delete 'etc'
-    dirs.delete 'var'
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-        names = @@remote_tap_formulae['#{user}/#{repo}']
-    user = user.downcase if user == 'Homebrew' # special handling for the Homebrew organization
-    names.select { |name| rx === name }.map { |name| '#{user}/#{repo}/#{name}' }
-  rescue GitHub::HTTPNotFoundError => e
-    opoo 'Failed to search tap: #{user}/#{repo}. Please run `brew update`'
-    []
-  rescue GitHub::Error => e
-    SEARCH_ERROR_QUEUE << e
-    []
-  end
-    
-        updated_taps = []
-    Tap.each do |tap|
-      next unless tap.git?
-      begin
-        reporter = Reporter.new(tap)
-      rescue Reporter::ReporterRevisionUnsetError => e
-        onoe e if ARGV.homebrew_developer?
-        next
-      end
-      if reporter.updated?
-        updated_taps << tap.name
-        hub.add(reporter)
-      end
-    end
-    
-      def std_cmake_parameters
-    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
-  end
-    
-          class MergeRequest < ActiveRecord::Base
-        self.table_name = 'merge_requests'
-    
-            private
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
-  end
-    
-    module Jekyll
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
-      end
+    Then(%r!^I should (not )?see '(.*)' in '(.*)' if on Windows$!) do |negative, text, file|
+  step %(the '#{file}' file should exist)
+  regexp = Regexp.new(text, Regexp::MULTILINE)
+  if negative.nil? || negative.empty?
+    if Jekyll::Utils::Platforms.really_windows?
+      expect(file_contents(file)).to match regexp
+    else
+      expect(file_contents(file)).not_to match regexp
     end
   end
 end
     
-              unless hash[key] == value
-            hash[key] = value
-            hash.delete(key) if value.nil?
+    #
+    
+          it 'generates the correct git command with an array of paths' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+          it 'works with all parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: /.*/,
+              exclude_regex: /Test.m/,
+              report_type: 'pmd',
+              report_path: 'report_path.xml',
+              max_priority_1: 10,
+              max_priority_2: 20,
+              max_priority_3: 30,
+              thresholds: ['LONG_LINE=200', 'LONG_METHOD=200'],
+              enable_rules: ['DoubleNegative', 'DeadCode'],
+              disable_rules: ['GotoStatement', 'ShortVariableName'],
+              list_enabled_rules: true,
+              enable_clang_static_analyzer: true,
+              enable_global_analysis: true,
+              allow_duplicated_violations: true
+            )
+          end').runner.execute(:test)
+    
+              expect(result).to eq('swiftlint lint')
+        end
+    
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
+    
+            it 'raises an error for unresolved conflict between options' do
+          conflicting_options = [
+            FastlaneCore::ConfigItem.new(key: :foo,
+                                         conflicting_options: [:bar, :oof]),
+            FastlaneCore::ConfigItem.new(key: :bar),
+            FastlaneCore::ConfigItem.new(key: :oof)
+          ]
+    
+          open_dry_run_modal(formatting_agent)
+      find('.dry-run-event-sample').click
+      within(:css, '.modal .builder') do
+        expect(page).to have_text('Line 1\nLine 2\nLine 3')
+      end
+      click_on('Dry Run')
+      expect(page).to have_text('Line 1,Line 2,Line 3')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
+  end
+    
+      it 'imports a scenario which requires a service' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
+    click_on 'Start Import'
+    check('I confirm that I want to import these Agents.')
+    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
+    expect(page).to have_text('Import successful!')
+  end
+end
+
+    
+        it 'should work with the human task agent' do
+      valid_params = {
+        'expected_receive_period_in_days' => 2,
+        'trigger_on' => 'event',
+        'hit' =>
+          {
+            'assignments' => 1,
+            'title' => 'Sentiment evaluation',
+            'description' => 'Please rate the sentiment of this message: '<$.message>'',
+            'reward' => 0.05,
+            'lifetime_in_seconds' => 24 * 60 * 60,
+            'questions' =>
+              [
+                {
+                  'type' => 'selection',
+                  'key' => 'sentiment',
+                  'name' => 'Sentiment',
+                  'required' => 'true',
+                  'question' => 'Please select the best sentiment value:',
+                  'selections' =>
+                    [
+                      { 'key' => 'happy', 'text' => 'Happy' },
+                      { 'key' => 'sad', 'text' => 'Sad' },
+                      { 'key' => 'neutral', 'text' => 'Neutral' }
+                    ]
+                },
+                {
+                  'type' => 'free_text',
+                  'key' => 'feedback',
+                  'name' => 'Have any feedback for us?',
+                  'required' => 'false',
+                  'question' => 'Feedback',
+                  'default' => 'Type here...',
+                  'min_length' => '2',
+                  'max_length' => '2000'
+                }
+              ]
+          }
+      }
+      @agent = Agents::HumanTaskAgent.new(:name => 'somename', :options => valid_params)
+      @agent.user = users(:jane)
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options['hit']['description']).to eq('Please rate the sentiment of this message: '{{message}}'')
+    end
+  end
+end
+    
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
+  end
+    
+              expect {
+            @agent.options[:foo] = 'bar2'
+            @agent.keep_events_for = 3.days
+            @agent.save!
+          }.to change { @event.reload.expires_at }
+          expect(@event.expires_at.to_i).to be_within(60 * 61).of(1.days.from_now.to_i) # The larger time is to deal with daylight savings
+        end
+    
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+              # Add the help option, which must be on every command.
+          opts.on_tail('-h', '--help', 'Print this help') do
+            safe_puts(opts.help)
+            return nil
           end
     
-        def initialize(local_file)
-      @local_file = local_file
+              components.providers.register(name.to_sym) do
+            [block.call, options]
+          end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
+        end
+    
+      before_action :set_filters, only: :index
+  before_action :set_filter, only: [:edit, :update, :destroy]
+    
+      private
+    
+            it 'treats several white spaces as one' do
+          format('%     b', 10).should == ' 1010'
+          format('%     B', 10).should == ' 1010'
+          format('%     d', 112).should == ' 112'
+          format('%     i', 112).should == ' 112'
+          format('%     o', 87).should == ' 127'
+          format('%     u', 112).should == ' 112'
+          format('%     x', 196).should == ' c4'
+          format('%     X', 196).should == ' C4'
+    
+      it 'accepts a Float' do
+    sleep(0.1).should be_close(0, 2)
+  end
+    
+      context 'time commands' do
+    before :each do
+      @tmp_file = File.new(tmp('file.kernel.test'), 'w')
     end
     
-        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
-    # calling update without requirements will remove any previous requirements
-    plugins = plugins_to_update(previous_gem_specs_map)
-    # Skipping the major version validation when using a local cache as we can have situations
-    # without internet connection.
-    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
-      .compact
-      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
-      .each   { |plugin| gemfile.update(plugin.name) }
+      def fill_in_new_user_form
+    @username = 'ohai'
+    fill_in('user_email', with: '#{@username}@example.com')
+    fill_in('user_username', with: @username)
+    fill_in('user_password', with: 'secret')
+    fill_in('user_password_confirmation', with: 'secret')
     
-          after do
-        ENV.delete('bar')
-        ENV.delete('f$$')
+    describe LikesController, type: :controller do
+  before do
+    @alices_aspect = alice.aspects.where(:name => 'generic').first
+    @bobs_aspect = bob.aspects.where(:name => 'generic').first
+    
+          # @see Base#\_retrieve
+      def _retrieve(key, version, sha)
+        return unless File.readable?(path_to(key))
+        begin
+          File.open(path_to(key), 'rb') do |f|
+            if f.readline('\n').strip == version && f.readline('\n').strip == sha
+              return f.read
+            end
+          end
+          File.unlink path_to(key)
+        rescue Errno::ENOENT
+          # Already deleted. Race condition?
+        end
+        nil
+      rescue EOFError, TypeError, ArgumentError => e
+        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
       end
     
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
-  end
+          vars = vars.split(',').map do |var|
+        var.strip!
+        raise SyntaxError.new('Invalid variable \'#{var}\'.') unless var =~ Script::VALIDATE
+        var[1..-1]
+      end
+    
+          # create Gemfile from template iff it does not exist
+      unless ::File.exists?(Environment::GEMFILE_PATH)
+        FileUtils.copy(
+          ::File.join(Environment::LOGSTASH_HOME, 'Gemfile.template'), Environment::GEMFILE_PATH
+        )
+      end
+      # create Gemfile.jruby-1.9.lock from template iff a template exists it itself does not exist
+      lock_template = ::File.join(ENV['LOGSTASH_HOME'], 'Gemfile.jruby-2.3.lock.release')
+      if ::File.exists?(lock_template) && !::File.exists?(Environment::LOCKFILE)
+        FileUtils.copy(lock_template, Environment::LOCKFILE)
+      end
+    
+      gem.add_runtime_dependency 'logstash-core', LOGSTASH_CORE_VERSION.gsub('-', '.')
+    
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+      end
+    
+          def order_id
+        params[:order_id] || params[:checkout_id] || params[:order_number]
+      end
+    
+            def update
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update_attributes(image_params)
+            respond_with(@image, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def new; end
+    
+            def scope
+          @scope ||= if params[:option_type_id]
+                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :read)
+                     else
+                       Spree::OptionValue.accessible_by(current_ability, :read).load
+                     end
+        end
+    
+            def update
+          authorize! params[:action], @payment
+          if !@payment.editable?
+            render 'update_forbidden', status: 403
+          elsif @payment.update_attributes(payment_params)
+            respond_with(@payment, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
+    
+            def destroy
+          if @property
+            authorize! :destroy, @property
+            @property.destroy
+            respond_with(@property, status: 204)
+          else
+            invalid_resource!(@property)
+          end
+        end
