@@ -1,94 +1,92 @@
 
         
-                def generate_temporarily_email(username)
-          'temp-email-for-oauth-#{username}@gitlab.localhost'
+        describe JobsHelper do
+  let(:job) { Delayed::Job.new }
+    
+          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent1])
+    end
+  end
+end
+
+    
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
+    
+      it 'ignores invalid values' do
+    location2 = Location.new(
+      lat: 2,
+      lng: 3,
+      radius: -1,
+      speed: -1,
+      course: -1)
+    expect(location2.radius).to be_nil
+    expect(location2.speed).to be_nil
+    expect(location2.course).to be_nil
+  end
+    
+        it 'warns and returns nil when not parseable' do
+      mock(STDERR).puts('WARNING: Invalid duration format: 'bogus'')
+      expect(Utils.parse_duration('bogus')).to be_nil
+    end
+  end
+    
+      let :reverted_extract do
+    old_extract
+  end
+    
+      def set_statuses
+    @statuses = scope_for_collection
+    @statuses = cache_collection(@statuses, Status)
+  end
+    
+        def enable
+      authorize @custom_emoji, :enable?
+      @custom_emoji.update!(disabled: false)
+      log_action :enable, @custom_emoji
+      flash[:notice] = I18n.t('admin.custom_emojis.enabled_msg')
+      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+    end
+    
+        def index
+      authorize :email_domain_block, :index?
+      @email_domain_blocks = EmailDomainBlock.page(params[:page])
+    end
+    
+          Homebrew.failed = true
+      print '#{f}: ' if ff.size > 1
+      puts missing.join(' ')
+    end
+  end
+end
+
+    
+          clear_cache
+      super(new_user, new_repo)
+    
+          def content_type
+        case params[:format]
+        when 'json'
+          'application/json; charset=utf-8'
+        when 'xml'
+          'text/xml; charset=utf-8'
         end
       end
-    end
-  end
-end
-
     
-    module Gitlab
-  module BackgroundMigration
-    class MigrateStageStatus
-      STATUSES = { created: 0, pending: 1, running: 2, success: 3,
-                   failed: 4, canceled: 5, skipped: 6, manual: 7 }.freeze
-    
-    Bootstrap.load!
-
-    
-        def pos
-      byte_to_str_pos @s.pos
-    end
-    
-        def get_trees
-      @trees ||= get_tree(@branch_sha)
-    end
-    
-      # Pre release
-  #-----------------------------------------------------------------------------#
-    
-    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
-    
-    # It is very likely that we'll need these and as some of those paths will atm
-# result in a I18n deprecation warning, we load those here now so that we can
-# get rid of that warning.
-require 'active_support/core_ext/string/strip'
-require 'active_support/core_ext/string/inflections'
-require 'active_support/core_ext/array/conversions'
-# TODO: check what this actually does by the time we're going to add support for
-# other locales.
-require 'i18n'
-if I18n.respond_to?(:enforce_available_locales=)
-  I18n.enforce_available_locales = false
-end
-    
-    namespace :doc do
-  task :readmes do
-    Dir.glob 'lib/rack/protection/*.rb' do |file|
-      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
-      next if excluded_files.include?(file)
-      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
-      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
-      Dir.mkdir 'doc' unless File.directory? 'doc'
-      puts 'writing #{file}'
-      File.open(file, 'w') { |f| f << doc }
-    end
-  end
-    
-            safe?(env) ||
-          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
-          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
-          ( options[:allow_if] && options[:allow_if].call(env) )
-      end
-    
-    module Jekyll
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-    module OctopressFilters
-  def self.pre_filter(page)
-    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
-      input = BacktickCodeBlock::render_code_block(page.content)
-      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
-        TemplateWrapper::safe_wrap($1)
-      end
-    end
-  end
-  def self.post_filter(page)
-    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
-      page.output = TemplateWrapper::unwrap(page.output)
-    end
-  end
+            def destroy
+          @image = scope.images.accessible_by(current_ability, :destroy).find(params[:id])
+          @image.destroy
+          respond_with(@image, status: 204)
+        end
