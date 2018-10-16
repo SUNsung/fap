@@ -1,183 +1,222 @@
 
         
-            Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
+                  def default_datetime(options)
+            return if options[:include_blank] || options[:prompt]
+    
+        if successfully_sent?(resource)
+      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+    else
+      respond_with(resource)
+    end
+  end
+    
+        if successfully_sent?(resource)
+      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
+    else
+      respond_with(resource)
+    end
+  end
+    
+    end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
       end
     
-        it 'understands hl=-' do
-      stub(params).[](:hl) { '-' }
-      expect((1..10).select { |i| highlighted?(i) }).to eq [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
     end
     
-    describe DotHelper do
-  describe 'with example Agents' do
-    class Agents::DotFoo < Agent
-      default_schedule '2pm'
+      def body
+    @body ||= request.body.read
+  end
     
-      describe '#status' do
-    it 'works for failed jobs' do
-      job.failed_at = Time.now
-      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+        def form_status_batch_params
+      params.require(:form_status_batch).permit(status_ids: [])
     end
     
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
+      private
+    
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
     end
-    
-    describe ScenarioImport do
-  let(:user) { users(:bob) }
-  let(:guid) { 'somescenarioguid' }
-  let(:tag_fg_color) { '#ffffff' }
-  let(:tag_bg_color) { '#000000' }
-  let(:icon) { 'Star' }
-  let(:description) { 'This is a cool Huginn Scenario that does something useful!' }
-  let(:name) { 'A useful Scenario' }
-  let(:source_url) { 'http://example.com/scenarios/2/export.json' }
-  let(:weather_agent_options) {
-    {
-      'api_key' => 'some-api-key',
-      'location' => '12345'
-    }
-  }
-  let(:trigger_agent_options) {
-    {
-      'expected_receive_period_in_days' => 2,
-      'rules' => [{
-                    'type' => 'regex',
-                    'value' => 'rain|storm',
-                    'path' => 'conditions',
-                  }],
-      'message' => 'Looks like rain!'
-    }
-  }
-  let(:valid_parsed_weather_agent_data) do
-    {
-      :type => 'Agents::WeatherAgent',
-      :name => 'a weather agent',
-      :schedule => '5pm',
-      :keep_events_for => 14.days,
-      :disabled => true,
-      :guid => 'a-weather-agent',
-      :options => weather_agent_options
-    }
-  end
-  let(:valid_parsed_trigger_agent_data) do
-    {
-      :type => 'Agents::TriggerAgent',
-      :name => 'listen for weather',
-      :keep_events_for => 0,
-      :propagate_immediately => true,
-      :disabled => false,
-      :guid => 'a-trigger-agent',
-      :options => trigger_agent_options
-    }
-  end
-  let(:valid_parsed_basecamp_agent_data) do
-    {
-      :type => 'Agents::BasecampAgent',
-      :name => 'Basecamp test',
-      :schedule => 'every_2m',
-      :keep_events_for => 0,
-      :propagate_immediately => true,
-      :disabled => false,
-      :guid => 'a-basecamp-agent',
-      :options => {project_id: 12345}
-    }
-  end
-  let(:valid_parsed_data) do
-    {
-      schema_version: 1,
-      name: name,
-      description: description,
-      guid: guid,
-      tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color,
-      icon: icon,
-      source_url: source_url,
-      exported_at: 2.days.ago.utc.iso8601,
-      agents: [
-        valid_parsed_weather_agent_data,
-        valid_parsed_trigger_agent_data
-      ],
-      links: [
-        { :source => 0, :receiver => 1 }
-      ],
-      control_links: []
-    }
-  end
-  let(:valid_data) { valid_parsed_data.to_json }
-  let(:invalid_data) { { :name => 'some scenario missing a guid' }.to_json }
-    
-        it 'should work with nested arrays' do
-      @agent.options['array'] = ['one', '$.two']
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
-    end
-    
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
   end
     
-    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
+        '#<#{self.class} http#{ssl ? 's' : ''}://#{listen_host}:#{listen_port} [ #{resources_str} ]>'
+  end
     
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
+    =begin
+      +------+-----------+-----------------------------------------+
+      | Hex  | Name      | Description                             |
+      +------+-----------+-----------------------------------------+
+      | 0x01 | NEW       | Initiate a new call                     |
+      |      |           |                                         |
+      | 0x02 | PING      | Ping request                            |
+      |      |           |                                         |
+      | 0x03 | PONG      | Ping or poke reply                      |
+      |      |           |                                         |
+      | 0x04 | ACK       | Explicit acknowledgment                 |
+      |      |           |                                         |
+      | 0x05 | HANGUP    | Initiate call tear-down                 |
+      |      |           |                                         |
+      | 0x06 | REJECT    | Reject a call                           |
+      |      |           |                                         |
+      | 0x07 | ACCEPT    | Accept a call                           |
+      |      |           |                                         |
+      | 0x08 | AUTHREQ   | Authentication request                  |
+      |      |           |                                         |
+      | 0x09 | AUTHREP   | Authentication reply                    |
+      |      |           |                                         |
+      | 0x0a | INVAL     | Invalid message                         |
+      |      |           |                                         |
+      | 0x0b | LAGRQ     | Lag request                             |
+      |      |           |                                         |
+      | 0x0c | LAGRP     | Lag reply                               |
+      |      |           |                                         |
+      | 0x0d | REGREQ    | Registration request                    |
+      |      |           |                                         |
+      | 0x0e | REGAUTH   | Registration authentication             |
+      |      |           |                                         |
+      | 0x0f | REGACK    | Registration acknowledgement            |
+      |      |           |                                         |
+      | 0x10 | REGREJ    | Registration reject                     |
+      |      |           |                                         |
+      | 0x11 | REGREL    | Registration release                    |
+      |      |           |                                         |
+      | 0x12 | VNAK      | Video/Voice retransmit request          |
+      |      |           |                                         |
+      | 0x13 | DPREQ     | Dialplan request                        |
+      |      |           |                                         |
+      | 0x14 | DPREP     | Dialplan reply                          |
+      |      |           |                                         |
+      | 0x15 | DIAL      | Dial                                    |
+      |      |           |                                         |
+      | 0x16 | TXREQ     | Transfer request                        |
+      |      |           |                                         |
+      | 0x17 | TXCNT     | Transfer connect                        |
+      |      |           |                                         |
+      | 0x18 | TXACC     | Transfer accept                         |
+      |      |           |                                         |
+      | 0x19 | TXREADY   | Transfer ready                          |
+      |      |           |                                         |
+      | 0x1a | TXREL     | Transfer release                        |
+      |      |           |                                         |
+      | 0x1b | TXREJ     | Transfer reject                         |
+      |      |           |                                         |
+      | 0x1c | QUELCH    | Halt audio/video [media] transmission   |
+      |      |           |                                         |
+      | 0x1d | UNQUELCH  | Resume audio/video [media] transmission |
+      |      |           |                                         |
+      | 0x1e | POKE      | Poke request                            |
+      |      |           |                                         |
+      | 0x1f | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x20 | MWI       | Message waiting indication              |
+      |      |           |                                         |
+      | 0x21 | UNSUPPORT | Unsupported message                     |
+      |      |           |                                         |
+      | 0x22 | TRANSFER  | Remote transfer request                 |
+      |      |           |                                         |
+      | 0x23 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x24 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x25 | Reserved  | Reserved for future use                 |
+      +------+-----------+-----------------------------------------+
+=end
+    
+                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
+    
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
           end
-        end
-      end
-    end
-  end
-end
-
     
-            def scope
-          if params[:product_id]
-            Spree::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Spree::Variant.find(params[:variant_id])
-          end
-        end
+          it 'corrects one hash parameter without braces with one hash value' do
+        corrected = autocorrect_source('where(x: { 'y' => 'z' })')
+        expect(corrected).to eq('where({x: { 'y' => 'z' }})')
       end
     end
   end
 end
 
     
-              can_event = 'can_#{@event}?'
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
     
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
-          end
-        end
+          # Calls the given block for each `pair` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_pair
+        return each_child_node(:pair).to_enum unless block_given?
     
-            def remove_coupon_code
-          find_order(true)
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+          # A shorthand for getting the first argument of the node.
+      # Equivalent to `arguments.first`.
+      #
+      # @return [Node, nil] the first argument of the node,
+      #                     or `nil` if there are no arguments
+      def first_argument
+        arguments[0]
+      end
+    
+            def advance
           authorize! :update, @order, order_token
-          @handler = Spree::PromotionHandler::Coupon.new(@order).remove(params[:coupon_code])
-          status = @handler.successful? ? 200 : 404
-          render 'spree/api/v1/promotions/handler', status: status
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
         end
     
-              if params[:stock_item].key?(:backorderable)
-            @stock_item.backorderable = params[:stock_item][:backorderable]
-            @stock_item.save
+            def inventory_unit_params
+          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        end
+      end
+    end
+  end
+end
+
+    
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def update
+          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
+          if @option_value.update_attributes(option_value_params)
+            render :show
+          else
+            invalid_resource!(@option_value)
           end
+        end
+    
+            def new
+          authorize! :admin, ReturnAuthorization
+        end
