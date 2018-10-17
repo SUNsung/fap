@@ -1,150 +1,151 @@
 
         
-              expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for Staff category!'
+              if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
+        else
+          0444
         end
-    
-      def self.store
-    store_class.new(store_path)
-  end
-    
-          def version_slug
-        return if version.blank?
-        slug = version.downcase
-        slug.gsub! '+', 'p'
-        slug.gsub! '#', 's'
-        slug.gsub! %r{[^a-z0-9\_\.]}, '_'
-        slug
-      end
-    
-        def subpath
-      @subpath ||= subpath_to(current_url)
-    end
-    
-        def initialize(content)
-      @content = content
-      @html = document? ? parse_as_document : parse_as_fragment
-    end
-    
-        def effective_path
-      @effective_path ||= effective_url.path
-    end
-  end
-end
-
-    
-        class << self
-      attr_accessor :dir
-    
-          def to_proc
-        method(:call).to_proc
-      end
-    end
-  end
-end
-
-    
-                    raise Errors::VMNoMatchError if vms.empty?
-              else
-                # String name, just look for a specific VM
-                vms << @env.vms[name.to_sym]
-                raise Errors::VMNotFoundError, name: name if !vms[0]
-              end
-            end
-          else
-            vms = @env.vms_ordered
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
           end
-    
-              if name != UNSET_VALUE
-            # Validate the name of the command
-            if name.to_s !~ /^[-a-z0-9]+$/i
-              raise InvalidCommandName, 'Commands can only contain letters, numbers, and hyphens'
-            end
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
         end
-    
-              @commands = Registry.new
-          @configs = Hash.new { |h, k| h[k] = Registry.new }
-          @guests  = Registry.new
-          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @hosts   = Registry.new
-          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @providers = Registry.new
-          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @pushes = Registry.new
-          @synced_folders = Registry.new
-        end
+        path.chmod perms
       end
     end
   end
 end
 
     
-            # This should return an action callable for the given name.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Object] A callable action sequence object, whether it
-        #   is a proc, object, etc.
-        def action(name)
-          nil
-        end
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-      # Provides configurability to Paperclip. The options available are:
-  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
-  #   an uploaded image. Defaults to true.
-  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
-  #   log levels, etc. Defaults to true.
-  # * command_path: Defines the path at which to find the command line
-  #   programs if they are not visible to Rails the system's search path. Defaults to
-  #   nil, which uses the first executable found in the user's search path.
-  # * use_exif_orientation: Whether to inspect EXIF data to determine an
-  #   image's orientation. Defaults to true.
-  def self.options
-    @options ||= {
-      command_path: nil,
-      content_type_mappings: {},
-      log: true,
-      log_command: true,
-      read_timeout: nil,
-      swallow_stderr: true,
-      use_exif_orientation: true,
-      whiny: true,
-      is_windows: Gem.win_platform?
-    }
-  end
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
+            $stderr.puts
+        opoo out
+        Homebrew.failed = true
+        first_warning = false
       end
     end
+    
+      it 'pauses execution indefinitely if not given a duration' do
+    running = false
+    t = Thread.new do
+      running = true
+      sleep
+      5
+    end
+    
+        after do
+      rm_r @tmp_file
+    end
+    
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
+    end
+  end
+end
+    
+      class ShareVisibility < ApplicationRecord
+  end
+    
+    Given /^a user with username '([^']*)' is connected with '([^']*)'$/ do |arg1, arg2|
+  user1 = User.where(:username => arg1).first
+  user2 = User.where(:username => arg2).first
+  connect_users(user1, user1.aspects.where(:name => 'Besties').first, user2, user2.aspects.where(:name => 'Besties').first)
+end
+    
+    # We have a ridiculously high wait time to account for build machines of various beefiness.
+Capybara.default_max_wait_time = 30
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
+  end
+end
+    
+    module Workers
+  class PublishToHub < Base
+    def perform(*_args)
+      # don't publish to pubsubhubbub in cucumber
+    end
+  end
+    
+    describe LikesController, type: :controller do
+  before do
+    @alices_aspect = alice.aspects.where(:name => 'generic').first
+    @bobs_aspect = bob.aspects.where(:name => 'generic').first
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+        # Checks that the podfile exists.
+    #
+    # @raise  If the podfile does not exists.
+    #
+    # @return [void]
+    #
+    def verify_podfile_exists!
+      unless config.podfile
+        raise Informative, 'No `Podfile' found in the project directory.'
+      end
+    end
+    
+          def executable_path
+        <<-EOS
+### Installation Source
+    
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '[' }
+    let(:close) { ']' }
+  end
+    
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) do
+      <<-RUBY.strip_indent.chomp
+        [
+        1
+        ]
+      RUBY
+    end
+  end
+    
+        context 'opening brace on same line as first element' do
+      it 'allows closing brace on same line as last element' do
+        expect_no_offenses(construct(false, false))
+      end
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
+    
+          DOUBLE_SPLAT = '**'.freeze
