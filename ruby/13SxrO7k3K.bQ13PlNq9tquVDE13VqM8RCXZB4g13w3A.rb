@@ -1,222 +1,134 @@
 
         
-                  def default_datetime(options)
-            return if options[:include_blank] || options[:prompt]
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-        if successfully_sent?(resource)
-      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
-    else
-      respond_with(resource)
-    end
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
     
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
-    end
-  end
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-    end
+    #
     
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+        Category.transaction do
+      lounge.group_names = ['trust_level_3']
+      unless lounge.save
+        puts lounge.errors.full_messages
+        raise 'Failed to set permissions on trust level 3 lounge category!'
       end
     
-        if last_request_at.is_a? Integer
-      last_request_at = Time.at(last_request_at).utc
-    elsif last_request_at.is_a? String
-      last_request_at = Time.parse(last_request_at)
-    end
+      before_action :set_account
     
-      def body
-    @body ||= request.body.read
-  end
-    
-        def form_status_batch_params
-      params.require(:form_status_batch).permit(status_ids: [])
-    end
-    
-      private
-    
-      def update
-    if verify_payload?
-      process_salmon
-      head 202
-    elsif payload.present?
-      render plain: signature_verification_failure_reason, status: 401
-    else
-      head 400
-    end
-  end
-    
-        '#<#{self.class} http#{ssl ? 's' : ''}://#{listen_host}:#{listen_port} [ #{resources_str} ]>'
-  end
-    
-    =begin
-      +------+-----------+-----------------------------------------+
-      | Hex  | Name      | Description                             |
-      +------+-----------+-----------------------------------------+
-      | 0x01 | NEW       | Initiate a new call                     |
-      |      |           |                                         |
-      | 0x02 | PING      | Ping request                            |
-      |      |           |                                         |
-      | 0x03 | PONG      | Ping or poke reply                      |
-      |      |           |                                         |
-      | 0x04 | ACK       | Explicit acknowledgment                 |
-      |      |           |                                         |
-      | 0x05 | HANGUP    | Initiate call tear-down                 |
-      |      |           |                                         |
-      | 0x06 | REJECT    | Reject a call                           |
-      |      |           |                                         |
-      | 0x07 | ACCEPT    | Accept a call                           |
-      |      |           |                                         |
-      | 0x08 | AUTHREQ   | Authentication request                  |
-      |      |           |                                         |
-      | 0x09 | AUTHREP   | Authentication reply                    |
-      |      |           |                                         |
-      | 0x0a | INVAL     | Invalid message                         |
-      |      |           |                                         |
-      | 0x0b | LAGRQ     | Lag request                             |
-      |      |           |                                         |
-      | 0x0c | LAGRP     | Lag reply                               |
-      |      |           |                                         |
-      | 0x0d | REGREQ    | Registration request                    |
-      |      |           |                                         |
-      | 0x0e | REGAUTH   | Registration authentication             |
-      |      |           |                                         |
-      | 0x0f | REGACK    | Registration acknowledgement            |
-      |      |           |                                         |
-      | 0x10 | REGREJ    | Registration reject                     |
-      |      |           |                                         |
-      | 0x11 | REGREL    | Registration release                    |
-      |      |           |                                         |
-      | 0x12 | VNAK      | Video/Voice retransmit request          |
-      |      |           |                                         |
-      | 0x13 | DPREQ     | Dialplan request                        |
-      |      |           |                                         |
-      | 0x14 | DPREP     | Dialplan reply                          |
-      |      |           |                                         |
-      | 0x15 | DIAL      | Dial                                    |
-      |      |           |                                         |
-      | 0x16 | TXREQ     | Transfer request                        |
-      |      |           |                                         |
-      | 0x17 | TXCNT     | Transfer connect                        |
-      |      |           |                                         |
-      | 0x18 | TXACC     | Transfer accept                         |
-      |      |           |                                         |
-      | 0x19 | TXREADY   | Transfer ready                          |
-      |      |           |                                         |
-      | 0x1a | TXREL     | Transfer release                        |
-      |      |           |                                         |
-      | 0x1b | TXREJ     | Transfer reject                         |
-      |      |           |                                         |
-      | 0x1c | QUELCH    | Halt audio/video [media] transmission   |
-      |      |           |                                         |
-      | 0x1d | UNQUELCH  | Resume audio/video [media] transmission |
-      |      |           |                                         |
-      | 0x1e | POKE      | Poke request                            |
-      |      |           |                                         |
-      | 0x1f | Reserved  | Reserved for future use                 |
-      |      |           |                                         |
-      | 0x20 | MWI       | Message waiting indication              |
-      |      |           |                                         |
-      | 0x21 | UNSUPPORT | Unsupported message                     |
-      |      |           |                                         |
-      | 0x22 | TRANSFER  | Remote transfer request                 |
-      |      |           |                                         |
-      | 0x23 | Reserved  | Reserved for future use                 |
-      |      |           |                                         |
-      | 0x24 | Reserved  | Reserved for future use                 |
-      |      |           |                                         |
-      | 0x25 | Reserved  | Reserved for future use                 |
-      +------+-----------+-----------------------------------------+
-=end
-    
-                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
-    
-              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'KdcResponse encoding not supported'
-          end
-    
-          it 'corrects one hash parameter without braces with one hash value' do
-        corrected = autocorrect_source('where(x: { 'y' => 'z' })')
-        expect(corrected).to eq('where({x: { 'y' => 'z' }})')
-      end
+        def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
     end
   end
 end
 
     
-    module RuboCop
-  module AST
-    # A node extension for `case` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `case` nodes within RuboCop.
-    class CaseNode < Node
-      include ConditionalNode
+        private
     
-          # Calls the given block for each `pair` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_pair
-        return each_child_node(:pair).to_enum unless block_given?
+      def local_domain?
+    TagManager.instance.web_domain?(hub_topic_domain)
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+      def future_expires
+    Time.now.utc + lease_seconds_or_default
+  end
     
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
-      #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
-      end
-    
-            def advance
-          authorize! :update, @order, order_token
-          while @order.next; end
-          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
-        end
-    
-            def inventory_unit_params
-          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
-        end
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
+      begin
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
+      ensure
+        ::Process.wait pid
       end
     end
+    [$? && $?.exitstatus == 0, cmd_with_env]
+  end
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
+  end
+end
+    
+      desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
+    
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
   end
 end
 
     
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
+      # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # config.action_controller.asset_host = 'http://assets.example.com'
     
-            def update
-          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
-          if @option_value.update_attributes(option_value_params)
-            render :show
-          else
-            invalid_resource!(@option_value)
-          end
-        end
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
     
-            def new
-          authorize! :admin, ReturnAuthorization
-        end
+          attr_reader :name, :path
+    
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+        def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
+      else
+        fail ArgumentError, 'emoji `#{name}' not found'
+      end
+    end
