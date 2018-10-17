@@ -1,209 +1,278 @@
 
         
-        // Computes part of matrix.vector v = Wu. Computes N=8 results.
-// For details see PartialMatrixDotVector64 with N=8.
-static void PartialMatrixDotVector8(const int8_t* wi, const double* scales,
-                                    const int8_t* u, int num_in, int num_out,
-                                    double* v) {
-  // Register containing 16-bit ones for horizontal add with 16->32 bit
-  // conversion.
-  __m256i ones =
-      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
-  // Initialize all the results to 0.
-  __m256i result0 = _mm256_setzero_si256();
-  // Iterate over the input (u), one registerful at a time.
-  for (int j = 0; j < num_in;) {
-    __m256i inputs =
-        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
-    // Inputs are processed in groups of kNumInputsPerGroup, replicated
-    // kNumInputGroups times.
-    for (int ig = 0; ig < kNumInputGroups && j < num_in;
-         ++ig, j += kNumInputsPerGroup) {
-      // Replicate the low 32 bits (4 inputs) 8 times.
-      __m256i rep_input =
-          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
-      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
-      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
-      __m256i weights, reps;
-      // Mul-add, with horizontal add of the 4 inputs to each of the results.
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
-    }
-  }
-  ExtractResults(result0, shift_id, wi, scales, num_out, v);
+         protected:
+  // content::ContentClient:
+  std::string GetProduct() const override;
+  std::string GetUserAgent() const override;
+  base::string16 GetLocalizedString(int message_id) const override;
+  void AddAdditionalSchemes(Schemes* schemes) override;
+  void AddPepperPlugins(
+      std::vector<content::PepperPluginInfo>* plugins) override;
+  void AddContentDecryptionModules(
+      std::vector<content::CdmInfo>* cdms,
+      std::vector<media::CdmHostFilePath>* cdm_host_file_paths) override;
+    
+    void AutoUpdater::OnCheckingForUpdate() {
+  Emit('checking-for-update');
 }
-#else
-namespace tesseract {
-#endif  // __AVX2__
-    }
     
-    namespace tesseract {
-    }
+      std::unique_ptr<NativeBrowserView> view_;
     
-    #include <cstdint>  // for int16_t
-    
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-    
-    {
-/**
- * @name tess_add_doc_word
- *
- * Add the given word to the document dictionary
- */
-void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
-  getDict().add_document_word(*word_choice);
-}
-}  // namespace tesseract
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_menu, Initialize)
 
     
-    /**********************************************************************
- * recog_word
- *
- * Convert the word to tess form and pass it to the tess segmenter.
- * Convert the output back to editor form.
- **********************************************************************/
-namespace tesseract {
-void Tesseract::recog_word(WERD_RES *word) {
-  if (wordrec_skip_no_truth_words && (word->blamer_bundle == nullptr ||
-      word->blamer_bundle->incorrect_result_reason() == IRR_NO_TRUTH)) {
-    if (classify_debug_level) tprintf('No truth for word - skipping\n');
-    word->tess_failed = true;
-    return;
+    // static
+mate::WrappableBase* Notification::New(mate::Arguments* args) {
+  if (!Browser::Get()->is_ready()) {
+    args->ThrowError('Cannot create Notification before app is ready');
+    return nullptr;
   }
-  ASSERT_HOST(!word->chopped_word->blobs.empty());
-  recog_word_recursive(word);
-  word->SetupBoxWord();
-  if (word->best_choice->length() != word->box_word->length()) {
-    tprintf('recog_word ASSERT FAIL String:\'%s\'; '
-            'Strlen=%d; #Blobs=%d\n',
-            word->best_choice->debug_string().string(),
-            word->best_choice->length(), word->box_word->length());
+  return new Notification(args->isolate(), args->GetThis(), args);
+}
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_POWER_SAVE_BLOCKER_H_
+#define ATOM_BROWSER_API_ATOM_API_POWER_SAVE_BLOCKER_H_
+    
+    namespace api {
+    }
+    
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_common_screen, Initialize)
+
+    
+      /// Retrieve the array of protocol conformances, which line up with the
+  /// requirements of the generic signature.
+  ArrayRef<ProtocolConformanceRef> getConformances() const {
+    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
   }
-  ASSERT_HOST(word->best_choice->length() == word->box_word->length());
-  // Check that the ratings matrix size matches the sum of all the
-  // segmentation states.
-  if (!word->StatesAllValid()) {
-    tprintf('Not all words have valid states relative to ratings matrix!!');
-    word->DebugWordChoices(true, nullptr);
-    ASSERT_HOST(word->StatesAllValid());
+  MutableArrayRef<ProtocolConformanceRef> getConformances() {
+    return MutableArrayRef<ProtocolConformanceRef>(
+                              getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
   }
-  if (tessedit_override_permuter) {
-    /* Override the permuter type if a straight dictionary check disagrees. */
-    uint8_t perm_type = word->best_choice->permuter();
-    if ((perm_type != SYSTEM_DAWG_PERM) &&
-        (perm_type != FREQ_DAWG_PERM) && (perm_type != USER_DAWG_PERM)) {
-      uint8_t real_dict_perm_type = dict_word(*word->best_choice);
-      if (((real_dict_perm_type == SYSTEM_DAWG_PERM) ||
-           (real_dict_perm_type == FREQ_DAWG_PERM) ||
-           (real_dict_perm_type == USER_DAWG_PERM)) &&
-          (alpha_count(word->best_choice->unichar_string().string(),
-                       word->best_choice->unichar_lengths().string()) > 0)) {
-        word->best_choice->set_permuter(real_dict_perm_type);  // use dict perm
+    
+    
+    {  SyntaxMap[FromNode] = ToNode;
+}
+    
+    void CacheImpl::releaseValue(void *Value) {
+  cache_release_value(static_cast<cache_t*>(Impl), Value);
+}
+    
+      // If the word preceding the preposition extends the preposition, it
+  // will never be dropped.
+  if (std::next(nameWordRevIter) != nameWordRevIterEnd &&
+      priorWordExtendsPreposition(*std::next(nameWordRevIter), preposition)) {
+    ++nameWordRevIter;
+    preposition = StringRef((*nameWordRevIter).begin(),
+                            preposition.size() + (*nameWordRevIter).size());
+  }
+    
+      bool isVoid() const {
+    assert(isValid());
+    return Decl.isNull();
+  }
+    
+      bool isGetter() const {
+    return accessorKind == IAMAccessorKind::Getter;
+  }
+    
+    #ifdef __SSE4_1__
+// Computes part of matrix.vector v = Wu. Computes 1 result.
+static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
+                                    const int8_t* u, int num_in, int num_out,
+                                    double* v) {
+  int total = IntDotProductSSE(u, wi, num_in);
+  // Add in the bias and correct for integer values.
+  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
+}
+#endif  // __SSE4_1__
+    
+      // Check if the neighbor with vertical distance of y_gap is a near and math
+  // block partition.
+  bool IsNearMathNeighbor(const int y_gap, const ColPartition *neighbor) const;
+    
+    
+    {  UNICHARSET* unicharset;
+  OSBestResult best_result;
+};
+    
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
+    
+     private:
+  // The unique ID of this VC object.
+  int my_id_;
+  // Whether the parameter was changed_ and thus needs to be rewritten.
+  bool changed_;
+  // The actual ParamType of this VC object.
+  ParamType param_type_;
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+     private:
+  // try to prune off current leaf
+  inline int TryPruneLeaf(RegTree &tree, int nid, int depth, int npruned) { // NOLINT(*)
+    if (tree[nid].IsRoot()) return npruned;
+    int pid = tree[nid].Parent();
+    RegTree::NodeStat &s = tree.Stat(pid);
+    ++s.leaf_child_cnt;
+    if (s.leaf_child_cnt >= 2 && param_.NeedPrune(s.loss_chg, depth - 1)) {
+      // need to be pruned
+      tree.ChangeToLeaf(pid, param_.learning_rate * s.base_weight);
+      // tail recursion
+      return this->TryPruneLeaf(tree, pid, depth - 1, npruned + 2);
+    } else {
+      return npruned;
+    }
+  }
+  /*! \brief do pruning of a tree */
+  inline void DoPrune(RegTree &tree) { // NOLINT(*)
+    int npruned = 0;
+    // initialize auxiliary statistics
+    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
+      tree.Stat(nid).leaf_child_cnt = 0;
+    }
+    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
+      if (tree[nid].IsLeaf()) {
+        npruned = this->TryPruneLeaf(tree, nid, tree.GetDepth(nid), npruned);
       }
     }
-    if (tessedit_rejection_debug &&
-        perm_type != word->best_choice->permuter()) {
-      tprintf('Permuter Type Flipped from %d to %d\n',
-              perm_type, word->best_choice->permuter());
+    if (!param_.silent) {
+      LOG(INFO) << 'tree pruning end, ' << tree.param.num_roots << ' roots, '
+                << tree.NumExtraNodes() << ' extra nodes, ' << npruned
+                << ' pruned nodes, max_depth=' << tree.MaxDepth();
     }
   }
-  // Factored out from control.cpp
-  ASSERT_HOST((word->best_choice == nullptr) == (word->raw_choice == nullptr));
-  if (word->best_choice == nullptr || word->best_choice->length() == 0 ||
-      static_cast<int>(strspn(word->best_choice->unichar_string().string(),
-                              ' ')) == word->best_choice->length()) {
-    word->tess_failed = true;
-    word->reject_map.initialise(word->box_word->length());
-    word->reject_map.rej_word_tess_failure();
-  } else {
-    word->tess_failed = false;
-  }
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
+    }
+    }
+    
+      ~Carver();
+    
+    namespace osquery {
+    }
+    
+    
+    {  c.reset();
 }
+    
+    Status ViewsConfigParserPlugin::update(const std::string& source,
+                                       const ParserConfig& config) {
+  auto cv = config.find('views');
+  if (cv == config.end()) {
+    return Status(1);
+  }
     }
     
-      /// Threshold the rectangle, taking everything except the src_pix
-  /// from the class, using thresholds/hi_values to the output pix.
-  /// NOTE that num_channels is the size of the thresholds and hi_values
-  // arrays and also the bytes per pixel in src_pix.
-  void ThresholdRectToPix(Pix* src_pix, int num_channels,
-                          const int* thresholds, const int* hi_values,
-                          Pix** pix) const;
+    namespace osquery {
+    }
     
-    #include <iterator>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_pointer.hpp>
+      /// original path, read from config
+  std::string opath;
     
-    #ifdef __cplusplus
-#  include <boost/cstdint.hpp>
-#endif
+      // Assure we start from a base state.
+  EXPECT_EQ(sub->timesConfigured, 0U);
+  // Force the config into a loaded state.
+  Config::get().loaded_ = true;
+  Config::get().update({{'data', '{}'}});
+  EXPECT_EQ(sub->timesConfigured, 1U);
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_wild()
+        std::unique_ptr<DHTTokenTracker> tokenTracker;
+    
+    
+    {} // namespace aria2
+
+    
+    class DHTRoutingTableSerializer {
+private:
+  int family_;
+    }
+    
+    
+    {} // namespace aria2
+    
+    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
 {
-   if(position == last) 
-      return false;
-   if(is_separator(*position) && ((match_any_mask & static_cast<const re_dot*>(pstate)->mask) == 0))
-      return false;
-   if((*position == char_type(0)) && (m_match_flags & match_not_dot_null))
-      return false;
-   pstate = pstate->next.p;
-   ++position;
-   return true;
+  factory_ = factory;
 }
     
-       // find out which of these two alternatives we need to take:
-   if(position == last)
-   {
-      take_first = jmp->can_be_null & mask_take;
-      take_second = jmp->can_be_null & mask_skip;
-   }
-   else
-   {
-      take_first = can_start(*position, jmp->_map, (unsigned char)mask_take);
-      take_second = can_start(*position, jmp->_map, (unsigned char)mask_skip);
+    void DHTTaskQueueImpl::addPeriodicTask2(const std::shared_ptr<DHTTask>& task)
+{
+  periodicTaskQueue2_.addTask(task);
+}
+    
+    public:
+  DHTTaskQueueImpl();
+    
+    public:
+  // _remoteNode is always null
+  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                    const unsigned char* data, size_t length,
+                    const std::string& ipaddr, uint16_t port);
+    
+    DNSCache::~DNSCache() = default;
+    
+      /**
+   * @brief Send a single message.
+   * @param frames A single-element vector containing only one message.
+   * @return The status of the sending single message action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  virtual apollo::common::ErrorCode SendSingleFrame(
+      const std::vector<CanFrame> &frames) {
+    CHECK_EQ(frames.size(), 1)
+        << 'frames size not equal to 1, actual frame size :' << frames.size();
+    int32_t n = 1;
+    return Send(frames, &n);
   }
     
-    //
-// provide std lib proposal compatible constants:
-//
-namespace regex_constants{
+    #include 'modules/drivers/canbus/can_client/can_client_factory.h'
+    
+      /**
+   * @brief Destructor
+   */
+  virtual ~EsdCanClient();
+    
+    using apollo::common::ErrorCode;
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
     }
     
+    /* vim: set expandtab ts=4 sw=4 sts=4 tw=100: */
+
     
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
+    #include 'modules/drivers/canbus/can_client/socket/socket_can_client_raw.h'
     
-    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
-inline std::size_t regex_split(OutputIterator out,
-                   std::basic_string<charT, Traits1, Alloc1>& s, 
-                   const basic_regex<charT, Traits2>& e,
-                   match_flag_type flags = match_default)
-{
-   return regex_split(out, s, e, flags, UINT_MAX);
-}
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-    #ifndef BOOST_REGEX_V4_REGEX_TOKEN_ITERATOR_HPP
-#define BOOST_REGEX_V4_REGEX_TOKEN_ITERATOR_HPP
+    #endif  // MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
