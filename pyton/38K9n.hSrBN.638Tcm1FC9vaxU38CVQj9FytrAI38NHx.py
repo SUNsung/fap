@@ -1,81 +1,182 @@
 
         
-            def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
+            def __init__(self, size):
+        self.size = size
+        self.table = [[] for _ in range(self.size)]
     
-        def __init__(self):
-        self.people = {}  # key: person_id, value: person
     
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+EXIT_STATUS_LABELS = {
+    value: key
+    for key, value in ExitStatus.__dict__.items()
+    if key.isupper()
+}
+
     
-        def process_response(self, request, response):
-        # No need to check for a redirect for non-404 responses.
-        if response.status_code != 404:
-            return response
+            version = {
+            9: '0.9',
+            10: '1.0',
+            11: '1.1',
+            20: '2',
+        }[original.version]
     
-        def _get_session_key(self):
-        '''
-        Instead of generating a random string, generate a secure url-safe
-        base64-encoded string of data as our session key.
-        '''
-        return signing.dumps(
-            self._session, compress=True,
-            salt='django.contrib.sessions.backends.signed_cookies',
-            serializer=self.serializer,
+            :param headers: The headers as text.
+    
+    
+class HTTPBasicAuth(requests.auth.HTTPBasicAuth):
+    
+    
+setup(
+    name='httpie',
+    version=httpie.__version__,
+    description=httpie.__doc__.strip(),
+    long_description=long_description(),
+    url='http://httpie.org/',
+    download_url='https://github.com/jakubroztocil/httpie',
+    author=httpie.__author__,
+    author_email='jakub@roztocil.co',
+    license=httpie.__licence__,
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'http = httpie.__main__:main',
+        ],
+    },
+    extras_require=extras_require,
+    install_requires=install_requires,
+    tests_require=tests_require,
+    cmdclass={'test': PyTest},
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development',
+        'Topic :: System :: Networking',
+        'Topic :: Terminals',
+        'Topic :: Text Processing',
+        'Topic :: Utilities'
+    ],
+)
+
+    
+        try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME,
         )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+
     
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
-    
-        return result
-    
-    # See how far apart the test image is from the known faces
-face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
-    
-    
-def _css_to_rect(css):
-    '''
-    Convert a tuple in (top, right, bottom, left) order to a dlib `rect` object
-    
-    # Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-known_face_names = [
-    'Barack Obama',
-    'Joe Biden'
-]
-    
-        # Only process every other frame of video to save time
-    if process_this_frame:
-        # Find all the faces and face encodings in the current frame of video
-        face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
-    
-    # Display the resulting image
-pil_image.show()
+        def test_implicit_POST_stdin(self, httpbin):
+        with open(FILE_PATH) as f:
+            env = MockEnvironment(stdin_isatty=False, stdin=f)
+            r = http('--form', httpbin.url + '/post', env=env)
+        assert HTTP_OK in r
     
     
-@click.command()
-@click.argument('known_people_folder')
-@click.argument('image_to_check')
-@click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means 'use all in system'')
-@click.option('--tolerance', default=0.6, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
-@click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
-def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
-    known_names, known_face_encodings = scan_known_people(known_people_folder)
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('two_people.jpg')
+    
+class ConstantTest(unittest.TestCase):
+    '''Tests for acme.messages._Constant.'''
+    
+    
+def load_pyopenssl_private_key(*names):
+    '''Load pyOpenSSL private key.'''
+    loader = _guess_loader(
+        names[-1], crypto.FILETYPE_PEM, crypto.FILETYPE_ASN1)
+    return crypto.load_privatekey(loader, load_vector(*names))
+    
+            self.config.rollback_checkpoints()
+        self.assertEqual(mock_load.call_count, 1)
+    
+        forbidden_extensions = ['html', 'htm'] if results.nohtml else []
+    
+    import os
+import sys
+import codecs
+import re
+    
+    
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
+
+    
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/device_tracker.hitron_coda/
+'''
+import logging
+from collections import namedtuple
+    
+            devicesstring = ''
+        devices = self.api.trusted_devices
+        for i, device in enumerate(devices):
+            devicename = device.get(
+                'deviceName', 'SMS to %s' % device.get('phoneNumber'))
+            devicesstring += '{}: {};'.format(i, devicename)
+    
+        def refresh_token(self):
+        '''Get a new token.'''
+        self.token = _get_token(self.origin, self.username, self.password)
+    
+            self.last_results = {}
+        self.token = _get_token(self.host, self.username, self.password)
+    
+        _LOGGER.info('Connected to Dyson account')
+    dyson_devices = dyson_account.devices()
+    if CONF_DEVICES in config[DOMAIN] and config[DOMAIN].get(CONF_DEVICES):
+        configured_devices = config[DOMAIN].get(CONF_DEVICES)
+        for device in configured_devices:
+            dyson_device = next((d for d in dyson_devices if
+                                 d.serial == device['device_id']), None)
+            if dyson_device:
+                try:
+                    connected = dyson_device.connect(device['device_ip'])
+                    if connected:
+                        _LOGGER.info('Connected to device %s', dyson_device)
+                        hass.data[DYSON_DEVICES].append(dyson_device)
+                    else:
+                        _LOGGER.warning('Unable to connect to device %s',
+                                        dyson_device)
+                except OSError as ose:
+                    _LOGGER.error('Unable to connect to device %s: %s',
+                                  str(dyson_device.network_device), str(ose))
+            else:
+                _LOGGER.warning(
+                    'Unable to find device %s in Dyson account',
+                    device['device_id'])
+    else:
+        # Not yet reliable
+        for device in dyson_devices:
+            _LOGGER.info('Trying to connect to device %s with timeout=%i '
+                         'and retry=%i', device, timeout, retry)
+            connected = device.auto_connect(timeout, retry)
+            if connected:
+                _LOGGER.info('Connected to device %s', device)
+                hass.data[DYSON_DEVICES].append(device)
+            else:
+                _LOGGER.warning('Unable to connect to device %s', device)
