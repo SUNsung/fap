@@ -1,40 +1,43 @@
 
         
-              GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
+                      Time.utc(
+                default[:year], default[:month], default[:day],
+                default[:hour], default[:min], default[:sec]
+              )
+            end
+          end
+      end
     end
-    
-    Badge.seed do |b|
-  b.id = Badge::FirstMention
-  b.name = 'First Mention'
-  b.badge_type_id = BadgeType::Bronze
-  b.multiple_grant = false
-  b.target_posts = true
-  b.show_posts = true
-  b.query = BadgeQueries::FirstMention
-  b.badge_grouping_id = BadgeGrouping::GettingStarted
-  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
-  b.trigger = Badge::Trigger::PostRevision
-  b.system = true
+  end
 end
+
     
-    Group.user_trust_level_change!(-1, TrustLevel[4])
-    
-        def stylesheets_path
-      File.join assets_path, 'stylesheets'
+        # Main render entry point shared by Action View and Action Controller.
+    def render(context, options)
+      if options.key?(:partial)
+        render_partial(context, options)
+      else
+        render_template(context, options)
+      end
     end
     
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
-    end
-    
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+      def resource_params
+    params.require(:custom_filter).permit(:phrase, :expires_in, :irreversible, :whole_word, context: [])
+  end
 end
+
     
-          get :index, params: {conversation_id: @conv1.id}
-      save_fixture(html_for('body'), 'conversations_read')
+    module Admin
+  class ConfirmationsController < BaseController
+    before_action :set_user
+    before_action :check_confirmation, only: [:resend]
+    
+        def destroy
+      authorize @report_note, :destroy?
+      @report_note.destroy!
+      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
     end
+    
+      def hub_callback
+    params['hub.callback']
   end
