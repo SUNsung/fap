@@ -1,99 +1,82 @@
 
         
-        
-def main():
-    if len(sys.argv) < 2:
-        print('No file passed (file should contain Markdown table syntax)')
-        sys.exit(1)
-    check_format(sys.argv[1])
-    if len(errors) > 0:
-        for err in errors:
-            print(err)
-        sys.exit(1)
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
+    index_title = 0
+index_desc = 1
+index_auth = 2
+index_https = 3
+index_cors = 4
+index_link = 5
+num_segments = 5
     
-class Unaccent(Transform):
-    bilateral = True
-    lookup_name = 'unaccent'
-    function = 'UNACCENT'
+        Provide both the name and the version of the Python implementation
+    currently running. For example, on CPython 2.7.5 it will return
+    {'name': 'CPython', 'version': '2.7.5'}.
     
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
+        return inner
+    
+        # Redirection.
+    300: ('multiple_choices',),
+    301: ('moved_permanently', 'moved', '\\o-'),
+    302: ('found',),
+    303: ('see_other', 'other'),
+    304: ('not_modified',),
+    305: ('use_proxy',),
+    306: ('switch_proxy',),
+    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
+    308: ('permanent_redirect',
+          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
+    
+            is_stream = all([
+            hasattr(data, '__iter__'),
+            not isinstance(data, (basestring, list, tuple, Mapping))
+        ])
+    
+    # Language to be used for generating the HTML full-text search index.
+# Sphinx supports the following languages:
+#   'da', 'de', 'en', 'es', 'fi', 'fr', 'h', 'it', 'ja'
+#   'nl', 'no', 'pt', 'ro', 'r', 'sv', 'tr', 'zh'
+#
+# html_search_language = 'en'
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+            return False
+    
+        for device in new_devices:
+        dev_id = (
+            id(device.gateway), device.node_id, device.child_id,
+            device.value_type)
+        async_dispatcher_connect(
+            hass, mysensors.const.SIGNAL_CALLBACK.format(*dev_id),
+            device.async_update_callback)
+    
+            self.websession = async_create_clientsession(
+            hass, cookie_jar=aiohttp.CookieJar(unsafe=True, loop=hass.loop))
+    
+            # Test the router is accessible.
+        data = self.get_thomson_data()
+        self.success_init = data is not None
+    
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        if self.mac2name is None:
+            result = self._retrieve_list_with_retry()
+            if result:
+                hosts = [x for x in result
+                         if 'mac' in x and 'name' in x]
+                mac2name_list = [
+                    (x['mac'].upper(), x['name']) for x in hosts]
+                self.mac2name = dict(mac2name_list)
+            else:
+                # Error, handled in the _retrieve_list_with_retry
                 return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
+        return self.mac2name.get(device.upper(), None)
     
-        def create(self):
-        while True:
-            self._session_key = self._get_new_session_key()
-            try:
-                # Save immediately to ensure we have a unique entry in the
-                # database.
-                self.save(must_create=True)
-            except CreateError:
-                # Key wasn't unique. Try again.
-                continue
-            self.modified = True
-            return
-    
-        print('20 newsgroups')
-    print('=============')
-    print('X_train.shape = {0}'.format(X_train.shape))
-    print('X_train.format = {0}'.format(X_train.format))
-    print('X_train.dtype = {0}'.format(X_train.dtype))
-    print('X_train density = {0}'
-          ''.format(X_train.nnz / np.product(X_train.shape)))
-    print('y_train {0}'.format(y_train.shape))
-    print('X_test {0}'.format(X_test.shape))
-    print('X_test.format = {0}'.format(X_test.format))
-    print('X_test.dtype = {0}'.format(X_test.dtype))
-    print('y_test {0}'.format(y_test.shape))
-    print()
-    
-            print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
-    
-        timings = []
-    for exponent in range(args.log_min_problem_size,
-                          args.log_max_problem_size):
-        n = 10 ** exponent
-        Y = DATASET_GENERATORS[args.dataset](n)
-        time_per_iteration = \
-            [bench_isotonic_regression(Y) for i in range(args.iterations)]
-        timing = (n, np.mean(time_per_iteration))
-        timings.append(timing)
-    
-    from time import time
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.metrics import roc_curve, auc
-from sklearn.datasets import fetch_kddcup99, fetch_covtype, fetch_mldata
-from sklearn.preprocessing import LabelBinarizer
-    
-    
-def compute_bench(samples_range, features_range, n_iter=3, rank=50):
-    
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
-
-    
-    Does two benchmarks
-    
-    # List all available versions of the documentation
-from __future__ import print_function
-    
-    
-    
-    import markdown
+    import voluptuous as vol
