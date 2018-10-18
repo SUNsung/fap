@@ -1,6 +1,16 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
+          def self.path(name)
+    Formulary.core_path(name)
+  end
+    
+      before(:each) do
+    # This value needs to be set or our event fixtures will not match
+    allow(FastlaneCore::Helper).to receive(:ci?).and_return(false)
+    allow(FastlaneCore::Helper).to receive(:operating_system).and_return('macOS')
+  end
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
           add_git_tag ({
             tag: '#{tag}',
             grouping: 'grouping',
@@ -9,67 +19,75 @@
           })
         end').runner.execute(:test)
     
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        # this is not really the command that would have been executed, but a 'fabricated' representation for tests (by Actions.sh) that includes both command that would have been run
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
+          it 'Does not use pattern matching for tag name if so requested' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits()
+        end').runner.execute(:test)
+    
+          it 'handles the extension parameter correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.rb')
       end
     
-          context 'without parameters' do
-        it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add .', anything).and_return('')
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0].shellescape} #{path[1].shellescape}', anything).and_return('')
           result = Fastlane::FastFile.new.parse('lane :test do
-            git_add
+            git_add(path: #{path})
           end').runner.execute(:test)
         end
       end
     
-          context 'with valid path to compile_commands.json' do
-        context 'with no path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
+          it 'works given the path to compile_commands.json' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
+            )
+          end').runner.execute(:test)
     
-            expected = 'slather coverage
-                    --build-directory #{build_dir.shellescape}
-                    --source-directory #{source_dir.shellescape}
-                    --output-directory #{output_dir.shellescape}
-                    --ignore #{ignore.shellescape}
-                    --input-format bah
-                    --scheme #{scheme.shellescape}
-                    #{proj.shellescape}'.gsub(/\s+/, ' ')
-        expect(result).to eq(expected)
-      end
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
     
-        it 'adds an environment Hash at the beginning' do
-      message = 'A message'
-      command = command_from_args({ 'PATH' => '/usr/local/bin' }, 'git', 'commit', '-m', message)
-      expect(command).to eq('PATH=/usr/local/bin git commit -m #{message.shellescape}')
-    end
-    
-        context 'string formats' do
-      it 'determines the maximum number of characters to be copied from the string' do
-        format('%.1p', [1]).should == '['
-        format('%.2p', [1]).should == '[1'
-        format('%.10p', [1]).should == '[1]'
-        format('%.0p', [1]).should == ''
-    
-      it 'accepts a Rational' do
-    sleep(Rational(1, 9)).should be_close(0, 2)
+        odie 'Unknown command: #{cmd}' unless path
+    puts path
   end
-    
-        it 'returns true when passed ?w if the argument is readable by the effective uid' do
-      Kernel.test(?w, @tmp_file).should be_true
-    end
-    
-        if other.respond_to?(:to_str)
-      return true if to_str == other.to_str
-    end
-    
-    require 'commands'
-    
-      prepend Compat
 end
+
+    
+        def URIEncodeOctets(octets, result, index)
+      if (@@hexCharCodeArray == 0)
+        @@hexCharCodeArray = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+                              65, 66, 67, 68, 69, 70];
+      end
+      index = URIAddEncodedOctetToBuffer(octets[0], result, index);
+      if (octets[1]);
+        index = URIAddEncodedOctetToBuffer(octets[1], result, index)
+      end
+      if (octets[2]);
+        index = URIAddEncodedOctetToBuffer(octets[2], result, index)
+      end
+      if (octets[3]);
+        index = URIAddEncodedOctetToBuffer(octets[3], result, index)
+      end
+      return index;
+    end
+    
+    module Gollum
+end
+Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER'] if ENV['GIT_ADAPTER']
+    
+      if base_path.nil?
+    Precious::App.run!(options)
+  else
+    require 'rack'
+    
+        def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
+      else
+        fail ArgumentError, 'emoji `#{name}' not found'
+      end
+    end
