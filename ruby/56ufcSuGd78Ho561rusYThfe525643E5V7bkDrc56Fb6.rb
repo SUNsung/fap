@@ -1,39 +1,39 @@
 
         
-        module Fastlane
-  # Handles receiving commands from the socket server, finding the Action to be invoked,
-  # invoking it, and returning any return values
-  class SocketServerActionCommandExecutor < CommandExecutor
-    attr_accessor :runner
-    attr_accessor :actions_requiring_special_handling
+          all_files       = `git ls-files -z`.split('\x0')
+  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
+  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
+  s.bindir        = 'exe'
+  s.require_paths = ['lib']
     
-            expect(result).to eq('carthage bootstrap --platform tvOS')
-      end
+            def setup
+          @config['syntax_highlighter'] ||= highlighter
+          @config['syntax_highlighter_opts'] ||= {}
+          @config['coderay'] ||= {} # XXX: Legacy.
+          modernize_coderay_config
+          make_accessible
+        end
     
-          context 'when specify quiet option' do
-        it 'adds quiet option' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              quiet: true
-            )
-          end').runner.execute(:test)
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
     
-      def empty?
-    @paths.empty?
-  end
+    (allow file-write*
+  (literal
+    '/dev/dtracehelper'
+    '/dev/null'
+  )
+  (regex
+    #'^<%= Pod::Config.instance.project_root %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
+    #'^/dev/tty'
+    #'^/private/var'
+  )
+)
     
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
+    module Pod
+  class Command
+    class Env < Command
+      self.summary = 'Display pod environment'
+      self.description = 'Display pod environment.'
