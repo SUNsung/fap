@@ -1,489 +1,239 @@
 
         
-        // Must be included first
-#include 'tensorflow/python/lib/core/numpy.h'
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace tensorflow {
-namespace python_op_gen_internal {
-    }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  if (!register_ufunc('equal', CompareUFunc<Bfloat16EqFunctor>,
-                      compare_types)) {
-    return false;
-  }
-  if (!register_ufunc('not_equal', CompareUFunc<Bfloat16NeFunctor>,
-                      compare_types)) {
-    return false;
-  }
-  if (!register_ufunc('less', CompareUFunc<Bfloat16LtFunctor>, compare_types)) {
-    return false;
-  }
-  if (!register_ufunc('greater', CompareUFunc<Bfloat16GtFunctor>,
-                      compare_types)) {
-    return false;
-  }
-  if (!register_ufunc('less_equal', CompareUFunc<Bfloat16LeFunctor>,
-                      compare_types)) {
-    return false;
-  }
-  if (!register_ufunc('greater_equal', CompareUFunc<Bfloat16GeFunctor>,
-                      compare_types)) {
-    return false;
-  }
-  return true;
-}
-    
-    
-    {}  // end namespace tensorflow
-    
-    
-    {}  // namespace tensorflow
-
-    
-    struct TFTensorDeleter {
-  void operator()(TF_Tensor* p) const { TF_DeleteTensor(p); }
-};
-    
-    namespace tensorflow {
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    CUDAExecutor *cuda_exec):
-      driver_scoped_activate_context_(
-          new ScopedActivateContext{ExtractCudaContext(cuda_exec)}) { }
-    
-    
-    {
-    {}  // namespace cuda
-}  // namespace stream_executor
-    
-    #include <set>
-#include <string>
-#include <vector>
-    
-    void AutoUpdater::SetFeedURL(mate::Arguments* args) {
-  auto_updater::AutoUpdater::SetFeedURL(args);
-}
-    
-    
-    {}  // namespace atom
-    
-      std::unique_ptr<NativeBrowserView> view_;
-    
-    
-    {}  // namespace atom
-
-    
-    
+        
     { private:
-  DISALLOW_COPY_AND_ASSIGN(Button);
+  DISALLOW_COPY_AND_ASSIGN(AtomContentClient);
 };
     
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-    {}  // namespace mate
-    
-      // TransactionObserver:
-  void OnTransactionsUpdated(
-      const std::vector<in_app_purchase::Transaction>& transactions) override;
-    
-    void SetProxyConfigCallback(
-    base::WaitableEvent* done,
-    net::URLRequestContextGetter* url_request_context_getter,
-    const net::ProxyConfig& proxy_config) {
-  net::ProxyService* proxy_service =
-      url_request_context_getter->GetURLRequestContext()->proxy_service();
-  proxy_service->ResetConfigService(
-      new net::ProxyConfigServiceFixed(proxy_config));
-  done->Signal();
-}
-    
-    v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::EscapableHandleScope handle_scope(isolate);
-    }
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-    bool MenuDelegate::HasIcon(int command_id) {
-  if (command_id < 0)
-    return false;
-    }
-    
-    namespace nwapi {
-    }
-    
-    
-    
-    
-    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
-                           base::WaitableEvent::InitialState::NOT_SIGNALED);
-  content::BrowserThread::PostTask(
-      content::BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 base::WrapRefCounted(context_getter), config));
-  done.Wait();
-  return true;
-}
-    
-    
-    {  // ExtensionFunction:
-  ResponseAction Run() override;
-  DECLARE_EXTENSION_FUNCTION('nw.App.closeAllWindows', UNKNOWN)
-};
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
-};
-    
-    
-    {
-} // namespace extensions
+    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
 
     
-    class Semaphore {
- public:
-  void post(int n = 1) {
-    std::unique_lock<std::mutex> lock(m_);
-    n_ += n;
-    cv_.notify_all();
-  }
-    }
     
-    
-    {
-    {OPERATOR_SCHEMA(ExtendTensor)
-    .NumInputs(2)
-    .NumOutputs(1)
-    .EnforceInplace({{0, 0}})
-    .SetDoc(R'DOC(
-Extend input 0 if necessary based on max element in input 1.
-Input 0 must be the same as output, that is, it is required to be in-place.
-Input 0 may have to be re-allocated in order for accommodate to the new size.
-Currently, an exponential growth ratio is used in order to ensure amortized
-constant time complexity.
-All except the outer-most dimension must be the same between input 0 and 1.
-)DOC')
-    .Input(0, 'tensor', 'The tensor to be extended.')
-    .Input(
-        1,
-        'new_indices',
-        'The size of tensor will be extended based on max element in '
-        'new_indices.')
-    .Output(
-        0,
-        'extended_tensor',
-        'Same as input 0, representing the mutated tensor.');
-}
-} // namespace
-
-    
-        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
-         ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
-      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 2));
-    }
-    input_blob_names.push_back(GO(2));
-    
-    <summary> <b>Example</b> </summary>
-    
-    
-    {  bool RunOnDevice() override;
+    {  DISALLOW_COPY_AND_ASSIGN(Screen);
 };
     
     
-    {  bool RunOnDevice() override {
-    for (Blob* output : OperatorBase::Outputs()) {
-      output->Reset();
-    }
-    return true;
-  }
-};
-    
-    template <>
-bool FullyConnectedGradientOp<
-    CUDAContext,
-    TensorCoreEngine,
-    false /* don't transpose weight */>::RunOnDevice() {
-  return RunFullyConnectedGradientOpOnCUDADevice(
-      false /* float16_compute */, this);
+    {  // Produce the generic signature and environment.
+  // FIXME: Pass in a source location for the conformance, perhaps? It seems
+  // like this could fail.
+  syntheticSignature =
+    std::move(builder).computeGenericSignature(SourceLoc());
+  syntheticEnvironment = syntheticSignature->createGenericEnvironment();
 }
-    
-    grpc_byte_buffer* CoreCodegen::grpc_raw_byte_buffer_create(grpc_slice* slice,
-                                                           size_t nslices) {
-  return ::grpc_raw_byte_buffer_create(slice, nslices);
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
-// field data. A 1 byte version ID is always encoded first. Tags are directly
-// serialized into the given grpc_slice.
-size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
-    
-    
-    {}  // namespace grpc
 
     
-      // Serializes rpc server stats into the provided buffer.  It returns the
-  // number of bytes written to the buffer. If the buffer is smaller than
-  // kRpcServerStatsSize bytes it will return kEncodeDecodeFailure. Inlined for
-  // performance reasons.
-  static size_t Encode(uint64_t time, char* buf, size_t buf_size) {
-    if (buf_size < kRpcServerStatsSize) {
-      return kEncodeDecodeFailure;
-    }
-    }
+        llvm::errs() << '\n=====================================================\n';
+    SyntaxNode->dump(llvm::errs());
+    llvm::errs() << '\n\n---- Maps to semantic node: ----\n\n';
     
-    const ViewDescriptor& ServerReceivedMessagesPerRpcMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/server/received_messages_per_rpc/minute')
-          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
-          .set_aggregation(CountDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
-}
-    
-    #include <BulletDynamics/ConstraintSolver/btTypedConstraint.h>
-    
-    	virtual PhysicsServer::JointType get_type() const { return PhysicsServer::JOINT_HINGE; }
-    
-    class JointBullet : public ConstraintBullet {
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
     }
     
-    	{
-		MethodInfo mi;
-		mi.name = 'call_func';
-		Vector<Variant> defargs;
-		ClassDB::bind_vararg_method(METHOD_FLAGS_DEFAULT, 'call_func', &FuncRef::call_func, mi, defargs);
-	}
     
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         char_regex_traits.cpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Declares deprecated traits classes char_regex_traits<>.
-  */
-    
-    #undef BOOST_REGEX_TEMPLATE_DECL
-    
-    
-//
-// Unfortunately Rogue Waves standard library appears to have a bug
-// in std::basic_string::compare that results in eroneous answers
-// in some cases (tested with Borland C++ 5.1, Rogue Wave lib version
-// 0x020101) the test case was:
-// {39135,0} < {0xff,0}
-// which succeeds when it should not.
-//
-#ifndef _RWSTD_VER
-template <class C, class T, class A>
-inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
-{ 
-   if(0 == *p)
-   {
-      if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
-         return 0;
-   }
-   return s.compare(p); 
-}
-#else
-template <class C, class T, class A>
-inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
-{ 
-   if(0 == *p)
-   {
-      if(s.empty() || ((s.size() == 1) && (s[0] == 0)))
-         return 0;
-   }
-   return s.compare(p); 
-}
-inline int string_compare(const std::string& s, const char* p)
-{ return std::strcmp(s.c_str(), p); }
-# ifndef BOOST_NO_WREGEX
-inline int string_compare(const std::wstring& s, const wchar_t* p)
-{ return std::wcscmp(s.c_str(), p); }
-#endif
-#endif
-template <class Seq, class C>
-inline int string_compare(const Seq& s, const C* p)
-{
-   std::size_t i = 0;
-   while((i < s.size()) && (p[i] == s[i]))
-   {
-      ++i;
-   }
-   return (i == s.size()) ? -p[i] : s[i] - p[i];
-}
-# define STR_COMP(s,p) string_compare(s,p)
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::unwind_recursion_stopper(bool)
-{
-   boost::BOOST_REGEX_DETAIL_NS::inplace_destroy(m_backup_state++);
-   pstate = 0;   // nothing left to search
-   return false; // end of stack nothing more to search
+    {  ChunkType pattern = (addOnes ? ~ChunkType(0) : ChunkType(0));
+  appendReserved(numBits, [=](size_t numBitsWanted) -> ChunkType {
+    return (pattern >> (ChunkSizeInBits - numBitsWanted));
+  });
 }
     
-    template <class T>
-class concrete_protected_call
-   : public abstract_protected_call
-{
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  llvm::SmallString<32> NameBuf(Name);
+  cache_attributes_t Attrs = {
+    CACHE_ATTRIBUTES_VERSION_2,
+    CBs.keyHashCB,
+    CBs.keyIsEqualCB,
+    nullptr,
+    CBs.keyDestroyCB,
+    CBs.valueReleaseCB,
+    nullptr,
+    nullptr,
+    CBs.UserData,
+    CBs.valueRetainCB,
+  };
+    }
+    
+    class TreePrinter {
+  llvm::raw_ostream &Out;
+  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
+  SmallString<40> Indent;
 public:
-   typedef bool (T::*proc_type)();
-   concrete_protected_call(T* o, proc_type p)
-      : obj(o), proc(p) {}
-private:
-   virtual bool call()const;
-   T* obj;
-   proc_type proc;
-};
-    
-    
-    {   template <class OutputIter>
-   OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits& t = Traits())
-   {
-      //typedef typename Match::char_type char_type;
-      return BOOST_REGEX_DETAIL_NS::regex_format_imp(i, m, func.begin(), func.end(), f, t);
-   }
-private:
-   const Container& func;
-   format_functor_container(const format_functor_container&);
-   format_functor_container& operator=(const format_functor_container&);
-};
-    
-    //
-// define BOOST_REGEX_NO_FWD if this
-// header doesn't work!
-//
-#ifdef BOOST_REGEX_NO_FWD
-#  ifndef BOOST_RE_REGEX_HPP
-#     include <boost/regex.hpp>
-#  endif
-#else
-    
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const charT* fmt, 
-                         match_flag_type flags = match_default)
-{
-   return regex_replace(out, first, last, e, fmt, flags);
-}
-    
-    protected:
-    
-    void AccelDeccelAmplitude::update(float time)
-{
-    float f = time * 2;
+  TreePrinter(llvm::raw_ostream &out,
+              void (&printNodeData)(llvm::raw_ostream &out, void *node))
+    : Out(out), PrintNodeData(printNodeData) {}
     }
     
-    Liquid* Liquid::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) Liquid();
-    a->initWithDuration(_duration, _gridSize, _waves, _amplitude);
-    a->autorelease();
-    return a;
-}
+      if (clangDiag.getID() == clang::diag::err_module_not_built &&
+      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
+    SourceLoc loc = DiagLoc;
+    if (clangDiag.getLocation().isValid())
+      loc = resolveSourceLocation(clangDiag.getSourceManager(),
+                                  clangDiag.getLocation());
+    }
     
-        virtual void startWithTarget(Node *target) override;
+        template <typename ElementType>
+    void LearnerSGD::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
+                            const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const
+    {
+        UNUSED(smoothedGradientValue);
+        const auto& gradientMatrix = GetWritableMatrix<ElementType>(gradientValue);
+        const auto& parameterMatrix = GetWritableMatrix<ElementType>(parameter.Value());
+        const auto learningRate = ElementType(LearningRate(trainingSampleCount));
+    }
     
-    virtual bool isDone() const override;
-    /**
-     * @param dt In seconds.
-     */
-    virtual void step(float dt) override;
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    /** ActionTween
+        template CNTK_API std::tuple<const float*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<float>() const;
+    template CNTK_API std::tuple<const double*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<double>() const;
+    template CNTK_API std::tuple<const float16*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<float16>() const;
+    template CNTK_API std::tuple<const int8_t*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<int8_t>() const;
+    template CNTK_API std::tuple<const int16_t*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<int16_t>() const;
     
     
-    {} // namespace aria2
+    {        bool isImage = configp->Get(L'isImage');
+        if (!isImage)
+            Init(configp->Get(L'shape'), isSparse, axisName);
+        else
+            Init(ImageDimensions::AsTensorShape(configp->Get(L'imageWidth'), configp->Get(L'imageHeight'), configp->Get(L'imageChannels'), ImageLayoutKindFrom(configp->Get(L'imageLayout'))), isSparse, axisName);
+    }
+    
+      /*
+   * @brief a helper variable for keeping track of the posix tar archive.
+   *
+   * This variable is the absolute location of the tar archive created from
+   * tar'ing all of the carved files from the carve temp dir.
+   */
+  boost::filesystem::path archivePath_;
+    
+      update['awesome'] = R'raw({
+    'options': {
+      'custom_nested_json': 
+        {'foo':1,'bar':'baz'}
+    }
+  })raw';
+  auto s = c.update(update);
+  EXPECT_TRUE(s.ok());
+  EXPECT_EQ(s.toString(), 'OK');
+    
+    
+    {/**
+ * @brief Compute a hash digest from the contents of a buffer.
+ *
+ * @param hash_type The osquery-supported hash algorithm.
+ * @param buffer A caller-controlled buffer (already allocated).
+ * @param size The length of buffer in bytes.
+ * @return A string (hex) representation of the hash digest.
+ */
+std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
+} // namespace osquery
 
     
+    #ifndef WIN32
+#include <sys/wait.h>
+#endif
     
-    {} // namespace aria2
-    
-      int numBucket_;
-    
-    #define WRITE_CHECK(fp, ptr, count)                                            \
-  if (fp.write((ptr), (count)) != (count)) {                                   \
-    throw DL_ABORT_EX(                                                         \
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));     \
-  }
-    
-    class DHTSetup {
-public:
-  DHTSetup();
+        if (descriptor_inosubctx_.find(watch) != descriptor_inosubctx_.end()) {
+      auto ino_sc = descriptor_inosubctx_.at(watch);
+      if (inotify_sanity_check) {
+        std::string watched_path = ino_sc->descriptor_paths_[watch];
+        path_descriptors_.erase(watched_path);
+      }
+      ino_sc->descriptor_paths_.erase(watch);
+      descriptor_inosubctx_.erase(watch);
     }
     
-    class DHTNode;
-class DHTRoutingTable;
-class DHTMessageDispatcher;
-class DHTMessageFactory;
-class DHTTaskQueue;
-class DHTAbstractTask;
+    TEST_F(AuditTests, test_parse_sock_addr) {
+  Row r;
+  std::string msg = '02001F907F0000010000000000000000';
+  bool unix_socket;
+  parseSockAddr(msg, r, unix_socket);
+  ASSERT_FALSE(r['remote_address'].empty());
+  EXPECT_EQ(r['remote_address'], '127.0.0.1');
+  EXPECT_EQ(r['family'], '2');
+  EXPECT_EQ(r['remote_port'], '8080');
+    }
     
-    
-    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
-};
-    
-    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
+    int main(int, char**)
 {
-  immediateTaskQueue_.addTask(task);
+    IwGxInit();
+    }
+    
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX10 sample code but remove this dependency you can: 
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
+    
+    static void ImGui_ImplDX11_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
+    
+        if (pEvent->m_Pressed == 1)
+    {
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
+            g_MousePressed[0] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
+            g_MousePressed[1] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
+            g_MousePressed[2] = true;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
+            io.MouseWheel += pEvent->m_y;
+        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
+            io.MouseWheel += pEvent->m_y;
+    }
+    
+    // About OpenGL function loaders: 
+// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
+// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
+// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+    
+    // Gamma Correct Blending:
+//  FreeType assumes blending in linear space rather than gamma space.
+//  See https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html#FT_Render_Glyph
+//  For correct results you need to be using sRGB and convert to linear space in the pixel shader output.
+//  The default imgui styles will be impacted by this change (alpha values will need tweaking).
+    
+    #ifndef SKIP_RESERVE
+void BENCHFUN(reserve)(int iters, int size) {
+  auto const obj = randomObject<VECTOR::value_type>();
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v(random(0U, 1U), obj);
+    v.reserve(size);
+  }
+}
+BENCHMARK_PARAM(BENCHFUN(reserve), 16)
+BENCHMARK_PARAM(BENCHFUN(reserve), 128)
+BENCHMARK_PARAM(BENCHFUN(reserve), 1024)
+#endif
+    
+    inline UriTuple as_tuple(const folly::Uri& k) {
+  return UriTuple(
+      k.scheme(),
+      k.username(),
+      k.password(),
+      k.host(),
+      k.port(),
+      k.path(),
+      k.query(),
+      k.fragment());
 }
     
+    namespace folly {
+    }
     
-    {  virtual void
-  addImmediateTask(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-};
-    
-    #include 'common.h'
-#include <string>
-    
-      virtual void preProcess() CXX11_OVERRIDE;
-    
-    #ifndef BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
-#define BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
+{
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
+}
