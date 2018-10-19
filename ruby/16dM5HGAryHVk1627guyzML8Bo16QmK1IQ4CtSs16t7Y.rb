@@ -1,103 +1,147 @@
 
         
-        require 'action_view/helpers/tags/checkable'
+        module Gitlab
+  module BackgroundMigration
+    class MigrateStageStatus
+      STATUSES = { created: 0, pending: 1, running: 2, success: 3,
+                   failed: 4, canceled: 5, skipped: 6, manual: 7 }.freeze
     
-    Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
-  s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '2.2.2'
-  s.required_ruby_version = '>= 2.3.0'
+          class MergeRequest < ActiveRecord::Base
+        self.table_name = 'merge_requests'
     
-        # Private: The list of existing files, apart from those included in
-    # keep_files and hidden files.
-    #
-    # Returns a Set with the file paths
-    def existing_files
-      files = Set.new
-      regex = keep_file_regex
-      dirs = keep_dirs
+      private
     
-          unless (value.is_a?(Integer) && value >= 0) || value.is_a?(Symbol)
-        raise ArgumentError, ':#{key} must be a nonnegative Integer or symbol'
-      end
+    module Admin
+  class EmailDomainBlocksController < BaseController
+    before_action :set_email_domain_block, only: [:show, :destroy]
+    
+        def filtered_instances
+      InstanceFilter.new(filter_params).results
     end
+    
+      task :build do
+    title 'Building the gem'
   end
     
-          def save
-        @changed = identity.save
+        # Ensure that the master spec repo exists
+    #
+    # @return [void]
+    #
+    def ensure_master_spec_repo_exists!
+      unless config.sources_manager.master_repo_functional?
+        Setup.new(CLAide::ARGV.new([])).run
+      end
+    end
+    
+          def plugins_string
+        UI::ErrorReport.plugins_string
       end
     
-            include ::EachBatch
-      end
-    
-            def value_text
-          @status ? ('%.2f%%' % @status) : 'unknown'
-        end
-    
-      path = 'assets/stylesheets'
-  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
-  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
-  Dir.mkdir(css_path) unless File.directory?(css_path)
-  %w(_bootstrap bootstrap/_theme).each do |file|
-    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
-    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
-    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    css       = engine.render
-    File.open(save_path, 'w') { |f| f.write css }
+      def safely_remove_file(_path)
+    run_vagrant_command('rm #{test_file}')
+  rescue
+    VagrantHelpers::VagrantSSHCommandError
   end
 end
     
-        def get_trees
-      @trees ||= get_tree(@branch_sha)
+        def configure_scm
+      Capistrano::Configuration::SCMResolver.new.resolve
     end
     
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
+            if echo?
+          $stdin.gets
+        else
+          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
+        end
+      rescue Errno::EIO
+        # when stdio gets closed
+        return
+      end
+    
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
+      end
+    
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
+    end
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+      private
+  def update_all?
+    plugins_arg.size == 0
   end
-  config.static_cache_control = 'public, max-age=3600'
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
-    
-        # Returns the width and height in a format suitable to be passed to Geometry.parse
-    def to_s
-      s = ''
-      s << width.to_i.to_s if width > 0
-      s << 'x#{height.to_i}' if height > 0
-      s << modifier.to_s
-      s
-    end
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
+          it 'should not support $ in environment variable name' do
+        expect(subject.oneString).to(be == '${f$$:val}')
       end
     end
+  end
+end
+
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+    task default: :test
+    
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+              if Spree::Cart::Update.call(order: @order, params: line_items_attributes).success?
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+    
+            def update
+          authorize! params[:action], @payment
+          if !@payment.editable?
+            render 'update_forbidden', status: 403
+          elsif @payment.update_attributes(payment_params)
+            respond_with(@payment, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
+    
+            private
+    
+              state = @states.last
+          respond_with(@states) if stale?(state)
+        end
+    
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
+          end
+        end
