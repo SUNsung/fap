@@ -1,134 +1,154 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+            describe 'replies' do
+      def process_alerts(post)
+        PostAlerter.post_created(post)
+      end
     
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
+        #####################################################
+    # @!group Other things
+    #####################################################
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+        def show_github_issues(message_or_error)
+      return if FastlaneCore::Env.truthy?('FASTLANE_HIDE_GITHUB_ISSUES')
+      return if FastlaneCore::Helper.test?
     
+          it 'Does not use pattern matching for tag name if so requested' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits()
+        end').runner.execute(:test)
+    
+          it 'passes the deprecated pathspec parameter to path parameter' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(pathspec: 'myfile.txt')
+          end').runner.execute(:test)
+        end
+      end
+    
+            context 'with given path to oclint' do
+          let(:result) do
+            Fastlane::FastFile.new.parse('lane :test do
+              oclint(
+                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+                oclint_path: 'test/bin/oclint'
+              )
+            end').runner.execute(:test)
+          end
+          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
+    
+          it 'does not require any parameters other than project' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          slather({
+            proj: 'foo.xcodeproj'
+          })
+        end').runner.execute(:test)
+    
+          root.children.each {|v| nest_seqs(v)}
+    end
+    
+          # Given an `@import`ed path, returns an array of possible
+      # on-disk filenames and their corresponding syntaxes for that path.
+      #
+      # @param name [String] The filename.
+      # @return [Array(String, Symbol)] An array of pairs.
+      #   The first element of each pair is a filename to look for;
+      #   the second element is the syntax that file would be in (`:sass` or `:scss`).
+      def possible_files(name)
+        name = escape_glob_characters(name)
+        dirname, basename, extname = split(name)
+        sorted_exts = extensions.sort
+        syntax = extensions[extname]
+    
+      # Post release
+  #-----------------------------------------------------------------------------#
+    
+    if Encoding.default_external != Encoding::UTF_8
+    
+    require 'pathname'
+require 'cocoapods/config'
+require 'rbconfig'
+require 'erb'
+    
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
+    
+        # Checks that the podfile exists.
     #
-    
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
-      end
-    
-      before_action :set_account
-    
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
-end
-
-    
-        private
-    
-      def local_domain?
-    TagManager.instance.web_domain?(hub_topic_domain)
-  end
-    
-      def future_expires
-    Time.now.utc + lease_seconds_or_default
-  end
-    
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
+    # @raise  If the podfile does not exists.
+    #
+    # @return [void]
+    #
+    def verify_podfile_exists!
+      unless config.podfile
+        raise Informative, 'No `Podfile' found in the project directory.'
       end
     end
-    [$? && $?.exitstatus == 0, cmd_with_env]
-  end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
-  else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
-  end
-end
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
     
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
+    World(RemoteCommandHelpers)
 
     
-      # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.action_controller.asset_host = 'http://assets.example.com'
+      class Configuration
+    def self.env
+      @env ||= new
+    end
     
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+          def roles_array
+        roles.to_a
+      end
     
-          attr_reader :name, :path
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
+        else
+          servers_by_key[key] = new_host.with(properties)
+        end
+      end
     
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+          def trusted_keys
+        @trusted_keys.dup
+      end
+    
+        <div id='rack'>
+      <h3 id='env-info'>Rack ENV</h3>
+      <table class='req'>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
+         <tr>
+           <td><%=h key %></td>
+           <td class='code'><div><%=h val %></div></td>
+         </tr>
+         <% } %>
+      </table>
+      <div class='clear'></div>
+    </div> <!-- /RACK ENV -->
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
     
-        def emoji(name)
-      if emoji = Gemojione.index.find_by_name(name)
-        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
-      else
-        fail ArgumentError, 'emoji `#{name}' not found'
-      end
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
     end
