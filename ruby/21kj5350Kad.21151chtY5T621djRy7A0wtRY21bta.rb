@@ -1,59 +1,69 @@
 
         
-                staff.topic_id = post.topic.id
-        unless staff.save
-          puts staff.errors.full_messages
-          puts 'Failed to set the Staff category description topic!'
-        end
-    
-        def create
-      authorize :custom_emoji, :create?
-    
-        def destroy
-      authorize @domain_block, :destroy?
-      UnblockDomainService.new.call(@domain_block, retroactive_unblock?)
-      log_action :destroy, @domain_block
-      redirect_to admin_domain_blocks_path, notice: I18n.t('admin.domain_blocks.destroyed_msg')
-    end
-    
-    module Admin
-  class EmailDomainBlocksController < BaseController
-    before_action :set_email_domain_block, only: [:show, :destroy]
-    
-        def ordered_instances
-      paginated_instances.map { |account| Instance.new(account) }
-    end
-    
-          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
-    else
-      ['Unknown mode: #{hub_mode}', 422]
+          include_examples 'multiline literal brace layout' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) do
+      <<-RUBY.strip_indent.chomp
+        [
+        1
+        ]
+      RUBY
     end
   end
     
-    require 'sass/engine'
-require 'sass/plugin' if defined?(Merb::Plugins)
-require 'sass/railtie'
-require 'sass/features'
-
+          it 'detects closing brace on same line as last element' do
+        src = construct(true, false)
+        inspect_source(src)
     
-            seq = first_seq(child)
-        seq.members.reject! {|sseq| sseq == '\n'}
-        first, rest = seq.members.first, seq.members[1..-1]
-    
-          opts.on('--trace', :NONE, 'Show a full Ruby stack trace on error') do
-        @options[:trace] = true
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
-    end
     
-          opts.on('-t', '--style NAME', 'Output style. Can be nested (default), compact, ' \
-                                    'compressed, or expanded.') do |name|
-        @options[:for_engine][:style] = name.to_sym
+          # Calls the given block for each `key` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_key
+        return pairs.map(&:key).to_enum unless block_given?
+    
+          # A shorthand for getting the first argument of the node.
+      # Equivalent to `arguments.first`.
+      #
+      # @return [Node, nil] the first argument of the node,
+      #                     or `nil` if there are no arguments
+      def first_argument
+        arguments[0]
       end
+    
+            def find_product
+          super(params[:product_id])
+        end
+    
+              count_on_hand = 0
+          if params[:stock_item].key?(:count_on_hand)
+            count_on_hand = params[:stock_item][:count_on_hand].to_i
+            params[:stock_item].delete(:count_on_hand)
+          end
+    
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
+          end
+        end
