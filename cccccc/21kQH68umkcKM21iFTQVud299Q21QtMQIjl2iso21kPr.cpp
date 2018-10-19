@@ -1,181 +1,176 @@
 
         
-        #if defined(OS_WIN)
-StringType GetWaitEventName(base::ProcessId pid);
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
     
-    namespace atom {
+      // Computes matrix.vector v = Wu.
+  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
+  // u is imagined to have an extra element at the end with value 1, to
+  // implement the bias, but it doesn't actually have it.
+  // Computes the base C++ implementation, if there are no partial_funcs_.
+  // NOTE: The size of the input vector (u) must be padded using
+  // RoundInputs above.
+  // The input will be over-read to the extent of the padding. There are no
+  // alignment requirements.
+  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                       const GenericVector<double>& scales, const int8_t* u,
+                       double* v) const;
+    
+      /**
+   * Returns the baseline of the current object at the given level.
+   * The baseline is the line that passes through (x1, y1) and (x2, y2).
+   * WARNING: with vertical text, baselines may be vertical!
+   * Returns false if there is no baseline at the current position.
+   */
+  bool Baseline(PageIteratorLevel level,
+                int* x1, int* y1, int* x2, int* y2) const;
+    
+    /**
+ * @name tess_segment_pass_n
+ *
+ * Segment a word using the pass_n conditions of the tess segmenter.
+ * @param pass_n pass number
+ * @param word word to do
+ */
+    
+      // Gets a pix that contains an 8 bit threshold value at each pixel. The
+  // returned pix may be an integer reduction of the binary image such that
+  // the scale factor may be inferred from the ratio of the sizes, even down
+  // to the extreme of a 1x1 pixel thresholds image.
+  // Ideally the 8 bit threshold should be the exact threshold used to generate
+  // the binary image in ThresholdToPix, but this is not a hard constraint.
+  // Returns nullptr if the input is binary. PixDestroy after use.
+  virtual Pix* GetPixRectThresholds();
+    
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+}
+    
+      std::vector<grpc::string_ref> FindPropertyValues(
+      const grpc::string& name) const override;
+    
+    void GenerateClientContext(absl::string_view method, CensusContext* ctxt,
+                           CensusContext* parent_ctxt) {
+  if (parent_ctxt != nullptr) {
+    SpanContext span_ctxt = parent_ctxt->Context();
+    Span span = parent_ctxt->Span();
+    if (span_ctxt.IsValid()) {
+      new (ctxt) CensusContext(method, &span);
+      return;
+    }
+  }
+  new (ctxt) CensusContext(method);
+}
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
     }
     
-      // Protocol Handler Registry -----------------------------------------------
-  // Sent when a ProtocolHandlerRegistry is changed. The source is the profile.
-  NOTIFICATION_PROTOCOL_HANDLER_REGISTRY_CHANGED,
+      enum class WriteStallCause {
+    kNone,
+    kMemtableLimit,
+    kL0FileCountLimit,
+    kPendingCompactionBytes,
+  };
+  static std::pair<WriteStallCondition, WriteStallCause>
+  GetWriteStallConditionAndCause(int num_unflushed_memtables, int num_l0_files,
+                                 uint64_t num_compaction_needed_bytes,
+                                 const MutableCFOptions& mutable_cf_options);
     
-    enum NotifyChromeResult {
-  NOTIFY_SUCCESS,
-  NOTIFY_FAILED,
-  NOTIFY_WINDOW_HUNG,
-};
+      // Compaction filter never applies to merge keys.
+  ASSERT_OK(db_->Put(WriteOptions(), 'foobar', one));
+  ASSERT_OK(Flush());
+  ASSERT_OK(db_->Merge(WriteOptions(), 'foobar', two));
+  ASSERT_OK(Flush());
+  newvalue = Get('foobar');
+  ASSERT_EQ(newvalue, three);
+  dbfull()->CompactRange(CompactRangeOptions(), nullptr, nullptr);
+  newvalue = Get('foobar');
+  ASSERT_EQ(newvalue, three);
     
-    #include <string>
+      Options options = CurrentOptions();
+  options.create_if_missing = true;
+  options.write_buffer_size = 2048;
+  options.max_write_buffer_number = 2;
+  options.level0_file_num_compaction_trigger = 2;
+  options.level0_slowdown_writes_trigger = 9999;
+  options.level0_stop_writes_trigger = 9999;
+  options.target_file_size_base = 2;
+  options.level_compaction_dynamic_level_bytes = true;
+  options.max_bytes_for_level_base = 10240;
+  options.max_bytes_for_level_multiplier = 4;
+  options.max_background_compactions = 1;
+  const int kNumLevels = 5;
+  options.num_levels = kNumLevels;
+  options.max_compaction_bytes = 1;  // Force not expanding in compactions
+  BlockBasedTableOptions table_options;
+  table_options.block_size = 1024;
+  options.table_factory.reset(NewBlockBasedTableFactory(table_options));
     
-      kFullType = 1,
+      virtual Status NewIterators(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>& column_families,
+      std::vector<Iterator*>* iterators) override;
     
-      // Add the specified file at the specified number.
-  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
-  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
-  void AddFile(int level, uint64_t file,
-               uint64_t file_size,
-               const InternalKey& smallest,
-               const InternalKey& largest) {
-    FileMetaData f;
-    f.number = file;
-    f.file_size = file_size;
-    f.smallest = smallest;
-    f.largest = largest;
-    new_files_.push_back(std::make_pair(level, f));
-  }
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
-    
-      for (size_t i = 0; i < 3; ++i) {
-    std::string res;
-    ASSERT_OK(db->Get(ReadOptions(), keys[i], &res));
-    ASSERT_TRUE(res == vals[i]);
-  }
-    
-    
-    {}  // namespace leveldb
-    
-    #include <stdio.h>
-#include 'leveldb/dumpfile.h'
-#include 'leveldb/env.h'
-#include 'leveldb/status.h'
-    
-    
-    {  // Write the header and the payload
-  Status s = dest_->Append(Slice(buf, kHeaderSize));
-  if (s.ok()) {
-    s = dest_->Append(Slice(ptr, n));
-    if (s.ok()) {
-      s = dest_->Flush();
+    Status WriteBatchBase::Put(const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
     }
+    
+      friend class WriteControllerToken;
+  friend class StopWriteToken;
+  friend class DelayWriteToken;
+  friend class CompactionPressureToken;
+    
+      env.now_micros_ += 3024u;  // sleep credit 2000
+    
+      // Sync + corrupt => no change
+  ASSERT_OK(writable_file->Fsync());
+  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
+  result.clear();
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
+                          const rocksdb::Slice& existing_value) const override {
+    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
+    ++merge_count_;
+    return existing_value == 'bad';
   }
-  block_offset_ += kHeaderSize + n;
-  return s;
-}
     
-    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
-extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
+      virtual void accept(DHTMessageCallback* callback) = 0;
     
-    bool js_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DSliderConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DSliderConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_Physics3DSliderConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+      ~DHTSetup();
     
-        return 0;
-}
-int lua_cocos2dx_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createBucketRefreshTask()
 {
-    int argc = 0;
-    cocos2d::PhysicsJointRatchet* cobj = nullptr;
-    bool ok  = true;
+  auto task = std::make_shared<DHTBucketRefreshTask>();
+  setCommonProperty(task);
+  return task;
+}
     
-    	b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);
+      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
     
-    			b2FixtureDef sd1;
-			sd1.shape = &poly1;
-			sd1.density = 4.0f;
+    DHTTaskQueueImpl::DHTTaskQueueImpl()
+    : periodicTaskQueue1_(NUM_CONCURRENT_TASK),
+      periodicTaskQueue2_(NUM_CONCURRENT_TASK),
+      immediateTaskQueue_(NUM_CONCURRENT_TASK)
+{
+}
     
-    #ifndef BREAKABLE_TEST_H
-#define BREAKABLE_TEST_H
     
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
-    }
-    
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
-    }
+    {} // namespace aria2
