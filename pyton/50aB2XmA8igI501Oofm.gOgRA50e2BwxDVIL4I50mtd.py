@@ -1,105 +1,154 @@
 
         
-        
-class Transaction(object):
+            Checks that the id exists and optionally that the current user is
+    the author.
     
-        def reducer(self, key, values):
-        total = sum(values)
-        if total == 1:
-            yield key, total
+        if current_app.config['JSONIFY_PRETTYPRINT_REGULAR'] or current_app.debug:
+        indent = 2
+        separators = (', ', ': ')
     
-    from flaskr.auth import login_required
-from flaskr.db import get_db
+            :param tag_class: tag class to register. Will be instantiated with this
+            serializer instance.
+        :param force: overwrite an existing tag. If false (default), a
+            :exc:`KeyError` is raised.
+        :param index: index to insert the new tag in the tag order. Useful when
+            the new tag is a special case of an existing tag. If ``None``
+            (default), the tag is appended to the end of the order.
     
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
+            If the ``obj`` argument is not given, passes an instance of
+        :class:`~flask.cli.ScriptInfo` that knows how to load the Flask
+        app being tested.
+    
+    KEY_PREFIX = 'django.contrib.sessions.cached_db'
+    
+        def test_splitdrive(self):
+        # splitdrive for non-NT paths
+        splitdrive = self.pathmodule.splitdrive
+        self.assertEqual(splitdrive('/foo/bar'), ('', '/foo/bar'))
+        self.assertEqual(splitdrive('foo:bar'), ('', 'foo:bar'))
+        self.assertEqual(splitdrive(':foo:bar'), ('', ':foo:bar'))
+    
+        If a name, the module is imported.  If the passed or imported module
+    object is not a package, raise an exception.
     '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-
-    
-        with pytest.raises(sqlite3.ProgrammingError) as e:
-        db.execute('SELECT 1')
-    
-        def record(self, func):
-        '''Registers a function that is called when the blueprint is
-        registered on the application.  This function is called with the
-        state as argument as returned by the :meth:`make_setup_state`
-        method.
-        '''
-        if self._got_registered_once and self.warn_on_modifications:
-            from warnings import warn
-            warn(Warning('The blueprint was already registered once '
-                         'but is getting modified now.  These changes '
-                         'will not show up.'))
-        self.deferred_functions.append(func)
-    
-        Do not attempt to use this class directly, instead use
-    :meth:`~flask.Flask.test_request_context` and
-    :meth:`~flask.Flask.request_context` to create this object.
-    
-        if args and kwargs:
-        raise TypeError('jsonify() behavior undefined when passed both args and kwargs')
-    elif len(args) == 1:  # single args are passed directly to dumps()
-        data = args[0]
+    if hasattr(package, '__spec__'):
+        if package.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(
+                package.__spec__.name))
+        else:
+            return package
     else:
-        data = args or kwargs
+        module = import_module(package)
+        if module.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(package))
+        else:
+            return module
     
-        if app.debug and logger.level == logging.NOTSET:
-        logger.setLevel(logging.DEBUG)
+        @bigmemtest(size=_4G + 100, memuse=2)
+    def testCompress4G(self, size):
+        # 'Test BZ2Compressor.compress()/flush() with >4GiB input'
+        bz2c = BZ2Compressor()
+        data = b'x' * size
+        try:
+            compressed = bz2c.compress(data)
+            compressed += bz2c.flush()
+        finally:
+            data = None  # Release memory
+        data = bz2.decompress(compressed)
+        try:
+            self.assertEqual(len(data), size)
+            self.assertEqual(len(data.strip(b'x')), 0)
+        finally:
+            data = None
     
-    from flask.helpers import is_ip, total_seconds
-from flask.json.tag import TaggedJSONSerializer
-    
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
-    
-    # The name of an image file (relative to this directory) to place at the top of
-# the title page.
-#
-# latex_logo = None
-    
-        # Initialize flic client responsible for
-    # connecting to buttons and retrieving events
-    host = config.get(CONF_HOST)
-    port = config.get(CONF_PORT)
-    discovery = config.get(CONF_DISCOVERY)
-    
-    
-def register(cloud, email, password):
-    '''Register a new account.'''
-    from botocore.exceptions import ClientError
-    
-        def random_see(dev_id, name):
-        '''Randomize a sighting.'''
-        see(
-            dev_id=dev_id,
-            host_name=name,
-            gps=(hass.config.latitude + offset(),
-                 hass.config.longitude + offset()),
-            gps_accuracy=random.randrange(50, 150),
-            battery=random.randrange(10, 90)
+        # Initialize and populate our database.
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
+    tasks = (
+        'give food to fish',
+        'prepare group meeting',
+        'fight with a zebra',
         )
+    for task in tasks:
+        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
     
-        return scanner if scanner.success_init else None
+    def handleSlideTitle(title):
+    print('<h2>%s</h2>' % getText(title.childNodes))
+    
+    # register the Foo class; make `f()` and `g()` accessible via proxy
+MyManager.register('Foo1', Foo)
+    
+            it = pool.imap(f, list(range(10)))
+        for i in range(10):
+            try:
+                x = next(it)
+            except ZeroDivisionError:
+                if i == 5:
+                    pass
+            except StopIteration:
+                break
+            else:
+                if i == 5:
+                    raise AssertionError('expected ZeroDivisionError')
+    
+        # Predict classes and remove classifications that aren't within the threshold
+    return [(pred, loc) if rec else ('unknown', loc) for pred, loc, rec in zip(knn_clf.predict(faces_encodings), X_face_locations, are_matches)]
+    
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
+    
+        :param faces: List of face encodings to compare
+    :param face_to_compare: A face encoding to compare against
+    :return: A numpy ndarray with the distance for each face in the same order as the 'faces' array
+    '''
+    if len(face_encodings) == 0:
+        return np.empty((0))
+    
+        fftv.publish('cartoon')
+    fftv.publish('music')
+    fftv.publish('ads')
+    fftv.publish('movie')
+    fftv.publish('cartoon')
+    fftv.publish('cartoon')
+    fftv.publish('movie')
+    fftv.publish('blank')
     
     
-def setup_scanner(hass, config, see, discovery_info=None):
-    '''Set up the Volvo tracker.'''
-    if discovery_info is None:
-        return
+a = A()
+b = B()
+c = C()
+visitor = Visitor()
+visitor.visit(a)
+visitor.visit(b)
+visitor.visit(c)
     
-    _LOGGER = logging.getLogger(__name__)
+    
+# In some very complex cases, it might be desirable to pull out the building
+# logic into another function (or a method on another class), rather than being
+# in the base class '__init__'. (This leaves you in the strange situation where
+# a concrete class does not have a useful constructor)
     
     
-def setup(hass, config):
-    '''Set up the Dyson parent component.'''
-    _LOGGER.info('Creating new Dyson component')
+def main():
+    try:
+        import queue
+    except ImportError:  # python 2.x compatibility
+        import Queue as queue
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 2)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 100)
