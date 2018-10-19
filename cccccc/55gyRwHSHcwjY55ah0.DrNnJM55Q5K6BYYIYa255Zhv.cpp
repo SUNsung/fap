@@ -1,249 +1,278 @@
 
         
-        class TestFileSystem : public NullFileSystem {
- public:
-  Status NewRandomAccessFile(
-      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
-    result->reset(new TestRandomAccessFile);
-    return Status::OK();
-  }
-  // Always return size of 10
-  Status GetFileSize(const string& fname, uint64* file_size) override {
-    *file_size = 10;
-    return Status::OK();
-  }
-};
+        #define MAKE_TYPE_INFO(m_type, m_var_type)                    \
+	template <>                                               \
+	struct GetTypeInfo<m_type> {                              \
+		static const Variant::Type VARIANT_TYPE = m_var_type; \
+		static inline PropertyInfo get_class_info() {         \
+			return PropertyInfo(VARIANT_TYPE, String());      \
+		}                                                     \
+	};                                                        \
+	template <>                                               \
+	struct GetTypeInfo<const m_type &> {                      \
+		static const Variant::Type VARIANT_TYPE = m_var_type; \
+		static inline PropertyInfo get_class_info() {         \
+			return PropertyInfo(VARIANT_TYPE, String());      \
+		}                                                     \
+	};
     
-    REGISTER_OP('Add').Doc(R'doc(
-An op to test that duplicate registrations don't override previously
-registered ops.
-)doc');
+    #include 'constraint_bullet.h'
+#include 'servers/physics_server.h'
     
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
+    #ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
     
-    // Returns the PyObject for the bfloat16 type.
-PyObject* Bfloat16PyType();
+    namespace BOOST_REGEX_DETAIL_NS{
+template BOOST_REGEX_DECL void perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::construct_init(
+      const basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >& e, match_flag_type f);
+template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::match();
+template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::find();
+} // namespace
     
-    // Must be included first.
-#include 'tensorflow/python/lib/core/numpy.h'
-    
-    // Structure which keeps a reference to a Tensor alive while numpy has a pointer
-// to it.
-struct TensorReleaser {
-  // Python macro to include standard members.
-  PyObject_HEAD
-    }
-    
-    // Called by python code on initialization.
-//
-// 'trampoline' must represent a python function which has the
-// following signature:
-//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
-//     ndarray | list(ndarray) | python scalar |
-//     EagerTensor | list(EagerTensor) | None
-//
-// The trampoline takes two arguments, the first is a string token
-// used by the python frontend's dispatching logic; the second is a
-// list of numpy ndarrays or EagerTensor objects. It can return a
-// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
-// EagerTensor, a list of EagerTensors, or None.
-//
-// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
-// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
-// of EagerTensors, or None.
-//
-// The C++ runtime converts outputs back to Tensor objects.
-//
-// This function is called by script_ops.py during its module initialization.
-//
-// TODO(zhifengc): Support distributed runtime.
-void InitializePyTrampoline(PyObject* trampoline);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // A wrapper around io::RecordReader that is more easily SWIG wrapped for
-// Python.  An instance of this class is not safe for concurrent access
-// by multiple threads.
-class PyRecordReader {
- public:
-  // TODO(vrv): make this take a shared proto to configure
-  // the compression options.
-  static PyRecordReader* New(const string& filename, uint64 start_offset,
-                             const string& compression_type_string,
-                             TF_Status* out_status);
-    }
-    
-    #include 'tensorflow/stream_executor/lib/strcat.h'
-    
-      ScopedActivateExecutorContext(ScopedActivateExecutorContext&& other);
-    
-     private:
-  std::string file_;
-  int line_;
-  int index_;
-  int write_fd_;
-    
-      // Returns a copy of the FilePath with the directory part removed.
-  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
-  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
-  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
-  // returns an empty FilePath ('').
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveDirectoryName() const;
-    
-    // Creates a new TestInfo object and registers it with Google Test;
-// returns the created object.
-//
-// Arguments:
-//
-//   test_case_name:   name of the test case
-//   name:             name of the test
-//   type_param        the name of the test's type parameter, or NULL if
-//                     this is not a typed or a type-parameterized test.
-//   value_param       text representation of the test's value parameter,
-//                     or NULL if this is not a type-parameterized test.
-//   fixture_class_id: ID of the test fixture class
-//   set_up_tc:        pointer to the function that sets up the test case
-//   tear_down_tc:     pointer to the function that tears down the test case
-//   factory:          pointer to the factory that creates a test object.
-//                     The newly created TestInfo instance will assume
-//                     ownership of the factory object.
-GTEST_API_ TestInfo* MakeAndRegisterTestInfo(
-    const char* test_case_name,
-    const char* name,
-    const char* type_param,
-    const char* value_param,
-    TypeId fixture_class_id,
-    SetUpTestCaseFunc set_up_tc,
-    TearDownTestCaseFunc tear_down_tc,
-    TestFactoryBase* factory);
-    
-      T* value_;
-  linked_ptr_internal link_;
-    
-    template <GTEST_TEMPLATE_ T1>
-struct Templates1 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates0 Tail;
-};
-    
-    #endif // BOOST_NO_WREGEX
-    
-    
-    
-    #ifndef BOOST_REGEX_V4_MATCH_RESULTS_HPP
-#define BOOST_REGEX_V4_MATCH_RESULTS_HPP
-    
-    
-    
-    template <class OutputIterator, class Results, class traits, class ForwardIter>
-OutputIterator basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format(ForwardIter p1, ForwardIter p2, match_flag_type f)
+    template <bool is_pointer_type>
+struct is_random_imp_selector
 {
-   m_position = p1;
-   m_end = p2;
-   m_flags = f;
-   format_all();
-   return m_out;
-}
-    
-    
-    {   void cow()
+   template <class I>
+   struct rebind
    {
-      // copy-on-write
-      if(pdata.get() && !pdata.unique())
+      typedef is_random_imp<I> type;
+   };
+};
+    
+          func(*this, i, flags);
+      return result;
+   }
+   // format with locale:
+   template <class OutputIterator, class Functor, class RegexT>
+   OutputIterator format(OutputIterator out,
+                         Functor fmt,
+                         match_flag_type flags,
+                         const RegexT& re) const
+   {
+      if(m_is_singular)
+         raise_logic_error();
+      typedef ::boost::regex_traits_wrapper<typename RegexT::traits_type> traits_type;
+      typedef typename BOOST_REGEX_DETAIL_NS::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, OutputIterator, traits_type>::type F;
+      F func(fmt);
+      return func(*this, out, flags, re.get_traits());
+   }
+   template <class RegexT, class Functor>
+   string_type format(Functor fmt,
+                      match_flag_type flags,
+                      const RegexT& re) const
+   {
+      if(m_is_singular)
+         raise_logic_error();
+      typedef ::boost::regex_traits_wrapper<typename RegexT::traits_type> traits_type;
+      std::basic_string<char_type> result;
+      BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<char_type> > i(result);
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_long_set_repeat()
+{
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+#ifdef __BORLANDC__
+#pragma option push -w-8008 -w-8066 -w-8004
+#endif
+   typedef typename traits::char_class_type m_type;
+   const re_repeat* rep = static_cast<const re_repeat*>(pstate);
+   const re_set_long<m_type>* set = static_cast<const re_set_long<m_type>*>(pstate->next.p);
+   std::size_t count = 0;
+   //
+   // start by working out how much we can skip:
+   //
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
+   std::size_t desired = greedy ? rep->max : rep->min;
+   if(::boost::is_random_access_iterator<BidiIterator>::value)
+   {
+      BidiIterator end = position;
+      // Move end forward by 'desired', preferably without using distance or advance if we can
+      // as these can be slow for some iterator types.
+      std::size_t len = (desired == (std::numeric_limits<std::size_t>::max)()) ? 0u : ::boost::BOOST_REGEX_DETAIL_NS::distance(position, last);
+      if(desired >= len)
+         end = last;
+      else
+         std::advance(end, desired);
+      BidiIterator origin(position);
+      while((position != end) && (position != re_is_set_member(position, last, set, re.get_data(), icase)))
       {
-         pdata.reset(new impl(*(pdata.get())));
+         ++position;
+      }
+      count = (unsigned)::boost::BOOST_REGEX_DETAIL_NS::distance(origin, position);
+   }
+   else
+   {
+      while((count < desired) && (position != last) && (position != re_is_set_member(position, last, set, re.get_data(), icase)))
+      {
+         ++position;
+         ++count;
       }
    }
-};
-    
-    template <class ST, class SA, class Allocator, class charT, class traits>
-inline bool regex_match(const std::basic_string<charT, ST, SA>& s, 
-                 match_results<typename std::basic_string<charT, ST, SA>::const_iterator, Allocator>& m, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   return regex_match(s.begin(), s.end(), m, e, flags);
-}
-template <class charT, class traits>
-inline bool regex_match(const charT* str, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
-{
-   match_results<const charT*> m;
-   return regex_match(str, str + traits::length(str), m, e, flags | regex_constants::match_any);
-}
-    
-       raw_storage();
-   raw_storage(size_type n);
-    
-    
-    {} // namespace boost
-    
-    template <class BaseT, bool has_extensions>
-struct compute_wrapper_base
-{
-   typedef BaseT type;
-};
-#if !BOOST_WORKAROUND(__HP_aCC, < 60000)
-template <class BaseT>
-struct compute_wrapper_base<BaseT, false>
-{
-   typedef default_wrapper<BaseT> type;
-};
-#else
-template <>
-struct compute_wrapper_base<c_regex_traits<char>, false>
-{
-   typedef default_wrapper<c_regex_traits<char> > type;
-};
-#ifndef BOOST_NO_WREGEX
-template <>
-struct compute_wrapper_base<c_regex_traits<wchar_t>, false>
-{
-   typedef default_wrapper<c_regex_traits<wchar_t> > type;
-};
-#endif
-#endif
-    
-    namespace osquery {
     }
     
     
-    {  QueryLogItem second_item;
-  getDecorations(second_item.decorations);
-  ASSERT_EQ(second_item.decorations.size(), 2U);
+template <class traits, class charT>
+unsigned find_sort_syntax(const traits* pt, charT* delim)
+{
+   //
+   // compare 'a' with 'A' to see how similar they are,
+   // should really use a-accute but we can't portably do that,
+   //
+   typedef typename traits::string_type string_type;
+   typedef typename traits::char_type char_type;
+    }
+    
+    namespace boost{
+//
+// class regbase
+// handles error codes and flags
+//
+class BOOST_REGEX_DECL regbase
+{
+public:
+   enum flag_type_
+   {
+      //
+      // Divide the flags up into logical groups:
+      // bits 0-7 indicate main synatx type.
+      // bits 8-15 indicate syntax subtype.
+      // bits 16-31 indicate options that are common to all
+      // regex syntaxes.
+      // In all cases the default is 0.
+      //
+      // Main synatx group:
+      //
+      perl_syntax_group = 0,                      // default
+      basic_syntax_group = 1,                     // POSIX basic
+      literal = 2,                                // all characters are literals
+      main_option_type = literal | basic_syntax_group | perl_syntax_group, // everything!
+      //
+      // options specific to perl group:
+      //
+      no_bk_refs = 1 << 8,                        // \d not allowed
+      no_perl_ex = 1 << 9,                        // disable perl extensions
+      no_mod_m = 1 << 10,                         // disable Perl m modifier
+      mod_x = 1 << 11,                            // Perl x modifier
+      mod_s = 1 << 12,                            // force s modifier on (overrides match_not_dot_newline)
+      no_mod_s = 1 << 13,                         // force s modifier off (overrides match_not_dot_newline)
+    }
+    }
+    }
+    
+    template <class F, class M, class O>
+struct format_traits
+{
+public:
+   // 
+   // Type is mpl::int_<N> where N is one of:
+   //
+   // 0 : F is a pointer to a presumably null-terminated string.
+   // 1 : F is a character-container such as a std::string.
+   //
+   // Other options such as F being a Functor are not supported without
+   // SFINAE support.
+   //
+   typedef typename boost::mpl::if_<
+      boost::is_pointer<F>,
+      boost::mpl::int_<0>,
+      boost::mpl::int_<1>
+   >::type type;
+};
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_grep.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides regex_grep implementation.
+  */
+    
+    
+    
+    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
+    
+    typedef void (*Transform1d)(const double* in, int stride, double* out);
+    
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
+  }
+    
+    inline void ColumnDct(coeff_t* in) {
+  for (int i = 0; i < 8; ++i) {
+    int m0, m1, m2, m3, m4, m5, m6, m7;
+    COLUMN_DCT8(in + i);
+  }
 }
     
     
-    {
-    {  EXPECT_TRUE(doc.HasMember('custom_nested_json'));
-  EXPECT_FALSE(Flag::getValue('custom_nested_json').empty());
-  EXPECT_EQ(R'raw({'foo':1,'bar':'baz'})raw',
-            Flag::getValue('custom_nested_json'));
+    {  FILE* f = write_to_stdout ? stdout : fopen(filename, 'wb');
+  if (!f) {
+    perror('Can't open output file for writing');
+    exit(1);
+  }
+  if (fwrite(contents.data(), 1, contents.size(), f) != contents.size()) {
+    perror('fwrite');
+    exit(1);
+  }
+  if (fclose(f) < 0) {
+    perror('fclose');
+    exit(1);
+  }
 }
-}
+    
+      tmp0 = in[3 * stride];
+  tmp1 = kIDCTMatrix[ 3] * tmp0;
+  tmp2 = kIDCTMatrix[11] * tmp0;
+  tmp3 = kIDCTMatrix[19] * tmp0;
+  tmp4 = kIDCTMatrix[27] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+    
+    #endif  // GUETZLI_IDCT_H_
 
     
-    #include 'osquery/core/json.h'
-#include 'osquery/tests/test_util.h'
+    namespace guetzli {
+    }
     
-    #include <osquery/core.h>
+    // Writes len bytes from buf, using the out callback.
+inline bool JPEGWrite(JPEGOutput out, const uint8_t* buf, size_t len) {
+  static const size_t kBlockSize = 1u << 30;
+  size_t pos = 0;
+  while (len - pos > kBlockSize) {
+    if (!out.Write(buf + pos, kBlockSize)) {
+      return false;
+    }
+    pos += kBlockSize;
+  }
+  return out.Write(buf + pos, len - pos);
+}
     
-      /// Reset counters after a worker exits.
-  void resetWorkerCounters(size_t respawn_time);
-    
-    FLAG(string, distributed_plugin, 'tls', 'Distributed plugin name');
-    
-     private:
-  /// A configure-time pattern was expanded to match absolute paths.
-  bool recursive_match{false};
+    #include <stdint.h>
+#include <string.h>
+#include <vector>
