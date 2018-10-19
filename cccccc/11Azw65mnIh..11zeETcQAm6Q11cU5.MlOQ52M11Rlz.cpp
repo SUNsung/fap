@@ -1,292 +1,299 @@
 
         
-         protected:
-   /**
-   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
-   *
-   * @param n
-   *    The upperbound (exclusive) value of the random number.
-   * @return
-   *    A uniformly random integer value from ({0, 1, ..., n-1}).
-   */
-  virtual int Rand(int n);
+        CostAnalyzer::CostAnalyzer(const GrapplerItem& item, Cluster* cluster,
+                           const string& suffix)
+    : item_(&item),
+      measure_estimator_(cluster, 10, 0),
+      analytical_estimator_(cluster, false),
+      suffix_(suffix) {}
     
-      /** Will not return until the internal thread has exited. */
-  void StopInternalThread();
-    
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     #include <vector>
     
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
+    
+    {
+    {}  // namespace cuda
+}  // namespace stream_executor
+
+    
+    // To write value-parameterized tests, first you should define a fixture
+// class. It is usually derived from testing::TestWithParam<T> (see below for
+// another inheritance scheme that's sometimes useful in more complicated
+// class hierarchies), where the type of your parameter values.
+// TestWithParam<T> is itself derived from testing::Test. T can be any
+// copyable type. If it's a raw pointer, you are responsible for managing the
+// lifespan of the pointed values.
+    
+    // A UnitTest consists of a vector of TestCases.
+//
+// This is a singleton class.  The only instance of UnitTest is
+// created when UnitTest::GetInstance() is first called.  This
+// instance is never deleted.
+//
+// UnitTest is not copyable.
+//
+// This class is thread-safe as long as the methods are called
+// according to their specification.
+class GTEST_API_ UnitTest {
+ public:
+  // Gets the singleton UnitTest object.  The first time this method
+  // is called, a UnitTest object is constructed and returned.
+  // Consecutive calls will return the same object.
+  static UnitTest* GetInstance();
+    }
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38>
+struct Templates38 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates37<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38> Tail;
 };
     
-    #include 'caffe/layers/deconv_layer.hpp'
+      bool check_for_leaks = false;
+  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
+    check_for_leaks = true;
+  else
+    printf('%s\n', 'Run this program with --check_for_leaks to enable '
+           'custom leak checking in the tests.');
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of SigmoidLayer.
- */
-template <typename Dtype>
-class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
- public:
-  explicit CuDNNSigmoidLayer(const LayerParameter& param)
-      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSigmoidLayer();
-    }
+    #endif  // GTEST_SAMPLES_SAMPLE3_INL_H_
+
     
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
+    ```
+    
+    
+    {} // namespace caffe2
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
     }
+  }
+}
     
     ChannelCredentials::~ChannelCredentials() {}
     
-    void ChannelArguments::SetPointerWithVtable(
-    const grpc::string& key, void* value,
-    const grpc_arg_pointer_vtable* vtable) {
-  grpc_arg arg;
-  arg.type = GRPC_ARG_POINTER;
-  strings_.push_back(key);
-  arg.key = const_cast<char*>(strings_.back().c_str());
-  arg.value.pointer.p = vtable->copy(value);
-  arg.value.pointer.vtable = vtable;
-  args_.push_back(arg);
-}
-    
-    grpc_slice CoreCodegen::grpc_slice_from_static_buffer(const void* buffer,
-                                                      size_t length) {
-  return ::grpc_slice_from_static_buffer(buffer, length);
-}
-    
-      void AddProperty(const grpc::string& key,
-                   const grpc::string_ref& value) override;
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
-    
-      // implementation of ServerReflectionInfo(stream ServerReflectionRequest) rpc
-  // in ServerReflection service
-  Status ServerReflectionInfo(
-      ServerContext* context,
-      ServerReaderWriter<reflection::v1alpha::ServerReflectionResponse,
-                         reflection::v1alpha::ServerReflectionRequest>* stream)
-      override;
-    
-    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
-    : reflection_service_(new grpc::ProtoServerReflection()) {}
-    
-    	FAIL_ON_ERROR(RegSetValue(command, L'', REG_SZ, commandStr, NULL));
-    
-        if (offset < 0) {
-      // Relative to end of file; make it absolute
-      if (-offset > sbuf.st_size) {
-        offset = 0;
-      } else {
-        offset = sbuf.st_size + offset;
-      }
+    ChannelArguments::ChannelArguments(const ChannelArguments& other)
+    : strings_(other.strings_) {
+  args_.reserve(other.args_.size());
+  auto list_it_dst = strings_.begin();
+  auto list_it_src = other.strings_.begin();
+  for (auto a = other.args_.begin(); a != other.args_.end(); ++a) {
+    grpc_arg ap;
+    ap.type = a->type;
+    GPR_ASSERT(list_it_src->c_str() == a->key);
+    ap.key = const_cast<char*>(list_it_dst->c_str());
+    ++list_it_src;
+    ++list_it_dst;
+    switch (a->type) {
+      case GRPC_ARG_INTEGER:
+        ap.value.integer = a->value.integer;
+        break;
+      case GRPC_ARG_STRING:
+        GPR_ASSERT(list_it_src->c_str() == a->value.string);
+        ap.value.string = const_cast<char*>(list_it_dst->c_str());
+        ++list_it_src;
+        ++list_it_dst;
+        break;
+      case GRPC_ARG_POINTER:
+        ap.value.pointer = a->value.pointer;
+        ap.value.pointer.p = a->value.pointer.vtable->copy(ap.value.pointer.p);
+        break;
     }
-    if (offset > sbuf.st_size) {
-      offset = sbuf.st_size;
-    }
-    if (offset + bytes_to_corrupt > sbuf.st_size) {
-      bytes_to_corrupt = sbuf.st_size - offset;
-    }
-    
-    
-    {  void HeapProfile() {
-    char fname[100];
-    snprintf(fname, sizeof(fname), '%s/heap-%04d', FLAGS_db, ++heap_counter_);
-    WritableFile* file;
-    Status s = g_env->NewWritableFile(fname, &file);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      return;
-    }
-    bool ok = port::GetHeapProfile(WriteToFile, file);
-    delete file;
-    if (!ok) {
-      fprintf(stderr, 'heap profiling not supported\n');
-      g_env->DeleteFile(fname);
-    }
-  }
-};
-    
-    // Called on every log record (each one of which is a WriteBatch)
-// found in a kDescriptorFile.
-static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  VersionEdit edit;
-  Status s = edit.DecodeFrom(record);
-  if (!s.ok()) {
-    r += s.ToString();
-    r.push_back('\n');
-  } else {
-    r += edit.DebugString();
-  }
-  dst->Append(r);
-}
-    
-    #include <stdint.h>
-#include <string>
-#include 'leveldb/slice.h'
-#include 'leveldb/status.h'
-#include 'port/port.h'
-    
-    int MemTable::KeyComparator::operator()(const char* aptr, const char* bptr)
-    const {
-  // Internal keys are encoded as length-prefixed strings.
-  Slice a = GetLengthPrefixedSlice(aptr);
-  Slice b = GetLengthPrefixedSlice(bptr);
-  return comparator.Compare(a, b);
-}
-    
-      std::string Get(const std::string& k, const Snapshot* snapshot = nullptr) {
-    std::string result;
-    Status s = db_->Get(ReadOptions(), k, &result);
-    if (s.IsNotFound()) {
-      result = 'NOT_FOUND';
-    } else if (!s.ok()) {
-      result = s.ToString();
-    }
-    return result;
-  }
-    
-    static const int kCbToGreenTable[256] = {
-  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
-  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
-  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
-  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
-  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
-  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
-  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
-  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
-  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
-  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
-  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
-   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
-   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
-   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
-   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
-   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
-    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
-  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
-  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
-  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
-  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
-  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
- -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
- -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
- -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
- -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
- -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
- -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
- -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
- -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
- -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
- -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
-};
-    
-    void DCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
-    }
+    args_.push_back(ap);
   }
 }
     
-    // Entropy encoding (Huffman) utilities.
-    
-    
-    {}  // namespace guetzli
-    
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo) {
-  for (size_t i = 0; i < jpg.components.size(); ++i) {
-    const JPEGComponent& c = jpg.components[i];
-    JpegHistogram* dc_histogram = &histo[i];
-    coeff_t last_dc_coeff = 0;
-    for (int mcu_y = 0; mcu_y < jpg.MCU_rows; ++mcu_y) {
-      for (int mcu_x = 0; mcu_x < jpg.MCU_cols; ++mcu_x) {
-        for (int iy = 0; iy < c.v_samp_factor; ++iy) {
-          for (int ix = 0; ix < c.h_samp_factor; ++ix) {
-            int block_y = mcu_y * c.v_samp_factor + iy;
-            int block_x = mcu_x * c.h_samp_factor + ix;
-            int block_idx = block_y * c.width_in_blocks + block_x;
-            coeff_t dc_coeff = c.coeffs[block_idx << 6];
-            int diff = std::abs(dc_coeff - last_dc_coeff);
-            int nbits = Log2Floor(diff) + 1;
-            dc_histogram->Add(nbits);
-            last_dc_coeff = dc_coeff;
-          }
-        }
-      }
+    namespace grpc {
     }
-  }
+    
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
 }
     
-    #endif  // GUETZLI_JPEG_DATA_WRITER_H_
+    
+    {}  // namespace grpc
+    
+      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
+    
+    const ViewDescriptor& ServerReceivedMessagesPerRpcHour() {
+  const static ViewDescriptor descriptor =
+      HourDescriptor()
+          .set_name('grpc.io/server/received_messages_per_rpc/hour')
+          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+      // Add the full names of registered services
+  void SetServiceList(const std::vector<grpc::string>* services);
+    
+    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+{
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
+}
+    
+    const std::string& DHTResponseMessage::getType() const { return R; }
+    
+      virtual const std::string& getType() const CXX11_OVERRIDE;
+    
+      Time serializedTime_;
+    
+    #include 'LogFactory.h'
+#include 'Logger.h'
+#include 'util.h'
+#include 'DHTNode.h'
+#include 'DHTConnectionImpl.h'
+#include 'DHTRoutingTable.h'
+#include 'DHTMessageFactoryImpl.h'
+#include 'DHTMessageTracker.h'
+#include 'DHTMessageDispatcherImpl.h'
+#include 'DHTMessageReceiver.h'
+#include 'DHTTaskQueueImpl.h'
+#include 'DHTTaskFactoryImpl.h'
+#include 'DHTPeerAnnounceStorage.h'
+#include 'DHTTokenTracker.h'
+#include 'DHTInteractionCommand.h'
+#include 'DHTTokenUpdateCommand.h'
+#include 'DHTBucketRefreshCommand.h'
+#include 'DHTPeerAnnounceCommand.h'
+#include 'DHTEntryPointNameResolveCommand.h'
+#include 'DHTAutoSaveCommand.h'
+#include 'DHTTask.h'
+#include 'DHTRoutingTableDeserializer.h'
+#include 'DHTRegistry.h'
+#include 'DHTBucketRefreshTask.h'
+#include 'DHTMessageCallback.h'
+#include 'DHTMessageTrackerEntry.h'
+#include 'DHTMessageEntry.h'
+#include 'UDPTrackerClient.h'
+#include 'BtRegistry.h'
+#include 'prefs.h'
+#include 'Option.h'
+#include 'SocketCore.h'
+#include 'DlAbortEx.h'
+#include 'RecoverableException.h'
+#include 'a2functional.h'
+#include 'DownloadEngine.h'
+#include 'fmt.h'
+    
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
+    }
+  }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
+}
+    
+    
+    {} // namespace aria2
 
     
-    #include <folly/GLog.h>
+    class DHTTokenTracker {
+private:
+  static const size_t SECRET_SIZE = 4;
+    }
     
-    #include <stdexcept>
+    
+    {} // namespace aria2
+    
+      static const std::string E;
+    
+    TEST(ExecutorTest, KeepAliveBasic) {
+  KeepAliveTestExecutor exec;
+    }
+    
+    BENCHMARK_RELATIVE(format_short_string_safe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& shortString = getShortString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { format(&out, '{}', shortString); });
+  }
+}
+    
+    namespace detail {
+    }
     
     namespace folly {
     }
+    
+      bool is_lock_free() const noexcept {
+    // lock free unless more than EXTERNAL_OFFSET threads are
+    // contending and they all get unlucky and scheduled out during
+    // load().
+    //
+    // TODO: Could use a lock-free external map to fix this
+    // corner case.
+    return true;
+  }
