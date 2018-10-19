@@ -1,404 +1,196 @@
 
         
-          void AddDocStringArgs();
-  void AddDocStringInputs();
-  void AddDocStringAttrs();
-  void AddDocStringNameArg();
-  void AddOutputGlobals();
-  void AddDocStringOutputs();
-  void AddBody(const string& prefix);
-  void AddBodyNoReturn(const string& apply_prefix);
-  void AddExport();
-    
-    #include 'tensorflow/core/framework/common_shape_fns.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/resource_mgr.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/public/version.h'
-    
-    void CostAnalyzer::PrintAnalysis(std::ostream& os, bool per_node_report,
-                                 bool verbose) const {
-  os << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time measured in ns (serialized): ' << std::right
-     << std::setw(20) << total_time_measured_serialized_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time measured in ns (actual): ' << std::right << std::setw(20)
-     << total_time_measured_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time analytical in ns (upper bound): ' << std::right
-     << std::setw(20) << total_time_analytical_upper_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time analytical in ns (lower bound): ' << std::right
-     << std::setw(20) << total_time_analytical_lower_ << std::endl;
-  double efficiency_upper = static_cast<double>(total_time_analytical_upper_) /
-                            static_cast<double>(total_time_measured_);
-  os << std::left << std::setw(50)
-     << 'Overall efficiency (analytical upper/actual): ' << std::right
-     << std::setw(20) << efficiency_upper << std::endl;
-  double efficiency_lower = static_cast<double>(total_time_analytical_lower_) /
-                            static_cast<double>(total_time_measured_);
-  os << std::left << std::setw(50)
-     << 'Overall efficiency (analytical lower/actual): ' << std::right
-     << std::setw(20) << efficiency_lower << std::endl;
-  os << std::endl;
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Converts the given numpy ndarray to a (safe) TF_Tensor. The returned
-// TF_Tensor in `out_tensor` may have its own Python reference to `ndarray`s
-// data. After `out_tensor` is destroyed, this reference must (eventually) be
-// decremented via ClearDecrefCache().
-//
-// `out_tensor` must be non-null. Caller retains ownership of `ndarray`.
-Status PyArrayToTF_Tensor(PyObject* ndarray, Safe_TF_TensorPtr* out_tensor);
-    
-    // Creates a numpy array in 'ret' and copies the content of tensor 't'
-// into 'ret'.
-Status ConvertTensorToNdarray(const Tensor& t, PyObject** ret);
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+        #endif  // GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
 
     
-    Safe_PyObjectPtr make_safe(PyObject* object) {
-  return Safe_PyObjectPtr(object);
-}
-    
-    namespace tensorflow {
-    }
-    
-    
-    {} // namespace caffe2
-
-    
-    #include <string>
-#include <vector>
-    
-    namespace caffe2 {
-std::vector<TensorShape> FCShapeInference(
-    const OperatorDef& def,
-    const vector<TensorShape>& in,
-    bool pretransposed_weight) {
-  vector<TensorShape> out(1);
-  ArgumentHelper helper(def);
-    }
-    }
+    // This macro is for implementing ASSERT/EXPECT_DEBUG_DEATH when compiled in
+// NDEBUG mode. In this case we need the statements to be executed, the regex is
+// ignored, and the macro must accept a streamed message even though the message
+// is never printed.
+# define GTEST_EXECUTE_STATEMENT_(statement, regex) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+     GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } else \
+    ::testing::Message()
     
     
-  )DOC')
-    .Input(0, 'data', 'a 1-D tensor.')
-    .Output(
-        0,
-        'indices',
-        'Indices of duplicate elements in data, excluding first occurrences.');
-    
-      const T* input_data = input.template data<T>();
-  const TIndex* k_data = k.template data<TIndex>();
-    
-    template <typename T, class Context>
-class FlexibleTopKOp : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-    }
-    
-    X before running op:
-[[ 3.813361   -1.319647    5.2089314  -4.931328    0.6218652 ]
- [ 7.2757645   5.5552588   5.785643   -2.4790506  -0.41400087]
- [ 1.1541046  -6.933266    3.3754056   1.6569928  -1.7670316 ]
- [-3.4932013   4.891472    1.5530115  -3.2443287  -4.605099  ]
- [-4.574543   -7.360948    5.91305    -8.196495   -5.357458  ]]
-X after running op:
-[[ 3. -2.  5. -5.  0.]
- [ 7.  5.  5. -3. -1.]
- [ 1. -7.  3.  1. -2.]
- [-4.  4.  1. -4. -5.]
- [-5. -8.  5. -9. -6.]]
-    
-    
-    {	static Error parse_value(Token &token, Variant &value, Stream *p_stream, int &line, String &r_err_str, ResourceParser *p_res_parser = NULL);
-	static Error get_token(Stream *p_stream, Token &r_token, int &line, String &r_err_str);
-	static Error parse(Stream *p_stream, Variant &r_ret, String &r_err_str, int &r_err_line, ResourceParser *p_res_parser = NULL);
-};
-    
-    
-    {	return false;
-};
-    
-    	ThreadPosix();
-    
-    class DirAccessWindows : public DirAccess {
-    }
-    
-    #include 'os/mutex.h'
-#include <windows.h>
-/**
-	@author Juan Linietsky <reduzio@gmail.com>
-*/
-class MutexWindows : public Mutex {
-    }
-    
-    			port = ntohs(s6_from->sin6_port);
-    
-    #ifndef RWLOCKWINDOWS_H
-#define RWLOCKWINDOWS_H
-    
-    #ifdef __clang__
-#pragma clang diagnostic pop
-#endif
-#endif
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::find_restart_buf()
-{
-   if((position == base) && ((m_match_flags & match_not_bob) == 0))
-      return match_prefix();
-   return false;
-}
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_PREFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    
-    
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const std::basic_string<charT>& fmt,
-                         match_flag_type flags = match_default)
-{
-   return regex_merge(out, first, last, e, fmt.c_str(), flags);
-}
-    
-    template <class BidirectionalIterator, 
-          class charT = BOOST_DEDUCED_TYPENAME BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::value_type,
-          class traits = regex_traits<charT> >
-class regex_token_iterator 
-#ifndef BOOST_NO_STD_ITERATOR
-   : public std::iterator<
-         std::forward_iterator_tag, 
-         sub_match<BidirectionalIterator>,
-         typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::difference_type,
-         const sub_match<BidirectionalIterator>*,
-         const sub_match<BidirectionalIterator>& >         
-#endif
-{
-private:
-   typedef regex_token_iterator_implementation<BidirectionalIterator, charT, traits> impl;
-   typedef shared_ptr<impl> pimpl;
-public:
-   typedef          basic_regex<charT, traits>                   regex_type;
-   typedef          sub_match<BidirectionalIterator>                        value_type;
-   typedef typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::difference_type 
-                                                                            difference_type;
-   typedef          const value_type*                                       pointer;
-   typedef          const value_type&                                       reference; 
-   typedef          std::forward_iterator_tag                               iterator_category;
-   
-   regex_token_iterator(){}
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
-                        int submatch = 0, match_flag_type m = match_default)
-                        : pdata(new impl(&re, b, submatch, m))
-   {
-      if(!pdata->init(a))
-         pdata.reset();
-   }
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
-                        const std::vector<int>& submatches, match_flag_type m = match_default)
-                        : pdata(new impl(&re, b, submatches, m))
-   {
-      if(!pdata->init(a))
-         pdata.reset();
-   }
-#if !BOOST_WORKAROUND(__HP_aCC, < 60700)
-#if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
-      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
-      || BOOST_WORKAROUND(__HP_aCC, < 60700)
-   template <class T>
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
-                        const T& submatches, match_flag_type m = match_default)
-                        : pdata(new impl(&re, b, submatches, m))
-   {
-      if(!pdata->init(a))
-         pdata.reset();
-   }
-#else
-   template <std::size_t N>
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
-                        const int (&submatches)[N], match_flag_type m = match_default)
-                        : pdata(new impl(&re, b, submatches, m))
-   {
-      if(!pdata->init(a))
-         pdata.reset();
-   }
-#endif
-#endif
-   regex_token_iterator(const regex_token_iterator& that)
-      : pdata(that.pdata) {}
-   regex_token_iterator& operator=(const regex_token_iterator& that)
-   {
-      pdata = that.pdata;
-      return *this;
-   }
-   bool operator==(const regex_token_iterator& that)const
-   { 
-      if((pdata.get() == 0) || (that.pdata.get() == 0))
-         return pdata.get() == that.pdata.get();
-      return pdata->compare(*(that.pdata.get())); 
-   }
-   bool operator!=(const regex_token_iterator& that)const
-   { return !(*this == that); }
-   const value_type& operator*()const
-   { return pdata->get(); }
-   const value_type* operator->()const
-   { return &(pdata->get()); }
-   regex_token_iterator& operator++()
-   {
-      cow();
-      if(0 == pdata->next())
-      {
-         pdata.reset();
-      }
-      return *this;
-   }
-   regex_token_iterator operator++(int)
-   {
-      regex_token_iterator result(*this);
-      ++(*this);
-      return result;
-   }
-private:
-    }
-    
-        // Overrides
-    virtual void startWithTarget(Node *target) override;
-    virtual ActionCamera * reverse() const override;
-    virtual ActionCamera *clone() const override;
-    
-    #include <iterator>
-    
-        /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~PointArray();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    PointArray();
-    
-    
-    {
-    {
-    {
-    {
-    {                    float l = logf(pre_log) * _lensEffect;
-                    float new_r = expf( l ) * _radius;
-                    
-                    if (vect.getLength() > 0)
-                    {
-                        vect.normalize();
-                        Vec2 new_vect = vect * new_r;
-                        v.z += (_concave ? -1.0f : 1.0f) * new_vect.getLength() * _lensEffect;
-                    }
-                }
-                
-                setVertex(Vec2(i, j), v);
-            }
-        }
-        
-        _dirty = false;
-    }
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionProgressTimer.h'
-#include '2d/CCProgressTimer.h'
-    
-    bool TurnOffTiles::initWithDuration(float duration, const Size& gridSize, unsigned int seed)
-{
-    if (TiledGrid3DAction::initWithDuration(duration, gridSize))
-    {
-        _seed = seed;
-        _tilesOrder = nullptr;
-    }
-    }
-    
-    
-    {    return 0;
-}
-
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-    
-    {        // If a number >1 of GPUs got reported, you should find the best fit GPU for your purpose
-        // e.g. VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU if available, or with the greatest memory available, etc.
-        // for sake of simplicity we'll just take the first one, assuming it has a graphics queue family.
-        g_PhysicalDevice = gpus[0];
-        free(gpus);
-    }
-    
-      /**
-   * @brief Initialize the CAN client by specified CAN card parameters.
-   * @param parameter CAN card parameters to initialize the CAN client.
-   * @return If the initialization is successful.
-   */
-  virtual bool Init(const CANCardParameter &parameter) = 0;
-    
-    TEST_F(FakeCanClientTest, ReceiveMessage) {
-  std::vector<CanFrame> buf;
-  int32_t frame_num = FRAME_LEN;
-    }
-    
-    using apollo::common::ErrorCode;
-    
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_SOCKET_CAN_CLIENT_RAW_H_
-#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_SOCKET_CAN_CLIENT_RAW_H_
-    
-    #include 'modules/drivers/canbus/can_client/socket/socket_can_client_raw.h'
-    
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
- public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
+    {  template <typename U> void copy(linked_ptr<U> const* ptr) {
+    value_ = ptr->get();
+    if (value_)
+      link_.join(&ptr->link_);
+    else
+      link_.join_new();
   }
 };
     
-    /**
- * @file
- * @brief The class of ProtocolData
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39>
+class ValueArray39 {
+ public:
+  ValueArray39(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
+      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39) : v1_(v1), v2_(v2),
+      v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
+      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15), v16_(v16),
+      v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21), v22_(v22),
+      v23_(v23), v24_(v24), v25_(v25), v26_(v26), v27_(v27), v28_(v28),
+      v29_(v29), v30_(v30), v31_(v31), v32_(v32), v33_(v33), v34_(v34),
+      v35_(v35), v36_(v36), v37_(v37), v38_(v38), v39_(v39) {}
+    }
+    
+      // Formats an int value as '%X'.
+  static std::string FormatHexInt(int value);
+    
+    // AssertyTypeEq<T1, T2>::type is defined iff T1 and T2 are the same
+// type.  This can be used as a compile-time assertion to ensure that
+// two types are equal.
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    // This should fail when the --check_for_leaks command line flag is
+// specified.
+TEST(ListenersTest, LeaksWater) {
+  Water* water = new Water;
+  EXPECT_TRUE(water != NULL);
+}
+    
+    
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
+
+    
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar() = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd() = 0;
+    
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+          // Test write entire array
+      std::vector<unsigned char> buffer(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+    
+    #pragma once
+    
+    
+    {/**
+ * @brief Compute a hash digest from the contents of a buffer.
+ *
+ * @param hash_type The osquery-supported hash algorithm.
+ * @param buffer A caller-controlled buffer (already allocated).
+ * @param size The length of buffer in bytes.
+ * @return A string (hex) representation of the hash digest.
  */
+std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
+} // namespace osquery
+
     
-    using ::apollo::canbus::ChassisDetail;
     
-    // data file
-DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
+    {
+    {    int code = 0;
+    EXPECT_TRUE(getProcessExitCode(*process, code));
+    EXPECT_EQ(code, EXTENSION_SUCCESS_CODE);
+  }
+}
+    
+    void Initializer::platformTeardown() {
+  // Before we shutdown, we must insure to free the COM libs in windows
+  ::CoUninitialize();
+}
+    
+    #include <string>
+#include <vector>
+#include 'esd_can/include/ntcan.h'
+#include 'gflags/gflags.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    
+    {  // Synchronous transmission of CAN messages
+  int32_t send_num = *frame_num;
+  int32_t ret = bcan_send(_dev_handler, _send_frames, send_num);
+  if (ret < 0) {
+    int ret_send_error = bcan_get_status(_dev_handler);
+    AERROR << 'send message failed, error code: ' << ret
+           << ', send error: ' << ret_send_error;
+    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+  }
+  *frame_num = ret;
+  return ErrorCode::OK;
+}
+    
+    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    
+    {  ::apollo::canbus::ChassisDetail chassis_detail;
+  chassis_detail.set_car_type(::apollo::canbus::ChassisDetail::QIRUI_EQ_15);
+  EXPECT_EQ(manager.GetSensorData(&chassis_detail), ErrorCode::OK);
+  EXPECT_EQ(manager.GetSensorData(nullptr), ErrorCode::CANBUS_ERROR);
+}
+    
+      /*
+   * @brief get the length of protocol data. The length is usually 8.
+   * @return the length of protocol data.
+   */
+  virtual int32_t GetLength() const;
+    
+    TEST(ProtocolDataTest, CheckSum) {
+  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
+  const uint8_t result =
+      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
+  EXPECT_EQ(0xE7, result);
+}
