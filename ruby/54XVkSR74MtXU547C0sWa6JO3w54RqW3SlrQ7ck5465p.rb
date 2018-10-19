@@ -1,162 +1,218 @@
 
         
-                      if block_given?
-                @template_object.capture(builder, &block)
-              else
-                render_component(builder)
-              end
-            end
+        Given(%r!^I have the following (draft|post)s? within the '(.*)' directory:$!) do |type, folder, table|
+  table.hashes.each do |input_hash|
+    title = slug(input_hash['title'])
+    parsed_date = Time.xmlschema(input_hash['date']) rescue Time.parse(input_hash['date'])
     
-              add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
     
-          _normalize_layout(value)
-    end
+    module Jekyll
+  module Converters
+    class Markdown
+      class KramdownParser
+        CODERAY_DEFAULTS = {
+          'css'               => 'style',
+          'bold_every'        => 10,
+          'line_numbers'      => 'inline',
+          'line_number_start' => 1,
+          'tab_width'         => 4,
+          'wrap'              => 'div',
+        }.freeze
     
-        def cache_message(payload) # :doc:
-      case payload[:cache_hit]
-      when :hit
-        '[cache hit]'
-      when :miss
-        '[cache miss]'
-      end
-    end
+          action_launched('import')
     
-    group :app do
-  gem 'rack'
-  gem 'sinatra'
-  gem 'sinatra-contrib'
-  gem 'thin'
-  gem 'sprockets'
-  gem 'sprockets-helpers'
-  gem 'erubi'
-  gem 'browser'
-  gem 'sass'
-  gem 'coffee-script'
-end
+    module Commander
+  # This class override the run method with our custom stack trace handling
+  # In particular we want to distinguish between user_error! and crash! (one with, one without stack trace)
+  class Runner
+    # Code taken from https://github.com/commander-rb/commander/blob/master/lib/commander/runner.rb#L50
     
-        use BetterErrors::Middleware
-    BetterErrors.application_root = File.expand_path('..', __FILE__)
-    BetterErrors.editor = :sublime
-    
-        def to_a
-      @filters.dup
-    end
-    
-        def base_url
-      @base_url ||= URL.parse self.class.base_url
-    end
-    
-        def file_path_for(url)
-      File.join self.class.dir, url.remove(base_url.to_s)
-    end
-    
-            def with_redirections
-          @redirections = new.fetch_redirections
-          yield
-        ensure
-          @redirections = nil
-        end
-      end
-    
-        def format_url(url)
-      url.to_s.remove %r{\Ahttps?://}
-    end
-    
-            css('.filetree').each do |node|
-          node.content = node.css('.file').map(&:inner_html).join('\n')
-          node.name = 'pre'
-          node.remove_attribute('class')
-        end
-    
-        FUNCTION_RE = /^@function\s*(#{Sass::SCSS::RX::IDENT})(.*)$/
-    def parse_function_directive(parent, line, root, value, offset)
-      name, arg_string = line.text.scan(FUNCTION_RE).first
-      raise SyntaxError.new('Invalid function definition \'#{line.text}\'.') if name.nil?
-    
-        # The content passed to this environment. This is naturally only set
-    # for mixin body environments with content passed in.
-    #
-    # @return {[Array<Sass::Tree::Node>, Environment]?} The content nodes and
-    #   the lexical environment of the content block.
-    def content
-      @content || (@parent && @parent.content)
-    end
-    
-        # Parses the command-line arguments and runs the executable.
-    # This does not handle exceptions or exit the program.
-    #
-    # @see #parse!
-    def parse
-      @opts = OptionParser.new(&method(:set_opts))
-      @opts.parse!(@args)
-    
-          opts.on('-s', '--stdin', :NONE,
-              'Read input from standard input instead of an input file.',
-              'This is the default if no input file is specified. Requires --from.') do
-        @options[:input] = $stdin
-      end
-    
-        def common_options(opts)
-      opts.separator ''
-      opts.separator 'Common Options:'
-    
-    platforms :jruby do
-  gem 'json'
-end
-
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-        <div id='backtrace' class='condensed'>
-      <h3>BACKTRACE</h3>
-      <p><a href='#' id='expando'
-            onclick='toggleBacktrace(); return false'>(expand)</a></p>
-      <p id='nav'><strong>JUMP TO:</strong>
-         <% unless bad_request?(exception) %>
-            <a href='#get-info'>GET</a>
-            <a href='#post-info'>POST</a>
-         <% end %>
-         <a href='#cookie-info'>COOKIES</a>
-         <a href='#env-info'>ENV</a>
-      </p>
-      <div class='clear'></div>
-    
-          NO_ARG_DIRECTIVES = %i(block_all_mixed_content disown_opener
-                             upgrade_insecure_requests).freeze
-    
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+            session.action_launched(launch_context: launch_context)
       end
     end
   end
 end
 
     
-    require './plugins/pygments_code'
-require './plugins/raw'
-require 'pathname'
+            cmd << ['-am #{message.shellescape}']
+        cmd << '--force' if options[:force]
+        cmd << '-s' if options[:sign]
+        cmd << tag.shellescape
+        cmd << options[:commit].to_s if options[:commit]
     
-      # Replaces relative urls with full urls
-  def expand_urls(input, url='')
-    url ||= '/'
-    input.gsub /(\s+(href|src|poster)\s*=\s*['|']{1})(\/[^\/>]{1}[^\''>]*)/ do
-      $1+url+$3
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            message: '#{message}',
+            commit: '#{commit}'
+          })
+        end').runner.execute(:test)
+    
+          it 'adds docset_package_url param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_package_url: 'http://docset-package-url.com'
+          )
+        end').runner.execute(:test)
+    
+          it 'use custom executable' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              executable: 'custom_carthage'
+            )
+          end').runner.execute(:test)
+    
+            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
+        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
+        expect(result).to eq(pseudocommand)
+      end
+    
+          it 'works with name and password that contain spaces or `\'`' do
+        password = '\'test password\''
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: '#{password}',
+          })
+        end').runner.execute(:test)
+    
+            Fastlane::FastFile.new.parse('lane :test do
+          import_certificate ({
+            keychain_name: '#{keychain}',
+            certificate_path: '#{cert_name}',
+            certificate_password: '#{password}',
+            log_output: true
+          })
+        end').runner.execute(:test)
+      end
     end
+  end
+end
+
+    
+          it 'works with select regex' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: /AppDelegate/
+            )
+          end').runner.execute(:test)
+    
+          describe '#configuration_available?' do
+        let(:param) { { use_bundle_exec: false } }
+        let(:version) { '' }
+        before do
+          allow(action).to receive(:slather_version).and_return(Gem::Version.create(version))
+        end
+    
+          context 'when specify reporter' do
+        it 'adds reporter option' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              reporter: 'json'
+            )
+          end').runner.execute(:test)
+    
+      expect(Open3).to receive(:popen2e).with(*command).and_yield(mock_input, mock_output, mock_thread)
+end
+
+    
+        def retroactive_unblock?
+      ActiveRecord::Type.lookup(:boolean).cast(resource_params[:retroactive])
+    end
+  end
+end
+
+    
+    module Admin
+  class ReportedStatusesController < BaseController
+    before_action :set_report
+    
+      private
+    
+    class PolymorphicMentions < ActiveRecord::Migration[4.2]
+  def change
+    remove_index :mentions, column: %i(post_id)
+    remove_index :mentions, column: %i(person_id post_id), unique: true
+    rename_column :mentions, :post_id, :mentions_container_id
+    add_column :mentions, :mentions_container_type, :string
+    add_index :mentions,
+              %i(mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_mc_id_and_mc_type',
+              length: {mentions_container_type: 191}
+    add_index :mentions,
+              %i(person_id mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
+              length: {mentions_container_type: 191},
+              unique: true
+    
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
+    
+          def page_name
+        @name.gsub('-', ' ')
+      end
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+          def title
+        'Home'
+      end
+    
+      test 'edit returns nil for non-existant page' do
+    # post '/edit' fails. post '/edit/' works.
+    page = 'not-real-page'
+    path = '/'
+    post '/edit/', :content => 'edit_msg',
+         :page              => page, :path => path, :message => ''
+    page_e = @wiki.paged(page, path)
+    assert_equal nil, page_e
+  end
+    
+        @wiki = Gollum::Wiki.new(@path)
+    page  = @wiki.page('k')
+    assert_equal '바뀐 text', utf8(page.raw_data)
+    assert_equal 'ghi', page.version.message
+  end
+    
+    if options[:irb]
+  require 'irb'
+  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
+  module IRB # :nodoc:
+    def self.start_session(binding)
+      unless @__initialized
+        args = ARGV
+        ARGV.replace(ARGV.dup)
+        IRB.setup(nil)
+        ARGV.replace(args)
+        @__initialized = true
+      end
+    
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
+    
+      class Error < StandardError;
   end
