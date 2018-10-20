@@ -1,144 +1,95 @@
 
         
-        #endif  // GOOGLE_CUDA
-
+        private:
+    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
     
+    /* QComboBox that can be used with QDataWidgetMapper to select ordinal values from a model. */
+class QValueComboBox : public QComboBox
+{
+    Q_OBJECT
+    }
     
-    {  return call;
+    namespace Ui {
+    class SignVerifyMessageDialog;
 }
     
-    #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_RPC_GRPC_MASTER_SERVICE_IMPL_H_
-#define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_RPC_GRPC_MASTER_SERVICE_IMPL_H_
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(both, NULL, sig, recid) == 0);
+    CHECK(ecount == 4);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(both, &recsig, NULL, recid) == 0);
+    CHECK(ecount == 5);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(both, &recsig, sig, -1) == 0);
+    CHECK(ecount == 6);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(both, &recsig, sig, 5) == 0);
+    CHECK(ecount == 7);
+    /* overflow in signature will fail but not affect ecount */
+    memcpy(sig, over_privkey, 32);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(both, &recsig, sig, recid) == 0);
+    CHECK(ecount == 7);
     
-    #include 'tensorflow/core/distributed_runtime/partial_run_mgr.h'
-    
-    
-    {    io::RecordReaderOptions options =
-        io::RecordReaderOptions::CreateRecordReaderOptions(compression_type_);
-    reader_.reset(new io::RecordReader(file_.get(), options));
-    return Status::OK();
-  }
-    
-    #define REGISTER_GPU(T)                                           \
-  template void DynamicStitchGPUImpl(                             \
-      const Eigen::GpuDevice& gpu_device, const int32 slice_size, \
-      const int32 first_dim_size,                                 \
-      const CudaDeviceArrayStruct<int32>& input_indices,          \
-      const CudaDeviceArrayStruct<const T*>& input_ptrs, T* output);
-    
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_path, const string& db_backend) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
     }
+}
     
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
+    bool ParseInt64(const std::string& str, int64_t *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    char *endp = NULL;
+    errno = 0; // strtoll will not set errno if valid
+    long long int n = strtoll(str.c_str(), &endp, 10);
+    if(out) *out = (int64_t)n;
+    // Note that strtoll returns a *long long int*, so even if strtol doesn't report a over/underflow
+    // we still have to check that the returned value is within the range of an *int64_t*.
+    return endp && *endp == 0 && !errno &&
+        n >= std::numeric_limits<int64_t>::min() &&
+        n <= std::numeric_limits<int64_t>::max();
+}
     
-      /**
-   * @brief Initialize the Random number generations if needed by the
-   *    transformation.
-   */
-  void InitRand();
+    void read_image(std::ifstream* image_file, std::ifstream* label_file,
+        uint32_t index, uint32_t rows, uint32_t cols,
+        char* pixels, char* label) {
+  image_file->seekg(index * rows * cols + 16);
+  image_file->read(pixels, rows * cols);
+  label_file->seekg(index + 8);
+  label_file->read(label, 1);
+}
     
-    #endif  // CAFFE_BASE_CONVOLUTION_LAYER_HPP_
+      vector<shared_ptr<Batch<Dtype> > > prefetch_;
+  BlockingQueue<Batch<Dtype>*> prefetch_free_;
+  BlockingQueue<Batch<Dtype>*> prefetch_full_;
+  Batch<Dtype>* prefetch_current_;
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
 
     
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
+    namespace caffe {
     }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
     
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t bias_desc_;
+  cudnnFilterDescriptor_t filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
      protected:
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -146,176 +97,151 @@ class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
- */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
     
-    				gjk_input.m_transformA = area->get_transform__bullet() * area->get_compound_shape()->getChildTransform(y);
-				area_shape = static_cast<btConvexShape *>(area->get_compound_shape()->getChildShape(y));
+    {
+    {}}
     
     
-    {	ADD_PROPERTY(PropertyInfo(Variant::REAL, 'friction'), 'set_friction', 'get_friction');
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, 'rough'), 'set_rough', 'is_rough');
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, 'bounce'), 'set_bounce', 'get_bounce');
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, 'absorbent'), 'set_absorbent', 'is_absorbent');
+    {
+    {}}
+    
+    namespace php {
+struct Program;
 }
+struct Index;
     
-    	_FORCE_INLINE_ void apply_bias_impulse(const Vector2 &p_pos, const Vector2 &p_j) {
-    }
-    
-    		c.active = true;
-#ifdef DEBUG_ENABLED
-		if (space->is_debugging_contacts()) {
-			space->add_debug_contact(global_A + offset_A);
-			space->add_debug_contact(global_B + offset_A);
-		}
-#endif
-		int gather_A = A->can_report_contacts();
-		int gather_B = B->can_report_contacts();
-    
-    	virtual Variant area_get_param(RID p_area, AreaParameter p_param) const;
-	virtual Transform2D area_get_transform(RID p_area) const;
-	virtual void area_set_monitorable(RID p_area, bool p_monitorable);
-	virtual void area_set_collision_mask(RID p_area, uint32_t p_mask);
-	virtual void area_set_collision_layer(RID p_area, uint32_t p_layer);
-    
-    	bool body_collide_shape(RID p_body, int p_body_shape, RID p_shape, const Transform2D &p_shape_xform, const Vector2 &p_motion, Vector2 *r_results, int p_result_max, int &r_result_count) {
-		return physics_2d_server->body_collide_shape(p_body, p_body_shape, p_shape, p_shape_xform, p_motion, r_results, p_result_max, r_result_count);
-	}
-    
-    class Physics2DTestMotionResult;
-    
-    	ground_horizon_color = p_ground_horizon;
-	_queue_update();
-}
-Color ProceduralSky::get_ground_horizon_color() const {
-    
-    	bool push_back(const T &p_elem);
-    
-      virtual void onAbortOutstandingRequestEvent(
-      const BtAbortOutstandingRequestEvent& event) CXX11_OVERRIDE
-  {
+      void branchFar(Label& l,
+                 BranchConditions bc = BranchConditions::Always,
+                 LinkReg lr = LinkReg::DoNotTouch,
+                 ImmType immt = ImmType::TocOnly,
+                 bool immMayChange = false) {
+    l.branchFar(*this, bc, lr, immt, immMayChange);
   }
     
-    bool AbstractOptionHandler::getChangeOptionForReserved() const
+    CONFIG_BODY(bool, Bool)
+CONFIG_BODY(char, Byte)
+CONFIG_BODY(unsigned char, UByte)
+CONFIG_BODY(int16_t, Int16)
+CONFIG_BODY(uint16_t, UInt16)
+CONFIG_BODY(int32_t, Int32)
+CONFIG_BODY(uint32_t, UInt32)
+CONFIG_BODY(int64_t, Int64)
+CONFIG_BODY(uint64_t, UInt64)
+CONFIG_BODY(double, Double)
+CONFIG_BODY(std::string, String)
+    
+    #endif // incl_HPHP_DEBUGGABLE_H_
+
+    
+    protected:
+  ExtendedException(const std::string& msg, ArrayData* backTrace);
+  void computeBacktrace(bool skipFrame = false);
+    
+    inline ExecutionContext::ErrorState ExecutionContext::getErrorState() const {
+  return m_errorState;
+}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      virtual bool isReply() const CXX11_OVERRIDE;
+    
+      // localnode
+  // 8bytes reserved
+  readBytes(fp, buf, buf.size(), 8);
+  // localnode ID
+  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
+  auto localNode = std::make_shared<DHTNode>(buf);
+  // 4bytes reserved
+  readBytes(fp, buf, buf.size(), 4);
+    
+      // localnode
+  // 8bytes reserved
+  WRITE_CHECK(fp, zero, 8);
+  // 20bytes localnode ID
+  WRITE_CHECK(fp, localNode_->getID(), DHT_ID_LENGTH);
+  // 4bytes reserved
+  WRITE_CHECK(fp, zero, 4);
+    
+    #endif // D_DHT_TASK_FACTORY_IMPL_H
+
+    
+    void DHTTaskQueueImpl::executeTask()
 {
-  return flags_ & FLAG_CHANGE_OPTION_FOR_RESERVED;
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
 }
     
-    class HttpConnection;
-class SocketCore;
+    class DHTTokenTracker;
     
-    public:
-  AbstractProxyResponseCommand(
-      cuid_t cuid, const std::shared_ptr<Request>& req,
-      const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
-      const std::shared_ptr<HttpConnection>& httpConnection, DownloadEngine* e,
-      const std::shared_ptr<SocketCore>& s);
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
+};
     
-    class ActivePeerConnectionCommand : public Command {
-private:
-  RequestGroup* requestGroup_;
-  std::shared_ptr<BtRuntime> btRuntime_;
-  std::shared_ptr<PieceStorage> pieceStorage_;
-  std::shared_ptr<PeerStorage> peerStorage_;
-  std::shared_ptr<BtAnnounce> btAnnounce_;
+    void ComputeBlockIDCTDouble(double block[64]) {
+  TransformBlock(block, IDCT1d);
+}
+    
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    namespace guetzli {
     }
     
-      int64_t totalLength_;
-    
-    AnnounceTier::~AnnounceTier() = default;
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+    namespace guetzli {
     }
     
-    
-    {} // namespace aria2
-    
-    
-    {  return true;
+    void TerminateHandler() {
+  fprintf(stderr, 'Unhandled exception. Most likely insufficient memory available.\n'
+          'Make sure that there is 300MB/MPix of memory available.\n');
+  exit(1);
 }
     
-    
-    {
-    {
-    {}  // namespace math
-}  // namespace common
-}  // namespace apollo
-    
-      std::vector<const Obstacle*> obstacles_;
-    
-      bool HaveHighConfidence(std::shared_ptr<VisualObject> obj_ptr);
-    
-     private:
-  void BuildPredictedEnvironment(
-      const std::vector<const Obstacle*>& obstacles,
-      const double ego_vehicle_s,
-      const double ego_vehicle_d,
-      const std::vector<common::PathPoint>& discretized_reference_line);
-    
-      const double dx1 = cos_heading_ * half_length_;
-  const double dy1 = sin_heading_ * half_length_;
-  const double dx2 = sin_heading_ * half_width_;
-  const double dy2 = -cos_heading_ * half_width_;
-  const double dx3 = box.cos_heading() * box.half_length();
-  const double dy3 = box.sin_heading() * box.half_length();
-  const double dx4 = box.sin_heading() * box.half_width();
-  const double dy4 = -box.cos_heading() * box.half_width();
-    
-    bool Polygon2d::HasOverlap(const LineSegment2d &line_segment) const {
-  CHECK_GE(points_.size(), 3);
-  if ((line_segment.start().x() < min_x_ && line_segment.end().x() < min_x_) ||
-      (line_segment.start().x() > max_x_ && line_segment.end().x() > max_x_) ||
-      (line_segment.start().y() < min_y_ && line_segment.end().y() < min_y_) ||
-      (line_segment.start().y() > max_y_ && line_segment.end().y() > max_y_)) {
-    return false;
-  }
-  Vec2d first;
-  Vec2d last;
-  return GetOverlap(line_segment, &first, &last);
+    // Returns non-zero if and only if x has a zero byte, i.e. one of
+// x & 0xff, x & 0xff00, ..., x & 0xff00000000000000 is zero.
+inline uint64_t HasZeroByte(uint64_t x) {
+  return (x - 0x0101010101010101ULL) & ~x & 0x8080808080808080ULL;
 }
     
-    bool MultiCamerasProjection::Project(const CarPose &pose,
-                                     const ProjectOption &option,
-                                     Light *light) const {
-  const Eigen::Matrix4d mpose = pose.pose();
-  const apollo::hdmap::Signal &tl_info = light->info;
-  bool ret = true;
-    }
-    
-    
-    {  ReviseOption option(100);
-  for (size_t i = 0; i < color_list.size(); ++i) {
-    std::vector<LightPtr> light;
-    light.emplace_back(new Light);
-    light[0]->status.color = TLColor(color_list[i]);
-    reviser_->Revise(option, &light);
-    option.ts = ts_list[i];
-    ASSERT_TRUE(TLColor(gt_list[i]) == light[0]->status.color) << ' i: ' << i;
-  }
-}
-    
-      /**
-   * @brief Destructor
-   */
-  virtual ~Planner() = default;
+    typedef int16_t coeff_t;
