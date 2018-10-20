@@ -1,131 +1,125 @@
 
         
-                # Insert the include statement to MANIFEST.in if not present
-        with open(manifest_path, 'a+') as manifest:
-            manifest.seek(0)
-            manifest_content = manifest.read()
-            if not 'include fastentrypoints.py' in manifest_content:
-                manifest.write(('\n' if manifest_content else '')
-                               + 'include fastentrypoints.py')
+        secret_msg = b'Secret message goes here'
+    
+    for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
+    
+        # Are checkable fields missing from the test case definition?
+    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
+                          for key, value in got_dict.items()
+                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
+    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
+    if missing_keys:
+        def _repr(v):
+            if isinstance(v, compat_str):
+                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
+            else:
+                return repr(v)
+        info_dict_str = ''
+        if len(missing_keys) != len(expected_dict):
+            info_dict_str += ''.join(
+                '    %s: %s,\n' % (_repr(k), _repr(v))
+                for k, v in test_info_dict.items() if k not in missing_keys)
     
     
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
+FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8'
+JSON_CONTENT_TYPE = 'application/json'
+JSON_ACCEPT = '{0}, */*'.format(JSON_CONTENT_TYPE)
+DEFAULT_UA = 'HTTPie/%s' % __version__
+    
+        def __init__(self, msg, with_headers=True, with_body=True,
+                 on_body_chunk_downloaded=None):
+        '''
+        :param msg: a :class:`models.HTTPMessage` subclass
+        :param with_headers: if `True`, headers will be included
+        :param with_body: if `True`, body will be included
+    
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
     
     
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
     
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
+class TestBinaryRequestData:
     
     
-@pytest.mark.parametrize('command', [
-    Command('apt list --upgradable', no_match_output),
-    Command('sudo apt list --upgradable', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
     
-    lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
-                               cooldown=0,
-                               patience=5,
-                               min_lr=0.5e-6)
-    
-    
-def test_imdb():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = imdb.load_data()
-        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = imdb.get_word_index()
-        assert isinstance(word_index, dict)
-    
-    __Note on specifying the initial state of RNNs__
+        @pytest.mark.parametrize('header, expected_filename', [
+        ('attachment; filename=hello-WORLD_123.txt', 'hello-WORLD_123.txt'),
+        ('attachment; filename='.hello-WORLD_123.txt'', 'hello-WORLD_123.txt'),
+        ('attachment; filename='white space.txt'', 'white space.txt'),
+        (r'attachment; filename='\'quotes\'.txt'', ''quotes'.txt'),
+        ('attachment; filename=/etc/hosts', 'hosts'),
+        ('attachment; filename=', None)
+    ])
+    def test_Content_Disposition_parsing(self, header, expected_filename):
+        assert filename_from_content_disposition(header) == expected_filename
     
     
-max_features = 20000
-# cut texts after this number of words
-# (among top max_features most common words)
-maxlen = 100
-batch_size = 32
-    
-    for i, (input_text, target_text) in enumerate(zip(input_texts, target_texts)):
-    for t, char in enumerate(input_text):
-        encoder_input_data[i, t, input_token_index[char]] = 1.
-    for t, char in enumerate(target_text):
-        # decoder_target_data is ahead of decoder_input_data by one timestep
-        decoder_input_data[i, t, target_token_index[char]] = 1.
-        if t > 0:
-            # decoder_target_data will be ahead by one timestep
-            # and will not include the start character.
-            decoder_target_data[i, t - 1, target_token_index[char]] = 1.
-    
-        # Sampling loop for a batch of sequences
-    # (to simplify, here we assume a batch of size 1).
-    stop_condition = False
-    decoded_sentence = ''
-    while not stop_condition:
-        output_tokens, h, c = decoder_model.predict(
-            [target_seq] + states_value)
-    
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+def test_help():
+    r = http('--help', error_exit_ok=True)
+    assert r.exit_status == httpie.ExitStatus.OK
+    assert 'https://github.com/jakubroztocil/httpie/issues' in r
     
     
-def cleanup_files(files):
-    for file in files:
-        os.remove(file)
+class TestVerboseFlag:
+    def test_verbose(self, httpbin):
+        r = http('--verbose',
+                 'GET', httpbin.url + '/get', 'test-header:__test__')
+        assert HTTP_OK in r
+        assert r.count('__test__') == 2
     
-    __all__ = ['facebook_download']
     
-    def get_single_photo_url(url):
-    page = get_html(url)
-    pid = get_photo_id(url, page)
-    title = match1(page, pattern_inline_title)
-    if match1(page, pattern_inline_video_mark):
-        api_key = get_api_key(page)
-        reply = get_content(tmpl_api_call_photo_info % (api_key, get_photo_id(url, page)))
-        secret = json.loads(reply)['photo']['secret']
-        return get_orig_video_source(api_key, pid, secret), title
-    #last match always has the best resolution
-    match = match1(page, pattern_inline_img_url)
-    return 'https:' + match.replace('\\', ''), title
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'GroupCommitResolution'
+        db.create_table(
+            'sentry_groupcommitresolution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'group_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'commit_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'datetime', self.gf('django.db.models.fields.DateTimeField')(
+                        db_index=True
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['GroupCommitResolution'])
+    
+        complete_apps = ['sentry']
+
+    
+            # User chose to not deal with backwards NULL issues for 'Environment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'Environment.project_id' and its values cannot be restored.'
+        )
