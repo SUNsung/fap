@@ -1,160 +1,105 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      void Compute(OpKernelContext* context) override {
-    // Output a scalar string.
-    Tensor* output_tensor = nullptr;
-    OP_REQUIRES_OK(context,
-                   context->allocate_output(0, TensorShape(), &output_tensor));
-    auto output = output_tensor->scalar<string>();
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Safe container for an owned PyObject. On destruction, the reference count of
-// the contained object will be decremented.
-using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
-Safe_PyObjectPtr make_safe(PyObject* o);
-    
-    
+        
     {
-    {}  // namespace swig
-}  // namespace tensorflow
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+
     
-    namespace stream_executor {
+    void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
+    string comments = location.leading_comments.empty() ?
+        location.trailing_comments : location.leading_comments;
+    if (comments.empty()) {
+        return;
     }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-     private:
-  void SetText(std::string& text);
-  std::string GetText();
-  void Clear();
-    
-    void MenuItem::SetChecked(bool checked) {
-  // Set active will cause 'activate' to be emitted, so block here
-  block_active_ = true;
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
-  block_active_ = false;
+    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
+    // node of a summary element, not part of an attribute.
+    comments = StringReplace(comments, '&', '&amp;', true);
+    comments = StringReplace(comments, '<', '&lt;', true);
+    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
+    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
+    // but that needs to be part of a bigger effort to understand the markdown better anyway.
+    printer->Print('/// <summary>\n');
+    bool last_was_empty = false;
+    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
+    // to preserve the blank lines themselves, as this is relevant in the markdown.
+    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
+    // (We don't skip 'just whitespace' lines, either.)
+    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+        string line = *it;
+        if (line.empty()) {
+            last_was_empty = true;
+        } else {
+            if (last_was_empty) {
+                printer->Print('///\n');
+            }
+            last_was_empty = false;
+            printer->Print('///$line$\n', 'line', *it);
+        }
+    }
+    printer->Print('/// </summary>\n');
 }
     
+    #include <sstream>
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
-};
+    int ImmutableExtensionLiteGenerator::GenerateRegistrationCode(
+    io::Printer* printer) {
+  printer->Print(
+    'registry.add($scope$.$name$);\n',
+    'scope', scope_,
+    'name', UnderscoresToCamelCase(descriptor_));
+  return 7;
+}
     
-    namespace extensions {
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace objectivec {
+    }
+    }
+    }
     }
     
-      protected:
-    ~NwScreenIsMonitorStartedFunction() override {}
-    DECLARE_EXTENSION_FUNCTION('nw.Screen.isMonitorStarted', UNKNOWN)
+    // A simple macro to mark codes that are not implemented, so that when the code
+// is executed we will see a fatal log.
+#define NOT_IMPLEMENTED LOG(FATAL) << 'Not Implemented Yet'
     
-      /**
-   * @brief Initialize the Random number generations if needed by the
-   *    transformation.
-   */
-  void InitRand();
-    
-    /// @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$.
-template <typename Dtype>
-class UniformFiller : public Filler<Dtype> {
+    template <typename Dtype>
+class LayerRegistry {
  public:
-  explicit UniformFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), Dtype(this->filler_param_.min()),
-        Dtype(this->filler_param_.max()), blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
+  typedef shared_ptr<Layer<Dtype> > (*Creator)(const LayerParameter&);
+  typedef std::map<string, Creator> CreatorRegistry;
+    }
     
-    #endif  // CAFFE_INTERNAL_THREAD_HPP_
-
-    
-    #endif  // CAFFE_ACCURACY_LAYER_HPP_
-
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
     
     /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
+ * @brief Index into the input blob along its first axis.
  *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
  */
 template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
+class BatchReindexLayer : public Layer<Dtype> {
  public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
+  explicit BatchReindexLayer(const LayerParameter& param)
       : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
   virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
     }
     
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    #include 'caffe/layers/base_conv_layer.hpp'
     
      protected:
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -162,34 +107,144 @@ class ArgMaxLayer : public Layer<Dtype> {
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
     
-void register_fd(int fd) {
-  struct pollfd pfd = {0};
-  pfd.fd = fd;
-  pfd.events = POLLIN;
-  pollfds.push_back(pfd);
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
+    
+    static internal::GrpcLibraryInitializer g_gli_initializer;
+ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
+    
+    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
+  return !operator==(rhs);
 }
     
-    namespace caffe2 {
+    void ChannelArguments::SetPointer(const grpc::string& key, void* value) {
+  static const grpc_arg_pointer_vtable vtable = {
+      &PointerVtableMembers::Copy, &PointerVtableMembers::Destroy,
+      &PointerVtableMembers::Compare};
+  SetPointerWithVtable(key, value, &vtable);
+}
+    
+    CompletionQueue::CompletionQueueTLSCache::~CompletionQueueTLSCache() {
+  GPR_ASSERT(flushed_);
+}
+    
+    size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size) {
+  GrpcTraceContext trace_ctxt(context);
+  return TraceContextEncoding::Encode(trace_ctxt, tracing_buf,
+                                      tracing_buf_size);
+}
+    
+    namespace grpc {
     }
     
-    #ifndef CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
-#define CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
+    #ifndef GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+#define GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
     
-    #if BOOST_ATOMIC_THREAD_FENCE > 0
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::thread_fence(order);
+    #include <grpc/support/cpu.h>
+    
+    namespace dmlc {
+DMLC_REGISTRY_ENABLE(::xgboost::TreeUpdaterReg);
+}  // namespace dmlc
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+      CanAgent agent_a(param_ptr_a.get());
+  CanAgent agent_b(param_ptr_b.get());
+  agent_a.AddOtherAgent(&agent_b);
+  agent_b.AddOtherAgent(&agent_a);
+  if (!agent_a.Start()) {
+    AERROR << 'Agent a start failed.';
+    return -1;
+  }
+  if (FLAGS_only_one_send) {
+    agent_b.is_receiving(true);
+    agent_b.is_sending_finish(true);
+  } else {
+    if (!agent_b.Start()) {
+      AERROR << 'Agent b start failed.';
+      return -1;
+    }
+  }
+    
+    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
+    
+      /**
+   * @brief Start the ESD CAN client.
+   * @return The status of the start action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Start() override;
+    
+    using apollo::common::ErrorCode;
+    
+    #endif  // MODULES_DRIVERS_CANBUS_CAN_CLIENT_FAKE_FAKE_CAN_CLIENT_H_
+
+    
+    
+    {  auto ret = recv_client_->Receive(&buf, &frame_num);
+  EXPECT_EQ(ret, ErrorCode::OK);
+  recv_client_->Stop();
 }
-#else
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::thread_fence();
+    
+      /**
+   * @brief Receive messages
+   * @param frames The messages to receive.
+   * @param frame_num The amount of messages to receive.
+   * @return The status of the receiving action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  virtual apollo::common::ErrorCode Receive(std::vector<CanFrame> *const frames,
+                                            int32_t *const frame_num);
+  /**
+   * @brief Get the error string.
+   * @param status The status to get the error string.
+   */
+  virtual std::string GetErrorString(const int32_t status);
+  /**
+   * @brief Set inited status.
+   * @param if status is inited.
+   */
+  void SetInited(bool init);
+    
+    int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  int ret = RUN_ALL_TESTS();
+  return ret;
 }
-#endif
+
+    
+    #include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/message_manager.h'
+    
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    const int32_t CANBUS_MESSAGE_LENGTH = 8;  // according to ISO-11891-1
+const int32_t MAX_CAN_PORT = 3;
