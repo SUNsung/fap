@@ -1,213 +1,262 @@
 
         
-        #ifndef TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
+        #define TEGRA_MAX(src1, sz1, src2, sz2, dst, sz, w, h) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    CAROTENE_NS::max(CAROTENE_NS::Size2D(w, h), \
+                     src1, sz1, \
+                     src2, sz2, \
+                     dst, sz), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    PyTypeObject TensorReleaserType = {
-    PyVarObject_HEAD_INIT(nullptr, 0) /* head init */
-    'tensorflow_wrapper',             /* tp_name */
-    sizeof(TensorReleaser),           /* tp_basicsize */
-    0,                                /* tp_itemsize */
-    /* methods */
-    TensorReleaser_dealloc,      /* tp_dealloc */
-    nullptr,                     /* tp_print */
-    nullptr,                     /* tp_getattr */
-    nullptr,                     /* tp_setattr */
-    nullptr,                     /* tp_compare */
-    nullptr,                     /* tp_repr */
-    nullptr,                     /* tp_as_number */
-    nullptr,                     /* tp_as_sequence */
-    nullptr,                     /* tp_as_mapping */
-    nullptr,                     /* tp_hash */
-    nullptr,                     /* tp_call */
-    nullptr,                     /* tp_str */
-    nullptr,                     /* tp_getattro */
-    nullptr,                     /* tp_setattro */
-    nullptr,                     /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT,          /* tp_flags */
-    'Wrapped TensorFlow Tensor', /* tp_doc */
-    nullptr,                     /* tp_traverse */
-    nullptr,                     /* tp_clear */
-    nullptr,                     /* tp_richcompare */
-};
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    string TransposeString(Transpose t) {
-  switch (t) {
-    case Transpose::kNoTranspose:
-      return 'NoTranspose';
-    case Transpose::kTranspose:
-      return 'Transpose';
-    case Transpose::kConjugateTranspose:
-      return 'ConjugateTranspose';
-    default:
-      LOG(FATAL) << 'Unknown transpose ' << static_cast<int32>(t);
-  }
-}
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    ScopedActivateExecutorContext &&other)
-    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
-  other.driver_scoped_activate_context_ = nullptr;
-}
-    
-      // Next, add requirements.
-  if (covariantSelf) {
-    auto paramTy = GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
-    Requirement reqt(RequirementKind::Superclass, paramTy, substConcreteType);
-    builder.addRequirement(reqt, source, nullptr);
-  }
-    
-      char *oldAllocation = Allocated;
-  char *oldBegin = Begin;
-  std::size_t oldSize = (std::size_t) (End - oldBegin);
-    
-    #include 'swift/Basic/Unicode.h'
-    
-    #if GTEST_HAS_GLOBAL_WSTRING
-  // Converts the given wide string to a narrow string using the UTF-8
-  // encoding, and streams the result to this Message object.
-  Message& operator <<(const ::wstring& wstr);
-#endif  // GTEST_HAS_GLOBAL_WSTRING
-    
-    // Typed (aka type-driven) tests repeat the same test for types in a
-// list.  You must know which types you want to test with when writing
-// typed tests. Here's how you do it:
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT5.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, #v5, v1, v2, v3, v4, v5), \
-                on_failure)
-    
-      // An enumeration of possible roles that may be taken when a death
-  // test is encountered.  EXECUTE means that the death test logic should
-  // be executed immediately.  OVERSEE means that the program should prepare
-  // the appropriate environment for a child process to execute the death
-  // test, then wait for it to complete.
-  enum TestRole { OVERSEE_TEST, EXECUTE_TEST };
-    
-    template <typename T, typename U>
-void CopyArray(const T* from, size_t size, U* to);
-    
-    
-    {  // Sets the 0-terminated C string this MyString object represents.
-  void Set(const char* c_string);
-};
-    
-      // Set should work when the input pointer is the same as the one
-  // already in the MyString object.
-  s.Set(s.c_string());
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-    
-    #include 'leveldb/status.h'
-    
-    
-    {}  // namespace config
-    
-    namespace leveldb {
-namespace log {
-    }
+        void operator() (const uint8x8_t & v_src0, const uint8x8_t & v_src1,
+                     uint8x8_t & v_dst) const
+    {
+        v_dst = vand_u8(v_src0, v_src1);
     }
     
-          case kLastType:
-        if (!in_fragmented_record) {
-          ReportCorruption(fragment.size(),
-                           'missing start of fragmented record(2)');
-        } else {
-          scratch->append(fragment.data(), fragment.size());
-          *record = Slice(*scratch);
-          last_record_offset_ = prospective_record_offset;
-          return true;
-        }
-        break;
+    #include 'common.hpp'
     
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
+                uint32x4_t s1 = vmovq_n_u32(0);
+            uint32x4_t s2 = vmovq_n_u32(0);
     
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
+            //left&right borders
+        if (borderType != BORDER_MODE_CONSTANT)
+            for (s32 k = 0; k < cn; ++k)
+            {
+                lane[-cn+k] = lane[idx_l1 + k];
+                lane[-cn-cn+k] = lane[idx_l2 + k];
+    }
     
-    void MemTable::Add(SequenceNumber s, ValueType type,
-                   const Slice& key,
-                   const Slice& value) {
-  // Format of an entry is concatenation of:
-  //  key_size     : varint32 of internal_key.size()
-  //  key bytes    : char[internal_key.size()]
-  //  value_size   : varint32 of value.size()
-  //  value bytes  : char[value.size()]
-  size_t key_size = key.size();
-  size_t val_size = value.size();
-  size_t internal_key_size = key_size + 8;
-  const size_t encoded_len =
-      VarintLength(internal_key_size) + internal_key_size +
-      VarintLength(val_size) + val_size;
-  char* buf = arena_.Allocate(encoded_len);
-  char* p = EncodeVarint32(buf, internal_key_size);
-  memcpy(p, key.data(), key_size);
-  p += key_size;
-  EncodeFixed64(p, (s << 8) | type);
-  p += 8;
-  p = EncodeVarint32(p, val_size);
-  memcpy(p, value.data(), val_size);
-  assert(p + val_size == buf + encoded_len);
-  table_.Insert(buf);
-}
-    
-    // Snapshots are kept in a doubly-linked list in the DB.
-// Each SnapshotImpl corresponds to a particular sequence number.
-class SnapshotImpl : public Snapshot {
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
  public:
-  SnapshotImpl(SequenceNumber sequence_number)
-      : sequence_number_(sequence_number) {}
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
     }
     
-    #endif // D_DHT_RESPONSE_MESSAGE_H
-
+     private:
+  // try to prune off current leaf
+  inline int TryPruneLeaf(RegTree &tree, int nid, int depth, int npruned) { // NOLINT(*)
+    if (tree[nid].IsRoot()) return npruned;
+    int pid = tree[nid].Parent();
+    RegTree::NodeStat &s = tree.Stat(pid);
+    ++s.leaf_child_cnt;
+    if (s.leaf_child_cnt >= 2 && param_.NeedPrune(s.loss_chg, depth - 1)) {
+      // need to be pruned
+      tree.ChangeToLeaf(pid, param_.learning_rate * s.base_weight);
+      // tail recursion
+      return this->TryPruneLeaf(tree, pid, depth - 1, npruned + 2);
+    } else {
+      return npruned;
+    }
+  }
+  /*! \brief do pruning of a tree */
+  inline void DoPrune(RegTree &tree) { // NOLINT(*)
+    int npruned = 0;
+    // initialize auxiliary statistics
+    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
+      tree.Stat(nid).leaf_child_cnt = 0;
+    }
+    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
+      if (tree[nid].IsLeaf()) {
+        npruned = this->TryPruneLeaf(tree, nid, tree.GetDepth(nid), npruned);
+      }
+    }
+    if (!param_.silent) {
+      LOG(INFO) << 'tree pruning end, ' << tree.param.num_roots << ' roots, '
+                << tree.NumExtraNodes() << ' extra nodes, ' << npruned
+                << ' pruned nodes, max_depth=' << tree.MaxDepth();
+    }
+  }
     
-    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
+    /**
+ * @brief Parser plugin for logger configurations.
+ */
+class LoggerConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {kLoggerKey};
+  }
+    }
     
-    #endif // D_DHT_TASK_H
-
+      // serialize the QueryLogItem and make sure decorations go top level
+  auto doc = JSON::newObject();
+  auto status = serializeQueryLogItem(item, doc);
+  std::string expected = 'test';
+  std::string result = doc.doc()['load_test'].GetString();
+  EXPECT_EQ(result, expected);
     
-    #include <memory>
+      // We use a restricted scope below to change the data structure from
+  // an array to a set. This lets us do deletes much more efficiently
+  std::vector<std::string> created_views;
+  std::set<std::string> erase_views;
+  {
+    std::vector<std::string> old_views_vec;
+    scanDatabaseKeys(kQueries, old_views_vec, kConfigViews);
+    for (const auto& view : old_views_vec) {
+      erase_views.insert(view.substr(kConfigViews.size()));
+    }
+  }
     
-      virtual std::shared_ptr<DHTTask>
-  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                 int numRetry = 0) CXX11_OVERRIDE;
+    /// Unlike checkChildProcessStatus, this will block until process exits.
+static bool getProcessExitCode(osquery::PlatformProcess& process,
+                               int& exitCode) {
+  if (!process.isValid()) {
+    return false;
+  }
+    }
     
-      std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port,
-                            const unsigned char* secret) const;
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
     
-    void DHTTokenUpdateCommand::setTokenTracker(DHTTokenTracker* tokenTracker)
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+    
+    #include 'imgui.h'
+#include 'imgui_impl_dx10.h'
+    
+    // DirectX data
+static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
+static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
+static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
+static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+    
+    bool ImGui_ImplVulkan_CreateDeviceObjects()
 {
-  tokenTracker_ = tokenTracker;
+    VkResult err;
+    VkShaderModule vert_module;
+    VkShaderModule frag_module;
+    }
+    
+        // Render characters, setup ImFont and glyphs for runtime
+    for (int input_i = 0; input_i < atlas->ConfigData.Size; input_i++)
+    {
+        ImFontConfig& cfg = atlas->ConfigData[input_i];
+        FreeTypeFont& font_face = fonts[input_i];
+        ImFont* dst_font = cfg.DstFont;
+        if (cfg.MergeMode)
+            dst_font->BuildLookupTable();
+    }
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-03-22: Added FreeGLUT Platform binding.
+    
+      // REQUIRES: called exactly once per iteration of the benchmarking loop.
+  // Set the manually measured time for this benchmark iteration, which
+  // is used instead of automatically measured time if UseManualTime() was
+  // specified.
+  //
+  // For threaded benchmarks the final value will be set to the largest
+  // reported values.
+  void SetIterationTime(double seconds);
+    
+    #include <cmath>
+#include <iosfwd>
+#include <limits>
+#include <string>
+#include <vector>
+    
+      LogType& GetLog() { return log_; }
+    
+    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
+                 va_list args) {
+#ifdef BENCHMARK_OS_WINDOWS
+  ((void)out);  // suppress unused warning
+    }
+    
+    #include 'counter.h'
+    
+    #include 'string_util.h'
+#include 'timers.h'
+#include 'check.h'
+    
+    
+    {
+    {
+    {  // Native Client does not provide any API to access cycle counter.
+  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
+  // because is provides nanosecond resolution (which is noticable at
+  // least for PNaCl modules running on x86 Mac & Linux).
+  // Initialize to always return 0 if clock_gettime fails.
+  struct timespec ts = { 0, 0 };
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
+#elif defined(__aarch64__)
+  // System timer of ARMv8 runs at a different frequency than the CPU's.
+  // The frequency is fixed, typically in the range 1-50MHz.  It can be
+  // read at CNTFRQ special register.  We assume the OS has set up
+  // the virtual timer properly.
+  int64_t virtual_timer_value;
+  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
+  return virtual_timer_value;
+#elif defined(__ARM_ARCH)
+  // V6 is the earliest arch that has a standard cyclecount
+  // Native Client validator doesn't allow MRC instructions.
+#if (__ARM_ARCH >= 6)
+  uint32_t pmccntr;
+  uint32_t pmuseren;
+  uint32_t pmcntenset;
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
+      // The counter is set up to count every 64th cycle
+      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+    }
+  }
+#endif
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#elif defined(__mips__)
+  // mips apparently only allows rdtsc for superusers, so we fall
+  // back to gettimeofday.  It's possible clock_gettime would be better.
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#else
+// The soft failover to a generic implementation is automatic only for ARM.
+// For other platforms the developer is expected to make an attempt to create
+// a fast implementation and use generic version if nothing better is available.
+#error You need to define CycleTimer for your OS and CPU
+#endif
 }
+}  // end namespace cycleclock
+}  // end namespace benchmark
     
+    namespace benchmark {
+    }
     
-    {  void setTokenTracker(DHTTokenTracker* tokenTracker);
-};
-    
-    bool DHTUnknownMessage::send() { return true; }
-    
-    DNSCache::CacheEntry::~CacheEntry() = default;
+      const CPUInfo &info = context.cpu_info;
+  Out << 'Run on (' << info.num_cpus << ' X '
+      << (info.cycles_per_second / 1000000.0) << ' MHz CPU '
+      << ((info.num_cpus > 1) ? 's' : '') << ')\n';
+  if (info.caches.size() != 0) {
+    Out << 'CPU Caches:\n';
+    for (auto &CInfo : info.caches) {
+      Out << '  L' << CInfo.level << ' ' << CInfo.type << ' '
+          << (CInfo.size / 1000) << 'K';
+      if (CInfo.num_sharing != 0)
+        Out << ' (x' << (info.num_cpus / CInfo.num_sharing) << ')';
+      Out << '\n';
+    }
+  }
