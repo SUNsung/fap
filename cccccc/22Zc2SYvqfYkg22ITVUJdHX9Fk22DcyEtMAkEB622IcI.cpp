@@ -1,617 +1,356 @@
 
         
-        /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
+            const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
     
-    #endif // BITCOIN_QT_OPENURIDIALOG_H
+    private:
+    PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing);
+    
+    #endif // BITCOIN_QT_QVALUECOMBOBOX_H
 
     
-    #include <QComboBox>
-#include <QVariant>
-    
-    #ifndef BITCOIN_REVERSELOCK_H
-#define BITCOIN_REVERSELOCK_H
-    
-    #include 'include/secp256k1_ecdh.h'
-#include 'ecmult_const_impl.h'
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+    // Verify that difficulty is 1.0 for an empty chain.
+BOOST_AUTO_TEST_CASE(get_difficulty_for_null_tip)
 {
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
+    double difficulty = GetDifficulty(nullptr);
+    RejectDifficultyMismatch(difficulty, 1.0);
 }
     
-    BOOST_FIXTURE_TEST_SUITE(blockchain_tests, BasicTestingSetup)
-    
-     private:
-  void SetText(std::string& text);
-  std::string GetText();
-  void Clear();
-    
-    void Menu::Append(MenuItem* menu_item) {
-  if (menu_item->submenu_)
-    menu_model_->AddSubMenu(menu_item->id(), menu_item->label_,
-                            menu_item->submenu_->menu_model_.get());
-  else if (menu_item->type_ == 'normal')
-    menu_model_->AddItem(menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'checkbox')
-    menu_model_->AddCheckItem(menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'separator')
-    menu_model_->AddSeparator(ui::NORMAL_SEPARATOR);
-    }
-    
-    void MenuItem::SetEnabled(bool enabled) {
-  gtk_widget_set_sensitive(menu_item_, enabled);
+    IntSimdMatrixSSE::IntSimdMatrixSSE() {
+#ifdef __SSE4_1__
+  partial_funcs_ = {PartialMatrixDotVector1};
+#endif  // __SSE4_1__
 }
     
-    class NwAppCrashBrowserFunction : public UIThreadExtensionFunction {
+    #ifndef GRAPHICS_DISABLED
+    
+    namespace tesseract {
+    }
+    
+       static size_type length(const char_type* p) 
+   { 
+      return (std::wcslen)((const wchar_t*)p); 
+   }
+    
+    
+    
+       const re_repeat* rep = pmp->rep;
+   std::size_t count = pmp->count;
+   pstate = rep->next.p;
+   const re_set_long<m_type>* set = static_cast<const re_set_long<m_type>*>(pstate);
+   position = pmp->last_position;
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         basic_regex_creator.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares template class basic_regex_creator which fills in
+  *                the data members of a regex_data object.
+  */
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares boost::basic_regex<> and associated
+  *                functions and classes. This header is the main
+  *                entry point for the template regex code.
+  */
+    
+    
+namespace boost{
+    }
+    
+    
+namespace boost{
+    }
+    
+    #endif // partial overload
+    
+    template <class OutputIterator, class charT, class Traits1, class Alloc1>
+inline std::size_t regex_split(OutputIterator out,
+                   std::basic_string<charT, Traits1, Alloc1>& s)
+{
+   return regex_split(out, s, BOOST_REGEX_DETAIL_NS::get_default_expression(charT(0)), match_default, UINT_MAX);
+}
+    
+      // Copy constructor if different value type - use getters and setters to
+  // perform conversion
+  template <typename T2>
+  XGBOOST_DEVICE explicit GradientPairInternal(const GradientPairInternal<T2> &g) {
+    SetGrad(g.GetGrad());
+    SetHess(g.GetHess());
+  }
+    
+      /**
+   * \brief Updates linear model given gradients.
+   *
+   * \param in_gpair            The gradient pair statistics of the data.
+   * \param data                Input data matrix.
+   * \param model               Model to be updated.
+   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
+   */
+    
+    /*!
+ * \brief an iterator that iterates over a configure file and gets the configures
+ */
+class ConfigIterator: public ConfigStreamReader {
  public:
-  NwAppCrashBrowserFunction() {}
+  /*!
+   * \brief constructor
+   * \param fname name of configure file
+   */
+  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi_) {
+    fi_.open(fname);
+    if (fi_.fail()) {
+      LOG(FATAL) << 'cannot open file ' << fname;
     }
-    
-    static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
-  return NULL;
-}
-static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
-  return NULL;
-}
-    
-    void EnumGenerator::Generate(io::Printer* printer) {
-  WriteEnumDocComment(printer, descriptor_);
-  printer->Print('$access_level$ enum $name$ {\n',
-                 'access_level', class_access_level(),
-                 'name', descriptor_->name());
-  printer->Indent();
-  std::set<string> used_names;
-  std::set<int> used_number;
-  for (int i = 0; i < descriptor_->value_count(); i++) {
-      WriteEnumValueDocComment(printer, descriptor_->value(i));
-      string original_name = descriptor_->value(i)->name();
-      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
-      // Make sure we don't get any duplicate names due to prefix removal.
-      while (!used_names.insert(name).second) {
-        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
-        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
-          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
-        name += '_';
-      }
-      int number = descriptor_->value(i)->number();
-      if (!used_number.insert(number).second) {
-          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
-             'original_name', original_name,
-             'name', name,
-             'number', SimpleItoa(number));
-      } else {
-          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
-             'original_name', original_name,
-             'name', name,
-             'number', SimpleItoa(number));
-      }
+    ConfigReaderBase::Init();
   }
-  printer->Outdent();
-  printer->Print('}\n');
-  printer->Print('\n');
-}
-    
-    void ImmutableMapFieldGenerator::
-GenerateMapGetters(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      '$deprecation$\n'
-      'public int ${$get$capitalized_name$Count$}$() {\n'
-      '  return internalGet$capitalized_name$().getMap().size();\n'
-      '}\n');
-  printer->Annotate('{', '}', descriptor_);
-  WriteFieldDocComment(printer, descriptor_);
-  printer->Print(
-      variables_,
-      '$deprecation$\n'
-      'public boolean ${$contains$capitalized_name$$}$(\n'
-      '    $key_type$ key) {\n'
-      '  $key_null_check$\n'
-      '  return internalGet$capitalized_name$().getMap().containsKey(key);\n'
-      '}\n');
-  printer->Annotate('{', '}', descriptor_);
-  if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
-    printer->Print(
-        variables_,
-        '/**\n'
-        ' * Use {@link #get$capitalized_name$Map()} instead.\n'
-        ' */\n'
-        '@java.lang.Deprecated\n'
-        'public java.util.Map<$boxed_key_type$, $value_enum_type$>\n'
-        '${$get$capitalized_name$$}$() {\n'
-        '  return get$capitalized_name$Map();\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public java.util.Map<$boxed_key_type$, $value_enum_type$>\n'
-        '${$get$capitalized_name$Map$}$() {\n'
-        '  return internalGetAdapted$capitalized_name$Map(\n'
-        '      internalGet$capitalized_name$().getMap());'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public $value_enum_type$ ${$get$capitalized_name$OrDefault$}$(\n'
-        '    $key_type$ key,\n'
-        '    $value_enum_type$ defaultValue) {\n'
-        '  $key_null_check$\n'
-        '  java.util.Map<$boxed_key_type$, $boxed_value_type$> map =\n'
-        '      internalGet$capitalized_name$().getMap();\n'
-        '  return map.containsKey(key)\n'
-        '         ? $name$ValueConverter.doForward(map.get(key))\n'
-        '         : defaultValue;\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public $value_enum_type$ ${$get$capitalized_name$OrThrow$}$(\n'
-        '    $key_type$ key) {\n'
-        '  $key_null_check$\n'
-        '  java.util.Map<$boxed_key_type$, $boxed_value_type$> map =\n'
-        '      internalGet$capitalized_name$().getMap();\n'
-        '  if (!map.containsKey(key)) {\n'
-        '    throw new java.lang.IllegalArgumentException();\n'
-        '  }\n'
-        '  return $name$ValueConverter.doForward(map.get(key));\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    if (SupportUnknownEnumValue(descriptor_->file())) {
-      printer->Print(
-          variables_,
-          '/**\n'
-          ' * Use {@link #get$capitalized_name$ValueMap()} instead.\n'
-          ' */\n'
-          '@java.lang.Deprecated\n'
-          'public java.util.Map<$boxed_key_type$, $boxed_value_type$>\n'
-          '${$get$capitalized_name$Value$}$() {\n'
-          '  return get$capitalized_name$ValueMap();\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$\n'
-          'public java.util.Map<$boxed_key_type$, $boxed_value_type$>\n'
-          '${$get$capitalized_name$ValueMap$}$() {\n'
-          '  return internalGet$capitalized_name$().getMap();\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$\n'
-          'public $value_type$ ${$get$capitalized_name$ValueOrDefault$}$(\n'
-          '    $key_type$ key,\n'
-          '    $value_type$ defaultValue) {\n'
-          '  $key_null_check$\n'
-          '  java.util.Map<$boxed_key_type$, $boxed_value_type$> map =\n'
-          '      internalGet$capitalized_name$().getMap();\n'
-          '  return map.containsKey(key) ? map.get(key) : defaultValue;\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$\n'
-          'public $value_type$ ${$get$capitalized_name$ValueOrThrow$}$(\n'
-          '    $key_type$ key) {\n'
-          '  $key_null_check$\n'
-          '  java.util.Map<$boxed_key_type$, $boxed_value_type$> map =\n'
-          '      internalGet$capitalized_name$().getMap();\n'
-          '  if (!map.containsKey(key)) {\n'
-          '    throw new java.lang.IllegalArgumentException();\n'
-          '  }\n'
-          '  return map.get(key);\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-    }
-  } else {
-    printer->Print(
-        variables_,
-        '/**\n'
-        ' * Use {@link #get$capitalized_name$Map()} instead.\n'
-        ' */\n'
-        '@java.lang.Deprecated\n'
-        'public java.util.Map<$type_parameters$> '
-        '${$get$capitalized_name$$}$() {\n'
-        '  return get$capitalized_name$Map();\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public java.util.Map<$type_parameters$> '
-        '${$get$capitalized_name$Map$}$() {\n'
-        '  return internalGet$capitalized_name$().getMap();\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public $value_type$ ${$get$capitalized_name$OrDefault$}$(\n'
-        '    $key_type$ key,\n'
-        '    $value_type$ defaultValue) {\n'
-        '  $key_null_check$\n'
-        '  java.util.Map<$type_parameters$> map =\n'
-        '      internalGet$capitalized_name$().getMap();\n'
-        '  return map.containsKey(key) ? map.get(key) : defaultValue;\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public $value_type$ ${$get$capitalized_name$OrThrow$}$(\n'
-        '    $key_type$ key) {\n'
-        '  $key_null_check$\n'
-        '  java.util.Map<$type_parameters$> map =\n'
-        '      internalGet$capitalized_name$().getMap();\n'
-        '  if (!map.containsKey(key)) {\n'
-        '    throw new java.lang.IllegalArgumentException();\n'
-        '  }\n'
-        '  return map.get(key);\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
+  /*! \brief destructor */
+  ~ConfigIterator() {
+    fi_.close();
   }
-}
-    
-    namespace protobuf {
-namespace compiler {
-namespace objectivec {
-    }
-    }
     }
     
-    void absDiff(const Size2D &size,
-             const f32 * src0Base, ptrdiff_t src0Stride,
-             const f32 * src1Base, ptrdiff_t src1Stride,
-             f32 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<f32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-        inline void ToRGB( const u8 *y1, const u8 *y2, const u8 *uv,
-                       u8 *dst1, u8 *dst2 )
-    {
-        uint8x8x2_t raw_uv = vld2_u8(uv);
-        uint16x8_t gu =            vmlsl_u8(convertYUV420Internals.vc8696,  raw_uv.val[1-vIdx], convertYUV420Internals.vc25);  //(8696-25*u)
-        int16x8_t ruv = (int16x8_t)vmlsl_u8(convertYUV420Internals.vc14216, raw_uv.val[vIdx], convertYUV420Internals.vc102); //(14216-102*v)
-    }
-    
-    #ifdef CAROTENE_NEON
-    if (shift >= 16)
-    {
-        if (cpolicy == CONVERT_POLICY_WRAP)
-        {
-            size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-            size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-            int16x8_t v_zero = vdupq_n_s16(0);
-    }
-    }
-    
-    #ifdef CAROTENE_NEON
-    
-      // Computes matrix.vector v = Wu.
-  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
-  // u is imagined to have an extra element at the end with value 1, to
-  // implement the bias, but it doesn't actually have it.
-  // Computes the base C++ implementation, if there are no partial_funcs_.
-  // NOTE: The size of the input vector (u) must be padded using
-  // RoundInputs above.
-  // The input will be over-read to the extent of the padding. There are no
-  // alignment requirements.
-  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                       const GenericVector<double>& scales, const int8_t* u,
-                       double* v) const;
-    
-    // Computes part of matrix.vector v = Wu. Computes N=16 results.
-// For details see PartialMatrixDotVector64 with N=16.
-static void PartialMatrixDotVector16(const int8_t* wi, const double* scales,
-                                     const int8_t* u, int num_in, int num_out,
-                                     double* v) {
-  // Register containing 16-bit ones for horizontal add with 16->32 bit
-  // conversion.
-  __m256i ones =
-      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
-  // Initialize all the results to 0.
-  __m256i result0 = _mm256_setzero_si256();
-  __m256i result1 = _mm256_setzero_si256();
-  // Iterate over the input (u), one registerful at a time.
-  for (int j = 0; j < num_in;) {
-    __m256i inputs =
-        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
-    // Inputs are processed in groups of kNumInputsPerGroup, replicated
-    // kNumInputGroups times.
-    for (int ig = 0; ig < kNumInputGroups && j < num_in;
-         ++ig, j += kNumInputsPerGroup) {
-      // Replicate the low 32 bits (4 inputs) 8 times.
-      __m256i rep_input =
-          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
-      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
-      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
-      __m256i weights, reps;
-      // Mul-add, with horizontal add of the 4 inputs to each of the results.
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
-    }
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
   }
-  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  num_out -= kNumOutputsPerRegister;
-  ExtractResults(result1, shift_id, wi, scales,
-                 std::min(kNumOutputsPerRegister, num_out), v);
-}
-    
-      // A simple array of pointers to the best assigned column division at
-  // each grid y coordinate. This pointer is passed in from the caller, so do
-  // NOT destroy it in the class.
-  ColPartitionSet** best_columns_;
-    
-    extern BLOCK_LIST *current_block_list;
-extern STRING_VAR_H (editor_image_win_name, 'EditorImage',
-'Editor image window name');
-extern INT_VAR_H (editor_image_xpos, 590, 'Editor image X Pos');
-extern INT_VAR_H (editor_image_ypos, 10, 'Editor image Y Pos');
-extern INT_VAR_H (editor_image_height, 680, 'Editor image height');
-extern INT_VAR_H (editor_image_width, 655, 'Editor image width');
-extern INT_VAR_H (editor_image_word_bb_color, BLUE,
-'Word bounding box colour');
-extern INT_VAR_H (editor_image_blob_bb_color, YELLOW,
-'Blob bounding box colour');
-extern INT_VAR_H (editor_image_text_color, WHITE, 'Correct text colour');
-extern STRING_VAR_H (editor_dbwin_name, 'EditorDBWin',
-'Editor debug window name');
-extern INT_VAR_H (editor_dbwin_xpos, 50, 'Editor debug window X Pos');
-extern INT_VAR_H (editor_dbwin_ypos, 500, 'Editor debug window Y Pos');
-extern INT_VAR_H (editor_dbwin_height, 24, 'Editor debug window height');
-extern INT_VAR_H (editor_dbwin_width, 80, 'Editor debug window width');
-extern STRING_VAR_H (editor_word_name, 'BlnWords',
-'BL normalised word window');
-extern INT_VAR_H (editor_word_xpos, 60, 'Word window X Pos');
-extern INT_VAR_H (editor_word_ypos, 510, 'Word window Y Pos');
-extern INT_VAR_H (editor_word_height, 240, 'Word window height');
-extern INT_VAR_H (editor_word_width, 655, 'Word window width');
-extern double_VAR_H (editor_smd_scale_factor, 1.0, 'Scaling for smd image');
-    
-    
-/**********************************************************************
- * recog_word_recursive
- *
- * Convert the word to tess form and pass it to the tess segmenter.
- * Convert the output back to editor form.
- **********************************************************************/
-void Tesseract::recog_word_recursive(WERD_RES *word) {
-  int word_length = word->chopped_word->NumBlobs();  // no of blobs
-  if (word_length > MAX_UNDIVIDED_LENGTH) {
-    return split_and_recog_word(word);
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
   }
-  cc_recog(word);
-  word_length = word->rebuild_word->NumBlobs();  // No of blobs in output.
-    }
-    
-    ```
-    
-    #include 'caffe2/core/logging.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/utils/math.h'
-    
-    
-    {
-    {    const float* Xdata = X.template data<float>();
-    float* Ydata = Y->template mutable_data<float>();
-    for (int i = 0; i < X.size(); ++i) {
-      Ydata[i] = std::floor(Xdata[i]);
-    }
-    return true;
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
   }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
 };
     
-    namespace caffe2 {
-namespace {
-    }
+    static const int kCbToBlueTable[256] = {
+  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
+  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
+  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
+  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
+  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
+  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
+   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
+   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
+   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
+   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
+   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
+     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
+    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
+    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
+    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
+    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
+   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
+   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
+   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
+   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
+   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
+   220,  222,  223,  225,
+};
+    
+      // Returns the combined score of the output image in the last Compare() call
+  // (or the baseline image, if Compare() was not called yet), based on output
+  // size and the similarity metric.
+  virtual double ScoreOutputSize(int size) const = 0;
+    
+    namespace guetzli {
     }
     
-    namespace {
-float sigmoid(const float x) {
-  if (x >= 0) {
-    return 1. / (1. + exp(-x));
-  } else {
-    const float exp_x = exp(x);
-    return exp_x / (1 + exp_x);
+    #include 'guetzli/output_image.h'
+    
+    // Decodes one 8x8 block of DCT coefficients from the bit stream.
+bool DecodeDCTBlock(const HuffmanTableEntry* dc_huff,
+                    const HuffmanTableEntry* ac_huff,
+                    int Ss, int Se, int Al,
+                    int* eobrun,
+                    BitReaderState* br,
+                    JPEGData* jpg,
+                    coeff_t* last_dc_coeff,
+                    coeff_t* coeffs) {
+  int s;
+  int r;
+  bool eobrun_allowed = Ss > 0;
+  if (Ss == 0) {
+    s = ReadSymbol(dc_huff, br);
+    if (s >= kJpegDCAlphabetSize) {
+      fprintf(stderr, 'Invalid Huffman symbol %d for DC coefficient.\n', s);
+      jpg->error = JPEG_INVALID_SYMBOL;
+      return false;
+    }
+    if (s > 0) {
+      r = br->ReadBits(s);
+      s = HuffExtend(r, s);
+    }
+    s += *last_dc_coeff;
+    const int dc_coeff = SignedLeftshift(s, Al);
+    coeffs[0] = dc_coeff;
+    if (dc_coeff != coeffs[0]) {
+      fprintf(stderr, 'Invalid DC coefficient %d\n', dc_coeff);
+      jpg->error = JPEG_NON_REPRESENTABLE_DC_COEFF;
+      return false;
+    }
+    *last_dc_coeff = s;
+    ++Ss;
   }
-}
-} // namespace
-    
-            if (extent.size() > rank)
-            InvalidArgument('NDArrayView::SliceView: Dimensionality (%d) of the specified slice extent exceeds the rank (%d) of this NDArrayView.', (int)extent.size(), (int)rank);
-    
-        /*virtual*/ NDArrayViewPtr Value::Data() const
-    {
-        if (!m_data)
-        {
-            RuntimeError('This Value object is invalid and can no longer be accessed. This usually happens when a temporary Value object returned by the CNTK library'
-                          ' is not cloned and accessed later after it has been erased by the library. The Value objects created inside and returned by the library from APIs '
-                          'like Forward, Backward etc. are temporary and are only guaranteed to be valid until the next Forward/Backward call. If you want to access the Values '
-                          'later, you must explicitly clone them.');
-        }
+  if (Ss > Se) {
+    return true;
+  }
+  if (*eobrun > 0) {
+    --(*eobrun);
+    return true;
+  }
+  for (int k = Ss; k <= Se; k++) {
+    s = ReadSymbol(ac_huff, br);
+    if (s >= kJpegHuffmanAlphabetSize) {
+      fprintf(stderr, 'Invalid Huffman symbol %d for AC coefficient %d\n',
+              s, k);
+      jpg->error = JPEG_INVALID_SYMBOL;
+      return false;
     }
-    
-    // Rand based on Mersenne Twister.
-// We use our own distribution in order to match baselines between different operating systems,
-// because uniform_distribution is not guaranteed to provide the same numbers on different platforms.
-// TODO: Switching to Boost would eliminate this problem.
-static inline size_t RandMT(const size_t begin, const size_t end, std::mt19937_64& rng)
-{
-    const size_t randomNumber = rng();
-    return begin + randomNumber % (end - begin);
-}
-    
-    #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
-template<>
-struct regex_iterator_traits<unsigned short*> : pointer_iterator_traits<unsigned short>{};
-template<>
-struct regex_iterator_traits<const unsigned short*> : const_pointer_iterator_traits<unsigned short>{};
-#endif
-    
-          typedef typename BOOST_REGEX_DETAIL_NS::compute_functor_type<Functor, match_results<BidiIterator, Allocator>, BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<char_type> >, traits_type >::type F;
-      F func(fmt);
-    
-    
-    {
-    {}
-} // namespace boost
-    
-    template <class BidiIterator, class Allocator, class traits>
-inline void perl_matcher<BidiIterator, Allocator, traits>::push_repeater_count(int i, repeater_count<BidiIterator>** s)
-{
-   saved_repeater<BidiIterator>* pmp = static_cast<saved_repeater<BidiIterator>*>(m_backup_state);
-   --pmp;
-   if(pmp < m_stack_base)
-   {
-      extend_stack();
-      pmp = static_cast<saved_repeater<BidiIterator>*>(m_backup_state);
-      --pmp;
-   }
-   (void) new (pmp)saved_repeater<BidiIterator>(i, s, position, this->recursion_stack.size() ? this->recursion_stack.back().idx : (INT_MIN + 3));
-   m_backup_state = pmp;
-}
-    
-    
-    {   match_results<BidiIterator> m;
-   BOOST_REGEX_DETAIL_NS::perl_matcher<BidiIterator, match_allocator_type, traits> matcher(first, last, m, e, flags, first);
-   unsigned int count = 0;
-   while(matcher.find())
-   {
-      ++count;
-      if(0 == foo(m))
-         return count; // caller doesn't want to go on
-      if(m[0].second == last)
-         return count; // we've reached the end, don't try and find an extra null match.
-      if(m.length() == 0)
-      {
-         if(m[0].second == last)
-            return count;
-         // we found a NULL-match, now try to find
-         // a non-NULL one at the same position:
-         match_results<BidiIterator, match_allocator_type> m2(m);
-         matcher.setf(match_not_null | match_continuous);
-         if(matcher.find())
-         {
-            ++count;
-            if(0 == foo(m))
-               return count;
-         }
-         else
-         {
-            // reset match back to where it was:
-            m = m2;
-         }
-         matcher.unsetf((match_not_null | match_continuous) & ~flags);
+    r = s >> 4;
+    s &= 15;
+    if (s > 0) {
+      k += r;
+      if (k > Se) {
+        fprintf(stderr, 'Out-of-band coefficient %d band was %d-%d\n',
+                k, Ss, Se);
+        jpg->error = JPEG_OUT_OF_BAND_COEFF;
+        return false;
       }
-   }
-   return count;
+      if (s + Al >= kJpegDCAlphabetSize) {
+        fprintf(stderr, 'Out of range AC coefficient value: s=%d Al=%d k=%d\n',
+                s, Al, k);
+        jpg->error = JPEG_NON_REPRESENTABLE_AC_COEFF;
+        return false;
+      }
+      r = br->ReadBits(s);
+      s = HuffExtend(r, s);
+      coeffs[kJPEGNaturalOrder[k]] = SignedLeftshift(s, Al);
+    } else if (r == 15) {
+      k += 15;
+    } else {
+      *eobrun = 1 << r;
+      if (r > 0) {
+        if (!eobrun_allowed) {
+          fprintf(stderr, 'End-of-block run crossing DC coeff.\n');
+          jpg->error = JPEG_EOB_RUN_TOO_LONG;
+          return false;
+        }
+        *eobrun += br->ReadBits(r);
+      }
+      break;
+    }
+  }
+  --(*eobrun);
+  return true;
 }
     
-    #endif
-    
-       pimpl pdata;
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-      can_factory->RegisterCanClients();
-    
-      // init config and state
-  // After a CAN handle is created with canOpen() the CAN-ID filter is
-  // cleared
-  // (no CAN messages
-  // will pass the filter). To receive a CAN message with a certain CAN-ID
-  // or an
-  // NTCAN-Event with
-  // a certain Event-ID it is required to enable this ID in the handle
-  // filter as
-  // otherwise a
-  // received  message or event is discarded by the driver for this handle.
-  // 1. set receive message_id filter, ie white list
-  int32_t id_count = 0x800;
-  ret = canIdRegionAdd(dev_handler_, 0, &id_count);
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'add receive msg id filter error code: ' << ret << ', '
-           << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+    void ConsoleReporter::ReportRuns(const std::vector<Run>& reports) {
+  for (const auto& run : reports) {
+    // print the header:
+    // --- if none was printed yet
+    bool print_header = !printed_header_;
+    // --- or if the format is tabular and this run
+    //     has different fields from the prev header
+    print_header |= (output_options_ & OO_Tabular) &&
+                    (!internal::SameNames(run.counters, prev_counters_));
+    if (print_header) {
+      printed_header_ = true;
+      prev_counters_ = run.counters;
+      PrintHeader(run);
+    }
+    // As an alternative to printing the headers like this, we could sort
+    // the benchmarks by header and then print. But this would require
+    // waiting for the full results before printing, or printing twice.
+    PrintRunData(run);
   }
+}
     
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
+      std::string walltime_value = LocalDateTimeString();
+  out << indent << FormatKV('date', walltime_value) << ',\n';
     
-    /**
- * @namespace apollo::canbus::can
- * @brief apollo::canbus::can
- */
-namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
+    std::string FakeCanClient::GetErrorString(const int32_t /*status*/) {
+  return '';
+}
     
-        if (buf.size() != static_cast<size_t>(frame_num)) {
-      AERROR_EVERY(100) << 'Receiver buf size [' << buf.size()
-                        << '] does not match can_client returned length['
-                        << frame_num << '].';
-    }
+      /**
+   * @brief Get the error string.
+   * @param status The status to get the error string.
+   */
+  std::string GetErrorString(const int32_t status) override;
+    
+    
+    {  SocketCanClientRaw socket_can_client;
+  EXPECT_TRUE(socket_can_client.Init(param));
+  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(socket_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  socket_can_client.Stop();
+}
     
     #include 'modules/canbus/proto/chassis_detail.pb.h'
 #include 'modules/common/proto/error_code.pb.h'
 #include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-    // System gflags
-DECLARE_string(node_name);
-DECLARE_string(canbus_driver_name);
+    /**
+ * @class Byte
+ * @brief The class of one byte, which is 8 bits.
+ *        It includes some operations on one byte.
+ */
+class Byte {
+ public:
+  /**
+   * @brief Constructor which takes a pointer to a one-byte unsigned integer.
+   * @param value The pointer to a one-byte unsigned integer for construction.
+   */
+  explicit Byte(const uint8_t *value);
+    }
+    
+    
+    {  EXPECT_TRUE(value.is_bit_1(0));
+  EXPECT_TRUE(value.is_bit_1(1));
+  EXPECT_FALSE(value.is_bit_1(3));
+  EXPECT_TRUE(value.is_bit_1(6));
+  EXPECT_FALSE(value.is_bit_1(7));
+}
+    
+    /**
+ * @file
+ */
+    
+    // Sensor gflags
+DECLARE_double(sensor_freq);
