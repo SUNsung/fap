@@ -1,132 +1,238 @@
 
         
-        from .compat import is_py2, builtin_str, str
+        
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
-            if is_stream:
-            body = data
-    
-    from sklearn.datasets import fetch_20newsgroups_vectorized
-from sklearn.metrics import accuracy_score
-from sklearn.utils.validation import check_array
-    
-    
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-        ###########################################################################
-    # Set transformer input
-    ###########################################################################
-    transformers = {}
-    
-        print('Sampling algorithm performance:')
-    print('===============================')
-    print('Results are averaged over %s repetition(s).' % opts.n_times)
-    print('')
+        # test that the user was inserted into the database
+    with app.app_context():
+        assert get_db().execute(
+            'select * from user where username = 'a'',
+        ).fetchone() is not None
     
     
-def bench_scikit_tree_regressor(X, Y):
-    '''Benchmark with scikit-learn decision tree regressor'''
+def test_create(client, auth, app):
+    auth.login()
+    assert client.get('/create').status_code == 200
+    client.post('/create', data={'title': 'created', 'body': ''})
     
+    import pytest
+from flaskr.db import get_db
     
-def issue_role(name, rawtext, text, lineno,
-               inliner, options=None, content=None):
-    '''Sphinx role for linking to an issue. Must have
-    `issues_uri` or `issues_github_path` configured in ``conf.py``.
+    :copyright: © 2010 by the Pallets team.
+:license: BSD, see LICENSE for more details.
+'''
+import codecs
+import io
+import uuid
+from datetime import date, datetime
+from flask.globals import current_app, request
+from flask._compat import text_type, PY2
     
+    from flask._compat import iteritems, text_type
+from flask.json import dumps, loads
     
-def rev_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'http://hg.scrapy.org/scrapy/changeset/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, 'r' + text, refuri=ref, **options)
-    return [node], []
+        Implements the bridge to Jinja2.
+    
+        if base_url is None:
+        http_host = app.config.get('SERVER_NAME') or 'localhost'
+        app_root = app.config['APPLICATION_ROOT']
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
+    
+        def test_basic_exception(self):
+        def f(p):
+            1/0
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident),
+                              ])
+    
+                for name in rest.split(sep):
+                if not name or name == '.':
+                    # current dir
+                    continue
+                if name == '..':
+                    # parent dir
+                    path, _, _ = path.rpartition(sep)
+                    continue
+                newpath = path + sep + name
+                if newpath in seen:
+                    # Already seen this path
+                    path = seen[newpath]
+                    if path is not None:
+                        # use cached value
+                        continue
+                    # The symlink is not resolved, so we must have a symlink loop.
+                    raise RuntimeError('Symlink loop from %r' % newpath)
+                # Resolve the symbolic link
+                try:
+                    target = accessor.readlink(newpath)
+                except OSError as e:
+                    if e.errno != EINVAL and strict:
+                        raise
+                    # Not a symlink, or non-strict mode. We just leave the path
+                    # untouched.
+                    path = newpath
+                else:
+                    seen[newpath] = None # not resolved symlink
+                    path = _resolve(path, target)
+                    seen[newpath] = path # resolved symlink
+    
+        def test_str_subclass(self):
+        self._check_str_subclass('c:')
+        self._check_str_subclass('c:a')
+        self._check_str_subclass('c:a\\b.txt')
+        self._check_str_subclass('c:\\')
+        self._check_str_subclass('c:\\a')
+        self._check_str_subclass('c:\\a\\b.txt')
+        self._check_str_subclass('\\\\some\\share')
+        self._check_str_subclass('\\\\some\\share\\a')
+        self._check_str_subclass('\\\\some\\share\\a\\b.txt')
+    
+    from . import abc as resources_abc
+from contextlib import contextmanager, suppress
+from importlib import import_module
+from importlib.abc import ResourceLoader
+from io import BytesIO, TextIOWrapper
+from pathlib import Path
+from types import ModuleType
+from typing import Iterable, Iterator, Optional, Set, Union   # noqa: F401
+from typing import cast
+from typing.io import BinaryIO, TextIO
+from zipimport import ZipImportError
+    
+        def persistent_load(self, pid):
+        # This method is invoked whenever a persistent ID is encountered.
+        # Here, pid is the tuple returned by DBPickler.
+        cursor = self.connection.cursor()
+        type_tag, key_id = pid
+        if type_tag == 'MemoRecord':
+            # Fetch the referenced record from the database and return it.
+            cursor.execute('SELECT * FROM memos WHERE key=?', (str(key_id),))
+            key, task = cursor.fetchone()
+            return MemoRecord(key, task)
+        else:
+            # Always raises an error if you cannot return the correct object.
+            # Otherwise, the unpickler will think None is the object referenced
+            # by the persistent ID.
+            raise pickle.UnpicklingError('unsupported persistent object')
+    
+    def handleSlideshow(slideshow):
+    print('<html>')
+    handleSlideshowTitle(slideshow.getElementsByTagName('title')[0])
+    slides = slideshow.getElementsByTagName('slide')
+    handleToc(slides)
+    handleSlides(slides)
+    print('</html>')
+    
+    ##
+    
+    #
+#
+#
+    
+    if __name__ == '__main__':
+  Main()
 
     
-            if 'latency' in request.args:
-            latency = float(request.args['latency'][0])
-            reactor.callLater(latency, self._finish, request)
-            return NOT_DONE_YET
     
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
+def SendShutdownRequest():
+  request = ShutdownRequest()
+  # This is a blocking call.
+  request.Start()
+
     
-        def syntax(self):
-        return '[options] <spider>'
+          if line[ 0 ] == ' ' or line[ 0 ] == '\t':
+        current_group.lines.append( line.strip() )
     
-        requires_project = False
-    default_settings = {'SPIDER_LOADER_WARN_ONLY': True}
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-                appid = random.choice(self.working_appid_list)
-            return str(appid)
-        else:
-            for _ in xrange(0, 10):
-                appid = self.public_appid.get()
-                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
-                    continue
-                else:
-                    return appid
-            return None
+        open_filename.assert_has_exact_calls( [
+      call( ycm._server_stdout, { 'size': 12,
+                                  'watch': True,
+                                  'fix': True,
+                                  'focus': False,
+                                  'position': 'end' } )
+    ] )
+    close_buffers_for_filename.assert_has_exact_calls( [
+      call( ycm._client_logfile )
+    ] )
     
+      def _adjust_thread_count( self ):
+    # When the executor gets lost, the weakref callback will wake up
+    # the worker threads.
+    def weakref_cb( _, q=self._work_queue ):
+      q.put( None )
+    # TODO(bquinlan): Should avoid creating new threads if there are more
+    # idle threads than items in the work queue.
+    if len( self._threads ) < self._max_workers:
+      t = threading.Thread( target=_worker,
+                            args=( weakref.ref( self, weakref_cb ),
+                                   self._work_queue ) )
+      t.daemon = True
+      t.start()
+      self._threads.add( t )
     
-if __name__ == '__main__':
-    sys.path.append(root_path)
-    
-    
-def best_server(probe_nat=False):
-    best_server = None
-    prober = new_pteredor(probe_nat=probe_nat)
-    prober.qualified = True
-    if not probe_nat:
-        prober.nat_type = 'unknown'
-        prober.rs_cone_flag = 0
-    
-    # Predefined token types
-EOR_TOKEN_TYPE = 1
-    
-                if stream_id in self.streams:
-                urls = self.streams[stream_id]['src']
-                ext = self.streams[stream_id]['container']
-                total_size = self.streams[stream_id]['size']
-            else:
-                urls = self.dash_streams[stream_id]['src']
-                ext = self.dash_streams[stream_id]['container']
-                total_size = self.dash_streams[stream_id]['size']
-    
-    import json
-import re
-import base64
-import time
+    '''Functions for evaluating results on Cityscapes.'''
     
     
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
+def cityscapes_to_coco_all_random(cityscapes_id):
+    lookup = {
+        0: -1,  # ... background
+        1: -1,  # bicycle
+        2: -1,  # car
+        3: -1,  # person (ignore)
+        4: -1,  # train
+        5: -1,  # truck
+        6: -1,  # motorcycle
+        7: -1,  # bus
+        8: -1,  # rider (ignore)
+    }
+    return lookup[cityscapes_id]
+
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
+            if cfg.MODEL.MASK_ON:
+            # Add the mask head
+            head_loss_gradients['mask'] = _add_roi_mask_head(
+                model, add_roi_mask_head_func, blob_conv, dim_conv,
+                spatial_scale_conv
+            )
+    
+    from collections import namedtuple
+import logging
+import numpy as np
+import threading
+    
+        # Base Fast R-CNN blobs
+    blob_dict = dict(
+        labels_int32=sampled_labels.astype(np.int32, copy=False),
+        rois=sampled_rois,
+        bbox_targets=bbox_targets,
+        bbox_inside_weights=bbox_inside_weights,
+        bbox_outside_weights=bbox_outside_weights
+    )
