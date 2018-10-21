@@ -1,114 +1,186 @@
 
         
-            region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-    client = boto3_conn(module, conn_type='client', resource='waf', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+        
+def init_db():
+    '''Clear existing data and create new tables.'''
+    db = get_db()
     
-    - name: create an origin access identity
-  cloudfront_origin_access_identity:
-    state: present
-    caller_reference: this is an example reference
-    comment: this is an example comment
     
-        def disable(self):
-        '''Disables the rule in AWS'''
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+    
+    
+def test_index(client, auth):
+    response = client.get('/')
+    assert b'Log In' in response.data
+    assert b'Register' in response.data
+    
+    
+if not PY2:
+    text_type = str
+    string_types = (str,)
+    integer_types = (int,)
+    
+        seems_fishy = False
+    if total_found == 0:
+        info.append('Error: the template could not be found.')
+        seems_fishy = True
+    elif total_found > 1:
+        info.append('Warning: multiple loaders returned a match for the template.')
+        seems_fishy = True
+    
+    
+def _lookup_req_object(name):
+    top = _request_ctx_stack.top
+    if top is None:
+        raise RuntimeError(_request_ctx_err_msg)
+    return getattr(top, name)
+    
+    
+def _wrap_reader_for_text(fp, encoding):
+    if isinstance(fp.read(0), bytes):
+        fp = io.TextIOWrapper(io.BufferedReader(fp), encoding)
+    return fp
+    
+    
+class SecureCookieSessionInterface(SessionInterface):
+    '''The default session interface that stores sessions in signed cookies
+    through the :mod:`itsdangerous` module.
+    '''
+    #: the salt that should be applied on top of the secret key for the
+    #: signing of cookie based sessions.
+    salt = 'cookie-session'
+    #: the hash function to use for the signature.  The default is sha1
+    digest_method = staticmethod(hashlib.sha1)
+    #: the name of the itsdangerous supported key derivation.  The default
+    #: is hmac.
+    key_derivation = 'hmac'
+    #: A python serializer for the payload.  The default is a compact
+    #: JSON derived serializer with support for some extra Python types
+    #: such as datetime objects or tuples.
+    serializer = session_json_serializer
+    session_class = SecureCookieSession
+    
+    RETURN = '''
+web_acl:
+  description: contents of the Web ACL
+  returned: always
+  type: complex
+  contains:
+    default_action:
+      description: Default action taken by the Web ACL if no rules match
+      returned: always
+      type: dict
+      sample:
+        type: BLOCK
+    metric_name:
+      description: Metric name used as an identifier
+      returned: always
+      type: string
+      sample: mywebacl
+    name:
+      description: Friendly name of the Web ACL
+      returned: always
+      type: string
+      sample: my web acl
+    rules:
+      description: List of rules
+      returned: always
+      type: complex
+      contains:
+        action:
+          description: Action taken by the WAF when the rule matches
+          returned: always
+          type: complex
+          sample:
+            type: ALLOW
+        priority:
+          description: priority number of the rule (lower numbers are run first)
+          returned: always
+          type: int
+          sample: 2
+        rule_id:
+          description: Rule ID
+          returned: always
+          type: string
+          sample: a6fc7ab5-287b-479f-8004-7fd0399daf75
+        type:
+          description: Type of rule (either REGULAR or RATE_BASED)
+          returned: always
+          type: string
+          sample: REGULAR
+    web_acl_id:
+      description: Unique identifier of Web ACL
+      returned: always
+      type: string
+      sample: 10fff965-4b6b-46e2-9d78-24f6d2e2d21c
+'''
+    
+    from ansible.module_utils.ec2 import get_aws_connection_info
+from ansible.module_utils.ec2 import ec2_argument_spec, boto3_conn
+from ansible.module_utils.ec2 import snake_dict_to_camel_dict
+from ansible.module_utils.ec2 import camel_dict_to_snake_dict
+from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.aws.cloudfront_facts import CloudFrontFactsServiceManager
+import datetime
+    
         try:
-            response = self.client.disable_rule(Name=self.name)
-        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-            self.module.fail_json_aws(e, msg='Could not disable rule %s' % self.name)
-        self.changed = True
-        return response
+        response = conn.describe_egress_only_internet_gateways()
+    except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
+        module.fail_json_aws(e, msg='Could not get list of existing Egress-Only Internet Gateways')
     
-        exit_params = {'msg': 'AMI deregister operation complete.', 'changed': True}
+        def get_repository(self, registry_id, name):
+        try:
+            res = self.ecr.describe_repositories(
+                repositoryNames=[name], **build_kwargs(registry_id))
+            repos = res.get('repositories')
+            return repos and repos[0]
+        except ClientError as err:
+            code = err.response['Error'].get('Code', 'Unknown')
+            if code == 'RepositoryNotFoundException':
+                return None
+            raise
     
-    try:
-    import boto3
-    HAS_BOTO3 = True
-except ImportError:
-    HAS_BOTO3 = False
-    
-        if limit:
-        results = results[:int(limit)]
+        module.exit_json(elasticache_clusters=get_elasticache_clusters(client, module, region))
     
     
 if __name__ == '__main__':
     main()
 
     
-    First, we fix a training set and increase the number of
-samples. Then we plot the computation time as function of
-the number of samples.
+        if get_user(connection, module, params['UserName']):
+        # Check mode means we would remove this user
+        if module.check_mode:
+            module.exit_json(changed=True)
     
-    Note that LocalOutlierFactor is not meant to predict on a test set and its
-performance is assessed in an outlier detection context:
-1. The model is trained on the whole dataset which is assumed to contain
-outliers.
-2. The ROC curve is computed on the same dataset using the knowledge of the
-labels.
-In this context there is no need to shuffle the dataset because the model
-is trained and tested on the whole dataset. The randomness of this benchmark
-is only caused by the random selection of anomalies in the SA dataset.
     
-            ax.set_xlabel('n_samples')
-        ax.set_ylabel('n_features')
-        ax.set_zlabel('Time (s)')
-        ax.set_zlim3d(0.0, max_time * 1.1)
-        ax.set_title(label)
-        # ax.legend()
-        i += 1
-    plt.show()
-
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(default=None, required=True),
+            shards=dict(default=None, required=False, type='int'),
+            retention_period=dict(default=None, required=False, type='int'),
+            tags=dict(default=None, required=False, type='dict', aliases=['resource_tags']),
+            wait=dict(default=True, required=False, type='bool'),
+            wait_timeout=dict(default=300, required=False, type='int'),
+            state=dict(default='present', choices=['present', 'absent']),
+            encryption_type=dict(required=False, choices=['NONE', 'KMS']),
+            key_id=dict(required=False, type='str'),
+            encryption_state=dict(required=False, choices=['enabled', 'disabled']),
+        )
+    )
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+    )
     
-    import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import ticker
-    
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            X = make_low_rank_matrix(n_samples, n_features,
-                                  effective_rank=rank,
-                                  tail_strength=0.2)
-    
-    import time
-    
-        default_algorithms = 'custom-tracking-selection,custom-auto,' \
-                         'custom-reservoir-sampling,custom-pool,'\
-                         'python-core-sample,numpy-permutation'
-    
-    File: sparsity_benchmark.py
-Function: benchmark_sparse_predict at line 56
-Total time: 0.39274 s
-    
-    for Vectorizer, (analyzer, ngram_range) in itertools.product(
-            [CountVectorizer, TfidfVectorizer, HashingVectorizer],
-            [('word', (1, 1)),
-             ('word', (1, 2)),
-             ('word', (1, 4)),
-             ('char', (4, 4)),
-             ('char_wb', (4, 4))
-             ]):
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeClassifier()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-            :user:`sloria`
-    '''
-    options = options or {}
-    content = content or []
-    has_explicit_title, title, target = split_explicit_title(text)
-    
-    import os
-try:
-    # Python 2 compat
-    from urllib2 import Request, build_opener
-except ImportError:
-    # Python 3
-    from urllib.request import Request, build_opener
+        invocations = dict(
+        aliases='alias_details',
+        all='all_details',
+        config='config_details',
+        mappings='mapping_details',
+        policy='policy_details',
+        versions='version_details',
+    )
