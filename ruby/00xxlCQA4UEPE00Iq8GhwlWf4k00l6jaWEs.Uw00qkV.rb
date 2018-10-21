@@ -1,119 +1,147 @@
 
         
-                def render
-          options = @options.stringify_keys
-          options['type']     = 'checkbox'
-          options['value']    = @checked_value
-          options['checked'] = 'checked' if input_checked?(options)
-    
-                  yield item, value, text, default_html_options.merge(additional_html_options)
-            end.join.html_safe
-          end
-    
-            def render(&block)
-          render_collection_for(RadioButtonBuilder, &block)
-        end
-    
-    Group.user_trust_level_change!(-1, TrustLevel[4])
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
-    
-      def set_filters
-    @filters = current_account.custom_filters
-  end
-    
-      def process_payload
-    ActivityPub::ProcessingWorker.perform_async(signed_request_account.id, body.force_encoding('UTF-8'))
-  end
-end
-
-    
-      def page_requested?
-    params[:page] == 'true'
-  end
-    
-    module Admin
-  class ConfirmationsController < BaseController
-    before_action :set_user
-    before_action :check_confirmation, only: [:resend]
-    
-        def show
-      authorize @domain_block, :show?
+            def initialize
+      Fastlane.load_actions
+      @runner = Runner.new
+      @actions_requiring_special_handling = ['sh'].to_set
     end
     
-        private
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-      def verified_domain
-    return signed_request_account.domain if signed_request_account
+      before(:each) do
+    # This value needs to be set or our event fixtures will not match
+    allow(FastlaneCore::Helper).to receive(:ci?).and_return(false)
+    allow(FastlaneCore::Helper).to receive(:operating_system).and_return('macOS')
   end
     
-      it 'pauses execution indefinitely if not given a duration' do
-    running = false
-    t = Thread.new do
-      running = true
-      sleep
-      5
-    end
+            cmd = ['git tag']
     
-      it 'calls #to_int on seed' do
-    srand(3.8)
-    srand.should == 3
-    
-      it 'raises #{frozen_error_class} on an untainted, frozen object' do
-    o = Object.new.freeze
-    lambda { o.taint }.should raise_error(frozen_error_class)
-  end
-    
-      it 'writes each argument on a line when passed multiple arguments' do
-    lambda {
-      $VERBOSE = true
-      warn('line 1', 'line 2')
-    }.should output(nil, 'line 1\nline 2\n')
-  end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
+          it 'handles the extension parameter correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.rb')
       end
+    
+          it 'generates the correct git command with an array of paths' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+            it 'supports autocorrect mode option' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              mode: :autocorrect
+            )
+          end').runner.execute(:test)
+    
+          it 'should not be fooled by 10 local code signing identities available' do
+        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
+        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
+        expect(FastlaneCore::UI).not_to(receive(:error))
+    
+          it 'updates an existing user' do
+        visit edit_admin_user_path(users(:bob))
+        check 'Admin'
+        click_on 'Update User'
+        expect(page).to have_text('User 'bob' was successfully updated.')
+        visit edit_admin_user_path(users(:bob))
+        expect(page).to have_checked_field('Admin')
+      end
+    
+        it 'shows the dry run pop up with previous events and allows use previously received event' do
+      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
+      agent.sources << emitter
+      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
+      agent.save!
+    
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
     end
   end
-end
-
     
-      # Prepend all log lines with the following tags.
-  # config.log_tags = [ :subdomain, :uuid ]
+        it 'unregisters disabled SchedulerAgents' do
+      @scheduler.schedule_scheduler_agents
     
-    Given /^I am signed in( on the mobile website)?$/ do |mobile|
-  automatic_login
-  confirm_login mobile
-end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
-    end
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
   end
-end
-
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
+    module Homebrew
+  module_function
     
-        it 'returns a 401 for a private post when logged out' do
-      bob.like!(@message)
-      sign_out :user
-      get :index, params: {post_id: @message.id}, format: :json
-      expect(response.status).to eq(401)
+            if rest.empty?
+          current_rule.children += child.children
+        else
+          rest.unshift Sass::Selector::Parent.new
+          child.parsed_rules = make_sseq(sseq.subject?, *rest)
+          current_rule << child
+        end
+    
+        # Returns a string representation of the Sass backtrace.
+    #
+    # @param default_filename [String] The filename to use for unknown files
+    # @see #sass_backtrace
+    # @return [String]
+    def sass_backtrace_str(default_filename = 'an unknown file')
+      lines = message.split('\n')
+      msg = lines[0] + lines[1..-1].
+        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
+      'Error: #{msg}' +
+        sass_backtrace.each_with_index.map do |entry, i|
+          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
+            ' of #{entry[:filename] || default_filename}' +
+            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
+        end.join
     end
-  end
+    
+          # Polling is used by default on Windows.
+      unless Sass::Util.windows?
+        opts.on('--poll', 'Check for file changes manually, rather than relying on the OS.',
+                          'Only meaningful for --watch.') do
+          @options[:poll] = true
+        end
+      end
+    
+          # @see Base#to_s
+      def to_s
+        @root
+      end
+    
+          def allow_uploads
+        @allow_uploads
+      end
+    
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :selected  => @page.version.id == v.id,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+          }
+        end
+      end
+    
+        EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
+    
+      s.add_development_dependency 'rack-test', '~> 0.6.2'
+  s.add_development_dependency 'shoulda', '~> 3.5.0'
+  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
+  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
+  s.add_development_dependency 'mocha', '~> 1.1.0'
+  s.add_development_dependency 'test-unit', '~> 3.1.0'
+  s.add_development_dependency 'webrick', '~> 1.3.1'
