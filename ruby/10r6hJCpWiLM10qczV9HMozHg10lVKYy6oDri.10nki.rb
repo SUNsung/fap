@@ -1,101 +1,120 @@
 
         
-            # Returns the specified or detected guest type name.
-    #
-    # @return [Symbol]
-    def name
-      capability_host_chain[0][0]
+              def version?
+        version.present?
+      end
+    
+        def push(*names)
+      @filters.push *filter_const(names)
     end
     
-    module Vagrant
-  module Plugin
-    module V1
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
+          if base == dest
+        ''
+      elsif dest.start_with? File.join(base, '')
+        url.path[(path.length)..-1]
+      end
+    end
     
-            # This contains all the configuration plugins by scope.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :configs
-    
-            # Merge another configuration object into this one. This assumes that
-        # the other object is the same class as this one. This should not
-        # mutate this object, but instead should return a new, merged object.
-        #
-        # The default implementation will simply iterate over the instance
-        # variables and merge them together, with this object overriding
-        # any conflicting instance variables of the older object. Instance
-        # variables starting with '__' (double underscores) will be ignored.
-        # This lets you set some sort of instance-specific state on your
-        # configuration keys without them being merged together later.
-        #
-        # @param [Object] other The other configuration object to merge from,
-        #   this must be the same type of object as this one.
-        # @return [Object] The merged object.
-        def merge(other)
-          result = self.class.new
-    
-            # This should return an action callable for the given name.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Object] A callable action sequence object, whether it
-        #   is a proc, object, etc.
-        def action(name)
-          nil
+            if at_css('.api-type-label.module')
+          at_css('h1').content = subpath.remove('api/')
         end
     
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
     
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
+        private
     
-              # Retrieves the element instance fields
-          #
-          # @return [Array]
-          def attributes
-            self.class.attributes
-          end
+        # .btn { ... } -> @mixin btn { ... }; .btn { @include btn }
+    def extract_mixins_from_selectors(file, selectors_to_mixins)
+      selectors_to_mixins.each do |selector, mixin|
+        file = replace_rules file, Regexp.escape(selector), prefix: false do |selector_css|
+          log_transform '#{selector} { ... } -> @mixin #{mixin} { ... }; #{selector} { @include #{mixin} } ', from: 'extract_mixins_from_selectors'
+          <<-SCSS
+// [converter] extracted from `#{selector}` for libsass compatibility
+@mixin #{mixin} {#{unwrap_rule_block(selector_css)}
+}
+// [converter] extracted as `@mixin #{mixin}` for libsass compatibility
+#{selector} {
+  @include #{mixin};
+}
+          SCSS
+        end
+      end
+      file
+    end
     
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 1
-                self.pvno = decode_asn1_pvno(val)
-              when 2
-                self.msg_type = decode_asn1_msg_type(val)
-              when 3
-                self.pa_data  = decode_asn1_pa_data(val)
-              when 4
-                self.req_body = decode_asn1_req_body(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
-              end
-            end
-          end
+      # Specifies the header that your server uses for sending files.
+  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+    
+            parser = Sass::SCSS::Parser.new(value,
+          @options[:filename], @options[:importer],
+          @line, to_parser_offset(@offset))
+        parsed_value = parser.parse_declaration_value
+        end_offset = start_offset + value.length
+      elsif value.strip.empty?
+        parsed_value = [Sass::Script::Tree::Literal.new(Sass::Script::Value::String.new(''))]
+        end_offset = start_offset
+      else
+        expr = parse_script(value, :offset => to_parser_offset(start_offset))
+        end_offset = expr.source_range.end_pos.offset - 1
+        parsed_value = [expr]
+      end
+      node = Tree::PropNode.new(parse_interp(name), parsed_value, prop)
+      node.value_source_range = Sass::Source::Range.new(
+        Sass::Source::Position.new(line.index, to_parser_offset(start_offset)),
+        Sass::Source::Position.new(line.index, to_parser_offset(end_offset)),
+        @options[:filename], @options[:importer])
+      if !node.custom_property? && value.strip.empty? && line.children.empty?
+        raise SyntaxError.new(
+          'Invalid property: \'#{node.declaration}\' (no value).' +
+          node.pseudo_class_selector_message)
+      end
+    
+        # The top-level Environment object.
+    #
+    # @return [Environment]
+    def global_env
+      @global_env ||= global? ? self : @parent.global_env
+    end
+    
+          # If this importer is based on files on the local filesystem This method
+      # should return true if the file, when changed, should trigger a
+      # recompile.
+      #
+      # It is acceptable for non-sass files to be watched and trigger a recompile.
+      #
+      # @param filename [String] The absolute filename for a file that has changed.
+      # @return [Boolean] When the file changed should cause a recompile.
+      def watched_file?(filename)
+        false
+      end
+    end
+  end
+end
+
+    
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) do
+      <<-RUBY.strip_indent.chomp
+        [
+        1
+        ]
+      RUBY
+    end
+  end
