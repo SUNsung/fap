@@ -1,175 +1,196 @@
 
         
-        map = {}
-dups = []
+                default_connectors = {
+          words_connector: ', ',
+          two_words_connector: ' and ',
+          last_word_connector: ', and '
+        }
+        if defined?(I18n)
+          i18n_connectors = I18n.translate(:'support.array', locale: options[:locale], default: {})
+          default_connectors.merge!(i18n_connectors)
+        end
+        options = default_connectors.merge!(options)
     
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
+              def sanitized_object_name
+            @sanitized_object_name ||= @object_name.gsub(/\]\[|[^-a-zA-Z0-9:.]/, '_').sub(/_$/, '')
+          end
+    
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
           end
         end
     
-            # Registers a callback to be called when a specific action sequence
-        # is run. This allows plugin authors to hook into things like VM
-        # bootup, VM provisioning, etc.
+              def select_type
+            self.class.select_type
+          end
+    
+            private
+    
+        initializer 'action_view.caching' do |app|
+      ActiveSupport.on_load(:action_view) do
+        if app.config.action_view.cache_template_loading.nil?
+          ActionView::Resolver.caching = app.config.cache_classes
+        end
+      end
+    end
+    
+        # Render but returns a valid Rack body. If fibers are defined, we return
+    # a streaming body that renders the template piece by piece.
+    #
+    # Note that partials are not supported to be rendered with streaming,
+    # so in such cases, we just wrap them in an array.
+    def render_body(context, options)
+      if options.key?(:partial)
+        [render_partial(context, options)]
+      else
+        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
+      end
+    end
+    
+        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
+  end
+    
+        def show
+      authorize @user, :change_email?
+    end
+    
+        def new
+      authorize :email_domain_block, :create?
+      @email_domain_block = EmailDomainBlock.new
+    end
+    
+        def resubscribe
+      authorize :instance, :resubscribe?
+      params.require(:by_domain)
+      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
+      redirect_to admin_instances_path
+    end
+    
+        def form_status_batch_params
+      params.require(:form_status_batch).permit(status_ids: [])
+    end
+    
+    module Rex
+module Proto
+module Http
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_msg_type(input)
+            input.value[0].value.to_i
+          end
+    
+        desc 'Run the functional specs'
+    task :functional, [:spec] => 'fixture_tarballs:unpack' do |_t, args|
+      args.with_defaults(:spec => '**/*')
+      sh 'bundle exec bacon #{specs('functional/#{args[:spec]}')}'
+    end
+    
+      def ruby_prefix
+    RbConfig::CONFIG['prefix']
+  end
+    
+        pod 'Alamofire', path: '../Alamofire Example/Alamofire'
+    
+        # Checks that the git version is at least 1.8.5
+    #
+    # @raise If the git version is older than 1.8.5
+    #
+    # @return [void]
+    #
+    def self.verify_minimum_git_version!
+      if git_version < Gem::Version.new('1.8.5')
+        raise Informative, 'You need at least git version 1.8.5 to use CocoaPods'
+      end
+    end
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
         #
-        # @param [Symbol] name Name of the action.
-        # @return [Array] List of the hooks for the given action.
-        def self.action_hook(name, &block)
-          # Get the list of hooks for the given hook name
-          data[:action_hooks] ||= {}
-          hooks = data[:action_hooks][name.to_sym] ||= []
-    
-                active_machines.each do |active_name, active_provider|
-              if name == active_name
-                # We found an active machine with the same name
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a configuration key defined for
-      # V2. Any configuration key plugins for V2 should inherit from this
-      # class.
-      class Config
-        # This constant represents an unset value. This is useful so it is
-        # possible to know the difference between a configuration value that
-        # was never set, and a value that is nil (explicitly). Best practice
-        # is to initialize all variables to this value, then the {#merge}
-        # method below will 'just work' in many cases.
-        UNSET_VALUE = Object.new
-    
-            # This returns all the registered configuration classes.
+        # This output is valid YAML so it can be parsed with 3rd party tools
         #
-        # @return [Hash]
-        def config
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:top])
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
             end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
           end
         end
-    
-        odie 'Unknown command: #{cmd}' unless path
-    puts path
-  end
-end
-
-    
-      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
-  # after workers have forked.
-  #
-  # The rolling file appender uses shared file locks to ensure that only one
-  # process will roll the log file. Each process writing to the file must have
-  # its own open file descriptor for `flock` to function properly. Reopening
-  # the file descriptors after forking ensures that each worker has a unique
-  # file descriptor.
-  if defined? PhusionPassenger
-    PhusionPassenger.on_event(:starting_worker_process) do |forked|
-      Logging.reopen if forked
-    end
-  end
-end
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    Capybara.javascript_driver = :poltergeist
-    
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
-    end
-  end
-    
-      class SendPublic < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
+      end
     end
   end
 end
 
     
-          verify_minimum_git_version!
-      verify_xcode_license_approved!
+      gem.required_ruby_version = '>= 2.0'
+  gem.add_dependency 'airbrussh', '>= 1.0.0'
+  gem.add_dependency 'i18n'
+  gem.add_dependency 'rake', '>= 10.0.0'
+  gem.add_dependency 'sshkit', '>= 1.9.0'
     
-          def use_identicon
-        @page.wiki.user_icons == 'identicon'
+      def test_file_exists(path)
+    exists?('f', path)
+  end
+    
+      def execute
+    signal_deprecation_warning_for_pack
+    
+        puts('Unpacking #{package_file}')
+    
+        it 'should raise configuration error when provided with too many spaces' do
+      expect {
+        Class.new(LogStash::Filters::Base) do
+          include LogStash::Config::Mixin
+          config_name 'test'
+          milestone 1
+          config :size_file, :validate => :bytes
+        end.new({'size_file' => '10  kib'})
+      }.to raise_error(LogStash::ConfigurationError)
+    end
+  end
+    
+        context 'when is not a system pipeline' do
+      it 'returns false if the pipeline is not a system pipeline' do
+        expect(subject.system?).to be_falsey
       end
+    end
+  end
+end
+
     
-          def extract_renamed_path_destination(file)
-        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
+          options = {:debug => ENV['LS_QA_DEBUG']}
+      puts 'Destroying #{machines}'
+      LogStash::VagrantHelpers.destroy(machines, options)
+      puts 'Bootstrapping #{machines}'
+      LogStash::VagrantHelpers.bootstrap(machines, options)
+    end
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
-    
-      class DuplicatePageError < Error
-    attr_accessor :dir
-    attr_accessor :existing_path
-    attr_accessor :attempted_path
+    end
+  end
+end
