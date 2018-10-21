@@ -1,183 +1,117 @@
 
         
-                  theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+                case array.length
+        when 0
+          ''.html_safe
+        when 1
+          ERB::Util.html_escape(array[0])
+        when 2
+          safe_join([array[0], array[1]], options[:two_words_connector])
+        else
+          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
         end
-        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-      # True if a {Formula} is being built with a specific option
-  # (which isn't named `with-*` or `without-*`).
-  # @deprecated
-  def include?(name)
-    @args.include?('--#{name}')
-  end
+              def translation
+            method_and_value = @tag_value.present? ? '#{@method_name}.#{@tag_value}' : @method_name
     
-    module Homebrew
-  def list
-    # Use of exec means we don't explicitly exit
-    list_unbrewed if ARGV.flag? '--unbrewed'
+    module ActionView
+  # This is the main entry point for rendering. It basically delegates
+  # to other objects like TemplateRenderer and PartialRenderer which
+  # actually renders the template.
+  #
+  # The Renderer will parse the options from the +render+ or +render_body+
+  # method and render a partial or a template based on the options. The
+  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
+  # the setup and logic necessary to render a view and a new object is created
+  # each time +render+ is called.
+  class Renderer
+    attr_accessor :lookup_context
     
-        results.map do |name|
-      begin
-        formula = Formulary.factory(name)
-        canonical_name = formula.name
-        canonical_full_name = formula.full_name
-      rescue
-        canonical_name = canonical_full_name = name
-      end
-      # Ignore aliases from results when the full name was also found
-      if aliases.include?(name) && results.include?(canonical_full_name)
-        next
-      elsif (HOMEBREW_CELLAR/canonical_name).directory?
-        pretty_installed(name)
-      else
-        name
-      end
-    end.compact
+    # Test if processing content string without any Liquid constructs, via Liquid,
+# is slower than checking whether constructs exist ( using `String#include?` )
+# and return-ing the 'plaintext' content string as is..
+#
+# Ref: https://github.com/jekyll/jekyll/pull/6735
+    
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
 end
 
     
-      def report
-    return @report if @report
-    
-      def self.require_universal_deps
-    define_method(:require_universal_deps?) { true }
-  end
-    
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
-  end
-    
-      module Controllers
-    autoload :Helpers,        'devise/controllers/helpers'
-    autoload :Rememberable,   'devise/controllers/rememberable'
-    autoload :ScopedViews,    'devise/controllers/scoped_views'
-    autoload :SignInOut,      'devise/controllers/sign_in_out'
-    autoload :StoreLocation,  'devise/controllers/store_location'
-    autoload :UrlHelpers,     'devise/controllers/url_helpers'
-  end
-    
-            warden.logout
-        expire_data_after_sign_out!
-        warden.clear_strategies_cache!
-        warden.lock! if lock
-    
-          # Initialize script_name with nil to prevent infinite loops in
-      # authenticated mounted engines in rails 4.2 and 5.0
-      opts[:script_name] = nil
-    
-      private
-    
-      def set_size
-    case params[:id]
-    when 'featured'
-      @account.pinned_statuses.count
-    else
-      raise ActiveRecord::NotFound
-    end
-  end
-    
-        def new
-      authorize :email_domain_block, :create?
-      @email_domain_block = EmailDomainBlock.new
-    end
-    
-      private
-    
-      def account_feed_path?
-    hub_topic_params[:controller] == 'accounts' && hub_topic_params[:action] == 'show' && hub_topic_params[:format] == 'atom'
-  end
+        #{text}
+  DATA
 end
+    
+          #
+    
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
+      end
+    end
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+          # Stores the provided location to redirect the user after signing in.
+      # Useful in combination with the `stored_location_for` helper.
+      #
+      # Example:
+      #
+      #   store_location_for(:user, dashboard_path)
+      #   redirect_to user_facebook_omniauth_authorize_path
+      #
+      def store_location_for(resource_or_scope, location)
+        session_key = stored_location_key_for(resource_or_scope)
+        
+        path = extract_path_from_location(location)
+        session[session_key] = path if path
+      end
+    
+            include Vagrant::Util
+    
+            # This contains all the command plugins by name, and returns
+        # the command class and options. The command class is wrapped
+        # in a Proc so that it can be lazy loaded.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        attr_reader :commands
+    
+      class Blockquote < Liquid::Block
+    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
+    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
+    Author =  /(.+)/
+    
+    end
 
     
-    lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano/version'
-    
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
-    
-        def display_error_message(ex)
-      unless options.backtrace
-        Rake.application.options.suppress_backtrace_pattern = backtrace_pattern if backtrace_pattern
-        trace '(Backtrace restricted to imported tasks)'
-      end
-    
-          attr_reader :locations, :values, :fetched_keys
-    
-          def get_installer_for(plugin_name)
-        uri = pack_uri(plugin_name)
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for braces around the last parameter in a method call
-      # if the last parameter is a hash.
-      # It supports `braces`, `no_braces` and `context_dependent` styles.
-      #
-      # @example EnforcedStyle: braces
-      #   # The `braces` style enforces braces around all method
-      #   # parameters that are hashes.
-      #
-      #   # bad
-      #   some_method(x, y, a: 1, b: 2)
-      #
-      #   # good
-      #   some_method(x, y, {a: 1, b: 2})
-      #
-      # @example EnforcedStyle: no_braces (default)
-      #   # The `no_braces` style checks that the last parameter doesn't
-      #   # have braces around it.
-      #
-      #   # bad
-      #   some_method(x, y, {a: 1, b: 2})
-      #
-      #   # good
-      #   some_method(x, y, a: 1, b: 2)
-      #
-      # @example EnforcedStyle: context_dependent
-      #   # The `context_dependent` style checks that the last parameter
-      #   # doesn't have braces around it, but requires braces if the
-      #   # second to last parameter is also a hash literal.
-      #
-      #   # bad
-      #   some_method(x, y, {a: 1, b: 2})
-      #   some_method(x, y, {a: 1, b: 2}, a: 1, b: 2)
-      #
-      #   # good
-      #   some_method(x, y, a: 1, b: 2)
-      #   some_method(x, y, {a: 1, b: 2}, {a: 1, b: 2})
-      class BracesAroundHashParameters < Cop
-        include ConfigurableEnforcedStyle
-        include RangeHelp
-    
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
-      end
