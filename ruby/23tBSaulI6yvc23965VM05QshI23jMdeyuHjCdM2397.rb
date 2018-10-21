@@ -1,86 +1,83 @@
 
         
-          def post_superenv_hacks
-    # Only allow Homebrew-approved directories into the PATH, unless
-    # a formula opts-in to allowing the user's path.
-    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
-      ENV.userpaths!
-    end
-  end
-    
-      def repo_var
-    @repo_var ||= tap.path.to_s.
-        strip_prefix(Tap::TAP_DIRECTORY.to_s).
-        tr('^A-Za-z0-9', '_').
-        upcase
-  end
-    
-        def replace_fadein(less)
-      less.gsub(/(?![\-$@.])fadein\((.*?),\s*(.*?)%\)/) { 'fade_in(#{$1}, #{$2.to_i / 100.0})' }
-    end
-    
-        def get_json(url)
-      JSON.parse get_file(url)
-    end
-  end
-end
-
-    
-    When /^I (?:sign|log) in with password '([^']*)'( on the mobile website)?$/ do |password, mobile|
-  @me.password = password
-  automatic_login
-  confirm_login mobile
-end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-    # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
-    
-      class OfflinePluginPackager
-    LOGSTASH_DIR = 'logstash'
-    DEPENDENCIES_DIR = ::File.join(LOGSTASH_DIR, 'dependencies')
-    
-      # Make sure we dont build this gem from a non jruby
-  # environment.
-  if RUBY_PLATFORM == 'java'
-    gem.platform = 'java'
-  else
-    raise 'The logstash-core-api need to be build on jruby'
-  end
-end
-
-    
-        desc 'Halt all VM's involved in the acceptance test round'
-    task :halt, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-    module RuboCop
-  module Cop
-    # Common functionality for checking the closing brace of a literal is
-    # either on the same line as the last contained elements, or a new line.
-    module MultilineLiteralBraceLayout
-      include ConfigurableEnforcedStyle
-    
-    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
-    
-    module RuboCop
-  module AST
-    # A node extension for `def` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `def` nodes within RuboCop.
-    class DefNode < Node
-      include ParameterizedNode
-      include MethodIdentifierPredicates
-    
-          # Returns the operator for the `kwsplat` as a string.
-      #
-      # @return [String] the double splat operator
-      def operator
-        DOUBLE_SPLAT
+            context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
       end
+    
+        it 'returns a label 'Disabled' if a given agent is disabled' do
+      stub(@agent).disabled? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Disabled'
+    end
+    
+            context 'when the schema_version is less than 1' do
+          it 'translates keep_events_for from days to seconds' do
+            valid_parsed_data.delete(:schema_version)
+            valid_parsed_data[:agents] = [valid_parsed_weather_agent_data.merge(keep_events_for: 5)]
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+            # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
+        end
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+      platform_is :windows do
+    it 'runs commands starting with any number of @ using shell' do
+      `#{ruby_cmd('p system 'does_not_exist'')} 2>NUL`.chomp.should == 'nil'
+      @object.system('@does_not_exist 2>NUL').should == false
+      @object.system('@@@#{ruby_cmd('exit 0')}').should == true
+    end
+  end
+end
+    
+        after :each do
+      @tmp_file.close
+      rm_r @tmp_file
+    end
+    
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
+end
+
+    
+      desc 'Install all spree gems'
+  task install: :build do
+    for_each_gem do |gem_path|
+      Bundler.with_clean_env do
+        sh 'gem install #{gem_path}'
+      end
+    end
+  end
+    
+          def error_during_processing(exception)
+        Rails.logger.error exception.message
+        Rails.logger.error exception.backtrace.join('\n')
+    
+            def show
+          respond_with(@property)
+        end
+    
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
