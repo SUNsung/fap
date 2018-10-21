@@ -1,132 +1,184 @@
 
         
-            after :each do
-      ENV['SHELL'] = @shell
-    end
+          def failed_strategy
+    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
+  end
     
-      ruby_version_is '2.5' do
-    describe ':uplevel keyword argument' do
-      before :each do
-        $VERBOSE = true
-      end
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
     
-    script_binding = binding
-    
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
+      # Override prefixes to consider the scoped view.
+  # Notice we need to check for the request due to a bug in
+  # Action Controller tests that forces _prefixes to be
+  # loaded before even having a request object.
   #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
+  # This method should be public as it is in ActionPack
+  # itself. Changing its visibility may break other gems.
+  def _prefixes #:nodoc:
+    @_prefixes ||= if self.class.scoped_views? && request && devise_mapping
+      ['#{devise_mapping.scoped_path}/#{controller_name}'] + super
+    else
+      super
+    end
+  end
     
-                cipher = OpenSSL::Cipher.new('rc4')
-            cipher.encrypt
-            cipher.key = k3
-            encrypted = cipher.update(data_encrypt) + cipher.final
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
+      end
     
-              # Encrypts the Rex::Proto::Kerberos::Model::AuthorizationData
-          #
-          # @param etype [Integer] the crypto schema to encrypt
-          # @param key [String] the key to encrypt
-          # @return [String] the encrypted result
-          # @raise [NotImplementedError] if encryption schema isn't supported
-          def encrypt(etype, key)
-            data = self.encode
+        # Try retrieving the URL options from the parent controller (usually
+    # ApplicationController). Instance methods are not supported at the moment,
+    # so only the class-level attribute is used.
+    def self.default_url_options(*args)
+      if defined?(Devise.parent_controller.constantize)
+        Devise.parent_controller.constantize.try(:default_url_options) || {}
+      else
+        {}
+      end
+    end
     
-              def initialize(options = {})
-            self.class.attributes.each do |attr|
-              if options.has_key?(attr)
-                m = (attr.to_s + '=').to_sym
-                self.send(m, options[attr])
-              end
-            end
-          end
+            format('%1$*2$e', 109.52, -20).should == '1.095200e+02        '
+        format('%1$*2$E', 109.52, -20).should == '1.095200E+02        '
+        format('%1$*2$f', 10.952, -20).should == '10.952000           '
+        format('%1$*2$g', 12.1234, -20).should == '12.1234             '
+        format('%1$*2$G', 12.1234, -20).should == '12.1234             '
+        format('%1$*2$a', 196, -20).should == '0x1.88p+7           '
+        format('%1$*2$A', 196, -20).should == '0X1.88P+7           '
     
-              # Decodes the till field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_till(input)
-            input.value[0].value
-          end
+      it 'accepts and uses a seed of 0' do
+    srand(0)
+    srand.should == 0
+  end
     
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
+      it 'no raises a RuntimeError on symbols' do
+    v = :sym
+    lambda { v.taint }.should_not raise_error(RuntimeError)
+    v.tainted?.should == false
+  end
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
+      it 'returns true when passed ?f if the argument is a regular file' do
+    Kernel.test(?f, @file).should == true
+  end
+    
+      it 'raises an UncaughtThrowError if there is no catch block for the symbol' do
+    lambda { throw :blah }.should raise_error(UncaughtThrowError)
+  end
+    
+      after :each do
+    Object.send :remove_method, :boom
+  end
+    
+    require 'rake/testtask'
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose = true
+end
+    
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
+  end
+end
+
+    
+        def byte_to_str_pos(pos)
+      @s.string.byteslice(0, pos).length
+    end
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+    end
+    
+      # Enable Rack::Cache to put a simple HTTP cache in front of your application
+  # Add `rack-cache` to your Gemfile before enabling this.
+  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
+  # config.action_dispatch.rack_cache = true
+    
+    desc 'Update configurations to support publishing to root or sub directory'
+task :set_root_dir, :dir do |t, args|
+  puts '>>> !! Please provide a directory, eg. rake config_dir[publishing/subdirectory]' unless args.dir
+  if args.dir
+    if args.dir == '/'
+      dir = ''
+    else
+      dir = '/' + args.dir.sub(/(\/*)(.+)/, '\\2').sub(/\/$/, '');
+    end
+    rakefile = IO.read(__FILE__)
+    rakefile.sub!(/public_dir(\s*)=(\s*)([''])[\w\-\/]*['']/, 'public_dir\\1=\\2\\3public#{dir}\\3')
+    File.open(__FILE__, 'w') do |f|
+      f.write rakefile
+    end
+    compass_config = IO.read('config.rb')
+    compass_config.sub!(/http_path(\s*)=(\s*)([''])[\w\-\/]*['']/, 'http_path\\1=\\2\\3#{dir}/\\3')
+    compass_config.sub!(/http_images_path(\s*)=(\s*)([''])[\w\-\/]*['']/, 'http_images_path\\1=\\2\\3#{dir}/images\\3')
+    compass_config.sub!(/http_fonts_path(\s*)=(\s*)([''])[\w\-\/]*['']/, 'http_fonts_path\\1=\\2\\3#{dir}/fonts\\3')
+    compass_config.sub!(/css_dir(\s*)=(\s*)([''])[\w\-\/]*['']/, 'css_dir\\1=\\2\\3public#{dir}/stylesheets\\3')
+    File.open('config.rb', 'w') do |f|
+      f.write compass_config
+    end
+    jekyll_config = IO.read('_config.yml')
+    jekyll_config.sub!(/^destination:.+$/, 'destination: public#{dir}')
+    jekyll_config.sub!(/^subscribe_rss:\s*\/.+$/, 'subscribe_rss: #{dir}/atom.xml')
+    jekyll_config.sub!(/^root:.*$/, 'root: /#{dir.sub(/^\//, '')}')
+    File.open('_config.yml', 'w') do |f|
+      f.write jekyll_config
+    end
+    rm_rf public_dir
+    mkdir_p '#{public_dir}#{dir}'
+    puts '## Site's root directory is now '/#{dir.sub(/^\//, '')}' ##'
+  end
+end
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+    
+  # Adds some extra filters used during the category creation process.
+  module Filters
+    
+        def get_cache_file_for(gist, file)
+      bad_chars = /[^a-zA-Z0-9\-_.]/
+      gist      = gist.gsub bad_chars, ''
+      file      = file.gsub bad_chars, ''
+      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
+      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
+    end
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
+  end
+    
+            def right_brace_and_space(loc_end, space)
+          brace_and_space =
+            range_with_surrounding_space(
+              range: loc_end,
+              side: :left,
+              newlines: space[:newlines],
+              whitespace: space[:right]
+            )
+          range_with_surrounding_comma(brace_and_space, :left)
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
     
-      end
+      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
     
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
-    end
-    
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
-      end
-    end
-  end
-    
-      # Removes trailing forward slash from a string for easily appending url segments
-  def strip_slash(input)
-    if input =~ /(.+)\/$|^\/$/
-      input = $1
-    end
-    input
-  end
-    
-    module Jekyll
+    RSpec.describe RuboCop::Cop::Layout::MultilineHashBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
