@@ -1,130 +1,283 @@
 
         
-        
-    {  // Reorder to the correct output order.
-  // TODO(szabadka): Modify the above computation so that this is not needed.
-  Complex tmp = a[2];
-  a[2] = a[3];
-  a[3] = a[5];
-  a[5] = a[7];
-  a[7] = a[4];
-  a[4] = a[1];
-  a[1] = a[6];
-  a[6] = tmp;
-}
+        // Calls the registered C++ shape inference function for <node> (a serialized
+// NodeDef).
+// Should not be called for shape functions that access input tensors; constant
+// input tensor values are not made available, and so the inferred shapes will
+// be less precise than they could be.
+//
+// Returns an error, or OK, in <out_status> according to whether the shape
+// inference was successful.
+//
+// On success, returns a vector populated with the inferred output shapes (as
+// serialized CppShapeInferenceResult protos) followed by a serialized
+// CppShapeInferenceInputsNeeded proto.
+//
+// This is temporary code to be used during the migration
+// from python shape inference functions to C++ shape inference functions.
+std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status);
     
-      void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) override;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
     
-    static const int kCrToGreenTable[256] = {
-  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
-  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
-  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
-  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
-  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
-  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
-  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
-  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
-  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
-  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
-  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
-  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
-  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
-  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
-   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
-   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
-        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
-  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
-  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
- -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
- -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
- -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
- -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
- -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
- -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
- -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
- -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
- -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
- -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
- -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
- -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
- -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
-};
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
-// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-static const double kDCTMatrix[64] = {
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
- -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
-  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
- -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
-  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
-  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
- -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
-  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
- -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
-  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
-  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
-};
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #endif  // GUETZLI_DCT_DOUBLE_H_
+    
+    {}  // namespace tensorflow
 
     
-        // The nodes are:
-    // [0, n): the sorted leaf nodes that we start with.
-    // [n]: we add a sentinel here.
-    // [n + 1, 2n): new parent nodes are added here, starting from
-    //              (n+1). These are naturally in ascending order.
-    // [2n]: we add a sentinel at the end as well.
-    // There will be (2n+1) elements at the end.
-    const HuffmanTree sentinel(~static_cast<uint32_t>(0), -1, -1);
-    tree[n] = sentinel;
-    tree[n + 1] = sentinel;
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
+ public:
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
+    }
     
-    // A node of a Huffman tree.
-struct HuffmanTree {
-  HuffmanTree() {}
-  HuffmanTree(uint32_t count, int16_t left, int16_t right)
-      : total_count_(count),
-        index_left_(left),
-        index_right_or_value_(right) {
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    class RandomAccessFile;
+    
+    
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
   }
-  uint32_t total_count_;
-  int16_t index_left_;
-  int16_t index_right_or_value_;
-};
-    
-    #include <cmath>
-    
-    // Single pixel rgb to 16-bit yuv conversion.
-// The returned yuv values are signed integers in the
-// range [-128, 127] inclusive.
-inline static void RGBToYUV16(const uint8_t* const rgb,
-                              coeff_t *out) {
-  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
-  const int r = rgb[0];
-  const int g = rgb[1];
-  const int b = rgb[2];
-  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
-  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
-  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
 }
     
-    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
-// parsed data.
-bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  const size_t start_pos = *pos;
-  VERIFY_LEN(3);
-  size_t marker_len = ReadUint16(data, pos);
-  int comps_in_scan = ReadUint8(data, pos);
-  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
-               COMPS_IN_SCAN);
+    #ifndef TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_ACTIVATION_H_
+#define TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_ACTIVATION_H_
+    
+    // BLAS plugin for CUDA platform via cuBLAS library.
+//
+// This satisfies the platform-agnostic BlasSupport interface.
+//
+// Note that the cuBLAS handle that this encapsulates is implicitly tied to the
+// context (and, as a result, the device) that the parent CUDAExecutor is tied
+// to. This simply happens as an artifact of creating the cuBLAS handle when a
+// CUDA context is active.
+//
+// Thread-safe post-initialization.
+class CUDABlas : public blas::BlasSupport {
+ public:
+  explicit CUDABlas(CUDAExecutor *parent);
     }
+    
+    port::StatusOr<DriverVersion> Diagnostician::FindKernelModuleVersion(
+    const string &driver_version_file_contents) {
+  static const char *kDriverFilePrelude = 'Kernel Module  ';
+  size_t offset = driver_version_file_contents.find(kDriverFilePrelude);
+  if (offset == string::npos) {
+    return port::Status(
+        port::error::NOT_FOUND,
+        port::StrCat('could not find kernel module information in '
+                     'driver version file contents: \'',
+                     driver_version_file_contents, '\''));
+  }
+    }
+    
+    
+    
+      std::vector<std::thread> workers;
+  for (auto worker = size_t{0}; worker < num_threads; ++worker) {
+    workers.push_back(std::thread([&] {
+      try {
+        hphp_thread_init();
+        hphp_session_init(Treadmill::SessionKind::HHBBC);
+        SCOPE_EXIT {
+          hphp_context_exit();
+          hphp_session_exit();
+          hphp_thread_exit();
+        };
+    }
+    }
+    }
+    
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
+    
+    struct ObjectData;
+struct Object;
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////n
+    }
+    
+      int cnt = 1;
+  bool ignore_default_configs = ::getenv('HHVM_NO_DEFAULT_CONFIGS') != nullptr;
+  while (cnt < argc) {
+    if (strcmp(argv[cnt], '-a') == 0 ||
+        strcmp(argv[cnt], '--interactive') == 0) {
+      need_file = false;
+      newargv.push_back('-a');
+      cnt++;
+      continue;
+    }
+    if (strcmp(argv[cnt], '-z') == 0) {
+      std::string arg = '-vDynamicExtensions.0=';
+      arg.append(argv[cnt+1]);
+      newargv.push_back(arg.c_str());
+      cnt += 2;
+      continue;
+    }
+    if (strcmp(argv[cnt], '-l') == 0 || strcmp(argv[cnt], '--lint') == 0) {
+      cnt++;
+      lint = true;
+      continue;
+    }
+    if (strcmp(argv[cnt], '-r') == 0) {
+      if (cnt + 1 == argc) {
+        // Hmm, no program fragment passed along. Let hhvm print its usage
+        // message?
+        newargv.push_back(argv[cnt++]);
+        continue;
+      }
+      assertx(cnt + 1 < argc);
+      program = argv[cnt + 1];
+      need_file = true;
+      cnt += 2;
+      continue;
+    }
+    if (strcmp(argv[cnt], '-i') == 0 || strcmp(argv[cnt], '--info') == 0) {
+      // Pretend they did '-r 'phpinfo();''
+      program = 'phpinfo();';
+      need_file = true;
+      cnt = argc; // no need to check the rest of options and arguments
+      break;
+    }
+    if (strcmp(argv[cnt], '-w') == 0) {
+      cnt++;
+      show = true;
+      continue;
+    }
+    if (strcmp(argv[cnt], '-v') == 0 || strcmp(argv[cnt], '--version') == 0) {
+      newargv.push_back('--version');
+      cnt = argc; // no need to check the rest of options and arguments
+      need_file = false;
+      break;
+    }
+    if (strcmp(argv[cnt], '--modules') == 0) {
+    // zend has a -m flag but we're already using it for --mode
+      newargv.push_back('--modules');
+      cnt = argc; // no need to check the rest of options and arguments
+      need_file = false;
+      break;
+    }
+    if (strcmp(argv[cnt], '-f') == 0 || strcmp(argv[cnt], '--file') == 0) {
+      cnt++;
+      newargv.push_back(lint ? '-l' : '-f');
+      newargv.push_back(argv[cnt++]);
+      need_file = false;
+      break;
+    }
+    if (strcmp(argv[cnt], '-n') == 0) {
+      ignore_default_configs = true;
+      cnt++;
+      newargv.push_back('--no-config');
+      continue;
+    }
+    if (strcmp(argv[cnt], '-c')  == 0) {
+      if (cnt + 1 < argc && argv[cnt + 1][0] != '-') {
+        newargv.push_back('-c');
+        newargv.push_back(argv[cnt + 1]);
+        cnt = cnt + 2;
+        continue;
+      } else {
+        fprintf(stderr, 'Notice: No config file specified');
+        exit(EXIT_FAILURE);
+      }
+    }
+    if (strcmp(argv[cnt], '-d')  == 0 || strcmp(argv[cnt], '--define') == 0) {
+      ini_fd = get_tempfile_if_not_exists(ini_fd, ini_path);
+    }
+    }
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    
+    {  closedir(dir);
+}
+    
+      String ret(maxlen, ReserveString);
+  char* path = ret.mutableData();
+    
+    /**
+ * Make dest directory look identical to src by copying files and directories,
+ * without copying identical files (so they keep the same timestamp as before).
+ */
+void syncdir(const std::string &dest, const std::string &src,
+             bool keepSrc = false);
+    
+    namespace CNTK
+{
+    class UDFUtils
+    {
+    public:
+    }
+    }
+    
+        // return the randomized feature bounds for a time range
+    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
+    {
+        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
+        size_t tend = min(te + randomizationrange / 2, map.size());
+        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
+    }
+    
+    #endif
