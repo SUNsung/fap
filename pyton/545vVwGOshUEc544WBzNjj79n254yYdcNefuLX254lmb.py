@@ -1,221 +1,313 @@
 
         
-        
-class DefaultCategories(Enum):
+            def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
-        def __init__(self, size):
-        self.size = size
-        self.table = [[] for _ in range(self.size)]
+        def __init__(self):
+        self.lookup = {}  # key: person_id, value: person_server
     
-        def add_link_to_crawl(self, url):
-        '''Add the given link to `links_to_crawl`.'''
-        pass
+    import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+import numpy as np
+import tensorflow as tf
     
-        # test that the user was inserted into the database
-    with app.app_context():
-        assert get_db().execute(
-            'select * from user where username = 'a'',
-        ).fetchone() is not None
-    
-        Some py2/py3 compatibility support based on a stripped down
-    version of six so we don't have to depend on a specific version
-    of it.
-    
-            Otherwise works as the :meth:`~flask.Flask.errorhandler` decorator
-        of the :class:`~flask.Flask` object.
-        '''
-        def decorator(f):
-            self.record_once(lambda s: s.app._register_error_handler(
-                self.name, code_or_exception, f))
-            return f
-        return decorator
-    
-        def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
-    
-    
-def _find_app():
-    top = _app_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_app_ctx_err_msg)
-    return top.app
-    
-        Not to be confused with the package path returned by :func:`find_package`.
+    def get_train_n_valid_inds(num_trials, train_fraction, nreplications):
+  '''Split the numbers between 0 and num_trials-1 into two portions for
+  training and validation, based on the train fraction.
+  Args:
+    num_trials: the number of trials
+    train_fraction: (e.g. .80)
+    nreplications: the number of spiking trials per initial condition
+  Returns:
+    a 2-tuple of two lists: the training indices and validation indices
     '''
-    # Module already imported and has a file attribute.  Use that first.
-    mod = sys.modules.get(import_name)
-    if mod is not None and hasattr(mod, '__file__'):
-        return os.path.dirname(os.path.abspath(mod.__file__))
+  train_inds = []
+  valid_inds = []
+  for i in range(num_trials):
+    # This line divides up the trials so that within one initial condition,
+    # the randomness of spikifying the condition is shared among both
+    # training and validation data splits.
+    if (i % nreplications)+1 > train_fraction * nreplications:
+      valid_inds.append(i)
+    else:
+      train_inds.append(i)
     
-        def setdefault(self, key, default=None):
-        self.accessed = True
-        return super(SecureCookieSession, self).setdefault(key, default)
+        Args:
+      shard_name: file path.
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+      all_embs = np.zeros([vocab.size, 1024])
+  for i in xrange(vocab.size):
+    input_dict = {t['inputs_in']: inputs,
+                  t['targets_in']: targets,
+                  t['target_weights_in']: weights}
+    if 'char_inputs_in' in t:
+      input_dict[t['char_inputs_in']] = (
+          vocab.word_char_ids[i].reshape([-1, 1, MAX_WORD_LEN]))
+    embs = sess.run(t['all_embs'], input_dict)
+    all_embs[i, :] = embs
+    sys.stderr.write('Finished word embedding %d/%d\n' % (i, vocab.size))
     
-    Author: dufferzafar
-'''
+      def _score_patches(self, word_patches):
+    '''Score a 2D matrix of word_patches and stitch results together.'''
+    batch_size, num_timesteps = self.shape
+    nrow, ncol = len(word_patches), len(word_patches[0])
+    max_len = num_timesteps * ncol
+    probs = np.zeros([0, max_len])  # accumulate results into this.
     
-            self.tail.appendleft(delta)
-        self.lasttime = now
-        self.concurrent += 1
+        for i in range(batch_size):
+      data_index = batch * batch_size + i
+      example = raw_data[data_index]
     
-    del sys
+      word_to_id = build_vocab(train_path)
+  train_data = _file_to_word_ids(train_path, word_to_id)
+  valid_data = _file_to_word_ids(valid_path, word_to_id)
+  test_data = _file_to_word_ids(test_path, word_to_id)
+  vocabulary = len(word_to_id)
+  return train_data, valid_data, test_data, vocabulary
+    
+      ## Load weights from language model checkpoint.
+  if FLAGS.language_model_ckpt_dir:
+    if FLAGS.maskgan_ckpt is None:
+      ## Generator Models.
+      if FLAGS.generator_model == 'rnn_nas':
+        load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+        print('Restoring Generator from %s.' % load_ckpt)
+        tf.logging.info('Restoring Generator from %s.' % load_ckpt)
+        gen_init_saver = init_savers['gen_init_saver']
+        gen_init_saver.restore(sess, load_ckpt)
+    
+      # The unique ngrams in the training set.
+  unique_ngrams_in_train = 0.
+    
+          return context_vector
+    
+            name=HTTPie  language=Python  description='CLI HTTP client'
+    
+        if not args.session and not args.session_read_only:
+        kwargs = get_requests_kwargs(args)
+        if args.debug:
+            dump_request(kwargs)
+        response = requests_session.request(**kwargs)
+    else:
+        response = sessions.get_response(
+            requests_session=requests_session,
+            args=args,
+            config_dir=config_dir,
+            session_name=args.session or args.session_read_only,
+            read_only=bool(args.session_read_only),
+        )
+    
+    
+class ConverterPlugin(object):
+    
+        '''
+    return path.replace('\\', '\\\\\\')
+    
+    
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        config['implicit_content_type'] = 'json'
+    config.save()
+    config.load()
+    assert 'implicit_content_type' not in config
+    assert not config['default_options']
+    
+    from httpie.compat import urlopen
+from httpie.downloads import (
+    parse_content_range, filename_from_content_disposition, filename_from_url,
+    get_unique_filename, ContentRangeError, Downloader,
+)
+from utils import http, MockEnvironment
+    
+    
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
+    
+        entry_points = {'console_scripts': proj_info['console_scripts']}
+)
 
     
+            link_list = []
     
-class Command(ScrapyCommand):
+    #----------------------------------------------------------------------
+def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
+    #Info XML
+    video_info = ckplayer_get_info_by_xml(ckinfo)
     
-            admin_command = '''osascript -e 'do shell script '%s' with administrator privileges' ''' % exec_command
-        cmd = admin_command.encode('utf-8')
-        xlog.info('try auto import CA command:%s', cmd)
-        os.system(cmd)
+    try:
+        title = kwargs['title']
+    except:
+        title = ''
+    type_ = ''
+    size = 0
     
-    import traceback
-import platform
+    if len(video_info['links']) > 0:  #has link
+        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
     
-            if isinstance(self.input, TokenStream):
-            return self.token.type
+    if 'size' in video_info:
+        size = int(video_info['size'])
+    else:
+        for i in video_info['links'][1:]:  #save 1st one
+            size += url_info(i)[2]
     
-        :returns: Augeas path to vhost relative to the containing file
-    :rtype: str
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
     
-    AUTOHSTS_FREQ = 172800
-'''Minimum time since last increase to perform a new one: 48h'''
+    def get_url_of_largest(info, api_key, size):
+    if info['media'] == 'photo':
+        sizes = size_suffixes
+        if size in sizes:
+            sizes = sizes[sizes.index(size):]
+        for suffix in sizes:
+            if 'url_' + suffix in info:
+                return info['url_' + suffix].replace('\\', '')
+        return None
+    else:
+        return get_orig_video_source(api_key, info['id'], info['secret'])
     
-            # Make conservative educated guess... this is very restrictive
-        # Consider adding more safety checks.
-        if len(vhost.addrs) != len(self.addrs):
-            return False
+        def test_filetime(self):
+        filename = support.TESTFN
+        self.addCleanup(support.unlink, filename)
     
-        def test_load_modules(self):
-        '''If only first is found, there is bad variable parsing.'''
-        self.assertTrue('status_module' in self.parser.modules)
-        self.assertTrue('mod_status.c' in self.parser.modules)
+    # Note that the above expectations are still wrong in some cases, such as:
+# * Windows when PYTHONLEGACYWINDOWSFSENCODING is set
+# * Any platform other than AIX that uses latin-1 in the C locale
+# * Any Linux distro where POSIX isn't a simple alias for the C locale
+# * Any Linux distro where the default locale is something other than 'C'
+#
+# Options for dealing with this:
+# * Don't set the PY_COERCE_C_LOCALE preprocessor definition on
+#   such platforms (e.g. it isn't set on Windows)
+# * Fix the test expectations to match the actual platform behaviour
     
-      For instance ('|' represents the cursor):
-    1. Buffer state: 'foo.|bar'
-    2. A completion candidate of 'zoobar' is shown and the user selects it.
-    3. Buffer state: 'foo.zoobar|bar' instead of 'foo.zoo|bar' which is what the
-    user wanted.
-    
-    
-def _FormatYcmdDebugInfo( ycmd ):
-  python = ycmd[ 'python' ]
-  clang = ycmd[ 'clang' ]
-  message = ( 'Server Python interpreter: {0}\n'
-              'Server Python version: {1}\n'
-              'Server has Clang support compiled in: {2}\n'
-              'Clang version: {3}\n'.format( python[ 'executable' ],
-                                             python[ 'version' ],
-                                             clang[ 'has_support' ],
-                                             clang[ 'version' ] ) )
-  extra_conf = ycmd[ 'extra_conf' ]
-  extra_conf_path = extra_conf[ 'path' ]
-  if not extra_conf_path:
-    message += 'No extra configuration file found\n'
-  elif not extra_conf[ 'is_loaded' ]:
-    message += ( 'Extra configuration file found but not loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  else:
-    message += ( 'Extra configuration file found and loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  return message
-    
-    
-def _HandlePollResponse( response, diagnostics_handler ):
-  if isinstance( response, list ):
-    for notification in response:
-      if 'message' in notification:
-        PostVimMessage( notification[ 'message' ],
-                        warning = False,
-                        truncate = True )
-      elif 'diagnostics' in notification:
-        diagnostics_handler.UpdateWithNewDiagnosticsForFile(
-          notification[ 'filepath' ],
-          notification[ 'diagnostics' ] )
-  elif response is False:
-    # Don't keep polling for this file
-    return False
-  # else any truthy response means 'nothing to see here; poll again in a
-  # while'
-    
-    from ycm.client.completion_request import CompletionRequest
+        def check_fsencoding(self, fs_encoding, expected=None):
+        self.assertIsNotNone(fs_encoding)
+        codecs.lookup(fs_encoding)
+        if expected:
+            self.assertEqual(fs_encoding, expected)
     
     
-class DiagnosticInterface( object ):
-  def __init__( self, bufnr, user_options ):
-    self._bufnr = bufnr
-    self._user_options = user_options
-    self._diagnostics = []
-    self._diag_filter = DiagnosticFilter.CreateFromOptions( user_options )
-    # Line and column numbers are 1-based
-    self._line_to_diags = defaultdict( list )
-    self._previous_diag_line_number = -1
-    self._diag_message_needs_clearing = False
+if __name__ == '__main__':
+    main()
+
+    
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
+    
+    <slide><title>Another demo slide</title>
+<point>It is important</point>
+<point>To have more than</point>
+<point>one slide</point>
+</slide>
+</slideshow>
+'''
+    
+    def test():
+    NUMBER_OF_PROCESSES = 4
+    TASKS1 = [(mul, (i, 7)) for i in range(20)]
+    TASKS2 = [(plus, (i, 8)) for i in range(10)]
     
     
-def RawResponse_ConvertedFromOmniCompleter_test():
-  vim_results = [
-    { 'word': 'WORD', 'abbr': 'ABBR', 'menu': 'MENU',
-      'kind': 'KIND', 'info': 'INFO' },
-    { 'word': 'WORD2', 'abbr': 'ABBR2', 'menu': 'MENU2',
-      'kind': 'KIND2', 'info': 'INFO' },
-    { 'word': 'WORD', 'abbr': 'ABBR', },
-    {},
-  ]
-  expected_results = [
-    has_entries( { 'insertion_text': 'WORD', 'menu_text': 'ABBR',
-                   'extra_menu_info': 'MENU', 'kind': [ 'KIND' ],
-                   'detailed_info': 'INFO' } ),
-    has_entries( { 'insertion_text': 'WORD2', 'menu_text': 'ABBR2',
-                   'extra_menu_info': 'MENU2', 'kind': [ 'KIND2' ],
-                   'detailed_info': 'INFO' } ),
-    has_entries( { 'insertion_text': 'WORD', 'menu_text': 'ABBR', } ),
-    has_entries( {} ),
-  ]
-  request = BuildOmnicompletionRequest( vim_results )
+class AlexaFlashBriefingView(http.HomeAssistantView):
+    '''Handle Alexa Flash Briefing skill requests.'''
     
+    from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.components.device_tracker import (
+    PLATFORM_SCHEMA, DOMAIN, ATTR_ATTRIBUTES, ENTITY_ID_FORMAT, DeviceScanner)
+from homeassistant.components.zone.zone import active_zone
+from homeassistant.helpers.event import track_utc_time_change
+import homeassistant.helpers.config_validation as cv
+from homeassistant.util import slugify
+import homeassistant.util.dt as dt_util
+from homeassistant.util.location import distance
     
-def EndsWithPython_BadPaths_test():
-  not_python_paths = [
-    None,
-    '',
-    '/opt/local/bin/vim',
-    r'C:\Program Files\Vim\vim74\gvim.exe',
-    '/usr/bin/python2.5',
-    '/home/user/.pyenv/shims/python3.2',
-  ]
+            self.last_results = last_results
     
+    _LOGGER = logging.getLogger(__name__)
     
-def KeywordsFromSyntaxListOutput_StatementAndTypeHierarchy_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-tBaa xxx foo bar
-         links to tFoo
-tFoo xxx zoo goo
-         links to tBar
-tBar xxx qux moo
-         links to Type
-sBaa xxx na bar
-         links to sFoo
-sFoo xxx zoo nb
-         links to sBar
-sBar xxx qux nc
-         links to Statement''' ),
-              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo',
-                                   'na', 'nb', 'nc' ) )
+        dispatcher_connect(hass, SIGNAL_VEHICLE_SEEN, see_vehicle)
+    dispatcher_send(hass, SIGNAL_VEHICLE_SEEN, vehicle)
+    
+        @property
+    def device_state_attributes(self):
+        '''Return the state attributes.'''
+        state_attr = {}
+        if self.vendor_id is not None:
+            state_attr[ATTR_VENDOR_ID] = self.vendor_id
+            state_attr[ATTR_VENDOR_NAME] = self.vendor_name
+        if self.type_id is not None:
+            state_attr[ATTR_TYPE_ID] = self.type_id
+            state_attr[ATTR_TYPE] = self.type
+        if self.physical_address is not None:
+            state_attr[ATTR_PHYSICAL_ADDRESS] = self.physical_address
+        return state_attr
+
+    
+    _logger = logging.getLogger( __name__ )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      def __init__( self, all_filters ):
+    self._all_filters = all_filters
+    self._cache = {}
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      eq_( request.Done(), True )
+    
+    from ycm import vimsupport
+from ycmd.utils import ToBytes
+from ycm.client.completion_request import ( CompletionRequest,
+                                            _FilterToMatchingCompletions,
+                                            _GetRequiredNamespaceImport )
+    
+          assert_that( ycm.IsServerAlive(), equal_to( True ) )
+      post_vim_message.assert_called_once_with( 'Restarting ycmd server...' )
+    finally:
+      WaitUntilReady()
+      StopServer( ycm )
+    
+      subprocess.check_call( [ sys.executable, '-m', 'nose' ] + nosetests_args )
