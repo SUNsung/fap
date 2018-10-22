@@ -1,176 +1,271 @@
 
         
-        // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n);
-// Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
+        #include 'atom/browser/api/atom_api_browser_window.h'
     
-      // Computes matrix.vector v = Wu.
-  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
-  // u is imagined to have an extra element at the end with value 1, to
-  // implement the bias, but it doesn't actually have it.
-  // Computes the base C++ implementation, if there are no partial_funcs_.
-  // NOTE: The size of the input vector (u) must be padded using
-  // RoundInputs above.
-  // The input will be over-read to the extent of the padding. There are no
-  // alignment requirements.
-  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                       const GenericVector<double>& scales, const int8_t* u,
-                       double* v) const;
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_content_tracing, Initialize)
+
     
-      /**
-   * Returns the baseline of the current object at the given level.
-   * The baseline is the line that passes through (x1, y1) and (x2, y2).
-   * WARNING: with vertical text, baselines may be vertical!
-   * Returns false if there is no baseline at the current position.
-   */
-  bool Baseline(PageIteratorLevel level,
-                int* x1, int* y1, int* x2, int* y2) const;
+    namespace {
+    }
     
-    /**
- * @name tess_segment_pass_n
- *
- * Segment a word using the pass_n conditions of the tess segmenter.
- * @param pass_n pass number
- * @param word word to do
- */
+    #include 'atom/browser/api/trackable_object.h'
+#include 'base/files/file_path.h'
+#include 'components/download/public/common/download_item.h'
+#include 'native_mate/handle.h'
+#include 'url/gurl.h'
     
-      // Gets a pix that contains an 8 bit threshold value at each pixel. The
-  // returned pix may be an integer reduction of the binary image such that
-  // the scale factor may be inferred from the ratio of the sizes, even down
-  // to the extreme of a 1x1 pixel thresholds image.
-  // Ideally the 8 bit threshold should be the exact threshold used to generate
-  // the binary image in ThresholdToPix, but this is not a hard constraint.
-  // Returns nullptr if the input is binary. PixDestroy after use.
-  virtual Pix* GetPixRectThresholds();
+      AcceleratorCallbackMap accelerator_callback_map_;
     
-    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/lib/power_observer.h'
+#include 'base/compiler_specific.h'
+#include 'native_mate/handle.h'
+#include 'ui/base/idle/idle.h'
     
-    void SecureAuthContext::AddProperty(const grpc::string& key,
-                                    const grpc::string_ref& value) {
-  if (!ctx_) return;
-  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+    gfx::Point Screen::GetCursorScreenPoint() {
+  return screen_->GetCursorScreenPoint();
 }
     
-      std::vector<grpc::string_ref> FindPropertyValues(
-      const grpc::string& name) const override;
+    namespace api {
+    }
     
-    void GenerateClientContext(absl::string_view method, CensusContext* ctxt,
-                           CensusContext* parent_ctxt) {
-  if (parent_ctxt != nullptr) {
-    SpanContext span_ctxt = parent_ctxt->Context();
-    Span span = parent_ctxt->Span();
-    if (span_ctxt.IsValid()) {
-      new (ctxt) CensusContext(method, &span);
-      return;
+    IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
+                           int /* object id */,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
+    
+    namespace nwapi {
+    }
+    
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+
+    
+    
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
+    }
+    return false;
+  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
+};
+    
+    #endif  // CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+
+    
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
+};
+    
+     protected:
+  ~NwObjDestroyFunction() override;
+    
+    #include <grpcpp/completion_queue.h>
+    
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
+  }
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
+  }
+  return identity;
+}
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
     }
   }
-  new (ctxt) CensusContext(method);
+  return '';
 }
     
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, int value) {
-  class IntOption final : public ServerBuilderOption {
-   public:
-    IntOption(const grpc::string& name, int value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-      enum class WriteStallCause {
-    kNone,
-    kMemtableLimit,
-    kL0FileCountLimit,
-    kPendingCompactionBytes,
-  };
-  static std::pair<WriteStallCondition, WriteStallCause>
-  GetWriteStallConditionAndCause(int num_unflushed_memtables, int num_l0_files,
-                                 uint64_t num_compaction_needed_bytes,
-                                 const MutableCFOptions& mutable_cf_options);
-    
-      // Compaction filter never applies to merge keys.
-  ASSERT_OK(db_->Put(WriteOptions(), 'foobar', one));
-  ASSERT_OK(Flush());
-  ASSERT_OK(db_->Merge(WriteOptions(), 'foobar', two));
-  ASSERT_OK(Flush());
-  newvalue = Get('foobar');
-  ASSERT_EQ(newvalue, three);
-  dbfull()->CompactRange(CompactRangeOptions(), nullptr, nullptr);
-  newvalue = Get('foobar');
-  ASSERT_EQ(newvalue, three);
-    
-      Options options = CurrentOptions();
-  options.create_if_missing = true;
-  options.write_buffer_size = 2048;
-  options.max_write_buffer_number = 2;
-  options.level0_file_num_compaction_trigger = 2;
-  options.level0_slowdown_writes_trigger = 9999;
-  options.level0_stop_writes_trigger = 9999;
-  options.target_file_size_base = 2;
-  options.level_compaction_dynamic_level_bytes = true;
-  options.max_bytes_for_level_base = 10240;
-  options.max_bytes_for_level_multiplier = 4;
-  options.max_background_compactions = 1;
-  const int kNumLevels = 5;
-  options.num_levels = kNumLevels;
-  options.max_compaction_bytes = 1;  // Force not expanding in compactions
-  BlockBasedTableOptions table_options;
-  table_options.block_size = 1024;
-  options.table_factory.reset(NewBlockBasedTableFactory(table_options));
-    
-      virtual Status NewIterators(
-      const ReadOptions& options,
-      const std::vector<ColumnFamilyHandle*>& column_families,
-      std::vector<Iterator*>* iterators) override;
-    
-    Status WriteBatchBase::Put(const SliceParts& key, const SliceParts& value) {
-  std::string key_buf, value_buf;
-  Slice key_slice(key, &key_buf);
-  Slice value_slice(value, &value_buf);
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusClientCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusClientCallData : public CallData {
+ public:
+  // Maximum size of trace context is sent on the wire.
+  static constexpr uint32_t kMaxTraceContextLen = 64;
+  // Maximum size of tags that are sent on the wire.
+  static constexpr uint32_t kMaxTagsLen = 2048;
     }
     
-      friend class WriteControllerToken;
-  friend class StopWriteToken;
-  friend class DelayWriteToken;
-  friend class CompactionPressureToken;
-    
-      env.now_micros_ += 3024u;  // sleep credit 2000
-    
-      // Sync + corrupt => no change
-  ASSERT_OK(writable_file->Fsync());
-  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
-  result.clear();
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
-                          const rocksdb::Slice& existing_value) const override {
-    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
-    ++merge_count_;
-    return existing_value == 'bad';
+      // Serializes a GrpcTraceContext into the provided buffer. Returns the number
+  // of bytes serialized into the buffer. If the buffer is not of sufficient
+  // size (it must be at least kGrpcTraceContextSize bytes) it will drop
+  // everything and return 0 bytes serialized. Inlined for performance reasons.
+  static size_t Encode(const GrpcTraceContext& tc, char* buf, size_t buf_size) {
+    if (buf_size < kGrpcTraceContextSize) {
+      return kEncodeDecodeFailure;
+    }
+    buf[kVersionIdOffset] = kVersionId;
+    buf[kTraceIdOffset] = kTraceIdField;
+    memcpy(&buf[kTraceIdOffset + 1], tc.trace_id,
+           opencensus::trace::TraceId::kSize);
+    buf[kSpanIdOffset] = kSpanIdField;
+    memcpy(&buf[kSpanIdOffset + 1], tc.span_id,
+           opencensus::trace::SpanId::kSize);
+    buf[kTraceOptionsOffset] = kTraceOptionsField;
+    memcpy(&buf[kTraceOptionsOffset + 1], tc.trace_options,
+           opencensus::trace::TraceOptions::kSize);
+    return kGrpcTraceContextSize;
   }
     
-      virtual void accept(DHTMessageCallback* callback) = 0;
-    
-      ~DHTSetup();
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createBucketRefreshTask()
-{
-  auto task = std::make_shared<DHTBucketRefreshTask>();
-  setCommonProperty(task);
-  return task;
+    const ViewDescriptor& ServerReceivedMessagesPerRpcCumulative() {
+  const static ViewDescriptor descriptor =
+      ViewDescriptor()
+          .set_name('grpc.io/server/sent_messages_per_rpc/cumulative')
+          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
 }
     
-      void setCommonProperty(const std::shared_ptr<DHTAbstractTask>& task);
     
-    DHTTaskQueueImpl::DHTTaskQueueImpl()
-    : periodicTaskQueue1_(NUM_CONCURRENT_TASK),
-      periodicTaskQueue2_(NUM_CONCURRENT_TASK),
-      immediateTaskQueue_(NUM_CONCURRENT_TASK)
+    {}  // namespace grpc
+
+    
+      // Lock over the persistent DB state.  Non-null iff successfully acquired.
+  FileLock* db_lock_;
+    
+    
+    {  // For fragments
+  kFirstType = 2,
+  kMiddleType = 3,
+  kLastType = 4
+};
+static const int kMaxRecordType = kLastType;
+    
+        if (type == kZeroType && length == 0) {
+      // Skip zero length record without reporting any drops since
+      // such records are produced by the mmap based writing code in
+      // env_posix.cc that preallocates file regions.
+      buffer_.clear();
+      return kBadRecord;
+    }
+    
+      // Record metadata for testing initial offset functionality
+  static size_t initial_offset_record_sizes_[];
+  static uint64_t initial_offset_last_record_offsets_[];
+  static int num_initial_offset_records_;
+    
+      // Format the header
+  char buf[kHeaderSize];
+  buf[4] = static_cast<char>(n & 0xff);
+  buf[5] = static_cast<char>(n >> 8);
+  buf[6] = static_cast<char>(t);
+    
+    bool DHTRoutingTable::addGoodNode(const std::shared_ptr<DHTNode>& node)
 {
+  return addNode(node, true);
 }
+    
+        taskFactory->setLocalNode(localNode);
+    taskFactory->setRoutingTable(routingTable.get());
+    taskFactory->setMessageDispatcher(dispatcher.get());
+    taskFactory->setMessageFactory(factory.get());
+    taskFactory->setTaskQueue(taskQueue.get());
+    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
+                       uint16_t tcpPort,
+                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
     
     
     {} // namespace aria2
+    
+    namespace aria2 {
+    }
+    
+    const std::string& DHTUnknownMessage::getMessageType() const { return UNKNOWN; }
+    
+    
+    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    state.SetBytesProcessed(state.iterations() * file.tellg());
+}
+BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
+BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
+BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
+BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
+BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
+BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
+BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
+    
+    namespace benchmark {
+namespace internal {
+// The arraysize(arr) macro returns the # of elements in an array arr.
+// The expression is a compile-time constant, and therefore can be
+// used in defining new arrays, for example.  If you use arraysize on
+// a pointer by mistake, you will get a compile-time error.
+//
+    }
+    }
+    
+    ConsoleReporter::OutputOptions GetOutputOptions(bool force_no_color = false);
+    
+    struct LeastSq {
+  LeastSq() : coef(0.0), rms(0.0), complexity(oNone) {}
+    }
+    
+    void CSVReporter::PrintRunData(const Run & run) {
+  std::ostream& Out = GetOutputStream();
+    }
+    
+    #if defined(BENCHMARK_OS_MACOSX)
+#include <mach/mach_time.h>
+#endif
+// For MSVC, we want to use '_asm rdtsc' when possible (since it works
+// with even ancient MSVC compilers), and when not possible the
+// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
+// environments, <windows.h> and <intrin.h> have conflicting
+// declarations of some other intrinsics, breaking compilation.
+// Therefore, we simply declare __rdtsc ourselves. See also
+// http://connect.microsoft.com/VisualStudio/feedback/details/262047
+#if defined(COMPILER_MSVC) && !defined(_M_IX86)
+extern 'C' uint64_t __rdtsc();
+#pragma intrinsic(__rdtsc)
+#endif
+    
+    
+    {#ifndef NDEBUG
+  Out << '***WARNING*** Library was built as DEBUG. Timings may be '
+         'affected.\n';
+#endif
+}
+    
+    void SleepForMilliseconds(int milliseconds) {
+  SleepForMicroseconds(milliseconds * kNumMicrosPerMilli);
+}
