@@ -1,148 +1,265 @@
 
         
-            with client:
-        auth.logout()
-        assert 'user_id' not in session
-
+        entries = []
+for v in versions:
+    fields = v.split('.')
+    year, month, day = map(int, fields[:3])
+    faked = 0
+    patchlevel = 0
+    while True:
+        try:
+            datetime.date(year, month, day)
+        except ValueError:
+            day -= 1
+            faked += 1
+            assert day > 0
+            continue
+        break
+    if len(fields) >= 4:
+        try:
+            patchlevel = int(fields[3])
+        except ValueError:
+            patchlevel = 1
+    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
     
     
-class locked_cached_property(object):
-    '''A decorator that converts a function into a lazy property.  The
-    function wrapped is called the first time to retrieve the result
-    and then that calculated result is used the next time you access
-    the value.  Works like the one in Werkzeug but has a lock for
-    thread safety.
-    '''
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
+    import io
+import optparse
     
-def htmlsafe_dumps(obj, **kwargs):
-    '''Works exactly like :func:`dumps` but is safe for use in ``<script>``
-    tags.  It accepts the same arguments and returns a JSON string.  Note that
-    this is available in templates through the ``|tojson`` filter which will
-    also mark the result as safe.  Due to how this function escapes certain
-    characters this is safe even if used outside of ``<script>`` tags.
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
     
-    setup(name='thefuck',
-      version=VERSION,
-      description='Magnificent app which corrects your previous console command',
-      long_description=long_description,
-      author='Vladimir Iakovlev',
-      author_email='nvbn.rm@gmail.com',
-      url='https://github.com/nvbn/thefuck',
-      license='MIT',
-      packages=find_packages(exclude=['ez_setup', 'examples',
-                                      'tests', 'tests.*', 'release']),
-      include_package_data=True,
-      zip_safe=False,
-      install_requires=install_requires,
-      extras_require=extras_require,
-      entry_points={'console_scripts': [
-          'thefuck = thefuck.entrypoints.main:main',
-          'fuck = thefuck.entrypoints.not_configured:main']})
-
+        with open(ZSH_COMPLETION_FILE, 'w') as f:
+        f.write(template)
     
+        def test_download_json(self):
+        uri = encode_data_uri(b'{'foo': 'blah'}', 'application/json')
+        self.assertEqual(self.ie._download_json(uri, None), {'foo': 'blah'})
+        uri = encode_data_uri(b'callback({'foo': 'blah'})', 'application/javascript')
+        self.assertEqual(self.ie._download_json(uri, None, transform_source=strip_jsonp), {'foo': 'blah'})
+        uri = encode_data_uri(b'{'foo': invalid}', 'application/json')
+        self.assertRaises(ExtractorError, self.ie._download_json, uri, None)
+        self.assertEqual(self.ie._download_json(uri, None, fatal=False), None)
     
-@pytest.fixture(autouse=True)
-def functional(request):
-    if request.node.get_marker('functional') \
-            and not request.config.getoption('enable_functional'):
-        pytest.skip('functional tests are disabled')
+        changed = bool(insertions or deletions)
+    update = {
+        'RuleId': rule_id,
+        'Updates': insertions + deletions
+    }
+    if changed:
+        try:
+            run_func_with_change_token_backoff(client, module, update, client.update_rule, wait=True)
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, msg='Could not update rule conditions')
     
+            # Create optional stack outputs
+        all_facts = module.params.get('all_facts')
+        if all_facts or module.params.get('stack_resources'):
+            facts['stack_resource_list'] = service_mgr.list_stack_resources(stack_name)
+            facts['stack_resources'] = to_dict(facts.get('stack_resource_list'), 'LogicalResourceId', 'PhysicalResourceId')
+        if all_facts or module.params.get('stack_template'):
+            facts['stack_template'] = service_mgr.get_template(stack_name)
+        if all_facts or module.params.get('stack_policy'):
+            facts['stack_policy'] = service_mgr.get_stack_policy(stack_name)
+        if all_facts or module.params.get('stack_events'):
+            facts['stack_events'] = service_mgr.describe_stack_events(stack_name)
     
-python_3 = (u'thefuck/python3-bash',
-            u'FROM python:3',
-            u'sh')
-    
-    
-@pytest.mark.parametrize('script, output, help_text, result', [
-    ('apt-get isntall vim', invalid_operation('isntall'),
-     apt_get_help, 'apt-get install vim'),
-    ('apt saerch vim', invalid_operation('saerch'),
-     apt_help, 'apt search vim'),
-])
-def test_get_new_command(set_help, output, script, help_text, result):
-    set_help(help_text)
-    assert get_new_command(Command(script, output))[0] == result
-
-    
-    
-no_such_subcommand_old = '''No such subcommand
-    
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
-    
-            ax.set_xlabel('n_samples')
-        ax.set_ylabel('n_features')
-        ax.set_zlabel('Time (s)')
-        ax.set_zlim3d(0.0, max_time * 1.1)
-        ax.set_title(label)
-        # ax.legend()
-        i += 1
-    plt.show()
-
-    
-    The input data is mostly low rank but is a fat infinite tail.
+    RETURN = '''
+log_groups:
+    description: Return the list of complex objetcs representing log groups
+    returned: success
+    type: complex
+    contains:
+        log_group_name:
+            description: The name of the log group.
+            returned: always
+            type: string
+        creation_time:
+            description: The creation time of the log group.
+            returned: always
+            type: integer
+        retention_in_days:
+            description: The number of days to retain the log events in the specified log group.
+            returned: always
+            type: integer
+        metric_filter_count:
+            description: The number of metric filters.
+            returned: always
+            type: integer
+        arn:
+            description: The Amazon Resource Name (ARN) of the log group.
+            returned: always
+            type: string
+        stored_bytes:
+            description: The number of bytes stored.
+            returned: always
+            type: string
+        kms_key_id:
+            description: The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.
+            returned: always
+            type: string
 '''
-from __future__ import print_function
     
-    PROJ_NAME = 'you-get'
-PACKAGE_NAME = 'you_get'
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import (boto3_conn, ec2_argument_spec, get_aws_connection_info, ansible_dict_to_boto3_filter_list,
+                                      camel_dict_to_snake_dict, boto3_tag_list_to_ansible_dict)
     
-    _options = [
-    'help',
-    'version',
-    'gui',
-    'force',
-    'playlists',
-]
-_short_options = 'hVgfl'
+    # Delete Customer Gateway
+- ec2_customer_gateway:
+    ip_address: 1.2.3.4
+    name: IndianapolisOffice
+    state: absent
+    region: us-east-1
+  register: cgw
+'''
     
-    #----------------------------------------------------------------------
-def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
-    if is_xml:  #URL is XML URL
+    
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
         try:
-            title = kwargs['title']
-        except:
-            title = ''
-        try:
-            headers = kwargs['headers']  #headers provided
-            ckinfo = get_content(url, headers = headers)
-        except NameError:
-            ckinfo = get_content(url)
+        vpc_obj = AWSRetry.backoff(
+            delay=3, tries=8,
+            catch_extra_error_codes=['InvalidVpcID.NotFound'],
+        )(connection.describe_vpcs)(VpcIds=[vpc_id])['Vpcs'][0]
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Failed to describe VPCs')
+    try:
+        vpc_obj['ClassicLinkEnabled'] = get_classic_link_with_backoff(connection, vpc_id)
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Failed to describe VPCs')
+    
+                        if verbosity >= 3:
+                        result['original_policy'] = original_policy
+    
+        if not HAS_BOTO3:
+        module.fail_json(msg='boto3 required for this module')
+    
+            try:
+            connection.delete_user(**params)
+        except ClientError as e:
+            module.fail_json(msg='Unable to delete user {0}: {1}'.format(params['UserName'], to_native(e)),
+                             exception=traceback.format_exc(), **camel_dict_to_snake_dict(e.response))
+        except ParamValidationError as e:
+            module.fail_json(msg='Unable to delete user {0}: {1}'.format(params['UserName'], to_native(e)),
+                             exception=traceback.format_exc())
+    
+        dimensions = 500 * np.arange(1, n_iter + 1)
+    
+    In both cases, only 10% of the features are informative.
+'''
+import gc
+from time import time
+import numpy as np
+    
+    
+@ignore_warnings
+def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
+              formats=tuple(v for k, v in sorted(FORMATS.items())),
+              samples=1000, classes=4, density=.2,
+              n_times=5):
+    '''Times metric calculations for a number of inputs
+    
+        it = 0
+    results = defaultdict(lambda: [])
+    chunk = 100
+    
+    
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+    
+        #Parsing the arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dir_path', help = 'Path to tldr 'pages' directory')
+    parser.add_argument('-c', choices=['solarized-light', 'solarized-dark'], help='Color scheme of the PDF')
+    args = parser.parse_args()
+    
+    loc = args.dir_path
+    if args.c == 'solarized-light' or args.c == 'solarized-dark':
+        colorscheme = args.c
         
-        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
-                                info_only, title = title)
+    main(loc, colorscheme)
+
     
-        sd_urls = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'sd_src_no_ratelimit:'([^']*)'', html)
-    ]))
-    hd_urls = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'hd_src_no_ratelimit:'([^']*)'', html)
-    ]))
-    urls = hd_urls if hd_urls else sd_urls
     
-    # Find all facial features in all the faces in the image
-face_landmarks_list = face_recognition.face_landmarks(image)
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
     
-    for face_location in face_locations:
     
-                # If a match was found in known_face_encodings, just use the first one.
-            if True in matches:
-                first_match_index = matches.index(True)
-                name = known_face_names[first_match_index]
+  def Done( self ):
+    return True
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
     
-        def test_raw_face_landmarks(self):
-        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg'))
-        face_landmarks = api._raw_face_landmarks(img)
-        example_landmark = face_landmarks[0].parts()[10]
+  def Just_Doc_String_test( self ):
+    self._Check( 'not_an_int', {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'extra_data': {
+        'doc_string':    'DOC STRING',
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DOC STRING',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': 'not_an_int',
+    } )
+    
+      request_data = {
+    'start_column': start_column
+  }
+  request = OmniCompletionRequest( omni_completer, request_data )
+  request.Start()
+    
+    
+def _assert_accept_equals( filter, text_or_obj, expected ):
+  if not isinstance( text_or_obj, dict ):
+    text_or_obj = { 'text': text_or_obj }
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+@patch( 'ycm.vimsupport.GetVariableValue',
+        GetVariableValue_CompleteItemIs( 'Test' ) )
+def GetCompletionsUserMayHaveCompleted_ReturnMatchIfMatches_test( *args ):
+  completions = [ BuildCompletionNamespace( None ) ]
+  with _SetupForCsharpCompletionDone( completions ) as request:
+    eq_( request._GetCompletionsUserMayHaveCompleted(), completions )
+    
+      # We update the diagnostic on the current cursor position
+  post_vim_message.assert_has_exact_calls( [
+    call( 'error text in current buffer', truncate = True, warning = False ),
+  ] )
+    
+    
+# This file provides an UnsafeThreadPoolExecutor, which operates exactly like
+# the upstream Python version of ThreadPoolExecutor with one exception: it
+# doesn't wait for worker threads to finish before shutting down the Python
+# interpreter.
+#
+# This is dangerous for many workloads, but fine for some (like when threads
+# only send network requests). The YCM workload is one of those workloads where
+# it's safe (the aforementioned network requests case).
