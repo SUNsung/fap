@@ -1,149 +1,209 @@
 
         
-            def reject_friend_request(self, friend_id):
-        pass
-    
-        HOUSING = 0
-    FOOD = 1
-    GAS = 2
-    SHOPPING = 3
-    # ...
+                (foo, 2), p1
+        (bar, 3), p1
+        (foo, 3), p2
+        (bar, 10), p3
+        (foo, 1), p4
     
     
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
+    
+        monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
+    result = runner.invoke(args=['init-db'])
+    assert 'Initialized' in result.output
+    assert Recorder.called
 
     
     
-class Graph(object):
+def is_ip(value):
+    '''Determine if the given string is an IP address.
     
-    # the data, split between train and test sets
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-    
-    from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
-    
-    
-def test_objective_shapes_2d():
-    y_a = K.variable(np.random.random((6, 7)))
-    y_b = K.variable(np.random.random((6, 7)))
-    for obj in allobj:
-        objective_output = obj(y_a, y_b)
-        assert K.eval(objective_output).shape == (6,)
-    
-    # Apply a dense layer to the every temporal slice of an input. For each of step
-# of the output sequence, decide which character should be chosen.
-model.add(layers.TimeDistributed(layers.Dense(len(chars), activation='softmax')))
-model.compile(loss='categorical_crossentropy',
-              optimizer='adam',
-              metrics=['accuracy'])
-model.summary()
-    
-                batches = make_batches(num_train_samples, batch_size)
-            for batch_index, (batch_start, batch_end) in enumerate(batches):
-                batch_ids = index_array[batch_start:batch_end]
-                try:
-                    if isinstance(fit_inputs[-1], float):
-                        # Do not slice the training phase flag.
-                        ins_batch = slice_arrays(
-                            fit_inputs[:-1], batch_ids) + [fit_inputs[-1]]
-                    else:
-                        ins_batch = slice_arrays(fit_inputs, batch_ids)
-                except TypeError:
-                    raise TypeError('TypeError while preparing batch. '
-                                    'If using HDF5 input data, '
-                                    'pass shuffle='batch'.')
-                batch_logs = {}
-                batch_logs['batch'] = batch_index
-                batch_logs['size'] = len(batch_ids)
-                callbacks.on_batch_begin(batch_index, batch_logs)
-                for i in indices_for_conversion_to_dense:
-                    ins_batch[i] = ins_batch[i].toarray()
-    
-    
-    {            'utf8_mode': 1,
-            'stdio_encoding': 'utf-8',
-            'stdio_errors': 'surrogateescape',
-            'filesystem_encoding': 'utf-8',
-            'filesystem_errors': self.UTF8_MODE_ERRORS,
-            'user_site_directory': 0,
-            '_frozen': 1,
-        }
-        self.check_config('init_global_config', config)
-    
-        def test_text_modes(self):
-        text = self.TEXT.decode('ascii')
-        text_native_eol = text.replace('\n', os.linesep)
-        for mode in ('wt', 'xt'):
-            if mode == 'xt':
-                unlink(self.filename)
-            with self.open(self.filename, mode) as f:
-                f.write(text)
-            with open(self.filename, 'rb') as f:
-                file_data = ext_decompress(f.read()).decode('ascii')
-                self.assertEqual(file_data, text_native_eol)
-            with self.open(self.filename, 'rt') as f:
-                self.assertEqual(f.read(), text)
-            with self.open(self.filename, 'at') as f:
-                f.write(text)
-            with open(self.filename, 'rb') as f:
-                file_data = ext_decompress(f.read()).decode('ascii')
-                self.assertEqual(file_data, text_native_eol * 2)
-    
-        # Load the records from the pickle data stream.
-    file.seek(0)
-    memos = DBUnpickler(file, conn).load()
-    
-    # Make a local copy of what we are going to send.
-with open('outgoing.msg', 'wb') as f:
-    f.write(bytes(msg))
-    
-    #
-# Function used to calculate result
-#
-    
-    # If not '', a 'Last updated on:' timestamp is inserted at every page
-# bottom, using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
-    
-        :param face_image: The image that contains one or more faces
-    :param known_face_locations: Optional - the bounding boxes of each face if you already know them.
-    :param num_jitters: How many times to re-sample the face when calculating encoding. Higher is more accurate, but slower (i.e. 100 is 100x slower)
-    :return: A list of 128-dimensional face encodings (one for each face in the image)
+        If there is no handler for the logger's effective level, add a
+    :class:`~logging.StreamHandler` for
+    :func:`~flask.logging.wsgi_errors_stream` with a basic format.
     '''
-    raw_landmarks = _raw_face_landmarks(face_image, known_face_locations, model='small')
-    return [np.array(face_encoder.compute_face_descriptor(face_image, raw_landmark_set, num_jitters)) for raw_landmark_set in raw_landmarks]
+    logger = logging.getLogger('flask.app')
     
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = __short_version__
-# The full version, including alpha/beta/rc tags.
-release = __version__
+        :rtype: str
+    '''
+    warnings.warn((
+        'In requests 3.0, get_unicode_from_response will be removed. For '
+        'more information, please see the discussion on issue #2266. (This'
+        ' warning should only appear once.)'),
+        DeprecationWarning)
     
-    import requests
-import voluptuous as vol
+        def test_decode_bad(self):
+        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
     
-        def _make_request(self):
-        # Weirdly enough, this doesn't seem to require authentication
-        data = [{
-            'request': {
-                'sinceRevision': 0
-            },
-            'action': 'http://linksys.com/jnap/devicelist/GetDevices'
-        }]
-        headers = {'X-JNAP-Action': 'http://linksys.com/jnap/core/Transaction'}
-        return requests.post('http://{}/JNAP/'.format(self.host),
-                             timeout=DEFAULT_TIMEOUT,
-                             headers=headers,
-                             json=data)
+    
+class HeaderTest(unittest.TestCase):
+    '''Tests for acme.jws.Header.'''
+    
+        # Remove components from the end of file_path until it becomes valid
+    while not os.path.exists(file_path):
+        file_path, _, internal_path_part = file_path.rpartition('/')
+        internal_path.append(internal_path_part)
+    
+            self.assertEqual(len(matches), 1)
+        self.assertEqual(self.parser.get_arg(matches[0]), '1234')
+    
+            achall = self.achalls[0]
+        self.sni.add_chall(achall)
+        response = self.achalls[0].response(self.auth_key)
+        mock_setup_cert = mock.MagicMock(return_value=response)
+        # pylint: disable=protected-access
+        self.sni._setup_challenge_cert = mock_setup_cert
+    
+    # -- General configuration ------------------------------------------------
+    
+        def test_caught_exception(self):
+        def f(p):
+            try: 1/0
+            except: pass
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident),
+                              ])
+    
+    def splitext(p):
+    p = os.fspath(p)
+    if isinstance(p, bytes):
+        return genericpath._splitext(p, b'\\', b'/', b'.')
+    else:
+        return genericpath._splitext(p, '\\', '/', '.')
+splitext.__doc__ = genericpath._splitext.__doc__
+    
+        def __init__(self, child_parts):
+        self.child_parts = child_parts
+        if child_parts:
+            self.successor = _make_selector(child_parts)
+            self.dironly = True
+        else:
+            self.successor = _TerminatingSelector()
+            self.dironly = False
+    
+            # Test character: cent sign, encoded as 0x4A (ASCII J) in CP424,
+        # not representable in ASCII.
+    
+            if MS_WINDOWS:
+            # PYTHONLEGACYWINDOWSFSENCODING disables the UTF-8 mode
+            # and has the priority over -X utf8 and PYTHONUTF8
+            out = self.get_output('-X', 'utf8', '-c', code,
+                                  PYTHONUTF8='strict',
+                                  PYTHONLEGACYWINDOWSFSENCODING='1')
+            self.assertEqual(out, 'mbcs/replace')
+    
+    import os
+import smtplib
+# For guessing MIME type based on file name extension
+import mimetypes
+    
+    
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
+    
+    def handleSlide(slide):
+    handleSlideTitle(slide.getElementsByTagName('title')[0])
+    handlePoints(slide.getElementsByTagName('point'))
+    
+        # Get and print results
+    print('Unordered results:')
+    for i in range(len(TASKS1)):
+        print('\t', done_queue.get())
+    
+    
+def CheckCall( args, **kwargs ):
+  try:
+    subprocess.check_call( args, **kwargs )
+  except subprocess.CalledProcessError as error:
+    sys.exit( error.returncode )
+    
+    
+class CompleterAvailableRequest( BaseRequest ):
+  def __init__( self, filetypes ):
+    super( CompleterAvailableRequest, self ).__init__()
+    self.filetypes = filetypes
+    self._response = None
+    
+        if self._response_future is None:
+      # First poll
+      self._SendRequest()
+      return True
+    
+    from ycm.client.base_request import BaseRequest
+    
+          BaseRequest().GetDataFromHandler( 'healthy', display_message = False )
+
+    
+    
+  def SubsetForTypes( self, filetypes ):
+    # check cache
+    cache_key = ','.join( filetypes )
+    cached = self._cache.get( cache_key )
+    if cached is not None:
+      return cached
+    
+    
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+    
+    
+@patch( 'ycm.vimsupport.GetVariableValue',
+        GetVariableValue_CompleteItemIs( 'Test' ) )
+def GetCompletionsUserMayHaveCompleted_ReturnMatchIfMatches_test( *args ):
+  completions = [ BuildCompletionNamespace( None ) ]
+  with _SetupForCsharpCompletionDone( completions ) as request:
+    eq_( request._GetCompletionsUserMayHaveCompleted(), completions )
+    
+    
+def Main():
+  ( parsed_args, nosetests_args ) = ParseArguments()
+  if not parsed_args.no_flake8:
+    RunFlake8()
+  BuildYcmdLibs( parsed_args )
+  NoseTests( parsed_args, nosetests_args )
