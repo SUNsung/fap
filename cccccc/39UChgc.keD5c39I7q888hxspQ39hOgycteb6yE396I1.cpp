@@ -1,447 +1,329 @@
 
         
-          // Convert output shapes.
-  output_tensor_shape_protos->resize(c.num_outputs());
-  CppShapeInferenceResult out;
-  for (int i = 0; i < c.num_outputs(); ++i) {
-    out.Clear();
-    ProtoFromShapeHandle(c.output(i), &c, out.mutable_shape());
-    }
+        #ifndef CONTENT_NW_SRC_API_APP_APP_H_
+#define CONTENT_NW_SRC_API_APP_APP_H_
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    int NPyBfloat16_Fill(void* buffer_raw, npy_intp length, void* ignored) {
-  bfloat16* const buffer = reinterpret_cast<bfloat16*>(buffer_raw);
-  const float start(buffer[0]);
-  const float delta = static_cast<float>(buffer[1]) - start;
-  for (npy_intp i = 2; i < length; ++i) {
-    buffer[i] = static_cast<bfloat16>(start + i * delta);
-  }
-  return 0;
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    #include 'tensorflow/python/lib/core/numpy.h'
-    
-    
-    {  DCHECK(PyDict_Check(code_to_exc_type_map));
-  PyObject* key;
-  PyObject* value;
-  Py_ssize_t pos = 0;
-  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
-    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
-    singleton_->exc_types_[code] = value;
-    // The exception classes should also have the lifetime of the process, but
-    // incref just in case.
-    Py_INCREF(value);
-  }
-}
-    
-    #include 'tensorflow/stream_executor/blas.h'
-    
-      inline const shared_ptr<SyncedMemory>& data() const {
-    CHECK(data_);
-    return data_;
-  }
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    v8::Handle<v8::Value> AllocateId(int routing_id) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope scope(isolate);
     }
     
-      virtual inline const char* type() const { return 'Bias'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MaxBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    namespace ui {
+    }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    
-    {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
-};
-}  // namespace caffe
+    bool NwAppSetProxyConfigFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  net::ProxyConfigWithAnnotation config;
+  std::unique_ptr<nwapi::nw__app::SetProxyConfig::Params> params(
+      nwapi::nw__app::SetProxyConfig::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params.get());
+    }
     
      protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  ~NwAppQuitFunction() override;
     
-      // algorithms for forward and backwards convolutions
-  cudnnConvolutionFwdAlgo_t *fwd_algo_;
-  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
-  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-#include 'caffe/layers/power_layer.hpp'
-    
-    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
-
-    
-    REGISTER_GRADIENT(Sub, GetSubGradient);
-    
-    
-    {
-    {OPERATOR_SCHEMA(ExtendTensor)
-    .NumInputs(2)
-    .NumOutputs(1)
-    .EnforceInplace({{0, 0}})
-    .SetDoc(R'DOC(
-Extend input 0 if necessary based on max element in input 1.
-Input 0 must be the same as output, that is, it is required to be in-place.
-Input 0 may have to be re-allocated in order for accommodate to the new size.
-Currently, an exponential growth ratio is used in order to ensure amortized
-constant time complexity.
-All except the outer-most dimension must be the same between input 0 and 1.
-)DOC')
-    .Input(0, 'tensor', 'The tensor to be extended.')
-    .Input(
-        1,
-        'new_indices',
-        'The size of tensor will be extended based on max element in '
-        'new_indices.')
-    .Output(
-        0,
-        'extended_tensor',
-        'Same as input 0, representing the mutated tensor.');
-}
-} // namespace
-
-    
-    #include 'caffe2/core/common_omp.h'
-#include 'caffe2/core/context.h'
-#include 'caffe2/core/logging.h'
-#include 'caffe2/core/operator.h'
-    
-    namespace caffe2 {
-    }
-    
-    namespace mxnet {
-/*! \brief runtime functions for NDArray */
-class Imperative {
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
  public:
-  /*! \brief */
-  class AGInfo {
-   public:
-    Context ctx;
-    OpReqType grad_req;
-    OpStatePtr state;
-    std::vector<NDArray> outputs;
-    std::vector<NDArray> out_grads;
-    bool fresh_out_grad;
-    }
-    }
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-    #if DMLC_USE_CXX11
-// OperatorProperty allows C++11, while Operator do not rely on it.
-/*!
- * \brief OperatorProperty is a object that stores all information about Operator.
- * It also contains method to generate context(device) specific operators.
- *
- * It also contains various functions that can be optimally overriden to
- * provide optimization chance for computation engine.
- */
-class OperatorProperty {
- public:
-  /*!
-   * \brief virtual destructor
-   */
-  virtual ~OperatorProperty() {}
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief Get a map representation of internal parameters.
-   *  This can be used by Init to recover the state of OperatorProperty.
-   */
-  virtual std::map<std::string, std::string> GetParams() const = 0;
-  /*!
-   * \brief Get input arguments of the Operator.
-   * \return vector of arguments.
-   */
-  virtual std::vector<std::string> ListArguments() const {
-    return {'data'};
-  }
-  /*!
-   * \brief Get name of output values of Operator
-   * \return name of output values.
-   */
-  virtual std::vector<std::string> ListOutputs() const {
-    return {'output'};
-  }
-  /*!
-   * \brief Get name of auxiliary states of Operator
-   * \return name of return values.
-   */
-  virtual std::vector<std::string> ListAuxiliaryStates() const {
-    return {};
-  }
-  /*! \return number of real return values of the Operator */
-  virtual int NumOutputs() const {
-    return this->ListOutputs().size();
-  }
-  /*!
-   * \brief get number of visible return values during Symbol creation.
-   *  If NumVisibleOutputs() = k, and NumOutputs() = n.
-   *  The first k returns will be presented in the resulting symbol.
-   *
-   *  The rest of the returns can be used for auxiliary states for Backward.
-   *  For example, Dropout will return [data, mask], with NumVisibleOutputs() == 1.
-   *  So when user call sym = Dropout(input), only data is presented in sym.
-   *  But all the returns will be presented in out_data parameter of Backward if requested.
-   *
-   * \return number of default return values
-   */
-  virtual int NumVisibleOutputs() const {
-    return NumOutputs();
-  }
-  /*!
-   * \brief infer the shapes of outputs and unknown input arguments
-   * \param in_shape the shape of input arguments of the operator
-   *     this should be of same length as the vector returned by DescribeArgs
-   *     in_shape allows unknown elements, which are checked by shape.ndim() == 0.
-   *     For unknown shapes, InferShape will try to fill in the correct Shape in in_shape
-   *     For known shapes, InferShape will check shape consistency
-   *
-   *     common practice: set the shape of data input, and usually weight's shape can be inferred
-   *
-   * \param out_shape the shape of outputs of the operator
-   *     InferShape will modify the vector to fill output TShape
-   * \param aux_shape the shape of auxiliary states of the operator
-   *     InferShape will modify the vector to fill output TShape
-   * \return true if the shape inference is successful, false if there is not enough information.
-   * \throws dmlc::Error if the known arg_shapes are inconsistent.
-   */
-  virtual bool InferShape(std::vector<TShape> *in_shape,
-                          std::vector<TShape> *out_shape,
-                          std::vector<TShape> *aux_shape) const = 0;
-  /*!
-   * \brief infer the data types of outputs and unknown input arguments
-   * \param in_type the type of input arguments of the operator
-   *     this should be of same length as the vector returned by DescribeArgs
-   *     in_type allows unknown elements, which are checked by type.ndim() == 0.
-   *     For unknown types, Infertype will try to fill in the correct type in in_type
-   *     For known types, Infertype will check type consistency
-   *
-   *     common practice: set the type of data input, and usually weight's type can be inferred
-   *
-   * \param out_type the type of outputs of the operator
-   *     Infertype will modify the vector to fill output Ttype
-   * \param aux_type the type of auxiliary states of the operator
-   *     Infertype will modify the vector to fill output Ttype
-   * \return true if the type inference is successful, false if there is not enough information.
-   * \throws dmlc::Error if the known arg_types are inconsistent.
-   */
-  virtual bool InferType(std::vector<int> *in_type,
-                          std::vector<int> *out_type,
-                          std::vector<int> *aux_type) const {
-    CHECK_LE(in_type->size(), this->ListArguments().size());
-    int n_in = this->ListArguments().size();
-    for (unsigned i = 0; i < in_type->size(); ++i) {
-      CHECK(in_type->at(i) == mshadow::default_type_flag ||
-            in_type->at(i) == -1) << 'Unsupported data type ' << in_type->at(i);
-    }
-    in_type->clear();
-    for (int i = 0; i < n_in; ++i ) in_type->push_back(mshadow::default_type_flag);
-    }
+    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
     }
     
-    template<>
-void SetDataGradToBlob<mshadow::gpu, float>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<float>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_gpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, float)->set_gpu_diff(data_ptr);
+    uint64_t GetOutgoingDataSize(const grpc_call_final_info* final_info) {
+  return final_info->stats.transport_stream_stats.outgoing.data_bytes;
 }
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_fieldentry.h
- * \brief Implement FieldEntry<caffe::LayerParameter>
- * \author Haoran Wang
- */
-#ifndef PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
-#define PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
     
-        for (int i = 0; i < param_.num_out; ++i)
-      top_blobs.push_back(new Blob<float>());
-    
-    
-    {    for (auto blob_ptr : bot_blobs)
-      delete blob_ptr;
-    for (auto blob_ptr : top_blobs)
-      delete blob_ptr;
-    return true;
-  }
-    
-     private:
-  /*!
-   * \brief Wait for all started threads to signal that they're ready
-   */
-  void WaitForReady() {
-    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
-      ptr->wait();
-    }
-  }
-    
-    /*!
- *  Copyright (c) 2016 by Contributors
- * \file optimizer_op-inl.h
- * \brief Optimizer operators
- * \author Junyuan Xie
- */
-#include <dmlc/parameter.h>
-#include <dmlc/logging.h>
-#include <mxnet/ndarray.h>
-#include <mxnet/operator.h>
-#include <mxnet/operator_util.h>
-#include <mxnet/op_attr_types.h>
-#include <mshadow/base.h>
-#include <nnvm/op.h>
-#include <nnvm/op_attr_types.h>
-#include <nnvm/tuple.h>
-    
-    #define FindFirstFileA _fi_FindFirstFile
-#define FindNextFileA _fi_FindNextFile
-#define FindClose _fi_FindClose
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         mem_block_cache.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: memory block cache used by the non-recursive matcher.
-  */
-    
-    
-    
-    
+    {}  // namespace grpc
 
     
+      enum FieldIdValue {
+    kServerElapsedTimeField = 0,
+  };
     
-    
-    #include <osquery/config.h>
-#include <osquery/registry_factory.h>
-    
-    #include 'osquery/config/parsers/prometheus_targets.h'
-    
-    class ViewsConfigParserPluginTests : public testing::Test {};
-    
-      Status update(const std::string& source, const ParserConfig& config) override;
-    
-      fpack.platform_ = 'posix';
-  if (isPlatform(PlatformType::TYPE_POSIX) ||
-      isPlatform(PlatformType::TYPE_LINUX) ||
-      isPlatform(PlatformType::TYPE_OSX) ||
-      isPlatform(PlatformType::TYPE_FREEBSD)) {
-    EXPECT_TRUE(fpack.checkPlatform());
+    // Force InitProtoReflectionServerBuilderPlugin() to be called at static
+// initialization time.
+struct StaticProtoReflectionPluginInitializer {
+  StaticProtoReflectionPluginInitializer() {
+    InitProtoReflectionServerBuilderPlugin();
   }
+} static_proto_reflection_plugin_initializer;
     
-    std::shared_ptr<PlatformProcess> PlatformProcess::launchExtension(
-    const std::string& exec_path,
-    const std::string& extensions_socket,
-    const std::string& extensions_timeout,
-    const std::string& extensions_interval,
-    bool verbose) {
-  auto ext_pid = ::fork();
-  if (ext_pid < 0) {
-    return std::shared_ptr<PlatformProcess>();
-  } else if (ext_pid == 0) {
-    setEnvVar('OSQUERY_EXTENSION', std::to_string(::getpid()).c_str());
+        // Finish and check for builder errors
+    s = builder->Finish();
+    if (s.ok()) {
+      meta->file_size = builder->FileSize();
+      assert(meta->file_size > 0);
     }
-    }
+    delete builder;
     
-    /// The WatcherWatcher is spawned within the worker and watches the watcher.
-class WatcherWatcherRunner : public InternalRunnable {
- public:
-  explicit WatcherWatcherRunner(const std::shared_ptr<PlatformProcess>& watcher)
-      : InternalRunnable('WatcherWatcherRunner'), watcher_(watcher) {}
-    }
+      // Release mutex while we're actually doing the compaction work
+  mutex_.Unlock();
     
-    #include <osquery/system.h>
-    
-    Status deserializeDistributedQueryResult(const rj::Value& obj,
-                                         DistributedQueryResult& r) {
-  DistributedQueryRequest request;
-  auto s = deserializeDistributedQueryRequest(obj['request'], request);
-  if (!s.ok()) {
-    return s;
-  }
-    }
-    
-        static BOOST_FORCEINLINE storage_type fetch_sub(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        typedef typename make_signed< storage_type >::type signed_storage_type;
-        return Derived::fetch_add(storage, static_cast< storage_type >(-static_cast< signed_storage_type >(v)), order);
-    }
-    
-    
-    {
-    {        BOOST_DEFAULTED_FUNCTION(aligned(), {})
-        BOOST_FORCEINLINE BOOST_CONSTEXPR explicit aligned(type v) BOOST_NOEXCEPT : value(v) {}
-    };
+    struct MTThread {
+  MTState* state;
+  int id;
 };
     
-    namespace atomics {
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+    TEST(FormatTest, InternalKeyShortSeparator) {
+  // When user keys are same
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 99, kTypeValue)));
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 101, kTypeValue)));
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 100, kTypeDeletion)));
     }
     
-    struct YGCachedMeasurement {
-  float availableWidth;
-  float availableHeight;
-  YGMeasureMode widthMeasureMode;
-  YGMeasureMode heightMeasureMode;
+    #include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+      fname = LogFileName('foo', 192);
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(192, number);
+  ASSERT_EQ(kLogFile, type);
+    
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
+    
+      std::vector<uint64_t> GetFiles(FileType t) {
+    std::vector<std::string> filenames;
+    ASSERT_OK(env_->GetChildren(dbname_, &filenames));
+    std::vector<uint64_t> result;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      uint64_t number;
+      FileType type;
+      if (ParseFileName(filenames[i], &number, &type) && type == t) {
+        result.push_back(number);
+      }
+    }
+    return result;
+  }
+    
+    
+    {REGISTER_INTERNAL(PrometheusMetricsConfigParserPlugin,
+                  'config_parser',
+                  'prometheus_targets');
+}
+
+    
+      fpack.platform_ = 'bad_value';
+  EXPECT_FALSE(fpack.checkPlatform());
+    
+    void Initializer::platformSetup() {
+  // Initialize the COM libraries utilized by Windows WMI calls.
+  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
+  if (ret != S_OK) {
+    ::CoUninitialize();
+  }
+}
+    
+    static const int kCrToGreenTable[256] = {
+  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
+  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
+  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
+  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
+  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
+  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
+  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
+  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
+  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
+  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
+  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
+  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
+  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
+  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
+   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
+   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
+        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
+  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
+  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
+ -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
+ -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
+ -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
+ -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
+ -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
+ -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
+ -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
+ -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
+ -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
+ -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
+ -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
+ -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
+ -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
+};
+    
+    #endif  // GUETZLI_DCT_DOUBLE_H_
+
+    
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    
+    {  tmp0 = in[7 * stride];
+  tmp1 = kIDCTMatrix[ 7] * tmp0;
+  tmp2 = kIDCTMatrix[15] * tmp0;
+  tmp3 = kIDCTMatrix[23] * tmp0;
+  tmp4 = kIDCTMatrix[31] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+}
+    
+      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
+  void EmitByte(int byte) {
+    if (pos < len) {
+      data[pos++] = byte;
+    } else {
+      overflow = true;
+    }
+    if (byte == 0xff) {
+      EmitByte(0);
+    }
+  }
+    
+    bool JPEGData::Is444() const {
+  return (components.size() == 3 &&
+          max_h_samp_factor == 1 &&
+          max_v_samp_factor == 1 &&
+          components[0].h_samp_factor == 1 &&
+          components[0].v_samp_factor == 1 &&
+          components[1].h_samp_factor == 1 &&
+          components[1].v_samp_factor == 1 &&
+          components[2].h_samp_factor == 1 &&
+          components[2].v_samp_factor == 1);
+}
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
+    
+    #include 'modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h'
+#include 'gtest/gtest.h'
+    
+    /**
+ * @class MessageManager
+ *
+ * @brief message manager manages protocols. It supports parse and can get
+ * protocol data by message id.
+ */
+template <typename SensorType>
+class MessageManager {
+ public:
+  /*
+  * @brief constructor function
+  */
+  MessageManager() {}
+  /*
+   * @brief destructor function
+   */
+  virtual ~MessageManager() = default;
     }
     
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
+    template <typename SensorType>
+void ProtocolData<SensorType>::Parse(const uint8_t *bytes, int32_t length,
+                                     SensorType *sensor_data) const {}
+    
+    #ifndef MODULES_DRIVERS_CANBUS_SENSOR_GFLAGS_H_
+#define MODULES_DRIVERS_CANBUS_SENSOR_GFLAGS_H_
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        uint64_t const* p_value = (uint64_t const*)&v;
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %[dest], %%rax\n\t'
+            'movq 8+%[dest], %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b %[dest]\n\t'
+            'jne 1b\n\t'
+            : [dest] '=o' (storage)
+            : 'b' (p_value[0]), 'c' (p_value[1])
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq 0(%[dest]), %%rax\n\t'
+            'movq 8(%[dest]), %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            :
+            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+    }
+    
+        struct aligned
+    {
+        BOOST_ALIGNMENT(2) type value;
+    }
