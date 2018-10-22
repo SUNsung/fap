@@ -1,89 +1,76 @@
 
         
-            print()
-    print('Classification performance:')
-    print('===========================')
-    print()
-    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
-                           'Accuracy'))
-    print('-' * 44)
-    for name in sorted(accuracy, key=accuracy.get):
-        print('%s %s %s %s' % (name.ljust(16),
-                               ('%.4fs' % train_time[name]).center(10),
-                               ('%.4fs' % test_time[name]).center(10),
-                               ('%.4f' % accuracy[name]).center(10)))
+        # tree.RewriteRuleElementStream
+# tree.RewriteRuleSubtreeStream
+# tree.RewriteRuleTokenStream
+# CharStream
+# DFA
+# TokenSource
     
+                    # EOF Transition to accept state?
+                if c == EOF and self.eof[s] >= 0:
+                    #print 'EOF Transition to accept state %d' \
+                    #  % self.accept[self.eof[s]]
+                    return self.accept[self.eof[s]]
     
-def plot_feature_errors(all_errors, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_errors['pca'], label='PCA')
-    plot_results(all_components, all_errors['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. n_components\n'
-                 'LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Mean absolute error')
+    Instead of importing this module directly, import os and refer to
+this module as os.path.  The 'os.path' name is an alias for this
+module on Posix systems; on other systems (e.g. Mac, Windows),
+os.path provides the same operations in a manner specific to that
+platform, and is an alias to another module (e.g. macpath, ntpath).
     
-    plot(euclidean_distances)
-plot(rbf_kernels)
-plt.show()
+        def test_default(self):
+        size = test.support.calcvobjsize
+        self.assertEqual(sys.getsizeof(True), size('') + self.longdigit)
+        self.assertEqual(sys.getsizeof(True, -1), size('') + self.longdigit)
+    
+    # In a real program you'd get the filename from the arguments.
+with open('outgoing.msg', 'rb') as fp:
+    msg = BytesParser(policy=policy.default).parse(fp)
+    
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
+    
+        function_parameters = zip(
+        images_to_check,
+        itertools.repeat(model),
+    )
+    
+    # Load a sample picture and learn how to recognize it.
+obama_image = face_recognition.load_image_file('obama.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    
+            print('I see someone named {}!'.format(name))
 
     
-       ###########################################################################
-    # Set custom automatic method selection
-    sampling_algorithm['custom-auto'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='auto',
-                                       random_state=random_state)
+      # As a last resort, we search python in the PATH. We prefer Python 2 over 3
+  # for the sake of backwards compatibility with ycm_extra_conf.py files out
+  # there; few people wrote theirs to work on py3.
+  # So we check 'python2' before 'python' because on some distributions (Arch
+  # Linux for example), python refers to python3.
+  python_interpreter = utils.PathToFirstExistingExecutable( [ 'python2',
+                                                              'python',
+                                                              'python3' ] )
+  if python_interpreter:
+    return python_interpreter
     
-                std = X_train.std(axis=0)
-            mean = X_train.mean(axis=0)
-            X_train = (X_train - mean) / std
-            X_test = (X_test - mean) / std
-    
-    input data sparsity: 0.050000
-true coef sparsity: 0.000100
-test data sparsity: 0.027400
-model sparsity: 0.000024
-r^2 on test data (dense model) : 0.233651
-r^2 on test data (sparse model) : 0.233651
-Wrote profile results to sparsity_benchmark.py.lprof
-Timer unit: 1e-06 s
-    
-    ROOT_URL = 'https://api.github.com/repos/scikit-learn/scikit-learn.github.io/contents/'  # noqa
-RAW_FMT = 'https://raw.githubusercontent.com/scikit-learn/scikit-learn.github.io/master/%s/documentation.html'  # noqa
-VERSION_RE = re.compile(r'\bVERSION:\s*'([^']+)'')
-NAMED_DIRS = ['dev', 'stable']
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-        self._cached_response = self.HandleFuture( self._response_future,
-                                               truncate_message = True )
-    
-    
-  def Start( self ):
-    self.PostDataToHandler( {},
-                            'shutdown',
-                            TIMEOUT_SECONDS,
-                            display_message = False )
-    
-    
-class FakeResponse( object ):
-  '''A fake version of a requests response object, just about suitable for
-  mocking a server response. Not usually used directly. See
-  MockServerResponse* methods'''
-  def __init__( self, response, exception ):
-    self._json = response
-    self._exception = exception
-    self.status_code = requests.codes.ok
-    self.text = not exception
+      opts = { 'filter_diagnostics' : {
+    'java,c,cs' : { 'regex' : '.*taco.*' } } }
     
     
 @patch( 'ycm.vimsupport.GetVariableValue',
@@ -97,67 +84,14 @@ def PostCompleteFixIt_ApplyFixIt_EmptyFixIt_test( replace_chunks, *args ):
     request._OnCompleteDone_FixIt()
     replace_chunks.assert_called_once_with( [], silent = True )
     
-        def do_something(self, something):
-        return 'Doing %s' % something
+    import os
+import sys
+from hamcrest import ( assert_that, contains, empty, equal_to, has_entries,
+                       is_in, is_not, matches_regexp )
+from mock import call, MagicMock, patch
     
-    ### OUTPUT ###
-# Setting up the Test
-# Inserting the execution begin status in the Database
-# Executing the test
-# Tearing down
-# Updating the test results in Database
-# Reporting the results of Test
-# Setting up the Test
-# Inserting the execution begin status in the Database
-# Reporter Class is preparing to report the results
-# Problem in setup. Test not executed.
-# Test not executed. No tear down required.
-# Setting up the Test
-# Inserting the execution begin status in the Database
-# Executing the test
-# Tearing down
-# Updating the test results in Database
-# Reporting the results of Test
-
-    
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    
-        def scan(self):
-        self.state.scan()
-    
-    The idea is to abstract the creation of objects depending on business
-logic, platform choice, etc.
-    
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
-    
-        try:
-        cognito.client.resend_confirmation_code(
-            Username=email,
-            ClientId=cognito.client_id
-        )
-    except ClientError as err:
-        raise _map_aws_exception(err)
-    
-    from homeassistant.components.device_tracker import DOMAIN
-    
-            if self.accountname in _CONFIGURING:
-            request_id = _CONFIGURING.pop(self.accountname)
-            configurator = self.hass.components.configurator
-            configurator.request_done(request_id)
+      if parsed_args.coverage:
+    nosetests_args += [ '--with-coverage',
+                        '--cover-erase',
+                        '--cover-package=ycm',
+                        '--cover-html' ]
