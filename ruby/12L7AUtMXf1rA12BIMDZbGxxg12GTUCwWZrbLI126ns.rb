@@ -1,73 +1,145 @@
 
         
-        end
-
-    
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
-      end
-    
-        context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
-      end
-    
-          it 'properly shell escapes its message' do
-        tag = '2.0.0'
-        message = 'message with 'quotes' (and parens)'
-    
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD --no-merges'
-        expect(result).to eq(pseudocommand)
-      end
-    
-            keychain_path = File.expand_path(File.join('~', 'Library', 'Keychains', keychain))
-        expected_command = 'security import #{cert_name} -k '#{keychain_path}' -P #{password} -T /usr/bin/codesign -T /usr/bin/security'
-    
-          it 'raises an exception when the default compile_commands.json is not present' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            oclint
-          end').runner.execute(:test)
-        end.to raise_error('Could not find json compilation database at path 'compile_commands.json'')
-      end
-    
-          true
+          def fixopt(f)
+    path = if f.linked_keg.directory? && f.linked_keg.symlink?
+      f.linked_keg.resolved_path
+    elsif f.prefix.directory?
+      f.prefix
+    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
+      kids.first
+    else
+      raise
     end
-    
-          def changed?
-        @changed
-      end
-    
-      protected
-    def after_resetting_password_path_for(resource)
-      Devise.sign_in_after_reset_password ? after_sign_in_path_for(resource) : new_session_path(resource_name)
-    end
-    
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-      get '/' => 'test#index'
+    Keg.new(path).optlink
+  rescue StandardError
+    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
+  end
 end
     
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
+        option_names.any? do |name|
+      if option_defined? 'with-#{name}'
+        include? 'with-#{name}'
+      elsif option_defined? 'without-#{name}'
+        !include? 'without-#{name}'
+      else
+        false
+      end
+    end
+  end
+    
+          path_modified_time < prune_time
+    end
+  end
+end
+
+    
+      def external_commands
+    paths.reduce([]) do |cmds, path|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        cmds << cmd unless cmd.include?('.')
+      end
+      cmds
+    end.sort
+  end
+    
+      def gcc_40
+    @gcc_40 ||= MacOS.gcc_40_build_version if MacOS.has_apple_developer_tools?
+  end
+    
+      def installed?(formula)
+    (HOMEBREW_CELLAR/formula.split('/').last).directory?
+  end
+end
+
+    
+      def patches
+    {}
+  end
+    
+    Group.user_trust_level_change!(-1, TrustLevel[4])
+    
+          def title
+        'Create a new page'
+      end
+    
+          def has_path
+        !@path.nil?
+      end
+    
+          def has_header
+        if @header
+          @header.formatted_data.strip.empty? ? false : true
+        else
+          @header = (@page.header || false)
+          !!@header
+        end
+      end
+    
+      test 'translation' do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
+    
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+      class Error < StandardError;
+  end
+    
+      require ARGV.shift
+  exit_status = LogStash::Runner.run('bin/logstash', ARGV)
+  exit(exit_status || 0)
+end
+
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
+  end
+end
+
+    
+        puts('Packaging plugins for offline usage')
+    
+            return nil
+      end
+    end
+  end
+end end end
+
+    
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+        after :each do
+      logstash.uninstall
+    end
