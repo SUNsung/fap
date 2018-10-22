@@ -1,156 +1,120 @@
 
         
-            # This returns whether the guest is ready to work. If this returns
-    # `false`, then {#detect!} should be called in order to detect the
-    # guest OS.
-    #
-    # @return [Boolean]
-    def ready?
-      !!capability_host_chain
+              if ARGV.git?
+        system 'git', 'init'
+        system 'git', 'add', '-A'
+      end
+      if ARGV.interactive?
+        ohai 'Entering interactive mode'
+        puts 'Type `exit' to return and finalize the installation'
+        puts 'Install to this prefix: #{formula.prefix}'
+    
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
+      end
     end
-  end
-end
-
     
-            # If an active machine of the same name/provider was not
-        # found, it is already false.
-        return false if !found
+        it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
+    end
     
-                    @env.vms.each do |name, vm|
-                  vms << vm if name =~ regex
-                end
+          it 'should ignore events that were created before a particular Link' do
+        agent2 = Agents::SomethingSource.new(:name => 'something')
+        agent2.user = users(:bob)
+        agent2.save!
+        agent2.check
     
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
+        def root_page?
+      subpath.blank? || subpath == '/' || subpath == root_path
+    end
+    
+        def initialize(name = nil, path = nil, type = nil)
+      self.name = name
+      self.path = path
+      self.type = type
+    
+    module Docs
+  class Subscriber < ActiveSupport::Subscriber
+    cattr_accessor :namespace
+    
+            css('.filetree .children').each do |node|
+          node.css('.file').each do |n|
+            n.content = '  #{n.content}'
           end
         end
     
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
+            # Configures the given list of networks on the virtual machine.
         #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
         end
     
-                  # Create an environment for this location and yield the
-              # machine in that environment. We silence warnings here because
-              # Vagrantfiles often have constants, so people would otherwise
-              # constantly (heh) get 'already initialized constant' warnings.
-              begin
-                env = entry.vagrant_env(
-                  @env.home_path, ui_class: @env.ui_class)
-              rescue Vagrant::Errors::EnvironmentNonExistentCWD
-                # This means that this environment working directory
-                # no longer exists, so delete this entry.
-                entry = @env.machine_index.get(name.to_s)
-                @env.machine_index.delete(entry) if entry
-                raise
-              end
-    
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
+            # Upload a file to the remote machine.
         #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
         end
     
-            # This contains all the command plugins by name, and returns
-        # the command class and options. The command class is wrapped
-        # in a Proc so that it can be lazy loaded.
+            # This should return an action callable for the given name.
         #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        attr_reader :commands
+        # @param [Symbol] name Name of the action.
+        # @return [Object] A callable action sequence object, whether it
+        #   is a proc, object, etc.
+        def action(name)
+          nil
+        end
     
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
       end
     end
-    [$? && $?.exitstatus == 0, cmd_with_env]
-  end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
   else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
+    output += ' data-value='#{config[key]}''
   end
+  output += '></#{tag}>'
 end
     
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
+    module Jekyll
     
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
-    end
-  end
-end
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
       else
-        puts dark cyan s
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
-    
-      # Setup a color scheme called 'bright' than can be used to add color codes
-  # to the pattern layout. Color schemes should only be used with appenders
-  # that write to STDOUT or STDERR; inserting terminal color codes into a file
-  # is generally considered bad form.
-  Logging.color_scheme('bright',
-                       levels:  {
-                         info:  :green,
-                         warn:  :yellow,
-                         error: :red,
-                         fatal: %i(white on_red)
-                       },
-                       date:    :blue,
-                       logger:  :cyan,
-                       message: :magenta
-                      )
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
-    
-    When /^I fill out change password section with my password and '([^']*)' and '([^']*)'$/ do |new_pass, confirm_pass|
-  fill_change_password_section(@me.password, new_pass, confirm_pass)
-end
-    
-        it 'lets a user destroy their like' do
-      current_user = controller.send(:current_user)
-      expect(current_user).to receive(:retract).with(@like)
