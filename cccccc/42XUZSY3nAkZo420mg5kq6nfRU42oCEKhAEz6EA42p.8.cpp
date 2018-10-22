@@ -1,163 +1,419 @@
 
         
-        void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
+        class AtomContentClient : public brightray::ContentClient {
+ public:
+  AtomContentClient();
+  ~AtomContentClient() override;
+    }
+    
+     private:
+  ~UvTaskRunner() override;
+  static void OnTimeout(uv_timer_t* timer);
+  static void OnClose(uv_handle_t* handle);
+    
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
+    
+      // Override download::DownloadItem::Observer methods
+  void OnDownloadUpdated(download::DownloadItem* download) override;
+  void OnDownloadDestroyed(download::DownloadItem* download) override;
+    
+    #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
+
+    
+    class Net : public mate::EventEmitter<Net> {
+ public:
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
+    }
+    
+    namespace api {
+    }
+    
+    namespace api {
+    }
+    
+    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
+ public:
+  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
+                                  mate::Arguments* args);
+    }
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n) {
+  int max_offset = n - 2;
+  int offset = 0;
+  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
+  // v, and multiplying them together in parallel.
+  __m128d sum = _mm_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 2;
+    // Aligned load is reputedly faster but requires 16 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
+      // Use aligned load.
+      sum = _mm_load_pd(u);
+      __m128d floats2 = _mm_load_pd(v);
+      // Multiply.
+      sum = _mm_mul_pd(sum, floats2);
+      while (offset <= max_offset) {
+        __m128d floats1 = _mm_load_pd(u + offset);
+        floats2 = _mm_load_pd(v + offset);
+        offset += 2;
+        floats1 = _mm_mul_pd(floats1, floats2);
+        sum = _mm_add_pd(sum, floats1);
+      }
+    } else {
+      // Use unaligned load.
+      sum = _mm_loadu_pd(u);
+      __m128d floats2 = _mm_loadu_pd(v);
+      // Multiply.
+      sum = _mm_mul_pd(sum, floats2);
+      while (offset <= max_offset) {
+        __m128d floats1 = _mm_loadu_pd(u + offset);
+        floats2 = _mm_loadu_pd(v + offset);
+        offset += 2;
+        floats1 = _mm_mul_pd(floats1, floats2);
+        sum = _mm_add_pd(sum, floats1);
+      }
+    }
   }
+  // Add the 2 sums in sum horizontally.
+  sum = _mm_hadd_pd(sum, sum);
+  // Extract the low result.
+  double result = _mm_cvtsd_f64(sum);
+  // Add on any left-over products.
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
 }
-
     
-    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
+    // Constructor.
+// Tests the architecture in a system-dependent way to detect AVX, SSE and
+// any other available SIMD equipment.
+// __GNUC__ is also defined by compilers that include GNU extensions such as
+// clang.
+SIMDDetect::SIMDDetect() {
+#if defined(X86_BUILD)
+#if defined(__GNUC__)
+  unsigned int eax, ebx, ecx, edx;
+  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
+    // Note that these tests all use hex because the older compilers don't have
+    // the newer flags.
+    sse_available_ = (ecx & 0x00080000) != 0;
+    avx_available_ = (ecx & 0x10000000) != 0;
+    if (avx_available_) {
+      // There is supposed to be a __get_cpuid_count function, but this is all
+      // there is in my cpuid.h. It is a macro for an asm statement and cannot
+      // be used inside an if.
+      __cpuid_count(7, 0, eax, ebx, ecx, edx);
+      avx2_available_ = (ebx & 0x00000020) != 0;
+      avx512F_available_ = (ebx & 0x00010000) != 0;
+      avx512BW_available_ = (ebx & 0x40000000) != 0;
     }
-    
-    void CacheImpl::releaseValue(void *Value) {
-  cache_release_value(static_cast<cache_t*>(Impl), Value);
-}
-    
-    void DiverseStackBase::pushNewStorageSlow(std::size_t needed) {
-  bool wasInline = isAllocatedInline();
-    }
-    
-      bool IsFirstLine = true;
-    
-    uint64_t swift::unicode::getUTF16Length(StringRef Str) {
-  uint64_t Length;
-  // Transcode the string to UTF-16 to get its length.
-  SmallVector<llvm::UTF16, 128> buffer(Str.size() + 1); // +1 for ending nulls.
-  const llvm::UTF8 *fromPtr = (const llvm::UTF8 *) Str.data();
-  llvm::UTF16 *toPtr = &buffer[0];
-  llvm::ConversionResult Result =
-    ConvertUTF8toUTF16(&fromPtr, fromPtr + Str.size(),
-                       &toPtr, toPtr + Str.size(),
-                       llvm::strictConversion);
-  assert(Result == llvm::conversionOK &&
-         'UTF-8 encoded string cannot be converted into UTF-16 encoding');
-  (void)Result;
-    }
-    
-    
-    {  return '';
-}
-
-    
-    public:
-  static CFPointeeInfo classifyTypedef(const clang::TypedefNameDecl *decl);
-    
-    #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
+  }
+#elif defined(_WIN32)
+  int cpuInfo[4];
+  __cpuid(cpuInfo, 0);
+  if (cpuInfo[0] >= 1) {
+    __cpuid(cpuInfo, 1);
+    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
+    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
+  }
 #else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
+#error 'I don't know how to test for SIMD with this compiler'
 #endif
-    
-    #include <google/protobuf/python/python_protobuf.h>
-    
-      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
-  // Comparison operators are non reflexive.
-  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
-  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
-    
-    void upb_inttable_packedsize(const upb_inttable *t, size_t *size);
-void upb_strtable_packedsize(const upb_strtable *t, size_t *size);
-upb_inttable *upb_inttable_pack(const upb_inttable *t, void *p, size_t *ofs,
-                                size_t size);
-upb_strtable *upb_strtable_pack(const upb_strtable *t, void *p, size_t *ofs,
-                                size_t size);
-    
-    bool DecodeMetadata(const string& path, GeneratedCodeInfo* info) {
-  string data;
-  GOOGLE_CHECK_OK(File::GetContents(path, &data, true));
-  io::ArrayInputStream input(data.data(), data.size());
-  return info->ParseFromZeroCopyStream(&input);
+#endif  // X86_BUILD
 }
+
     
+      // Count the number of values in sorted_vec that is close to val, used to
+  // check if a partition is aligned with text partitions.
+  int CountAlignment(
+      const GenericVector<int>& sorted_vec, const int val) const;
     
-    {  // Check if the optional_nested_message was actually moved (and not just
-  // copied).
-  EXPECT_EQ(nested, &message2.optional_nested_message());
-  EXPECT_NE(nested, &message1.optional_nested_message());
-}
-    
-      printer->Print(
-    '/// <summary>Holder for reflection information generated from $file_name$</summary>\n'
-    '$access_level$ static partial class $reflection_class_name$ {\n'
-    '\n',
-    'file_name', file_->name(),
-    'access_level', class_access_level(),
-    'reflection_class_name', reflectionClassname_);
-  printer->Indent();
-}
-    
-    const Options* SourceGeneratorBase::options() {
-  return this->options_;
-}
-    
-    #include <google/protobuf/compiler/java/java_doc_comment.h>
-    
-    void ImmutableMapFieldGenerator::
-GenerateParsingCode(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      'if (!$get_mutable_bit_parser$) {\n'
-      '  $name$_ = com.google.protobuf.MapField.newMapField(\n'
-      '      $map_field_parameter$);\n'
-      '  $set_mutable_bit_parser$;\n'
-      '}\n');
-  if (!SupportUnknownEnumValue(descriptor_->file()) &&
-      GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
-    printer->Print(
-        variables_,
-        'com.google.protobuf.ByteString bytes = input.readBytes();\n'
-        'com.google.protobuf.MapEntry<$type_parameters$>\n'
-        '$name$__ = $default_entry$.getParserForType().parseFrom(bytes);\n');
-    printer->Print(
-        variables_,
-        'if ($value_enum_type$.forNumber($name$__.getValue()) == null) {\n'
-        '  unknownFields.mergeLengthDelimitedField($number$, bytes);\n'
-        '} else {\n'
-        '  $name$_.getMutableMap().put(\n'
-        '      $name$__.getKey(), $name$__.getValue());\n'
-        '}\n');
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
   } else {
-    printer->Print(
-        variables_,
-        'com.google.protobuf.MapEntry<$type_parameters$>\n'
-        '$name$__ = input.readMessage(\n'
-        '    $default_entry$.getParserForType(), extensionRegistry);\n'
-        '$name$_.getMutableMap().put(\n'
-        '    $name$__.getKey(), $name$__.getValue());\n');
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
   }
 }
     
-      // Note: For the TextFormat decode info, we can't use the enum value as
-  // the key because protocol buffer enums have 'allow_alias', which lets
-  // a value be used more than once. Instead, the index into the list of
-  // enum value descriptions is used. Note: start with -1 so the first one
-  // will be zero.
-  TextFormatDecodeData text_format_decode_data;
-  int enum_value_description_key = -1;
-  string text_blob;
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
     
-    class EnumFieldGenerator : public SingleFieldGenerator {
-  friend FieldGenerator* FieldGenerator::Make(const FieldDescriptor* field,
-                                              const Options& options);
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
     }
+    }
+    }
+    
+          // Wait threads to complete
+      while (!shared.AllDone()) {
+        shared.GetCondVar()->Wait();
+      }
+    
+      // REQUIRES: DB mutex held
+  // Build ColumnFamiliesOptions with immutable options and latest mutable
+  // options.
+  ColumnFamilyOptions GetLatestCFOptions() const;
+    
+    class DBEncryptionTest : public DBTestBase {
+ public:
+  DBEncryptionTest() : DBTestBase('/db_encryption_test') {}
+};
+    
+    
+    {  // Sleep just until `num_bytes` is allowed.
+  uint64_t sleep_amount =
+      static_cast<uint64_t>(num_bytes /
+                            static_cast<long double>(delayed_write_rate_) *
+                            kMicrosPerSecond) +
+      sleep_debt;
+  last_refill_time_ = time_now + sleep_amount;
+  return sleep_amount;
+}
+    
+    #include <atomic>
+#include <memory>
+#include 'rocksdb/rate_limiter.h'
+    
+    // Decrypt one or more (partial) blocks of data at the file offset.
+// Length of data is given in dataSize.
+Status BlockAccessCipherStream::Decrypt(uint64_t fileOffset, char *data, size_t dataSize) {
+  // Calculate block index
+  auto blockSize = BlockSize();
+  uint64_t blockIndex = fileOffset / blockSize;
+  size_t blockOffset = fileOffset % blockSize;
+  unique_ptr<char[]> blockBuffer;
+    }
+    
+      virtual Status GetFileModificationTime(const std::string& fname,
+                                         uint64_t* time) override;
+    
+      std::string scratch;
+  scratch.resize(kGood.size() + kCorrupted.size() + 16);
+  Slice result;
+  unique_ptr<RandomAccessFile> rand_file;
+  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+    int main() {
+  DB* db;
+  Options options;
+  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+  options.IncreaseParallelism();
+  options.OptimizeLevelStyleCompaction();
+  // create the DB if it's not already present
+  options.create_if_missing = true;
+    }
+    
+    void DHTReplaceNodeTask::onTimeout(const std::shared_ptr<DHTNode>& node)
+{
+  ++numRetry_;
+  if (numRetry_ >= MAX_RETRY) {
+    A2_LOG_INFO(fmt('ReplaceNode: Ping failed %d times. Replace %s with %s.',
+                    numRetry_, node->toString().c_str(),
+                    newNode_->toString().c_str()));
+    node->markBad();
+    bucket_->addNode(newNode_);
+    setFinished(true);
+  }
+  else {
+    A2_LOG_INFO(fmt('ReplaceNode: Ping reply timeout from %s. Try once more.',
+                    node->toString().c_str()));
+    sendMessage();
+  }
+}
+    
+    std::string DHTResponseMessage::toString() const
+{
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
+}
+    
+    void DHTRoutingTable::showBuckets() const
+{
+  /*
+    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
+    buckets_.begin(); itr != buckets_.end(); ++itr) {
+    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
+    << 'nodes = ' << (*itr)->countNode() << endl;
+    }
+  */
+}
+    
+      char zero[18];
+  memset(zero, 0, sizeof(zero));
+    
+      ~DHTSetup();
+    
+    void DHTTaskFactoryImpl::setTaskQueue(DHTTaskQueue* taskQueue)
+{
+  taskQueue_ = taskQueue;
+}
+    
+    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
+    
+    std::string DHTUnknownMessage::toString() const
+{
+  size_t sampleLength = 8;
+  if (length_ < sampleLength) {
+    sampleLength = length_;
+  }
+  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
+             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
+             util::toHex(data_, sampleLength).c_str());
+}
+    
+    
+    {  static const std::string UNKNOWN;
+};
+    
+    TEST(Expected, CoroutineSuccess) {
+  auto r0 = []() -> Expected<int, Err> {
+    auto x = co_await f1();
+    EXPECT_EQ(7, x);
+    auto y = co_await f2(x);
+    EXPECT_EQ(2.0 * 7, y);
+    auto z = co_await f3(x, y);
+    EXPECT_EQ(int(2.0 * 7 + 7), *z);
+    co_return* z;
+  }();
+  EXPECT_TRUE(r0.hasValue());
+  EXPECT_EQ(21, *r0);
+}
+    
+    /// Returns a keep-alive token which guarantees that Executor will keep
+/// processing tasks until the token is released (if supported by Executor).
+/// KeepAlive always contains a valid pointer to an Executor.
+template <typename ExecutorT>
+Executor::KeepAlive<ExecutorT> getKeepAliveToken(ExecutorT* executor) {
+  static_assert(
+      std::is_base_of<Executor, ExecutorT>::value,
+      'getKeepAliveToken only works for folly::Executor implementations.');
+  return Executor::getKeepAliveToken(executor);
+}
+    
+    namespace detail {
+    }
+    
+    using UriTuple = std::tuple<
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    uint16_t,
+    const std::string&,
+    const std::string&,
+    const std::string&>;
+    
+    #include <folly/DefaultKeepAliveExecutor.h>
+    
+      // Test converions to floating point durations
+  ts.tv_sec = 1;
+  ts.tv_nsec = 500000000;
+  EXPECT_EQ(1.5, to<duration<double>>(ts).count());
+  ts.tv_sec = -1;
+  ts.tv_nsec = 500000000;
+  EXPECT_EQ(-0.5, to<duration<double>>(ts).count());
+  ts.tv_sec = -1;
+  ts.tv_nsec = -500000000;
+  EXPECT_EQ(-1.5, to<duration<double>>(ts).count());
+  ts.tv_sec = 1;
+  ts.tv_nsec = 500000000;
+  auto doubleNanos = to<duration<double, std::nano>>(ts);
+  EXPECT_EQ(1500000000, doubleNanos.count());
+  ts.tv_sec = 90;
+  ts.tv_nsec = 0;
+  auto doubleMinutes = to<duration<double, std::ratio<60>>>(ts);
+  EXPECT_EQ(1.5, doubleMinutes.count());
+    
+    /**
+ * Get a codec with the given options and compression level.
+ *
+ * If the windowSize is 15 and the format is Format::ZLIB or Format::GZIP, then
+ * the type of the codec will be CodecType::ZLIB or CodecType::GZIP
+ * respectively. Otherwise, the type will be CodecType::USER_DEFINED.
+ *
+ * Automatic uncompression is not supported with USER_DEFINED codecs.
+ *
+ * Levels supported: 0 = no compression, 1 = fast, ..., 9 = best; default = 6
+ */
+std::unique_ptr<Codec> getCodec(
+    Options options = Options(),
+    int level = COMPRESSION_LEVEL_DEFAULT);
+std::unique_ptr<StreamCodec> getStreamCodec(
+    Options options = Options(),
+    int level = COMPRESSION_LEVEL_DEFAULT);
+    
+     private:
+  // Matches packed_sync_pointer.  Must be > max number of local
+  // counts.  This is the max number of threads that can access this
+  // atomic_shared_ptr at once before we start blocking.
+  static constexpr unsigned EXTERNAL_OFFSET{0x2000};
+  // Bit signifying aliased constructor
+  static constexpr unsigned ALIASED_PTR{0x4000};
+    
+      template <class, size_t>
+  friend class CoreCachedWeakPtr;
