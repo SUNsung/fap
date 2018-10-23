@@ -1,115 +1,156 @@
 
         
-            def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
-    end
+              # First check if there are local actions to import in the same directory as the Fastfile
+      actions_path = File.join(File.expand_path('..', path), 'actions')
+      Fastlane::Actions.load_external_actions(actions_path) if File.directory?(actions_path)
     
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
-    
-          it 'Does not use pattern matching for tag name if so requested' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits()
-        end').runner.execute(:test)
-    
-            allow(File).to receive(:file?).and_return(false)
-        allow(File).to receive(:file?).with(keychain_path).and_return(true)
-        allow(File).to receive(:exist?).and_return(false)
-        expect(File).to receive(:exist?).with(cert_name).and_return(true)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_set_key_partition_list_command, print: false)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_security_import_command, print: false)
-    
-          it 'raises an exception when the default compile_commands.json is not present' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            oclint
-          end').runner.execute(:test)
-        end.to raise_error('Could not find json compilation database at path 'compile_commands.json'')
-      end
-    
-            context 'when slather version is 2.4.2' do
-          let(:version) { '2.4.2' }
-          it 'configuration option is available' do
-            expect(action.configuration_available?).to be_truthy
+                if Fastlane::Actions.is_deprecated?(class_ref)
+              puts('=========================================='.deprecated)
+              puts('This action (#{method_sym}) is deprecated'.deprecated)
+              puts(class_ref.deprecated_notes.to_s.deprecated) if class_ref.deprecated_notes
+              puts('==========================================\n'.deprecated)
+            end
+            class_ref.runner = self # needed to call another action form an action
+            return class_ref.run(arguments)
           end
         end
+      rescue Interrupt => e
+        raise e # reraise the interruption to avoid logging this as a crash
+      rescue FastlaneCore::Interface::FastlaneCommonException => e # these are exceptions that we dont count as crashes
+        raise e
+      rescue FastlaneCore::Interface::FastlaneError => e # user_error!
+        action_completed(method_sym.to_s, status: FastlaneCore::ActionCompletionStatus::USER_ERROR, exception: e)
+        raise e
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        # high chance this is actually FastlaneCore::Interface::FastlaneCrash, but can be anything else
+        # Catches all exceptions, since some plugins might use system exits to get out
+        action_completed(method_sym.to_s, status: FastlaneCore::ActionCompletionStatus::FAILED, exception: e)
+        raise e
       end
-    
-    module CrossplatformShellwords
-  # handle switching between implementations of shellescape
-  def shellescape(str)
-    if FastlaneCore::Helper.windows?
-      WindowsShellwords.shellescape(str)
-    else
-      # using `escape` instead of expected `shellescape` here
-      # which corresponds to Shellword's `String.shellescape` implementation
-      # https://github.com/ruby/ruby/blob/1cf2bb4b2085758112503e7da7414d1ef52d4f48/lib/shellwords.rb#L216
-      Shellwords.escape(str)
     end
+    
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --exit-threshold \'2\' input/dir #{input_dir_with_spaces.shellescape} third/input/file.h')
+      end
+    
+          it 'sets the configuration to Release' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              configuration: 'Release'
+            )
+          end').runner.execute(:test)
+    
+          it 'yields any error result' do
+        expect_command('ls', '-la', exitstatus: 1)
+        Fastlane::Actions.sh('ls', '-la') do |status, result|
+          expect(status.exitstatus).to eq(1)
+          expect(result).to be_empty
+        end
+      end
+    
+    # confirms that the escaped string that is generated actually
+# gets turned back into the source string by the actual shell.
+# abuses a `grep` (or `find`) error message because that should be cross platform
+def confirm_shell_unescapes_string_correctly(string, escaped)
+  compare_string = string.to_s.dup
+    
+              # Return the result
+          result
+        end
+    
+              @registered.each do |plugin|
+            result += plugin.components.action_hooks[Plugin::ALL_ACTIONS]
+            result += plugin.components.action_hooks[hook_name]
+          end
+    
+      #
+  # A hash that associated a file extension with a mime type for use as the
+  # content type of responses.
+  #
+  ExtensionMimeTypes =
+    {
+      'rhtml' => 'text/html',
+      'html'  => 'text/html',
+      'htm'   => 'text/htm',
+      'jpg'   => 'image/jpeg',
+      'jpeg'  => 'image/jpeg',
+      'gif'   => 'image/gif',
+      'png'   => 'image/png',
+      'bmp'   => 'image/bmp',
+      'txt'   => 'text/plain',
+      'css'   => 'text/css',
+      'ico'   => 'image/x-icon',
+    }
+    
+              # Encodes the auth_time field
+          #
+          # @return [String]
+          def encode_auth_time
+            [auth_time].pack('N')
+          end
+    
+                checksum = cipher[0, 16]
+            data = cipher[16, cipher.length - 1]
+    
+                decode_asn1(asn1)
+          end
+    
+    def blog_url(user, project, source_dir)
+  cname = '#{source_dir}/CNAME'
+  url = if File.exists?(cname)
+    'http://#{IO.read(cname).strip}'
+  else
+    'http://#{user.downcase}.github.io'
   end
-  module_function :shellescape
+  url += '/#{project}' unless project == ''
+  url
+end
     
-          it 'should shell escape keychain names when checking for installation' do
-        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
+    class SinatraStaticServer < Sinatra::Base
     
-          describe 'misc features' do
-        it 'makes it non optional by default' do
-          c = FastlaneCore::ConfigItem.new(key: :test,
-                                 default_value: '123')
-          expect(c.optional).to eq(false)
-        end
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
+    end
     
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+        def cache(gist, file, data)
+      cache_file = get_cache_file_for gist, file
+      File.open(cache_file, 'w') do |io|
+        io.write data
       end
+    end
     
-    module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
-      #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-              workspace_path = 'Examples.xcworkspace'
-          workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          workspace.schemes.each do |scheme_name, project_path|
-            next if scheme_name == 'Pods'
-            next if project_path.end_with? 'Pods.xcodeproj'
-            puts '    Building scheme: #{scheme_name}'
-    
-          attr_reader :key, :default, :options
-    
-          # Internal use only.
-      def peek(key, default=nil, &block)
-        value = fetch_for(key, default, &block)
-        while callable_without_parameters?(value)
-          value = (values[key] = value.call)
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
         end
-        value
+        @img['class'].gsub!(/'/, '') if @img['class']
       end
+      super
+    end
+    
+      # Returns a title cased string based on John Gruber's title case http://daringfireball.net/2008/08/title_case_update
+  def titlecase(input)
+    input.titlecase
+  end
+    
+      include_examples 'multiline literal brace layout trailing comma' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+  end
+end
+
+    
+          DOUBLE_SPLAT = '**'.freeze
