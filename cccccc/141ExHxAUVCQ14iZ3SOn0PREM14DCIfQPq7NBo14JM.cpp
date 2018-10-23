@@ -1,269 +1,169 @@
 
         
-        TegraCvtColor_Invoker(rgb2bgr565, rgb2bgr565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                              dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-TegraCvtColor_Invoker(rgb2rgb565, rgb2rgb565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                              dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-TegraCvtColor_Invoker(rgbx2bgr565, rgbx2bgr565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                                dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-TegraCvtColor_Invoker(rgbx2rgb565, rgbx2rgb565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
-                                                dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
-#define TEGRA_CVTBGRTOBGR565(src_data, src_step, dst_data, dst_step, width, height, scn, swapBlue, greenBits) \
-( \
-    greenBits == 6 && CAROTENE_NS::isSupportedConfiguration() ? \
-        scn == 3 ? \
-            (swapBlue ? \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_rgb2bgr565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) : \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_rgb2rgb565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) ), \
-            CV_HAL_ERROR_OK : \
-        scn == 4 ? \
-            (swapBlue ? \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_rgbx2bgr565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) : \
-                parallel_for_(Range(0, height), \
-                TegraCvtColor_rgbx2rgb565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
-                (width * height) / static_cast<double>(1<<16)) ), \
-            CV_HAL_ERROR_OK : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
+        #endif // BITCOIN_QT_OPENURIDIALOG_H
+
     
-    template <> struct wAdd<f32>
-{
-    typedef f32 type;
-    }
+    #endif // BITCOIN_QT_TRAFFICGRAPHWIDGET_H
+
     
-    template <bool L2gradient, bool externalSobel>
-inline void Canny3x3(const Size2D &size, s32 cn,
-                     const u8 * srcBase, ptrdiff_t srcStride,
-                     u8 * dstBase, ptrdiff_t dstStride,
-                     s16 * dxBase, ptrdiff_t dxStride,
-                     s16 * dyBase, ptrdiff_t dyStride,
-                     f64 low_thresh, f64 high_thresh,
-                     Margin borderMargin)
-{
-    s32 low, high;
-    prepareThresh<L2gradient>(low_thresh, high_thresh, low, high);
-    }
     
-        s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
-    {
-        const f64* src = internal::getRowPtr( srcBase,  srcStride, k);
-        size_t i = 0;
-    }
-    
-            if (cpolicy == CONVERT_POLICY_SATURATE)
-        {
-            for (; j < roiw128; j += step128)
-            {
-                internal::prefetch(src1 + j);
-    }
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const T * src = getRowPtr((const T *)srcBase, srcStride, i);
-        T * dst = getRowPtr((T *)dstBase, dstStride, (flipMode & FLIP_VERTICAL_MODE) != 0 ? size.height - i - 1 : i);
-        size_t j = 0, js = 0, jd = size.width * 3;
-    }
-    
-    #include 'err.h'
-#include 'socket.h'
-    
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
-    
-    ChannelCredentials::~ChannelCredentials() {}
-    
-    void CoreCodegen::grpc_slice_buffer_pop(grpc_slice_buffer* sb) {
-  ::grpc_slice_buffer_pop(sb);
-}
-    
-      bool IsPeerAuthenticated() const override;
-    
-    // A CallData class will be created for every grpc call within a channel. It is
-// used to store data and methods specific to that call. CensusClientCallData is
-// thread-compatible, however typically only 1 thread should be interacting with
-// a call at a time.
-class CensusClientCallData : public CallData {
- public:
-  // Maximum size of trace context is sent on the wire.
-  static constexpr uint32_t kMaxTraceContextLen = 64;
-  // Maximum size of tags that are sent on the wire.
-  static constexpr uint32_t kMaxTagsLen = 2048;
-    }
-    
-      CensusServerCallData()
-      : gc_(nullptr),
-        auth_context_(nullptr),
-        recv_initial_metadata_(nullptr),
-        initial_on_done_recv_initial_metadata_(nullptr),
-        initial_on_done_recv_message_(nullptr),
-        recv_message_(nullptr),
-        recv_message_count_(0),
-        sent_message_count_(0) {
-    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&path_, 0, sizeof(grpc_slice));
-    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
-    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
-  }
-    
-    Status ProtoServerReflection::ListService(ServerContext* context,
-                                          ListServiceResponse* response) {
-  if (services_ == nullptr) {
-    return Status(StatusCode::NOT_FOUND, 'Services not found.');
-  }
-  for (auto it = services_->begin(); it != services_->end(); ++it) {
-    ServiceResponse* service_response = response->add_service();
-    service_response->set_name(*it);
-  }
-  return Status::OK;
-}
-    
-       static char_class_type BOOST_REGEX_CALL lookup_classname(const wchar_t* p1, const wchar_t* p2);
-   static string_type BOOST_REGEX_CALL lookup_collatename(const wchar_t* p1, const wchar_t* p2);
-    
-    template <class I>
-struct is_random_imp
-{
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
-private:
-   typedef typename std::iterator_traits<I>::iterator_category cat;
-public:
-   BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<cat*, std::random_access_iterator_tag*>::value));
-#else
-   BOOST_STATIC_CONSTANT(bool, value = false);
-#endif
+    {private:
+    Ui::TransactionDescDialog *ui;
 };
     
-             if(*p == static_cast<charT>(0)) // if null we've matched
-            return set_->isnot ? next : (ptr == next) ? ++next : ptr;
+    BOOST_AUTO_TEST_SUITE_END()
+
     
-    #include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_function.hpp>
-#include <boost/type_traits/is_class.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/type_traits/remove_cv.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not.hpp>
-#ifndef BOOST_NO_SFINAE
-#include <boost/mpl/has_xxx.hpp>
-#endif
-#include <boost/ref.hpp>
+    REGISTER_CPU_OPERATOR(
+    MergeMultiScalarFeatureTensors,
+    MergeMultiScalarFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiScalarFeatureTensors)
+    .SetDoc(
+        'Merge given multi-feature tensors with scalar features into one.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
+    .NumOutputs(3)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_keys', '.keys')
+    .Input(2, 'in1_values', '.values')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values', '.values');
     
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
+      template <typename T>
+  bool DoRunWithType() {
+    const auto& data = Input(0);
+    CAFFE_ENFORCE(data.ndim() == 1, 'data should be 1-D.');
+    }
     
-       void BOOST_REGEX_CALL resize(size_type n);
-   
-   void* BOOST_REGEX_CALL extend(size_type n)
-   {
-      if(size_type(last - end) < n)
-         resize(n + (end - start));
-      pointer result = end;
-      end += n;
-      return result;
-   }
-    
-      XGBOOST_DEVICE GradientPairInternal<T> &operator-=(
-      const GradientPairInternal<T> &rhs) {
-    grad_ -= rhs.grad_;
-    hess_ -= rhs.hess_;
-    return *this;
-  }
-    
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
+    template <typename T, class Context>
+class FlexibleTopKOp : public Operator<Context> {
  public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
     }
     
-    /*!
- * \brief Macro to register tree updater.
- *
- * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
- * .describe('Column based tree maker.')
- * .set_body([]() {
- *     return new ColMaker<TStats>();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
-  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
-      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
+    #define COLUMN_DCT8(in) do { \
+  LOAD(m0, (in)[0 * 8]);     \
+  LOAD(m2, (in)[2 * 8]);     \
+  LOAD(m7, (in)[7 * 8]);     \
+  LOAD(m5, (in)[5 * 8]);     \
+                             \
+  BUTTERFLY(m0, m7);         \
+  BUTTERFLY(m2, m5);         \
+                             \
+  LOAD(m3, (in)[3 * 8]);     \
+  LOAD(m4, (in)[4 * 8]);     \
+  BUTTERFLY(m3, m4);         \
+                             \
+  LOAD(m6, (in)[6 * 8]);     \
+  LOAD(m1, (in)[1 * 8]);     \
+  BUTTERFLY(m1, m6);         \
+  BUTTERFLY(m7, m4);         \
+  BUTTERFLY(m6, m5);         \
+                             \
+  /* RowIdct() needs 15bits fixed-point input, when the output from   */ \
+  /* ColumnIdct() would be 12bits. We are better doing the shift by 3 */ \
+  /* now instead of in RowIdct(), because we have some multiplies to  */ \
+  /* perform, that can take advantage of the extra 3bits precision.   */ \
+  LSHIFT(m4, 3);             \
+  LSHIFT(m5, 3);             \
+  BUTTERFLY(m4, m5);         \
+  STORE16((in)[0 * 8], m5);  \
+  STORE16((in)[4 * 8], m4);  \
+                             \
+  LSHIFT(m7, 3);             \
+  LSHIFT(m6, 3);             \
+  LSHIFT(m3, 3);             \
+  LSHIFT(m0, 3);             \
+                             \
+  LOAD_CST(m4, kTan2);       \
+  m5 = m4;                   \
+  MULT(m4, m7);              \
+  MULT(m5, m6);              \
+  SUB(m4, m6);               \
+  ADD(m5, m7);               \
+  STORE16((in)[2 * 8], m5);  \
+  STORE16((in)[6 * 8], m4);  \
+                             \
+  /* We should be multiplying m6 by C4 = 1/sqrt(2) here, but we only have */ \
+  /* the k2Sqrt2 = 1/(2.sqrt(2)) constant that fits into 15bits. So we    */ \
+  /* shift by 4 instead of 3 to compensate for the additional 1/2 factor. */ \
+  LOAD_CST(m6, k2Sqrt2);     \
+  LSHIFT(m2, 3 + 1);         \
+  LSHIFT(m1, 3 + 1);         \
+  BUTTERFLY(m1, m2);         \
+  MULT(m2, m6);              \
+  MULT(m1, m6);              \
+  BUTTERFLY(m3, m1);         \
+  BUTTERFLY(m0, m2);         \
+                             \
+  LOAD_CST(m4, kTan3m1);     \
+  LOAD_CST(m5, kTan1);       \
+  m7 = m3;                   \
+  m6 = m1;                   \
+  MULT(m3, m4);              \
+  MULT(m1, m5);              \
+                             \
+  ADD(m3, m7);               \
+  ADD(m1, m2);               \
+  CORRECT_LSB(m1);           \
+  CORRECT_LSB(m3);           \
+  MULT(m4, m0);              \
+  MULT(m5, m2);              \
+  ADD(m4, m0);               \
+  SUB(m0, m3);               \
+  ADD(m7, m4);               \
+  SUB(m5, m6);               \
+                             \
+  STORE16((in)[1 * 8], m1);  \
+  STORE16((in)[3 * 8], m0);  \
+  STORE16((in)[5 * 8], m7);  \
+  STORE16((in)[7 * 8], m5);  \
+} while (0)
     
-    /*!
- * \brief Find the maximum iterator within the iterators
- * \param begin The begining iterator.
- * \param end The end iterator.
- * \return the iterator point to the maximum value.
- * \tparam Iterator The type of the iterator.
- */
-template<typename Iterator>
-inline Iterator FindMaxIndex(Iterator begin, Iterator end) {
-  Iterator maxit = begin;
-  for (Iterator it = begin; it != end; ++it) {
-    if (*it > *maxit) maxit = it;
-  }
-  return maxit;
-}
+      tmp0 = in[3 * stride];
+  tmp1 = kIDCTMatrix[ 3] * tmp0;
+  tmp2 = kIDCTMatrix[11] * tmp0;
+  tmp3 = kIDCTMatrix[19] * tmp0;
+  tmp4 = kIDCTMatrix[27] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
     
-    // common regressions
-// linear regression
-struct LinearSquareLoss {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    return 1.0f;
-  }
-  template <typename T>
-  static T PredTransform(T x) { return x; }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() { return ''; }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
+    
+    
+    {  // One-byte id of the component.
+  int id;
+  // Horizontal and vertical sampling factors.
+  // In interleaved mode, each minimal coded unit (MCU) has
+  // h_samp_factor x v_samp_factor DCT blocks from this component.
+  int h_samp_factor;
+  int v_samp_factor;
+  // The index of the quantization table used for this component.
+  size_t quant_idx;
+  // The dimensions of the component measured in 8x8 blocks.
+  int width_in_blocks;
+  int height_in_blocks;
+  int num_blocks;
+  // The DCT coefficients of this component, laid out block-by-block, divided
+  // through the quantization matrix values.
+  std::vector<coeff_t> coeffs;
 };
+    
+    #include 'guetzli/output_image.h'
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg);
+    
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
