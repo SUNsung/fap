@@ -1,75 +1,88 @@
 
         
-          def validate_each(record, attribute, value)
-    raise(ArgumentError, 'A CarrierWave::Uploader::Base object was expected') unless value.is_a? CarrierWave::Uploader::Base
-    
-          def provider
-        oauth['provider']
-      end
-    
-            def key_text
-          @entity.to_s
-        end
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
-    
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
-  end
-    
-      def hub_topic_domain
-    hub_topic_uri.host + (hub_topic_uri.port ? ':#{hub_topic_uri.port}' : '')
-  end
-    
-        desc 'Commits the version to github repository'
-    task :commit_version do
-      sh <<-SH
-        sed -i 's/.*VERSION.*/  VERSION = '#{source_version}'/' lib/sinatra/version.rb
-        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' sinatra-contrib/lib/sinatra/contrib/version.rb
-        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' rack-protection/lib/rack/protection/version.rb
-      SH
-    
-          env['rack.errors'] = errors
-    
-          def real_token(session)
-        decode_token(session[:csrf])
-      end
-    
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
-    
-          def close_body(body)
-        body.close if body.respond_to?(:close)
-      end
+          def create
+    if signed_request_account
+      upgrade_account
+      process_payload
+      head 202
+    else
+      render plain: signature_verification_failure_reason, status: 401
     end
   end
+    
+        def resource_params
+      params.require(:report_note).permit(
+        :content,
+        :report_id
+      )
+    end
+    
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
 end
+
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+        def read_cached_files(path, files)
+      full_path = '#@cache_path/#@branch_sha/#{path}'
+      contents  = {}
+      if File.directory?(full_path)
+        files.each do |name|
+          path = '#{full_path}/#{name}'
+          contents[name] = File.read(path, mode: 'rb') if File.exists?(path)
+        end
+      end
+      contents
+    end
+    
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+            def left_whole_line_range(loc_begin)
+          if range_by_whole_lines(loc_begin).source.strip == '{'
+            range_by_whole_lines(loc_begin, include_final_newline: true)
+          else
+            loc_begin
+          end
+        end
+    }
+    
+        it 'accepts one hash parameter without braces and with one hash value' do
+      expect_no_offenses('where(x: { 'y' => 'z' })')
+    end
+    
+          it 'does not autocorrect the closing brace' do
+        new_source = autocorrect_source(source)
+        expect(new_source).to eq([source].join($RS))
+      end
+    end
+    
+          # Checks whether any of the key value pairs in the `hash` literal are on
+      # the same line.
+      #
+      # @note A multiline `pair` is considered to be on the same line if it
+      #       shares any of its lines with another `pair`
+      #
+      # @return [Boolean] whether any `pair` nodes are on the same line
+      def pairs_on_same_line?
+        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
+      end
