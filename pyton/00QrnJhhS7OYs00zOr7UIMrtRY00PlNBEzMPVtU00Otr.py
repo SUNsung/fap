@@ -1,107 +1,80 @@
-    def implements_to_string(cls):
-        cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
-        return cls
-    
-        If you configure your own :class:`logging.StreamHandler`, you may want to
-    use this for the stream. If you are using file or dict configuration and
-    can't import this directly, you can refer to it as
-    ``ext://flask.logging.wsgi_errors_stream``.
-    '''
-    return request.environ['wsgi.errors'] if request else sys.stderr
+
+        
+            def append_to_front(self, node):
+        pass
     
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+seller_category_map = {}
+seller_category_map['Exxon'] = DefaultCategories.GAS
+seller_category_map['Target'] = DefaultCategories.SHOPPING
+    
+        def process_query(self, query):
+        query = self.parse_query(query)
+        results = self.memory_cache.get(query)
+        if results is None:
+            results = self.reverse_index_cluster.process_search(query)
+            self.memory_cache.set(query, results)
+        return results
+    
+        def insert_crawled_link(self, url, signature):
+        '''Add the given link to `crawled_links`.'''
+        pass
+    
+    
+def test_when_already_configured(usage_tracker_io, shell_pid,
+                                 shell, shell_config, logs):
+    shell.get_history.return_value = ['fuck']
+    shell_pid.return_value = 12
+    _change_tracker(usage_tracker_io, 12)
+    shell_config.read.return_value = 'eval $(thefuck --alias)'
+    main()
+    logs.already_configured.assert_called_once()
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+    
+def to_dict(items, key, value):
+    ''' Transforms a list of items to a Key/Value dictionary '''
+    if items:
+        return dict(zip([i[key] for i in items], [i[value] for i in items]))
+    else:
+        return dict()
+    
+    notes:
+  - does not support check mode
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-            for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
-                for template in loader.list_templates():
-                    result.add(template)
+        if not asgs:
+        return asgs
+    try:
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+        elbv2 = boto3_conn(module, conn_type='client', resource='elbv2', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    except ClientError as e:
+        # This is nice to have, not essential
+        elbv2 = None
+    matched_asgs = []
     
-            if 'methods' not in d:
-            methods = set()
+        list_launch_configs(connection, module)
     
-        class FailingSessionInterface(SessionInterface):
-        def open_session(self, app, request):
-            raise SessionError()
-    
-    
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
-    
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
-    
-        ###########################################################################
-    # Perform benchmark
-    ###########################################################################
-    time_fit = collections.defaultdict(list)
-    time_transform = collections.defaultdict(list)
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
-    
-    plt.show()
-
-    
-    '''
-print(__doc__)
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-            return contracts
-    
-        def __init__(self, *args, **kwargs):
-        super(ReturnsContract, self).__init__(*args, **kwargs)
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import (connect_to_aws,
+                                      boto3_conn,
+                                      ec2_argument_spec,
+                                      get_aws_connection_info)
+try:
+    from botocore.exceptions import (BotoCoreError, ClientError)
+except ImportError:
+    pass  # caught by imported HAS_BOTO3
