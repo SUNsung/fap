@@ -1,187 +1,301 @@
 
         
-              if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
+        Jekyll::Deprecator.process(ARGV)
     
-          UI.user_error!('Could not find lane '#{full_lane_name}'. Available lanes: #{available_lanes.join(', ')}') unless lane_obj
-      UI.user_error!('You can't call the private lane '#{lane}' directly') if lane_obj.is_private
-    
-          File.write(new_path, '1')
-      false
-    end
-    
-            expect(result[1]).to start_with('security set-keychain-settings')
-        expect(result[1]).to include('-t 600')
-        expect(result[1]).to include('-l')
-        expect(result[1]).to include('-u')
-        expect(result[1]).to include('~/Library/Keychains/test.keychain')
+          def after_feature_element(feature_element)
+        @timings[feature_element_timing_key(feature_element)] = Time.now - @timings[feature_element_timing_key(feature_element)]
+        @io.print ' (#{@timings[feature_element_timing_key(feature_element)]}s)'
       end
     
-          it 'generates the correct git command with a shell-escaped message' do
-        message = 'message with 'quotes' (and parens)'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: \'#{message}\')
-        end').runner.execute(:test)
-        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+          end
+    
+                @config['syntax_highlighter_opts'] = begin
+              strip_coderay_prefix(
+                @config['syntax_highlighter_opts'] \
+                  .merge(CODERAY_DEFAULTS) \
+                  .merge(@config['coderay'])
+              )
+            end
+          end
+        end
       end
     end
   end
 end
 
     
-            allow(File).to receive(:file?).and_return(false)
-        allow(File).to receive(:file?).with(keychain_path).and_return(true)
-        allow(File).to receive(:exist?).and_return(false)
-        expect(File).to receive(:exist?).with(cert_name).and_return(true)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_set_key_partition_list_command, print: false)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_security_import_command, print: false)
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
+    end
     
-          describe '#sensitive flag' do
-        before(:each) do
-          allow(FastlaneCore::Helper).to receive(:test?).and_return(false)
-          allow(FastlaneCore::UI).to receive(:interactive?).and_return(true)
-          allow(FastlaneCore::Helper).to receive(:ci?).and_return(false)
-        end
+        To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+    EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
     
-          open_dry_run_modal(agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('http://xkcd.com/')
+      def elisp_caveats
+    return if f.keg_only?
+    if keg && keg.elisp_installed?
+      <<-EOS.undent
+        Emacs Lisp files have been installed to:
+          #{HOMEBREW_PREFIX}/share/emacs/site-lisp/#{f.name}
+      EOS
+    end
+  end
+    
+          begin
+        migrator = Migrator.new(f)
+        migrator.migrate
+      rescue Migrator::MigratorDifferentTapsError
+      rescue Exception => e
+        onoe e
       end
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
+  end
+    
+      DATA = :DATA
+    
+          action_launched('puts')
+      return_value = Fastlane::Actions::PutsAction.run([value])
+      action_completed('puts', status: FastlaneCore::ActionCompletionStatus::SUCCESS)
+      return return_value
     end
     
-      describe '#omniauth_provider_icon' do
-    it 'returns a correct icon tag for Twitter' do
-      icon = omniauth_provider_icon(:twitter)
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-twitter')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
+        context 'action launch' do
+      let(:launch_context) do
+        FastlaneCore::ActionLaunchContext.new(
+          action_name: action_name,
+          p_hash: p_hash,
+          platform: 'ios',
+          fastlane_client_language: fastlane_client_language
+        )
+      end
     
+          def self.details
+        list = <<-LIST.markdown_list
+          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
+          `lane` is the name of the current fastlane lane
+          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
+          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
+          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
+        LIST
+    
+          it 'allows you to sign the tag using the default e-mail address's key.' do
+        tag = '2.0.0'
+        message = 'message'
+    
+          it 'logs the command if verbose' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: 'foo.bar')
+          end').runner.execute(:test)
+        end
+      end
+    
+          it 'works with select regex when regex is string' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: \'\/AppDelegate\'
+            )
+          end').runner.execute(:test)
+    
+            expected = 'slather coverage
+                    --travis
+                    --travispro
+                    --circleci
+                    --jenkins
+                    --buildkite
+                    --teamcity
+                    --coveralls
+                    --simple-output
+                    --gutter-json
+                    --cobertura-xml
+                    --llvm-cov
+                    --html
+                    --show
+                    --build-directory foo
+                    --source-directory baz
+                    --output-directory 123
+                    --ignore nothing
+                    --verbose
+                    --input-format bah
+                    --scheme Foo
+                    --configuration Bar
+                    --workspace foo.xcworkspace
+                    --binary-file you
+                    --binary-basename YourApp
+                    --binary-basename YourFramework
+                    --source-files #{source_files.shellescape}
+                    --decimals 2 foo.xcodeproj'.gsub(/\s+/, ' ')
+        expect(result).to eq(expected)
+      end
+    
+          context 'without error_callback' do
+        it 'raise shell_error' do
+          allow(FastlaneCore::UI).to receive(:shell_error!)
+          expect_command('exit 1', exitstatus: 1)
+          Fastlane::Actions.sh('exit 1')
+    
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
+    else
+      return str
     end
+  end
+  module_function :shellescape
+end
 
     
-        it 'sorts tuples in order specified: case 2' do
-      # order by x1 desc, x2 asc, c3 desc
-      orders = [true, false, true]
-      expected = tuples.values_at(5, 6, 0, 1, 4, 3, 2)
+              def nonzero?
+            @path.exclude?('\0')
+          end
     
-      let :reverted_extract do
-    old_extract
-  end
+              validations do
+            validates :config, allowed_keys: ALLOWED_KEYS
+            validates :policy, inclusion: { in: %w[pull-push push pull], message: 'should be pull-push, push, or pull' }, allow_blank: true
+          end
     
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
-  end
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
     
-            @agent.trigger_web_request(request)
-        expect(@agent.reload.memory['last_request']).to eq([ { 'some_param' => 'some_value' }, 'post', 'text/html', {'HTTP_X_CUSTOM_HEADER' => 'foo'} ])
-        expect(@agent.last_web_request_at.to_i).to be_within(1).of(Time.now.to_i)
-      end
+          context '#restart_dead_workers' do
+        before do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+    
+    describe LiquidMigrator do
+  describe 'converting JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
+      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
+      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
     end
     
-        Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
-    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
+      describe '#interpolate_jsonpaths' do
+    let(:payload) { { :there => { :world => 'WORLD' }, :works => 'should work' } }
+    
+          it 'should only schedule receiving agents that are set to propagate_immediately' do
+        Event.delete_all
+        sender = Agents::SomethingSource.new(:name => 'Sending Agent')
+        sender.user = users(:bob)
+        sender.save!
+    
+    module URI
+  ;
+  class << self
+# Does the char code correspond to an alpha-numeric char.
+# isAlphaNumeric('a'.ord) => true
+# isAlphaNumeric(''.ord) => false
+    def isAlphaNumeric(cc)
+      # a - z
+      if (97 <= cc && cc <= 122);
+        return true
+      end
+      # A - Z
+      if (65 <= cc && cc <= 90);
+        return true
+      end
+      # 0 - 9
+      if (48 <= cc && cc <= 57);
+        return true
+      end
+    
+          def left_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, li                  = *line.match(/\-(\d+)/)
+          @left_diff_line_number = li.to_i
+          @current_line_number   = @left_diff_line_number
+          ret                    = '...'
+        elsif line[0] == ?-
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        elsif line[0] == ?+
+          ret = ' '
+        else
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        end
+        ret
+      end
+    
+        end
+  end
+end
+
+    
+    def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+  end
+  cloned
+end
+    
+      test 'edit returns nil for non-existant page' do
+    # post '/edit' fails. post '/edit/' works.
+    page = 'not-real-page'
+    path = '/'
+    post '/edit/', :content => 'edit_msg',
+         :page              => page, :path => path, :message => ''
+    page_e = @wiki.paged(page, path)
+    assert_equal nil, page_e
   end
     
-        def create
-      authorize AccountModerationNote, :create?
-    
-    module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-        def create
-      authorize :domain_block, :create?
-    
-      it 'accepts a proc argument instead of a block' do
-    captured = nil
-    
-        def log_processed(name)
-      puts green '    #{name}'
-    end
-    
-        export LANG=en_US.UTF-8
-    DOC
-  else
-    STDERR.puts <<-DOC
-    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-        # Returns a new {Gem::Version} based on the systems `git` version.
-    #
-    # @return [Gem::Version]
-    #
-    def self.git_version
-      raw_version = Executable.capture_command('git', ['--version']).first
-      unless match = raw_version.scan(/\d+\.\d+\.\d+/).first
-        raise 'Failed to extract git version from `git --version` (#{raw_version.inspect})'
-      end
-      Gem::Version.new(match)
-    end
-    
-          def servers_by_key
-        @servers_by_key ||= {}
-      end
-    
-          # Returns an array of source file location(s) where the given key was
-      # assigned (i.e. where `set` was called). If the key was never assigned,
-      # returns `nil`.
-      def source_locations(key)
-        locations[key]
-      end
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
+        assert body.include?('<span class='username'>Charles Pence</span>'), '/latest_changes should include the Author Charles Pence'
+    assert body.include?('a8ad3c0'), '/latest_changes should include the :latest_changes_count commit'
+    assert !body.include?('60f12f4'), '/latest_changes should not include more than latest_changes_count commits'
+    assert body.include?('<a href='Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e'>Data-Two.csv</a>'), '/latest_changes include links to modified files in #{body}'
+    assert body.include?('<a href='Hobbit/874f597a5659b4c3b153674ea04e406ff393975e'>Hobbit.md</a>'), '/latest_changes should include links to modified pages in #{body}'
   end
     
-          def instrument(env)
-        return unless i = options[:instrumenter]
-        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
-        i.instrument('rack.protection', env)
-      end
-    
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-          @left_diff_line_number = nil
-    
-      test 'frontend links for editing blocked' do
-    Precious::App.set(:wiki_options, { allow_editing: false })
-    get '/A'
-    
-      test 'h1 title can be disabled' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-      s.executables = ['gollum']
-    
-      class Error < StandardError;
-  end
+    def replace_header(head, header_name)
+  head.sub!(/(\.#{header_name}\s*= ').*'/) { '#{$1}#{send(header_name)}''}
+end
