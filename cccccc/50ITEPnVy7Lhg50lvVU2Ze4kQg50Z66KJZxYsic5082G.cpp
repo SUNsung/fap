@@ -1,197 +1,190 @@
 
         
-        class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
-                    public auto_updater::Delegate,
-                    public WindowListObserver {
- public:
-  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
-    }
+        #include <map>
     
-    
-    {}  // namespace api
-    
-    #include 'atom/browser/native_window_views.h'
+    AutoUpdater::AutoUpdater(v8::Isolate* isolate) {
+  auto_updater::AutoUpdater::SetDelegate(this);
+  Init(isolate);
+}
     
     void Initialize(v8::Local<v8::Object> exports,
                 v8::Local<v8::Value> unused,
                 v8::Local<v8::Context> context,
                 void* priv) {
-  auto controller = base::Unretained(TracingController::GetInstance());
   mate::Dictionary dict(context->GetIsolate(), exports);
-  dict.SetMethod('getCategories',
-                 base::Bind(&TracingController::GetCategories, controller));
-  dict.SetMethod('startRecording',
-                 base::Bind(&TracingController::StartTracing, controller));
-  dict.SetMethod('stopRecording', &StopRecording);
-  dict.SetMethod(
-      'getTraceBufferUsage',
-      base::Bind(&TracingController::GetTraceBufferUsage, controller));
+  dict.SetMethod('showMessageBox', &ShowMessageBox);
+  dict.SetMethod('showErrorBox', &atom::ShowErrorBox);
+  dict.SetMethod('showOpenDialog', &ShowOpenDialog);
+  dict.SetMethod('showSaveDialog', &ShowSaveDialog);
+#if defined(OS_MACOSX) || defined(OS_WIN)
+  dict.SetMethod('showCertificateTrustDialog',
+                 &certificate_trust::ShowCertificateTrust);
+#endif
 }
     
+      void Pause();
+  bool IsPaused() const;
+  void Resume();
+  bool CanResume() const;
+  void Cancel();
+  int64_t GetReceivedBytes() const;
+  int64_t GetTotalBytes() const;
+  std::string GetMimeType() const;
+  bool HasUserGesture() const;
+  std::string GetFilename() const;
+  std::string GetContentDisposition() const;
+  const GURL& GetURL() const;
+  const std::vector<GURL>& GetURLChain() const;
+  download::DownloadItem::DownloadState GetState() const;
+  bool IsDone() const;
+  void SetSavePath(const base::FilePath& path);
+  base::FilePath GetSavePath() const;
+  std::string GetLastModifiedTime() const;
+  std::string GetETag() const;
+  double GetStartTime() const;
     
-    {  // Reference this object in case it got garbage collected.
-  g_download_item_objects[handle->weak_map_id()] =
-      v8::Global<v8::Object>(isolate, handle.ToV8());
-  return handle;
+    #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
+
+    
+    
+    {  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
+      .MakeDestroyable()
+#if defined(OS_LINUX)
+      .SetMethod('blockShutdown', &PowerMonitor::BlockShutdown)
+      .SetMethod('unblockShutdown', &PowerMonitor::UnblockShutdown)
+#endif
+      .SetMethod('querySystemIdleState', &PowerMonitor::QuerySystemIdleState)
+      .SetMethod('querySystemIdleTime', &PowerMonitor::QuerySystemIdleTime);
 }
     
-     private:
-  base::FilePath save_path_;
-  download::DownloadItem* download_item_;
+    #include <map>
+#include <memory>
     
-    bool GlobalShortcut::Register(const ui::Accelerator& accelerator,
-                              const base::Closure& callback) {
-  if (!GlobalShortcutListener::GetInstance()->RegisterAccelerator(accelerator,
-                                                                  this)) {
-    return false;
+    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
+ public:
+  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
+                                  mate::Arguments* args);
+    }
+    
+    namespace atom {
+    }
+    
+    void Event::FrameDeleted(content::RenderFrameHost* rfh) {
+  if (sender_ != rfh)
+    return;
+  sender_ = nullptr;
+  message_ = nullptr;
+}
+    
+          if (node->Further) {
+        // Further indent, and include the line to the right child if
+        // there is one.
+        IndentScope is(this, node->Right ? '|   ' : '    ');
+        print(node->Further, ChildKind::Further);
+      }
+    
+        // Special case: 'ObjectValue' in the name matches 'Object' in the
+    // type.
+    if (matchNameWordToTypeWord('Object', *typeWordRevIter) &&
+        matchNameWordToTypeWord(nameWord, 'Value')) {
+      auto nextNameWordRevIter = std::next(nameWordRevIter);
+      if (nextNameWordRevIter != nameWordRevIterEnd &&
+          matchNameWordToTypeWord(*nextNameWordRevIter, 'Object')) {
+        matched();
+        nameWordRevIter = nextNameWordRevIter;
+        ++nameWordRevIter;
+        ++typeWordRevIter;
+        continue;
+      }
+    }
+    
+      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = decl;
+    return info;
   }
-    }
     
-    void InAppPurchase::OnTransactionsUpdated(
-    const std::vector<in_app_purchase::Transaction>& transactions) {
-  Emit('transactions-updated', transactions);
-}
+      // Instance members
+  IAMResult(DeclName declName, unsigned selfIdx, EffectiveClangContext dc)
+      : name(declName), selfIndex(selfIdx), effectiveDC(dc) {}
+    
+    #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
 #endif
     
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_net, Initialize)
+    
+    {
+    {
+    {
+    {bool AnnotationMatchesSubstring(const string& file_content,
+                                const GeneratedCodeInfo::Annotation* annotation,
+                                const string& expected_text) {
+  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
+  annotations.push_back(annotation);
+  return AtLeastOneAnnotationMatchesSubstring(file_content, annotations,
+                                              expected_text);
+}
+}  // namespace annotation_test_util
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
-#define ATOM_BROWSER_API_ATOM_API_NET_H_
-    
-    base::string16 Notification::GetBody() const {
-  return body_;
-}
-    
-    // static
-void RenderProcessPreferences::BuildPrototype(
-    v8::Isolate* isolate,
-    v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(
-      mate::StringToV8(isolate, 'RenderProcessPreferences'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('addEntry', &RenderProcessPreferences::AddEntry)
-      .SetMethod('removeEntry', &RenderProcessPreferences::RemoveEntry);
-}
-    
-    #include 'atom/browser/render_process_preferences.h'
-#include 'native_mate/handle.h'
-#include 'native_mate/wrappable.h'
-    
-    #include 'atom/browser/api/atom_api_browser_window.h'
-#include 'atom/browser/browser.h'
-#include 'atom/common/native_mate_converters/gfx_converter.h'
-#include 'base/bind.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-#include 'ui/display/display.h'
-#include 'ui/display/screen.h'
-#include 'ui/gfx/geometry/point.h'
-    
-    
-std::vector<struct pollfd> pollfds;
-std::unordered_map<int, ClientSession> client_sessions;
-// TODO: check if objects have been freed from time to time
-std::set<std::string> used_objects;
-    
-    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
-    
-      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = pretransposed_weight
-      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
-      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    **Result**
-    
-    namespace caffe2 {
+        std::vector<string> lines = Split(comments, '\n');
+    while (!lines.empty() && lines.back().empty()) {
+      lines.pop_back();
     }
     
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
     
-    
-    {  // Add new data and corrupt it
-  ASSERT_OK(writable_file->Append(kCorrupted));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size() + kCorrupted.size());
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kCorrupted), 0);
-  // Corrupted
-  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_NE(result.compare(kCorrupted), 0);
+    string ClassNameResolver::GetJavaImmutableClassName(
+    const EnumDescriptor* descriptor) {
+  return GetJavaClassFullName(
+      ClassNameWithoutPackage(descriptor, true),
+      descriptor->file(), true);
 }
     
-    int main() {
-  rocksdb::DB* raw_db;
-  rocksdb::Status status;
-    }
+    #include <google/protobuf/compiler/java/java_shared_code_generator.h>
     
-      // destroy and open DB
-  DB* db;
-  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
-  assert(s.ok());
-  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
-  assert(s.ok());
+      void GenerateMembersHeader(io::Printer* printer);
+  void GenerateStaticVariablesInitialization(io::Printer* printer);
+  void GenerateRegistrationSource(io::Printer* printer);
     
-    
-BENCHMARK_MAIN();
-
-    
-      BENCHMARK_ALWAYS_INLINE
-  explicit StateIterator(State* st)
-      : cached_(st->error_occurred_ ? 0 : st->max_iterations), parent_(st) {}
-    
-    namespace benchmark {
-namespace internal {
-// The arraysize(arr) macro returns the # of elements in an array arr.
-// The expression is a compile-time constant, and therefore can be
-// used in defining new arrays, for example.  If you use arraysize on
-// a pointer by mistake, you will get a compile-time error.
-//
-    }
-    }
-    
-    // The CHECK macro returns a std::ostream object that can have extra information
-// written to it.
-#ifndef NDEBUG
-#define CHECK(b)                                                             \
-  (b ? ::benchmark::internal::GetNullLogInstance()                           \
-     : ::benchmark::internal::CheckHandler(#b, __FILE__, __func__, __LINE__) \
-           .GetLog())
-#else
-#define CHECK(b) ::benchmark::internal::GetNullLogInstance()
-#endif
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
     
     
-    {// Returns true unless value starts with one of: '0', 'f', 'F', 'n' or 'N', or
-// some non-alphanumeric character. As a special case, also returns true if
-// value is the empty string.
-bool IsTruthyFlagValue(const std::string& value);
-}  // end namespace benchmark
+    {}  // namespace grpc
     
-    #ifndef BENCHMARK_CYCLECLOCK_H_
-#define BENCHMARK_CYCLECLOCK_H_
-    
-    // Enable thread safety attributes only with clang.
-// The attributes can be safely erased when compiling with other compilers.
-#if defined(HAVE_THREAD_SAFETY_ATTRIBUTES)
-#define THREAD_ANNOTATION_ATTRIBUTE__(x) __attribute__((x))
-#else
-#define THREAD_ANNOTATION_ATTRIBUTE__(x)  // no-op
-#endif
-    
-    double BenchmarkReporter::Run::GetAdjustedRealTime() const {
-  double new_time = real_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
+    void SetCreateThreadPool(CreateThreadPoolFunc func) { g_ctp_impl = func; }
