@@ -1,139 +1,161 @@
 
         
-            def configure_sass
-      require 'sass'
-    
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-        def silence_log
-      @silence = true
-      yield
-    ensure
-      @silence = false
+            def set_after_all(platform, block)
+      unless after_all_blocks[platform].nil?
+        UI.error('You defined multiple `after_all` blocks in your `Fastfile`. The last one being set will be used.')
+      end
+      after_all_blocks[platform] = block
     end
-  end
-end
-
     
-        # get sha of the branch (= the latest commit)
-    def get_branch_sha
-      @branch_sha ||= begin
-        if @branch + '\n' == %x[git rev-parse #@branch]
-          @branch
-        else
-          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
-          log cmd
-          result = %x[#{cmd}]
-          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
-          result.split(/\s+/).first
+            # Stub out calls related to the execution environment
+        client = double('ingester_client')
+        session = FastlaneCore::AnalyticsSession.new(analytics_ingester_client: client)
+        expect(client).to receive(:post_event).with({
+            client_id: p_hash,
+            category: 'fastlane Client Langauge - ruby',
+            action: :launch,
+            label: nil,
+            value: nil
+        })
+    
+          it 'handles the exclude_dirs parameter with a single element correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle')
+      end
+    
+          it 'works with multiple ignore patterns' do
+        pattern1 = 'Pods/*'
+        pattern2 = '../**/*/Xcode*'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          slather({
+            ignore: ['#{pattern1}', '#{pattern2}'],
+            proj: 'foo.xcodeproj'
+          })
+        end').runner.execute(:test)
+    
+          if conflicting_options
+        conflicting_options.each do |conflicting_option_key|
+          UI.user_error!('Conflicting option key must be a symbol') unless conflicting_option_key.kind_of?(Symbol)
         end
       end
+    
+              config = FastlaneCore::Configuration.create([name, other, platform], {})
+          config.set(:name, 'name1')
+          config.set(:other, 'other')
+          config.push_values!
+    
+    invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
     end
-    
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
-    
-    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
-# requests with `config.assets.quiet`, because the default silence method of
-# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
-Logging::Logger.send :alias_method, :local_level, :level
-Logging::Logger.send :alias_method, :local_level=, :level=
-Logging::Logger.send :include, LoggerSilence
-
-    
-      def up
-    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
-         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
   end
 end
-
     
-    When /^I (?:log|sign) out manually on the mobile website$/ do
-  manual_logout_mobile
-end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-    Given /^a user with email '([^']*)' is connected with '([^']*)'$/ do |arg1, arg2|
-  user1 = User.where(:email => arg1).first
-  user2 = User.where(:email => arg2).first
-  connect_users(user1, user1.aspects.where(:name => 'Besties').first, user2, user2.aspects.where(:name => 'Besties').first)
-end
+        protected
     
-    require 'sidekiq/testing/inline'
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
+        #
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
+        #
+        # @param [V2::Root] new
+        def upgrade(new)
+        end
     
-    def await_condition &condition
-  start_time = Time.zone.now
-  until condition.call
-    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
-    sleep 0.05
+            include Vagrant::Util
+    
+              providers
+        end
+    
+              # This is a helper that gets a single machine with the proper
+          # provider. The 'proper provider' in this case depends on what was
+          # given:
+          #
+          #   * If a provider was explicitly specified, then use that provider.
+          #     But if an active machine exists with a DIFFERENT provider,
+          #     then throw an error (for now), since we don't yet support
+          #     bringing up machines with different providers.
+          #
+          #   * If no provider was specified, then use the active machine's
+          #     provider if it exists, otherwise use the default provider.
+          #
+          get_machine = lambda do |name|
+            # Check for an active machine with the same name
+            provider_to_use = options[:provider]
+            provider_to_use = provider_to_use.to_sym if provider_to_use
+    
+            # This contains all the synced folder implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Integer>>]
+        attr_reader :synced_folders
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
+    
+      it 'raises a TypeError when passed nil' do
+    lambda { srand(nil) }.should raise_error(TypeError)
   end
-  true
-end
-
     
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
+        it 'returns the last access time for the provided file when passed ?A' do
+      Kernel.test(?A, @tmp_file).should == @tmp_file.atime
+    end
+    
+      # String arguments should be evaluated in the context of the caller.
+  it 'accepts a String argument instead of a Proc or block' do
+    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
     else
-      expect(page).to have_path(path_to(page_name))
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
     end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
+else
+  Pod::Command.run(ARGV)
 end
+
     
-    # Ensures that the VERSION file has been updated for a new release.
-task :check_release do
-  version = File.read(scope('VERSION')).strip
-  raise 'There have been changes since current version (#{version})' if changed_since?(version)
-  raise 'VERSION_NAME must not be 'Bleeding Edge'' if File.read(scope('VERSION_NAME')) == 'Bleeding Edge'
-end
-    
-    $stderr.puts <<DEPRECATION
-WARNING: Ruby Sass's Git repository is moving, and the old repository will be
-deled on 26 March 2019! Please update your Git URLs to point to the new
-repository at https://github.com/sass/ruby-sass.
-    
-              def set_global_#{name}(name, value)
-            global_env.set_#{name}(name, value)
-          end
-        RUBY
-      end
-    end
-    
-        # Returns the standard exception backtrace,
-    # including the Sass backtrace.
+        # Checks that the podfile exists.
     #
-    # @return [Array<String>]
-    def backtrace
-      return nil if super.nil?
-      return super if sass_backtrace.all? {|h| h.empty?}
-      sass_backtrace.map do |h|
-        '#{h[:filename] || '(sass)'}:#{h[:line]}' +
-          (h[:mixin] ? ':in `#{h[:mixin]}'' : '')
-      end + super
-    end
-    
-          output = @options[:output] = @args.shift
-      raise 'Error: --from required when using --recursive.' unless @options[:from]
-      raise 'Error: --to required when using --recursive.' unless @options[:to]
-      unless File.directory?(@options[:input])
-        raise 'Error: '#{@options[:input]}' is not a directory'
-      end
-      if @options[:output] && File.exist?(@options[:output]) &&
-        !File.directory?(@options[:output])
-        raise 'Error: '#{@options[:output]}' is not a directory'
-      end
-      @options[:output] ||= @options[:input]
-    
-          opts.on('-l', '--line-numbers', '--line-comments',
-              'Emit comments in the generated CSS indicating the corresponding source line.') do
-        @options[:for_engine][:line_numbers] = true
+    # @raise  If the podfile does not exists.
+    #
+    # @return [void]
+    #
+    def verify_podfile_exists!
+      unless config.podfile
+        raise Informative, 'No `Podfile' found in the project directory.'
       end
     end
