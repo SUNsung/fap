@@ -1,96 +1,59 @@
 
         
-              OptionParser.new do |opts|
-        opts.banner = 'See full documentation at http://capistranorb.com/.'
-        opts.separator ''
-        opts.separator 'Install capistrano in a project:'
-        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
-        opts.separator ''
-        opts.separator 'Show available tasks:'
-        opts.separator '    bundle exec cap -T'
-        opts.separator ''
-        opts.separator 'Invoke (or simulate invoking) a task:'
-        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
-        opts.separator ''
-        opts.separator 'Advanced options:'
+          attr_accessor :listen_port, :listen_host, :server_name, :context, :comm
+  attr_accessor :ssl, :ssl_cert, :ssl_compression, :ssl_cipher
+  attr_accessor :listener, :resources
     
-          def each
-        servers_by_key.values.each { |server| yield server }
-      end
+      def hangup
+    self.client.send_hangup(self)
+    self.state = :hangup
+    true
+  end
     
-    require 'stringex'
+    module Rex
+  module Proto
+    module Kerberos
+      module Crypto
+        module Rc4Hmac
+          # Decrypts the cipher using RC4-HMAC schema
+          #
+          # @param cipher [String] the data to decrypt
+          # @param key [String] the key to decrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the decrypted cipher
+          # @raise [RuntimeError] if decryption doesn't succeed
+          def decrypt_rc4_hmac(cipher, key, msg_type)
+            unless cipher && cipher.length > 16
+              raise ::RuntimeError, 'RC4-HMAC decryption failed'
+            end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
+              # Encodes a Rex::Proto::Kerberos::Model::AuthorizationData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            seqs = []
+            elements.each do |elem|
+              elems = []
+              type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type(elem[:type])], 0, :CONTEXT_SPECIFIC)
+              elems << type_asn1
+              data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_data(elem[:data])], 1, :CONTEXT_SPECIFIC)
+              elems << data_asn1
+              seqs << OpenSSL::ASN1::Sequence.new(elems)
+            end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
-    end
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
+              # Decodes the key_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_type(input)
+            input.value[0].value.to_i
+          end
     
-          # Returns the iteration variable of the `for` loop.
-      #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
-      end
-    
-          # Returns an array of all the keys in the `hash` literal.
-      #
-      # @return [Array<Node>] an array of keys in the `hash` literal
-      def keys
-        each_key.to_a
-      end
-    
-          # Returns the keyword of the `if` statement as a string. Returns an empty
-      # string for ternary operators.
-      #
-      # @return [String] the keyword of the `if` statement
-      def keyword
-        ternary? ? '' : loc.keyword.source
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
-    
-          # Checks whether this `hash` element is on the same line as `other`.
-      #
-      # @note A multiline element is considered to be on the same line if it
-      #       shares any of its lines with `other`
-      #
-      # @return [Boolean] whether this element is on the same line as `other`
-      def same_line?(other)
-        loc.last_line == other.loc.line || loc.line == other.loc.last_line
-      end
+      s.executables = ['gollum']
