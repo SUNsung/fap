@@ -1,429 +1,401 @@
 
         
-        // Implementation of str() for PyBfloat16.
-PyObject* PyBfloat16_Str(PyObject* self) {
-  bfloat16 x = reinterpret_cast<PyBfloat16*>(self)->value;
-  string v = strings::StrCat(static_cast<float>(x));
-  return MakePyString(v);
-}
-    
-    #include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/lib/core/status.h'
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_ACTIVATION_H_
-
-    
-    // Asserts that a given statement causes the program to exit, either by
-// explicitly exiting with a nonzero exit code or being killed by a
-// signal, and emitting error output that matches regex.
-# define ASSERT_DEATH(statement, regex) \
-    ASSERT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47, typename T48, typename T49>
-internal::ValueArray49<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-    T44, T45, T46, T47, T48, T49> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5,
-    T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14,
-    T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22,
-    T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30,
-    T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38,
-    T39 v39, T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46,
-    T47 v47, T48 v48, T49 v49) {
-  return internal::ValueArray49<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41, T42, T43, T44, T45, T46, T47, T48, T49>(v1, v2, v3, v4, v5, v6,
-      v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21,
-      v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35,
-      v36, v37, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47, v48, v49);
-}
-    
-      // Returns true if the death test passed; that is, the test process
-  // exited during the test, its exit status matches a user-supplied
-  // predicate, and its stderr output matches a user-supplied regular
-  // expression.
-  // The user-supplied predicate may be a macro expression rather
-  // than a function pointer or functor, or else Wait and Passed could
-  // be combined.
-  virtual bool Passed(bool exit_status_ok) = 0;
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25>
-class ValueArray25 {
- public:
-  ValueArray25(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24,
-      T25 v25) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
-      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
-      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
-      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25) {}
-    }
-    
-    
-    {    return -1;
-  }
-    
-      const size_t len = strlen(a_c_string);
-  char* const clone = new char[ len + 1 ];
-  memcpy(clone, a_c_string, len + 1);
-    
-    
-    {  // Sets the 0-terminated C string this MyString object represents.
-  void Set(const char* c_string);
-};
-    
-      // Asserts that s.c_string() returns NULL.
-  //
-  // <TechnicalDetails>
-  //
-  // If we write NULL instead of
-  //
-  //   static_cast<const char *>(NULL)
-  //
-  // in this assertion, it will generate a warning on gcc 3.4.  The
-  // reason is that EXPECT_EQ needs to know the types of its
-  // arguments in order to print them when it fails.  Since NULL is
-  // #defined as 0, the compiler will use the formatter function for
-  // int to print it.  However, gcc thinks that NULL should be used as
-  // a pointer, not an int, and therefore complains.
-  //
-  // The root of the problem is C++'s lack of distinction between the
-  // integer number 0 and the null pointer constant.  Unfortunately,
-  // we have to live with this fact.
-  //
-  // </TechnicalDetails>
-  EXPECT_STREQ(NULL, s.c_string());
-    
-    
-    {   while(m_position != m_end)
-   {
-      switch(this->m_traits.syntax_type(*m_position))
-      {
-      case regex_constants::syntax_caret:
-         if(m_position == base)
-         {
-            char_set.negate();
-            ++m_position;
-            item_base = m_position;
-         }
-         else
-            parse_set_literal(char_set);
-         break;
-      case regex_constants::syntax_close_set:
-         if(m_position == item_base)
-         {
-            parse_set_literal(char_set);
-            break;
-         }
-         else
-         {
-            ++m_position;
-            if(0 == this->append_set(char_set))
-            {
-               fail(regex_constants::error_ctype, m_position - m_base);
-               return false;
-            }
-         }
-         return true;
-      case regex_constants::syntax_open_set:
-         if(parse_inner_set(char_set))
-            break;
-         return true;
-      case regex_constants::syntax_escape:
-         {
-            // 
-            // look ahead and see if this is a character class shortcut
-            // \d \w \s etc...
-            //
-            ++m_position;
-            if(this->m_traits.escape_syntax_type(*m_position)
-               == regex_constants::escape_type_class)
-            {
-               char_class_type m = this->m_traits.lookup_classname(m_position, m_position+1);
-               if(m != 0)
-               {
-                  char_set.add_class(m);
-                  ++m_position;
-                  break;
-               }
-            }
-            else if(this->m_traits.escape_syntax_type(*m_position)
-               == regex_constants::escape_type_not_class)
-            {
-               // negated character class:
-               char_class_type m = this->m_traits.lookup_classname(m_position, m_position+1);
-               if(m != 0)
-               {
-                  char_set.add_negated_class(m);
-                  ++m_position;
-                  break;
-               }
-            }
-            // not a character class, just a regular escape:
-            --m_position;
-            parse_set_literal(char_set);
-            break;
-         }
-      default:
-         parse_set_literal(char_set);
-         break;
+        #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
       }
-   }
-   return m_position != m_end;
-}
-    
-    #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
-//
-// Provide an unsigned short version as well, so the user can link to this
-// no matter whether they build with /Zc:wchar_t or not (MSVC specific).
-//
-template<>
-struct BOOST_REGEX_DECL c_regex_traits<unsigned short>
-{
-   c_regex_traits(){}
-   typedef unsigned short char_type;
-   typedef std::size_t size_type;
-   typedef std::basic_string<unsigned short> string_type;
-   struct locale_type{};
-   typedef boost::uint32_t char_class_type;
-    }
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         char_regex_traits.cpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Declares deprecated traits classes char_regex_traits<>.
-  */
-    
-    
-    {
-    {
-} // namespace BOOST_REGEX_DETAIL_NS
-using boost::BOOST_REGEX_DETAIL_NS::directory_iterator;
-using boost::BOOST_REGEX_DETAIL_NS::file_iterator;
-using boost::BOOST_REGEX_DETAIL_NS::mapfile;
-} // namespace boost
-    
-    template <class BidiIterator>
-struct saved_position : public saved_state
-{
-   const re_syntax_base* pstate;
-   BidiIterator position;
-   saved_position(const re_syntax_base* ps, BidiIterator pos, int i) : saved_state(i), pstate(ps), position(pos){};
-};
-    
-    
-    {      basic = ::boost::regbase::basic,
-      extended = ::boost::regbase::extended,
-      normal = ::boost::regbase::normal,
-      emacs = ::boost::regbase::emacs,
-      awk = ::boost::regbase::awk,
-      grep = ::boost::regbase::grep,
-      egrep = ::boost::regbase::egrep,
-      sed = basic,
-      perl = normal,
-      ECMAScript = normal,
-      JavaScript = normal,
-      JScript = normal
-   };
-   typedef ::boost::regbase::flag_type syntax_option_type;
-    
-    #endif
-    
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const std::basic_string<charT>& fmt,
-                         match_flag_type flags = match_default)
-{
-   return regex_merge(out, first, last, e, fmt.c_str(), flags);
-}
-    
-    template <class traits, class charT, class Formatter>
-std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
-                         const basic_regex<charT, traits>& e, 
-                         Formatter fmt,
-                         match_flag_type flags = match_default)
-{
-   std::basic_string<charT> result;
-   BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<charT> > i(result);
-   regex_replace(i, s.begin(), s.end(), e, fmt, flags);
-   return result;
-}
-    
-      /**
-   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
-   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
-   * ntree_limit = 0) = 0;
-   *
-   * \brief predict the leaf index of each tree, the output will be nsample *
-   * ntree vector this is only valid in gbtree predictor.
-   *
-   * \param [in,out]  dmat        The input feature matrix.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       Model to make predictions from.
-   * \param           ntree_limit (Optional) The ntree limit.
-   */
-    
-    
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
+      return false;
+    });
   }
 }
-}  // namespace data
-}  // namespace xgboost
+#endif
+    
+    #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
+#include 'swift/Basic/Dwarf.h'
+#include 'swift/Serialization/SerializedModuleLoader.h'
+#include 'swift/Serialization/Validation.h'
+#include 'llvm/Support/Debug.h'
+#include 'llvm/Support/raw_ostream.h'
+    
+      if (!wasInline) delete[] oldBegin;
+    
+      // Set the '_endian' platform condition.
+  switch (Target.getArch()) {
+  case llvm::Triple::ArchType::arm:
+  case llvm::Triple::ArchType::thumb:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
+    break;
+  case llvm::Triple::ArchType::aarch64:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
+    break;
+  case llvm::Triple::ArchType::ppc64:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'big');
+    break;
+  case llvm::Triple::ArchType::ppc64le:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
+    break;
+  case llvm::Triple::ArchType::x86:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
+    break;
+  case llvm::Triple::ArchType::x86_64:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
+    break;
+  case llvm::Triple::ArchType::systemz:
+    addPlatformConditionValue(PlatformConditionKind::Endianness, 'big');
+    break;
+  default:
+    llvm_unreachable('undefined architecture endianness');
+  }
+    
+      /// Local function that lowercases all of the base names and
+  /// argument names before returning.
+  auto lowercaseAcronymsForReturn = [&] {
+    StringRef newBaseName = toLowercaseInitialisms(baseName, scratch);
+    if (baseName.data() != newBaseName.data()) {
+      baseName = newBaseName;
+      anyChanges = true;
+    }
+    }
     
     
-    {
-    {}  // namespace data
-}  // namespace xgboost
-#endif  // XGBOOST_DATA_SPARSE_PAGE_WRITER_H_
+    {      ExecutingTasks.push(PidTaskPair(Pid, std::move(T)));
+    }
+    
+    swift::UUID::UUID(FromTime_t) {
+#if defined(_WIN32)
+  ::UUID uuid;
+  ::CoCreateGuid(&uuid);
+    }
+    
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
 
     
-    TreeUpdater* TreeUpdater::Create(const std::string& name) {
-  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
-  if (e == nullptr) {
-    LOG(FATAL) << 'Unknown tree updater ' << name;
-  }
-  return (e->body)();
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-      void SetStart() {
-    start_ = true;
+    namespace remote {
+    }
+    
+    
+    {} // namespace nwapi
+
+    
+    void Menu::Append(MenuItem* menu_item) {
+  menu_items.push_back(menu_item);
+  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    menu_item->UpdateKeys(gtk_accel_group);
   }
-    
-      // Implementations of the DB interface
-  using DB::Get;
-  virtual Status Get(const ReadOptions& options,
-                     ColumnFamilyHandle* column_family, const Slice& key,
-                     PinnableSlice* value) override;
-  using DB::MultiGet;
-  virtual std::vector<Status> MultiGet(
-      const ReadOptions& options,
-      const std::vector<ColumnFamilyHandle*>&,
-      const std::vector<Slice>& keys, std::vector<std::string>* values)
-    override;
-    
-        virtual ~CompactionProxy() = default;
-    virtual int level(size_t /*compaction_input_level*/ = 0) const {
-      return compaction_->level();
-    }
-    virtual bool KeyNotExistsBeyondOutputLevel(
-        const Slice& user_key, std::vector<size_t>* level_ptrs) const {
-      return compaction_->KeyNotExistsBeyondOutputLevel(user_key, level_ptrs);
-    }
-    virtual bool bottommost_level() const {
-      return compaction_->bottommost_level();
-    }
-    virtual int number_levels() const { return compaction_->number_levels(); }
-    virtual Slice GetLargestUserKey() const {
-      return compaction_->GetLargestUserKey();
-    }
-    virtual bool allow_ingest_behind() const {
-      return compaction_->immutable_cf_options()->allow_ingest_behind;
-    }
-    virtual bool preserve_deletes() const {
-      return compaction_->immutable_cf_options()->preserve_deletes;
-    }
-    
-    Status WriteBatchBase::Merge(const SliceParts& key, const SliceParts& value) {
-  std::string key_buf, value_buf;
-  Slice key_slice(key, &key_buf);
-  Slice value_slice(value, &value_buf);
-    }
-    
-    TEST_F(WriteControllerTest, ChangeDelayRateTest) {
-  TimeSetEnv env;
-  WriteController controller(40000000u);  // also set max delayed rate
-  controller.set_delayed_write_rate(10000000u);
-  auto delay_token_0 =
-      controller.GetDelayToken(controller.delayed_write_rate());
-  ASSERT_EQ(static_cast<uint64_t>(2000000),
-            controller.GetDelay(&env, 20000000u));
-  auto delay_token_1 = controller.GetDelayToken(2000000u);
-  ASSERT_EQ(static_cast<uint64_t>(10000000),
-            controller.GetDelay(&env, 20000000u));
-  auto delay_token_2 = controller.GetDelayToken(1000000u);
-  ASSERT_EQ(static_cast<uint64_t>(20000000),
-            controller.GetDelay(&env, 20000000u));
-  auto delay_token_3 = controller.GetDelayToken(20000000u);
-  ASSERT_EQ(static_cast<uint64_t>(1000000),
-            controller.GetDelay(&env, 20000000u));
-  // This is more than max rate. Max delayed rate will be used.
-  auto delay_token_4 =
-      controller.GetDelayToken(controller.delayed_write_rate() * 3);
-  ASSERT_EQ(static_cast<uint64_t>(500000),
-            controller.GetDelay(&env, 20000000u));
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu_), menu_item->menu_item_);
 }
     
+    namespace extensions {
+    }
     
-    {  // Remove any kind of caching of data from the offset to offset+length
-  // of this file. If the length is 0, then it refers to the end of file.
-  // If the system is not caching the file contents, then this is a noop.
-  virtual Status InvalidateCache(size_t offset, size_t length) override {
-    return file_->InvalidateCache(offset + prefixLength_, length);
-  }
-};
+    // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
     
-      bool isValid() {
-    return hfile_ != nullptr;
-  }
-    
-    Status PosixWritableFile::Truncate(uint64_t size) {
-  Status s;
-  int r = ftruncate(fd_, size);
-  if (r < 0) {
-    s = IOError('While ftruncate file to size ' + ToString(size), filename_,
-                errno);
-  } else {
-    filesize_ = size;
-  }
-  return s;
+    static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
 }
     
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
-    return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
+    void upb_arena_init(upb_arena *a);
+void upb_arena_init2(upb_arena *a, void *mem, size_t n, upb_alloc *alloc);
+void upb_arena_uninit(upb_arena *a);
+bool upb_arena_addcleanup(upb_arena *a, upb_cleanup_func *func, void *ud);
+size_t upb_arena_bytesallocated(const upb_arena *a);
+void upb_arena_setnextblocksize(upb_arena *a, size_t size);
+void upb_arena_setmaxblocksize(upb_arena *a, size_t size);
+UPB_INLINE upb_alloc *upb_arena_alloc(upb_arena *a) { return (upb_alloc*)a; }
     
-        static BOOST_FORCEINLINE storage_type fetch_and(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    
     {
-        return static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND64(&storage, v));
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
+    const FieldDescriptor* descriptor, const Options& options)
+    : RepeatedFieldGenerator(descriptor, options) {
+  SetEnumVariables(descriptor, &variables_);
+  variables_['array_storage_type'] = 'GPBEnumArray';
+}
+    
+      inline int offset(const vector<int>& indices) const {
+    CHECK_LE(indices.size(), num_axes());
+    int offset = 0;
+    for (int i = 0; i < num_axes(); ++i) {
+      offset *= shape(i);
+      if (indices.size() > i) {
+        CHECK_GE(indices[i], 0);
+        CHECK_LT(indices[i], shape(i));
+        offset += indices[i];
+      }
+    }
+    return offset;
+  }
+  /**
+   * @brief Copy from a source Blob.
+   *
+   * @param source the Blob to copy from
+   * @param copy_diff if false, copy the data; if true, copy the diff
+   * @param reshape if false, require this Blob to be pre-shaped to the shape
+   *        of other (and die otherwise); if true, Reshape this Blob to other's
+   *        shape if necessary
+   */
+  void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,
+      bool reshape = false);
+    
+      bool is_started() const;
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/im2col.hpp'
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #if GTEST_HAS_STD_WSTRING
+  // Converts the given wide string to a narrow string using the UTF-8
+  // encoding, and streams the result to this Message object.
+  Message& operator <<(const ::std::wstring& wstr);
+#endif  // GTEST_HAS_STD_WSTRING
+    
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5, typename Generator6,
+    typename Generator7, typename Generator8>
+internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
+    Generator4, Generator5, Generator6, Generator7, Generator8> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5, const Generator6& g6,
+        const Generator7& g7, const Generator8& g8) {
+  return internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
+      Generator4, Generator5, Generator6, Generator7, Generator8>(
+      g1, g2, g3, g4, g5, g6, g7, g8);
+}
+    
+    // Helper function for printing a tuple.  T must be instantiated with
+// a tuple type.
+template <typename T>
+void PrintTupleTo(const T& t, ::std::ostream* os) {
+  *os << '(';
+  TuplePrefixPrinter< ::std::tr1::tuple_size<T>::value>::
+      PrintPrefixTo(t, os);
+  *os << ')';
+}
+    
+    // 5-ary predicate assertion macros.
+#define EXPECT_PRED_FORMAT5(pred_format, v1, v2, v3, v4, v5) \
+  GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED5(pred, v1, v2, v3, v4, v5) \
+  GTEST_PRED5_(pred, v1, v2, v3, v4, v5, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT5(pred_format, v1, v2, v3, v4, v5) \
+  GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED5(pred, v1, v2, v3, v4, v5) \
+  GTEST_PRED5_(pred, v1, v2, v3, v4, v5, GTEST_FATAL_FAILURE_)
+    
+      // Smart pointer members.
+  void reset(T* ptr = NULL) {
+    depart();
+    capture(ptr);
+  }
+  T* get() const { return value_; }
+  T* operator->() const { return value_; }
+  T& operator*() const { return *value_; }
+    
+        for (int i = 2; i <= max; i++) {
+      if (!is_prime_[i]) continue;
     }
     
-        struct aligned
-    {
-        type value;
+    // Tests the c'tor that accepts a C string.
+TEST(MyString, ConstructorFromCString) {
+  const MyString s(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
+            s.Length());
+}
+    
+    const std::string LoggerConfigParserPlugin::kLoggerKey{'logger'};
+    
+    #ifdef WIN32
+  DWORD code = 0;
+  DWORD ret = 0;
+    
+    TEST_F(TablesTests, test_constraint_matching) {
+  struct ConstraintList cl;
+  // An empty constraint list has expectations.
+  EXPECT_FALSE(cl.exists());
+  EXPECT_FALSE(cl.exists(GREATER_THAN));
+  EXPECT_TRUE(cl.notExistsOrMatches('some'));
+    }
+    
+        // Create a basic path trigger, this is a file path.
+    real_test_path = kTestWorkingDirectory + 'inotify-trigger' +
+                     std::to_string(rand() % 10000 + 10000);
+    // Create a similar directory for embedded paths and directories.
+    real_test_dir = kTestWorkingDirectory + 'inotify-triggers' +
+                    std::to_string(rand() % 10000 + 10000);
+    
+      // Custom methods do not make sense, but for testing it exists.
+  int getTestValue() {
+    return smallest_ever_;
+  }
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    
+    {    if (g_pBlendState) { g_pBlendState->Release(); g_pBlendState = NULL; }
+    if (g_pDepthStencilState) { g_pDepthStencilState->Release(); g_pDepthStencilState = NULL; }
+    if (g_pRasterizerState) { g_pRasterizerState->Release(); g_pRasterizerState = NULL; }
+    if (g_pPixelShader) { g_pPixelShader->Release(); g_pPixelShader = NULL; }
+    if (g_pPixelShaderBlob) { g_pPixelShaderBlob->Release(); g_pPixelShaderBlob = NULL; }
+    if (g_pVertexConstantBuffer) { g_pVertexConstantBuffer->Release(); g_pVertexConstantBuffer = NULL; }
+    if (g_pInputLayout) { g_pInputLayout->Release(); g_pInputLayout = NULL; }
+    if (g_pVertexShader) { g_pVertexShader->Release(); g_pVertexShader = NULL; }
+    if (g_pVertexShaderBlob) { g_pVertexShaderBlob->Release(); g_pVertexShaderBlob = NULL; }
+}
+    
+            D3D12_TEXTURE_COPY_LOCATION dstLocation = {};
+        dstLocation.pResource = pTexture;
+        dstLocation.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+        dstLocation.SubresourceIndex = 0;
+    
+    BENCHMARK_RELATIVE(format_long_string_safe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& longString = getLongString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { format(&out, '{}', longString); });
+  }
+}
+    
+    int main(int argc, char** argv) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  folly::runBenchmarks();
+  return 0;
+}
+
+    
+    /**
+ * If cond is not true, raise an exception of type E.  E must have a ctor that
+ * works with const char* (a description of the failure).
+ */
+#define CHECK_THROW(cond, E)           \
+  do {                                 \
+    if (!(cond)) {                     \
+      throw E('Check failed: ' #cond); \
+    }                                  \
+  } while (0)
+    
+    
+    {} // namespace folly
+
+    
+    namespace folly {
+    }
+    
+    #include <type_traits>
+    
+    /// Returns the best real CacheLocality information available
+static CacheLocality getSystemLocalityInfo() {
+  if (kIsLinux) {
+    try {
+      return CacheLocality::readFromSysfs();
+    } catch (...) {
+      // keep trying
+    }
+  }
     }
