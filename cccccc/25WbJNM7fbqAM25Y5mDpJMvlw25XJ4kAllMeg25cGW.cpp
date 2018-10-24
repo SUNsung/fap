@@ -1,43 +1,78 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        // Unlike test_ops.cc, these are built with the 'require_shapes' option in the
+// BUILD file.
     
-    #include <numeric>
-    
-    // A pass which performs constant folding in order to avoid unnecessary
-// computation on constants.
-class HloConstantFolding : public HloPassInterface {
- public:
-  tensorflow::StringPiece name() const override { return 'constant_folding'; }
+    void CostAnalyzer::PrintAnalysis(std::ostream& os, bool per_node_report,
+                                 bool verbose) const {
+  os << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time measured in ns (serialized): ' << std::right
+     << std::setw(20) << total_time_measured_serialized_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time measured in ns (actual): ' << std::right << std::setw(20)
+     << total_time_measured_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time analytical in ns (upper bound): ' << std::right
+     << std::setw(20) << total_time_analytical_upper_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time analytical in ns (lower bound): ' << std::right
+     << std::setw(20) << total_time_analytical_lower_ << std::endl;
+  double efficiency_upper = static_cast<double>(total_time_analytical_upper_) /
+                            static_cast<double>(total_time_measured_);
+  os << std::left << std::setw(50)
+     << 'Overall efficiency (analytical upper/actual): ' << std::right
+     << std::setw(20) << efficiency_upper << std::endl;
+  double efficiency_lower = static_cast<double>(total_time_analytical_lower_) /
+                            static_cast<double>(total_time_measured_);
+  os << std::left << std::setw(50)
+     << 'Overall efficiency (analytical lower/actual): ' << std::right
+     << std::setw(20) << efficiency_lower << std::endl;
+  os << std::endl;
     }
     
-    #endif  // TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
-
+    Status ModelAnalyzer::GenerateReport(bool debug, bool assume_valid_feeds,
+                                     std::ostream& os) {
+  GraphProperties properties(item_);
+  TF_RETURN_IF_ERROR(properties.InferStatically(assume_valid_feeds));
+    }
     
-      // TODO(josh11b): Implement serializing and restoring the state.
-    
-    sampled_audio: A rank 2 tensor containing all tracks of the audio. Dimension 0
-    is time and dimension 1 is the channel.
-contents: The binary audio file contents.
-file_format: A string describing the audio file format. This must be 'wav'.
-samples_per_second: The number of samples per second that the audio should have.
-bits_per_second: The approximate bitrate of the encoded audio file. This is
-    ignored by the 'wav' file format.
+    REGISTER_OP('Add').Doc(R'doc(
+An op to test that duplicate registrations don't override previously
+registered ops.
 )doc');
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    {
-    {    std::map<string, const NodeDef*> node_lookup;
-    MapNamesToNodes(result, &node_lookup);
-    EXPECT_EQ('', node_lookup.at('mul_node1')->device());
-    EXPECT_EQ('', node_lookup.at('add_node2')->device());
-  }
-};
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
+ public:
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
+    }
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -46,280 +81,244 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    #endif  // GOOGLE_CUDA
-
     
-    TEST(CCOpTest, KernelLabel) {
-  Scope root = Scope::NewRootScope();
-  auto add = Add(root.WithKernelLabel('AddWithKernelLabel'), 1.0f, 2.0f);
-  TF_EXPECT_OK(root.status());
-  AttrSlice attrs = add.z.op().node()->attrs();
-  const auto* kernel_attr = attrs.Find('_kernel');
-  ASSERT_TRUE(kernel_attr);
-  TF_EXPECT_OK(AttrValueHasType(*kernel_attr, 'string'));
-  EXPECT_EQ(kernel_attr->s(), 'AddWithKernelLabel');
-}
-    
-    TEST_F(StopGradientMultiOutputTest, ValidGradAllOutputs) {
-  // clang-format off
-  CheckGrad({false, false, false}, test::AsTensor<int>(
-    {1, 2, 3, 4, 5, 6, 7, 8,
-     9, 10, 11, 12, 13, 14, 15, 16,
-     17, 18, 19, 20, 21, 22, 23, 24},
-    {3, 2, 4}));
-  // clang-format on
-}
-    
-    #include 'ui/gfx/geometry/rect.h'
-    
-    class SizeConstraints {
- public:
-  // The value SizeConstraints uses to represent an unbounded width or height.
-  // This is an enum so that it can be declared inline here.
-  enum { kUnboundedSize = 0 };
-    }
-    
-      // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
-    }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
   }
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
+}
     
-      virtual inline const char* type() const { return 'AbsVal'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #include <utility>
-#include <vector>
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+    #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
+    // Computes part of matrix.vector v = Wu. Computes N=16 results.
+// For details see PartialMatrixDotVector64 with N=16.
+static void PartialMatrixDotVector16(const int8_t* wi, const double* scales,
+                                     const int8_t* u, int num_in, int num_out,
+                                     double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  __m256i result1 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
+    }
+  }
+  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  num_out -= kNumOutputsPerRegister;
+  ExtractResults(result1, shift_id, wi, scales,
+                 std::min(kNumOutputsPerRegister, num_out), v);
+}
     
-    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
-
+    IntSimdMatrixSSE::IntSimdMatrixSSE() {
+#ifdef __SSE4_1__
+  partial_funcs_ = {PartialMatrixDotVector1};
+#endif  // __SSE4_1__
+}
     
-    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
-
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
+    }
+  }
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
+    }
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of TanHLayer.
+    /**
+ * Class to iterate over tesseract page structure, providing access to all
+ * levels of the page hierarchy, without including any tesseract headers or
+ * having to handle any tesseract structures.
+ * WARNING! This class points to data held within the TessBaseAPI class, and
+ * therefore can only be used while the TessBaseAPI class still exists and
+ * has not been subjected to a call of Init, SetImage, Recognize, Clear, End
+ * DetectOS, or anything else that changes the internal PAGE_RES.
+ * See apitypes.h for the definition of PageIteratorLevel.
+ * See also ResultIterator, derived from PageIterator, which adds in the
+ * ability to access OCR output with text-specific methods.
  */
-template <typename Dtype>
-class CuDNNTanHLayer : public TanHLayer<Dtype> {
- public:
-  explicit CuDNNTanHLayer(const LayerParameter& param)
-      : TanHLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNTanHLayer();
+    
+      // Gets a VC object identified by its ID.
+  static ParamContent* GetParamContentById(int id);
+    
+    
+/**********************************************************************
+ * join_words
+ *
+ * The opposite of split_word():
+ *  join word2 (including any recognized data / seam array / etc)
+ *  onto the right of word and then delete word2.
+ *  Also, if orig_bb is provided, stitch it back into word.
+ **********************************************************************/
+void Tesseract::join_words(WERD_RES *word,
+                           WERD_RES *word2,
+                           BlamerBundle *orig_bb) const {
+  TBOX prev_box = word->chopped_word->blobs.back()->bounding_box();
+  TBOX blob_box = word2->chopped_word->blobs[0]->bounding_box();
+  // Tack the word2 outputs onto the end of the word outputs.
+  word->chopped_word->blobs += word2->chopped_word->blobs;
+  word->rebuild_word->blobs += word2->rebuild_word->blobs;
+  word2->chopped_word->blobs.clear();
+  word2->rebuild_word->blobs.clear();
+  TPOINT split_pt;
+  split_pt.x = (prev_box.right() + blob_box.left()) / 2;
+  split_pt.y = (prev_box.top() + prev_box.bottom() +
+                blob_box.top() + blob_box.bottom()) / 4;
+  // Move the word2 seams onto the end of the word1 seam_array.
+  // Since the seam list is one element short, an empty seam marking the
+  // end of the last blob in the first word is needed first.
+  word->seam_array.push_back(new SEAM(0.0f, split_pt));
+  word->seam_array += word2->seam_array;
+  word2->seam_array.truncate(0);
+  // Fix widths and gaps.
+  word->blob_widths += word2->blob_widths;
+  word->blob_gaps += word2->blob_gaps;
+  // Fix the ratings matrix.
+  int rat1 = word->ratings->dimension();
+  int rat2 = word2->ratings->dimension();
+  word->ratings->AttachOnCorner(word2->ratings);
+  ASSERT_HOST(word->ratings->dimension() == rat1 + rat2);
+  word->best_state += word2->best_state;
+  // Append the word choices.
+  *word->raw_choice += *word2->raw_choice;
     }
     
-    namespace caffe {
-    }
-    
-    #include <vector>
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-      size_t DroppedBytes() const {
-    return report_.dropped_bytes_;
-  }
-    
-    class VersionSet;
-    
-    Slice BlockBuilder::Finish() {
-  // Append restart array
-  for (size_t i = 0; i < restarts_.size(); i++) {
-    PutFixed32(&buffer_, restarts_[i]);
-  }
-  PutFixed32(&buffer_, restarts_.size());
-  finished_ = true;
-  return Slice(buffer_);
-}
-    
-      // Check first filter
-  ASSERT_TRUE(reader.KeyMayMatch(0, 'foo'));
-  ASSERT_TRUE(reader.KeyMayMatch(2000, 'bar'));
-  ASSERT_TRUE(! reader.KeyMayMatch(0, 'box'));
-  ASSERT_TRUE(! reader.KeyMayMatch(0, 'hello'));
-    
-    
-    {  Status result = metaindex_handle_.DecodeFrom(input);
-  if (result.ok()) {
-    result = index_handle_.DecodeFrom(input);
-  }
-  if (result.ok()) {
-    // We skip over any leftover data (just padding for now) in 'input'
-    const char* end = magic_ptr + 8;
-    *input = Slice(end, input->data() + input->size() - end);
-  }
-  return result;
-}
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-    const double Histogram::kBucketLimit[kNumBuckets] = {
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45,
-  50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 250, 300, 350, 400, 450,
-  500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000,
-  3500, 4000, 4500, 5000, 6000, 7000, 8000, 9000, 10000, 12000, 14000,
-  16000, 18000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 60000,
-  70000, 80000, 90000, 100000, 120000, 140000, 160000, 180000, 200000,
-  250000, 300000, 350000, 400000, 450000, 500000, 600000, 700000, 800000,
-  900000, 1000000, 1200000, 1400000, 1600000, 1800000, 2000000, 2500000,
-  3000000, 3500000, 4000000, 4500000, 5000000, 6000000, 7000000, 8000000,
-  9000000, 10000000, 12000000, 14000000, 16000000, 18000000, 20000000,
-  25000000, 30000000, 35000000, 40000000, 45000000, 50000000, 60000000,
-  70000000, 80000000, 90000000, 100000000, 120000000, 140000000, 160000000,
-  180000000, 200000000, 250000000, 300000000, 350000000, 400000000,
-  450000000, 500000000, 600000000, 700000000, 800000000, 900000000,
-  1000000000, 1200000000, 1400000000, 1600000000, 1800000000, 2000000000,
-  2500000000.0, 3000000000.0, 3500000000.0, 4000000000.0, 4500000000.0,
-  5000000000.0, 6000000000.0, 7000000000.0, 8000000000.0, 9000000000.0,
-  1e200,
-};
-    
-    namespace leveldb {
-    }
-    
-    static void InitTypeCrc(uint32_t* type_crc) {
-  for (int i = 0; i <= kMaxRecordType; i++) {
-    char t = static_cast<char>(i);
-    type_crc[i] = crc32c::Value(&t, 1);
-  }
-}
-    
-     private:
-  uint32_t NumRestarts() const;
-    
-     private:
-  const Options*        options_;
-  std::string           buffer_;      // Destination buffer
-  std::vector<uint32_t> restarts_;    // Restart points
-  int                   counter_;     // Number of entries emitted since restart
-  bool                  finished_;    // Has Finish() been called?
-  std::string           last_key_;
-    
-      /// Constructor to set a particular expiry time relative to now.
-  /**
-   * This constructor creates a timer and sets the expiry time.
-   *
-   * @param io_service The io_service object that the timer will use to dispatch
-   * handlers for any asynchronous operations performed on the timer.
-   *
-   * @param expiry_time The expiry time to be used for the timer, relative to
-   * now.
-   */
-  basic_waitable_timer(boost::asio::io_service& io_service,
-      const duration& expiry_time)
-    : basic_io_object<WaitableTimerService>(io_service)
-  {
-    boost::system::error_code ec;
-    this->service.expires_from_now(this->implementation, expiry_time, ec);
-    boost::asio::detail::throw_error(ec, 'expires_from_now');
-  }
-    
-      /// Start an asynchronous fill.
-  template <typename ReadHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
-      void (boost::system::error_code, std::size_t))
-  async_fill(BOOST_ASIO_MOVE_ARG(ReadHandler) handler);
-    
-    template <typename Stream>
-class buffered_read_stream;
-    
-      /// Clear the buffer.
-  void clear()
-  {
-    begin_offset_ = 0;
-    end_offset_ = 0;
-  }
-    
-      errno = 0;
-#if defined(__SYMBIAN32__)
-  int result = error_wrapper(::fcntl(d, F_GETFL, 0), ec);
-  if (result >= 0)
-  {
-    errno = 0;
-    int flag = (value ? (result | O_NONBLOCK) : (result & ~O_NONBLOCK));
-    result = error_wrapper(::fcntl(d, F_SETFL, flag), ec);
-  }
-#else // defined(__SYMBIAN32__)
-  ioctl_arg_type arg = (value ? 1 : 0);
-  int result = error_wrapper(::ioctl(d, FIONBIO, &arg), ec);
-#endif // defined(__SYMBIAN32__)
-    
-    template <typename Time_Traits>
-void dev_poll_reactor::add_timer_queue(timer_queue<Time_Traits>& queue)
+    bool AccelDeccelAmplitude::initWithAction(Action *action, float duration)
 {
-  do_add_timer_queue(queue);
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _rate = 1.0f;
+        _other = (ActionInterval*)(action);
+        action->retain();
+    }
+    }
+    
+    void ReverseTime::startWithTarget(Node *target)
+{
+    ActionInterval::startWithTarget(target);
+    _other->startWithTarget(target);
 }
     
-    #include 'jsapi.h'
-#include 'jsfriendapi.h'
+        //
+    // Overrides
+    //
+    virtual void startWithTarget(Node *target) override;
+    virtual SkewBy* clone() const  override;
+    virtual SkewBy* reverse() const override;
     
-    bool js_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DHingeConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DHingeConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMotorTarget(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_Physics3DHingeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+CC_CONSTRUCTOR_ACCESS:
+    SkewBy() {}
+    virtual ~SkewBy() {}
+    /**
+     * @param t In seconds.
+     */
+    bool initWithDuration(float t, float sx, float sy);
+    
+    PageTurn3D *PageTurn3D::clone() const
+{
+    // no copy constructor
+    return PageTurn3D::create(_duration, _gridSize);
+}
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    TEST(EsdCanClientTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::ESD_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    }
+    
+    TEST(HermesCanClient, init) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::HERMES_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+  HermesCanClient hermes_can;
+  EXPECT_TRUE(hermes_can.Init(param));
+  //    EXPECT_EQ(hermes_can.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  //      EXPECT_EQ(hermes_can.Start(), ErrorCode::OK);
+}
     
     
+    {
+    {    int ret = close(dev_handler_);
+    if (ret < 0) {
+      AERROR << 'close error code:' << ret << ', ' << GetErrorString(ret);
+    } else {
+      AINFO << 'close socket can ok. port:' << port_;
+    }
+  }
+}
     
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
     
+    // System gflags
+DEFINE_string(node_name, 'chassis', 'The chassis module name in proto');
+DEFINE_string(canbus_driver_name, 'canbus', 'Driver name.');
     
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.friction = 0.6f;
-			fd.density = 2.0f;
-    
-    #ifndef CANTILEVER_H
-#define CANTILEVER_H
-    
-    			b2RevoluteJointDef jd;
+    DECLARE_string(adapter_config_filename);
