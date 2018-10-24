@@ -1,84 +1,100 @@
 
         
         
-    {
-    {
-    {
-    {          std::transform(
-            begin(inputs) + start, begin(inputs) + stop,
-            retMem + start,
-            func
-          );
-        }
-      } catch (const std::runtime_error& e) {
-        std::fprintf(stderr,
-          'worker thread exited with exception: %s\n', e.what());
-        failed = true;
-      }
-    }));
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
   }
+};
     
-    #endif
-
+    REGISTER_CPU_OPERATOR(
+    MergeSingleMapFeatureTensors,
+    MergeSingleMapFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleMapFeatureTensors)
+    .SetDoc(
+        'Merge given single-feature tensors with map features into one '
+        'multi-feature tensor.' +
+        doc)
+    .NumInputs([](int n) { return n >= 4 && n % 4 == 0; })
+    .NumOutputs(5)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_keys', '.keys')
+    .Input(2, 'in1_values', '.values')
+    .Input(3, 'in1_presence', '.presence')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values.lengths')
+    .Output(3, 'out_values_keys', '.values.keys')
+    .Output(4, 'out_values_values', '.values.values')
+    .Arg('feature_ids', 'feature ids');
     
-    #endif
-
+      FlexibleTopKOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws) {}
     
-    #define RNAME(x) if (r == x) return #x
+    /// Root key to retrieve Kafka topic configurations.
+const std::string kKafkaTopicParserRootKey('kafka_topics');
     
-    inline Cell ExecutionContext::lookupClsCns(const StringData* cls,
-                                      const StringData* cns) {
-  return lookupClsCns(NamedEntity::get(cls), cls, cns);
-}
+    REGISTER_INTERNAL(LoggerConfigParserPlugin, 'config_parser', 'logger');
     
-    namespace osquery {
-    }
+    #include <osquery/core.h>
     
     /**
- * @brief Parser plugin for logger configurations.
+ * @brief Thread-safe watched child process state manager.
+ *
+ * The Watcher instance is separated from the WatcherRunner thread to allow
+ * signals and osquery-introspection to monitor the autoloaded extensions
+ * and optional worker stats. A child-process change signal may indicate an
+ * autoloaded extension ended. Tables may also report on the historic worker
+ * or extension utilizations.
+ *
+ * Though not critical, it is preferred to remove the extension's broadcasted
+ * routes quickly. Locking access to the extensions list between signals and
+ * the WatcherRunner thread allows osquery to tearDown registry changes before
+ * attempting to respawn an extension process.
  */
-class LoggerConfigParserPlugin : public ConfigParserPlugin {
+class Watcher : private boost::noncopyable {
  public:
-  std::vector<std::string> keys() const override {
-    return {kLoggerKey};
+  /// Instance accessor
+  static Watcher& get() {
+    static Watcher instance;
+    return instance;
   }
     }
     
-    #include 'osquery/config/parsers/prometheus_targets.h'
     
-    
-    {  c.reset();
+    {  if (console_reporter->ReportContext(context) &&
+      (!file_reporter || file_reporter->ReportContext(context))) {
+    flushStreams(console_reporter);
+    flushStreams(file_reporter);
+    for (const auto& benchmark : benchmarks) {
+      std::vector<BenchmarkReporter::Run> reports =
+          RunBenchmark(benchmark, &complexity_reports);
+      console_reporter->ReportRuns(reports);
+      if (file_reporter) file_reporter->ReportRuns(reports);
+      flushStreams(console_reporter);
+      flushStreams(file_reporter);
+    }
+  }
+  console_reporter->Finalize();
+  if (file_reporter) file_reporter->Finalize();
+  flushStreams(console_reporter);
+  flushStreams(file_reporter);
 }
     
-      if (WIFEXITED(process_status)) {
-    status = WEXITSTATUS(process_status);
-    return PROCESS_EXITED;
-  }
-    
-    TEST_F(QueryTests, test_query_name_updated) {
-  // Try to retrieve results from a query that has not executed.
-  QueryDataSet previous_qd;
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('will_update_query', query);
-  EXPECT_TRUE(cf.isNewQuery());
-  EXPECT_TRUE(cf.isNewQuery());
+    namespace benchmark {
+namespace internal {
+    }
     }
     
-    TEST_F(TablesTests, test_constraint_map) {
-  ConstraintMap cm;
+    typedef void(AbortHandlerT)();
+    
+    std::string FormatKV(std::string const& key, std::string const& value) {
+  return StringPrintF('\'%s\': \'%s\'', key.c_str(), value.c_str());
+}
+    
+    class SCOPED_CAPABILITY MutexLock {
+  typedef std::unique_lock<std::mutex> MutexLockImp;
     }
-    
-      /// Check the status of the last worker.
-  int getWorkerStatus() const {
-    return worker_status_;
-  }
-    
-      std::set<std::string> queries_to_run;
-  // Check for and run discovery queries first
-  if (doc.doc().HasMember('discovery')) {
-    const auto& queries = doc.doc()['discovery'];
-    assert(queries.IsObject());
-    }
-    
-      /// A string path parsed from the inotify_event.
-  std::string path;
