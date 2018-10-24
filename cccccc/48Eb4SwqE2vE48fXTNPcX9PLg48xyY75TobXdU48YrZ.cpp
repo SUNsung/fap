@@ -1,249 +1,196 @@
 
         
-        IPC_MESSAGE_ROUTED4(ShellViewHostMsg_Call_Object_Method,
-                    int /* object id */,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
+        // This flag controls the style of death tests.  Valid values are 'threadsafe',
+// meaning that the death test child process will re-execute the test binary
+// from the start, running only a single death test, or 'fast',
+// meaning that the child process will execute the test logic immediately
+// after forking.
+GTEST_DECLARE_string_(death_test_style);
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedFakeTestPartResultReporter);
 };
     
+      // Returns true if pathname describes an absolute path.
+  bool IsAbsolutePath() const;
     
-    {}  // namespace nwapi
-
     
-    
-    {} // namespace extensions
-#endif
-
-    
-    bool NwObjAllocateIdFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  response->AppendInteger(nw::ObjectManager::AllocateId());
-  return true;
+    {  return result;
 }
     
-    #include 'gtest/internal/gtest-death-test-internal.h'
-    
-    #if GTEST_OS_SYMBIAN
-  // These are needed as the Nokia Symbian Compiler cannot decide between
-  // const T& and const T* in a function template. The Nokia compiler _can_
-  // decide between class template specializations for T and T*, so a
-  // tr1::type_traits-like is_pointer works, and we can overload on that.
-  template <typename T>
-  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
+    // We will track memory used by this class.
+class Water {
+ public:
+  // Normal Water declarations go here.
     }
-  }
-  template <typename T>
-  inline void StreamHelper(internal::false_type /*is_pointer*/,
-                           const T& value) {
-    // See the comments in Message& operator <<(const T&) above for why
-    // we need this using statement.
-    using ::operator <<;
-    *ss_ << value;
-  }
-#endif  // GTEST_OS_SYMBIAN
     
-      template <typename Tuple>
-  static void TersePrintPrefixToStrings(const Tuple&, Strings*) {}
-};
-// We have to specialize the entire TuplePrefixPrinter<> class
-// template here, even though the definition of
-// TersePrintPrefixToStrings() is the same as the generic version, as
-// Embarcadero (formerly CodeGear, formerly Borland) C++ doesn't
-// support specializing a method template of a class template.
-template <>
-struct TuplePrefixPrinter<1> {
-  template <typename Tuple>
-  static void PrintPrefixTo(const Tuple& t, ::std::ostream* os) {
-    UniversalPrinter<typename ::std::tr1::tuple_element<0, Tuple>::type>::
-        Print(::std::tr1::get<0>(t), os);
-  }
-    
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-    
-    // Copyright 2008 Google Inc.
-// All Rights Reserved.
+    // Step 3. Call RUN_ALL_TESTS() in main().
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
 //
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
 //
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
 
     
-      // Removes the head of the queue and returns it.  Returns NULL if
-  // the queue is empty.
-  E* Dequeue() {
-    if (size_ == 0) {
-      return NULL;
+    template <typename E>  // E is the element type.
+class Queue {
+ public:
+  // Creates an empty queue.
+  Queue() : head_(NULL), last_(NULL), size_(0) {}
     }
-    }
     
-    //////////////////////////////////////////////////////////////////////
+    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsCollision(body0, body1);
+}
     
-      bool operator!=(SrcLoc o) const { return !(*this == o); }
     
-          M_form_t m_formater {{
-                           rc,
-                           me,
-                           mb,
-                           static_cast<uint32_t>(rb),
-                           static_cast<uint32_t>(ra),
-                           static_cast<uint32_t>(rs),
-                           op
-                          }};
+    {		allocs[i].free_list = &allocs[i + 1];
+	}
     
-    struct RequestMemoryExceededException : ResourceExceededException {
-  RequestMemoryExceededException(const std::string& msg,
-                                 const Array& backtrace)
-    : ResourceExceededException(msg, backtrace)
-  {}
-  EXCEPTION_COMMON_IMPL(RequestMemoryExceededException);
+    
+    {	ERR_FAIL_COND_V(!zfile, -1);
+	at_eof = unzeof(zfile);
+	if (at_eof)
+		return 0;
+	int read = unzReadCurrentFile(zfile, p_dst, p_length);
+	ERR_FAIL_COND_V(read < 0, read);
+	if (read < p_length)
+		at_eof = true;
+	return read;
 };
     
-    size_t dirname_impl(char *path, int len) {
-  if (len == 0) {
-    /* Illegal use of this function */
-    return 0;
-  }
-    }
+      // Returns the combined score of the output image in the last Compare() call
+  // (or the baseline image, if Compare() was not called yet), based on output
+  // size and the similarity metric.
+  virtual double ScoreOutputSize(int size) const = 0;
     
-      XGBOOST_DEVICE GradientPairInternal<T> &operator+=(
-      const GradientPairInternal<T> &rhs) {
-    grad_ += rhs.grad_;
-    hess_ += rhs.hess_;
-    return *this;
-  }
-    
-      virtual void PredictContribution(DMatrix* dmat,
-                                   std::vector<bst_float>* out_contribs,
-                                   const gbm::GBTreeModel& model,
-                                   unsigned ntree_limit = 0,
-                                   bool approximate = false,
-                                   int condition = 0,
-                                   unsigned condition_feature = 0) = 0;
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
 };
     
-            if(_rightBoundary < _leftBoundary)
-        {
-            // screen width is larger than world's boundary width
-            //set both in the middle of the world
-            _rightBoundary = _leftBoundary = (_leftBoundary + _rightBoundary) / 2;
-        }
-        if(_topBoundary < _bottomBoundary)
-        {
-            // screen width is larger than world's boundary width
-            //set both in the middle of the world
-            _topBoundary = _bottomBoundary = (_topBoundary + _bottomBoundary) / 2;
-        }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    {
+    {
+    {      // Add back the last sentinel node.
+      tree[j_end + 1] = sentinel;
+    }
+    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
+      /* We need to pack the Huffman tree in tree_limit bits. If this was not
+         successful, add fake entities to the lowest values and retry. */
+      break;
+    }
+  }
+}
     
-    /**
-@brief SplitCols action.
-@details Split the target node in many columns.
-        Then move out some columns from top, move out the other columns from bottom.
-*/
-class CC_DLL SplitCols : public TiledGrid3DAction
+    inline void ColumnDct(coeff_t* in) {
+  for (int i = 0; i < 8; ++i) {
+    int m0, m1, m2, m3, m4, m5, m6, m7;
+    COLUMN_DCT8(in + i);
+  }
+}
+    
+      std::unique_ptr<char[]> buf(new char[buffer_size]);
+  while (!feof(f)) {
+    size_t read_bytes = fread(buf.get(), sizeof(char), buffer_size, f);
+    if (ferror(f)) {
+      perror('fread');
+      exit(1);
+    }
+    result.append(buf.get(), read_bytes);
+  }
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg);
+    
+    void AddApp0Data(JPEGData* jpg) {
+  const unsigned char kApp0Data[] = {
+      0xe0, 0x00, 0x10,              // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
+  };
+  jpg->app_data.push_back(
+      std::string(reinterpret_cast<const char*>(kApp0Data),
+                                 sizeof(kApp0Data)));
+}
+    
+    
+    {}  // namespace guetzli
+    
+    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo) {
+  for (size_t i = 0; i < jpg.components.size(); ++i) {
+    const JPEGComponent& c = jpg.components[i];
+    JpegHistogram* dc_histogram = &histo[i];
+    coeff_t last_dc_coeff = 0;
+    for (int mcu_y = 0; mcu_y < jpg.MCU_rows; ++mcu_y) {
+      for (int mcu_x = 0; mcu_x < jpg.MCU_cols; ++mcu_x) {
+        for (int iy = 0; iy < c.v_samp_factor; ++iy) {
+          for (int ix = 0; ix < c.h_samp_factor; ++ix) {
+            int block_y = mcu_y * c.v_samp_factor + iy;
+            int block_x = mcu_x * c.h_samp_factor + ix;
+            int block_idx = block_y * c.width_in_blocks + block_x;
+            coeff_t dc_coeff = c.coeffs[block_idx << 6];
+            int diff = std::abs(dc_coeff - last_dc_coeff);
+            int nbits = Log2Floor(diff) + 1;
+            dc_histogram->Add(nbits);
+            last_dc_coeff = dc_coeff;
+          }
+        }
+      }
+    }
+  }
+}
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
+    
+            if ((order & (memory_order_consume | memory_order_acquire)) != 0)
+            hardware_full_fence();
+    
+    #if BOOST_ATOMIC_THREAD_FENCE > 0
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
 {
-public:
-    
-    /** 
-     * @brief Create the action with the number of columns and the duration.
-     * @param duration Specify the duration of the SplitCols action. It's a value in seconds.
-     * @param cols Specify the columns count should be split.
-     * @return If the creation success, return a pointer of SplitCols action; otherwise, return nil.
-     */
-    static SplitCols* create(float duration, unsigned int cols);
-    }
-    
-            if ( frameNames.empty() )
-        {
-            CCLOG('cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to animation cache.', anim.first.c_str());
-            continue;
-        }
-    
-        /** Adds an animation from an NSDictionary.
-     * Make sure that the frames were previously loaded in the SpriteFrameCache.
-     * @param dictionary An NSDictionary.
-     * @param plist The path of the relative file,it use to find the plist path for load SpriteFrames.
-     * @since v1.1
-	 @js NA
-     */
-    void addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist);
+    detail::thread_fence(order);
+}
+#else
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::thread_fence();
+}
+#endif
