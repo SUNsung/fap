@@ -1,105 +1,58 @@
 
         
-            # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
+              update_disk_cleanup_size(path.disk_usage)
+    end
+    
+        def compass?
+      defined?(::Compass::Frameworks)
+    end
+    
+        def pos
+      byte_to_str_pos @s.pos
+    end
+    
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+    end
+    
+      class SendPublic < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+          it 'should not be catched when it is unexpected' do
+        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
+        allow(alice).to receive(:like!).and_raise('something')
+        allow(@controller).to receive(:current_user).and_return(alice)
+        expect { post :create, params: like_hash, format: :json }.to raise_error('something')
       end
     end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
-    end
   end
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-        def recall_app(app)
-      controller, action = app.split('#')
-      controller_name  = ActiveSupport::Inflector.camelize(controller)
-      controller_klass = ActiveSupport::Inflector.constantize('#{controller_name}Controller')
-      controller_klass.action(action)
-    end
-    
-        if last_request_at.is_a? Integer
-      last_request_at = Time.at(last_request_at).utc
-    elsif last_request_at.is_a? String
-      last_request_at = Time.parse(last_request_at)
-    end
-    
-          def path
-        slug
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
     
-        attr_reader :filters
+            self
+      end
     
-        def type=(value)
-      @type = value.try :strip
-    end
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
     
-      def set_size
-    case params[:id]
-    when 'featured'
-      @account.pinned_statuses.count
-    else
-      raise ActiveRecord::NotFound
-    end
-  end
-    
-      def next_page
-    account_outbox_url(@account, page: true, max_id: @statuses.last.id) if @statuses.size == LIMIT
-  end
-    
-        def new
-      authorize :domain_block, :create?
-      @domain_block = DomainBlock.new
-    end
-    
-        helper_method :paginated_instances
-    
-    Given(/^servers with the roles app and web$/) do
-  begin
-    vagrant_cli_command('up')
-  rescue
-    nil
-  end
-end
-    
-    World(RemoteCommandHelpers)
-
-    
-        extend Forwardable
-    attr_reader :variables
-    def_delegators :variables,
-                   :set, :fetch, :fetch_for, :delete, :keys, :validate
-    
-          def warn_third_party_scm_must_be_upgraded
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure this custom SCM will work with future versions of Capistrano,
-please upgrade it to a version that uses the new SCM plugin mechanism
-documented here:
-    
-            def current
-          @order = find_current_order
-          if @order
-            respond_with(@order, default_template: :show, locals: { root_object: @order })
-          else
-            head :no_content
-          end
-        end
-    
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
+            private
