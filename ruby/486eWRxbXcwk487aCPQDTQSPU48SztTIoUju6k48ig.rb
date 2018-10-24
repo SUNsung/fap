@@ -1,6 +1,22 @@
 
         
-          def remove_duplicates
+                log_action :change_email, @user
+    
+        def create
+      authorize @user, :confirm?
+      @user.confirm!
+      log_action :confirm, @user
+      redirect_to admin_accounts_path
+    end
+    
+        def resource_params
+      params.require(:report_note).permit(
+        :content,
+        :report_id
+      )
+    end
+    
+      def remove_duplicates
     where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
       's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
     if AppConfig.postgres?
@@ -12,92 +28,74 @@
 end
 
     
+    Given /^I have been invited by '([^\']+)'$/ do |email|
+  AppConfig.settings.enable_registrations = false
+  @inviter = User.find_by_email(email)
+  @inviter_invite_count = @inviter.invitation_code.count
+  i = EmailInviter.new('new_invitee@example.com', @inviter)
+  i.send!
+end
+    
     require 'capybara/rails'
 require 'capybara/cucumber'
 require 'capybara/session'
 require 'capybara/poltergeist'
     
-      def fill_in_new_user_form
-    @username = 'ohai'
-    fill_in('user_email', with: '#{@username}@example.com')
-    fill_in('user_username', with: @username)
-    fill_in('user_password', with: 'secret')
-    fill_in('user_password_confirmation', with: 'secret')
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+  end
+end
     
-          # @see Base#\_retrieve
-      def _retrieve(key, version, sha)
-        return unless File.readable?(path_to(key))
-        begin
-          File.open(path_to(key), 'rb') do |f|
-            if f.readline('\n').strip == version && f.readline('\n').strip == sha
-              return f.read
-            end
-          end
-          File.unlink path_to(key)
-        rescue Errno::ENOENT
-          # Already deleted. Race condition?
-        end
-        nil
-      rescue EOFError, TypeError, ArgumentError => e
-        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
+      class SendPublic < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+        context 'on my own post' do
+      it 'succeeds' do
+        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
+        post :create, params: like_hash, format: :json
+        expect(response.code).to eq('201')
       end
+    end
     
-    module Sass
-  # This class converts CSS documents into Sass or SCSS templates.
-  # It works by parsing the CSS document into a {Sass::Tree} structure,
-  # and then applying various transformations to the structure
-  # to produce more concise and idiomatic Sass/SCSS.
-  #
-  # Example usage:
-  #
-  #     Sass::CSS.new('p { color: blue }').render(:sass) #=> 'p\n  color: blue'
-  #     Sass::CSS.new('p { color: blue }').render(:scss) #=> 'p {\n  color: blue; }'
-  class CSS
-    # @param template [String] The CSS stylesheet.
-    #   This stylesheet can be encoded using any encoding
-    #   that can be converted to Unicode.
-    #   If the stylesheet contains an `@charset` declaration,
-    #   that overrides the Ruby encoding
-    #   (see {file:SASS_REFERENCE.md#Encodings the encoding documentation})
-    # @option options :old [Boolean] (false)
-    #     Whether or not to output old property syntax
-    #     (`:color blue` as opposed to `color: blue`).
-    #     This is only meaningful when generating Sass code,
-    #     rather than SCSS.
-    # @option options :indent [String] ('  ')
-    #     The string to use for indenting each line. Defaults to two spaces.
-    def initialize(template, options = {})
-      if template.is_a? IO
-        template = template.read
-      end
-    
-          def escape_glob_characters(name)
-        name.gsub(/[\*\[\]\{\}\?]/) do |char|
-          '\\#{char}'
+            else
+          false # Token is malformed
         end
       end
     
-          it 'corrects one hash parameter without braces with one hash value' do
-        corrected = autocorrect_source('where(x: { 'y' => 'z' })')
-        expect(corrected).to eq('where({x: { 'y' => 'z' }})')
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
       end
     end
   end
 end
-
-    
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
