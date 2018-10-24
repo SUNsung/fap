@@ -1,230 +1,111 @@
 
         
-            if other.respond_to?(:to_str)
-      return true if to_str == other.to_str
+            Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
+    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
+  end
+    
+        def destroy
+      authorize @custom_emoji, :destroy?
+      @custom_emoji.destroy!
+      log_action :destroy, @custom_emoji
+      flash[:notice] = I18n.t('admin.custom_emojis.destroyed_msg')
+      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
     end
     
-        path = Commands.path(cmd)
-    
-          new_user = 'Homebrew'
-      new_repo = (repo == 'cask') ? repo : 'cask-#{repo}'
-    
-        return str
+      def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
   end
     
-          when IAX_CTRL_BUSY
-        dprint('BUSY')
-        self.busy  = true
-        self.state = :hangup
-        self.client.send_ack(self)
+    class Api::SubscriptionsController < Api::BaseController
+  before_action :set_account
+  respond_to :txt
     
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-    
-              # Decodes the enc_part
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
-          def decode_enc_part(input)
-            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
-          end
-        end
-      end
+        def replace_vars(less)
+      less = less.dup
+      # skip header comment
+      less =~ %r(\A/\*(.*?)\*/)m
+      from           = $~ ? $~.to_s.length : 0
+      less[from..-1] = less[from..-1].
+          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
+          # variables that would be ignored by gsub above: e.g. @page-header-border-color
+          gsub(/@(page[\w-]+)/, '$\1')
+      less
     end
-  end
-end
     
-    When /^I (?:log|sign) out$/ do
-  logout
-  step 'I go to the root page'
-end
+      # Precompile additional assets.
+  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
+  # config.assets.precompile += %w( search.js )
     
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
-  end
+      config.active_support.deprecation = :stderr
 end
 
     
-        it 'returns a 404 for a post not visible to the user' do
-      sign_in eve
-      expect {
-        get :index, params: {post_id: @message.id}
-      }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    
-    Then(/contains '([^']*)' in the output/) do |expected|
-  expect(@output).to include(expected)
-end
-    
-            standard_rake_options.each { |args| opts.on(*args) }
-        opts.environment('RAKEOPT')
-      end.parse!
-    end
-    
-        def servers
-      @servers ||= Servers.new
-    end
-    
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
-          end
-        end
-        block_given? ? nil : rps
-      end
-    
-        <% unless bad_request?(exception) %>
-      <div id='get'>
-        <h3 id='get-info'>GET</h3>
-        <% if req.GET and not req.GET.empty? %>
-          <table class='req'>
-            <tr>
-              <th>Variable</th>
-              <th>Value</th>
-            </tr>
-             <% req.GET.sort_by { |k, v| k.to_s }.each { |key, val| %>
-            <tr>
-              <td><%=h key %></td>
-              <td class='code'><div><%=h val.inspect %></div></td>
-            </tr>
-            <% } %>
-          </table>
-        <% else %>
-          <p class='no-data'>No GET data.</p>
-        <% end %>
-        <div class='clear'></div>
-      </div> <!-- /GET -->
-    
-          # Essentially the inverse of +mask_token+.
-      def unmask_token(masked_token)
-        # Split the token into the one-time pad and the encrypted
-        # value and decrypt it
-        token_length = masked_token.length / 2
-        one_time_pad = masked_token[0...token_length]
-        encrypted_token = masked_token[token_length..-1]
-        xor_byte_strings(one_time_pad, encrypted_token)
-      end
-    
-          def report(env)
-        warn env, 'attack reported by #{self.class}'
-        env[options[:report_key]] = true
-      end
-    
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
-        end
-      end
-    
-    
-    
-    opts = OptionParser.new do |opts|
-  # define program name (although this defaults to the name of the file, just in case...)
-  opts.program_name = 'gollum'
-    
-  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
-  opts.banner = '
-  Gollum is a multi-format Wiki Engine/API/Frontend.
-    
-  Usage:
-      gollum [options] [git-repo]
-    
-  Arguments:
-      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
-  
-  Notes:
-      Paths for all options are relative to <git-repo> unless absolute.
-      This message is only a basic description. For more information, please visit:
-          https://github.com/gollum/gollum
-  
-  OPTIONS'
-  
-  # define gollum options  
-  opts.separator ''
-  opts.separator '  Major:'
-  
-  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
-    options[:bind] = host
-  end
-  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
-    begin
-      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
-      options[:port] = Integer(port)
-    rescue ArgumentError
-      puts 'Error: '#{port}' is not a valid port number.'
-      exit 1
-    end
-  end
-  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
-    options[:config] = file
-  end
-  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
-    wiki_options[:ref] = ref
-  end
-  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
-    Gollum::GIT_ADAPTER = adapter
-  end
-  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
-    wiki_options[:repo_is_bare] = true
-  end
-  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
-    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
-      
-    # first trim a leading slash, if any
-    base_path.sub!(/^\/+/, '')
-    
-    module Precious
-  module Helpers
-    
-            include Spree::Core::ControllerHelpers::Auth
-        include Spree::Core::ControllerHelpers::Order
-        # This before_action comes from Spree::Core::ControllerHelpers::Order
-        skip_before_action :set_current_order
-    
-            def update
-          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
-          if @image.update_attributes(image_params)
-            respond_with(@image, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def destroy
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :destroy).find(params[:id])
-          @return_authorization.destroy
-          respond_with(@return_authorization, status: 204)
-        end
-    
-              Spree::Cart::AddItem.call(order: @shipment.order,
-                                    variant: variant,
-                                    quantity: quantity,
-                                    options: { shipment: @shipment })
-    
-            def stock_location_params
-          params.require(:stock_location).permit(permitted_stock_location_attributes)
-        end
-      end
+    Given /^(?:|[tT]hat )?following user[s]?(?: exist[s]?)?:$/ do |table|
+  table.hashes.each do |hash|
+    if hash.has_key? 'username' and hash.has_key? 'email'
+      step %{a user named '#{hash['username']}' with email '#{hash['email']}'}
+    elsif hash.has_key? 'username'
+      step %{a user with username '#{hash['username']}'}
+    elsif hash.has_key? 'email'
+      step %{a user with email '#{hash['email']}'}
     end
   end
 end
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+        def split_colon_path(path)
+      one, two = path.split(':', 2)
+      if one && two && Sass::Util.windows? &&
+          one =~ /\A[A-Za-z]\Z/ && two =~ %r{\A[/\\]}
+        # If we're on Windows and we were passed a drive letter path,
+        # don't split on that colon.
+        one2, two = two.split(':', 2)
+        one = one + ':' + one2
+      end
+      return one, two
+    end
+    
+    Then(/^the task fails$/) do
+  expect(@success).to be_falsey
+end
+    
+    Given(/^a linked file '(.*?)'$/) do |file|
+  # ignoring other linked files
+  TestApp.append_to_deploy_file('set :linked_files, ['#{file}']')
+end
+    
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
+        end
+      end
+    
+          !File.exists?(File.join(LogStash::Environment::LOGSTASH_HOME, 'x-pack'))
+    end
+    
+        # To make sure we have the maximum compatibility
+    # we will ignore theses gems and they won't be included in the pack
+    IGNORE_GEMS_IN_PACK = %w(
+      logstash-core
+      logstash-core-plugin-api
+      jar-dependencies
+    )
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
+    
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+      end
