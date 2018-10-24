@@ -1,110 +1,93 @@
 
         
-          def tumblr_consumer_secret
-    ENV['TUMBLR_OAUTH_SECRET']
+        def bottle_resolve_formula_names(bottle_file)
+  receipt_file_path = bottle_receipt_path bottle_file
+  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
+  name = receipt_file_path.split('/').first
+  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
+    
+      def external_commands
+    paths.reduce([]) do |cmds, path|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        cmds << cmd unless cmd.include?('.')
+      end
+      cmds
+    end.sort
   end
     
-      def index
-    set_table_sort sorts: %w[provider name global], default: { provider: :asc }
+      def describe_perl
+    describe_path(which 'perl')
+  end
     
-        it 'mimics a sed conditional with a many-element exclusive-end range' do
-      eval '10.times { |i| ScratchPad << i if (i == 4)...(i == 5) }'
-      ScratchPad.recorded.should == [4, 5]
-    end
+      def print_dir(root)
+    dirs = []
+    remaining_root_files = []
+    other = ''
     
-      def test_warn_balanced
-    warning = <<WARN
-test:1: warning: `%s' after local variable or literal is interpreted as binary operator
-test:1: warning: even though it seems like %s
-WARN
-    [
-     [:**, 'argument prefix'],
-     [:*, 'argument prefix'],
-     [:<<, 'here document'],
-     [:&, 'argument prefix'],
-     [:+, 'unary operator'],
-     [:-, 'unary operator'],
-     [:/, 'regexp literal'],
-     [:%, 'string literal'],
-    ].each do |op, syn|
-      all_assertions do |a|
-        ['puts 1 #{op}0', 'puts :a #{op}0', 'm = 1; puts m #{op}0'].each do |src|
-          a.for(src) do
-            assert_warning(warning % [op, syn], src) do
-              assert_valid_syntax(src, 'test', verbose: true)
-            end
-          end
+      def self.all
+    opoo 'Formula.all is deprecated, use Formula.map instead'
+    map
+  end
+    
+              builds = scope_relevant.select('count(*)').to_sql
+          created = scope_relevant.created.select('count(*)').to_sql
+          success = scope_relevant.success.select('count(*)').to_sql
+          manual = scope_relevant.manual.select('count(*)').to_sql
+          pending = scope_relevant.pending.select('count(*)').to_sql
+          running = scope_relevant.running.select('count(*)').to_sql
+          skipped = scope_relevant.skipped.select('count(*)').to_sql
+          canceled = scope_relevant.canceled.select('count(*)').to_sql
+          warnings = scope_warnings.select('count(*) > 0').to_sql
+    
+            class << self
+          def from_image(job)
+            image = Gitlab::Ci::Build::Image.new(job.options[:image])
+            return unless image.valid?
+    
+        require 'cocoapods/command/cache'
+    require 'cocoapods/command/env'
+    require 'cocoapods/command/init'
+    require 'cocoapods/command/install'
+    require 'cocoapods/command/ipc'
+    require 'cocoapods/command/lib'
+    require 'cocoapods/command/list'
+    require 'cocoapods/command/outdated'
+    require 'cocoapods/command/repo'
+    require 'cocoapods/command/setup'
+    require 'cocoapods/command/spec'
+    require 'cocoapods/command/update'
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Given(/^a task which executes as root$/) do
+  TestApp.copy_task_to_test_app('spec/support/tasks/root.rake')
+end
+    
+          def warn_third_party_scm_must_be_upgraded
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure this custom SCM will work with future versions of Capistrano,
+please upgrade it to a version that uses the new SCM plugin mechanism
+documented here:
+    
+            def lvalue(key)
+          key.to_s.chomp('=').to_sym
         end
       end
     end
   end
-    
-    load_extension('data')
-    
-      it 'raises an Errno::ECHILD if there are no child processes' do
-    lambda { Process.wait }.should raise_error(Errno::ECHILD)
-  end
-    
-      it 'adds a directory to $LOAD_PATH' do
-    dir = tmp('rubylib/incl')
-    ENV['RUBYLIB'] = @pre + dir
-    paths = ruby_exe('puts $LOAD_PATH').lines.map(&:chomp)
-    paths.should include(dir)
-  end
-    
-      def test_execute_outside_dir
-    gemspec_dir = File.join @tempdir, 'build_command_gem'
-    gemspec_file = File.join gemspec_dir, @gem.spec_name
-    
-        assert_in_out_err(%w(-p -l -a -e) + ['p [$-p, $-l, $-a]'],
-                      'foo\nbar\nbaz') do |r, e|
-      assert_equal(
-        [ '[true, true, true]', 'foo',
-          '[true, true, true]', 'bar',
-          '[true, true, true]', 'baz' ], r)
-      assert_equal([], e)
-    end
-  end
-    
-            candidates = String.instance_methods(true).collect{|m| m.to_s}
-        select_message(receiver, message, candidates)
-    
-    if mflags = ENV['GNUMAKEFLAGS'] and /\A-(\S*)j\d*/ =~ mflags
-  mflags = mflags.gsub(/(\A|\s)(-\S*)j\d*/, '\1\2')
-  mflags.strip!
-  ENV['GNUMAKEFLAGS'] = (mflags unless mflags.empty?)
 end
-ENV['LC_ALL'] = ENV['LANG'] = 'C'
-SVNURL = URI.parse('https://svn.ruby-lang.org/repos/ruby/')
-GITURL = URI.parse('https://git.ruby-lang.org/ruby.git')
-RUBY_VERSION_PATTERN = /^\#define\s+RUBY_VERSION\s+'([\d.]+)'/
+
     
-        # No dead or finished threads, give up to 10 seconds to start running
-    t = Time.now
-    Thread.pass until Time.now - t > 10 || (consumers + producers).all?{|thr| thr.status =~ /\A(?:run|sleep)\z/}
-    
-      File.unlink(out) if (File.size(out) == 0)
-    
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
-    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'ftp'
-    
-    classNames.each { |name|
-	filesIn << clsFile.new_with_sig('Ljava.lang.String;', '#{outputDir}/#{name}.class')
-}
-    
-    vers.each do |ver|
-  case ver
-  when '6.1.4'
-    __NR_execve      = 7
-    __NR_getpeername = 211
-    __NR_accept      = 237
-    __NR_listen      = 240
-    __NR_bind        = 242
-    __NR_socket      = 243
-    __NR_connect     = 244
-    __NR_close       = 278
-    __NR_kfcntl      = 658
+          cache(gist, file, data.body) unless @cache_disabled
+      data.body
+    end
