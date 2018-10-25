@@ -1,128 +1,183 @@
 
         
-          auto* message1_on_arena =
-      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
-  TestUtil::SetAllFields(message1_on_arena);
-  const auto* nested = &message1_on_arena->optional_nested_message();
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_doc_comment.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_name_resolver.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    }
-    
-    string ClassNameResolver::GetClassName(const FileDescriptor* descriptor,
-                                       bool immutable) {
-  string result = FileJavaPackage(descriptor, immutable);
-  if (!result.empty()) result += '.';
-  result += GetFileClassName(descriptor, immutable);
-  return result;
-}
-    
-    // Author: xiaofeng@google.com (Feng Xiao)
-    
-      static const int kBytesPerLine = 40;  // allow for escaping
-  printer->Print(
-      '    static const char *valueNames =');
-  for (int i = 0; i < text_blob.size(); i += kBytesPerLine) {
-    printer->Print(
-        '\n        \'$data$\'',
-        'data', EscapeTrigraphs(CEscape(text_blob.substr(i, kBytesPerLine))));
-  }
-  printer->Print(
-      ';\n'
-      '    static const int32_t values[] = {\n');
-  for (int i = 0; i < all_values_.size(); i++) {
-    printer->Print('        $name$,\n',  'name', EnumValueName(all_values_[i]));
-  }
-  printer->Print('    };\n');
-    
-    DHTResponseMessage::~DHTResponseMessage() = default;
-    
-    
-    {  static const std::string R;
+        
+    {
+    {		virtual btCollisionAlgorithm *CreateCollisionAlgorithm(btCollisionAlgorithmConstructionInfo &ci, const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap) {
+			void *mem = ci.m_dispatcher1->allocateCollisionAlgorithm(sizeof(GodotRayWorldAlgorithm));
+			return new (mem) GodotRayWorldAlgorithm(m_world, ci.m_manifold, ci, body0Wrap, body1Wrap, true);
+		}
+	};
 };
     
-    #include <cstring>
-#include <cstdio>
     
-    DHTSetup::DHTSetup() = default;
+    {	_FORCE_INLINE_ void _set_physics_server(BulletPhysicsServer *p_physicsServer) { physicsServer = p_physicsServer; }
+	_FORCE_INLINE_ BulletPhysicsServer *get_physics_server() const { return physicsServer; }
+};
+#endif
+
     
-    class DHTTask {
-public:
-  virtual ~DHTTask() = default;
+    class SliderJointBullet : public JointBullet {
+	class btSliderConstraint *sliderConstraint;
     }
     
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
+    
+    {	id = 0;
+}
+
+    
+    	ClassDB::bind_method(D_METHOD('set_refuse_new_connections', 'enable'), &NetworkedMultiplayerPeer::set_refuse_new_connections);
+	ClassDB::bind_method(D_METHOD('is_refusing_new_connections'), &NetworkedMultiplayerPeer::is_refusing_new_connections);
+    
+    	struct File {
+    }
+    
+            mutable size_t m_noiseInjectionSeed;
+    
+        template <typename V1ElemType>
+    TensorView<V1ElemType>* NDArrayView::GetWritableTensorView()
+    {
+        if (IsReadOnly())
+            InvalidArgument('NDArrayView::GetWritableTensorView: Cannot get a writable TensorView from a read-only NDArrayView.');
+    }
+    
+    
+    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+};
+    
+        /* Sets the Eye value of the Camera. 
+     * 
+     * @param eye The Eye value of the Camera.
+     * @js NA
+     */
+    void setEye(const Vec3 &eye);
+    void setEye(float x, float y, float z);
+    /* Returns the Eye value of the Camera. 
+     *
+     * @return The Eye value of the Camera.
+     * @js NA
+     */
+    const Vec3& getEye() const { return _eye; }
+    /* Sets the Center value of the Camera. 
+     *
+     * @param center The Center value of the Camera.
+     * @js NA
+     */
+    void setCenter(const Vec3 &center);
+    /* Returns the Center value of the Camera. 
+     *
+     * @return The Center value of the Camera.
+     * @js NA
+     */
+    const Vec3& getCenter() const { return _center; }
+    /* Sets the Up value of the Camera. 
+     *
+     * @param up The Up value of the Camera.
+     * @js NA
+     */
+    void setUp(const Vec3 &up);
+    /* Returns the Up value of the Camera. 
+     *
+     * @return The Up value of the Camera.
+     * @js NA
+     */
+    const Vec3& getUp() const { return _up; }
+    
+        /** Returns a new copy of the array reversed. User is responsible for releasing this copy.
+     *
+     * @js NA
+     * @return A new copy of the array reversed.
+     */
+    PointArray* reverse() const;
+    
+    // implementation of TiledGrid3DAction
+    
+    Ref* __CCCallFuncO::getObject() const
 {
+    return _object;
 }
     
-      ~DHTTaskExecutor();
+void __CCCallFuncO::setObject(Ref* obj)
+{
+    if (obj != _object)
+    {
+        CC_SAFE_RELEASE(_object);
+        _object = obj;
+        CC_SAFE_RETAIN(_object);
+    }
+}
     
-    namespace aria2 {
+    protected:
+    bool    _flipX;
+    
+        float d1 = action1->getDuration();
+    float d2 = action2->getDuration();
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        //
+    // Overrides
+    //
+    virtual ProgressFromTo* clone() const override;
+    virtual ProgressFromTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressFromTo() {}
+    virtual ~ProgressFromTo() {}
+    
+    /**
+@brief FadeOutBLTiles action.
+@details Fades out the target node with many tiles from Top-Right to Bottom-Left.
+ */
+class CC_DLL FadeOutBLTiles : public FadeOutTRTiles
+{
+public:
+    /** 
+    * @brief Create the action with the grid size and the duration.
+    * @param duration Specify the duration of the FadeOutBLTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @return If the creation success, return a pointer of FadeOutBLTiles action; otherwise, return nil.
+    */
+    static FadeOutBLTiles* create(float duration, const Size& gridSize);
     }
     
-      virtual void
-  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+        /** array of AnimationFrames. */
+    Vector<AnimationFrame*> _frames;
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
     
-    {  void setTokenTracker(DHTTokenTracker* tokenTracker);
-};
-    
-      FunctionRef<int(int, char const*)> variant5 = of;
-  EXPECT_EQ(100 + 5 * 19, variant5(19, 'foo'));
-  FunctionRef<int(int, char const*)> const cvariant5 = of;
-  EXPECT_EQ(100 + 5 * 19, cvariant5(19, 'foo'));
-    
-    #include <iostream>
+    {// end of base_node group
+/// @}
     
     
-    {  /**
-   * Returns a double in [min, max), if min == max, returns 0.
-   */
-  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
-  static double randDouble(double min, double max, RNG&& rng) {
-    if (std::fabs(max - min) < std::numeric_limits<double>::epsilon()) {
-      return 0;
-    }
-    return std::uniform_real_distribution<double>(min, max)(rng);
-  }
-};
+BOOST_FORCEINLINE void thread_fence(memory_order order) BOOST_NOEXCEPT
+{
+    BOOST_ATOMIC_DETAIL_COMPILER_BARRIER();
+    if (order != memory_order_relaxed)
+        msvc_arm_operations_base::hardware_full_fence();
+    BOOST_ATOMIC_DETAIL_COMPILER_BARRIER();
+}
     
-    struct Options {
-  /**
-   * ZLIB: default option -- write a zlib wrapper as documented in RFC 1950.
-   *
-   * GZIP: write a simple gzip header and trailer around the compressed data
-   * instead of a zlib wrapper.
-   *
-   * RAW: deflate will generate raw deflate data with no zlib header or
-   * trailer, and will not compute a check value.
-   *
-   * AUTO: enable automatic header detection for decoding gzip or zlib data.
-   * For deflation, ZLIB will be used.
-   */
-  enum class Format { ZLIB, GZIP, RAW, AUTO };
-    }
+    #if BOOST_ATOMIC_THREAD_FENCE > 0
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::thread_fence(order);
+}
+#else
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::thread_fence();
+}
+#endif
