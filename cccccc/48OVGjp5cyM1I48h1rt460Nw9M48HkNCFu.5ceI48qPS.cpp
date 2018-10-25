@@ -1,222 +1,255 @@
 
         
-        #include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/format.hpp'
-#include 'caffe/util/math_functions.hpp'
-    
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
+          if (op_reg_data->shape_inference_fn == nullptr) {
+    return errors::InvalidArgument(
+        'No shape inference function exists for op '', node.op(),
+        '', did you forget to define it?');
   }
-};
     
-    
-    {}  // namespace caffe
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel AVX intrinsics to access the SIMD instruction set.
-double DotProductAVX(const double* u, const double* v, int n) {
-  int max_offset = n - 4;
-  int offset = 0;
-  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
-  // v, and multiplying them together in parallel.
-  __m256d sum = _mm256_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 4;
-    // Aligned load is reputedly faster but requires 32 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
-      // Use aligned load.
-      __m256d floats1 = _mm256_load_pd(u);
-      __m256d floats2 = _mm256_load_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_load_pd(u + offset);
-        floats2 = _mm256_load_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    } else {
-      // Use unaligned load.
-      __m256d floats1 = _mm256_loadu_pd(u);
-      __m256d floats2 = _mm256_loadu_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_loadu_pd(u + offset);
-        floats2 = _mm256_loadu_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    }
+      int width = 35;
+  int width_narrow = 15;
+  int width_wide = 20;
+  os << std::setw(width + 1) << 'Op,';
+  os << std::setw(width_narrow + 1) << 'Count,';
+  os << std::setw(width_wide + 1) << 'Measured time (ns),';
+  os << std::setw(width_narrow + 2) << 'Time percent,';
+  os << std::setw(width_narrow + 2) << 'Acc percent,';
+  os << std::setw(width_wide + 1) << 'Analytical upper,';
+  os << std::setw(width_wide + 1) << 'Analytical lower,';
+  os << std::setw(width_narrow + 2) << 'Overall eff';
+  os << std::setw(width_narrow + 2) << 'Compute eff';
+  os << std::setw(width_narrow + 2) << 'Memory eff' << std::endl;
+  float acc_percent = 0;
+  for (const auto& op : ops_) {
+    double percent = static_cast<double>(op.time) /
+                     static_cast<double>(total_time_measured_serialized_);
+    double eff =
+        static_cast<double>(op.time_upper) / static_cast<double>(op.time);
+    double compute_eff =
+        static_cast<double>(op.compute_time) / static_cast<double>(op.time);
+    double memory_eff =
+        static_cast<double>(op.memory_time) / static_cast<double>(op.time);
+    os << std::setw(width) << op.name << ',';
+    os << std::setw(width_narrow) << op.count << ',';
+    os << std::setw(width_wide) << op.time << ',';
+    os << std::setw(width_narrow) << std::setprecision(2) << percent * 100
+       << '%,';
+    acc_percent += percent;
+    os << std::setw(width_narrow) << std::setprecision(2) << acc_percent * 100
+       << '%,';
+    os << std::setw(width_wide) << op.time_upper << ',';
+    os << std::setw(width_wide) << op.time_lower << ',';
+    os << std::setw(width_narrow) << std::setprecision(2) << eff * 100 << '%,';
+    os << std::setw(width_narrow) << std::setprecision(2) << compute_eff * 100
+       << '%,';
+    os << std::setw(width_narrow) << std::setprecision(2) << memory_eff * 100
+       << '%,';
+    os << std::endl;
   }
-  // Add the 4 product sums together horizontally. Not so easy as with sse, as
-  // there is no add across the upper/lower 128 bit boundary, so permute to
-  // move the upper 128 bits to lower in another register.
-  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
-  sum = _mm256_hadd_pd(sum, sum2);
-  sum = _mm256_hadd_pd(sum, sum);
-  double result;
-  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
-  // instruction, as that introduces a 70 cycle delay. All this casting is to
-  // fool the intrinsics into thinking we are extracting the bottom int64.
-  auto cast_sum = _mm256_castpd_si256(sum);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored '-Wstrict-aliasing'
-  *(reinterpret_cast<int64_t*>(&result)) =
-#if defined(_WIN32) || defined(__i386__)
-      // This is a very simple workaround that is activated
-      // for all platforms that do not have _mm256_extract_epi64.
-      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
-      ((uint64_t*)&cast_sum)[0]
-#else
-      _mm256_extract_epi64(cast_sum, 0)
-#endif
-      ;
-#pragma GCC diagnostic pop
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
+  os << std::endl;
+    
+    // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
+    
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
   }
-  return result;
-}
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
     
-    #include 'dotproductsse.h'
-#include <cstdio>
-#include <cstdlib>
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
     
+    INSTANTIATE_TEST_CASE_P(InstantiationName,
+                        FooTest,
+                        Values('meeny', 'miny', 'moe'));
     
-    {  for (std::map<int, ParamContent*>::iterator iter = vcMap.begin();
-                                          iter != vcMap.end();
-                                          ++iter) {
-    ParamContent* cur = iter->second;
-    if (!changes_only || cur->HasChanged()) {
-      fprintf(fp, '%-25s   %-12s   # %s\n',
-              cur->GetName(), cur->GetValue().string(), cur->GetDescription());
-    }
+      // Sets up the test fixture.
+  virtual void SetUp();
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED5.  Don't use
+// this in your code.
+#define GTEST_PRED5_(pred, v1, v2, v3, v4, v5, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred5Helper(#pred, \
+                                             #v1, \
+                                             #v2, \
+                                             #v3, \
+                                             #v4, \
+                                             #v5, \
+                                             pred, \
+                                             v1, \
+                                             v2, \
+                                             v3, \
+                                             v4, \
+                                             v5), on_failure)
+    
+     public:
+  // Clones a 0-terminated C string, allocating memory using new.
+  static const char* CloneCString(const char* a_c_string);
+    
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
-  fclose(fp);
-}
-#endif // GRAPHICS_DISABLED
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta);
+    
+      // Open the log file
+  std::string fname = LogFileName(dbname_, log_number);
+  SequentialFile* file;
+  Status status = env_->NewSequentialFile(fname, &file);
+  if (!status.ok()) {
+    MaybeIgnoreError(&status);
+    return status;
+  }
+    
+    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
 
     
-    /**********************************************************************
- * recog_word
- *
- * Convert the word to tess form and pass it to the tess segmenter.
- * Convert the output back to editor form.
- **********************************************************************/
-namespace tesseract {
-void Tesseract::recog_word(WERD_RES *word) {
-  if (wordrec_skip_no_truth_words && (word->blamer_bundle == nullptr ||
-      word->blamer_bundle->incorrect_result_reason() == IRR_NO_TRUTH)) {
-    if (classify_debug_level) tprintf('No truth for word - skipping\n');
-    word->tess_failed = true;
-    return;
-  }
-  ASSERT_HOST(!word->chopped_word->blobs.empty());
-  recog_word_recursive(word);
-  word->SetupBoxWord();
-  if (word->best_choice->length() != word->box_word->length()) {
-    tprintf('recog_word ASSERT FAIL String:\'%s\'; '
-            'Strlen=%d; #Blobs=%d\n',
-            word->best_choice->debug_string().string(),
-            word->best_choice->length(), word->box_word->length());
-  }
-  ASSERT_HOST(word->best_choice->length() == word->box_word->length());
-  // Check that the ratings matrix size matches the sum of all the
-  // segmentation states.
-  if (!word->StatesAllValid()) {
-    tprintf('Not all words have valid states relative to ratings matrix!!');
-    word->DebugWordChoices(true, nullptr);
-    ASSERT_HOST(word->StatesAllValid());
-  }
-  if (tessedit_override_permuter) {
-    /* Override the permuter type if a straight dictionary check disagrees. */
-    uint8_t perm_type = word->best_choice->permuter();
-    if ((perm_type != SYSTEM_DAWG_PERM) &&
-        (perm_type != FREQ_DAWG_PERM) && (perm_type != USER_DAWG_PERM)) {
-      uint8_t real_dict_perm_type = dict_word(*word->best_choice);
-      if (((real_dict_perm_type == SYSTEM_DAWG_PERM) ||
-           (real_dict_perm_type == FREQ_DAWG_PERM) ||
-           (real_dict_perm_type == USER_DAWG_PERM)) &&
-          (alpha_count(word->best_choice->unichar_string().string(),
-                       word->best_choice->unichar_lengths().string()) > 0)) {
-        word->best_choice->set_permuter(real_dict_perm_type);  // use dict perm
-      }
+    
+    {  for (int run = 0; run < 2; run++) {
+    for (int i = 0; i < 1000; i++) {
+      char buf[100];
+      snprintf(buf, sizeof(buf), '[%d]', i*10);
+      ASSERT_OK(Put(buf, buf));
     }
-    if (tessedit_rejection_debug &&
-        perm_type != word->best_choice->permuter()) {
-      tprintf('Permuter Type Flipped from %d to %d\n',
-              perm_type, word->best_choice->permuter());
-    }
-  }
-  // Factored out from control.cpp
-  ASSERT_HOST((word->best_choice == nullptr) == (word->raw_choice == nullptr));
-  if (word->best_choice == nullptr || word->best_choice->length() == 0 ||
-      static_cast<int>(strspn(word->best_choice->unichar_string().string(),
-                              ' ')) == word->best_choice->length()) {
-    word->tess_failed = true;
-    word->reject_map.initialise(word->box_word->length());
-    word->reject_map.rej_word_tess_failure();
-  } else {
-    word->tess_failed = false;
+    Compact('[0]', '[1000000]');
   }
 }
+    
+    // Return the name of the old info log file for 'dbname'.
+std::string OldInfoLogFileName(const std::string& dbname);
+    
+      // Successful parses
+  static struct {
+    const char* fname;
+    uint64_t number;
+    FileType type;
+  } cases[] = {
+    { '100.log',            100,   kLogFile },
+    { '0.log',              0,     kLogFile },
+    { '0.sst',              0,     kTableFile },
+    { '0.ldb',              0,     kTableFile },
+    { 'CURRENT',            0,     kCurrentFile },
+    { 'LOCK',               0,     kDBLockFile },
+    { 'MANIFEST-2',         2,     kDescriptorFile },
+    { 'MANIFEST-7',         7,     kDescriptorFile },
+    { 'LOG',                0,     kInfoLogFile },
+    { 'LOG.old',            0,     kInfoLogFile },
+    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
+  };
+  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+    std::string f = cases[i].fname;
+    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
+    ASSERT_EQ(cases[i].type, type) << f;
+    ASSERT_EQ(cases[i].number, number) << f;
+  }
+    
+        switch (record_type) {
+      case kFullType:
+        if (in_fragmented_record) {
+          // Handle bug in earlier versions of log::Writer where
+          // it could emit an empty kFirstType record at the tail end
+          // of a block followed by a kFullType or kFirstType record
+          // at the beginning of the next block.
+          if (!scratch->empty()) {
+            ReportCorruption(scratch->size(), 'partial record without end(1)');
+          }
+        }
+        prospective_record_offset = physical_record_offset;
+        scratch->clear();
+        *record = fragment;
+        last_record_offset_ = prospective_record_offset;
+        return true;
     }
     
-    namespace {
-void readBytes(BufferedFile& fp, unsigned char* buf, size_t buflen,
-               size_t readlen)
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+
+    
+      // Our data structure does not allow duplicate insertion
+  assert(x == nullptr || !Equal(key, x->key));
+    
+      DHTRegistry();
+    
+    void DHTReplaceNodeTask::sendMessage()
 {
-  assert(readlen <= buflen);
-  READ_CHECK(fp, buf, readlen);
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
+  }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
 }
-} // namespace
     
-      // number of nodes
-  uint32_t numNodes = htonl(nodes_.size());
-  WRITE_CHECK(fp, &numNodes, sizeof(uint32_t));
-  // 4bytes reserved
-  WRITE_CHECK(fp, zero, 4);
     
-    class DHTRoutingTableSerializer {
-private:
-  int family_;
+    {} // namespace aria2
+
+    
+    bool DHTRoutingTable::addGoodNode(const std::shared_ptr<DHTNode>& node)
+{
+  return addNode(node, true);
+}
+    
+      bool addNode(const std::shared_ptr<DHTNode>& node, bool good);
+    
+    class DHTSetup {
+public:
+  DHTSetup();
     }
     
-      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    #endif // D_DHT_TASK_H
+
+    
+    
+    {} // namespace aria2
     
       virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
+  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                 int numRetry = 0) CXX11_OVERRIDE;
     
-      virtual ~DHTTaskQueueImpl();
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+    void DHTTaskQueueImpl::executeTask()
 {
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
 }
     
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
-
-    
-    void DHTUnknownMessage::doReceivedAction() {}
+      virtual void executeTask() CXX11_OVERRIDE;
     
     public:
-  // _remoteNode is always null
-  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                    const unsigned char* data, size_t length,
-                    const std::string& ipaddr, uint16_t port);
+  DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                        std::chrono::seconds interval);
