@@ -1,173 +1,216 @@
 
         
-        // Like ASSERT_DEATH, but continues on to successive tests in the
-// test case, if any:
-# define EXPECT_DEATH(statement, regex) \
-    EXPECT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47>
-internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-    T44, T45, T46, T47> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
-    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
-    T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39,
-    T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47) {
-  return internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41, T42, T43, T44, T45, T46, T47>(v1, v2, v3, v4, v5, v6, v7, v8,
-      v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
-      v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37,
-      v38, v39, v40, v41, v42, v43, v44, v45, v46, v47);
+        static int secp256k1_gej_eq_x_var(const secp256k1_fe *x, const secp256k1_gej *a) {
+    secp256k1_fe r, r2;
+    VERIFY_CHECK(!a->infinity);
+    secp256k1_fe_sqr(&r, &a->z); secp256k1_fe_mul(&r, &r, x);
+    r2 = a->x; secp256k1_fe_normalize_weak(&r2);
+    return secp256k1_fe_equal_var(&r, &r2);
 }
     
-      // C'tor.  TestPartResult does NOT have a default constructor.
-  // Always use this constructor (with parameters) to create a
-  // TestPartResult object.
-  TestPartResult(Type a_type,
-                 const char* a_file_name,
-                 int a_line_number,
-                 const char* a_message)
-      : type_(a_type),
-        file_name_(a_file_name == NULL ? '' : a_file_name),
-        line_number_(a_line_number),
-        summary_(ExtractSummary(a_message)),
-        message_(a_message) {
+        secp256k1_pubkey_load(ctx, &pt, point);
+    secp256k1_scalar_set_b32(&s, scalar, &overflow);
+    if (overflow || secp256k1_scalar_is_zero(&s)) {
+        ret = 0;
+    } else {
+        unsigned char x[32];
+        unsigned char y[1];
+        secp256k1_sha256_t sha;
+    }
+    
+    
+    {    /* Try to multiply it by bad values */
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_zero) == 0);
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 0);
+    /* ...and a good one */
+    s_overflow[31] -= 1;
+    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 1);
+}
+    
+    
+    {    /* Serialize/parse compact and verify/recover. */
+    extra[0] = 0;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign(ctx, &signature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[4], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[1], message, privkey, NULL, extra) == 1);
+    extra[31] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[2], message, privkey, NULL, extra) == 1);
+    extra[31] = 0;
+    extra[0] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[3], message, privkey, NULL, extra) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(memcmp(&signature[4], &signature[0], 64) == 0);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    memset(&rsignature[4], 0, sizeof(rsignature[4]));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    /* Parse compact (with recovery id) and recover. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 1);
+    CHECK(memcmp(&pubkey, &recpubkey, sizeof(pubkey)) == 0);
+    /* Serialize/destroy/parse signature and verify again. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    sig[secp256k1_rand_bits(6)] += 1 + secp256k1_rand_int(255);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 0);
+    /* Recover again */
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 0 ||
+          memcmp(&pubkey, &recpubkey, sizeof(pubkey)) != 0);
+}
+    
+    
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
+}
+}
+    
+        std::map<std::string, UniValue::VType> objTypes;
+    objTypes['age'] = UniValue::VNUM;
+    objTypes['first'] = UniValue::VSTR;
+    objTypes['last'] = UniValue::VSTR;
+    objTypes['distance'] = UniValue::VNUM;
+    objTypes['time'] = UniValue::VNUM;
+    objTypes['calories'] = UniValue::VNUM;
+    objTypes['temperature'] = UniValue::VNUM;
+    objTypes['moon'] = UniValue::VBOOL;
+    objTypes['spoon'] = UniValue::VBOOL;
+    objTypes['cat1'] = UniValue::VNUM;
+    objTypes['cat2'] = UniValue::VNUM;
+    BOOST_CHECK(obj.checkObject(objTypes));
+    
+    #include 'err.h'
+#include 'socket.h'
+    
+    class GetMergeSingleScalarFeatureTensorsGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    vector<string> input_blob_names{};
+    vector<string> output_blob_names{};
+    }
+    }
+    
+    namespace caffe2 {
+namespace {
+REGISTER_CPU_OPERATOR(
+    FindDuplicateElements,
+    FindDuplicateElementsOp<CPUContext>);
+    }
+    }
+    
+    
+    {  bool RunOnDevice() override;
+};
+    
+    Contrast Example 2 with Example 1. For each data point per feature, the values
+are sorted by the corresponding KEY.
+)DOC')
+    .Input(0, 'DATA', 'Tensor of rank 1.')
+    .Input(
+        1,
+        'RANGES',
+        'Tensor of int32/int64 ranges, of dims (N, M, 2). '
+        'Where N is number of examples and M is a size of each example. '
+        'Last dimention represents a range in the format (start, lengths)')
+    .Input(2, 'KEY', 'Tensor of rank 1 and type int64.')
+    .Output(0, 'OUTPUT', '1-D tensor of size sum of range lengths')
+    .Arg('lengths', 'Expected lengths for ranges')
+    .TensorInferenceFunction([](const OperatorDef& def,
+                                const vector<TensorShape>& in) {
+      ArgumentHelper helper(def);
+      auto lengths = helper.GetRepeatedArgument<int>('lengths');
+      CAFFE_ENFORCE_EQ(in[0].dims_size(), 1, 'DATA should be 1-D tensor.');
+      CAFFE_ENFORCE_EQ(in[1].dims_size(), 3, 'RANGES should be 3-D tensor.');
+      if (in.size() > 2) {
+        CAFFE_ENFORCE_EQ(in[2].dims_size(), 1, 'KEY should be 1-D tensor.');
+      }
+      CAFFE_ENFORCE_GT(lengths.size(), 0, 'lengths should be non-empty.');
+      std::vector<TensorShape> out(lengths.size());
+      for (int i = 0; i < lengths.size(); ++i) {
+        out[i].set_data_type(in[0].data_type());
+        out[i].add_dims(in[1].dims(0));
+        out[i].add_dims(lengths[i]);
+      }
+      return out;
+    });
+    
+    
+    {          return out;
+        });
+OPERATOR_SCHEMA(Float16ConstantFill)
+    .NumInputs(0)
+    .NumOutputs(1)
+    .TensorInferenceFunction(Float16FillerTensorInference)
+    .Arg('value', 'The value for the elements of the output tensor.')
+    .Arg('shape', 'The shape of the output tensor.')
+    .Output(
+        0,
+        'output',
+        'Output tensor of constant values specified by 'value'');
+    
+    CallCredentials::~CallCredentials() {}
+    
+    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
+  if (property_ == nullptr || rhs.property_ == nullptr) {
+    return property_ == rhs.property_;
+  } else {
+    return index_ == rhs.index_;
+  }
+}
+    
+    Status ProtoServerReflection::GetFileContainingSymbol(
+    ServerContext* context, const grpc::string& symbol,
+    ServerReflectionResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
+    }
+    
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
+    
+    class DeleteFilter : public CompactionFilter {
+ public:
+  virtual bool Filter(int /*level*/, const Slice& /*key*/,
+                      const Slice& /*value*/, std::string* /*new_value*/,
+                      bool* /*value_changed*/) const override {
+    cfilter_count++;
+    return true;
+  }
+    }
+    
+      virtual Status GetChildren(const std::string& dir,
+                             std::vector<std::string>* result) override {
+    auto status_and_enc_path = EncodePath(dir);
+    if (!status_and_enc_path.first.ok()) {
+      return status_and_enc_path.first;
+    }
+    return EnvWrapper::GetChildren(status_and_enc_path.second, result);
   }
     
-    // This flags control whether Google Test prints the elapsed time for each
-// test.
-GTEST_DECLARE_bool_(print_time);
+      // drop column family
+  s = db->DropColumnFamily(handles[1]);
+  assert(s.ok());
     
-      // A helper class that aborts a death test when it's deleted.
-  class ReturnSentinel {
-   public:
-    explicit ReturnSentinel(DeathTest* test) : test_(test) { }
-    ~ReturnSentinel() { test_->Abort(TEST_ENCOUNTERED_RETURN_STATEMENT); }
-   private:
-    DeathTest* const test_;
-    GTEST_DISALLOW_COPY_AND_ASSIGN_(ReturnSentinel);
-  } GTEST_ATTRIBUTE_UNUSED_;
-    
-    // Tests factorial of positive numbers.
-TEST(FactorialTest, Positive) {
-  EXPECT_EQ(1, Factorial(1));
-  EXPECT_EQ(2, Factorial(2));
-  EXPECT_EQ(6, Factorial(3));
-  EXPECT_EQ(40320, Factorial(8));
-}
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
-
-    
-        for (ssize_t i = 1; i < reverse->count(); ++i)
-    {
-        Vec2 current = reverse->getControlPointAtIndex(i);
-        current = -current;
-        Vec2 abs = current + p;
-        reverse->replaceControlPoint(abs, i);
-    }
-    
-    
-Ripple3D* Ripple3D::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) Ripple3D();
-    a->initWithDuration(_duration, _gridSize, _position, _radius, _waves, _amplitude);
-    a->autorelease();
-    return a;
-}
-    
-    FlipX* FlipX::reverse() const
-{
-    return FlipX::create(!_flipX);
-}
-    
-    Repeat* Repeat::create(FiniteTimeAction *action, unsigned int times)
-{
-    Repeat* repeat = new (std::nothrow) Repeat();
-    if (repeat && repeat->initWithAction(action, times))
-    {
-        repeat->autorelease();
-        return repeat;
-    }
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
-#define __ACTION_CCPAGETURN3D_ACTION_H__
-    
-    ProgressTo* ProgressTo::clone() const
-{
-    // no copy constructor
-    return ProgressTo::create(_duration, _to);
-}
-    
-        /** 
-    * @brief Initializes the action with grid size, random seed and duration.
-    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @param seed Specify the random seed.
-    * @return If the Initialization success, return true; otherwise, return false.
-    */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
-    
-        /** array of AnimationFrames. */
-    Vector<AnimationFrame*> _frames;
-    
-    
-// AtlasNode - Atlas generation
-    
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-namespace atomics {
-namespace detail {
-    }
-    }
-    }
-    
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-namespace atomics {
-namespace detail {
-    }
-    }
-    }
-    
-    #if defined(BOOST_HAS_INT128)
-    
-    #if BOOST_ATOMIC_THREAD_FENCE > 0
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::thread_fence(order);
-}
-#else
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::thread_fence();
-}
-#endif
+      // Read a key using the snapshot
+  read_options.snapshot = snapshot;
+  s = txn->GetForUpdate(read_options, 'abc', &value);
+  assert(value == 'def');
