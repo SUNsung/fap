@@ -1,418 +1,360 @@
 
         
-        class GenPythonOp {
- public:
-  GenPythonOp(const OpDef& op_def, const ApiDef& api_def,
-              const string& function_name);
-  virtual ~GenPythonOp();
-    }
+        #include 'atom/app/command_line_args.h'
     
     
-    {  if (PyBfloat16_Check(arg)) {
-    Py_INCREF(arg);
-    return arg;
-  } else {
-    bfloat16 value;
-    if (!AsBfloat16(arg, &value)) {
-      return nullptr;
+    {}  // namespace api
+    
+    scoped_refptr<TracingController::TraceDataEndpoint> GetTraceDataEndpoint(
+    const base::FilePath& path,
+    const CompletionCallback& callback) {
+  base::FilePath result_file_path = path;
+  if (result_file_path.empty() && !base::CreateTemporaryFile(&result_file_path))
+    LOG(ERROR) << 'Creating temporary file failed';
     }
-    return PyBfloat16_FromBfloat16(value).release();
+    
+    template <>
+struct Converter<file_dialog::DialogSettings> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     file_dialog::DialogSettings* out) {
+    mate::Dictionary dict;
+    if (!ConvertFromV8(isolate, val, &dict))
+      return false;
+    dict.Get('window', &(out->parent_window));
+    dict.Get('title', &(out->title));
+    dict.Get('message', &(out->message));
+    dict.Get('buttonLabel', &(out->button_label));
+    dict.Get('nameFieldLabel', &(out->name_field_label));
+    dict.Get('defaultPath', &(out->default_path));
+    dict.Get('filters', &(out->filters));
+    dict.Get('properties', &(out->properties));
+    dict.Get('showsTagField', &(out->shows_tag_field));
+#if defined(MAS_BUILD)
+    dict.Get('securityScopedBookmarks', &(out->security_scoped_bookmarks));
+#endif
+    return true;
   }
-}
-    
-    namespace tensorflow {
-    }
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
-}
-    
-    // A wrapper around io::RecordReader that is more easily SWIG wrapped for
-// Python.  An instance of this class is not safe for concurrent access
-// by multiple threads.
-class PyRecordReader {
- public:
-  // TODO(vrv): make this take a shared proto to configure
-  // the compression options.
-  static PyRecordReader* New(const string& filename, uint64 start_offset,
-                             const string& compression_type_string,
-                             TF_Status* out_status);
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  return PlatformKind::none;
-}
-
-    
-    void
-SyntaxASTMap::recordSyntaxMapping(RC<syntax::SyntaxData> FromNode,
-                                  ASTNode ToNode) {
-  if (FromNode->getKind() == SyntaxKind::Unknown) {
-    return;
-  }
-    }
-    
-    
-    {  // All of these cases initialize 'length' chunks in newData.
-  switch (auto length = getLengthInChunks()) {
-  case 0:
-    break;
-  case 1:
-    newData[0] = oldDataValue;
-    break;
-  default:
-    assert(oldDataValue == 0 && 'not previously in inline-and-all-clear?');
-    memset(newData, 0, length * sizeof(ChunkType));
-    break;
-  }
-}
-    
-    void CacheImpl::releaseValue(void *Value) {
-  cache_release_value(static_cast<cache_t*>(Impl), Value);
-}
-    
-      // Set the 'os' platform condition.
-  if (Target.isMacOSX())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'OSX');
-  else if (Target.isTvOS())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'tvOS');
-  else if (Target.isWatchOS())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'watchOS');
-  else if (Target.isiOS())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'iOS');
-  else if (Target.isAndroid())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'Android');
-  else if (Target.isOSLinux())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'Linux');
-  else if (Target.isOSFreeBSD())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'FreeBSD');
-  else if (Target.isOSWindows())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'Windows');
-  else if (Target.isWindowsCygwinEnvironment())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'Cygwin');
-  else if (Target.isPS4())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'PS4');
-  else if (Target.isOSHaiku())
-    addPlatformConditionValue(PlatformConditionKind::OS, 'Haiku');
-  else
-    UnsupportedOS = true;
-    
-        // Special case: if the word in the name ends in 's', and we have
-    // a collection element type, see if this is a plural.
-    if (!typeName.CollectionElement.empty() && nameWord.size() > 2 &&
-        nameWord.back() == 's' && role != NameRole::BaseNameSelf) {
-      // Check <element name>s.
-      auto shortenedNameWord
-        = name.substr(0, nameWordRevIter.base().getPosition()-1);
-      auto newShortenedNameWord
-        = omitNeedlessWords(shortenedNameWord, typeName.CollectionElement,
-                            NameRole::Partial, allPropertyNames, scratch);
-      if (shortenedNameWord == newShortenedNameWord &&
-          shortenedNameWord.back() == 'e') {
-        (void)shortenedNameWord.drop_back();
-        newShortenedNameWord =
-          omitNeedlessWords(shortenedNameWord, typeName.CollectionElement,
-                            NameRole::Partial, allPropertyNames, scratch);
-      }
-    }
-    
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    }
-    
-    void run_ecdh_tests(void) {
-    test_ecdh_api();
-    test_ecdh_generator_basepoint();
-    test_bad_scalar();
-}
-    
-    #include <boost/test/unit_test.hpp>
-    
-    // Verify that difficulty is 1.0 for an empty chain.
-BOOST_AUTO_TEST_CASE(get_difficulty_for_null_tip)
-{
-    double difficulty = GetDifficulty(nullptr);
-    RejectDifficultyMismatch(difficulty, 1.0);
-}
-    
-    namespace detail {
-    }
-    
-    
-    {bool ParseDouble(const std::string& str, double *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
-        return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
-}
-}
-    
-    /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
- */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-    }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    
-    {  // Any views left are views that don't exist in the new configuration file
-  // so we tear them down and remove them from the database.
-  for (const auto& old_view : erase_views) {
-    osquery::query('DROP VIEW ' + old_view, r);
-    deleteDatabaseValue(kQueries, kConfigViews + old_view);
-  }
-  return Status(0, 'OK');
-}
-    
-    /// Unlike checkChildProcessStatus, this will block until process exits.
-static bool getProcessExitCode(osquery::PlatformProcess& process,
-                               int& exitCode) {
-  if (!process.isValid()) {
-    return false;
-  }
-    }
-    
-      /// Allow other parts of the codebase to check worker state.
-  bool isWorkerValid() const {
-    WriteLock lock(worker_mutex_);
-    return worker_->isValid();
-  }
-    
-      // Get the pathname the watch fired on.
-  {
-    WriteLock lock(path_mutex_);
-    if (descriptor_inosubctx_.find(event->wd) == descriptor_inosubctx_.end()) {
-      // return a blank event context if we can't find the paths for the event
-      return ec;
-    } else {
-      auto isc = descriptor_inosubctx_.at(event->wd);
-      ec->path = isc->descriptor_paths_.at(event->wd);
-      ec->isub_ctx = isc;
-    }
-  }
-    
-    DHTResponseMessage::DHTResponseMessage(
-    const std::shared_ptr<DHTNode>& localNode,
-    const std::shared_ptr<DHTNode>& remoteNode,
-    const std::string& transactionID)
-    : DHTAbstractMessage(localNode, remoteNode, transactionID)
-{
-}
-    
-    class DHTRoutingTableDeserializer {
-private:
-  int family_;
-    }
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
-{
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
-  }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
-}
-    
-      // do nothing
-  virtual void doReceivedAction() CXX11_OVERRIDE;
-    
-    
-    {  void remove(const std::string& hostname, uint16_t port);
 };
     
-      static const struct ERR2STR err2str[] = {
-      {NTCAN_SUCCESS, 'NTCAN_SUCCESS'},
-      {NTCAN_RX_TIMEOUT, 'NTCAN_RX_TIMEOUT'},
-      {NTCAN_TX_TIMEOUT, 'NTCAN_TX_TIMEOUT'},
-      {NTCAN_TX_ERROR, 'NTCAN_TX_ERROR'},
-      {NTCAN_CONTR_OFF_BUS, 'NTCAN_CONTR_OFF_BUS'},
-      {NTCAN_CONTR_BUSY, 'NTCAN_CONTR_BUSY'},
-      {NTCAN_CONTR_WARN, 'NTCAN_CONTR_WARN'},
-      {NTCAN_NO_ID_ENABLED, 'NTCAN_NO_ID_ENABLED'},
-      {NTCAN_ID_ALREADY_ENABLED, 'NTCAN_ID_ALREADY_ENABLED'},
-      {NTCAN_ID_NOT_ENABLED, 'NTCAN_ID_NOT_ENABLED'},
-      {NTCAN_INVALID_FIRMWARE, 'NTCAN_INVALID_FIRMWARE'},
-      {NTCAN_MESSAGE_LOST, 'NTCAN_MESSAGE_LOST'},
-      {NTCAN_INVALID_PARAMETER, 'NTCAN_INVALID_PARAMETER'},
-      {NTCAN_INVALID_HANDLE, 'NTCAN_INVALID_HANDLE'},
-      {NTCAN_NET_NOT_FOUND, 'NTCAN_NET_NOT_FOUND'},
-#ifdef NTCAN_IO_INCOMPLETE
-      {NTCAN_IO_INCOMPLETE, 'NTCAN_IO_INCOMPLETE'},
-#endif
-#ifdef NTCAN_IO_PENDING
-      {NTCAN_IO_PENDING, 'NTCAN_IO_PENDING'},
-#endif
-#ifdef NTCAN_INVALID_HARDWARE
-      {NTCAN_INVALID_HARDWARE, 'NTCAN_INVALID_HARDWARE'},
-#endif
-#ifdef NTCAN_PENDING_WRITE
-      {NTCAN_PENDING_WRITE, 'NTCAN_PENDING_WRITE'},
-#endif
-#ifdef NTCAN_PENDING_READ
-      {NTCAN_PENDING_READ, 'NTCAN_PENDING_READ'},
-#endif
-#ifdef NTCAN_INVALID_DRIVER
-      {NTCAN_INVALID_DRIVER, 'NTCAN_INVALID_DRIVER'},
-#endif
-#ifdef NTCAN_OPERATION_ABORTED
-      {NTCAN_OPERATION_ABORTED, 'NTCAN_OPERATION_ABORTED'},
-#endif
-#ifdef NTCAN_WRONG_DEVICE_STATE
-      {NTCAN_WRONG_DEVICE_STATE, 'NTCAN_WRONG_DEVICE_STATE'},
-#endif
-      {NTCAN_INSUFFICIENT_RESOURCES, 'NTCAN_INSUFFICIENT_RESOURCES'},
-#ifdef NTCAN_HANDLE_FORCED_CLOSE
-      {NTCAN_HANDLE_FORCED_CLOSE, 'NTCAN_HANDLE_FORCED_CLOSE'},
-#endif
-#ifdef NTCAN_NOT_IMPLEMENTED
-      {NTCAN_NOT_IMPLEMENTED, 'NTCAN_NOT_IMPLEMENTED'},
-#endif
-#ifdef NTCAN_NOT_SUPPORTED
-      {NTCAN_NOT_SUPPORTED, 'NTCAN_NOT_SUPPORTED'},
-#endif
-#ifdef NTCAN_SOCK_CONN_TIMEOUT
-      {NTCAN_SOCK_CONN_TIMEOUT, 'NTCAN_SOCK_CONN_TIMEOUT'},
-#endif
-#ifdef NTCAN_SOCK_CMD_TIMEOUT
-      {NTCAN_SOCK_CMD_TIMEOUT, 'NTCAN_SOCK_CMD_TIMEOUT'},
-#endif
-#ifdef NTCAN_SOCK_HOST_NOT_FOUND
-      {NTCAN_SOCK_HOST_NOT_FOUND, 'NTCAN_SOCK_HOST_NOT_FOUND'},
-#endif
-#ifdef NTCAN_CONTR_ERR_PASSIVE
-      {NTCAN_CONTR_ERR_PASSIVE, 'NTCAN_CONTR_ERR_PASSIVE'},
-#endif
-#ifdef NTCAN_ERROR_NO_BAUDRATE
-      {NTCAN_ERROR_NO_BAUDRATE, 'NTCAN_ERROR_NO_BAUDRATE'},
-#endif
-#ifdef NTCAN_ERROR_LOM
-      {NTCAN_ERROR_LOM, 'NTCAN_ERROR_LOM'},
-#endif
-      {(NTCAN_RESULT)0xffffffff, 'NTCAN_UNKNOWN'} /* stop-mark */
-  };
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    #include 'modules/drivers/canbus/can_client/hermes_can/bcan.h'
-/**
- * @namespace apollo::drivers::canbus::can
- * @brief apollo::drivers::canbus::can
- */
-    
-    
-    {    // Synchronous transmission of CAN messages
-    int ret = write(dev_handler_, &send_frames_[i], sizeof(send_frames_[i]));
-    if (ret <= 0) {
-      AERROR << 'send message failed, error code: ' << ret;
-      return ErrorCode::CAN_CLIENT_ERROR_BASE;
-    }
-  }
-    
-    
-    {  SocketCanClientRaw socket_can_client;
-  EXPECT_TRUE(socket_can_client.Init(param));
-  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(socket_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  socket_can_client.Stop();
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary(isolate, exports)
+      .Set('DownloadItem',
+           atom::api::DownloadItem::GetConstructor(isolate)->GetFunction());
 }
     
     
+    {}  // namespace
+    
+    
+    {}  // namespace api
+    
+    
+    {  delegate.Get('isCommandIdChecked', &is_checked_);
+  delegate.Get('isCommandIdEnabled', &is_enabled_);
+  delegate.Get('isCommandIdVisible', &is_visible_);
+  delegate.Get('getAcceleratorForCommandId', &get_accelerator_);
+  delegate.Get('executeCommand', &execute_command_);
+  delegate.Get('menuWillShow', &menu_will_show_);
+}
+    
+    // static
+void PowerMonitor::BuildPrototype(v8::Isolate* isolate,
+                                  v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'PowerMonitor'));
+    }
+    
+     protected:
+  RenderProcessPreferences(
+      v8::Isolate* isolate,
+      const atom::RenderProcessPreferences::Predicate& predicate);
+  ~RenderProcessPreferences() override;
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_SCREEN_H_
+#define ATOM_BROWSER_API_ATOM_API_SCREEN_H_
+    
+    class WebRequest : public mate::TrackableObject<WebRequest> {
+ public:
+  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
+                                         AtomBrowserContext* browser_context);
+    }
+    
+    
+    {        auto maskMatrix = GetMatrix();
+        size_t rowOffset = offset[0];
+        size_t colOffset = offset[1];
+        size_t sliceRowLength = (shape[0] != NDShape::InferredDimension) ? shape[0] : (maskMatrix->GetNumRows() - rowOffset);
+        size_t sliceColLength = (shape[1] != NDShape::InferredDimension) ? shape[1] : (maskMatrix->GetNumCols() - colOffset);
+        if ((rowOffset == 0) && (sliceRowLength == maskMatrix->GetNumRows()))
+            maskMatrix->ColumnSlice(colOffset, sliceColLength).SetValue((char)maskKind);
+        else
+        {
+            // Since Matrix does not support strides in the row dimension, we will need to create separate slices for each column
+            for (size_t i = colOffset; i < (colOffset + sliceColLength); ++i)
+            {
+                auto column = maskMatrix->ColumnSlice(i, 1);
+                column.Reshape(1, maskMatrix->GetNumRows());
+                column.ColumnSlice(rowOffset, sliceRowLength).SetValue((char)maskKind);
+            }
+        }
+    }
+    
+        ProgressWriter::ProgressWriter(size_t trainingUpdateWriteFrequency, size_t trainingFirstUpdatesToWrite,
+                                   size_t testUpdateWriteFrequency, size_t testFirstUpdatesToWrite,
+                                   size_t distributedSyncUpdateWriteFrequency, size_t distributedSyncFirstUpdatesToWrite)
+        : m_training(std::make_unique<Impl>(trainingUpdateWriteFrequency, trainingFirstUpdatesToWrite)),
+        m_test(std::make_unique<Impl>(testUpdateWriteFrequency, testFirstUpdatesToWrite)),
+        m_distributedSync(std::make_unique<Impl>(distributedSyncUpdateWriteFrequency, distributedSyncFirstUpdatesToWrite))
     {
+    }
+    
+        ParameterInitializer ConstantInitializer(double value)
     {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+        Dictionary initConfig;
+        initConfig[InitializerTypeAttributeName] = Microsoft::MSR::CNTK::ConstantInitializerTypeName;
+        initConfig[ValueAttributeName] = value;
+        return initConfig;
+    }
+    
+    #include <functional>
+#include <stdexcept>
+    
+    template <class ElemType>
+class InputValue : public InputValueBase<ElemType>, public IdentityTransformerNode
+{
+    typedef InputValueBase<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'InputValue'; }
+    }
+    
+      Status status;
+  if (c == nullptr) {
+    // Nothing to do
+  } else if (!is_manual && c->IsTrivialMove()) {
+    // Move file to next level
+    assert(c->num_input_files(0) == 1);
+    FileMetaData* f = c->input(0, 0);
+    c->edit()->DeleteFile(c->level(), f->number);
+    c->edit()->AddFile(c->level() + 1, f->number, f->file_size,
+                       f->smallest, f->largest);
+    status = versions_->LogAndApply(c->edit(), &mutex_);
+    if (!status.ok()) {
+      RecordBackgroundError(status);
+    }
+    VersionSet::LevelSummaryStorage tmp;
+    Log(options_.info_log, 'Moved #%lld to level-%d %lld bytes %s: %s\n',
+        static_cast<unsigned long long>(f->number),
+        c->level() + 1,
+        static_cast<unsigned long long>(f->file_size),
+        status.ToString().c_str(),
+        versions_->LevelSummary(&tmp));
+  } else {
+    CompactionState* compact = new CompactionState(c);
+    status = DoCompactionWork(compact);
+    if (!status.ok()) {
+      RecordBackgroundError(status);
+    }
+    CleanupCompaction(compact);
+    c->ReleaseInputs();
+    DeleteObsoleteFiles();
+  }
+  delete c;
+    
+    std::string TempFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'dbtmp');
+}
+    
+    TEST(LogTest, OpenForAppend) {
+  Write('hello');
+  ReopenForAppend();
+  Write('world');
+  ASSERT_EQ('hello', Read());
+  ASSERT_EQ('world', Read());
+  ASSERT_EQ('EOF', Read());
+}
+    
+    #include 'db/memtable.h'
+#include 'db/dbformat.h'
+#include 'leveldb/comparator.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'util/coding.h'
+    
+      KeyComparator comparator_;
+  int refs_;
+  Arena arena_;
+  Table table_;
+    
+    
+    {    return stb__out - out;
+}
 
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
+        {
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplAllegro5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                ImGui_ImplAllegro5_CreateDeviceObjects();
+            }
+        }
+    }
+    
+    int main(int argc, char** argv)
+{ 
+    // Create GLUT window
+    glutInit(&argc, argv);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+    glutInitWindowSize(1280, 720);
+    glutCreateWindow('Dear ImGui FreeGLUT+OpenGL2 Example');
+    }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Render command lists
+    int vtx_offset = 0;
+    int idx_offset = 0;
+    ImVec2 pos = draw_data->DisplayPos;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                // User callback (registered via ImDrawList::AddCallback)
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                // Apply scissor/clipping rectangle
+                const D3D10_RECT r = { (LONG)(pcmd->ClipRect.x - pos.x), (LONG)(pcmd->ClipRect.y - pos.y), (LONG)(pcmd->ClipRect.z - pos.x), (LONG)(pcmd->ClipRect.w - pos.y)};
+                ctx->RSSetScissorRects(1, &r);
     }
     }
     }
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized
+    if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
+        return;
+    }
+    
+    
+    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    state.SetBytesProcessed(state.iterations() * file.tellg());
+}
+BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
+BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
+BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
+BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
+BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
+BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
+BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
+    
+    // That gcc wants both of these prototypes seems mysterious. VC, for
+// its part, can't decide which to use (another mystery). Matching of
+// template overloads: the final frontier.
+#ifndef COMPILER_MSVC
+template <typename T, size_t N>
+char (&ArraySizeHelper(const T (&array)[N]))[N];
+#endif
+    
+      va_end(args_cp);
+    
+    #include 'benchmark/benchmark.h'
+    
+      if (result.error_occurred) {
+    printer(Out, COLOR_RED, 'ERROR OCCURRED: \'%s\'',
+            result.error_message.c_str());
+    printer(Out, COLOR_DEFAULT, '\n');
+    return;
+  }
+  // Format bytes per second
+  std::string rate;
+  if (result.bytes_per_second > 0) {
+    rate = StrCat(' ', HumanReadableNumber(result.bytes_per_second), 'B/s');
+  }
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
+  }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
+    
+    #if defined(BENCHMARK_OS_MACOSX)
+#include <mach/mach_time.h>
+#endif
+// For MSVC, we want to use '_asm rdtsc' when possible (since it works
+// with even ancient MSVC compilers), and when not possible the
+// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
+// environments, <windows.h> and <intrin.h> have conflicting
+// declarations of some other intrinsics, breaking compilation.
+// Therefore, we simply declare __rdtsc ourselves. See also
+// http://connect.microsoft.com/VisualStudio/feedback/details/262047
+#if defined(COMPILER_MSVC) && !defined(_M_IX86)
+extern 'C' uint64_t __rdtsc();
+#pragma intrinsic(__rdtsc)
+#endif
+    
+      out << indent << '\'caches\': [\n';
+  indent = std::string(6, ' ');
+  std::string cache_indent(8, ' ');
+  for (size_t i = 0; i < info.caches.size(); ++i) {
+    auto& CI = info.caches[i];
+    out << indent << '{\n';
+    out << cache_indent << FormatKV('type', CI.type) << ',\n';
+    out << cache_indent << FormatKV('level', static_cast<int64_t>(CI.level))
+        << ',\n';
+    out << cache_indent
+        << FormatKV('size', static_cast<int64_t>(CI.size) * 1000u) << ',\n';
+    out << cache_indent
+        << FormatKV('num_sharing', static_cast<int64_t>(CI.num_sharing))
+        << '\n';
+    out << indent << '}';
+    if (i != info.caches.size() - 1) out << ',';
+    out << '\n';
+  }
+  indent = std::string(4, ' ');
+  out << indent << '],\n';
+    
+    
+    {    return false;
+  }
