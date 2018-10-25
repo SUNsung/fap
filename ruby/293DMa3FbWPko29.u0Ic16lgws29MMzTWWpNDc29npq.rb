@@ -1,39 +1,41 @@
 
         
-            it 'accepts one hash parameter without braces and with one hash value' do
-      expect_no_offenses('where(x: { 'y' => 'z' })')
-    end
+        group :test do
+  gem 'omniauth-facebook'
+  gem 'omniauth-openid'
+  gem 'webrat', '0.7.3', require: false
+  gem 'mocha', '~> 1.1', require: false
+end
     
-          it 'allows closing brace on same line as last multiline element' do
-        expect_no_offenses(construct(true, a, make_multi(multi), false))
-      end
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
     
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
-      end
+      # GET /resource/password/new
+  def new
+    self.resource = resource_class.new
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `def` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `def` nodes within RuboCop.
-    class DefNode < Node
-      include ParameterizedNode
-      include MethodIdentifierPredicates
+      # Email regex used to validate email formats. It asserts that there are no
+  # @ symbols or whitespaces in either the localpart or the domain, and that
+  # there is a single @ symbol separating the localpart and the domain.
+  mattr_accessor :email_regexp
+  @@email_regexp = /\A[^@\s]+@[^@\s]+\z/
     
-          # Returns the branch of the `if` node that gets evaluated when its
-      # condition is truthy.
-      #
-      # @note This is normalized for `unless` nodes.
-      #
-      # @return [Node] the truthy branch node of the `if` node
-      # @return [nil] if the truthy branch is empty
-      def if_branch
-        node_parts[1]
-      end
+    module Devise
+  module Controllers
+    # Those helpers are convenience methods added to ApplicationController.
+    module Helpers
+      extend ActiveSupport::Concern
+      include Devise::Controllers::SignInOut
+      include Devise::Controllers::StoreLocation
     
-              delta(first.key.loc, second.key.loc, alignment)
+              path
         end
+      end
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+  end
