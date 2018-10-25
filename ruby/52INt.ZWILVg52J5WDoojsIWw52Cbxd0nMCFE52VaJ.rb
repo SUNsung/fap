@@ -1,93 +1,79 @@
 
         
-        def bottle_resolve_formula_names(bottle_file)
-  receipt_file_path = bottle_receipt_path bottle_file
-  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
-  name = receipt_file_path.split('/').first
-  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
+                      matches_path?(path, pipeline) &&
+                matches_pattern?(pattern, pipeline)
+            end
+          end
     
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
-  end
+                with_options if: :hash? do
+              validates :config, allowed_keys: ALLOWED_KEYS
     
-      def describe_perl
-    describe_path(which 'perl')
-  end
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
     
-      def print_dir(root)
-    dirs = []
-    remaining_root_files = []
-    other = ''
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos AuthorizationData data
+        # definition.
+        class AuthorizationData < Element
+          # @!attribute elements
+          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
+          #   @option [Integer] :type
+          #   @option [String] :data
+          attr_accessor :elements
     
-      def self.all
-    opoo 'Formula.all is deprecated, use Formula.map instead'
-    map
-  end
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_asn1_msg_type(input)
+            input.value[0].value.to_i
+          end
     
-              builds = scope_relevant.select('count(*)').to_sql
-          created = scope_relevant.created.select('count(*)').to_sql
-          success = scope_relevant.success.select('count(*)').to_sql
-          manual = scope_relevant.manual.select('count(*)').to_sql
-          pending = scope_relevant.pending.select('count(*)').to_sql
-          running = scope_relevant.running.select('count(*)').to_sql
-          skipped = scope_relevant.skipped.select('count(*)').to_sql
-          canceled = scope_relevant.canceled.select('count(*)').to_sql
-          warnings = scope_warnings.select('count(*) > 0').to_sql
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an String
+          #
+          # @param input [String] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
-            class << self
-          def from_image(job)
-            image = Gitlab::Ci::Build::Image.new(job.options[:image])
-            return unless image.valid?
-    
-        require 'cocoapods/command/cache'
-    require 'cocoapods/command/env'
-    require 'cocoapods/command/init'
-    require 'cocoapods/command/install'
-    require 'cocoapods/command/ipc'
-    require 'cocoapods/command/lib'
-    require 'cocoapods/command/list'
-    require 'cocoapods/command/outdated'
-    require 'cocoapods/command/repo'
-    require 'cocoapods/command/setup'
-    require 'cocoapods/command/spec'
-    require 'cocoapods/command/update'
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Given(/^a task which executes as root$/) do
-  TestApp.copy_task_to_test_app('spec/support/tasks/root.rake')
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
 end
     
-          def warn_third_party_scm_must_be_upgraded
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure this custom SCM will work with future versions of Capistrano,
-please upgrade it to a version that uses the new SCM plugin mechanism
-documented here:
+            begin
+          token = decode_token(token)
+        rescue ArgumentError # encoded_masked_token is invalid Base64
+          return false
+        end
     
-            def lvalue(key)
-          key.to_s.chomp('=').to_sym
+          def default_options
+        DEFAULT_OPTIONS
+      end
+    
+              react_and_close(env, body) or [status, headers, body]
+        else
+          [status, headers, body]
         end
       end
-    end
-  end
-end
-
     
-          cache(gist, file, data.body) unless @cache_disabled
-      data.body
-    end
+      subject { described_class.new(lambda {}) }
