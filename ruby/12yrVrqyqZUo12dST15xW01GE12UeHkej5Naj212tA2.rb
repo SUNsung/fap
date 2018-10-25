@@ -1,99 +1,103 @@
 
         
-        class BuildEnvironment
-  def initialize(*settings)
-    @settings = Set.new(*settings)
-  end
+          def dump_build_env(env, f = $stdout)
+    keys = build_env_keys(env)
+    keys -= %w[CC CXX OBJC OBJCXX] if env['CC'] == env['HOMEBREW_CC']
     
-      def zsh_completion_caveats
-    if keg && keg.completion_installed?(:zsh) then <<-EOS.undent
-      zsh completion has been installed to:
-        #{HOMEBREW_PREFIX}/share/zsh/site-functions
-      EOS
-    end
-  end
-    
-          return false unless prune_time
-    
-      def describe_path(path)
-    return 'N/A' if path.nil?
-    realpath = path.realpath
-    if realpath == path
-      path
-    else
-      '#{path} => #{realpath}'
-    end
-  end
-    
-        dirs.each do |d|
-      files = []
-      d.find { |pn| files << pn unless pn.directory? }
-      print_remaining_files files, d
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
     end
     
-      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
-    %w[Caskroom cask],
-    %w[Caskroom versions]
-  ]
-    
-    [
- [Badge::PopularLink, 'Popular Link', BadgeType::Bronze, 50],
- [Badge::HotLink,     'Hot Link',     BadgeType::Silver, 300],
- [Badge::FamousLink,  'Famous Link',  BadgeType::Gold,   1000],
-].each do |id, name, level, count|
-  Badge.seed do |b|
-    b.id = id
-    b.name = name
-    b.badge_type_id = level
-    b.multiple_grant = true
-    b.target_posts = true
-    b.show_posts = true
-    b.query = BadgeQueries.linking_badge(count)
-    b.badge_grouping_id = BadgeGrouping::Posting
-    b.default_badge_grouping_id = BadgeGrouping::Posting
-    # don't trigger for now, its too expensive
-    b.trigger = Badge::Trigger::None
-    b.system = true
-  end
-end
-    
-      smoke_user = User.seed do |u|
-    u.id = 0
-    u.name = 'smoke_user'
-    u.username = 'smoke_user'
-    u.username_lower = 'smoke_user'
-    u.password = 'P4ssw0rd'
-    u.active = true
-    u.approved = true
-    u.approved_at = Time.now
-    u.trust_level = TrustLevel[3]
-  end.first
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
+        def self.rm_DS_Store
+      paths = Queue.new
+      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
+        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
+      workers = (0...Hardware::CPU.cores).map do
+        Thread.new do
+          begin
+            while p = paths.pop(true)
+              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
+            end
+          rescue ThreadError # ignore empty queue error
+          end
         end
+      end
+      workers.map(&:join)
+    end
     
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
+        initial_revision_var = 'HOMEBREW_UPDATE_BEFORE#{repo_var}'
+    @initial_revision = ENV[initial_revision_var].to_s
+    raise ReporterRevisionUnsetError, initial_revision_var if @initial_revision.empty?
     
-    group :test do
-  gem 'minitest'
-  gem 'rr', require: false
-  gem 'rack-test', require: false
+      def self.path(name)
+    Formulary.core_path(name)
+  end
+    
+    # See browser for an example
+class GithubGistFormula < ScriptFileFormula
+  def self.url(val)
+    super
+    version File.basename(File.dirname(val))[0, 6]
+  end
 end
     
+    User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
+end
     
-    def initialize
-      raise NotImplementedError, '#{self.class} is an abstract class and cannot be instantiated.' if self.class.abstract
+              def name
+            value[:name]
+          end
+    
+          open_dry_run_modal(formatting_agent)
+      find('.dry-run-event-sample').click
+      within(:css, '.modal .builder') do
+        expect(page).to have_text('Line 1\nLine 2\nLine 3')
+      end
+      click_on('Dry Run')
+      expect(page).to have_text('Line 1,Line 2,Line 3')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
     end
+  end
+    
+        it 'returns a FontAwesome icon element' do
+      icon = icon_tag('fa-copy')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('i.fa.fa-copy')).to be_a Nokogiri::XML::Element
+    end
+    
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+  end
+end
+
+    
+        it 'for the afternoon' do
+      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
+    end
+  end
+    
+      let :reverted_extract do
+    old_extract
+  end
+    
+    module Docs
+  class EntryIndex
+    attr_reader :entries, :types
     
         def to_json
       JSON.generate(as_json)
@@ -102,82 +106,109 @@ end
 end
 
     
-        def initialize(options = {})
-      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
-      options[:max_concurrency] ||= 20
-      options[:pipelining] = false
+        def html?
+      mime_type.include? 'html'
+    end
+    
+            private
+    
+        def log(msg)
+      puts '\r' + justify(msg)
+    end
+    
+        def relative_path_to(url)
+      url = self.class.parse(url)
+      return unless origin == url.origin
+    
+            css('h1[class]').remove_attr('class')
+        css('table[class]').remove_attr('class')
+        css('table[width]').remove_attr('width')
+        css('tr[style]').remove_attr('style')
+    
+        # See {CapabilityHost#capability}
+    def capability(*args)
       super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
     end
     
-        after :each do
-      ENV['SHELL'] = @shell
-    end
+              # Default opts to a blank optionparser if none is given
+          opts ||= OptionParser.new
     
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
-  end
-    
-        it 'returns the time at which the file was created when passed ?C' do
-      Kernel.test(?C, @tmp_file).should == @tmp_file.ctime
-    end
-    
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
-end
-puts '==================================================='
-
-    
-    if profile_filename = ENV['PROFILE']
-  require 'ruby-prof'
-  reporter =
-    case (profile_extname = File.extname(profile_filename))
-    when '.txt'
-      RubyProf::FlatPrinterWithLineNumbers
-    when '.html'
-      RubyProf::GraphHtmlPrinter
-    when '.callgrind'
-      RubyProf::CallTreePrinter
-    else
-      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
-    end
-  File.open(profile_filename, 'w') do |io|
-    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
-  end
-else
-  Pod::Command.run(ARGV)
-end
-
-    
-        pod 'Alamofire', path: '../Alamofire Example/Alamofire'
-    
-          def content_type
-        case params[:format]
-        when 'json'
-          'application/json; charset=utf-8'
-        when 'xml'
-          'text/xml; charset=utf-8'
-        end
-      end
-    
-              if Spree::Cart::Update.call(order: @order, params: line_items_attributes).success?
-            @line_item.reload
-            respond_with(@line_item, default_template: :show)
-          else
-            invalid_resource!(@line_item)
-          end
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
         end
     
-            def create
-          authorize! :create, Product
-          params[:product][:available_on] ||= Time.current
-          set_up_shipping_category
+      def set_account
+    @account = Account.find_local!(params[:account_username])
+  end
     
-              if @shipment.inventory_units.any?
-            @shipment.reload
-          else
-            @shipment.destroy!
+        def set_account
+      @account = Account.find(params[:account_id])
+      @user = @account.user
+    end
+    
+      private
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
+  end
+    
+      private
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+        if rbenv_prefix = prefix_from_bin('rbenv')
+      prefixes << rbenv_prefix
+    end
+    
+        def self.options
+      [
+        ['--silent', 'Show nothing'],
+      ].concat(super)
+    end
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
           end
+        end
