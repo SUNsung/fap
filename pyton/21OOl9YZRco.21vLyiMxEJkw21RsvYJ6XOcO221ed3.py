@@ -1,105 +1,94 @@
 
         
-        
-def _ctypes_array(c_type, py_array):
-    ar = (c_type * len(py_array))()
-    ar[:] = py_array
-    return ar
+            # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-        else:
-        sys.stdout.write('.')
-    sys.stdout.flush()
+        def __call__(self, x):
+        regularization = 0.
+        if self.l1:
+            regularization += K.sum(self.l1 * K.abs(x))
+        if self.l2:
+            regularization += K.sum(self.l2 * K.square(x))
+        return regularization
     
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
+        model = create_multi_input_model_from(*models)
+    model.compile(loss='categorical_crossentropy', optimizer='sgd')
+    assert len(model.losses) == 8
     
-        def test_format_selection_audio_exts(self):
-        formats = [
-            {'format_id': 'mp3-64', 'ext': 'mp3', 'abr': 64, 'url': 'http://_', 'vcodec': 'none'},
-            {'format_id': 'ogg-64', 'ext': 'ogg', 'abr': 64, 'url': 'http://_', 'vcodec': 'none'},
-            {'format_id': 'aac-64', 'ext': 'aac', 'abr': 64, 'url': 'http://_', 'vcodec': 'none'},
-            {'format_id': 'mp3-32', 'ext': 'mp3', 'abr': 32, 'url': 'http://_', 'vcodec': 'none'},
-            {'format_id': 'aac-32', 'ext': 'aac', 'abr': 32, 'url': 'http://_', 'vcodec': 'none'},
-        ]
+            # On-the-fly setting of symbolic model inputs
+        # (either by using the tensor provided,
+        # or by creating a placeholder if Numpy data was provided).
+        self.inputs = []
+        self.input_names = []
+        self._feed_inputs = []
+        self._feed_input_names = []
+        self._feed_input_shapes = []
+        inputs = to_list(inputs, allow_tuple=True)
     
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
-    
-    
-@pytest.mark.parametrize('path', (
-    '/create',
-    '/1/update',
-    '/1/delete',
-))
-def test_login_required(client, path):
-    response = client.post(path)
-    assert response.headers['Location'] == 'http://localhost/auth/login'
-    
-        def before_app_request(self, f):
-        '''Like :meth:`Flask.before_request`.  Such a function is executed
-        before each request, even if outside of a blueprint.
-        '''
-        self.record_once(lambda s: s.app.before_request_funcs
-            .setdefault(None, []).append(f))
-        return f
-    
-    from __future__ import absolute_import
-    
-            ::
-    
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
+    	# Track the line at which the error occurred in case this is
+	# generated from a lexer.  We need to track this since the
+        # unexpected char doesn't carry the line info.
+        self.line = None
     
     
-
+class DeleteOp(ReplaceOp):
+    '''
+    @brief Internal helper class.
+    '''
     
-    - CommonTokenStream: A basic and most commonly used TokenStream
-  implementation.
-- TokenRewriteStream: A modification of CommonTokenStream that allows the
-  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
+        def __init__(self, json_name, value):
+        self.value = value
+        super(Fixed, self).__init__(
+            json_name=json_name, default=value, omitempty=False)
     
-    # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+    import josepy as jose
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
+    def get_mod_deps(mod_name):
+    '''Get known module dependencies.
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+            self.config.revert_challenge_config()
+        self.assertEqual(mock_load.call_count, 1)
     
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        def test_include_missing(self):
+        # This should miss
+        self.verify_fnmatch('test_*.onf', False)
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
+        def test_nonexistent_like(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                for like in entrypoint.OVERRIDE_CLASSES.keys():
+                    mock_like.return_value = [like]
+                    self.assertEqual(entrypoint.get_configurator(),
+                                     entrypoint.OVERRIDE_CLASSES[like])
     
+            complex_vh = VirtualHost(
+            'fp', 'vhp',
+            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
+            False, False)
+        self.assertTrue(complex_vh.conflicts([self.addr1]))
+        self.assertTrue(complex_vh.conflicts([self.addr2]))
+        self.assertFalse(complex_vh.conflicts([self.addr_default]))
     
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
-    else:
-        print('{},{}'.format(filename, name))
+    # If false, no module index is generated.
+#latex_domain_indices = True
     
-        context['show_on_github_url'] = show_url
-    context['edit_on_github_url'] = edit_url
-    
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
-    
-    import logging
+          # Pop the stack if there is a matching '<'.  Otherwise, ignore
+      # this '>' since it must be an operator.
+      if stack:
+        if stack[-1] == '<':
+          stack.pop()
+          if not stack:
+            return (i + 1, None)
+    elif char == ';':
+      # Found something that look like end of statements.  If we are currently
+      # expecting a '>', the matching '<' must have been an operator, since
+      # template argument list should not contain statements.
+      while stack and stack[-1] == '<':
+        stack.pop()
+      if not stack:
+        return (-1, None)
