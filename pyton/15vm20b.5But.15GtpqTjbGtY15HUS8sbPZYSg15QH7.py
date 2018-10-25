@@ -1,61 +1,50 @@
 
         
-            Validates that the username is not already taken. Hashes the
-    password for security.
-    '''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
+                return self.json(briefing)
+
     
+            self._hass.bus.fire(EVENT_NAME, {
+            EVENT_DATA_NAME: self.name,
+            EVENT_DATA_ADDRESS: self.address,
+            EVENT_DATA_QUEUED_TIME: time_diff,
+            EVENT_DATA_TYPE: hass_click_type
+        })
     
-def close_db(e=None):
-    '''If this request connected to the database, close the
-    connection.
-    '''
-    db = g.pop('db', None)
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/device_tracker.actiontec/
+'''
+import logging
+import re
+import telnetlib
+from collections import namedtuple
+import voluptuous as vol
     
-        def to_json(self, value):
-        return value.hex
+            try:
+            self.api = PyiCloudService(
+                self.username, self.password,
+                cookie_directory=icloud_dir,
+                verify=True)
+        except PyiCloudFailedLoginException as error:
+            self.api = None
+            _LOGGER.error('Error logging into iCloud Service: %s', error)
+            return
     
-        If there is no handler for the logger's effective level, add a
-    :class:`~logging.StreamHandler` for
-    :func:`~flask.logging.wsgi_errors_stream` with a basic format.
-    '''
-    logger = logging.getLogger('flask.app')
+        else:
+        _LOGGER.error('Invalid response from luci: %s', res)
     
+            try:
+            result = scanner.scan(hosts=' '.join(self.hosts),
+                                  arguments=options)
+        except PortScannerError:
+            return False
     
-def _default_template_ctx_processor():
-    '''Default template context processor.  Injects `request`,
-    `session` and `g`.
-    '''
-    reqctx = _request_ctx_stack.top
-    appctx = _app_ctx_stack.top
-    rv = {}
-    if appctx is not None:
-        rv['g'] = appctx.g
-    if reqctx is not None:
-        rv['request'] = reqctx.request
-        rv['session'] = reqctx.session
-    return rv
+        async def async_get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        filter_named = [result.name for result in self.last_results
+                        if result.mac == device]
     
-        classifiers = proj_info['classifiers'],
+            for order in target_orders:
+            order.place()
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        stream_types = [  #this is just a sample. Will make it in prepare()
-        # {'id': '1080'},
-        # {'id': '720'},
-        # {'id': '360'},
-        # {'id': '288'},
-        # {'id': '190'},
-        # {'id': '180'},
-        
-    ]
+    import requests
+import voluptuous as vol
