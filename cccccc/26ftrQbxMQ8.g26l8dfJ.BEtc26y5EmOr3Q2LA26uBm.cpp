@@ -1,210 +1,290 @@
 
         
-        #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
-
-    
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
-    
-    
-    {  // This version will be picked when the second argument to ASSERT_EQ() is a
-  // pointer, e.g. ASSERT_EQ(NULL, a_pointer).
-  template <typename T>
-  static AssertionResult Compare(
-      const char* expected_expression,
-      const char* actual_expression,
-      // We used to have a second template parameter instead of Secret*.  That
-      // template parameter would deduce to 'long', making this a better match
-      // than the first overload even without the first overload's EnableIf.
-      // Unfortunately, gcc with -Wconversion-null warns when 'passing NULL to
-      // non-pointer argument' (even a deduced integral argument), so the old
-      // implementation caused warnings in user code.
-      Secret* /* expected (NULL) */,
-      T* actual) {
-    // We already know that 'expected' is a null pointer.
-    return CmpHelperEQ(expected_expression, actual_expression,
-                       static_cast<T*>(NULL), actual);
-  }
-};
-    
-    #include 'gtest/internal/gtest-port.h'
-    
-      // Creates an ANSI string from the given wide string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the ANSI string, or NULL if the
-  // input is NULL.
-  //
-  // The returned string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
-#endif
-    
-      virtual int GetNextPrime(int p) const {
-    for (int n = p + 1; n > 0; n++) {
-      if (IsPrime(n)) return n;
-    }
-    }
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
-  }
-    }
-    
-    namespace CNTK
-{
-    Value::Value(const NDArrayViewPtr& data)
-        : Value(data, nullptr)
+        
     {
+    {        // Register the memory buffer.
+        SML->registerMemoryBuffer(info.name, std::move(bitstream));
+        foundModules.push_back(info.name);
+      }
+    } else {
+      llvm::dbgs() << 'Unable to load module';
+      if (!info.name.empty())
+        llvm::dbgs() << ' '' << info.name << '\'';
+      llvm::dbgs() << '.\n';
     }
-    }
     
-            void Unpack() const;
-    
-    
-    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-};
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-    //
-// define BOOST_REGEX_NO_FWD if this
-// header doesn't work!
-//
-#ifdef BOOST_REGEX_NO_FWD
-#  ifndef BOOST_RE_REGEX_HPP
-#     include <boost/regex.hpp>
-#  endif
-#else
-    
-       void BOOST_REGEX_CALL clear()
-   {
-      end = start;
-   }
-    
-    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
-inline std::size_t regex_split(OutputIterator out,
-                   std::basic_string<charT, Traits1, Alloc1>& s, 
-                   const basic_regex<charT, Traits2>& e,
-                   match_flag_type flags = match_default)
-{
-   return regex_split(out, s, e, flags, UINT_MAX);
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  return new DefaultCache(CBs);
 }
     
     
-    {
-    {}  // end namespace internal
-}  // end namespace benchmark
+    {  return { false, false };
+}
+
     
-    // Parses a bool/Int32/string from the environment variable
-// corresponding to the given Google Test flag.
-bool BoolFromEnv(const char* flag, bool default_val);
-int32_t Int32FromEnv(const char* flag, int32_t default_val);
-double DoubleFromEnv(const char* flag, double default_val);
-const char* StringFromEnv(const char* flag, const char* default_val);
+    #include 'gtest/internal/gtest-port.h'
     
-      // Calculate RMS
-  double rms = 0.0;
-  for (size_t i = 0; i < n.size(); ++i) {
-    double fit = result.coef * fitting_curve(n[i]);
-    rms += pow((time[i] - fit), 2);
+      static void ClearTestResult(TestInfo* test_info) {
+    test_info->result_.Clear();
   }
     
-    namespace benchmark {
-// NOTE: only i386 and x86_64 have been well tested.
-// PPC, sparc, alpha, and ia64 are based on
-//    http://peter.kuscsik.com/wordpress/?p=14
-// with modifications by m3b.  See also
-//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
-namespace cycleclock {
-// This should return the number of cycles since power-on.  Thread-safe.
-inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
-#if defined(BENCHMARK_OS_MACOSX)
-  // this goes at the top because we need ALL Macs, regardless of
-  // architecture, to return the number of 'mach time units' that
-  // have passed since startup.  See sysinfo.cc where
-  // InitializeSystemInfo() sets the supposed cpu clock frequency of
-  // macs to the number of mach time units per second, not actual
-  // CPU clock frequency (which can change in the face of CPU
-  // frequency scaling).  Also note that when the Mac sleeps, this
-  // counter pauses; it does not continue counting, nor does it
-  // reset to zero.
-  return mach_absolute_time();
-#elif defined(BENCHMARK_OS_EMSCRIPTEN)
-  // this goes above x86-specific code because old versions of Emscripten
-  // define __x86_64__, although they have nothing to do with it.
-  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
-#elif defined(__i386__)
-  int64_t ret;
-  __asm__ volatile('rdtsc' : '=A'(ret));
-  return ret;
-#elif defined(__x86_64__) || defined(__amd64__)
-  uint64_t low, high;
-  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
-  return (high << 32) | low;
-#elif defined(__powerpc__) || defined(__ppc__)
-  // This returns a time-base, which is not always precisely a cycle-count.
-  int64_t tbl, tbu0, tbu1;
-  asm('mftbu %0' : '=r'(tbu0));
-  asm('mftb  %0' : '=r'(tbl));
-  asm('mftbu %0' : '=r'(tbu1));
-  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
-  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
-  return (tbu1 << 32) | tbl;
-#elif defined(__sparc__)
-  int64_t tick;
-  asm('.byte 0x83, 0x41, 0x00, 0x00');
-  asm('mov   %%g1, %0' : '=r'(tick));
-  return tick;
-#elif defined(__ia64__)
-  int64_t itc;
-  asm('mov %0 = ar.itc' : '=r'(itc));
-  return itc;
-#elif defined(COMPILER_MSVC) && defined(_M_IX86)
-  // Older MSVC compilers (like 7.x) don't seem to support the
-  // __rdtsc intrinsic properly, so I prefer to use _asm instead
-  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
-  // the code is being compiled with a non-ancient compiler.
-  _asm rdtsc
-#elif defined(COMPILER_MSVC)
-  return __rdtsc();
-#elif defined(BENCHMARK_OS_NACL)
-  // Native Client validator on x86/x86-64 allows RDTSC instructions,
-  // and this case is handled above. Native Client validator on ARM
-  // rejects MRC instructions (used in the ARM-specific sequence below),
-  // so we handle it here. Portable Native Client compiles to
-  // architecture-agnostic bytecode, which doesn't provide any
-  // cycle counter access mnemonics.
+    #include <stdio.h>
+    
+      // STL-style container methods.
+  size_t size() const { return size_; }
+  const_iterator begin() const { return array_; }
+  const_iterator end() const { return array_ + size_; }
+  bool operator==(const NativeArray& rhs) const {
+    return size() == rhs.size() &&
+        ArrayEq(begin(), size(), rhs.begin());
+  }
+    
+     private:
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
     }
+    
+      grpc::string GetPeerIdentityPropertyName() const override;
+    
+    void CensusClientCallData::StartTransportStreamOpBatch(
+    grpc_call_element* elem, TransportStreamOpBatch* op) {
+  if (op->send_initial_metadata() != nullptr) {
+    census_context* ctxt = op->get_census_context();
+    GenerateClientContext(
+        qualified_method_, &context_,
+        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
+    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
+                                               kMaxTraceContextLen);
+    if (tracing_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &tracing_bin_,
+              grpc_mdelem_from_slices(
+                  GRPC_MDSTR_GRPC_TRACE_BIN,
+                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
+    }
+    grpc_slice tags = grpc_empty_slice();
+    // TODO: Add in tagging serialization.
+    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
+    if (encoded_tags_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &stats_bin_,
+              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
+    }
+  }
+    }
+    
+      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
+               grpc_closure* then_call_closure) override;
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
+    
+    const ViewDescriptor& ServerSentMessagesPerRpcMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/server/sent_messages_per_rpc/minute')
+          .set_measure(kRpcServerSentMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, const grpc::string& value) {
+  class StringOption final : public ServerBuilderOption {
+   public:
+    StringOption(const grpc::string& name, const grpc::string& value)
+        : name_(name), value_(value) {}
     }
     }
     
-      // Compile a regular expression matcher from spec.  Returns true on success.
-  //
-  // On failure (and if error is not nullptr), error is populated with a human
-  // readable error message if an error occurs.
-  bool Init(const std::string& spec, std::string* error);
+    namespace grpc {
+namespace {
+    }
+    }
+    
+        template <typename ElementType>
+    void LearnerFSAdaGrad::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
+                                  const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const
+    {
+        GET_WRITABLE_MATRICES;
+    }
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_fd != -1);
+        // removing file
+        unlink(m_fileName.c_str());
+        // Note: file is intentionally removed *before* releasing the lock
+        // to ensure that locked file isn't deleted by the non-owner of the lock
+        m_lock.l_type = F_UNLCK;
+        // Now removing the lock and closing the file descriptor
+        // waiting processes will be notified
+        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
+        if (rc == FCNTL_ERROR)
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
+        }
+        close(m_fd);
+        m_fd = -1;
+    }
+    
+        // return the randomized feature bounds for a time range
+    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
+    {
+        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
+        size_t tend = min(te + randomizationrange / 2, map.size());
+        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
+    }
+    
+    template class DiagTimesNode<float>;
+template class DiagTimesNode<double>;
+    
+        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& t) override
+    {
+        // input0 is the weight (each column is an embedding of one word), input 1 contains m_nbrLooked words in each column (sample)
+        Matrix<ElemType> functionValues =           ValueFor(t);
+        const Matrix<ElemType>&  input0 = InputRef(0).ValueAsMatrix();
+        Matrix<ElemType>         input1 = InputRef(1).ValueFor(t);
+    }
+    
+    /**
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ */
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+    }
+    
+    #include <osquery/config.h>
+    
+    
+    {} // namespace osquery
+
+    
+    TEST_F(OptionsConfigParserPluginTests, test_unknown_option) {
+  Config c;
+  std::map<std::string, std::string> update;
+    }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    /**
+ * @brief Hash is a general utility class for hashing content
+ *
+ * @code{.cpp}
+ *   Hash my_hash(HASH_TYPE_SHA256);
+ *   my_hash.update(my_buffer, my_buffer_size);
+ *   std::cout << my_hash.digest();
+ * @endcode
+ *
+ */
+class Hash : private boost::noncopyable {
+ public:
+  /**
+   * @brief Hash constructor
+   *
+   * The hash class should be initialized with one of osquery::HashType as a
+   * constructor argument.
+   *
+   * @param algorithm The hashing algorithm which will be used to compute the
+   * hash
+   */
+  explicit Hash(HashType algorithm);
+    }
+    
+    std::shared_ptr<PlatformProcess> PlatformProcess::launchWorker(
+    const std::string& exec_path, int argc /* unused */, char** argv) {
+  auto worker_pid = ::fork();
+  if (worker_pid < 0) {
+    return std::shared_ptr<PlatformProcess>();
+  } else if (worker_pid == 0) {
+    setEnvVar('OSQUERY_WORKER', std::to_string(::getpid()).c_str());
+    ::execve(exec_path.c_str(), argv, ::environ);
+    }
+    }
+    
+    /**
+ * @brief Categories of process performance limitations.
+ *
+ * Performance limits are applied by a watcher thread on autoloaded extensions
+ * and a optional daemon worker process. The performance types are identified
+ * here, and organized into levels. Such that a caller may enforce rigor or
+ * relax the performance expectations of a osquery daemon.
+ */
+enum class WatchdogLimitType {
+  MEMORY_LIMIT,
+  UTILIZATION_LIMIT,
+  RESPAWN_LIMIT,
+  RESPAWN_DELAY,
+  LATENCY_LIMIT,
+  INTERVAL,
+};
+    
+      /// original path, read from config
+  std::string opath;
+    
+    class DHTReplaceNodeTask : public DHTAbstractTask {
+private:
+  std::shared_ptr<DHTBucket> bucket_;
+    }
+    
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
+    
+      std::shared_ptr<DHTNode> getNode(const unsigned char* id,
+                                   const std::string& ipaddr,
+                                   uint16_t port) const;
+    
+    
+    {} // namespace aria2
+    
+    void DHTRoutingTableSerializer::serialize(const std::string& filename)
+{
+  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
+  std::string filenameTemp = filename;
+  filenameTemp += '__temp';
+  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
+    }
+    
+    
+    {} // namespace aria2
