@@ -1,171 +1,136 @@
 
         
-            def score(self):
-        min_over = sys.MAXSIZE
-        max_under = -sys.MAXSIZE
-        for score in self.possible_scores():
-            if self.BLACKJACK < score < min_over:
-                min_over = score
-            elif max_under < score <= self.BLACKJACK:
-                max_under = score
-        return max_under if max_under != -sys.MAXSIZE else min_over
+            def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+            self.wait_to_close_event = wait_to_close_event
+        self.ready_event = threading.Event()
+        self.stop_event = threading.Event()
     
     
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
+def main():
+    '''Pretty-print the bug information as JSON.'''
+    print(json.dumps(info(), sort_keys=True, indent=2))
     
-        return 'utf-8'
+            if pending is not None:
+            yield pending
     
-        @property
-    def config(self):
-        if not hasattr(self, '_config'):
-            self._config = Config(directory=self.config_dir)
-            if self._config.is_new():
-                self._config.save()
-            else:
-                self._config.load()
-        return self._config
-    
-            if color_scheme == PRESET_STYLE:
-            self.http_lexer = PygmentsHttpLexer()
-        else:
-            self.http_lexer = HTTPLexer()
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-        if n == 1:
-        return '1 B'
+    import sys
     
     
-FILE_PATH_ARG = patharg(FILE_PATH)
-BIN_FILE_PATH_ARG = patharg(BIN_FILE_PATH)
-JSON_FILE_PATH_ARG = patharg(JSON_FILE_PATH)
+def test_chunked_upload():
+    '''can safely send generators'''
+    close_server = threading.Event()
+    server = Server.basic_response_server(wait_to_close_event=close_server)
+    data = iter([b'a', b'b', b'c'])
     
+        @pytest.mark.parametrize(
+        'cid', (
+            CaseInsensitiveDict({'Foo': 'foo', 'BAr': 'bar'}),
+            CaseInsensitiveDict([('Foo', 'foo'), ('BAr', 'bar')]),
+            CaseInsensitiveDict(FOO='foo', BAr='bar'),
+        ))
+    def test_init(self, cid):
+        assert len(cid) == 2
+        assert 'foo' in cid
+        assert 'bar' in cid
     
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
+            sock.sendall(b'send something')
+            time.sleep(2.5)
+            sock.sendall(b'still alive')
+            block_server.set()  # release server block
     
+        app.connect('doctree-read', collect_scrapy_settings_refs)
+    app.connect('doctree-resolved', replace_settingslist_nodes)
     
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
+    # Apply monkey patches to fix issues in external libraries
+from . import _monkeypatches
+del _monkeypatches
     
-    del sys
-
+    def _run_command_profiled(cmd, args, opts):
+    if opts.profile:
+        sys.stderr.write('scrapy: writing cProfile stats to %r\n' % opts.profile)
+    loc = locals()
+    p = cProfile.Profile()
+    p.runctx('cmd.run(args, opts)', globals(), loc)
+    if opts.profile:
+        p.dump_stats(opts.profile)
+    
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
+    
+        requires_project = False
     
     
 class Command(ScrapyCommand):
     
-        def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
+            # The crawler is created this way since the Shell manually handles the
+        # crawling engine, so the set up in the crawl method won't work
+        crawler = self.crawler_process._create_crawler(spidercls)
+        # The Shell class needs a persistent engine in the crawler
+        crawler.engine = crawler._create_engine()
+        crawler.engine.start()
     
-    from scrapy.utils.spider import iter_spider_classes
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.conf import arglist_to_dict
-from scrapy.utils.python import without_none_values
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-c', dest='code',
-            help='evaluate the code in the shell, print the result and exit')
-        parser.add_option('--spider', dest='spider',
-            help='use this spider')
-        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
-            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
-    
-    The matching from server ftp command return codes to html response codes is defined in the
-CODE_MAPPING attribute of the handler class. The key 'default' is used for any code
-that is not explicitly present among the map keys. You may need to overwrite this
-mapping if want a different behaviour than default.
-    
-            self.reset_appid()
-    
-            pemfile = '/etc/ssl/certs/CA.pem'
-        new_certfile = '/usr/local/share/ca-certificates/CA.crt'
-        if not os.path.exists(pemfile) or not CertUtil.file_is_same(certfile, new_certfile):
-            if os.system('cp '%s' '%s' && update-ca-certificates' % (certfile, new_certfile)) != 0:
-                xlog.warning('install root certificate failed, Please run as administrator/root/sudo')
-    
-            if config.PROXY_ENABLE:
-            if config.PROXY_USER:
-                self.proxy = '%s://%s:%s@%s:%d' % \
-                    (config.PROXY_TYPE, config.PROXY_USER, config.PROXY_PASSWD, config.PROXY_HOST, config.PROXY_PORT)
+            if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
             else:
-                self.proxy = '%s://%s:%d' % \
-                    (config.PROXY_TYPE, config.PROXY_HOST, config.PROXY_PORT)
-        else:
-            self.proxy = None
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
+    
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+    __all__ = ['ckplayer_download']
     
     
-class SniManager(object):
-    plus = ['-', '', '.']
-    end = ['com', 'net', 'ml', 'org', 'us']
+def get_loop_file_path(title, output_dir):
+    return os.path.join(output_dir, get_output_filename([], title, 'txt', None, False))
     
-    - CommonToken: A basic and most commonly used Token implementation.
-- ClassicToken: A Token object as used in ANTLR 2.x, used to %tree
-  construction.
-    
-    # Predefined token types
-EOR_TOKEN_TYPE = 1
-    
-                msg = 'mismatched input ' \
-                  + self.getTokenErrorDisplay(e.token) \
-                  + ' expecting ' \
-                  + tokenName
+    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads Dailymotion videos by URL.
+    '''
     
     
-if __name__ == '__main__':
+'''
+http://open.iqiyi.com/lib/player.html
+'''
+iqiyi_patterns = [r'(?:\'|\')(https?://dispatcher\.video\.qiyi\.com\/disp\/shareplayer\.swf\?.+?)(?:\'|\')',
+                  r'(?:\'|\')(https?://open\.iqiyi\.com\/developer\/player_js\/coopPlayerIndex\.html\?.+?)(?:\'|\')']
     
-                    tado_json = await response.json()
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls(urls, title, ext, size, output_dir, merge=False)
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components.device_tracker import (
-    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
-from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
-    
-        vin, _ = discovery_info
-    voc = hass.data[DATA_KEY]
-    vehicle = voc.vehicles[vin]
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if self.mac2name is None:
-            result = self._retrieve_list_with_retry()
-            if result:
-                hosts = [x for x in result
-                         if 'mac' in x and 'name' in x]
-                mac2name_list = [
-                    (x['mac'].upper(), x['name']) for x in hosts]
-                self.mac2name = dict(mac2name_list)
-            else:
-                # Error, handled in the _retrieve_list_with_retry
-                return
-        return self.mac2name.get(device.upper(), None)
-    
-            send_data(name, json_body)
+    #----------------------------------------------------------------------
+def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
+    ''''''
+    fake_headers = {
+        'DNT': '1',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
+        'Accept': '*/*',
+        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
+        'Connection': 'keep-alive',
+    }
+    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
+    html = get_content(api_base, headers=fake_headers)
