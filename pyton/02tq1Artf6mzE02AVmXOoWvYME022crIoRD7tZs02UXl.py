@@ -1,200 +1,221 @@
 
         
-            request.addfinalizer(_reset_settings)
-    conf.settings.user_dir = Path('~/.thefuck')
-    return conf.settings
+        ssl.add_argument(
+    '--cert-key',
+    default=None,
+    type=readable_file_arg,
+    help='''
+    The private key to use with SSL. Only needed if --cert is given and the
+    certificate file does not contain the private key.
     
-    
-@pytest.mark.parametrize('app, help_text, operations', [
-    ('apt', apt_help, apt_operations),
-    ('apt-get', apt_get_help, apt_get_operations)
-])
-def test_get_operations(set_help, app, help_text, operations):
-    set_help(help_text)
-    assert _get_operations(app) == operations
-    
-        def find_condition_in_rules(self, condition_set_id):
-        rules_in_use = []
-        try:
-            all_rules = list_rules_with_backoff(self.client)
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            self.module.fail_json_aws(e, msg='Could not list rules')
-        for rule in all_rules:
-            try:
-                rule_details = get_rule_with_backoff(self.client, rule['RuleId'])
-            except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-                self.module.fail_json_aws(e, msg='Could not get rule details')
-            if condition_set_id in [predicate['DataId'] for predicate in rule_details['Predicates']]:
-                rules_in_use.append(rule_details['Name'])
-        return rules_in_use
-    
-    
-def remove_rule_conditions(client, module, rule_id):
-    conditions = get_rule(client, module, rule_id)['Predicates']
-    updates = [format_for_deletion(camel_dict_to_snake_dict(condition)) for condition in conditions]
     try:
-        run_func_with_change_token_backoff(client, module, {'RuleId': rule_id, 'Updates': updates}, client.update_rule)
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Could not remove rule conditions')
+    # https://urllib3.readthedocs.io/en/latest/security.html
+    # noinspection PyPackageRequirements
+    import urllib3
+    urllib3.disable_warnings()
+except (ImportError, AttributeError):
+    # In some rare cases, the user may have an old version of the requests
+    # or urllib3, and there is no method called 'disable_warnings.' In these
+    # cases, we don't need to call the method.
+    # They may get some noisy output but execution shouldn't die. Move on.
+    pass
     
-    notes:
-  - does not support check mode
+    from httpie.compat import is_windows
+from httpie.plugins import FormatterPlugin
     
-    
-def define_pipeline(client, module, objects, dp_id):
-    '''Puts pipeline definition
-    
-            else:
-            result['changed'] = False
-    
-    RETURN = '''
-gateway.customer_gateways:
-    description: details about the gateway that was created.
-    returned: success
-    type: complex
-    contains:
-        bgp_asn:
-            description: The Border Gateway Autonomous System Number.
-            returned: when exists and gateway is available.
-            sample: 65123
-            type: string
-        customer_gateway_id:
-            description: gateway id assigned by amazon.
-            returned: when exists and gateway is available.
-            sample: cgw-cb6386a2
-            type: string
-        ip_address:
-            description: ip address of your gateway device.
-            returned: when exists and gateway is available.
-            sample: 1.2.3.4
-            type: string
-        state:
-            description: state of gateway.
-            returned: when gateway exists and is available.
-            state: available
-            type: string
-        tags:
-            description: any tags on the gateway.
-            returned: when gateway exists and is available, and when tags exist.
-            state: available
-            type: string
-        type:
-            description: encryption type.
-            returned: when gateway exists and is available.
-            sample: ipsec.1
-            type: string
-'''
-    
-        params['Filters'] = ansible_dict_to_boto3_filter_list(module.params.get('filters'))
-    params['CustomerGatewayIds'] = module.params.get('customer_gateway_ids')
+            '''
+        r.headers['Authorization'] = type(self).make_header(
+            self.username, self.password).encode('latin1')
+        return r
     
     
-def create_metric_alarm(connection, module):
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    RETURN = '''
-snapshot_id:
-    description: The ID of the snapshot. Each snapshot receives a unique identifier when it is created.
-    type: string
-    returned: always
-    sample: snap-01234567
-volume_id:
-    description: The ID of the volume that was used to create the snapshot.
-    type: string
-    returned: always
-    sample: vol-01234567
-state:
-    description: The snapshot state (completed, pending or error).
-    type: string
-    returned: always
-    sample: completed
-state_message:
-    description: Encrypted Amazon EBS snapshots are copied asynchronously. If a snapshot copy operation fails (for example, if the proper
-                 AWS Key Management Service (AWS KMS) permissions are not obtained) this field displays error state details to help you diagnose why the
-                 error occurred.
-    type: string
-    returned: always
-    sample:
-start_time:
-    description: The time stamp when the snapshot was initiated.
-    type: string
-    returned: always
-    sample: '2015-02-12T02:14:02+00:00'
-progress:
-    description: The progress of the snapshot, as a percentage.
-    type: string
-    returned: always
-    sample: '100%'
-owner_id:
-    description: The AWS account ID of the EBS snapshot owner.
-    type: string
-    returned: always
-    sample: '099720109477'
-description:
-    description: The description for the snapshot.
-    type: string
-    returned: always
-    sample: 'My important backup'
-volume_size:
-    description: The size of the volume, in GiB.
-    type: int
-    returned: always
-    sample: 8
-owner_alias:
-    description: The AWS account alias (for example, amazon, self) or AWS account ID that owns the snapshot.
-    type: string
-    returned: always
-    sample: '033440102211'
-tags:
-    description: Any tags assigned to the snapshot.
-    type: dict
-    returned: always
-    sample: '{ 'my_tag_key': 'my_tag_value' }'
-encrypted:
-    description: Indicates whether the snapshot is encrypted.
-    type: boolean
-    returned: always
-    sample: 'True'
-kms_key_id:
-    description: The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to \
-    protect the volume encryption key for the parent volume.
-    type: string
-    returned: always
-    sample: '74c9742a-a1b2-45cb-b3fe-abcdef123456'
-data_encryption_key_id:
-    description: The data encryption key identifier for the snapshot. This value is a unique identifier that \
-    corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy.
-    type: string
-    returned: always
-    sample: 'arn:aws:kms:ap-southeast-2:012345678900:key/74c9742a-a1b2-45cb-b3fe-abcdef123456'
+        def test_binary_included_and_correct_when_suitable(self):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('GET', self.url, env=env)
+        assert r == self.bindata
+
     
-    # The language for content autogenerated by Sphinx. Refer to documentation
-# for a list of supported languages.
-#language = None
     
-    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
     
-        # If no valid image file was uploaded, show the file upload form:
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
+        def test_GET_with_data_auto_JSON_headers(self, httpbin):
+        # JSON headers should automatically be set also for GET with data.
+        r = http('POST', httpbin.url + '/post', 'a=b')
+        assert HTTP_OK in r
+        assert r.json['headers']['Accept'] == JSON_ACCEPT
+        assert r.json['headers']['Content-Type'] == 'application/json'
     
-            # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
     
-    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
-# other example, but it includes some basic performance tweaks to make things run a lot faster:
-#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
-#   2. Only detect faces in every other frame of video.
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
     
-        unknown_encodings = face_recognition.face_encodings(unknown_image)
     
-    test_requirements = [
-    'tox',
-    'flake8==2.6.0'
-]
+def get_setting_target(node):
+    # target nodes are placed next to the node in the doc tree
+    return node.parent[node.parent.index(node) + 1]
+    
+            parser.add_option_group(group)
+    
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
+    
+        def run(self, args, opts):
+        if len(args) != 1 or not is_url(args[0]):
+            raise UsageError()
+        cb = lambda x: self._print_response(x, opts)
+        request = Request(args[0], callback=cb, dont_filter=True)
+        # by default, let the framework handle redirects,
+        # i.e. command handles all codes expect 3xx
+        if not opts.no_redirect:
+            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+        else:
+            request.meta['handle_httpstatus_all'] = True
+    
+    from scrapy.utils.spider import iter_spider_classes
+from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+from scrapy.utils.conf import arglist_to_dict
+from scrapy.utils.python import without_none_values
+    
+            spider_loader = self.crawler_process.spider_loader
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
+    
+        CODE_MAPPING = {
+        '550': 404,
+        'default': 503,
+    }
+    
+        entry_points = {'console_scripts': proj_info['console_scripts']}
+)
+
+    
+            elif stream_id == []:
+            print('streams:             # Available quality and codecs')
+            # Print DASH streams
+            if self.dash_streams:
+                print('    [ DASH ] %s' % ('_' * 36))
+                itags = sorted(self.dash_streams,
+                               key=lambda i: -self.dash_streams[i]['size'])
+                for stream in itags:
+                    self.p_stream(stream)
+            # Print all other available streams
+            print('    [ DEFAULT ] %s' % ('_' * 33))
+            for stream in self.streams_sorted:
+                self.p_stream(stream['id'] if 'id' in stream else stream['itag'])
+    
+        #first call the main parasing API
+    info = json.loads(get_content('http://www.acfun.cn/video/getVideo.aspx?id=' + vid))
+    
+    __all__ = ['facebook_download']
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+        def gethomedir(self, username):
+        if 'HOME' in os.environ:
+            userhome = os.environ['HOME']
+        elif 'USERPROFILE' in os.environ:
+            userhome = os.environ['USERPROFILE']
+        elif 'HOMEPATH' in os.environ:
+            try:
+                drv = os.environ['HOMEDRIVE']
+            except KeyError:
+                drv = ''
+            userhome = drv + os.environ['HOMEPATH']
+        else:
+            raise RuntimeError('Can't determine home directory')
+    
+            self.assertEqual(posixpath.split(b'/foo/bar'), (b'/foo', b'bar'))
+        self.assertEqual(posixpath.split(b'/'), (b'/', b''))
+        self.assertEqual(posixpath.split(b'foo'), (b'', b'foo'))
+        self.assertEqual(posixpath.split(b'////foo'), (b'////', b'foo'))
+        self.assertEqual(posixpath.split(b'//foo//bar'), (b'//foo', b'bar'))
+    
+    
+def contents(package: Package) -> Iterable[str]:
+    '''Return an iterable of entries in 'package'.
+    
+    # Send the message via local SMTP server.
+with smtplib.SMTP('localhost') as s:
+    s.send_message(msg)
+
+    
+    # Import the email modules we'll need
+from email import policy
+from email.parser import BytesParser
+    
+            print('Ordered results using pool.apply_async():')
+        for r in results:
+            print('\t', r.get())
+        print()
+    
+        new_filter = DiagnosticFilter( spec )
+    self._cache[ cache_key ] = new_filter
+    return new_filter
+    
+    # The default options which are only relevant to the client, not the server and
+# thus are not part of default_options.json, but are required for a working
+# YouCompleteMe object.
+DEFAULT_CLIENT_OPTIONS = {
+  'g:ycm_server_python_interpreter': '',
+  'g:ycm_log_level': 'info',
+  'g:ycm_keep_logfiles': 0,
+  'g:ycm_extra_conf_vim_data': [],
+  'g:ycm_show_diagnostics_ui': 1,
+  'g:ycm_echo_current_diagnostic': 1,
+  'g:ycm_enable_diagnostic_signs': 1,
+  'g:ycm_enable_diagnostic_highlighting': 0,
+  'g:ycm_always_populate_location_list': 0,
+}
+    
+      eq_( len( results ), len( expected_results ) )
+  for result, expected_result in zip( results, expected_results ):
+    assert_that( result, expected_result )
+
+    
+    DIR_OF_THIS_SCRIPT = p.dirname( p.abspath( __file__ ) )
+DIR_OF_THIRD_PARTY = p.join( DIR_OF_THIS_SCRIPT, 'third_party' )
+DIR_OF_YCMD_THIRD_PARTY = p.join( DIR_OF_THIRD_PARTY, 'ycmd', 'third_party' )
