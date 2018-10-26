@@ -1,247 +1,183 @@
 
         
-        #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+          friend class SubstitutionMap;
     
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
-    }
-    }
+    using namespace swift::sys;
+using llvm::StringRef;
     
-     private:
-  ObjectManager* object_manager_;
-    
-        bool ReadRTF(ClipboardData& data) {
-      DCHECK(data.type == TYPE_RTF);
-      std::string text;
-      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(text));
-      return true;
-    }
-    
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    #if GTEST_OS_SYMBIAN
-  // These are needed as the Nokia Symbian Compiler cannot decide between
-  // const T& and const T* in a function template. The Nokia compiler _can_
-  // decide between class template specializations for T and T*, so a
-  // tr1::type_traits-like is_pointer works, and we can overload on that.
-  template <typename T>
-  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
-    }
+      bool isRecord() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
   }
-  template <typename T>
-  inline void StreamHelper(internal::false_type /*is_pointer*/,
-                           const T& value) {
-    // See the comments in Message& operator <<(const T&) above for why
-    // we need this using statement.
-    using ::operator <<;
-    *ss_ << value;
+  const clang::RecordDecl *getRecord() const {
+    assert(isRecord());
+    return Decl.get<const clang::RecordDecl *>();
   }
-#endif  // GTEST_OS_SYMBIAN
     
-    // Values() allows generating tests from explicitly specified list of
-// parameters.
-//
-// Synopsis:
-// Values(T v1, T v2, ..., T vN)
-//   - returns a generator producing sequences with elements v1, v2, ..., vN.
-//
-// For example, this instantiates tests from test case BarTest each
-// with values 'one', 'two', and 'three':
-//
-// INSTANTIATE_TEST_CASE_P(NumSequence, BarTest, Values('one', 'two', 'three'));
-//
-// This instantiates tests from test case BazTest each with values 1, 2, 3.5.
-// The exact type of values will depend on the type of parameter in BazTest.
-//
-// INSTANTIATE_TEST_CASE_P(FloatingNumbers, BazTest, Values(1, 2, 3.5));
-//
-// Currently, Values() supports from 1 to $n parameters.
-//
-$range i 1..n
-$for i [[
-$range j 1..i
+    ClangDiagnosticConsumer::ClangDiagnosticConsumer(
+    ClangImporter::Implementation &impl,
+    clang::DiagnosticOptions &clangDiagOptions,
+    bool dumpToStderr)
+  : TextDiagnosticPrinter(llvm::errs(), &clangDiagOptions),
+    ImporterImpl(impl), DumpToStderr(dumpToStderr) {}
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22>
-struct Templates22 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates21<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22> Tail;
+    /// The result of out inference system
+struct IAMResult {
+  // The name to import as
+  DeclName name = {};
+    }
+    
+    #endif  // CONTENT_NW_SRC_API_APP_APP_H_
+    
+    namespace base {
+class DictionaryValue;
+class ListValue;
+}
+    
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+        int menu_id;
+    if (option.GetInteger('submenu', &menu_id))
+      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
+    std::string key;
+    if (option.GetString('key',&key)){
+      enable_shortcut = true;
+      std::string modifiers = '';
+      option.GetString('modifiers',&modifiers);
+      modifiers_mask = GdkModifierType(0);
+      if (modifiers.size() != 0){
+        if (modifiers.find('ctrl') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
+        }
+        if (modifiers.find('alt') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
+        }
+        if (modifiers.find('super') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
+        }
+        if (modifiers.find('meta') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
+        }
+        
+        if (modifiers.find('shift') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
+        }
+    }
+    }
+    
+    
+    {
+} // namespace extensions
+
+    
+    // Common functions and classes from std that caffe often uses.
+using std::fstream;
+using std::ios;
+using std::isnan;
+using std::isinf;
+using std::iterator;
+using std::make_pair;
+using std::map;
+using std::ostringstream;
+using std::pair;
+using std::set;
+using std::string;
+using std::stringstream;
+using std::vector;
+    
+    /// @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$.
+template <typename Dtype>
+class UniformFiller : public Filler<Dtype> {
+ public:
+  explicit UniformFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK(blob->count());
+    caffe_rng_uniform<Dtype>(blob->count(), Dtype(this->filler_param_.min()),
+        Dtype(this->filler_param_.max()), blob->mutable_cpu_data());
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
 };
     
-    //////////////////////////////////////////////////////////////////////
+      bool is_started() const;
     
-    void Assembler::sradi(const Reg64& ra, const Reg64& rs, uint8_t sh, bool rc) {
-  EmitXSForm(31, rn(rs), rn(ra), sh, 413, rc);
-}
+    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+
     
-    inline TypedValue* APCLocalArray::localCache() const {
-  return const_cast<TypedValue*>(
-    reinterpret_cast<const TypedValue*>(this + 1)
-  );
-}
+    #include <vector>
     
     /**
- * Parts of the language can individually be made stricter, warning or
- * erroring when there's dangerous/unintuive usage; for example,
- * array_fill_keys() with non-int/string keys: Hack.Lang.StrictArrayFillKeys
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
  */
-enum class HackStrictOption {
-  OFF, // PHP5 behavior
-  WARN,
-  ON
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
 };
+#endif
     
+    #include 'constraint_bullet.h'
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    const StaticString
-  s_wrapper_type('wrapper_type'),
-  s_stream_type('stream_type'),
-  s_mode('mode'),
-  s_unread_bytes('unread_bytes'),
-  s_seekable('seekable'),
-  s_timed_out('timed_out'),
-  s_blocked('blocked'),
-  s_eof('eof'),
-  s_plainfile('plainfile'),
-  s_dir('dir'),
-  s_r('r');
-    
-    /**
- * Make dest directory look identical to src by copying files and directories,
- * without copying identical files (so they keep the same timestamp as before).
- */
-void syncdir(const std::string &dest, const std::string &src,
-             bool keepSrc = false);
-    
-    Array File::getMetaData() {
-  return make_map_array(
-    s_wrapper_type, getWrapperType(),
-    s_stream_type,  getStreamType(),
-    s_mode,         String(m_data->m_mode),
-    s_unread_bytes, 0,
-    s_seekable,     seekable(),
-    s_uri,          String(m_data->m_name),
-    s_timed_out,    false,
-    s_blocked,      true,
-    s_eof,          eof(),
-    s_wrapper_data, getWrapperMetaData()
-  );
-}
-    
-     private:
-  /*
-   * @brief A helper function to 'carve' files from disk
-   *
-   * This function performs a 'forensic carve' of a specified path to the
-   * users tmp directory
-   */
-  Status carve(const boost::filesystem::path& path);
-    
-      auto val4 = splayValue(100, 1);
-  EXPECT_GE(val4, 99U);
-  EXPECT_LE(val4, 101U);
-    
-    std::shared_ptr<PlatformProcess> PlatformProcess::launchTestPythonScript(
-    const std::string& args) {
-  std::string osquery_path;
-  auto osquery_path_option = getEnvVar('OSQUERY_DEPS');
-  if (osquery_path_option) {
-    osquery_path = *osquery_path_option;
-  } else {
-    if (!isPlatform(PlatformType::TYPE_FREEBSD)) {
-      osquery_path = '/usr/local/osquery';
-    } else {
-      osquery_path = '/usr/local';
-    }
-  }
+    class RIDBullet : public RID_Data {
+	RID self;
+	BulletPhysicsServer *physicsServer;
     }
     
-      /// Setter for an extension process.
-  void setExtension(const std::string& extension,
-                    const std::shared_ptr<PlatformProcess>& child);
-    
-    
-    {  auto subscription = Subscription::create('TestSubscriber', mc);
-  auto status = EventFactory::addSubscription('inotify', subscription);
-  EXPECT_TRUE(status.ok());
-  EventFactory::deregisterEventPublisher('inotify');
-}
-    
-    DEFINE_bool(benchmark_report_aggregates_only, false,
-            'Report the result of each benchmark repetitions. When 'true' is '
-            'specified only the mean, standard deviation, and other statistics '
-            'are reported for repeated benchmarks.');
-    
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
-      return false;
+    void unregister_dds_types() {
     }
-  }
-  return true;
-}
+    
+    	if (id == 0) {
+		r_error.error = Variant::CallError::CALL_ERROR_INSTANCE_IS_NULL;
+		return Variant();
+	}
+	Object *obj = ObjectDB::get_instance(id);
     
     
-    {  // Print user counters
-  for (const auto &ucn : user_counter_names_) {
-    auto it = run.counters.find(ucn);
-    if(it == run.counters.end()) {
-      Out << ',';
-    } else {
-      Out << ',' << it->second;
-    }
-  }
-  Out << '\n';
-}
+    {	ZipArchive *arch = ZipArchive::get_singleton();
+	ERR_FAIL_COND(!arch);
+	arch->close_handle(zfile);
+	zfile = NULL;
+};
