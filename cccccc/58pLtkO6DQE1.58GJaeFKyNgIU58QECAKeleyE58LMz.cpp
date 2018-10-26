@@ -1,404 +1,502 @@
 
         
-        
-    {
-    {
-    {
-    {bool AnnotationMatchesSubstring(const string& file_content,
-                                const GeneratedCodeInfo::Annotation* annotation,
-                                const string& expected_text) {
-  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
-  annotations.push_back(annotation);
-  return AtLeastOneAnnotationMatchesSubstring(file_content, annotations,
-                                              expected_text);
+        #include 'atom/browser/api/event_emitter.h'
+#include 'atom/browser/auto_updater.h'
+#include 'atom/browser/window_list_observer.h'
+#include 'native_mate/arguments.h'
+#include 'native_mate/handle.h'
+    
+    
+    {}  // namespace atom
+    
+    #endif  // ATOM_BROWSER_API_ATOM_API_DOWNLOAD_ITEM_H_
+
+    
+    GlobalShortcut::GlobalShortcut(v8::Isolate* isolate) {
+  Init(isolate);
 }
-}  // namespace annotation_test_util
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_menu, Initialize)
 
     
     
-    {  for (int i = 0; i < parts.size(); i++) {
-    string::size_type equals_pos = parts[i].find_first_of('=');
-    std::pair<string, string> value;
-    if (equals_pos == string::npos) {
-      value.first = parts[i];
-      value.second = '';
-    } else {
-      value.first = parts[i].substr(0, equals_pos);
-      value.second = parts[i].substr(equals_pos + 1);
+    {}  // namespace mate
+    
+    // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    namespace nw {
     }
-    output->push_back(value);
+    
+    #include 'content/nw/src/api/bindings_common.h'
+    
+      ~EventListener() override;
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return item->is_enabled_;
+}
+    
+    void PointMenuPositionFunc(GtkMenu* menu,
+                           int* x,
+                           int* y,
+                           gboolean* push_in,
+                           gpointer userdata) {
+  *push_in = TRUE;
+    }
+    
+    void Menu::Destroy() {
+}
+    
+    void MenuItem::SetIcon(const std::string& icon) {
+  base::ThreadRestrictions::ScopedAllowIO allow_io;
+  is_modified_ = true;
+  if (icon.empty()) {
+    icon_ = gfx::Image();
+    return;
   }
-}
+    }
     
-    TEST(MovableMessageTest, SelfMoveAssignment) {
-  // The `self` reference is necessary to defeat -Wself-move.
-  protobuf_unittest::TestAllTypes message, &self = message;
-  TestUtil::SetAllFields(&message);
-  message = std::move(self);
-  TestUtil::ExpectAllFieldsSet(message);
-}
+    #include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
+    #define ROW_DST_ARG1 , DT * dst1_data_
+#define ROW_DST_STORE1 , dst1_data(dst1_data_)
+#define ROW_DST_VAR1 DT * dst1_data;
+#define ROW_DST_ARG2 ROW_DST_ARG1 \
+                     , DT * dst2_data_
+#define ROW_DST_STORE2 ROW_DST_STORE1 \
+                       , dst2_data(dst2_data_)
+#define ROW_DST_VAR2 ROW_DST_VAR1 \
+                     DT * dst2_data;
+#define ROW_DST_ARG3 ROW_DST_ARG2 \
+                     , DT * dst3_data_
+#define ROW_DST_STORE3 ROW_DST_STORE2 \
+                       , dst3_data(dst3_data_)
+#define ROW_DST_VAR3 ROW_DST_VAR2 \
+                     DT * dst3_data;
+#define ROW_DST_ARG4 ROW_DST_ARG3 \
+                     , DT * dst4_data_
+#define ROW_DST_STORE4 ROW_DST_STORE3 \
+                       , dst4_data(dst4_data_)
+#define ROW_DST_VAR4 ROW_DST_VAR3 \
+                     DT * dst4_data;
     
-    void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service) {
-  printer->Print('/**\n');
-  WriteDocCommentBody(printer, service);
-  printer->Print(
-    ' * Protobuf service {@code $fullname$}\n'
-    ' */\n',
-    'fullname', EscapeJavadoc(service->full_name()));
-}
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vadd(v_src0, v_src1);
+    }
     
-        /*
-        For each point `p` within `size`, do:
-        dst[p] = lower <= src[p] && src[p] <= upper ? trueValue : falseValue
-    */
-    void thresholdRange(const Size2D &size,
-                        const u8 *srcBase, ptrdiff_t srcStride,
-                        u8 *dstBase, ptrdiff_t dstStride,
-                        u8 lowerThreshold, u8 upperThreshold,
-                        u8 trueValue = 255, u8 falseValue = 0);
     
-    void absDiff(const Size2D &size,
-             const u16 *src0Base, ptrdiff_t src0Stride,
-             const u16 *src1Base, ptrdiff_t src1Stride,
-             u16 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u16>());
+    {    void operator() (const T * src0, const T * src1, u8 * dst) const
+    {
+        dst[0] = src0[0] == src1[0] ? 255 : 0;
+    }
+};
+    
+    
+    {
+    {        size_t dj = 0u, j = 0u;
+        for (; j < roiw16; dj += 64, j += 16)
+        {
+            internal::prefetch(uv + j);
+            internal::prefetch(y1 + j);
+            internal::prefetch(y2 + j);
+#if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+            CONVERTYUV420TORGB(4, d0, d1, q5, q6)
+#else
+            convertYUV420.ToRGB(y1 + j, y2 + j, uv + j, dst1 + dj, dst2 + dj);
+#endif
+        }
+        for (; j + 2 <= size.width; j+=2, dj += 8)
+        {
+            convertYUV420ToRGB<4, 2, 1>(y1+j, y2+j, uv+j, dst1 + dj, dst2 + dj);
+        }
+    }
 #else
     (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
+    (void)yBase;
+    (void)yStride;
+    (void)uvBase;
+    (void)uvStride;
     (void)dstBase;
     (void)dstStride;
 #endif
 }
     
-        //last line
-    if(i < size.height)
+        template <typename ElementType>
+    /*static*/ ValuePtr Value::CreateSequence(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/)
     {
-        //vertical convolution
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        //TODO: avoid data copy.
+        std::vector<std::vector<size_t>> input = { sequenceData };
+        return Create<ElementType>(dimension, input, {sequenceStartFlag}, device, readOnly);
     }
     
     
-    {            v_src = vld4q_u8(src + sj + 64);
-            vst1q_u8(dst + dj + 16, v_src.val[coi]);
-        }
-#endif
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(f32, s8, 8,
-     register float32x4_t vhalf asm ('q0') = vdupq_n_f32(0.5f);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.32 {d2-d3}, [%[src1]]                              \n\t'
-             'vld1.32 {d4-d5}, [%[src2]]                              \n\t'
-             'vadd.f32 q3, q1, q0                                     \n\t'
-             'vadd.f32 q4, q2, q0                                     \n\t'
-             'vcvt.s32.f32 q5, q3                                     \n\t'
-             'vcvt.s32.f32 q6, q4                                     \n\t'
-             'vqmovn.s32 d14, q5                                      \n\t'
-             'vqmovn.s32 d15, q6                                      \n\t'
-             'vqmovn.s16 d16, q7                                      \n\t'
-             'vst1.8 {d16}, [%[dst]]                                  \n\t'
-             : /*no output*/
-             : [src1] 'r' (_src + i + 0),
-               [src2] 'r' (_src + i + 4),
-               [dst] 'r' (_dst + i),
-               'w' (vhalf)
-             : 'd2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17'
-         );
-     }
-})
-#else
-CVT_FUNC(f32, s8, 8,
-     float32x4_t vhalf = vdupq_n_f32(0.5f);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         float32x4_t vline1_f32 = vld1q_f32(_src + i);
-         float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-    }
-    }
-    
-    void lshift(const Size2D &size,
-            const u8 * srcBase, ptrdiff_t srcStride,
-            s16 * dstBase, ptrdiff_t dstStride,
-            u32 shift)
-{
-    internal::assertSupportedConfiguration();
-    }
-    
-    
-    {
-    {        for (--jd; js < size.width; ++js, --jd)
-            dst[jd] = src[js];
-    }
-}
-    
-    // Factory makes and returns an IntSimdMatrix (sub)class of the best
-// available type for the current architecture.
-/* static */
-IntSimdMatrix* IntSimdMatrix::GetFastestMultiplier() {
-  IntSimdMatrix* multiplier = nullptr;
-  if (SIMDDetect::IsAVX2Available()) {
-    multiplier = new IntSimdMatrixAVX2();
-  } else if (SIMDDetect::IsSSEAvailable()) {
-    multiplier = new IntSimdMatrixSSE();
-  } else {
-    // Default c++ implementation.
-    multiplier = new IntSimdMatrix();
-  }
-  return multiplier;
-}
-    
-      // Computes a reshaped copy of the weight matrix w. If there are no
-  // partial_funcs_, it does nothing.
-  void Init(const GENERIC_2D_ARRAY<int8_t>& w);
-    
-    // Computes one set of 4x8 products of inputs and weights, adding to result.
-// Horizontally adds 4 adjacent results, making 8x32-bit results.
-// rep_input is assumed to be an 8x replicated set of 4x8-bit signed integers.
-// Note that wi must previously have been re-organized with blocks of 4x8
-// weights in contiguous memory.
-// ones is a register of 16x16-bit values all equal to 1.
-// Note: wi is incremented by the amount of data read.
-// weights and reps are scratch registers.
-// This function must be inlined with references in order for the compiler to
-// correctly use the registers declared in the caller.
-inline void MultiplyGroup(const __m256i& rep_input, const __m256i& ones,
-                          const int8_t*& wi, __m256i& weights, __m256i& reps,
-                          __m256i& result) {
-  // Load a 4x8 block of weights.
-  weights = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(wi));
-  wi += kNumInputsPerRegister;
-  // Normalize the signs on rep_input, weights, so weights is always +ve.
-  reps = _mm256_sign_epi8(rep_input, weights);
-  weights = _mm256_sign_epi8(weights, weights);
-  // Multiply 32x8-bit reps by 32x8-bit weights to make 16x16-bit results,
-  // with adjacent pairs added.
-  weights = _mm256_maddubs_epi16(weights, reps);
-  // Multiply 16x16-bit result by 16x16-bit ones to make 8x32-bit results,
-  // with  adjacent pairs added. What we really want is a horizontal add of
-  // 16+16=32 bit result, but there is no such instruction, so multiply by
-  // 16-bit ones instead. It is probably faster than all the sign-extending,
-  // permuting and adding that would otherwise be required.
-  weights = _mm256_madd_epi16(weights, ones);
-  result = _mm256_add_epi32(result, weights);
-}
-    
-    #endif
-
-    
-      // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
-    
-    bool PageIterator::SetWordBlamerBundle(BlamerBundle *blamer_bundle) {
-  if (it_->word() != nullptr) {
-    it_->word()->blamer_bundle = blamer_bundle;
-    return true;
-  } else {
-    return false;
-  }
-}
-    
-      /**
-   * Returns an image of the current object at the given level in greyscale
-   * if available in the input. To guarantee a binary image use BinaryImage.
-   * NOTE that in order to give the best possible image, the bounds are
-   * expanded slightly over the binary connected component, by the supplied
-   * padding, so the top-left position of the returned image is returned
-   * in (left,top). These will most likely not match the coordinates
-   * returned by BoundingBox.
-   * If you do not supply an original image, you will get a binary one.
-   * Use pixDestroy to delete the image after use.
-   */
-  Pix* GetImage(PageIteratorLevel level, int padding, Pix* original_img,
-                int* left, int* top) const;
-    
-    
-    {  *right_piece = word2;
-  *orig_blamer_bundle = orig_bb;
-}
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-      void branchFar(CodeAddress c, BranchParams bp,
-                 ImmType immt = ImmType::TocOnly,
-                 bool immMayChange = false) {
-    LinkReg lr = (bp.savesLR()) ? LinkReg::Save : LinkReg::DoNotTouch;
-    branchFar(c, static_cast<BranchConditions>(bp), lr, immt, immMayChange);
-  }
-    
-      // Parse and process a .ini string (e.g., -d)
-  static void ParseIniString(const std::string &iniStr, IniSettingMap &ini,
-                             const bool constants_only = false);
-    
-      static std::string FormatNumber(const char* fmt, int64_t n);
-  static std::string FormatSize(int64_t size);
-  static std::string FormatTime(int64_t milliSeconds);
-    
-    
-    {    // If the -c option is specified without a -n, php behavior is to
-    // load the default ini/hdf
-    auto cb = [&newargv] (const char *filename) {
-      newargv.push_back('-c');
-      newargv.push_back(filename);
-    };
-    add_default_config_files_globbed(DEFAULT_CONFIG_DIR '/php*.ini', cb);
-    add_default_config_files_globbed(DEFAULT_CONFIG_DIR '/config*.hdf', cb);
-  }
-    
-      ExtendedException& operator=(const ExtendedException& other);
-  ExtendedException& operator=(ExtendedException&& other) noexcept;
-    
-    #endif
-
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-        // delete files/directories that are only in dest
-    if (access(fsrc.c_str(), F_OK) < 0) {
-      size_t pos = fdest.rfind('.');
-      if (pos != string::npos) {
-        string ext = fdest.substr(pos + 1);
-        // do not delete intermediate files
-        if (ext == 'o' || ext == 'd') {
-          continue;
-        }
-      }
-      todelete.insert(fdest);
-      continue;
-    }
-    
-    
-    {    for (size_t i = 0; i < batch.size; ++i) {
-      offset_[i + 1] = (i + 1) * num_col_;
-      Row<IndexType> row = batch[i];
-      for (uint32_t j = 0; j < num_col_; ++j) {
-        dense_index_[i * num_col_ + j] = j;
-      }
-      for (unsigned k = 0; k < row.length; ++k) {
-        uint32_t index = row.get_index(k);
-        CHECK_LT(index, num_col_)
-            << 'Featuere index larger than num_col';
-        dense_value_[i * num_col_ + index]  = row.get_value(k);
-      }
-    }
-    out_ = batch;
-    out_.index = dmlc::BeginPtr(dense_index_);
-    out_.value = dmlc::BeginPtr(dense_value_);
-    out_.offset = dmlc::BeginPtr(offset_);
-    return true;
-  }
-    
-    #include <dmlc/io.h>
-#include <string>
-#include <cstring>
-#include './sync.h'
-    
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
-}
-    
-    /*!
- * \brief Registry entry for sparse page format.
- */
-struct SparsePageFormatReg
-    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
-                                        std::function<SparsePageFormat* ()> > {
+    {private:
+    long long m_start;
+    long long m_end;
 };
     
-    namespace dmlc {
-DMLC_REGISTRY_ENABLE(::xgboost::TreeUpdaterReg);
-}  // namespace dmlc
+        // flatten the set of all nodes
+    // we collect all root ComputationNodes from the config record, and then expand into all their children by work-list processing
+    // TODO: This currently only supports nodes of the same ElemType. We could allow conversion operators.
+    for (let& id : config.GetMemberIds())
+    {
+        let& value = config[id];
+        if (value.Is<ComputationNodeBase>())
+        {
+            const ComputationNodeBasePtr& node = value;
+            // top-level defined record members get their top-level name
+            bool isSpecialNode = false;
+            for (let& nodeGroupName : nodeGroupNames)
+                isSpecialNode |= id == nodeGroupName + L'Nodes';
+            if (!isSpecialNode)
+                node->SetName(id);
+            workList.push_back(node);
+        }
+    }
+    
+                    for (size_t j = 0; j < secondSize + 1; j++)
+                {
+                    grid(0, j) = (float)(j * insPen);
+                    insMatrix(0, j) = (float)j;
+                }
+                for (size_t i = 1; i < firstSize + 1; i++)
+                {
+                    for (size_t j = 1; j < secondSize + 1; j++)
+                    {
+                        if (firstSeqVec[i - 1] == secondSeqVec[j - 1])
+                        {
+                            grid(i, j) = grid(i - 1, j - 1);
+                            insMatrix(i, j) = insMatrix(i - 1, j - 1);
+                            delMatrix(i, j) = delMatrix(i - 1, j - 1);
+                            subMatrix(i, j) = subMatrix(i - 1, j - 1);
+                        }
+                        else
+                        {
+                            del = grid(i - 1, j) + delPen; //deletion 
+                            ins = grid(i, j - 1) + insPen;  //insertion
+                            sub = grid(i - 1, j - 1) + subPen; //substitution 
+                            if (sub <= del && sub <= ins)
+                            {
+                                insMatrix(i, j) = insMatrix(i - 1, j - 1);
+                                delMatrix(i, j) = delMatrix(i - 1, j - 1);
+                                subMatrix(i, j) = subMatrix(i - 1, j - 1) + 1.0f;
+                                grid(i, j) = sub;
+                            }
+                            else if (del < ins)
+                            {
+                                insMatrix(i, j) = insMatrix(i - 1, j);
+                                subMatrix(i, j) = subMatrix(i - 1, j);
+                                delMatrix(i, j) = delMatrix(i - 1, j) + 1.0f;
+                                grid(i, j) = del;
+                            }
+                            else
+                            {
+                                delMatrix(i, j) = delMatrix(i, j - 1);
+                                subMatrix(i, j) = subMatrix(i, j - 1);
+                                insMatrix(i, j) = insMatrix(i, j - 1) + 1.0f;
+                                grid(i, j) = ins;
+                            }
+                        }
+                    }
+                }
+    
+    
+    {        bool log = GetEnvironmentPtr() && Environment().traceLevel > 0; // note: this will not log before node is part of network
+        if (log)
+        {
+            fprintf(stderr, '%ls: Initializing Parameter[%s] <- %ls(seed=%d, init dims=[%d x %d], range=%f(%f*%f), onCPU=%s.\n)',
+                    NodeDescription().c_str(), string(GetSampleLayout()).c_str(), m_initString.c_str(),
+                    (int)randomSeed, (int)fanOut, (int)fanIn, (float)range, (float)(range/initValueScale), (float)(initValueScale), initOnCPUOnly ? 'true' : 'false');
+        }
+    }
+    
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
+    
+    class Env;
+class Iterator;
+class TableCache;
+class VersionEdit;
+    
+    TEST(CorruptionTest, SequenceNumberRecovery) {
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v1'));
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v2'));
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v3'));
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v4'));
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v5'));
+  RepairDB();
+  Reopen();
+  std::string v;
+  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
+  ASSERT_EQ('v5', v);
+  // Write something.  If sequence number was not recovered properly,
+  // it will be hidden by an earlier write.
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'v6'));
+  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
+  ASSERT_EQ('v6', v);
+  Reopen();
+  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
+  ASSERT_EQ('v6', v);
+}
+    
+      void Crc32c(ThreadState* thread) {
+    // Checksum about 500MB of data total
+    const int size = 4096;
+    const char* label = '(4K per op)';
+    std::string data(size, 'x');
+    int64_t bytes = 0;
+    uint32_t crc = 0;
+    while (bytes < 500 * 1048576) {
+      crc = crc32c::Value(data.data(), size);
+      thread->stats.FinishedSingleOp();
+      bytes += size;
+    }
+    // Print so result is not dead
+    fprintf(stderr, '... crc=0x%x\r', static_cast<unsigned int>(crc));
+    }
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
+    
+    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
+  Slice user_key = ExtractUserKey(*key);
+  std::string tmp(user_key.data(), user_key.size());
+  user_comparator_->FindShortSuccessor(&tmp);
+  if (tmp.size() < user_key.size() &&
+      user_comparator_->Compare(user_key, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*key, tmp) < 0);
+    key->swap(tmp);
+  }
+}
+    
+    
+    {  delete iter;
+  delete table;
+  delete file;
+  return Status::OK();
+}
+    
+    std::string TableFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'ldb');
+}
+    
+      fname = TableFileName('bar', 200);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(200, number);
+  ASSERT_EQ(kTableFile, type);
+    
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+        // Skip physical record that started before initial_offset_
+    if (end_of_buffer_offset_ - buffer_.size() - kHeaderSize - length <
+        initial_offset_) {
+      result->clear();
+      return kBadRecord;
+    }
+    
+      // Read the next record into *record.  Returns true if read
+  // successfully, false if we hit end of the input.  May use
+  // '*scratch' as temporary storage.  The contents filled in *record
+  // will only be valid until the next mutating operation on this
+  // reader or the next mutation to *scratch.
+  bool ReadRecord(Slice* record, std::string* scratch);
+    
+    
+    {    virtual Status Close() { return Status::OK(); }
+    virtual Status Flush() { return Status::OK(); }
+    virtual Status Sync() { return Status::OK(); }
+    virtual Status Append(const Slice& slice) {
+      contents_.append(slice.data(), slice.size());
+      return Status::OK();
+    }
+  };
+    
+      // Return an iterator that yields the contents of the memtable.
+  //
+  // The caller must ensure that the underlying MemTable remains live
+  // while the returned iterator is live.  The keys returned by this
+  // iterator are internal keys encoded by AppendInternalKey in the
+  // db/format.{h,cc} module.
+  Iterator* NewIterator();
+    
+      // Make a bunch of uncompacted log files.
+  uint64_t old_log = FirstLogFile();
+  MakeLogFile(old_log+1, 1000, 'hello', 'world');
+  MakeLogFile(old_log+2, 1001, 'hi', 'there');
+  MakeLogFile(old_log+3, 1002, 'foo', 'bar2');
+    
+    template<typename Key, class Comparator>
+inline void SkipList<Key,Comparator>::Iterator::Seek(const Key& target) {
+  node_ = list_->FindGreaterOrEqual(target, nullptr);
+}
+    
+    static void ConcurrentReader(void* arg) {
+  TestState* state = reinterpret_cast<TestState*>(arg);
+  Random rnd(state->seed_);
+  int64_t reads = 0;
+  state->Change(TestState::RUNNING);
+  while (!state->quit_flag_.Acquire_Load()) {
+    state->t_.ReadStep(&rnd);
+    ++reads;
+  }
+  state->Change(TestState::DONE);
+}
+    
+        // Create Logical Device (with 1 queue)
+    {
+        int device_extension_count = 1;
+        const char* device_extensions[] = { 'VK_KHR_swapchain' };
+        const float queue_priority[] = { 1.0f };
+        VkDeviceQueueCreateInfo queue_info[1] = {};
+        queue_info[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queue_info[0].queueFamilyIndex = g_QueueFamily;
+        queue_info[0].queueCount = 1;
+        queue_info[0].pQueuePriorities = queue_priority;
+        VkDeviceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+        create_info.queueCreateInfoCount = sizeof(queue_info) / sizeof(queue_info[0]);
+        create_info.pQueueCreateInfos = queue_info;
+        create_info.enabledExtensionCount = device_extension_count;
+        create_info.ppEnabledExtensionNames = device_extensions;
+        err = vkCreateDevice(g_PhysicalDevice, &create_info, g_Allocator, &g_Device);
+        check_vk_result(err);
+        vkGetDeviceQueue(g_Device, g_QueueFamily, 0, &g_Queue);
+    }
+    
+        // Rendering
+    ImGui::Render();
+    ImGuiIO& io = ImGui::GetIO();
+    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // We are using the OpenGL fixed pipeline to make the example code simpler to read!
+    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
+    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box); 
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_SCISSOR_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+    
+        void FreeTypeFont::SetPixelHeight(int pixel_height) 
+    {
+        // I'm not sure how to deal with font sizes properly.
+        // As far as I understand, currently ImGui assumes that the 'pixel_height' is a maximum height of an any given glyph,
+        // i.e. it's the sum of font's ascender and descender. Seems strange to me.
+        FT_Size_RequestRec req;
+        req.type = FT_SIZE_REQUEST_TYPE_REAL_DIM;
+        req.width = 0;
+        req.height = (uint32_t)pixel_height * 64;
+        req.horiResolution = 0;
+        req.vertResolution = 0;
+        FT_Request_Size(FreetypeFace, &req);
+    }
+    
+    // Data
+static ALLEGRO_DISPLAY*         g_Display = NULL;
+static ALLEGRO_BITMAP*          g_Texture = NULL;
+static double                   g_Time = 0.0;
+static ALLEGRO_MOUSE_CURSOR*    g_MouseCursorInvisible = NULL;
+static ALLEGRO_VERTEX_DECL*     g_VertexDecl = NULL;
+static char*                    g_ClipboardTextData = NULL;
+    
+      /**
+   * @brief Start the ESD CAN client.
+   * @return The status of the start action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Start() override;
     
      private:
-  // try to prune off current leaf
-  inline int TryPruneLeaf(RegTree &tree, int nid, int depth, int npruned) { // NOLINT(*)
-    if (tree[nid].IsRoot()) return npruned;
-    int pid = tree[nid].Parent();
-    RegTree::NodeStat &s = tree.Stat(pid);
-    ++s.leaf_child_cnt;
-    if (s.leaf_child_cnt >= 2 && param_.NeedPrune(s.loss_chg, depth - 1)) {
-      // need to be pruned
-      tree.ChangeToLeaf(pid, param_.learning_rate * s.base_weight);
-      // tail recursion
-      return this->TryPruneLeaf(tree, pid, depth - 1, npruned + 2);
-    } else {
-      return npruned;
-    }
-  }
-  /*! \brief do pruning of a tree */
-  inline void DoPrune(RegTree &tree) { // NOLINT(*)
-    int npruned = 0;
-    // initialize auxiliary statistics
-    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
-      tree.Stat(nid).leaf_child_cnt = 0;
-    }
-    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
-      if (tree[nid].IsLeaf()) {
-        npruned = this->TryPruneLeaf(tree, nid, tree.GetDepth(nid), npruned);
-      }
-    }
-    if (!param_.silent) {
-      LOG(INFO) << 'tree pruning end, ' << tree.param.num_roots << ' roots, '
-                << tree.NumExtraNodes() << ' extra nodes, ' << npruned
-                << ' pruned nodes, max_depth=' << tree.MaxDepth();
-    }
-  }
+  std::unique_ptr<std::thread> thread_;
+  bool is_running_ = false;
+  // CanClient, MessageManager pointer life is managed by outer program
+  CanClient *can_client_ = nullptr;
+  MessageManager<SensorType> *pt_manager_ = nullptr;
+  bool enable_log_ = false;
+  bool is_init_ = false;
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
+    #include 'gtest/gtest.h'
+    
+    
+    {  EXPECT_TRUE(value.is_bit_1(0));
+  EXPECT_TRUE(value.is_bit_1(1));
+  EXPECT_FALSE(value.is_bit_1(3));
+  EXPECT_TRUE(value.is_bit_1(6));
+  EXPECT_FALSE(value.is_bit_1(7));
+}
+    
+    #endif  // MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+
+    
+    // Canbus gflags
+DEFINE_double(sensor_freq, 100,
+              'Sensor feedback timer frequency -- 0 means event trigger.');
