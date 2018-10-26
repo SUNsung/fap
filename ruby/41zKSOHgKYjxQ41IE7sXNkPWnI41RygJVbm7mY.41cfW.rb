@@ -1,96 +1,100 @@
 
         
-              def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
+          # True if a {Formula} is being built universally.
+  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
+  # <pre>args << '--universal-binary' if build.universal?</pre>
+  def universal?
+    include?('universal') && option_defined?('universal')
+  end
     
-                if pattern.first == '/' && pattern.last == '/'
-              Regexp.new(pattern[1...-1]) =~ pipeline.ref
-            else
-              pattern == pipeline.ref
-            end
-          end
-        end
-      end
-    end
+      private
+    
+        puts 'Your system is ready to brew.' unless Homebrew.failed?
   end
 end
 
     
-            # Executes a command and returns true if the command succeeded,
-        # and false otherwise. By default, this executes as a normal user,
-        # and it is up to the communicator implementation if they expose an
-        # option for running tests as an administrator.
-        #
-        # @see #execute
-        def test(command, opts=nil)
-        end
-      end
+        it 'allows to delete a user' do
+      visit admin_users_path
+      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
+      expect(page).to have_text('User 'bob' was deleted.')
+      expect(page).to have_no_text('bob@example.com')
     end
-  end
-end
-
     
-              @registered.each do |plugin|
-            configs = plugin.data[:config_upgrade_safe]
-            if configs
-              configs.each do |key|
-                result[key] = plugin.config.get(key)
-              end
-            end
-          end
-    
-              # Return the registry
-          data[:hosts]
+          describe '#generate_diff' do
+        it 'should check if the agent requires a service' do
+          agent_diffs = services_scenario_import.agent_diffs
+          basecamp_agent_diff = agent_diffs[0]
+          expect(basecamp_agent_diff.requires_service?).to eq(true)
         end
     
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
-        end
+          it 'runs until stop is called' do
+        mock.instance_of(Rufus::Scheduler).join
+        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
+        @agent_runner.run
       end
+    
+        it 'should raise an exception when encountering complex JSONPaths' do
+      @agent.options['username_path'] = '$.very.complex[*]'
+      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
+        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
     end
+    
+      it 'provides hash-style access to its properties with both symbol and string keys' do
+    expect(location[:lat]).to be_a Float
+    expect(location[:lat]).to eq 2.0
+    expect(location['lat']).to be_a Float
+    expect(location['lat']).to eq 2.0
   end
-end
-
     
-            # Defines a capability for the given host. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] host The name of the host
-        # @param [String] cap The name of the capability
-        def self.host_capability(host, cap, &block)
-          components.host_capabilities[host.to_sym].register(cap.to_sym, &block)
-          nil
-        end
-    
-          # Essentially the inverse of +mask_token+.
-      def unmask_token(masked_token)
-        # Split the token into the one-time pad and the encrypted
-        # value and decrypt it
-        token_length = masked_token.length / 2
-        one_time_pad = masked_token[0...token_length]
-        encrypted_token = masked_token[token_length..-1]
-        xor_byte_strings(one_time_pad, encrypted_token)
-      end
-    
-        it 'sets a session authenticity token if one does not exist' do
-      session = {}
-      allow(Rack::Protection::AuthenticityToken).to receive(:random_token).and_return(token)
-      allow_any_instance_of(Rack::Protection::AuthenticityToken).to receive(:mask_token).and_return(masked_token)
-      Rack::Protection::AuthenticityToken.token(session)
-      expect(session[:csrf]).to eq(token)
+      describe '#recursively_interpolate_jsonpaths' do
+    it 'interpolates all string values in a structure' do
+      struct = {
+        :int => 5,
+        :string => 'this <escape $.works>',
+        :array => ['<works>', 'now', '<$.there.world>'],
+        :deep => {
+          :string => 'hello <there.world>',
+          :hello => :world
+        }
+      }
+      data = { :there => { :world => 'WORLD' }, :works => 'should work' }
+      expect(Utils.recursively_interpolate_jsonpaths(struct, data)).to eq({
+        :int => 5,
+        :string => 'this should+work',
+        :array => ['should work', 'now', 'WORLD'],
+        :deep => {
+          :string => 'hello WORLD',
+          :hello => :world
+        }
+      })
     end
   end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+    class Converter
+  extend Forwardable
+  include Network
+  include LessConversion
+  include JsConversion
+  include FontsConversion
+    
+        def write_cached_files(path, files)
+      full_path = './#@cache_path/#@branch_sha/#{path}'
+      files.each do |name, content|
+        FileUtils.mkdir_p File.dirname(File.join(full_path, name))
+        File.open('#{full_path}/#{name}', 'wb') { |f| f.write content }
+      end
     end
