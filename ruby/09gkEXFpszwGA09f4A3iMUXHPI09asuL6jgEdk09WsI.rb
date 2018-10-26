@@ -1,58 +1,100 @@
 
         
-              update_disk_cleanup_size(path.disk_usage)
-    end
-    
-        def compass?
-      defined?(::Compass::Frameworks)
-    end
-    
-        def pos
-      byte_to_str_pos @s.pos
-    end
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-      class SendPublic < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
-    
-          it 'should not be catched when it is unexpected' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        allow(alice).to receive(:like!).and_raise('something')
-        allow(@controller).to receive(:current_user).and_return(alice)
-        expect { post :create, params: like_hash, format: :json }.to raise_error('something')
-      end
-    end
-  end
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
+                include ::EachBatch
       end
     
+              def nodes
+            @path.count('/')
+          end
+    
+              def metadata(metadata)
+            @metadata.merge!(metadata)
             self
+          end
+    
+              def self.default
+          end
+    
+        # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
+      end
+    end
+    
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+        include Devise::Controllers::StoreLocation
     
-            private
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
+    
+        def document?
+      @content =~ DOCUMENT_RGX
+    end
+    
+        def self.run(urls, options = {}, &block)
+      urls = urls.dup
+      requester = new(options)
+      requester.on_response(&block) if block
+      requester.on_response do # cheap hack to ensure root page is processed first
+        if urls
+          requester.request(urls)
+          urls = nil
+        end
+      end
+      requester.request(urls.shift)
+      requester.run
+      requester
+    end
+    
+          str.truncate(max_length).ljust(max_length) << tag.to_s
+    end
+    
+            css('.filetree').each do |node|
+          node.content = node.css('.file').map(&:inner_html).join('\n')
+          node.name = 'pre'
+          node.remove_attribute('class')
+        end
+    
+            css('pre > code').each do |node|
+          node['class'] ||= ''
+          lang = if node['class'].include?('lang-html') || node.content =~ /\A</
+            'html'
+          elsif node['class'].include?('lang-css')
+            'css'
+          elsif node['class'].include?('lang-js') || node['class'].include?('lang-javascript')
+            'javascript'
+          end
+          node.parent['data-language'] = lang if lang
+    
+          new_email = resource_params.fetch(:unconfirmed_email)
+    
+        def resend
+      authorize @user, :confirm?
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
+    
+      def status_finder
+    StatusFinder.new(params[:url])
+  end
+    
+      def show
+    render_cached_json('api:v1:instances:activity:show', expires_in: 1.day) { activity }
+  end
