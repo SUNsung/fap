@@ -1,273 +1,188 @@
 
         
-            def __init__(self, employee_id, name):
-        super(Operator, self).__init__(employee_id, name, Rank.SUPERVISOR)
+        
+def build_completion(opt_parser):
+    commands = []
     
-        MOTORCYCLE = 0
-    COMPACT = 1
-    LARGE = 2
-    
-        def __init__(self, categorizer):
-        self.categorizer = categorizer
-        ...
-    
-    
-if __name__ == '__main__':
-    HitCounts.run()
+    password = key + 16 * [0]
+new_key = aes_encrypt(password, key_expansion(password)) * (32 // 16)
+r = openssl_encode('aes-256-ctr', new_key, iv)
+print('aes_decrypt_text 32')
+print(repr(r))
 
     
-    from mrjob.job import MRJob
+    # We must be able to import youtube_dl
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     
-        def get_people(self, ids):
-        results = []
-        for id in ids:
-            if id in self.people:
-                results.append(self.people[id])
-        return results
+        def gen_ies_md(ies):
+        for ie in ies:
+            ie_md = '**{0}**'.format(ie.IE_NAME)
+            ie_desc = getattr(ie, 'IE_DESC', None)
+            if ie_desc is False:
+                continue
+            if ie_desc is not None:
+                ie_md += ': {0}'.format(ie.IE_DESC)
+            if not ie.working():
+                ie_md += ' (Currently broken)'
+            yield ie_md
     
-    
-class HashTable(object):
-    
-        def create_signature(self):
-        # Create signature based on url and contents
-        pass
-    
-            if error is None:
-            # store the user id in a new session and return to the index
-            session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
-    
-        def logout(self):
-        return self._client.get('/auth/logout')
-    
-        with app.app_context():
-        db = get_db()
-        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
-        assert post['title'] == 'updated'
-    
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
-    
-            :param resource: the name of the resource.  To access resources within
-                         subfolders use forward slashes as separator.
-        :param mode: resource file opening mode, default is 'rb'.
-        '''
-        if mode not in ('r', 'rb'):
-            raise ValueError('Resources can only be opened for reading')
-        return open(os.path.join(self.root_path, resource), mode)
+            info_dict = _make_result(formats)
+        ydl = YDL({'format': 'best'})
+        ie = YoutubeIE(ydl)
+        ie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(copy.deepcopy(info_dict))
+        downloaded = ydl.downloaded_info_dicts[0]
+        self.assertEqual(downloaded['format_id'], 'aac-64')
     
     
-class SecureCookieSessionInterface(SessionInterface):
-    '''The default session interface that stores sessions in signed cookies
-    through the :mod:`itsdangerous` module.
-    '''
-    #: the salt that should be applied on top of the secret key for the
-    #: signing of cookie based sessions.
-    salt = 'cookie-session'
-    #: the hash function to use for the signature.  The default is sha1
-    digest_method = staticmethod(hashlib.sha1)
-    #: the name of the itsdangerous supported key derivation.  The default
-    #: is hmac.
-    key_derivation = 'hmac'
-    #: A python serializer for the payload.  The default is a compact
-    #: JSON derived serializer with support for some extra Python types
-    #: such as datetime objects or tuples.
-    serializer = session_json_serializer
-    session_class = SecureCookieSession
+def test_preprocess_input():
+    # Test image batch with float and int image input
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
     
-    import numpy as np
-import gc
-from datetime import datetime
-from sklearn.isotonic import isotonic_regression
-from sklearn.utils.bench import total_seconds
-import matplotlib.pyplot as plt
-import argparse
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loss = MSE_MAE_loss(0.3)
+        inputs = keras.layers.Input((2,))
+        outputs = keras.layers.Dense(1, name='model_output')(inputs)
+        model = keras.models.Model(inputs, outputs)
+        model.compile(optimizer='sgd', loss={'model_output': loss})
+        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
+        model.save(model_filename)
     
-        if dataset_name == 'shuttle':
-        dataset = fetch_mldata('shuttle')
-        X = dataset.data
-        y = dataset.target
-        # we remove data with label 4
-        # normal data are then those of class 1
-        s = (y != 4)
-        X = X[s, :]
-        y = y[s]
-        y = (y != 1).astype(int)
+        # Note on specifying the initial state of RNNs
+    Note: that
+        One: You can specify the initial state of RNN layers symbolically by
+            calling them with the keyword argument `initial_state`.
+        Two: The value of `initial_state` should be a tensor or list of
+            tensors representing
+            the initial state of the RNN layer.
+        You can specify the initial state of RNN layers numerically by:
+        One: calling `reset_states`
+            - With the keyword argument `states`.
+                - The value of
+            `states` should be a numpy array or
+            list of numpy arrays representing
+        the initial state of the RNN layer.
     
-        if args.plot is not None:
-        max_val = getattr(args, args.plot)
-        if args.plot in ('classes', 'samples'):
-            min_val = 2
+        # Output shape
+        - if `return_state`: a list of tensors. The first tensor is
+            the output. The remaining tensors are the last states,
+            each 5D tensor with shape:
+            `(samples, timesteps,
+              filters, new_rows, new_cols)` if data_format='channels_first'
+            or 5D tensor with shape:
+            `(samples, timesteps,
+              new_rows, new_cols, filters)` if data_format='channels_last'.
+            `rows` and `cols` values might have changed due to padding.
+        - if `return_sequences`: 5D tensor with shape:
+            `(samples, timesteps,
+              filters, new_rows, new_cols)` if data_format='channels_first'
+            or 5D tensor with shape:
+            `(samples, timesteps,
+              new_rows, new_cols, filters)` if data_format='channels_last'.
+        - else, 4D tensor with shape:
+            `(samples, filters, new_rows, new_cols)` if data_format='channels_first'
+            or 4D tensor with shape:
+            `(samples, new_rows, new_cols, filters)` if data_format='channels_last'.
+    
+            # Broken links can't be fixed and
+        # I am not sure what do with the local ones.
+        if errortype.lower() in ['broken', 'local']:
+            print('Not Fixed: ' + line)
         else:
-            min_val = 0
-        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
-        if args.plot in ('classes', 'samples'):
-            steps = np.unique(np.round(steps).astype(int))
-        setattr(args, args.plot, steps)
-    
-        results = defaultdict(lambda: [])
-    
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
-    
-    import time
-    
-    ###############################################################################
-clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
-                   tol=None)
-clf.fit(X_train, y_train)
-print('model sparsity: %f' % sparsity_ratio(clf.coef_))
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+            # If this is a new file
+            if newfilename != _filename:
     
     from scrapy.commands import ScrapyCommand
-from scrapy.contracts import ContractsManager
-from scrapy.utils.misc import load_object
-from scrapy.utils.conf import build_component_list
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
 from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+    
+        def syntax(self):
+        return '[options] <url>'
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+        def syntax(self):
+        return '[options]'
+    
+            # The crawler is created this way since the Shell manually handles the
+        # crawling engine, so the set up in the crawl method won't work
+        crawler = self.crawler_process._create_crawler(spidercls)
+        # The Shell class needs a persistent engine in the crawler
+        crawler.engine = crawler._create_engine()
+        crawler.engine.start()
+    
+        def syntax(self):
+        return '[-v]'
     
     
-def sanitize_module_name(module_name):
-    '''Sanitize the given module name, by replacing dashes and points
-    with underscores and prefixing it with a letter if it doesn't start
-    with one
+FILEPATH = os.path.join(
+    os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'blns.txt')
+'''Path to the file'''
+    
+        path = os.fspath(path)
+    if isinstance(path, bytes):
+        curdir = b'.'
+        sep = b'/'
+        pardir = b'..'
+    else:
+        curdir = '.'
+        sep = '/'
+        pardir = '..'
+    
+        @unittest.skipIf(posix is None, 'Test requires posix module')
+    def test_ismount_directory_not_readable(self):
+        # issue #2466: Simulate ismount run on a directory that is not
+        # readable, which used to return False.
+        save_lstat = os.lstat
+        def fake_lstat(path):
+            st_ino = 0
+            st_dev = 0
+            if path.startswith(ABSTFN) and path != ABSTFN:
+                # ismount tries to read something inside the ABSTFN directory;
+                # simulate this being forbidden (no read permission).
+                raise OSError('Fake [Errno 13] Permission denied')
+            if path == ABSTFN:
+                st_dev = 1
+                st_ino = 1
+            return posix.stat_result((0, st_ino, st_dev, 0, 0, 0, 0, 0, 0, 0))
+        try:
+            os.lstat = fake_lstat
+            self.assertIs(posixpath.ismount(ABSTFN), True)
+        finally:
+            os.lstat = save_lstat
+    
+        Directories are *not* resources.
     '''
-    module_name = module_name.replace('-', '_').replace('.', '_')
-    if module_name[0] not in string.ascii_letters:
-        module_name = 'a' + module_name
-    return module_name
+    package = _get_package(package)
+    _normalize_path(name)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.is_resource(name)
+    try:
+        package_contents = set(contents(package))
+    except (NotADirectoryError, FileNotFoundError):
+        return False
+    if name not in package_contents:
+        return False
+    # Just because the given file_name lives as an entry in the package's
+    # contents doesn't necessarily mean it's a resource.  Directories are not
+    # resources, so let's try to find out if it's a directory or not.
+    path = Path(package.__spec__.origin).parent / name
+    return path.is_file()
     
-        def long_desc(self):
-        return 'Run the spider defined in the given file'
-    
-        def update_vars(self, vars):
-        '''You can use this function to update the Scrapy objects that will be
-        available in the shell
-        '''
-        pass
-    
-            e.g.:
-        @returns request
-        @returns request 2
-        @returns request 2 10
-        @returns request 0 10
-    '''
-    
-        def __init__(self, crawler):
-        self._crawler = crawler
-        self._schemes = {}  # stores acceptable schemes on instancing
-        self._handlers = {}  # stores instanced handlers for schemes
-        self._notconfigured = {}  # remembers failed handlers
-        handlers = without_none_values(
-            crawler.settings.getwithbase('DOWNLOAD_HANDLERS'))
-        for scheme, clspath in six.iteritems(handlers):
-            self._schemes[scheme] = clspath
-    
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
-    
-    
-site_info = 'coub.com'
-download = coub_download
-download_playlist = playlist_not_supported('coub')
-
-    
-        if re.match(r'https?://movie', url):
-        title = match1(html, 'name='description' content='([^']+)')
-        tid = match1(url, 'trailer/(\d+)')
-        real_url = 'https://movie.douban.com/trailer/video_url?tid=%s' % tid
-        type, ext, size = url_info(real_url)
-    
-        bokecc_metas = matchall(content, bokecc_patterns)
-    for meta in bokecc_metas:
-        found = True
-        bokecc.bokecc_download_by_id(meta[1], output_dir=output_dir, merge=merge, info_only=info_only, **kwargs)
-    
-    def get_api_key(page):
-    match = match1(page, pattern_inline_api_key)
-    # this happens only when the url points to a gallery page
-    # that contains no inline api_key(and never makes xhr api calls)
-    # in fact this might be a better approch for getting a temporary api key
-    # since there's no place for a user to add custom infomation that may
-    # misguide the regex in the homepage
-    if not match:
-        return match1(get_html('https://flickr.com'), pattern_inline_api_key)
-    return match
-    
-        # Test an invalid call (bpo-34125)
-    def test_unbound_method_no_args(self):
-        kwargs = {}
-        def f(p):
-            dict.get(**kwargs)
-        f_ident = ident(f)
-        self.check_events(f, [(1, 'call', f_ident),
-                              (1, 'return', f_ident)])
-    
-    
-supports_unicode_filenames = (sys.platform == 'darwin')
-    
-    from collections import namedtuple
-import os
-import platform
-import re
-import subprocess
-import sys
-    
-        def c_locale_get_error_handler(self, locale, isolated=False, encoding=None):
-        # Force the POSIX locale
-        env = os.environ.copy()
-        env['LC_ALL'] = locale
-        env['PYTHONCOERCECLOCALE'] = '0'
-        code = '\n'.join((
-            'import sys',
-            'def dump(name):',
-            '    std = getattr(sys, name)',
-            '    print('%s: %s' % (name, std.errors))',
-            'dump('stdin')',
-            'dump('stdout')',
-            'dump('stderr')',
-        ))
-        args = [sys.executable, '-X', 'utf8=0', '-c', code]
-        if isolated:
-            args.append('-I')
-        if encoding is not None:
-            env['PYTHONIOENCODING'] = encoding
-        else:
-            env.pop('PYTHONIOENCODING', None)
-        p = subprocess.Popen(args,
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT,
-                              env=env,
-                              universal_newlines=True)
-        stdout, stderr = p.communicate()
-        return stdout
+        def testDecompressorChunksMaxsize(self):
+        bzd = BZ2Decompressor()
+        max_length = 100
+        out = []
     
     # Simple class representing a record in our database.
 MemoRecord = namedtuple('MemoRecord', 'key, task')
@@ -275,72 +190,97 @@ MemoRecord = namedtuple('MemoRecord', 'key, task')
     
 def main():
     parser = ArgumentParser(description='''\
-Unpack a MIME message into a directory of files.
+Send the contents of a directory as a MIME message.
+Unless the -o option is given, the email is sent by forwarding to your local
+SMTP server, which then does the normal delivery process.  Your local machine
+must be running an SMTP server.
 ''')
-    parser.add_argument('-d', '--directory', required=True,
-                        help='''Unpack the MIME message into the named
-                        directory, which will be created if it doesn't already
-                        exist.''')
-    parser.add_argument('msgfile')
+    parser.add_argument('-d', '--directory',
+                        help='''Mail the contents of the specified directory,
+                        otherwise use the current directory.  Only the regular
+                        files in the directory are sent, and we don't recurse to
+                        subdirectories.''')
+    parser.add_argument('-o', '--output',
+                        metavar='FILE',
+                        help='''Print the composed message to FILE instead of
+                        sending the message to the SMTP server.''')
+    parser.add_argument('-s', '--sender', required=True,
+                        help='The value of the From: header (required)')
+    parser.add_argument('-r', '--recipient', required=True,
+                        action='append', metavar='RECIPIENT',
+                        default=[], dest='recipients',
+                        help='A To: header value (at least one required)')
     args = parser.parse_args()
+    directory = args.directory
+    if not directory:
+        directory = '.'
+    # Create the message
+    msg = EmailMessage()
+    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
+    msg['To'] = ', '.join(args.recipients)
+    msg['From'] = args.sender
+    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
     
-    def test():
-    PROCESSES = 4
-    print('Creating pool with %d processes\n' % PROCESSES)
+            try:
+            print(pool.apply(f, (5,)))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from pool.apply()')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
     
+      Args:
+    filename: The name of the current file.
+    clean_lines: A CleansedLines instance containing the file.
+    linenum: The number of the line to check.
+    nesting_state: A NestingState instance which maintains information about
+                   the current stack of nested blocks being parsed.
+    error: The function to call with any errors found.
+  '''
+  # Do nothing if there is no '&' on current line.
+  line = clean_lines.elided[linenum]
+  if '&' not in line:
+    return
     
-def FormatDebugInfoResponse( response ):
-  if not response:
-    return 'Server errored, no debug info from server\n'
-  message = _FormatYcmdDebugInfo( response )
-  completer = response[ 'completer' ]
-  if completer:
-    message += _FormatCompleterDebugInfo( completer )
-  return message
+        def __init__(self, hass, flash_briefings):
+        '''Initialize Alexa view.'''
+        super().__init__()
+        self.flash_briefings = copy.deepcopy(flash_briefings)
+        template.attach(hass, self.flash_briefings)
     
-    
-  def Response( self ):
-    return {
-      'completions': self._results,
-      'completion_start_column': self.request_data[ 'start_column' ]
-    }
-    
-    
-  def No_Insertion_Text_test( self ):
-    self._Check( 0, {
-      'menu_text':       'MENU TEXT',
-      'extra_menu_info': 'EXTRA MENU INFO',
-      'kind':            'K',
-      'detailed_info':   'DETAILED INFO',
-      'extra_data': {
-        'doc_string':    'DOC STRING',
-      },
-    }, {
-      'word'     : '',
-      'abbr'     : 'MENU TEXT',
-      'menu'     : 'EXTRA MENU INFO',
-      'kind'     : 'k',
-      'info'     : 'DETAILED INFO\nDOC STRING',
-      'dup'      : 1,
-      'empty'    : 1,
-      'user_data': '0'
-    } )
-
-    
-    from ycm.tests.test_utils import MockVimModule
-MockVimModule()
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.components.device_tracker import (
+    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
+from homeassistant.const import CONF_HOST
     
     
-@YouCompleteMeInstance()
-@patch.object( ycm_buffer_module,
-               'DIAGNOSTIC_UI_ASYNC_FILETYPES',
-               [ 'ycmtest' ] )
-@patch( 'ycm.youcompleteme.YouCompleteMe.FiletypeCompleterExistsForFiletype',
-        return_value = True )
-@patch( 'ycm.client.base_request._ValidateResponseObject', return_value = True )
-@patch( 'ycm.client.base_request.BaseRequest.PostDataToHandlerAsync' )
-@patch( 'ycm.client.messages_request._HandlePollResponse' )
-def YouCompleteMe_OnPeriodicTick_ValidResponse_test( ycm,
-                                                     handle_poll_response,
-                                                     post_data_to_handler_async,
-                                                     *args ):
+class SwisscomDeviceScanner(DeviceScanner):
+    '''This class queries a router running Swisscom Internet-Box firmware.'''
+    
+            # Flag C stands for CONNECTED
+        active_clients = [client for client in data.values() if
+                          client['status'].find('C') != -1]
+        self.last_results = active_clients
+        return True
+    
+    ATTR_COUNTRY = 'country_code'
+ATTR_FIRST_NAME = 'first_name'
+ATTR_LAST_NAME = 'last_name'
+ATTR_EMAIL = 'email'
+ATTR_PHONE = 'phone'
+ATTR_ADDRESS = 'address'
+ATTR_ORDERS = 'orders'
+ATTR_SHOW_MENU = 'show_menu'
+ATTR_ORDER_ENTITY = 'order_entity_id'
+ATTR_ORDER_NAME = 'name'
+ATTR_ORDER_CODES = 'codes'
+    
+                    _LOGGER.error('UPNP Responder socket exception occurred: %s',
+                              ex.__str__)
+                # without the following continue, a second exception occurs
+                # because the data object has not been initialized
+                continue
+    
+    
+def create_event_handler(patterns, hass):
+    '''Return the Watchdog EventHandler object.'''
+    from watchdog.events import PatternMatchingEventHandler
