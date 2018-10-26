@@ -1,329 +1,198 @@
 
         
-        #ifndef CONTENT_NW_SRC_API_APP_APP_H_
-#define CONTENT_NW_SRC_API_APP_APP_H_
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::EscapableHandleScope scope(isolate);
-    }
-    
-    namespace ui {
-    }
-    
-    bool NwAppSetProxyConfigFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  net::ProxyConfigWithAnnotation config;
-  std::unique_ptr<nwapi::nw__app::SetProxyConfig::Params> params(
-      nwapi::nw__app::SetProxyConfig::Params::Create(*args_));
-  EXTENSION_FUNCTION_VALIDATE(params.get());
-    }
-    
-     protected:
-  ~NwAppQuitFunction() override;
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    uint64_t GetOutgoingDataSize(const grpc_call_final_info* final_info) {
-  return final_info->stats.transport_stream_stats.outgoing.data_bytes;
-}
-    
-    
-    {}  // namespace grpc
-
-    
-      enum FieldIdValue {
-    kServerElapsedTimeField = 0,
-  };
-    
-    // Force InitProtoReflectionServerBuilderPlugin() to be called at static
-// initialization time.
-struct StaticProtoReflectionPluginInitializer {
-  StaticProtoReflectionPluginInitializer() {
-    InitProtoReflectionServerBuilderPlugin();
-  }
-} static_proto_reflection_plugin_initializer;
-    
-        // Finish and check for builder errors
-    s = builder->Finish();
-    if (s.ok()) {
-      meta->file_size = builder->FileSize();
-      assert(meta->file_size > 0);
-    }
-    delete builder;
-    
-      // Release mutex while we're actually doing the compaction work
-  mutex_.Unlock();
-    
-    struct MTThread {
-  MTState* state;
-  int id;
-};
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
-}
-    
-    TEST(FormatTest, InternalKeyShortSeparator) {
-  // When user keys are same
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 99, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 101, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeDeletion)));
-    }
-    
-    #include 'db/dbformat.h'
-#include 'db/filename.h'
-#include 'db/log_reader.h'
-#include 'db/version_edit.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'leveldb/options.h'
-#include 'leveldb/status.h'
-#include 'leveldb/table.h'
-#include 'leveldb/write_batch.h'
-#include 'util/logging.h'
-    
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
-    
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-      std::vector<uint64_t> GetFiles(FileType t) {
-    std::vector<std::string> filenames;
-    ASSERT_OK(env_->GetChildren(dbname_, &filenames));
-    std::vector<uint64_t> result;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      uint64_t number;
-      FileType type;
-      if (ParseFileName(filenames[i], &number, &type) && type == t) {
-        result.push_back(number);
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
       }
     }
-    return result;
   }
-    
-    
-    {REGISTER_INTERNAL(PrometheusMetricsConfigParserPlugin,
-                  'config_parser',
-                  'prometheus_targets');
-}
-
-    
-      fpack.platform_ = 'bad_value';
-  EXPECT_FALSE(fpack.checkPlatform());
-    
-    void Initializer::platformSetup() {
-  // Initialize the COM libraries utilized by Windows WMI calls.
-  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
-  if (ret != S_OK) {
-    ::CoUninitialize();
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
+#endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
   }
+  return result;
 }
     
-    static const int kCrToGreenTable[256] = {
-  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
-  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
-  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
-  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
-  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
-  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
-  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
-  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
-  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
-  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
-  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
-  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
-  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
-  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
-   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
-   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
-        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
-  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
-  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
- -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
- -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
- -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
- -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
- -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
- -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
- -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
- -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
- -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
- -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
- -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
- -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
- -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
-};
-    
-    #endif  // GUETZLI_DCT_DOUBLE_H_
-
-    
-    #endif  // GUETZLI_ENTROPY_ENCODE_H_
-
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    
-    {  tmp0 = in[7 * stride];
-  tmp1 = kIDCTMatrix[ 7] * tmp0;
-  tmp2 = kIDCTMatrix[15] * tmp0;
-  tmp3 = kIDCTMatrix[23] * tmp0;
-  tmp4 = kIDCTMatrix[31] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
-}
-    
-      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
-  void EmitByte(int byte) {
-    if (pos < len) {
-      data[pos++] = byte;
-    } else {
-      overflow = true;
-    }
-    if (byte == 0xff) {
-      EmitByte(0);
+    // Computes part of matrix.vector v = Wu. Computes N=32 results.
+// For details see PartialMatrixDotVector64 with N=32.
+static void PartialMatrixDotVector32(const int8_t* wi, const double* scales,
+                                     const int8_t* u, int num_in, int num_out,
+                                     double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  __m256i result1 = _mm256_setzero_si256();
+  __m256i result2 = _mm256_setzero_si256();
+  __m256i result3 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result2);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result3);
     }
   }
-    
-    bool JPEGData::Is444() const {
-  return (components.size() == 3 &&
-          max_h_samp_factor == 1 &&
-          max_v_samp_factor == 1 &&
-          components[0].h_samp_factor == 1 &&
-          components[0].v_samp_factor == 1 &&
-          components[1].h_samp_factor == 1 &&
-          components[1].v_samp_factor == 1 &&
-          components[2].h_samp_factor == 1 &&
-          components[2].v_samp_factor == 1);
+  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result1, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result2, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  num_out -= kNumOutputsPerRegister * 3;
+  ExtractResults(result3, shift_id, wi, scales,
+                 std::min(kNumOutputsPerRegister, num_out), v);
 }
     
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
-  }
- private:
-  JPEGOutputHook cb;
-  void* data;
-};
+      /**
+   * Returns information about the current paragraph, if available.
+   *
+   *   justification -
+   *     LEFT if ragged right, or fully justified and script is left-to-right.
+   *     RIGHT if ragged left, or fully justified and script is right-to-left.
+   *     unknown if it looks like source code or we have very few lines.
+   *   is_list_item -
+   *     true if we believe this is a member of an ordered or unordered list.
+   *   is_crown -
+   *     true if the first line of the paragraph is aligned with the other
+   *     lines of the paragraph even though subsequent paragraphs have first
+   *     line indents.  This typically indicates that this is the continuation
+   *     of a previous paragraph or that it is the very first paragraph in
+   *     the chapter.
+   *   first_line_indent -
+   *     For LEFT aligned paragraphs, the first text line of paragraphs of
+   *     this kind are indented this many pixels from the left edge of the
+   *     rest of the paragraph.
+   *     for RIGHT aligned paragraphs, the first text line of paragraphs of
+   *     this kind are indented this many pixels from the right edge of the
+   *     rest of the paragraph.
+   *     NOTE 1: This value may be negative.
+   *     NOTE 2: if *is_crown == true, the first line of this paragraph is
+   *             actually flush, and first_line_indent is set to the 'common'
+   *             first_line_indent for subsequent paragraphs in this block
+   *             of text.
+   */
+  void ParagraphInfo(tesseract::ParagraphJustification *justification,
+                     bool *is_list_item,
+                     bool *is_crown,
+                     int *first_line_indent) const;
     
-    #include 'modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h'
-#include 'gtest/gtest.h'
+      /// Threshold the source image as efficiently as possible to the output Pix.
+  /// Creates a Pix and sets pix to point to the resulting pointer.
+  /// Caller must use pixDestroy to free the created Pix.
+  /// Returns false on error.
+  virtual bool ThresholdToPix(PageSegMode pageseg_mode, Pix** pix);
     
     /**
- * @class MessageManager
- *
- * @brief message manager manages protocols. It supports parse and can get
- * protocol data by message id.
+ * @brief Parser plugin for logger configurations.
  */
-template <typename SensorType>
-class MessageManager {
+class LoggerConfigParserPlugin : public ConfigParserPlugin {
  public:
-  /*
-  * @brief constructor function
-  */
-  MessageManager() {}
-  /*
-   * @brief destructor function
-   */
-  virtual ~MessageManager() = default;
+  std::vector<std::string> keys() const override {
+    return {kLoggerKey};
+  }
     }
     
-    template <typename SensorType>
-void ProtocolData<SensorType>::Parse(const uint8_t *bytes, int32_t length,
-                                     SensorType *sensor_data) const {}
     
-    #ifndef MODULES_DRIVERS_CANBUS_SENSOR_GFLAGS_H_
-#define MODULES_DRIVERS_CANBUS_SENSOR_GFLAGS_H_
+    {  // This should work.
+  ASSERT_TRUE(doc.HasMember('custom_fake'));
+  EXPECT_TRUE(doc['custom_fake'].IsNumber());
+  EXPECT_EQ(1U, doc['custom_fake'].GetUint());
+  EXPECT_FALSE(Flag::getValue('custom_fake').empty());
+}
     
-        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+      fpack.platform_ = '';
+  EXPECT_TRUE(fpack.checkPlatform());
+    
+    
     {
-        uint64_t const* p_value = (uint64_t const*)&v;
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq %[dest], %%rax\n\t'
-            'movq 8+%[dest], %%rdx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg16b %[dest]\n\t'
-            'jne 1b\n\t'
-            : [dest] '=o' (storage)
-            : 'b' (p_value[0]), 'c' (p_value[1])
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
-        );
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq 0(%[dest]), %%rax\n\t'
-            'movq 8(%[dest]), %%rdx\n\t'
-            '.align 16\n\t'
-            '1: lock; cmpxchg16b 0(%[dest])\n\t'
-            'jne 1b\n\t'
-            :
-            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
-        );
-#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-    }
-    
-        struct aligned
     {
-        BOOST_ALIGNMENT(2) type value;
+    {        SQL sql(query);
+        if (!sql.getStatus().ok()) {
+          return Status(1, 'Distributed discovery query has an SQL error');
+        }
+        if (sql.rows().size() > 0) {
+          queries_to_run.insert(name);
+        }
+      }
     }
+  }
+    
+        Row r;
+    r['example_text'] = 'example';
+    r['example_integer'] = INTEGER(1);
+    
+    #define VLOG(x)                                                               \
+  (::benchmark::internal::GetLogInstanceForLevel(x) << '-- LOG(' << x << '):' \
+                                                                         ' ')
