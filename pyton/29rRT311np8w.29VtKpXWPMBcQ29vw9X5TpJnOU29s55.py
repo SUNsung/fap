@@ -1,265 +1,295 @@
 
         
-        entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
-        try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
-        try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
+            # apply the blueprints to the app
+    from flaskr import auth, blog
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(blog.bp)
+    
+        This is more useful if a function other than the view function wants to
+    modify a response.  For instance think of a decorator that wants to add
+    some headers without converting the return value into a response object.
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    import io
-import optparse
-    
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
-    
-        with open(ZSH_COMPLETION_FILE, 'w') as f:
-        f.write(template)
-    
-        def test_download_json(self):
-        uri = encode_data_uri(b'{'foo': 'blah'}', 'application/json')
-        self.assertEqual(self.ie._download_json(uri, None), {'foo': 'blah'})
-        uri = encode_data_uri(b'callback({'foo': 'blah'})', 'application/javascript')
-        self.assertEqual(self.ie._download_json(uri, None, transform_source=strip_jsonp), {'foo': 'blah'})
-        uri = encode_data_uri(b'{'foo': invalid}', 'application/json')
-        self.assertRaises(ExtractorError, self.ie._download_json, uri, None)
-        self.assertEqual(self.ie._download_json(uri, None, fatal=False), None)
-    
-        changed = bool(insertions or deletions)
-    update = {
-        'RuleId': rule_id,
-        'Updates': insertions + deletions
-    }
-    if changed:
-        try:
-            run_func_with_change_token_backoff(client, module, update, client.update_rule, wait=True)
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Could not update rule conditions')
-    
-            # Create optional stack outputs
-        all_facts = module.params.get('all_facts')
-        if all_facts or module.params.get('stack_resources'):
-            facts['stack_resource_list'] = service_mgr.list_stack_resources(stack_name)
-            facts['stack_resources'] = to_dict(facts.get('stack_resource_list'), 'LogicalResourceId', 'PhysicalResourceId')
-        if all_facts or module.params.get('stack_template'):
-            facts['stack_template'] = service_mgr.get_template(stack_name)
-        if all_facts or module.params.get('stack_policy'):
-            facts['stack_policy'] = service_mgr.get_stack_policy(stack_name)
-        if all_facts or module.params.get('stack_events'):
-            facts['stack_events'] = service_mgr.describe_stack_events(stack_name)
-    
-    RETURN = '''
-log_groups:
-    description: Return the list of complex objetcs representing log groups
-    returned: success
-    type: complex
-    contains:
-        log_group_name:
-            description: The name of the log group.
-            returned: always
-            type: string
-        creation_time:
-            description: The creation time of the log group.
-            returned: always
-            type: integer
-        retention_in_days:
-            description: The number of days to retain the log events in the specified log group.
-            returned: always
-            type: integer
-        metric_filter_count:
-            description: The number of metric filters.
-            returned: always
-            type: integer
-        arn:
-            description: The Amazon Resource Name (ARN) of the log group.
-            returned: always
-            type: string
-        stored_bytes:
-            description: The number of bytes stored.
-            returned: always
-            type: string
-        kms_key_id:
-            description: The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.
-            returned: always
-            type: string
-'''
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import (boto3_conn, ec2_argument_spec, get_aws_connection_info, ansible_dict_to_boto3_filter_list,
-                                      camel_dict_to_snake_dict, boto3_tag_list_to_ansible_dict)
-    
-    # Delete Customer Gateway
-- ec2_customer_gateway:
-    ip_address: 1.2.3.4
-    name: IndianapolisOffice
-    state: absent
-    region: us-east-1
-  register: cgw
-'''
-    
-    
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        try:
-        vpc_obj = AWSRetry.backoff(
-            delay=3, tries=8,
-            catch_extra_error_codes=['InvalidVpcID.NotFound'],
-        )(connection.describe_vpcs)(VpcIds=[vpc_id])['Vpcs'][0]
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Failed to describe VPCs')
-    try:
-        vpc_obj['ClassicLinkEnabled'] = get_classic_link_with_backoff(connection, vpc_id)
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Failed to describe VPCs')
-    
-                        if verbosity >= 3:
-                        result['original_policy'] = original_policy
-    
-        if not HAS_BOTO3:
-        module.fail_json(msg='boto3 required for this module')
-    
-            try:
-            connection.delete_user(**params)
-        except ClientError as e:
-            module.fail_json(msg='Unable to delete user {0}: {1}'.format(params['UserName'], to_native(e)),
-                             exception=traceback.format_exc(), **camel_dict_to_snake_dict(e.response))
-        except ParamValidationError as e:
-            module.fail_json(msg='Unable to delete user {0}: {1}'.format(params['UserName'], to_native(e)),
-                             exception=traceback.format_exc())
-    
-        dimensions = 500 * np.arange(1, n_iter + 1)
-    
-    In both cases, only 10% of the features are informative.
-'''
-import gc
-from time import time
-import numpy as np
-    
-    
-@ignore_warnings
-def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
-              formats=tuple(v for k, v in sorted(FORMATS.items())),
-              samples=1000, classes=4, density=.2,
-              n_times=5):
-    '''Times metric calculations for a number of inputs
-    
-        it = 0
-    results = defaultdict(lambda: [])
-    chunk = 100
-    
-    
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
-    
-        #Parsing the arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('dir_path', help = 'Path to tldr 'pages' directory')
-    parser.add_argument('-c', choices=['solarized-light', 'solarized-dark'], help='Color scheme of the PDF')
-    args = parser.parse_args()
-    
-    loc = args.dir_path
-    if args.c == 'solarized-light' or args.c == 'solarized-dark':
-        colorscheme = args.c
-        
-    main(loc, colorscheme)
+def explain_ignored_app_run():
+    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
+        warn(Warning('Silently ignoring app.run() because the '
+                     'application is run from the flask command line '
+                     'executable.  Consider putting app.run() behind an '
+                     'if __name__ == '__main__' guard to silence this '
+                     'warning.'), stacklevel=3)
 
     
     
-def FormatDebugInfoResponse( response ):
-  if not response:
-    return 'Server errored, no debug info from server\n'
-  message = _FormatYcmdDebugInfo( response )
-  completer = response[ 'completer' ]
-  if completer:
-    message += _FormatCompleterDebugInfo( completer )
-  return message
+def htmlsafe_dumps(obj, **kwargs):
+    '''Works exactly like :func:`dumps` but is safe for use in ``<script>``
+    tags.  It accepts the same arguments and returns a JSON string.  Note that
+    this is available in templates through the ``|tojson`` filter which will
+    also mark the result as safe.  Due to how this function escapes certain
+    characters this is safe even if used outside of ``<script>`` tags.
+    
+            :raise KeyError: if the tag key is already registered and ``force`` is
+            not true.
+        '''
+        tag = tag_class(self)
+        key = tag.key
+    
+        def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
+    
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
+    
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        try:
+            self.model.objects.get(session_key=session_key).delete()
+        except self.model.DoesNotExist:
+            pass
+    
+        def _get_session_key(self):
+        '''
+        Instead of generating a random string, generate a secure url-safe
+        base64-encoded string of data as our session key.
+        '''
+        return signing.dumps(
+            self._session, compress=True,
+            salt='django.contrib.sessions.backends.signed_cookies',
+            serializer=self.serializer,
+        )
     
     
-  def Done( self ):
-    return True
+def x_robots_tag(func):
+    @wraps(func)
+    def inner(request, *args, **kwargs):
+        response = func(request, *args, **kwargs)
+        response['X-Robots-Tag'] = 'noindex, noodp, noarchive'
+        return response
+    return inner
+    
+        data_train = fetch_20newsgroups_vectorized(subset='train')
+    data_test = fetch_20newsgroups_vectorized(subset='test')
+    X_train = check_array(data_train.data, dtype=np.float32,
+                          accept_sparse='csc')
+    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
+    y_train = data_train.target
+    y_test = data_test.target
     
     
-  def Just_Doc_String_test( self ):
-    self._Check( 'not_an_int', {
-      'insertion_text':  'INSERTION TEXT',
-      'menu_text':       'MENU TEXT',
-      'extra_menu_info': 'EXTRA MENU INFO',
-      'kind':            'K',
-      'extra_data': {
-        'doc_string':    'DOC STRING',
-      },
-    }, {
-      'word'     : 'INSERTION TEXT',
-      'abbr'     : 'MENU TEXT',
-      'menu'     : 'EXTRA MENU INFO',
-      'kind'     : 'k',
-      'info'     : 'DOC STRING',
-      'dup'      : 1,
-      'empty'    : 1,
-      'user_data': 'not_an_int',
-    } )
+def bench(factory, X, Y, X_test, Y_test, ref_coef):
+    gc.collect()
     
-      request_data = {
-    'start_column': start_column
-  }
-  request = OmniCompletionRequest( omni_completer, request_data )
-  request.Start()
+        if dataset_name == 'SA':
+        lb = LabelBinarizer()
+        x1 = lb.fit_transform(X[:, 1].astype(str))
+        x2 = lb.fit_transform(X[:, 2].astype(str))
+        x3 = lb.fit_transform(X[:, 3].astype(str))
+        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
+        y = (y != b'normal.').astype(int)
+    
+        results = benchmark([METRICS[k] for k in args.metrics],
+                        [FORMATS[k] for k in args.formats],
+                        args.samples, args.classes, args.density,
+                        args.n_times)
+    
+        return results
+    
+        ax.set_xlabel('n_samples')
+    ax.set_ylabel('n_features')
+    ax.set_zlabel('Time (s)')
+    ax.legend()
+    plt.show()
+
+    
+    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
+    
+        def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+            sfile = sys.modules[spidercls.__module__].__file__
+        sfile = sfile.replace('.pyc', '.py')
+        self.exitcode = os.system('%s '%s'' % (editor, sfile))
+
+    
+        def _print_response(self, response, opts):
+        if opts.headers:
+            self._print_headers(response.request.headers, b'>')
+            print('>')
+            self._print_headers(response.headers, b'<')
+        else:
+            self._print_bytes(response.body)
+    
+    if twisted_version >= (14, 0, 0):
     
     
-def _assert_accept_equals( filter, text_or_obj, expected ):
-  if not isinstance( text_or_obj, dict ):
-    text_or_obj = { 'text': text_or_obj }
+def splitext(p):
+    if isinstance(p, bytes):
+        return genericpath._splitext(p, b':', altsep, b'.')
+    else:
+        return genericpath._splitext(p, sep, altsep, extsep)
+splitext.__doc__ = genericpath._splitext.__doc__
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        @classmethod
+    def _format_parsed_parts(cls, drv, root, parts):
+        if drv or root:
+            return drv + root + cls._flavour.join(parts[1:])
+        else:
+            return cls._flavour.join(parts)
+    
+        def test_suffixes_common(self):
+        P = self.cls
+        self.assertEqual(P('').suffixes, [])
+        self.assertEqual(P('.').suffixes, [])
+        self.assertEqual(P('/').suffixes, [])
+        self.assertEqual(P('a/b').suffixes, [])
+        self.assertEqual(P('/a/b').suffixes, [])
+        self.assertEqual(P('/a/b/.').suffixes, [])
+        self.assertEqual(P('a/b.py').suffixes, ['.py'])
+        self.assertEqual(P('/a/b.py').suffixes, ['.py'])
+        self.assertEqual(P('a/.hgrc').suffixes, [])
+        self.assertEqual(P('/a/.hgrc').suffixes, [])
+        self.assertEqual(P('a/.hg.rc').suffixes, ['.rc'])
+        self.assertEqual(P('/a/.hg.rc').suffixes, ['.rc'])
+        self.assertEqual(P('a/b.tar.gz').suffixes, ['.tar', '.gz'])
+        self.assertEqual(P('/a/b.tar.gz').suffixes, ['.tar', '.gz'])
+        self.assertEqual(P('a/Some name. Ending with a dot.').suffixes, [])
+        self.assertEqual(P('/a/Some name. Ending with a dot.').suffixes, [])
+    
+        Note that not all entries are resources.  Specifically, directories are
+    not considered resources.  Use `is_resource()` on each entry returned here
+    to check if it is a resource or not.
+    '''
+    package = _get_package(package)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.contents()
+    # Is the package a namespace package?  By definition, namespace packages
+    # cannot have resources.  We could use _check_location() and catch the
+    # exception, but that's extra work, so just inline the check.
+    elif package.__spec__.origin is None or not package.__spec__.has_location:
+        return ()
+    else:
+        package_directory = Path(package.__spec__.origin).parent
+        return os.listdir(package_directory)
+
+    
+                if algo == 1:
+                self.assertEqual(sys.hash_info.algorithm, 'siphash24')
+            elif algo == 2:
+                self.assertEqual(sys.hash_info.algorithm, 'fnv')
+            else:
+                self.assertIn(sys.hash_info.algorithm, {'fnv', 'siphash24'})
+        else:
+            # PY_HASH_EXTERNAL
+            self.assertEqual(algo, 0)
+        self.assertGreaterEqual(sys.hash_info.cutoff, 0)
+        self.assertLess(sys.hash_info.cutoff, 8)
+    
+        for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+        if not os.path.isfile(path):
+            continue
+        # Guess the content type based on the file's extension.  Encoding
+        # will be ignored, although we should check for simple things like
+        # gzip'd or compressed files.
+        ctype, encoding = mimetypes.guess_type(path)
+        if ctype is None or encoding is not None:
+            # No guess could be made, or the file is encoded (compressed), so
+            # use a generic bag-of-bits type.
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(path, 'rb') as fp:
+            msg.add_attachment(fp.read(),
+                               maintype=maintype,
+                               subtype=subtype,
+                               filename=filename)
+    # Now send or store the message
+    if args.output:
+        with open(args.output, 'wb') as fp:
+            fp.write(msg.as_bytes(policy=SMTP))
+    else:
+        with smtplib.SMTP('localhost') as s:
+            s.send_message(msg)
+    
+    def handlePoint(point):
+    print('<li>%s</li>' % getText(point.childNodes))
+    
+    # A simple generator function
+def baz():
+    for i in range(10):
+        yield i*i
+    
+        def backwards(self, orm):
+        'Write your backwards methods here.'
+    
+        complete_apps = ['sentry']
+    symmetrical = True
+
     
     
-@patch( 'ycm.vimsupport.GetVariableValue',
-        GetVariableValue_CompleteItemIs( 'Test' ) )
-def GetCompletionsUserMayHaveCompleted_ReturnMatchIfMatches_test( *args ):
-  completions = [ BuildCompletionNamespace( None ) ]
-  with _SetupForCsharpCompletionDone( completions ) as request:
-    eq_( request._GetCompletionsUserMayHaveCompleted(), completions )
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
     
-      # We update the diagnostic on the current cursor position
-  post_vim_message.assert_has_exact_calls( [
-    call( 'error text in current buffer', truncate = True, warning = False ),
-  ] )
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-    
-# This file provides an UnsafeThreadPoolExecutor, which operates exactly like
-# the upstream Python version of ThreadPoolExecutor with one exception: it
-# doesn't wait for worker threads to finish before shutting down the Python
-# interpreter.
-#
-# This is dangerous for many workloads, but fine for some (like when threads
-# only send network requests). The YCM workload is one of those workloads where
-# it's safe (the aforementioned network requests case).
+        # Print the location of each facial feature in this image
+    for facial_feature in face_landmarks.keys():
+        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
