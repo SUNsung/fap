@@ -1,201 +1,266 @@
 
         
-        
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
-@login_required
-def update(id):
-    '''Update a post if the current user is the author.'''
-    post = get_post(id)
+            return out
     
     
-def test_register(client, app):
-    # test that viewing the page renders without template errors
-    assert client.get('/auth/register').status_code == 200
+class RequestsWarning(Warning):
+    '''Base warning for Requests.'''
+    pass
     
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
     
-    (c) 2016, Aaron Christianson
-http://github.com/ninjaaron/fast-entry_points
-'''
-from setuptools.command import easy_install
+class CaseInsensitiveDict(MutableMapping):
+    '''A case-insensitive ``dict``-like object.
+    
+    # Set default logging handler to avoid 'No handler found' warnings.
+import logging
+from logging import NullHandler
+    
+    import os
 import re
-TEMPLATE = '''\
-# -*- coding: utf-8 -*-
-# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
-__requires__ = '{3}'
-import re
+import time
+import hashlib
+import threading
+import warnings
+    
+    - name: obtain all facts for a single WAF
+  aws_waf_facts:
+    name: test_waf
+'''
+    
+        module.exit_json(changed=False, addresses=get_eips_details(module))
+    
+        if instance_id:
+        try:
+            volumes = ec2.get_all_volumes(filters={'attachment.instance-id': instance_id, 'attachment.device': device_name})
+        except boto.exception.BotoServerError as e:
+            module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
+    
+        def extract_service_from(self, service):
+        # some fields are datetime which is not JSON serializable
+        # make them strings
+        if 'deployments' in service:
+            for d in service['deployments']:
+                if 'createdAt' in d:
+                    d['createdAt'] = str(d['createdAt'])
+                if 'updatedAt' in d:
+                    d['updatedAt'] = str(d['updatedAt'])
+        if 'events' in service:
+            if not self.module.params['events']:
+                del service['events']
+            else:
+                for e in service['events']:
+                    if 'createdAt' in e:
+                        e['createdAt'] = str(e['createdAt'])
+        return service
+    
+    
+def copy(module, connection, name, target, bucket):
+    ''' Copy an Elasticache backup. '''
+    try:
+        response = connection.copy_snapshot(SourceSnapshotName=name,
+                                            TargetSnapshotName=target,
+                                            TargetBucket=bucket)
+        changed = True
+    except botocore.exceptions.ClientError as e:
+        module.fail_json(msg='Unable to copy the snapshot.', exception=traceback.format_exc())
+    return response, changed
+    
+    
+def load_data(cert, key, cert_chain):
+    # if paths are provided rather than lookups read the files and return the contents
+    if cert and os.path.isfile(cert):
+        cert = open(cert, 'r').read().rstrip()
+    if key and os.path.isfile(key):
+        key = open(key, 'r').read().rstrip()
+    if cert_chain and os.path.isfile(cert_chain):
+        cert_chain = open(cert_chain, 'r').read()
+    return cert, key, cert_chain
+    
+        if dataset_name == 'SA':
+        lb = LabelBinarizer()
+        x1 = lb.fit_transform(X[:, 1].astype(str))
+        x2 = lb.fit_transform(X[:, 2].astype(str))
+        x3 = lb.fit_transform(X[:, 3].astype(str))
+        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
+        y = (y != b'normal.').astype(int)
+    
+                gc.collect()
+            print('benchmarking lars_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            G = np.dot(X.T, X)  # precomputed Gram matrix
+            Xy = np.dot(X.T, y)
+            lars_path(X, y, Xy=Xy, Gram=G, method='lasso')
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lars_path (with Gram)'].append(delta)
+    
+                gc.collect()
+            print('benchmarking scikit-learn randomized_svd: n_iter=0')
+            tstart = time()
+            randomized_svd(X, rank, n_iter=0)
+            results['scikit-learn randomized_svd (n_iter=0)'].append(
+                time() - tstart)
+    
+        # Print results
+    ###########################################################################
+    print('Script arguments')
+    print('===========================')
+    arguments = vars(opts)
+    print('%s \t | %s ' % ('Arguments'.ljust(16),
+                           'Value'.center(12),))
+    print(25 * '-' + ('|' + '-' * 14) * 1)
+    for key, value in arguments.items():
+        print('%s \t | %s ' % (str(key).ljust(16),
+                               str(value).strip().center(12)))
+    print('')
+    
+        print('============================================')
+    print('Warning: this is going to take a looong time')
+    print('============================================')
+    
+    __all__ = ['normcase','isabs','join','splitdrive','split','splitext',
+           'basename','dirname','commonprefix','getsize','getmtime',
+           'getatime','getctime', 'islink','exists','lexists','isdir','isfile',
+           'expanduser','expandvars','normpath','abspath',
+           'curdir','pardir','sep','pathsep','defpath','altsep','extsep',
+           'devnull','realpath','supports_unicode_filenames']
+    
+    import os
 import sys
+import stat
+import genericpath
+from genericpath import *
+    
+        def test_chmod(self):
+        p = self.cls(BASE) / 'fileA'
+        mode = p.stat().st_mode
+        # Clear writable bit
+        new_mode = mode & ~0o222
+        p.chmod(new_mode)
+        self.assertEqual(p.stat().st_mode, new_mode)
+        # Set writable bit
+        new_mode = mode | 0o222
+        p.chmod(new_mode)
+        self.assertEqual(p.stat().st_mode, new_mode)
+    
+                with support.change_cwd(ABSTFN + '/k'):
+                self.assertEqual(realpath('a'), ABSTFN + '/y/a')
+        finally:
+            support.unlink(ABSTFN + '/k')
+            safe_rmdir(ABSTFN + '/y')
+            safe_rmdir(ABSTFN)
+    
+        def testMixedIterationAndReads(self):
+        self.createTempFile()
+        linelen = len(self.TEXT_LINES[0])
+        halflen = linelen // 2
+        with BZ2File(self.filename) as bz2f:
+            bz2f.read(halflen)
+            self.assertEqual(next(bz2f), self.TEXT_LINES[0][halflen:])
+            self.assertEqual(bz2f.read(), self.TEXT[linelen:])
+        with BZ2File(self.filename) as bz2f:
+            bz2f.readline()
+            self.assertEqual(next(bz2f), self.TEXT_LINES[1])
+            self.assertEqual(bz2f.readline(), self.TEXT_LINES[2])
+        with BZ2File(self.filename) as bz2f:
+            bz2f.readlines()
+            self.assertRaises(StopIteration, next, bz2f)
+            self.assertEqual(bz2f.readlines(), [])
+    
+    # Make a local copy of what we are going to send.
+with open('outgoing.msg', 'wb') as f:
+    f.write(bytes(msg))
+    
+        for filename in os.listdir(directory):
+        path = os.path.join(directory, filename)
+        if not os.path.isfile(path):
+            continue
+        # Guess the content type based on the file's extension.  Encoding
+        # will be ignored, although we should check for simple things like
+        # gzip'd or compressed files.
+        ctype, encoding = mimetypes.guess_type(path)
+        if ctype is None or encoding is not None:
+            # No guess could be made, or the file is encoded (compressed), so
+            # use a generic bag-of-bits type.
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(path, 'rb') as fp:
+            msg.add_attachment(fp.read(),
+                               maintype=maintype,
+                               subtype=subtype,
+                               filename=filename)
+    # Now send or store the message
+    if args.output:
+        with open(args.output, 'wb') as fp:
+            fp.write(msg.as_bytes(policy=SMTP))
+    else:
+        with smtplib.SMTP('localhost') as s:
+            s.send_message(msg)
+    
+    ##
+    
+    #
+# Function run by worker processes
+#
+    
+    def clean_pdf_link(link):
+    if 'arxiv' in link:
+        link = link.replace('abs', 'pdf')   
+        if not(link.endswith('.pdf')):
+            link = '.'.join((link, 'pdf'))
     
     
-@pytest.fixture(autouse=True)
-def no_cache(monkeypatch):
-    monkeypatch.setattr('thefuck.utils.cache.disabled', True)
-    
-    python_2 = (u'thefuck/python2-bash',
-            u'FROM python:2',
-            u'sh')
-    
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
-    
-      aws help
-  aws <command> help
-  aws <command> <subcommand> help
-aws: error: argument command: Invalid choice, valid choices are:
-    
-    - name: gather facts about Ubuntu 17.04 AMIs published by Canonical (099720109477)
-  ec2_ami_facts:
-    owners: 099720109477
-    filters:
-      name: 'ubuntu/images/ubuntu-zesty-17.04-*'
-'''
-    
-    version_added: '1.6'
-    
-        module = AnsibleModule(argument_spec=argument_spec)
-    
-    RETURN = '''
-image_id:
-    description: AMI id
-    returned: when Launch Configuration was found
-    type: string
-    sample: 'ami-0d75df7e'
-user_data:
-    description: User data used to start instance
-    returned: when Launch Configuration was found
-    type: string
-    sample: 'ZXhwb3J0IENMT1VE'
-name:
-    description: Name of the Launch Configuration
-    returned: when Launch Configuration was found
-    type: string
-    sample: 'myapp-v123'
-arn:
-    description: Name of the AMI
-    returned: when Launch Configuration was found
-    type: string
-    sample: 'arn:aws:autoscaling:eu-west-1:12345:launchConfiguration:d82f050e-e315:launchConfigurationName/yourproject'
-instance_type:
-    description: Type of ec2 instance
-    returned: when Launch Configuration was found
-    type: string
-    sample: 't2.small'
-created_time:
-    description: When it was created
-    returned: when Launch Configuration was found
-    type: string
-    sample: '2016-06-29T14:59:22.222000+00:00'
-ebs_optimized:
-    description: Launch Configuration EBS optimized property
-    returned: when Launch Configuration was found
-    type: boolean
-    sample: False
-instance_monitoring:
-    description: Launch Configuration instance monitoring property
-    returned: when Launch Configuration was found
-    type: string
-    sample: {'Enabled': false}
-classic_link_vpc_security_groups:
-    description: Launch Configuration classic link vpc security groups property
-    returned: when Launch Configuration was found
-    type: list
-    sample: []
-block_device_mappings:
-    description: Launch Configuration block device mappings property
-    returned: when Launch Configuration was found
-    type: list
-    sample: []
-keyname:
-    description: Launch Configuration ssh key
-    returned: when Launch Configuration was found
-    type: string
-    sample: mykey
-security_groups:
-    description: Launch Configuration security groups
-    returned: when Launch Configuration was found
-    type: list
-    sample: []
-kernel_id:
-    description: Launch Configuration kernel to use
-    returned: when Launch Configuration was found
-    type: string
-    sample: ''
-ram_disk_id:
-    description: Launch Configuration ram disk property
-    returned: when Launch Configuration was found
-    type: string
-    sample: ''
-associate_public_address:
-    description: Assign public address or not
-    returned: when Launch Configuration was found
-    type: boolean
-    sample: True
-...
-'''
-import re
-    
-        alarms = connection.describe_alarms(alarm_names=[name])
-    
-        elif state == 'absent':
-        placement_group = get_placement_group_details(connection, module)
-        if placement_group is None:
-            module.exit_json(changed=False)
-        else:
-            delete_placement_group(connection, module)
-    
-    # List all placement groups.
-- ec2_placement_group_facts:
-  register: all_ec2_placement_groups
+class CompleterAvailableRequest( BaseRequest ):
+  def __init__( self, filetypes ):
+    super( CompleterAvailableRequest, self ).__init__()
+    self.filetypes = filetypes
+    self._response = None
     
     
-def naughty_strings(filepath=FILEPATH):
-    '''Get the list of naughty_strings.
+  def Poll( self, diagnostics_handler ):
+    '''This should be called regularly to check for new messages in this buffer.
+    Returns True if Poll should be called again in a while. Returns False when
+    the completer or server indicated that further polling should not be done
+    for the requested file.'''
     
-    for image in TEST_IMAGES:
-    size = image.split('-')[1].split('.')[0]
-    print('Timings at {}:'.format(size))
     
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+  def IsAllowed( self, diagnostic ):
+    # NOTE: a diagnostic IsAllowed() ONLY if NO filters match it
+    for filterMatches in self._filters:
+      if filterMatches( diagnostic ):
+        return False
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(rgb_frame)
-    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
     
-                # If a match was found in known_face_encodings, just use the first one.
-            if True in matches:
-                first_match_index = matches.index(True)
-                name = known_face_names[first_match_index]
+    from ycm.tests.test_utils import MockVimModule
+MockVimModule()
     
-    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
-# the picamera[array] module installed.
-# You can follow this installation instructions to get your RPi set up:
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
     
-        # Let's trace out each facial feature in the image with a line!
-    for facial_feature in face_landmarks.keys():
-        d.line(face_landmarks[facial_feature], width=5)
     
-    with open('README.rst') as readme_file:
-    readme = readme_file.read()
+@patch( 'ycm.vimsupport.CurrentFiletypes', return_value = [ 'java' ] )
+def GetCompleteDoneHooks_ResultOnJava_test( *args ):
+  request = CompletionRequest( None )
+  result = list( request._GetCompleteDoneHooks() )
+  eq_( result, [ request._OnCompleteDone_FixIt ] )
+    
+    
+def BuildYcmdLibs( args ):
+  if not args.skip_build:
+    subprocess.check_call( [
+      sys.executable,
+      p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
+    ] )
