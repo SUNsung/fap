@@ -1,266 +1,224 @@
 
         
-        class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+          // Calculate the depth at which the requirement's generic parameters
+  // appear in the synthetic signature.
+  unsigned depth = 0;
+  if (covariantSelf) {
+    depth++;
   }
-}
-    
-    
-    {  int menu_id;
-  if (option.GetInteger('submenu', &menu_id))
-    SetSubmenu(object_manager()->GetApiObject<Menu>(menu_id));
-}
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    // The Message class works like an ostream repeater.
-//
-// Typical usage:
-//
-//   1. You stream a bunch of values to a Message object.
-//      It will remember the text in a stringstream.
-//   2. Then you stream the Message object to an ostream.
-//      This causes the text in the Message to be streamed
-//      to the ostream.
-//
-// For example;
-//
-//   testing::Message foo;
-//   foo << 1 << ' != ' << 2;
-//   std::cout << foo;
-//
-// will print '1 != 2'.
-//
-// Message is not intended to be inherited from.  In particular, its
-// destructor is not virtual.
-//
-// Note that stringstream behaves differently in gcc and in MSVC.  You
-// can stream a NULL char pointer to it in the former, but not in the
-// latter (it causes an access violation if you do).  The Message
-// class hides this difference by treating a NULL char pointer as
-// '(null)'.
-class GTEST_API_ Message {
- private:
-  // The type of basic IO manipulators (endl, ends, and flush) for
-  // narrow streams.
-  typedef std::ostream& (*BasicNarrowIoManip)(std::ostream&);
-    }
-    
-    // Prints the given value using the << operator if it has one;
-// otherwise prints the bytes in it.  This is what
-// UniversalPrinter<T>::Print() does when PrintTo() is not specialized
-// or overloaded for type T.
-//
-// A user can override this behavior for a class type Foo by defining
-// an overload of PrintTo() in the namespace where Foo is defined.  We
-// give the user this option as sometimes defining a << operator for
-// Foo is not desirable (e.g. the coding style may prevent doing it,
-// or there is already a << operator but it doesn't do what the user
-// wants).
-template <typename T>
-void PrintTo(const T& value, ::std::ostream* os) {
-  // DefaultPrintTo() is overloaded.  The type of its first two
-  // arguments determine which version will be picked.  If T is an
-  // STL-style container, the version for container will be called; if
-  // T is a pointer, the pointer version will be called; otherwise the
-  // generic version will be called.
-  //
-  // Note that we check for container types here, prior to we check
-  // for protocol message types in our operator<<.  The rationale is:
-  //
-  // For protocol messages, we want to give people a chance to
-  // override Google Mock's format by defining a PrintTo() or
-  // operator<<.  For STL containers, other formats can be
-  // incompatible with Google Mock's format for the container
-  // elements; therefore we check for container types here to ensure
-  // that our format is used.
-  //
-  // The second argument of DefaultPrintTo() is needed to bypass a bug
-  // in Symbian's C++ compiler that prevents it from picking the right
-  // overload between:
-  //
-  //   PrintTo(const T& x, ...);
-  //   PrintTo(T* x, ...);
-  DefaultPrintTo(IsContainerTest<T>(0), is_pointer<T>(), value, os);
-}
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
-    
-      // Returns a human-readable outcome message regarding the outcome of
-  // the last death test.
-  static const char* LastMessage();
-    
-    // Removes const from a type if it is a const type, otherwise leaves
-// it unchanged.  This is the same as tr1::remove_const, which is not
-// widely available yet.
-template <typename T>
-struct RemoveConst { typedef T type; };  // NOLINT
-template <typename T>
-struct RemoveConst<const T> { typedef T type; };  // NOLINT
-    
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
+  if (conformanceSig) {
+    depth += conformanceSig->getGenericParams().back()->getDepth() + 1;
   }
+    
+      /// Retrieve the array of protocol conformances, which line up with the
+  /// requirements of the generic signature.
+  ArrayRef<ProtocolConformanceRef> getConformances() const {
+    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
+  }
+  MutableArrayRef<ProtocolConformanceRef> getConformances() {
+    return MutableArrayRef<ProtocolConformanceRef>(
+                              getTrailingObjects<ProtocolConformanceRef>(),
+                              numConformanceRequirements);
+  }
+    
+    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
+    return false;
     }
     
-    template <typename T0 = void, typename T1 = void, typename T2 = void,
-    typename T3 = void, typename T4 = void, typename T5 = void,
-    typename T6 = void, typename T7 = void, typename T8 = void,
-    typename T9 = void>
-class tuple;
+      DefaultCacheKey CKey(Key, &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    if (Entry->second == Value)
+      return;
+    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
+    DCache.Entries.erase(Entry);
+  }
     
-    // A unique struct template used as the default value for the
-// arguments of class template Templates.  This allows us to simulate
-// variadic templates (e.g. Templates<int>, Templates<int, double>,
-// and etc), which C++ doesn't support directly.
-template <typename T>
-struct NoneT {};
+    #include 'llvm/ADT/APInt.h'
+#include 'llvm/Support/raw_ostream.h'
     
-      // Count the number of values in sorted_vec that is close to val, used to
-  // check if a partition is aligned with text partitions.
-  int CountAlignment(
-      const GenericVector<int>& sorted_vec, const int val) const;
+    bool CacheImpl::remove(const void *Key) {
+  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
+  return Ret == 0;
+}
     
-    /** Return that there is no such object at a given level. */
-bool PageIterator::Empty(PageIteratorLevel level) const {
-  if (it_->block() == nullptr) return true;  // Already at the end!
-  if (it_->word() == nullptr && level != RIL_BLOCK) return true;  // image block
-  if (level == RIL_SYMBOL && blob_index_ >= word_length_)
-    return true;  // Zero length word, or already at the end of it.
+      Begin = new char[capacity];
+  EndOfAllocation = Begin + capacity;
+  End = Begin + oldSize + needed;
+  std::memcpy(Begin, oldBegin, oldSize);
+    
+      if (triple.getOS() == llvm::Triple::Darwin &&
+      triple.getVendor() == llvm::Triple::Apple) {
+    // Rewrite darwinX.Y triples to macosx10.X'.Y ones.
+    // It affects code generation on our platform.
+    llvm::SmallString<16> osxBuf;
+    llvm::raw_svector_ostream osx(osxBuf);
+    osx << llvm::Triple::getOSTypeName(llvm::Triple::MacOSX);
+    }
+    
+    bool importer::isCFTypeDecl(
+       const clang::TypedefNameDecl *Decl) {
+  if (CFPointeeInfo::classifyTypedef(Decl))
+    return true;
   return false;
 }
     
-      //Only one event handler per window.
-  //sv->AddEventHandler((SVEventHandler*) this);
-    
-    
-    {  if (s.ok() && meta->file_size > 0) {
-    // Keep it
-  } else {
-    env->DeleteFile(fname);
-  }
-  return s;
-}
-    
-    #include <errno.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include 'leveldb/cache.h'
-#include 'leveldb/env.h'
-#include 'leveldb/table.h'
-#include 'leveldb/write_batch.h'
-#include 'db/db_impl.h'
-#include 'db/filename.h'
-#include 'db/log_format.h'
-#include 'db/version_set.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-      for (int i = 0; i < N; i++) {
-    ASSERT_EQ(Key(i) + std::string(1000, 'v'), Get(Key(i)));
+      using SourceManagerRef = llvm::IntrusiveRefCntPtr<const clang::SourceManager>;
+  auto iter = std::lower_bound(sourceManagersWithDiagnostics.begin(),
+                               sourceManagersWithDiagnostics.end(),
+                               &clangSrcMgr,
+                               [](const SourceManagerRef &inArray,
+                                  const clang::SourceManager *toInsert) {
+    return std::less<const clang::SourceManager *>()(inArray.get(), toInsert);
+  });
+  if (iter == sourceManagersWithDiagnostics.end() ||
+      iter->get() != &clangSrcMgr) {
+    sourceManagersWithDiagnostics.insert(iter, &clangSrcMgr);
   }
     
-    #ifndef STORAGE_LEVELDB_DB_DBFORMAT_H_
-#define STORAGE_LEVELDB_DB_DBFORMAT_H_
-    
-    namespace {
-    }
-    
-    Reader::Reporter::~Reporter() {
+    #if GTEST_HAS_STD_WSTRING
+GTEST_API_ void PrintWideStringTo(const ::std::wstring&s, ::std::ostream* os);
+inline void PrintTo(const ::std::wstring& s, ::std::ostream* os) {
+  PrintWideStringTo(s, os);
 }
+#endif  // GTEST_HAS_STD_WSTRING
+    
+    // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    # define TYPED_TEST(CaseName, TestName) \
+  template <typename gtest_TypeParam_> \
+  class GTEST_TEST_CLASS_NAME_(CaseName, TestName) \
+      : public CaseName<gtest_TypeParam_> { \
+   private: \
+    typedef CaseName<gtest_TypeParam_> TestFixture; \
+    typedef gtest_TypeParam_ TypeParam; \
+    virtual void TestBody(); \
+  }; \
+  bool gtest_##CaseName##_##TestName##_registered_ GTEST_ATTRIBUTE_UNUSED_ = \
+      ::testing::internal::TypeParameterizedTest< \
+          CaseName, \
+          ::testing::internal::TemplateSel< \
+              GTEST_TEST_CLASS_NAME_(CaseName, TestName)>, \
+          GTEST_TYPE_PARAMS_(CaseName)>::Register(\
+              '', #CaseName, #TestName, 0); \
+  template <typename gtest_TypeParam_> \
+  void GTEST_TEST_CLASS_NAME_(CaseName, TestName)<gtest_TypeParam_>::TestBody()
+    
+    #include 'gtest/internal/gtest-internal.h'
+    
+      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
+  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
+  linked_ptr(linked_ptr const& ptr) {  // NOLINT
+    assert(&ptr != this);
+    copy(&ptr);
+  }
+    
+    # define GTEST_TEMPLATE_ template <typename T> class
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
-    
-    
-    {  // No copying allowed
-  MemTableIterator(const MemTableIterator&);
-  void operator=(const MemTableIterator&);
-};
-    
-    namespace leveldb {
-    }
-    
-    template<typename Key, class Comparator>
-typename SkipList<Key,Comparator>::Node* SkipList<Key,Comparator>::FindGreaterOrEqual(const Key& key, Node** prev)
-    const {
-  Node* x = head_;
-  int level = GetMaxHeight() - 1;
-  while (true) {
-    Node* next = x->Next(level);
-    if (KeyIsAfterNode(key, next)) {
-      // Keep searching in this list
-      x = next;
-    } else {
-      if (prev != nullptr) prev[level] = x;
-      if (level == 0) {
-        return next;
-      } else {
-        // Switch to next list
-        level--;
+    {      // Marks all multiples of i (except i itself) as non-prime.
+      for (int j = 2*i; j <= max; j += i) {
+        is_prime_[j] = false;
       }
     }
   }
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
+
+    
+      // Gets the last element of the queue, or NULL if the queue is empty.
+  QueueNode<E>* Last() { return last_; }
+  const QueueNode<E>* Last() const { return last_; }
+    
+    void DHTResponseMessage::fillMessage(Dict* msgDict)
+{
+  msgDict->put(R, getResponse());
 }
     
-        static BOOST_FORCEINLINE storage_type load(storage_type const volatile& storage, memory_order order) BOOST_NOEXCEPT
-    {
-        storage_type v = BOOST_ATOMIC_DETAIL_ARM_LOAD64(&storage);
-        base_type::fence_after_load(order);
-        return v;
+    #endif // D_DHT_RESPONSE_MESSAGE_H
+
+    
+    namespace aria2 {
     }
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+    class DownloadEngine;
+class Command;
+    
+    class DHTTask {
+public:
+  virtual ~DHTTask() = default;
+    }
+    
+    const std::string DHTUnknownMessage::E('e');
+    
+    DNSCache::AddrEntry::AddrEntry(const std::string& addr)
+    : addr_(addr), good_(true)
+{
+}
+    
+    #endif // D_DNS_CACHE_H
