@@ -1,346 +1,208 @@
 
         
-        StringRef swift::platformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return #X;
-#include 'swift/AST/PlatformKinds.def'
-  }
-  llvm_unreachable('bad PlatformKind');
-}
-    
-    using namespace swift;
+          /// The number of conformance requirements, cached to avoid constantly
+  /// recomputing it on conformance-buffer access.
+  const unsigned numConformanceRequirements : 31;
     
     
     {
-    {    if (SemanticNode.is<Expr *>()) {
-      SemanticNode.get<Expr *>()->dump(llvm::errs());
-    } else if (SemanticNode.is<Decl *>()) {
-      SemanticNode.get<Decl *>()->dump(llvm::errs());
-    } else if (SemanticNode.is<Expr *>()) {
-      SemanticNode.get<Expr *>()->dump(llvm::errs());
-    } else {
-      llvm_unreachable('ASTNode has pointer to unknown thing!');
-    }
-    llvm::errs() << '\n=====================================================\n';
-  }
-}
-
-    
-    
-    {  cache_t *cache_out = nullptr;
-  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
-  assert(cache_out);
-  return cache_out;
-}
-    
-    bool DummyTaskQueue::execute(TaskQueue::TaskBeganCallback Began,
-                             TaskQueue::TaskFinishedCallback Finished,
-                             TaskQueue::TaskSignalledCallback Signalled) {
-  using PidTaskPair = std::pair<ProcessId, std::unique_ptr<DummyTask>>;
-  std::queue<PidTaskPair> ExecutingTasks;
-    }
-    
-    #include <google/protobuf/python/python_protobuf.h>
-    
-    const GeneratedCodeInfo::Annotation* FindAnnotationOnPath(
-    const GeneratedCodeInfo& info, const string& source_file,
-    const std::vector<int>& path) {
-  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
-  FindAnnotationsOnPath(info, source_file, path, &annotations);
-  if (annotations.empty()) {
-    return NULL;
-  }
-  return annotations[0];
-}
-    
-    // Parses a set of comma-delimited name/value pairs.
-void ParseGeneratorParameter(const string& text,
-                             std::vector<std::pair<string, string> >* output) {
-  std::vector<string> parts = Split(text, ',', true);
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    
-    {
-    {
-    {
-    {
-    {
-    {
-    {  printer->Print(
-      '      return YES;\n'
-      '    default:\n'
-      '      return NO;\n'
-      '  }\n'
-      '}\n\n');
-}
-}  // namespace objectivec
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    template <>
-template <typename T>
-bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
-  EnforceOnCPU<T>(Input(0));
-  return true;
-}
-    
-    template <class Context>
-class FindDuplicateElementsOp final : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  USE_SIMPLE_CTOR_DTOR(FindDuplicateElementsOp);
-  USE_DISPATCH_HELPER;
-    }
-    
-    </details>
-    
-    #endif  // GRPC_INTERNAL_CPP_COMMON_SECURE_AUTH_CONTEXT_H
-
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
-}
-    
-    class CensusChannelData : public ChannelData {
- public:
-  grpc_error* Init(grpc_channel_element* elem,
-                   grpc_channel_element_args* args) override;
+    {  explicit DefaultCache(CacheImpl::CallBacks CBs) : CBs(std::move(CBs)) { }
 };
+} // end anonymous namespace
     
-    namespace grpc {
+    #include 'swift/Basic/Cache.h'
+#include 'llvm/ADT/SmallString.h'
+#include <cache.h>
+    
+    #include 'swift/Basic/LangOptions.h'
+#include 'swift/Basic/Platform.h'
+#include 'swift/Basic/Range.h'
+#include 'swift/Config.h'
+#include 'llvm/ADT/Hashing.h'
+#include 'llvm/ADT/SmallString.h'
+#include 'llvm/Support/raw_ostream.h'
+#include <limits.h>
+    
+    #include 'swift/Basic/TaskQueue.h'
+    
+    %# Ignore the following admonition; it applies to the resulting .cpp file only
+//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+    
+    namespace {
+  // Quasi-lexicographic order: string length first, then string data.
+  // Since we don't care about the actual length, we can use this, which
+  // lets us ignore the string data a larger proportion of the time.
+  struct SortByLengthComparator {
+    bool operator()(StringRef lhs, StringRef rhs) const {
+      return (lhs.size() < rhs.size() ||
+              (lhs.size() == rhs.size() && lhs < rhs));
     }
-    
-    size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
-                              uint64_t* server_elapsed_time) {
-  return RpcServerStatsEncoding::Decode(absl::string_view(buf, buf_size),
-                                        server_elapsed_time);
-}
-    
-    // Creates a new client context that is by default a new root context.
-// If the current context is the default context then the newly created
-// span automatically becomes a root span. This should only be called with a
-// blank CensusContext as it overwrites it.
-void GenerateClientContext(absl::string_view method, CensusContext* ctxt,
-                           CensusContext* parent_ctx);
-    
-    #include 'opencensus/stats/stats.h'
-#include 'src/cpp/ext/filters/census/grpc_plugin.h'
-    
-      // Serializes rpc server stats into the provided buffer.  It returns the
-  // number of bytes written to the buffer. If the buffer is smaller than
-  // kRpcServerStatsSize bytes it will return kEncodeDecodeFailure. Inlined for
-  // performance reasons.
-  static size_t Encode(uint64_t time, char* buf, size_t buf_size) {
-    if (buf_size < kRpcServerStatsSize) {
-      return kEncodeDecodeFailure;
-    }
-    }
-    
-    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
-    : reflection_service_(new grpc::ProtoServerReflection()) {}
-    
-    ThreadPoolInterface* CreateDefaultThreadPoolImpl() {
-  int cores = gpr_cpu_num_cores();
-  if (!cores) cores = 4;
-  return new DynamicThreadPool(cores);
-}
+  };
+} // end anonymous namespace
     
     
     {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
-            {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
-        }
-    }
+    {/// Determine the imported CF type for the given typedef-name, or the empty
+/// string if this is not an imported CF type name.
+llvm::StringRef getCFTypeName(const clang::TypedefNameDecl *decl);
+}
 }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
-#define __ACTION_CCPAGETURN3D_ACTION_H__
+    // This is initialized with a default, stub implementation.
+// If python-google.protobuf.cc is loaded, the function pointer is overridden
+// with a full implementation.
+const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
+    GetCProtoInsidePyProtoStub;
+Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
+    MutableCProtoInsidePyProtoStub;
     
-    ShakyTiles3D* ShakyTiles3D::create(float duration, const Size& gridSize, int range, bool shakeZ)
-{
-    ShakyTiles3D *action = new (std::nothrow) ShakyTiles3D();
-    }
-    
-    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
-{
-    Animation *animation = new (std::nothrow) Animation();
-    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
-    animation->autorelease();
-    return animation;
+    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
+    WriteDocCommentBody(printer, enumDescriptor);
+}
+void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
+    WriteDocCommentBody(printer, value);
 }
     
-        /** Gets the units of time the frame takes.
-     *
-     * @return The units of time the frame takes.
-     */
-    float getDelayUnits() const { return _delayUnits; };
-    
-    /** Sets the units of time the frame takes.
-     *
-     * @param delayUnits The units of time the frame takes.
-     */
-    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
-    
-    /** @brief Gets user information
-     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
-     * If UserInfo is nil, then no notification will be broadcast.
-     *
-     * @return A dictionary as UserInfo
-     */
-    const ValueMap& getUserInfo() const { return _userInfo; };
-    ValueMap& getUserInfo() { return _userInfo; };
-    
-    /** Sets user information.
-     * @param userInfo A dictionary as UserInfo.
-     */
-    void setUserInfo(const ValueMap& userInfo)
-    {
-        _userInfo = userInfo;
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-    // Overrides
-    virtual AnimationFrame *clone() const override;
+    #include <sstream>
     
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    AnimationFrame();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~AnimationFrame();
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
     
-    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
-    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+      (*variables)['type'] =
+      name_resolver->GetImmutableClassName(descriptor->message_type());
+  const FieldDescriptor* key = KeyField(descriptor);
+  const FieldDescriptor* value = ValueField(descriptor);
+  const JavaType keyJavaType = GetJavaType(key);
+  const JavaType valueJavaType = GetJavaType(value);
     
-        /** Adds an animation from an NSDictionary.
-     * Make sure that the frames were previously loaded in the SpriteFrameCache.
-     * @param dictionary An NSDictionary.
-     * @param plist The path of the relative file,it use to find the plist path for load SpriteFrames.
-     * @since v1.1
-	 @js NA
-     */
-    void addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist);
-    
-    
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
-    }
-    
-    
-    {        glfwMakeContextCurrent(window);
-        glfwSwapBuffers(window);
-    }
-    
-        // Main loop
-    MSG msg;
-    ZeroMemory(&msg, sizeof(msg));
-    while (msg.message != WM_QUIT)
-    {
-        // Poll and handle messages (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            continue;
-        }
-    }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    // DirectX data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static IDXGIFactory*            g_pFactory = NULL;
-static ID3D11Buffer*            g_pVB = NULL;
-static ID3D11Buffer*            g_pIB = NULL;
-static ID3D10Blob*              g_pVertexShaderBlob = NULL;
-static ID3D11VertexShader*      g_pVertexShader = NULL;
-static ID3D11InputLayout*       g_pInputLayout = NULL;
-static ID3D11Buffer*            g_pVertexConstantBuffer = NULL;
-static ID3D10Blob*              g_pPixelShaderBlob = NULL;
-static ID3D11PixelShader*       g_pPixelShader = NULL;
-static ID3D11SamplerState*      g_pFontSampler = NULL;
-static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
-static ID3D11RasterizerState*   g_pRasterizerState = NULL;
-static ID3D11BlendState*        g_pBlendState = NULL;
-static ID3D11DepthStencilState* g_pDepthStencilState = NULL;
-static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
-    
-    void    ImGui_ImplOpenGL2_Shutdown()
-{
-    ImGui_ImplOpenGL2_DestroyDeviceObjects();
+    string ClassNameResolver::GetClassName(const EnumDescriptor* descriptor,
+                                       bool immutable) {
+  return GetClassFullName(ClassNameWithoutPackage(descriptor, immutable),
+                          descriptor->file(), immutable,
+                          MultipleJavaFiles(descriptor->file(), immutable));
 }
+    
+    void EnumFieldGenerator::DetermineForwardDeclarations(
+    std::set<string>* fwd_decls) const {
+  SingleFieldGenerator::DetermineForwardDeclarations(fwd_decls);
+  // If it is an enum defined in a different file, then we'll need a forward
+  // declaration for it.  When it is in our file, all the enums are output
+  // before the message, so it will be declared before it is needed.
+  if (descriptor_->file() != descriptor_->enum_type()->file()) {
+    // Enum name is already in 'storage_type'.
+    const string& name = variable('storage_type');
+    fwd_decls->insert('GPB_ENUM_FWD_DECLARE(' + name + ')');
+  }
+}
+    
+    // Asserts that a given statement causes the program to exit, either by
+// explicitly exiting with a nonzero exit code or being killed by a
+// signal, and emitting error output that matches regex.
+# define ASSERT_DEATH(statement, regex) \
+    ASSERT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19>
+internal::ValueArray19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5,
+    T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14,
+    T15 v15, T16 v16, T17 v17, T18 v18, T19 v19) {
+  return internal::ValueArray19<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19>(v1, v2, v3, v4, v5, v6, v7, v8,
+      v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19);
+}
+    
+    
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
+    
+    #include <grpcpp/impl/grpc_library.h>
+#include <grpcpp/security/credentials.h>
+    
+    void CensusClientCallData::Destroy(grpc_call_element* elem,
+                                   const grpc_call_final_info* final_info,
+                                   grpc_closure* then_call_closure) {
+  const uint64_t request_size = GetOutgoingDataSize(final_info);
+  const uint64_t response_size = GetIncomingDataSize(final_info);
+  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
+  ::opencensus::stats::Record(
+      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
+       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
+       {RpcClientRoundtripLatency(), latency_ms},
+       {RpcClientServerLatency(),
+        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
+       {RpcClientSentMessagesPerRpc(), sent_message_count_},
+       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
+      {{ClientMethodTagKey(), method_},
+       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
+  grpc_slice_unref_internal(path_);
+  context_.EndSpan();
+}
+    
+    #include 'absl/strings/string_view.h'
+#include 'absl/time/clock.h'
+#include 'absl/time/time.h'
+#include 'include/grpc/grpc_security.h'
+#include 'src/cpp/ext/filters/census/channel_filter.h'
+#include 'src/cpp/ext/filters/census/context.h'
+    
+        static BOOST_FORCEINLINE bool compare_exchange_strong(
+        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order success_order, memory_order failure_order) BOOST_NOEXCEPT
+    {
+        storage_type previous = expected, old_val;
+    }
+    
+    #endif // BOOST_ATOMIC_FENCES_HPP_INCLUDED_
