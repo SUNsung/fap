@@ -1,130 +1,78 @@
 
         
-              it 'returns an active nav link with menu when on a child page' do
-        stub(self).current_page?('/things') { false }
-        stub(self).current_page?('/things/stuff') { true }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover.active > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover.active > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
+            # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
+      else
+        new_session_path(resource_name)
       end
+    end
+    
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
+    
+      # Checks whether it's a devise mapped resource or not.
+  def assert_is_devise_resource! #:nodoc:
+    unknown_action! <<-MESSAGE unless devise_mapping
+Could not find devise mapping for path #{request.fullpath.inspect}.
+This may happen for two reasons:
+    
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
+      end
+    
+          if message.is_a?(Symbol)
+        options = {}
+        options[:resource_name] = scope
+        options[:scope] = 'devise.failure'
+        options[:default] = [message]
+        auth_keys = scope_class.authentication_keys
+        keys = (auth_keys.respond_to?(:keys) ? auth_keys.keys : auth_keys).map { |key| scope_class.human_attribute_name(key) }
+        options[:authentication_keys] = keys.join(I18n.translate(:'support.array.words_connector'))
+        options = i18n_options(options)
+    
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
+    end
+    
+      # create list of plugins to update
+  def plugins_to_update(previous_gem_specs_map)
+    if update_all?
+      previous_gem_specs_map.values.map{|spec| spec.name}
+    else
+      # If the plugins isn't available in the gemspec or in 
+      # the gemfile defined with a local path, we assume the plugins is not
+      # installed.
+      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
+      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
+      plugins_arg
     end
   end
     
-        it 'can not be turned off' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
+    project_versions_yaml_path = File.expand_path('../versions.yml', File.dirname(__FILE__))
+if File.exist?(project_versions_yaml_path)
+  # we need to copy the project level versions.yml into the gem root
+  # to be able to package it into the gems file structure
+  # as the require 'logstash-core-plugin-api/version' loads the yaml file from within the gem root.
+  #
+  # we ignore the copy in git and we overwrite an existing file
+  # each time we build the logstash-core gem
+  original_lines = IO.readlines(project_versions_yaml_path)
+  original_lines << ''
+  original_lines << '# This is a copy the project level versions.yml into this gem's root and it is created when the gemspec is evaluated.'
+  gem_versions_yaml_path = File.expand_path('./versions-gem-copy.yml', File.dirname(__FILE__))
+  File.open(gem_versions_yaml_path, 'w') do |new_file|
+    # create or overwrite
+    new_file.puts(original_lines)
   end
 end
-
-    
-        it 'has a default when the result is empty' do
-      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
-    end
-  end
-    
-          @scheduler.schedule_scheduler_agents
-    
-      it 'provides hash-style access to its properties with both symbol and string keys' do
-    expect(location[:lat]).to be_a Float
-    expect(location[:lat]).to eq 2.0
-    expect(location['lat']).to be_a Float
-    expect(location['lat']).to eq 2.0
-  end
-    
-    describe ConvertWebsiteAgentTemplateForMerge do
-  let :old_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
-    }
-  end
-    
-      private
-    
-          new_email = resource_params.fetch(:unconfirmed_email)
-    
-        def resend
-      authorize @user, :confirm?
-    
-          if @email_domain_block.save
-        log_action :create, @email_domain_block
-        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
-      else
-        render :new
-      end
-    end
-    
-      find_files = ->(path) {
-    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
-      path if File.file?(path)
-    end.compact
-  }
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-    namespace :doc do
-  task :readmes do
-    Dir.glob 'lib/rack/protection/*.rb' do |file|
-      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
-      next if excluded_files.include?(file)
-      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
-      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
-      Dir.mkdir 'doc' unless File.directory? 'doc'
-      puts 'writing #{file}'
-      File.open(file, 'w') { |f| f << doc }
-    end
-  end
-    
-          def random_string(secure = defined? SecureRandom)
-        secure ? SecureRandom.hex(16) : '%032x' % rand(2**128-1)
-      rescue NotImplementedError
-        random_string false
-      end
-    
-    # Lazily initialized.
-    @@hexCharCodeArray = 0;
-    
-        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
-    
-    
-  test 'create pages within sub-directories' do
-    post '/create', :content => 'big smelly creatures', :page => 'Orc',
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
-    get '/Mordor/Orc'
-    assert_match /big smelly creatures/, last_response.body
