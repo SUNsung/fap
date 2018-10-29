@@ -1,93 +1,64 @@
 
         
-                      matches_path?(path, pipeline) &&
-                matches_pattern?(pattern, pipeline)
-            end
-          end
+                # Set the name of the plugin. The moment that this is called, the
+        # plugin will be registered and available. Before this is called, a
+        # plugin does not exist. The name must be unique among all installed
+        # plugins.
+        #
+        # @param [String] name Name of the plugin.
+        # @return [String] The name of the plugin.
+        def self.name(name=UNSET_VALUE)
+          # Get or set the value first, so we have a name for logging when
+          # we register.
+          result = get_or_set(:name, name)
     
-          def store_page(store, id)
-        store.open(path) do
-          if page = new.build_page(id) and store_page?(page)
-            store.write page[:store_path], page[:output]
-            true
-          else
-            false
-          end
+            # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
         end
-      end
-    
-        def insert(index, *names)
-      @filters.insert assert_index(index), *filter_const(names)
-    end
-    
-        def self.run(urls, options = {}, &block)
-      urls = urls.dup
-      requester = new(options)
-      requester.on_response(&block) if block
-      requester.on_response do # cheap hack to ensure root page is processed first
-        if urls
-          requester.request(urls)
-          urls = nil
-        end
-      end
-      requester.request(urls.shift)
-      requester.run
-      requester
-    end
-    
-          base_dir = Pathname.new(normalized_path)
-      base_dir = base_dir.parent unless path.end_with? '/'
-    
-          def mod
-        return @mod if defined?(@mod)
-        @mod = slug[/api\/([\w\-\.]+)\//, 1]
-        @mod.remove! 'angular2.' if @mod
-        @mod
       end
     end
   end
 end
 
     
-      def_delegators :@logger, :log, :log_status, :log_processing, :log_transform, :log_file_info, :log_processed, :log_http_get_file, :log_http_get_files, :silence_log
-    
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
-    end
-    
-        # change Microsoft filters to Sass calling convention
-    def replace_ms_filters(file)
-      log_transform
-      file.gsub(
-          /filter: e\(%\('progid:DXImageTransform.Microsoft.gradient\(startColorstr='%d', endColorstr='%d', GradientType=(\d)\)',argb\(([\-$\w]+)\),argb\(([\-$\w]+)\)\)\);/,
-          %Q(filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='\#{ie-hex-str(\\2)}', endColorstr='\#{ie-hex-str(\\3)}', GradientType=\\1);)
-      )
-    end
-    
-    Then(/^the shared path is created$/) do
-  run_vagrant_command(test_dir_exists(TestApp.shared_path))
+    describe 'Kernel.sleep' do
+  it 'needs to be reviewed for spec completeness'
 end
+
     
-          def print_deprecation_warnings_if_applicable
-        if using_default_scm?
-          warn_add_git_to_capfile unless scm_plugin_installed?
-        elsif built_in_scm_name?
-          warn_set_scm_is_deprecated
-        elsif third_party_scm_name?
-          warn_third_party_scm_must_be_upgraded
-        end
-      end
+      it 'sets the return value of the catch block to a value specified as second parameter' do
+    res = catch :blah do
+      throw :blah, :return_value
+    end
+    res.should == :return_value
+  end
     
-            def set(key, value)
-          pval = @properties[key]
-          if pval.is_a?(Hash) && value.is_a?(Hash)
-            pval.merge!(value)
-          elsif pval.is_a?(Set) && value.is_a?(Set)
-            pval.merge(value)
-          elsif pval.is_a?(Array) && value.is_a?(Array)
-            pval.concat value
-          else
-            @properties[key] = value
-          end
-        end
+      it 'creates a public method in script binding' do
+    eval @code, script_binding
+    Object.should have_method :boom
+  end
+    
+    require 'sass/engine'
+require 'sass/plugin' if defined?(Merb::Plugins)
+require 'sass/railtie'
+require 'sass/features'
+
+    
+          private
+    
+        # Parses the command-line arguments and runs the executable.
+    # Calls `Kernel#exit` at the end, so it never returns.
+    #
+    # @see #parse
+    def parse!
+      # rubocop:disable RescueException
+      begin
+        parse
+      rescue Exception => e
+        # Exit code 65 indicates invalid data per
+        # http://www.freebsd.org/cgi/man.cgi?query=sysexits. Setting it via
+        # at_exit is a bit of a hack, but it allows us to rethrow when --trace
+        # is active and get both the built-in exception formatting and the
+        # correct exit code.
+        at_exit {exit Sass::Util.windows? ? 13 : 65} if e.is_a?(Sass::SyntaxError)
