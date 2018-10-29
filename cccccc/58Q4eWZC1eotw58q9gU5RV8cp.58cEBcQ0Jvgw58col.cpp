@@ -1,215 +1,337 @@
-inline bool is_smaller(const std::pair<int, float>& p1, const std::pair<int, float>& p2)
-{
-    return p1.second < p2.second;
-}
-    
-        int pointsCount = cvtest::randInt(rng) % maxPointsCount;
-    usedPointsCount = pointsCount == 0 ? 0 : cvtest::randInt(rng) % pointsCount;
-    
-    #ifndef __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
-#define __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
-    }
-    
-    void HHVM_FUNCTION(xhprof_enable, int64_t flags/* = 0 */,
-                                  const Array& args /* = null_array */) {
-  if (!RuntimeOption::EnableHotProfiler) {
-    raise_warning('The runtime option Stats.EnableHotProfiler must be on to '
-                  'use xhprof.');
-    return;
-  }
-    }
-    
-    #include 'hphp/runtime/vm/jit/abi.h'
-#include 'hphp/runtime/vm/jit/arg-group.h'
-#include 'hphp/runtime/vm/jit/fixup.h'
-#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
-#include 'hphp/runtime/vm/jit/vasm-gen.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
-    
-    #include <cstdint>
-#include <vector>
-#include <numa.h>
-    
-    namespace irgen {
-    }
-    
-    struct DataBlockFull : std::runtime_error {
-  std::string name;
-    }
-    
-    #include 'hphp/runtime/base/req-list.h'
-#include 'hphp/runtime/base/request-event-handler.h'
-#include 'hphp/runtime/base/request-local.h'
-#include 'hphp/runtime/base/req-ptr.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/type-resource.h'
-#include 'hphp/runtime/base/type-string.h'
-#include 'hphp/runtime/base/type-variant.h'
-    
-    namespace mxnet {
-namespace R {
-    }
-    }
-    
-    namespace Rcpp {
-  template<>
-  inline bool is<mxnet::R::NDArray>(SEXP x) {
-    if (TYPEOF(x) != EXTPTRSXP) return false;
-    Rcpp::XPtr<mxnet::R::NDBlob> ptr(x);
-    SEXP attr = ptr.attr('class');
-    return attr != R_NilValue &&
-        Rcpp::as<std::string>(attr) == 'MXNDArray';
-    return true;
-  }
-}  // namespace Rcpp
-#endif  // MXNET_RCPP_NDARRAY_H_
+
+        
+        #endif  // CAFFE_DATA_TRANSFORMER_HPP_
 
     
+      virtual inline const char* type() const { return 'AbsVal'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-struct ROIAlignParam : public dmlc::Parameter<ROIAlignParam> {
-  TShape pooled_size;
-  float spatial_scale;
-  int sample_ratio;
-  DMLC_DECLARE_PARAMETER(ROIAlignParam) {
-    DMLC_DECLARE_FIELD(pooled_size)
-    .set_expect_ndim(2).enforce_nonzero()
-    .describe('ROI Align output roi feature map height and width: (h, w)');
-    DMLC_DECLARE_FIELD(spatial_scale).set_range(0.0, 1.0)
-    .describe('Ratio of input feature map height (or w) to raw image height (or w). '
-    'Equals the reciprocal of total stride in convolutional layers');
-    DMLC_DECLARE_FIELD(sample_ratio).set_default(-1)
-    .describe('Optional sampling ratio of ROI align, using adaptive size by default.');
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    Object APCCollection::createObject() const {
+  if (m_arrayHandle->isTypedValue()) {
+    Variant local(m_arrayHandle->toLocal());
+    assertx(local.isArray());
+    return Object::attach(
+      collections::alloc(m_colType, local.getArrayData())
+    );
   }
+    }
+    
+    namespace HPHP {
+    }
+    
+      const char* data = filename.data();
+  int data_len = filename.length();
+  bool base64 = false;
+  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
+    return nullptr;
+  }
+  data += sizeof('data:') - 1;
+  data_len -= sizeof('data:') - 1;
+    
+    inline int ExecutionContext::getPageletTasksStarted() const {
+  return m_pageletTasksStarted;
+}
+    
+        bool isPHP = false;
+    const char *p = strrchr(ename, '.');
+    if (p) {
+      isPHP = (strncmp(p + 1, 'php', 3) == 0);
+    } else {
+      try {
+        std::string line;
+        std::ifstream fin(fe.c_str());
+        if (std::getline(fin, line)) {
+          if (line[0] == '#' && line[1] == '!' &&
+              line.find('php') != std::string::npos) {
+            isPHP = true;
+          }
+        }
+      } catch (...) {
+        Logger::Error('FileUtil::find(): unable to read %s', fe.c_str());
+      }
+    }
+    
+      if (length <= 0 || length > data.size()) {
+    length = data.size();
+  }
+    
+    /*!
+ * \brief Macro to register linear updater.
+ */
+#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
+      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
+          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
+              Name)
+    
+      size_t Read(void* dptr, size_t size) override {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer == 0) return strm_->Read(dptr, size);
+    if (nbuffer < size) {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
+      buffer_ptr_ += nbuffer;
+      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
+                                   size - nbuffer);
+    } else {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      buffer_ptr_ += size;
+      return size;
+    }
+  }
+    
+    
+    {    inline size_t Size() const {
+      return end - begin;
+    }
+  };
+  /* \brief specifies how to split a rowset into two */
+  struct Split {
+    std::vector<size_t> left;
+    std::vector<size_t> right;
+  };
+    
+    // logistic loss for binary classification task
+struct LogisticClassification : public LogisticRegression {
+  static const char* DefaultEvalMetric() { return 'error'; }
 };
+    
+     private:
+  // try to prune off current leaf
+  inline int TryPruneLeaf(RegTree &tree, int nid, int depth, int npruned) { // NOLINT(*)
+    if (tree[nid].IsRoot()) return npruned;
+    int pid = tree[nid].Parent();
+    RegTree::NodeStat &s = tree.Stat(pid);
+    ++s.leaf_child_cnt;
+    if (s.leaf_child_cnt >= 2 && param_.NeedPrune(s.loss_chg, depth - 1)) {
+      // need to be pruned
+      tree.ChangeToLeaf(pid, param_.learning_rate * s.base_weight);
+      // tail recursion
+      return this->TryPruneLeaf(tree, pid, depth - 1, npruned + 2);
+    } else {
+      return npruned;
+    }
+  }
+  /*! \brief do pruning of a tree */
+  inline void DoPrune(RegTree &tree) { // NOLINT(*)
+    int npruned = 0;
+    // initialize auxiliary statistics
+    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
+      tree.Stat(nid).leaf_child_cnt = 0;
+    }
+    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
+      if (tree[nid].IsLeaf()) {
+        npruned = this->TryPruneLeaf(tree, nid, tree.GetDepth(nid), npruned);
+      }
+    }
+    if (!param_.silent) {
+      LOG(INFO) << 'tree pruning end, ' << tree.param.num_roots << ' roots, '
+                << tree.NumExtraNodes() << ' extra nodes, ' << npruned
+                << ' pruned nodes, max_depth=' << tree.MaxDepth();
+    }
+  }
+    
+          cbw.Write(buffer.data(), input.begin(), input.end());
+    
+    TEST(Expected, CoroutineSuccess) {
+  auto r0 = []() -> Expected<int, Err> {
+    auto x = co_await f1();
+    EXPECT_EQ(7, x);
+    auto y = co_await f2(x);
+    EXPECT_EQ(2.0 * 7, y);
+    auto z = co_await f3(x, y);
+    EXPECT_EQ(int(2.0 * 7 + 7), *z);
+    co_return* z;
+  }();
+  EXPECT_TRUE(r0.hasValue());
+  EXPECT_EQ(21, *r0);
+}
+    
+    BENCHMARK_RELATIVE(format_long_string_safe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& longString = getLongString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { format(&out, '{}', longString); });
+  }
+}
+    
+    static std::string
+getStr(const std::vector<uint8_t>& v, size_t& pos, const size_t len) {
+  CHECK_GE(len, 1);
+  std::string res;
+  res.resize(len - 1);
+  for (size_t i = 0; i < len - 1; i++) {
+    CHECK_NE(v[pos + i], 0);
+    res[i] = char(v[pos + i]);
+  }
+  CHECK_EQ(0, v[pos + len - 1]);
+  pos += len;
+  return res;
+}
+    
+    inline std::system_error makeSystemErrorExplicit(int err, const char* msg) {
+  // TODO: The C++ standard indicates that std::generic_category() should be
+  // used for POSIX errno codes.
+  //
+  // We should ideally change this to use std::generic_category() instead of
+  // std::system_category().  However, undertaking this change will require
+  // updating existing call sites that currently catch exceptions thrown by
+  // this code and currently expect std::system_category.
+  return std::system_error(err, std::system_category(), msg);
+}
+    
+    exception_wrapper exception_wrapper::from_exception_ptr(
+    std::exception_ptr const& ptr) noexcept {
+  if (!ptr) {
+    return exception_wrapper();
+  }
+  try {
+    std::rethrow_exception(ptr);
+  } catch (std::exception& e) {
+    return exception_wrapper(std::current_exception(), e);
+  } catch (...) {
+    return exception_wrapper(std::current_exception());
+  }
+}
+    
+      /**
+   * Returns a random uint32_t
+   */
+  static uint32_t rand32() {
+    return rand32(ThreadLocalPRNG());
+  }
+    
+    
+    {} // namespace std
+
+    
+    #if FOLLY_HAVE_LIBZ
+    
+    /**
+ * This class creates core-local caches for a given shared_ptr, to
+ * mitigate contention when acquiring/releasing it.
+ *
+ * It has the same thread-safety guarantees as shared_ptr: it is safe
+ * to concurrently call get(), but reset()s must be synchronized with
+ * reads and other resets().
+ *
+ * @author Giuseppe Ottaviano <ott@fb.com>
+ */
+template <class T, size_t kNumSlots = 64>
+class CoreCachedSharedPtr {
+ public:
+  explicit CoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
+    reset(p);
+  }
+    }
+    
+      if (!apollo::common::util::GetProtoFromFile(FLAGS_can_client_conf_file_a,
+                                              &can_client_conf_a)) {
+    AERROR << 'Unable to load canbus conf file: '
+           << FLAGS_can_client_conf_file_a;
+    return 1;
+  } else {
+    AINFO << 'Conf file is loaded: ' << FLAGS_can_client_conf_file_a;
+  }
+  AINFO << can_client_conf_a.ShortDebugString();
+  auto client_a = can_client_factory->CreateObject(can_client_conf_a.brand());
+  if (!client_a || !client_a->Init(can_client_conf_a) ||
+      client_a->Start() != ErrorCode::OK) {
+    AERROR << 'Create can client a failed.';
+    return 1;
+  }
+  param_ptr_a->can_client = client_a.get();
+  param_ptr_a->is_first_agent = true;
+  param_ptr_a->conf = can_client_conf_a;
+    
+    
+    {  // Synchronous transmission of CAN messages
+  int32_t ret = canWrite(dev_handler_, send_frames_, frame_num, nullptr);
+  if (ret != NTCAN_SUCCESS) {
+    AERROR << 'send message failed, error code: ' << ret << ', '
+           << GetErrorString(ret);
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+  return ErrorCode::OK;
+}
     
     
     { private:
-  inline TBlob AsTBlob(const dmlc::Row<uint32_t, DType>& row, const TShape& shape) {
-    CHECK_EQ(row.length, shape.Size())
-        << 'The data size in CSV do not match size of shape: '
-        << 'specified shape=' << shape << ', the csv row-length=' << row.length;
-    const DType* ptr = row.value;
-    return TBlob((DType*)ptr, shape, cpu::kDevMask, 0);  // NOLINT(*)
-  }
-  // dummy label
-  mshadow::TensorContainer<cpu, 1, DType> dummy_label;
-  std::unique_ptr<dmlc::Parser<uint32_t, DType> > label_parser_;
-  std::unique_ptr<dmlc::Parser<uint32_t, DType> > data_parser_;
+  NTCAN_HANDLE dev_handler_;
+  CANCardParameter::CANChannelId port_;
+  CMSG send_frames_[MAX_CAN_SEND_FRAME_LEN];
+  CMSG recv_frames_[MAX_CAN_RECV_FRAME_LEN];
 };
     
-    // Transfer gradient and input and output to FGradient function
-struct ElemwiseGradUseInOut {
-  const char *op_name;
-  std::vector<nnvm::NodeEntry> operator()(const nnvm::NodePtr& n,
-                                          const std::vector<nnvm::NodeEntry>& ograds) const {
-    std::vector<nnvm::NodeEntry> heads(ograds.begin(), ograds.end());
-    for (auto& h : n->inputs) {
-      heads.push_back(h);
-    }
-    index_t n_out = n->num_outputs();
-    for (index_t i = 0; i < n_out; ++i) {
-      heads.emplace_back(nnvm::NodeEntry{n, i, 0});
-    }
-    return MakeGradNode(op_name, n, heads, n->attrs.dict);
-  }
-};
     
-    struct ElementWiseSumParam : public dmlc::Parameter<ElementWiseSumParam> {
-  int num_args;
-  DMLC_DECLARE_PARAMETER(ElementWiseSumParam) {
-    DMLC_DECLARE_FIELD(num_args).set_lower_bound(1)
-        .describe('Number of inputs to be summed.');
-  }
-};
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
     
-    #if 0   // merge leftover?
-        // This will automatically discard a large fraction of the data, useful if the training data is known to be highly correlated
-        if (dataDecimationFactor)
-        {
-            auto& pMBLayout = net->GetMBLayoutPtrOfNetwork();
-    }
+    #include 'modules/drivers/canbus/can_comm/can_sender.h'
     
+    #ifndef MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
+#define MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
     
-    {        return Data()->AsScalar<ElementType>();
-    }
-    
-    
-    {        // perform the operation on one long vector
-        msra::math::float4 threshold4(threshold);
-        foreach_index (i, us4)
-        {
-            us4[i] &= ((us4[i] >= threshold4) | (us4[i] <= -threshold4));
-        }
-    }
-    
-        // Save the data into this section,
-    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized);
-    
-    void GranularGPUDataTransferer::CopyCPUToGPUAsync(const void* cpuBuffer, size_t numElements, size_t elementSize, void* gpuBuffer)
-{
-    PrepareDevice(m_deviceId);
-    cudaMemcpyAsync(gpuBuffer, cpuBuffer, numElements * elementSize, cudaMemcpyHostToDevice, GetAssignStream()) || 'cudaMemcpyAsync failed';
+    TEST(ByteTest, SetGetHighLowBit) {
+  unsigned char byte_value = 0x37;
+  Byte value(&byte_value);
+  value.set_value_high_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
+  value.set_value_low_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
 }
     
-        ComputationNetworkPtr net;
+    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
+              'The adapter config file');
     
-    template <class _T>
-class const_array_ref
-{
-    const _T* data;
-    size_t n;
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < n);
-    }
-    inline void check_ptr() const
-    {
-        n;
-        data;
-        assert(n == 0 || data != NULL);
-    }
-    }
-    
-    public:
-    float4()
-    {
-    } // uninitialized
-    float4(const float4& f4)
-        : v(f4.v)
-    {
-    }
-    float4& operator=(const float4& other)
-    {
-        v = other.v;
-        return *this;
-    }
+    // System gflags
+DECLARE_string(sensor_node_name);
