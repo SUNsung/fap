@@ -1,154 +1,148 @@
 
         
-            describe 'replies' do
-      def process_alerts(post)
-        PostAlerter.post_created(post)
-      end
-    
-        #####################################################
+            #####################################################
     # @!group Other things
     #####################################################
     
-        def show_github_issues(message_or_error)
-      return if FastlaneCore::Env.truthy?('FASTLANE_HIDE_GITHUB_ISSUES')
-      return if FastlaneCore::Helper.test?
+          @launch_event_sent = true
+      builder = AnalyticsEventBuilder.new(
+        p_hash: launch_context.p_hash,
+        session_id: session_id,
+        action_name: nil,
+        fastlane_client_language: launch_context.fastlane_client_language
+      )
     
-          it 'Does not use pattern matching for tag name if so requested' do
+        def handle_unknown_error!(e)
+      # Some spaceship exception classes implement #preferred_error_info in order to share error info
+      # that we'd rather display instead of crashing with a stack trace. However, fastlane_core and
+      # spaceship can not know about each other's classes! To make this information passing work, we
+      # use a bit of Ruby duck-typing to check whether the unknown exception type implements the right
+      # method. If so, we'll present any returned error info in the manner of a user_error!
+      error_info = e.respond_to?(:preferred_error_info) ? e.preferred_error_info : nil
+      should_show_github_issues = e.respond_to?(:show_github_issues) ? e.show_github_issues : true
+    
+          it 'sets the platform to Mac' do
         result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits()
-        end').runner.execute(:test)
-    
-          it 'passes the deprecated pathspec parameter to path parameter' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(pathspec: 'myfile.txt')
+            carthage(
+              platform: 'Mac'
+            )
           end').runner.execute(:test)
-        end
+    
+            expect(result[1]).to start_with('security set-keychain-settings')
+        expect(result[1]).to include('-t 300')
+        expect(result[1]).to_not(include('-l'))
+        expect(result[1]).to_not(include('-u'))
+        expect(result[1]).to include('~/Library/Keychains/test.keychain')
+        expect(result[2]).to start_with('security list-keychains -s')
+        expect(result[2]).to end_with(File.expand_path('~/Library/Keychains/test.keychain').to_s)
       end
     
-            context 'with given path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint(
-                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-                oclint_path: 'test/bin/oclint'
-              )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
-    
-          it 'does not require any parameters other than project' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          slather({
-            proj: 'foo.xcodeproj'
-          })
-        end').runner.execute(:test)
-    
-          root.children.each {|v| nest_seqs(v)}
-    end
-    
-          # Given an `@import`ed path, returns an array of possible
-      # on-disk filenames and their corresponding syntaxes for that path.
-      #
-      # @param name [String] The filename.
-      # @return [Array(String, Symbol)] An array of pairs.
-      #   The first element of each pair is a filename to look for;
-      #   the second element is the syntax that file would be in (`:sass` or `:scss`).
-      def possible_files(name)
-        name = escape_glob_characters(name)
-        dirname, basename, extname = split(name)
-        sorted_exts = extensions.sort
-        syntax = extensions[extname]
-    
-      # Post release
-  #-----------------------------------------------------------------------------#
-    
-    if Encoding.default_external != Encoding::UTF_8
-    
-    require 'pathname'
-require 'cocoapods/config'
-require 'rbconfig'
-require 'erb'
-    
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
-    
-        # Checks that the podfile exists.
-    #
-    # @raise  If the podfile does not exists.
-    #
-    # @return [void]
-    #
-    def verify_podfile_exists!
-      unless config.podfile
-        raise Informative, 'No `Podfile' found in the project directory.'
+          it 'cannot have both path and pathspec parameters' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: 'myfile.txt', pathspec: '*.txt')
+          end').runner.execute(:test)
+        end.to raise_error(FastlaneCore::Interface::FastlaneError)
       end
     end
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-    World(RemoteCommandHelpers)
+  end
+end
 
     
-      class Configuration
-    def self.env
-      @env ||= new
+            # this command is also sent on macOS Sierra and we need to allow it or else the test will fail
+        allowed_command = 'security set-key-partition-list -S apple-tool:,apple: -k #{''.shellescape} #{keychain_path.shellescape} &> /dev/null'
+    
+          it 'passes an environment Hash' do
+        expect_command({ 'PATH' => '/usr/local/bin' }, 'git', 'commit')
+        Fastlane::Actions.sh({ 'PATH' => '/usr/local/bin' }, 'git', 'commit')
+      end
+    
+            MergeRequest
+          .where(id: start_id..stop_id)
+          .where(latest_merge_request_diff_id: nil)
+          .each_batch(of: BATCH_SIZE) do |relation|
+    
+                ##
+            # We assume that unspecified entry is undefined.
+            # See issue #18775.
+            #
+            if @value.nil?
+              Entry::Unspecified.new(
+                fabricate_unspecified
+              )
+            else
+              fabricate(@entry, @value)
+            end
+          end
+    
+              def location
+            name = @key.presence || self.class.name.to_s.demodulize
+                                        .underscore.humanize.downcase
+    
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
+      begin
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
+      ensure
+        ::Process.wait pid
+      end
     end
-    
-          def roles_array
-        roles.to_a
-      end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-          def trusted_keys
-        @trusted_keys.dup
-      end
-    
-        <div id='rack'>
-      <h3 id='env-info'>Rack ENV</h3>
-      <table class='req'>
-        <tr>
-          <th>Variable</th>
-          <th>Value</th>
-        </tr>
-         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
-         <tr>
-           <td><%=h key %></td>
-           <td class='code'><div><%=h val %></div></td>
-         </tr>
-         <% } %>
-      </table>
-      <div class='clear'></div>
-    </div> <!-- /RACK ENV -->
-    
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
+    [$? && $?.exitstatus == 0, cmd_with_env]
   end
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
+  end
+end
+    
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
     
         it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
       env = {'HTTP_HOST' => 'foo.com'}
       subject.options[:allow_empty_referrer] = false
       expect(subject.referrer(env)).to be_nil
     end
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+            def empty
+          authorize! :update, @order, order_token
+          @order.empty!
+          render plain: nil, status: 204
+        end
+    
+            def create
+          @order.validate_payments_attributes([payment_params])
+          @payment = @order.payments.build(payment_params)
+          if @payment.save
+            respond_with(@payment, status: 201, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
