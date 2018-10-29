@@ -1,115 +1,145 @@
 
         
-          describe 'migrating the 'make_message' format' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
-      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
-      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
+              File.write(new_path, '1')
+      false
     end
-  end
     
-          puts 'Moving #{old_path} to #{new_path}...' if $stdout.tty?
-      path.dirname.mkpath
-      FileUtils.mv old_path, new_path
+        def run!
+      require_program(:version, :description)
+      trap('INT') { abort(program(:int_message)) } if program(:int_message)
+      trap('INT') { program(:int_block).call } if program(:int_block)
+      global_option('-h', '--help', 'Display help documentation') do
+        args = @args - %w(-h --help)
+        command(:help).run(*args)
+        return
+      end
+      global_option('-v', '--version', 'Display version information') do
+        say(version)
+        return
+      end
+      parse_global_options
+      remove_global_options(options, @args)
+    
+            expect(result).to eq('git commit -m message ./fastlane/README.md ./LICENSE ' + './fastlane/spec/fixtures/git_commit/A FILE WITH SPACE'.shellescape)
+      end
+    
+            it 'escapes spaces in list of files to process' do
+          file = 'path/to/my project/source code/AppDelegate.swift'
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+                files: ['#{file}']
+            )
+          end').runner.execute(:test)
+    
+        os = 'other'
+    shellescape_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        str = testcase['str'].to_s
+        expect_correct_implementation_to_be_called(str, :shellescape, os)
+        escaped = str.shellescape
+        expect(escaped).to eq(testcase['expect'][os])
+      end
     end
-  end
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
   end
 end
-
     
-      # Integration tests
-  gem 'diffy'
-  gem 'clintegracon'
+          dir.find do |src|
+        dst = HOMEBREW_PREFIX + src.relative_path_from(path)
+        dst.extend(ObserverPathnameExtension)
     
-      module Generator
-    autoload :Acknowledgements,        'cocoapods/generator/acknowledgements'
-    autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
-    autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
-    autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
-    autoload :Constant,                'cocoapods/generator/constant'
-    autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
-    autoload :DummySource,             'cocoapods/generator/dummy_source'
-    autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
-    autoload :Header,                  'cocoapods/generator/header'
-    autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
-    autoload :ModuleMap,               'cocoapods/generator/module_map'
-    autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
-    autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
-    autoload :AppTargetHelper,         'cocoapods/generator/app_target_helper'
+    class GitHubGitDownloadStrategy < GitDownloadStrategy
+  def initialize(url, name, version, **meta)
+    super
+    
+    module Homebrew
+  module_function
+    
+      # Default log-level (development=debug, production=info)
+  Logging.logger.root.level = config.log_level
+    
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
   end
     
-        # Checks that the lockfile exists.
+    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
+  stream_element_numbers_content(position).should have_content(post_text)
+end
+    
+    When /^I should see one less invite$/ do
+  step 'I should see \'#{@inviter_invite_count -1} invites left\''
+end
+    
+      # submit the password reset form
+  def submit_password_reset_form
+    find('.btn').click
+  end
+    
+          @conv2 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
+             .increase_unread(alice)
+    
+    # Get the version string. If this is being installed from Git,
+# this includes the proper prerelease version.
+def get_version
+  File.read(scope('VERSION').strip)
+end
+    
+    require 'sass/logger'
+require 'sass/util'
+    
+      # A read-only wrapper for a lexical environment for SassScript.
+  class ReadOnlyEnvironment < BaseEnvironment
+    def initialize(parent = nil, options = nil)
+      super
+      @content_cached = nil
+    end
+    # The read-only environment of the caller of this environment's mixin or function.
     #
-    # @raise  If the lockfile does not exists.
+    # @see BaseEnvironment#caller
+    # @return {ReadOnlyEnvironment}
+    def caller
+      return @caller if @caller
+      env = super
+      @caller ||= env.is_a?(ReadOnlyEnvironment) ? env : ReadOnlyEnvironment.new(env, env.options)
+    end
+    
+        # Set an option for specifying `Encoding.default_external`.
     #
-    # @return [void]
-    #
-    def verify_lockfile_exists!
-      unless config.lockfile
-        raise Informative, 'No `Podfile.lock' found in the project directory, run `pod install'.'
+    # @param opts [OptionParser]
+    def encoding_option(opts)
+      encoding_desc = 'Specify the default encoding for input files.'
+      opts.on('-E', '--default-encoding ENCODING', encoding_desc) do |encoding|
+        Encoding.default_external = encoding
       end
     end
     
-          def initialize(argv)
-        super
-        config.silent = false
+          output = @options[:output] = @args.shift
+      raise 'Error: --from required when using --recursive.' unless @options[:from]
+      raise 'Error: --to required when using --recursive.' unless @options[:to]
+      unless File.directory?(@options[:input])
+        raise 'Error: '#{@options[:input]}' is not a directory'
       end
+      if @options[:output] && File.exist?(@options[:output]) &&
+        !File.directory?(@options[:output])
+        raise 'Error: '#{@options[:output]}' is not a directory'
+      end
+      @options[:output] ||= @options[:input]
     
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
-    end
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+      class ImageTag < Liquid::Tag
+    @img = nil
+    
+      # Escapes CDATA sections in post content
+  def cdata_escape(input)
+    input.gsub(/<!\[CDATA\[/, '&lt;![CDATA[').gsub(/\]\]>/, ']]&gt;')
   end
     
-            if built_in_scm_name?
-          load_built_in_scm
-        else
-          # Compatibility with existing 3.x third-party SCMs
-          register_legacy_scm_hooks
-          load_legacy_scm_by_name
-        end
-      end
-    
-        # Pulled from Rack::ShowExceptions in order to override TEMPLATE.
-    # If Rack provides another way to override, this could be removed
-    # in the future.
-    def pretty(env, exception)
-      req = Rack::Request.new(env)
-    
-            elsif masked_token?(token)
-          token = unmask_token(token)
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
-        end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
+    require 'pathname'
+require './plugins/octopress_filters'
