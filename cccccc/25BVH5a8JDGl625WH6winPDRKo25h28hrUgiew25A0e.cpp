@@ -1,158 +1,160 @@
 
         
-        // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
-// executed:
-//
-//   1. It generates a warning if there is more than one active
-//   thread.  This is because it's safe to fork() or clone() only
-//   when there is a single thread.
-//
-//   2. The parent process clone()s a sub-process and runs the death
-//   test in it; the sub-process exits with code 0 at the end of the
-//   death test, if it hasn't exited already.
-//
-//   3. The parent process waits for the sub-process to terminate.
-//
-//   4. The parent process checks the exit code and error message of
-//   the sub-process.
-//
-// Examples:
-//
-//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
-//   for (int i = 0; i < 5; i++) {
-//     EXPECT_DEATH(server.ProcessRequest(i),
-//                  'Invalid request .* in ProcessRequest()')
-//                  << 'Failed to die on request ' << i;
-//   }
-//
-//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
-//
-//   bool KilledBySIGHUP(int exit_code) {
-//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
-//   }
-//
-//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
-//
-// On the regular expressions used in death tests:
-//
-//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
-//   which uses the POSIX extended regex syntax.
-//
-//   On other platforms (e.g. Windows), we only support a simple regex
-//   syntax implemented as part of Google Test.  This limited
-//   implementation should be enough most of the time when writing
-//   death tests; though it lacks many features you can find in PCRE
-//   or POSIX extended regex syntax.  For example, we don't support
-//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
-//   repetition count ('x{5,7}'), among others.
-//
-//   Below is the syntax that we do support.  We chose it to be a
-//   subset of both PCRE and POSIX extended regex, so it's easy to
-//   learn wherever you come from.  In the following: 'A' denotes a
-//   literal character, period (.), or a single \\ escape sequence;
-//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
-//   natural numbers.
-//
-//     c     matches any literal character c
-//     \\d   matches any decimal digit
-//     \\D   matches any character that's not a decimal digit
-//     \\f   matches \f
-//     \\n   matches \n
-//     \\r   matches \r
-//     \\s   matches any ASCII whitespace, including \n
-//     \\S   matches any character that's not a whitespace
-//     \\t   matches \t
-//     \\v   matches \v
-//     \\w   matches any letter, _, or decimal digit
-//     \\W   matches any character that \\w doesn't match
-//     \\c   matches any literal character c, which must be a punctuation
-//     .     matches any single character except \n
-//     A?    matches 0 or 1 occurrences of A
-//     A*    matches 0 or many occurrences of A
-//     A+    matches 1 or many occurrences of A
-//     ^     matches the beginning of a string (not that of each line)
-//     $     matches the end of a string (not that of each line)
-//     xy    matches x followed by y
-//
-//   If you accidentally use PCRE or POSIX extended regex features
-//   not implemented by us, you will get a run-time failure.  In that
-//   case, please try to rewrite your regular expression within the
-//   above syntax.
-//
-//   This implementation is *not* meant to be as highly tuned or robust
-//   as a compiled regex library, but should perform well enough for a
-//   death test, which already incurs significant overhead by launching
-//   a child process.
-//
-// Known caveats:
-//
-//   A 'threadsafe' style death test obtains the path to the test
-//   program from argv[0] and re-executes it in the sub-process.  For
-//   simplicity, the current implementation doesn't search the PATH
-//   when launching the sub-process.  This means that the user must
-//   invoke the test program via a path that contains at least one
-//   path separator (e.g. path/to/foo_test and
-//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
-//   is rarely a problem as people usually don't put the test binary
-//   directory in PATH.
-//
-// TODO(wan@google.com): make thread-safe death tests search the PATH.
-    
-    // Then, use TYPED_TEST() instead of TEST_F() to define as many typed
-// tests for this test case as you want.
-TYPED_TEST(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
-  // Since we are inside a derived class template, C++ requires use to
-  // visit the members of FooTest via 'this'.
-  TypeParam n = this->value_;
-    }
-    
-    GTEST_DECLARE_string_(internal_run_death_test);
-    
-    template<typename T> inline
-bool operator==(T* ptr, const linked_ptr<T>& x) {
-  return ptr == x.get();
-}
-    
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
+        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
+  if (LangOpts.Target.isMacOSX()) {
+    return (LangOpts.EnableAppExtensionRestrictions
+                ? PlatformKind::OSXApplicationExtension
+                : PlatformKind::OSX);
   }
     }
     
+        if (info.bytes > buf.size()) {
+      llvm::dbgs() << 'AST section too small.\n';
+      return false;
+    }
     
-// Tests Factorial().
-    
-    #include 'sample2.h'
-    
-    	void disable_collisions_between_bodies(const bool p_disabled);
-	_FORCE_INLINE_ bool is_disabled_collisions_between_bodies() const { return disabled_collisions_between_bodies; }
-    
-    class RigidBodyBullet;
-class btTypedConstraint;
-    
-    #include 'register_types.h'
+        unsigned major, minor, micro;
+    triple.getMacOSXVersion(major, minor, micro);
+    osx << major << '.' << minor;
+    if (micro != 0)
+      osx << '.' << micro;
     
     
-    {	return env->NewGlobalRef(context);
-#else
-	return NULL;
-#endif
+    {    return name;
+  }
+    
+      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = decl;
+    return info;
+  }
+    
+    void register_csg_types() {
+    }
+    
+    Mutex *dvector_lock = NULL;
+    
+    
+    {	function = p_func;
 }
     
-    #include 'core/reference.h'
+    #include 'networked_multiplayer_peer.h'
+    
+      if (allow_2pc_) {
+    autovector<MemTable*> empty_list;
+    auto imm_prep_log =
+        imm()->PrecomputeMinLogContainingPrepSection(empty_list);
+    auto mem_prep_log = mem()->GetMinLogContainingPrepSection();
+    }
+    
+      // A manual compaction will trigger the base level to become L2
+  // Keep Writing data until base level changed 2->1. There will be L0->L2
+  // compaction going on at the same time.
+  rocksdb::SyncPoint::GetInstance()->DisableProcessing();
+  rocksdb::SyncPoint::GetInstance()->ClearAllCallBacks();
+    
+    #include 'rocksdb/slice.h'
+#include 'rocksdb/status.h'
+    
+    class ChrootEnv : public EnvWrapper {
+ public:
+  ChrootEnv(Env* base_env, const std::string& chroot_dir)
+      : EnvWrapper(base_env) {
+#if defined(OS_AIX)
+    char resolvedName[PATH_MAX];
+    char* real_chroot_dir = realpath(chroot_dir.c_str(), resolvedName);
+#else
+    char* real_chroot_dir = realpath(chroot_dir.c_str(), nullptr);
+#endif
+    // chroot_dir must exist so realpath() returns non-nullptr.
+    assert(real_chroot_dir != nullptr);
+    chroot_dir_ = real_chroot_dir;
+#if !defined(OS_AIX)
+    free(real_chroot_dir);
+#endif
+  }
+    }
+    
+    // Decrypt one or more (partial) blocks of data at the file offset.
+// Length of data is given in dataSize.
+Status BlockAccessCipherStream::Decrypt(uint64_t fileOffset, char *data, size_t dataSize) {
+  // Calculate block index
+  auto blockSize = BlockSize();
+  uint64_t blockIndex = fileOffset / blockSize;
+  size_t blockOffset = fileOffset % blockSize;
+  unique_ptr<char[]> blockBuffer;
+    }
+    
+      // Roundup x to a multiple of y
+  static size_t Roundup(size_t x, size_t y) { return ((x + y - 1) / y) * y; }
+    
+    // A simple compaction algorithm that always compacts everything
+// to the highest level whenever possible.
+class FullCompactor : public Compactor {
+ public:
+  explicit FullCompactor(const Options options) : options_(options) {
+    compact_options_.compression = options_.compression;
+    compact_options_.output_file_size_limit =
+        options_.target_file_size_base;
+  }
+    }
+    
+      // close DB
+  delete cf;
+  delete db;
+    
+      delete db;
+    
+    void BENCHFUN(fillCtor)(int iters, int size) {
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v(size_t(size), randomObject<VECTOR::value_type>());
+    doNotOptimizeAway(&v);
+  }
+}
+BENCHMARK_PARAM(BENCHFUN(fillCtor), 16)
+BENCHMARK_PARAM(BENCHFUN(fillCtor), 128)
+BENCHMARK_PARAM(BENCHFUN(fillCtor), 1024)
+    
+    using folly::Function;
+using folly::FunctionRef;
+    
+    #include <folly/GLog.h>
+    
+    #include <boost/filesystem.hpp>
+#include <folly/Conv.h>
+#include <folly/Format.h>
+#include <folly/Random.h>
+#include <folly/String.h>
+#include <folly/Subprocess.h>
+#include <folly/lang/Bits.h>
+#include <folly/portability/GTest.h>
+#include <folly/portability/Unistd.h>
+#include <folly/tracing/StaticTracepoint.h>
+#include <folly/tracing/test/StaticTracepointTestModule.h>
+    
+      /**
+   * Returns a random uint32_t in [0, max) given a specific RNG.
+   * If max == 0, returns 0.
+   */
+  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
+  static uint32_t rand32(uint32_t max, RNG&& rng) {
+    return rand32(0, max, rng);
+  }
+    
+    namespace folly {
+    }
+    
+    template <typename T>
+typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
+prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  prefix = Endian::little(prefix);
+  std::string result;
+  result.resize(n);
+  memcpy(&result[0], &prefix, n);
+  return result;
+}
