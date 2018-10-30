@@ -1,101 +1,149 @@
 
         
-                    if generate_ids?
-              options['id'] = options.fetch('id') { tag_id(index) }
-              if namespace = options.delete('namespace')
-                options['id'] = options['id'] ? '#{namespace}_#{options['id']}' : namespace
-              end
-            end
-          end
+          def merge(*args)
+    @settings.merge(*args)
+    self
+  end
     
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class CheckBox < Base #:nodoc:
-        include Checkable
+      private
     
-              def render_component(builder)
-            builder.radio_button + builder.label
-          end
+      def app_caveats
+    if keg && keg.app_installed?
+      <<-EOS.undent
+        .app bundles were installed.
+        Run `brew linkapps #{keg.name}` to symlink these to /Applications.
+      EOS
+    end
+  end
+    
+        current_revision_var = 'HOMEBREW_UPDATE_AFTER#{repo_var}'
+    @current_revision = ENV[current_revision_var].to_s
+    raise ReporterRevisionUnsetError, current_revision_var if @current_revision.empty?
+  end
+    
+      context 'successful dry runs' do
+    before do
+      stub_request(:get, 'http://xkcd.com/').
+        with(:headers => {'Accept-Encoding'=>'gzip,deflate', 'User-Agent'=>'Huginn - https://github.com/huginn/huginn'}).
+        to_return(:status => 200, :body => File.read(Rails.root.join('spec/data_fixtures/xkcd.html')), :headers => {})
+    end
+    
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+    end
+  end
+end
+
+    
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
+  end
+    
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
+        end
       end
-    end
-  end
-end
-
     
-        def initialize_copy(other)
-      @paths = other.paths.dup
-      self
+      describe '#jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('\\u003c/script\\u003e')
     end
     
-    unless dups.empty?
-  puts '\nDuplicate links:'
-  dups.each do |link|
-    puts '- #{link}'
-    puts `grep -nr '#{link}' README.md`
-  end
-  puts '\nDone with errors.'
-  exit(1)
-end
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+        def mime_type
+      headers['Content-Type'] || 'text/plain'
     end
-  end
-end
-
     
-    When /^I submit forgot password form$/ do
-  submit_forgot_password_form
-end
+          dest = url.normalized_path
+      dest_dir = Pathname.new(dest)
     
-    Before do |scenario|
-  Devise.mailer.deliveries = []
-  page.driver.headers = if scenario.source_tag_names.include? '@mobile'
-                          {'User-Agent' => 'Mozilla/5.0 (Mobile; rv:18.0) Gecko/18.0 Firefox/18.0'}
-                        else
-                          {}
-                        end
+            title = at_css('h1').content.strip
+        if root_page?
+          at_css('h1').content = 'Angular 2 Documentation'
+        elsif title == 'Index'
+          at_css('h1').content = result[:entries].first.name
+        elsif title == 'Angular'
+          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
+        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
+          at_css('h1').content = result[:entries].first.name
+        end
     
-            return nil
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
       end
+    
+        cmd = HOMEBREW_INTERNAL_COMMAND_ALIASES.fetch(ARGV.first, ARGV.first)
+    
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
     end
   end
-end end end
-
+end
     
-        def valid_format?(local_file)
-      ::File.extname(local_file).downcase == PACK_EXTENSION
-    end
-  end
-end end end
-
+    Then /^I should get a zipped file$/ do
+  expect(page.response_headers['Content-Type']).to eq('application/zip')
+end
     
-        # any errors will be logged to $stderr by invoke!
-    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
-    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
-    options[:local] = true if local?
-    output = LogStash::Bundler.invoke!(options)
-    # We currently dont removed unused gems from the logstash installation
-    # see: https://github.com/elastic/logstash/issues/6339
-    # output = LogStash::Bundler.invoke!(:clean => true)
-    display_updated_plugins(previous_gem_specs_map)
-  rescue => exception
-    gemfile.restore!
-    report_exception('Updated Aborted', exception)
-  ensure
-    display_bundler_output(output)
+    require File.join(File.dirname(__FILE__), 'integration_sessions_controller')
+require File.join(File.dirname(__FILE__), 'poor_mans_webmock')
+    
+    RSpec::Matchers.define :have_path do |expected|
+  match do |actual|
+    await_condition { actual.current_path == expected }
   end
     
-    Gem::Specification.new do |gem|
-  gem.authors       = ['Elastic']
-  gem.email         = ['info@elastic.co']
-  gem.description   = %q{Logstash plugin API}
-  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
-  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
-  gem.license       = 'Apache License (2.0)'
+        # captcha needs to be filled out, because the field is required (HTML5)
+    # in test env, the captcha will always pass successfully
+    fill_in('user_captcha', with: '123456')
+  end
     
-        shared_examples('safe URI') do |options|
-      options ||= {}
+    describe ConversationsController, :type => :controller do
+  describe '#index' do
+    before do
+      @person = alice.contacts.first.person
+      hash = {
+        :author => @person,
+        :participant_ids => [alice.person.id, @person.id],
+        :subject => 'not spam',
+        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
+      }
+      @conv1 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+    
+      gem.files         = Dir.glob(['logstash-core-plugin-api.gemspec', 'lib/**/*.rb', 'spec/**/*.rb'])
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.name          = 'logstash-core-plugin-api'
+  gem.require_paths = ['lib']
+  gem.version       = LOGSTASH_CORE_PLUGIN_API
