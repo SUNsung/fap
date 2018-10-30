@@ -1,262 +1,259 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+          // Gets the text streamed to this object so far as an std::string.
+  // Each '\0' character in the buffer is replaced with '\\0'.
+  //
+  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+  std::string GetString() const;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+    // ValuesIn() function allows generation of tests with parameters coming from
+// a container.
+//
+// Synopsis:
+// ValuesIn(const T (&array)[N])
+//   - returns a generator producing sequences with elements from
+//     a C-style array.
+// ValuesIn(const Container& container)
+//   - returns a generator producing sequences with elements from
+//     an STL-style container.
+// ValuesIn(Iterator begin, Iterator end)
+//   - returns a generator producing sequences with elements from
+//     a range [begin, end) defined by a pair of STL-style iterators. These
+//     iterators can also be plain C pointers.
+//
+// Please note that ValuesIn copies the values from the containers
+// passed in and keeps them to generate tests in RUN_ALL_TESTS().
+//
+// Examples:
+//
+// This instantiates tests from test case StringTest
+// each with C-string values of 'foo', 'bar', and 'baz':
+//
+// const char* strings[] = {'foo', 'bar', 'baz'};
+// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
+//
+// This instantiates tests from test case StlStringTest
+// each with STL strings with values 'a' and 'b':
+//
+// ::std::vector< ::std::string> GetParameterStrings() {
+//   ::std::vector< ::std::string> v;
+//   v.push_back('a');
+//   v.push_back('b');
+//   return v;
+// }
+//
+// INSTANTIATE_TEST_CASE_P(CharSequence,
+//                         StlStringTest,
+//                         ValuesIn(GetParameterStrings()));
+//
+//
+// This will also instantiate tests from CharTest
+// each with parameter values 'a' and 'b':
+//
+// ::std::list<char> GetParameterChars() {
+//   ::std::list<char> list;
+//   list.push_back('a');
+//   list.push_back('b');
+//   return list;
+// }
+// ::std::list<char> l = GetParameterChars();
+// INSTANTIATE_TEST_CASE_P(CharSequence2,
+//                         CharTest,
+//                         ValuesIn(l.begin(), l.end()));
+//
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end) {
+  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
+      ::value_type ParamType;
+  return internal::ParamGenerator<ParamType>(
+      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
+}
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    string TransposeString(Transpose t) {
-  switch (t) {
-    case Transpose::kNoTranspose:
-      return 'NoTranspose';
-    case Transpose::kTranspose:
-      return 'Transpose';
-    case Transpose::kConjugateTranspose:
-      return 'ConjugateTranspose';
-    default:
-      LOG(FATAL) << 'Unknown transpose ' << static_cast<int32>(t);
+      // Returns the number of TestPartResult objects in the array.
+  int size() const;
+    
+      // Returns a pointer to the last occurence of a valid path separator in
+  // the FilePath. On Windows, for example, both '/' and '\' are valid path
+  // separators. Returns NULL if no path separator was found.
+  const char* FindLastPathSeparator() const;
+    
+    #if GTEST_OS_WINDOWS_MOBILE
+  // Windows CE does not have the 'ANSI' versions of Win32 APIs. To be
+  // able to pass strings to Win32 APIs on CE we need to convert them
+  // to 'Unicode', UTF-16.
+    
+    namespace internal {
+    }
+    
+    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
+int Factorial(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
   }
-}
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // mutex that guards the cuBLAS handle for this device.
-  mutex mu_;
-    
-    class PAGE_RES_IT;
-class ROW;
-class WERD_RES;
-    
-    struct OSResults {
-  OSResults() : unicharset(nullptr) {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < kMaxNumberOfScripts; ++j)
-        scripts_na[i][j] = 0;
-      orientations[i] = 0;
     }
+    
+    int main(int argc, char **argv) {
+  InitGoogleTest(&argc, argv);
+    }
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    using LineNumber = uint32_t;
+using ColNumber  = uint32_t;
+using LineRange  = std::tuple<LineNumber,LineNumber>;
+    
+      if (HPHP::jit::deltaFits(imm64, HPHP::sz::word)) {
+    // immediate has only low 16 bits set, use simple load immediate
+    li(rt, static_cast<int16_t>(imm64));
+    if (imm64 & (1ULL << 15) && !(imm64 & (1ULL << 16))) {
+      // clear extended sign that should not be set
+      // (32bits number. Sets the 16th bit but not the 17th, it's not negative!)
+      clrldi(rt, rt, 48);
+      missing = kLi64Len - 2 * instr_size_in_bytes;
+    } else {
+      missing = kLi64Len - 1 * instr_size_in_bytes;
+    }
+  } else if (HPHP::jit::deltaFits(imm64, HPHP::sz::dword)) {
+    // immediate has only low 32 bits set
+    lis(rt, static_cast<int16_t>(imm64 >> 16));
+    ori(rt, rt, static_cast<int16_t>(imm64 & UINT16_MAX));
+    if (imm64 & (1ULL << 31) && !(imm64 & (1ULL << 32))) {
+      // clear extended sign
+      // (64bits number. Sets the 32th bit but not the 33th, it's not negative!)
+      clrldi(rt, rt, 32);
+      missing = kLi64Len - 3 * instr_size_in_bytes;
+    } else {
+      missing = kLi64Len - 2 * instr_size_in_bytes;
+    }
+  } else if (imm64 >> 48 == 0) {
+    // immediate has only low 48 bits set
+    lis(rt, static_cast<int16_t>(imm64 >> 32));
+    ori(rt, rt, static_cast<int16_t>((imm64 >> 16) & UINT16_MAX));
+    sldi(rt,rt,16);
+    ori(rt, rt, static_cast<int16_t>(imm64 & UINT16_MAX));
+    if (imm64 & (1ULL << 47)) {
+      // clear extended sign
+      clrldi(rt, rt, 16);
+    } else {
+      missing = kLi64Len - 4 * instr_size_in_bytes;
+    }
+  } else {
+    // load all 64 bits
+    lis(rt, static_cast<int16_t>(imm64 >> 48));
+    ori(rt, rt, static_cast<int16_t>((imm64 >> 32) & UINT16_MAX));
+    sldi(rt,rt,32);
+    oris(rt, rt, static_cast<int16_t>((imm64 >> 16) & UINT16_MAX));
+    ori(rt, rt, static_cast<int16_t>(imm64 & UINT16_MAX));
   }
-  void update_best_orientation();
-  // Set the estimate of the orientation to the given id.
-  void set_best_orientation(int orientation_id);
-  // Update/Compute the best estimate of the script assuming the given
-  // orientation id.
-  void update_best_script(int orientation_id);
-  // Return the index of the script with the highest score for this orientation.
-  TESS_API int get_best_script(int orientation_id) const;
-  // Accumulate scores with given OSResults instance and update the best script.
-  void accumulate(const OSResults& osr);
+    
+      // generic template, for CodeAddress and Label
+  template <typename T>
+  void call(T& target, CallArg ca = CallArg::Internal) {
+    if (CallArg::Internal == ca) {
+      // tries best performance possible
+      branchAuto(target, BranchConditions::Always, LinkReg::Save, true);
+    } else {
+      // branchFar is not only smashable but also it will use r12 so an
+      // external branch can correctly set its TOC address appropriately.
+      branchFar(target, BranchConditions::Always, LinkReg::Save,
+                ImmType::TocOnly, true);
     }
+    callEpilogue(ca);
+  }
     
-    namespace tesseract {
-    }
-    
-       void EmitAForm(const uint8_t op,
-                  const RegNumber rt,
-                  const RegNumber ra,
-                  const RegNumber rb,
-                  const RegNumber bc,
-                  const uint16_t xop,
-                  const bool rc = 0) {
-    }
-    
-    APCHandle::Pair APCCollection::Make(const ObjectData* obj,
-                                    APCHandleLevel level,
-                                    bool unserializeObj) {
-  auto bail = [&] {
-    return APCString::MakeSerializedObject(
-      apc_serialize(Variant(const_cast<ObjectData*>(obj)))
-    );
-  };
-    }
-    
-    #include 'hphp/runtime/base/apc-handle.h'
-    
-    inline APCLocalArray* APCLocalArray::Make(const APCArray* aa) {
-  auto size = sizeof(APCLocalArray) + aa->size() * sizeof(TypedValue);
-  auto local = new (tl_heap->objMalloc(size)) APCLocalArray(aa);
-  assertx(local->heapSize() == size);
-  return local;
+    inline APCLocalArray::APCLocalArray(const APCArray* source)
+  : ArrayData(kApcKind)
+  , m_arr(source)
+{
+  m_size = m_arr->size();
+  source->reference();
+  tl_heap->addApcArray(this);
+  memset(localCache(), static_cast<data_type_t>(KindOfUninit),
+         m_size * sizeof(TypedValue));
+  assertx(hasExactlyOneRef());
 }
     
-    std::string
-Config::IniName(const Hdf& config, bool /*prepend_hhvm*/ /* = true */) {
-  return Config::IniName(config.getFullPath());
-}
+    #ifndef HPHP_DATA_STREAM_WRAPPER_H
+#define HPHP_DATA_STREAM_WRAPPER_H
     
-      private:
+      // a silent exception does not have its exception message logged
+  bool isSilent() const { return m_silent; }
+  void setSilent(bool s = true) { m_silent = s; }
+  void recomputeBacktraceFromWH(c_WaitableWaitHandle* wh);
     
-    public:
-  static void Add(InfoVec& out, const char* name, const std::string& value);
-  static void AddServerStats(InfoVec& out, const char* name,
-                             const char* statsName = nullptr);
+      assertx(chunk_size > 0);
     
-    static int get_tempfile_if_not_exists(int ini_fd, char ini_path[]) {
-  if (ini_fd == -1) {
-#ifdef _MSC_VER
-    // MSVC doesn't require the characters to be the last
-    // 6 in the string.
-    ini_fd = open(mktemp(ini_path), O_RDWR | O_EXCL);
+    
+    {  fflush(stdout);
+  // Restores the text color.
+  SetConsoleTextAttribute(stdout_handle, old_color_attrs);
 #else
-    ini_fd = mkstemps(ini_path, 4); // keep the .ini suffix
+  const char* color_code = GetPlatformColorCode(color);
+  if (color_code) out << FormatString('\033[0;3%sm', color_code);
+  out << FormatString(fmt, args) << '\033[m';
 #endif
-    if (ini_fd == -1) {
-      fprintf(stderr, 'Error: unable to open temporary file');
-      exit(EXIT_FAILURE);
-    }
-  }
-  return ini_fd;
 }
     
-    #include <string>
-#include <atomic>
-#include <utility>
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
     
-    class ActionInterval;
-class RepeatForever;
+    #include 'string_util.h'
+#include 'timers.h'
     
-    bool RotateTo::initWithDuration(float duration, const Vec3& dstAngle3D)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _dstAngle = dstAngle3D;
-        _is3D = true;
-        
-        return true;
+    namespace benchmark {
     }
-    
-    return false;
-}
-    
-    
-    {    if (element->actions->num == 0)
-    {
-        if (_currentTarget == element)
-        {
-            _currentTargetSalvaged = true;
-        }
-        else
-        {
-            deleteHashElement(element);
-        }
-    }
-}
-    
-    
-    {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
-            {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
-        }
-    }
-}
-    
-    bool ProgressFromTo::initWithDuration(float duration, float fromPercentage, float toPercentage)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _to = toPercentage;
-        _from = fromPercentage;
-    }
-    }
-    
-    // implementation AtlasNode
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                 int32_t *const frame_num) override;
-    
-      /**
-   * @brief Destructor
-   */
-  virtual ~FakeCanClient() = default;
-    
-    #include 'modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h'
-#include 'gtest/gtest.h'
-    
-        if (buf.size() != static_cast<size_t>(frame_num)) {
-      AERROR_EVERY(100) << 'Receiver buf size [' << buf.size()
-                        << '] does not match can_client returned length['
-                        << frame_num << '].';
-    }
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    template <typename SensorType>
-template <class T, bool need_check>
-void MessageManager<SensorType>::AddSendProtocolData() {
-  send_protocol_data_.emplace_back(new T());
-  auto *dt = send_protocol_data_.back().get();
-  if (dt == nullptr) {
-    return;
-  }
-  protocol_data_map_[T::ID] = dt;
-  if (need_check) {
-    check_ids_[T::ID].period = dt->GetPeriod();
-    check_ids_[T::ID].real_period = 0;
-    check_ids_[T::ID].last_time = 0;
-    check_ids_[T::ID].error_count = 0;
-  }
-}
-    
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-    std::string Byte::byte_to_binary(const uint8_t value) {
-  return std::bitset<8 * sizeof(uint8_t)>(value).to_string();
-}
-    
-    /**
- * @file
- */
