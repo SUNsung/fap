@@ -1,82 +1,107 @@
 
         
-        Badge.seed do |b|
-  b.id = Badge::Reader
-  b.name = 'Reader'
-  b.badge_type_id = BadgeType::Bronze
-  b.multiple_grant = false
-  b.target_posts = false
-  b.show_posts = false
-  b.query = BadgeQueries::Reader
-  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
-  b.auto_revoke = false
-  b.system = true
-end
+                # config[kramdown][syntax_higlighter] >
+        #   config[kramdown][enable_coderay] >
+        #   config[highlighter]
+        # Where `enable_coderay` is now deprecated because Kramdown
+        # supports Rouge now too.
+        def highlighter
+          return @highlighter if @highlighter
     
-    module Vagrant
-  # MachineIndex is able to manage the index of created Vagrant environments
-  # in a central location.
-  #
-  # The MachineIndex stores a mapping of UUIDs to basic information about
-  # a machine. The UUIDs are stored with the Vagrant environment and are
-  # looked up in the machine index.
-  #
-  # The MachineIndex stores information such as the name of a machine,
-  # the directory it was last seen at, its last known state, etc. Using
-  # this information, we can load the entire {Machine} object for a machine,
-  # or we can just display metadata if needed.
-  #
-  # The internal format of the data file is currently JSON in the following
-  # structure:
-  #
-  #   {
-  #     'version': 1,
-  #     'machines': {
-  #       'uuid': {
-  #         'name': 'foo',
-  #         'provider': 'vmware_fusion',
-  #         'data_path': '/path/to/data/dir',
-  #         'vagrantfile_path': '/path/to/Vagrantfile',
-  #         'state': 'running',
-  #         'updated_at': '2014-03-02 11:11:44 +0100'
-  #       }
-  #     }
-  #   }
-  #
-  class MachineIndex
-    include Enumerable
+    require 'sass/engine'
+require 'sass/plugin' if defined?(Merb::Plugins)
+require 'sass/railtie'
+require 'sass/features'
+
     
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
+        # Transform
+    #
+    #     foo
+    #       bar
+    #         color: blue
+    #       baz
+    #         color: blue
+    #
+    # into
+    #
+    #     foo
+    #       bar, baz
+    #         color: blue
+    #
+    # @param root [Tree::Node] The parent node
+    def fold_commas(root)
+      prev_rule = nil
+      root.children.map! do |child|
+        unless child.is_a?(Tree::RuleNode)
+          fold_commas(child) if child.is_a?(Tree::DirectiveNode)
+          next child
         end
     
-            # A default to_s implementation.
-        def to_s
-          self.class.to_s
-        end
+        attr_writer :caller
+    attr_writer :content
+    attr_writer :selector
     
-            # Sets a human-friendly description of the plugin.
-        #
-        # @param [String] value Description of the plugin.
-        # @return [String] Description of the plugin.
-        def self.description(value=UNSET_VALUE)
-          get_or_set(:description, value)
-        end
-    
-        def enable
-      authorize @custom_emoji, :enable?
-      @custom_emoji.update!(disabled: false)
-      log_action :enable, @custom_emoji
-      flash[:notice] = I18n.t('admin.custom_emojis.enabled_msg')
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+        # @return [String] The error message
+    def to_s
+      @message
     end
     
-        def set_email_domain_block
-      @email_domain_block = EmailDomainBlock.find(params[:id])
+        def open_file(filename, flag = 'r')
+      return if filename.nil?
+      flag = 'wb' if @options[:unix_newlines] && flag == 'w'
+      file = File.open(filename, flag)
+      return file unless block_given?
+      yield file
+      file.close
     end
     
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
-        end
+        def process_file(input, output)
+      input_path, output_path = path_for(input), path_for(output)
+      if input_path
+        @options[:from] ||=
+          case input_path
+          when /\.scss$/; :scss
+          when /\.sass$/; :sass
+          when /\.less$/; raise 'sass-convert no longer supports LessCSS.'
+          when /\.css$/; :css
+          end
+      elsif @options[:in_place]
+        raise 'Error: the --in-place option requires a filename.'
+      end
+    
+          if @options[:update]
+        Sass::Plugin.update_stylesheets(files)
+        exit 1 if had_error
+        return
+      end
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+          super
+    end
+    
+    module Jekyll
