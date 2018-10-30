@@ -1,356 +1,345 @@
 
         
-        /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
+        #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
     
-    #ifndef BITCOIN_QT_QVALUECOMBOBOX_H
-#define BITCOIN_QT_QVALUECOMBOBOX_H
+    #include 'tensorflow/core/framework/numeric_types.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/python/lib/core/numpy.h'
+#include 'tensorflow/python/lib/core/safe_ptr.h'
     
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
     
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
+    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
+// pointer to the pyobj in a buffer to be dereferenced later when we're actually
+// holding the GIL. Data and len are ignored.
+void DelayedNumpyDecref(void* data, size_t len, void* obj);
     
-        {
-        LOCK(wallet->cs_wallet);
-        wallet->SetAddressBook(r_key_dest, r_label.toStdString(), 'receive');
-        wallet->SetAddressBook(s_key_dest, s_label.toStdString(), 'send');
-    }
-    
-    private:
-    void paintPath(QPainterPath &path, QQueue<float> &samples);
-    
-    
-    {
-    {        /* compute using ECDH function */
-        CHECK(secp256k1_ec_pubkey_create(ctx, &point[0], s_one) == 1);
-        CHECK(secp256k1_ecdh(ctx, output_ecdh, &point[0], s_b32) == 1);
-        /* compute 'explicitly' */
-        CHECK(secp256k1_ec_pubkey_create(ctx, &point[1], s_b32) == 1);
-        CHECK(secp256k1_ec_pubkey_serialize(ctx, point_ser, &point_ser_len, &point[1], SECP256K1_EC_COMPRESSED) == 1);
-        CHECK(point_ser_len == sizeof(point_ser));
-        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, point_ser, point_ser_len);
-        secp256k1_sha256_finalize(&sha, output_ser);
-        /* compare */
-        CHECK(memcmp(output_ecdh, output_ser, sizeof(output_ser)) == 0);
-    }
-}
-    
-    BOOST_AUTO_TEST_SUITE_END()
+    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_ACTIVATION_H_
 
     
-    grpc_completion_queue* CoreCodegen::grpc_completion_queue_create(
-    const grpc_completion_queue_factory* factory,
-    const grpc_completion_queue_attributes* attributes, void* reserved) {
-  return ::grpc_completion_queue_create(factory, attributes, reserved);
-}
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CLIENT_FILTER_H */
-
-    
-    // Client
-MeasureDouble RpcClientSentBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientSentBytesPerRpcMeasureName,
-      'Total bytes sent across all request messages per RPC', kUnitBytes);
-  return measure;
-}
-    
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-        /*virtual*/ void LearnerBase::RestoreFromCheckpoint(const Dictionary& checkpoint) /*override*/
-    {
-        static const vector<std::wstring> s_requiredDictionaryKeys = { typeKey, sampleCountKey, minibatchCountKey, learningRateScheduleKey };
-    }
-    
-        template <typename ElementType>
-    std::tuple<const ElementType *, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers() const
-    {
-        return _SparseCSCDataBuffers<ElementType, ElementType>();
-    }
-    
-    
-    {        for (auto& progressWriter : m_progressWriters)
-        {
-            progressWriter->UpdateTraining(numSamples, m_aggregatedTrainingLossValue, m_aggregatedTrainingEvalCriterionValue);
-        }
-    }
-    
-                if (m_varKind == VariableKind::Input)
-            {
-                for (auto dim : m_shape.Dimensions())
-                {
-                    if (dim == 0)
-                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
-                }
-            }
-    
-    
-    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-};
-    
-    class CloneFunctionConfigLambda : public ConfigLambda
-{
-    // how we treat the parameters in the clone
-    enum class ParameterTreatment
-    {
-        learnable, // parameters are copied and kept trainable
-        constant,  // parameters are copied and made immutable (e.g. for use of this as a fixed feature extractor)
-        shared     // parameters are shared with where they came from (e.g. for parallel identical paths through a network)
-    };
-public:
-    // -----------------------------------------------------------------------
-    // construction
-    // -----------------------------------------------------------------------
-    }
-    
-      virtual ~DHTResponseMessage();
-    
-      std::vector<std::shared_ptr<DHTNode>> nodes_;
-    
-      std::vector<std::shared_ptr<DHTNode>> nodes_;
-    
-    
-    {
-    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
-                                                   : PREF_DHT_ENTRY_POINT_HOST6;
-    if (!e->getOption()->get(prefEntryPointHost).empty()) {
-      {
-        PrefPtr prefEntryPointPort = family == AF_INET
-                                         ? PREF_DHT_ENTRY_POINT_PORT
-                                         : PREF_DHT_ENTRY_POINT_PORT6;
-        std::pair<std::string, uint16_t> addr(
-            e->getOption()->get(prefEntryPointHost),
-            e->getOption()->getAsInt(prefEntryPointPort));
-        std::vector<std::pair<std::string, uint16_t>> entryPoints;
-        entryPoints.push_back(addr);
-        auto command = make_unique<DHTEntryPointNameResolveCommand>(
-            e->newCUID(), e, family, entryPoints);
-        command->setBootstrapEnabled(true);
-        command->setTaskQueue(taskQueue.get());
-        command->setTaskFactory(taskFactory.get());
-        command->setRoutingTable(routingTable.get());
-        command->setLocalNode(localNode);
-        tempCommands.push_back(std::move(command));
-      }
-    }
-    else {
-      A2_LOG_INFO('No DHT entry point specified.');
-    }
-    {
-      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
-      command->setMessageDispatcher(dispatcher.get());
-      command->setMessageReceiver(receiver.get());
-      command->setTaskQueue(taskQueue.get());
-      command->setReadCheckSocket(connection->getSocket());
-      command->setConnection(std::move(connection));
-      command->setUDPTrackerClient(udpTrackerClient);
-      tempRoutineCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTTokenUpdateCommand>(
-          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
-      command->setTokenTracker(tokenTracker.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTBucketRefreshCommand>(
-          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
-      command->setTaskQueue(taskQueue.get());
-      command->setRoutingTable(routingTable.get());
-      command->setTaskFactory(taskFactory.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTPeerAnnounceCommand>(
-          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
-      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command =
-          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
-      command->setLocalNode(localNode);
-      command->setRoutingTable(routingTable.get());
-      tempCommands.push_back(std::move(command));
-    }
-    // add deserialized nodes to routing table
-    auto& desnodes = deserializer.getNodes();
-    for (auto& node : desnodes) {
-      routingTable->addNode(node);
-    }
-    if (!desnodes.empty()) {
-      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
-          taskFactory->createBucketRefreshTask());
-      task->setForceRefresh(true);
-      taskQueue->addPeriodicTask1(task);
-    }
-    // assign them into DHTRegistry
-    if (family == AF_INET) {
-      DHTRegistry::getMutableData().localNode = localNode;
-      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData().messageFactory = std::move(factory);
-      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
-      DHTRegistry::setInitialized(true);
-    }
-    else {
-      DHTRegistry::getMutableData6().localNode = localNode;
-      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData6().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
-      DHTRegistry::setInitialized6(true);
-    }
-    if (e->getBtRegistry()->getUdpPort() == 0) {
-      // We assign port last so that no exception gets in the way
-      e->getBtRegistry()->setUdpPort(port);
+    // Computes part of matrix.vector v = Wu. Computes N=64 results.
+// The weights *must* be arranged so that consecutive reads from wi
+// provides (num_in/kNumInputsPerGroup groups of (N output dim groups of
+// (kNumInputsPerGroup inputs))). After that there must be N consecutive
+// bias weights, before continuing with any more weights.
+// u must be padded out with zeros to
+// kNumInputsPerGroup*ceil(num_in/kNumInputsPerGroup) elements.
+static void PartialMatrixDotVector64(const int8_t* wi, const double* scales,
+                                     const int8_t* u, int num_in, int num_out,
+                                     double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  __m256i result1 = _mm256_setzero_si256();
+  __m256i result2 = _mm256_setzero_si256();
+  __m256i result3 = _mm256_setzero_si256();
+  __m256i result4 = _mm256_setzero_si256();
+  __m256i result5 = _mm256_setzero_si256();
+  __m256i result6 = _mm256_setzero_si256();
+  __m256i result7 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result2);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result3);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result4);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result5);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result6);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result7);
     }
   }
-  catch (RecoverableException& ex) {
-    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
-                        ' DHT is disabled.'),
-                    ex);
-    tempCommands.clear();
-    tempRoutineCommands.clear();
-    if (family == AF_INET) {
-      DHTRegistry::clearData();
-      e->getBtRegistry()->setUDPTrackerClient(
-          std::shared_ptr<UDPTrackerClient>{});
-    }
-    else {
-      DHTRegistry::clearData6();
-    }
-  }
-  return std::make_pair(std::move(tempCommands),
-                        std::move(tempRoutineCommands));
+  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result1, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result2, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result3, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result4, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result5, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result6, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  num_out -= kNumOutputsPerRegister * 7;
+  ExtractResults(result7, shift_id, wi, scales,
+                 std::min(kNumOutputsPerRegister, num_out), v);
 }
     
-    
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
-};
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
-    
-      virtual void executeTask() = 0;
-    
-    void DHTTaskQueueImpl::addPeriodicTask1(const std::shared_ptr<DHTTask>& task)
-{
-  periodicTaskQueue1_.addTask(task);
-}
-    
-      virtual ~DHTTokenUpdateCommand();
-    
-    public:
-  // _remoteNode is always null
-  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                    const unsigned char* data, size_t length,
-                    const std::string& ipaddr, uint16_t port);
-    
-    // Represents a baseline image, a comparison metric and an image acceptance
-// criteria based on this metric.
-class Comparator {
+    /// Base class for all tesseract image thresholding classes.
+/// Specific classes can add new thresholding methods by
+/// overriding ThresholdToPix.
+/// Each instance deals with a single image, but the design is intended to
+/// be useful for multiple calls to SetRectangle and ThresholdTo* if
+/// desired.
+class TESS_API ImageThresholder {
  public:
-  Comparator() {}
-  virtual ~Comparator() {}
+  ImageThresholder();
+  virtual ~ImageThresholder();
     }
     
-    #define GUETZLI_LOG(stats, ...)                                    \
-  do {                                                             \
-    char debug_string[1024];                                       \
-    int res = snprintf(debug_string, sizeof(debug_string),         \
-                       __VA_ARGS__);                               \
-    assert(res > 0 && 'expected successful printing');             \
-    (void)res;                                                     \
-    debug_string[sizeof(debug_string) - 1] = '\0';                 \
-    ::guetzli::PrintDebug(                      \
-         stats, std::string(debug_string));        \
-  } while (0)
-#define GUETZLI_LOG_QUANT(stats, q)                    \
-  for (int y = 0; y < 8; ++y) {                        \
-    for (int c = 0; c < 3; ++c) {                      \
-      for (int x = 0; x < 8; ++x)                      \
-        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
-      GUETZLI_LOG(stats, '   ');                       \
-    }                                                  \
-    GUETZLI_LOG(stats, '\n');                          \
-  }
+    // Macros for comparing floating-point numbers.
+//
+//    * {ASSERT|EXPECT}_FLOAT_EQ(expected, actual):
+//         Tests that two float values are almost equal.
+//    * {ASSERT|EXPECT}_DOUBLE_EQ(expected, actual):
+//         Tests that two double values are almost equal.
+//    * {ASSERT|EXPECT}_NEAR(v1, v2, abs_error):
+//         Tests that v1 and v2 are within the given distance to each other.
+//
+// Google Test uses ULP-based comparison to automatically pick a default
+// error bound that is appropriate for the operands.  See the
+// FloatingPoint template class in gtest-internal.h if you are
+// interested in the implementation details.
     
-    // Sort the root nodes, least popular first.
-static inline bool SortHuffmanTree(const HuffmanTree& v0,
-                                   const HuffmanTree& v1) {
-  if (v0.total_count_ != v1.total_count_) {
-    return v0.total_count_ < v1.total_count_;
-  }
-  return v0.index_right_or_value_ > v1.index_right_or_value_;
+    // A function to convert T* into linked_ptr<T>
+// Doing e.g. make_linked_ptr(new FooBarBaz<type>(arg)) is a shorter notation
+// for linked_ptr<FooBarBaz<type> >(new FooBarBaz<type>(arg))
+template <typename T>
+linked_ptr<T> make_linked_ptr(T* ptr) {
+  return linked_ptr<T>(ptr);
 }
     
-    namespace guetzli {
+      // Create template
+  std::vector<char> tmp(256);
+  auto len = snprintf(tmp.data(), tmp.size(), '%s/testXXXXXX', tmpdir);
+  tmp.resize(len);
+    
+    class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
     }
     
-    #endif  // GUETZLI_JPEG_DATA_DECODER_H_
+    ```
+    
+    
+    {class GetHalfToFloatGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'FloatToHalf', '', vector<string>{GO(0)}, vector<string>{GI(0)});
+  }
+};
+REGISTER_GRADIENT(HalfToFloat, GetHalfToFloatGradient);
+NO_GRADIENT(Float16ConstantFill);
+} // namespace caffe2
 
     
-    #include <string>
-    
-    
-    {  int code = 0;
-  int si = huffsize[0];
-  p = 0;
-  while (huffsize[p]) {
-    while ((huffsize[p]) == si) {
-      huffcode[p++] = code;
-      code++;
+    namespace xgboost {
+/*!
+ * \brief Learner class that does training and prediction.
+ *  This is the user facing module of xgboost training.
+ *  The Load/Save function corresponds to the model used in python/R.
+ *  \code
+ *
+ *  std::unique_ptr<Learner> learner(new Learner::Create(cache_mats));
+ *  learner.Configure(configs);
+ *
+ *  for (int iter = 0; iter < max_iter; ++iter) {
+ *    learner->UpdateOneIter(iter, train_mat);
+ *    LOG(INFO) << learner->EvalOneIter(iter, data_sets, data_names);
+ *  }
+ *
+ *  \endcode
+ */
+class Learner : public rabit::Serializable {
+ public:
+  /*! \brief virtual destructor */
+  ~Learner() override = default;
+  /*!
+   * \brief set configuration from pair iterators.
+   * \param begin The beginning iterator.
+   * \param end The end iterator.
+   * \tparam PairIter iterator<std::pair<std::string, std::string> >
+   */
+  template<typename PairIter>
+  inline void Configure(PairIter begin, PairIter end);
+  /*!
+   * \brief Set the configuration of gradient boosting.
+   *  User must call configure once before InitModel and Training.
+   *
+   * \param cfg configurations on both training and model parameters.
+   */
+  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
+  /*!
+   * \brief Initialize the model using the specified configurations via Configure.
+   *  An model have to be either Loaded or initialized before Update/Predict/Save can be called.
+   */
+  virtual void InitModel() = 0;
+  /*!
+   * \brief load model from stream
+   * \param fi input stream.
+   */
+  void Load(dmlc::Stream* fi) override = 0;
+  /*!
+   * \brief save model to stream.
+   * \param fo output stream
+   */
+  void Save(dmlc::Stream* fo) const override = 0;
+  /*!
+   * \brief update the model for one iteration
+   *  With the specified objective function.
+   * \param iter current iteration number
+   * \param train reference to the data matrix.
+   */
+  virtual void UpdateOneIter(int iter, DMatrix* train) = 0;
+  /*!
+   * \brief Do customized gradient boosting with in_gpair.
+   *  in_gair can be mutated after this call.
+   * \param iter current iteration number
+   * \param train reference to the data matrix.
+   * \param in_gpair The input gradient statistics.
+   */
+  virtual void BoostOneIter(int iter,
+                            DMatrix* train,
+                            HostDeviceVector<GradientPair>* in_gpair) = 0;
+  /*!
+   * \brief evaluate the model for specific iteration using the configured metrics.
+   * \param iter iteration number
+   * \param data_sets datasets to be evaluated.
+   * \param data_names name of each dataset
+   * \return a string corresponding to the evaluation result
+   */
+  virtual std::string EvalOneIter(int iter,
+                                  const std::vector<DMatrix*>& data_sets,
+                                  const std::vector<std::string>& data_names) = 0;
+  /*!
+   * \brief get prediction given the model.
+   * \param data input data
+   * \param output_margin whether to only predict margin value instead of transformed prediction
+   * \param out_preds output vector that stores the prediction
+   * \param ntree_limit limit number of trees used for boosted tree
+   *   predictor, when it equals 0, this means we are using all the trees
+   * \param pred_leaf whether to only predict the leaf index of each tree in a boosted tree predictor
+   * \param pred_contribs whether to only predict the feature contributions
+   * \param approx_contribs whether to approximate the feature contributions for speed
+   * \param pred_interactions whether to compute the feature pair contributions
+   */
+  virtual void Predict(DMatrix* data,
+                       bool output_margin,
+                       HostDeviceVector<bst_float> *out_preds,
+                       unsigned ntree_limit = 0,
+                       bool pred_leaf = false,
+                       bool pred_contribs = false,
+                       bool approx_contribs = false,
+                       bool pred_interactions = false) const = 0;
     }
-    code <<= 1;
-    si++;
+    }
+    
+      size_t PeekRead(void* dptr, size_t size) {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer < size) {
+      buffer_ = buffer_.substr(buffer_ptr_, buffer_.length());
+      buffer_ptr_ = 0;
+      buffer_.resize(size);
+      size_t nadd = strm_->Read(dmlc::BeginPtr(buffer_) + nbuffer, size - nbuffer);
+      buffer_.resize(nbuffer + nadd);
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_), buffer_.length());
+      return buffer_.length();
+    } else {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      return size;
+    }
   }
-  for (p = 0; p < lastp; p++) {
-    int i = values[p];
-    table->depth[i] = huffsize[p];
-    table->code[i] = huffcode[p];
+    
+      QueryLogItem item;
+  item.epoch = 0L;
+  item.counter = 0L;
+  getDecorations(item.decorations);
+  ASSERT_EQ(item.decorations.size(), 2U);
+  EXPECT_EQ(item.decorations.at('internal_60_test'), 'test');
+    
+      ASSERT_TRUE(data.doc().HasMember('events'));
+  ASSERT_TRUE(data.doc()['events'].HasMember('environment_variables'));
+  ASSERT_TRUE(data.doc()['events']['environment_variables'].IsArray());
+  for (const auto& var :
+       data.doc()['events']['environment_variables'].GetArray()) {
+    std::string value = var.GetString();
+    EXPECT_TRUE(value == 'foo' || value == 'bar');
   }
+    
+      // This looks funky, because the parser is named 'options' and it claims
+  // ownership of a single top-level-key called 'options'.
+  const auto& doc = c.getParser('options')->getData().doc()['options'];
+    
+    #include 'osquery/core/conversions.h'
+    
+    int PlatformProcess::getCurrentPid() {
+  return PlatformProcess::getCurrentProcess()->pid();
 }
     
-    #if defined(BOOST_HAS_INT128)
+      void WaitForFinish() {
+    if (thread_send_ != nullptr && thread_send_->joinable()) {
+      thread_send_->join();
+      thread_send_.reset();
+      AINFO << 'Send thread stopped. conf:'
+            << param_ptr_->conf.ShortDebugString();
+    }
+    if (thread_recv_ != nullptr && thread_recv_->joinable()) {
+      thread_recv_->join();
+      thread_recv_.reset();
+      AINFO << 'Recv thread stopped. conf:'
+            << param_ptr_->conf.ShortDebugString();
+    }
+  }
+    
+    /**
+ * @namespace apollo::drivers::canbus::can
+ * @brief apollo::drivers::canbus::can
+ */
+namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+      /**
+   * @brief Initialize the fake CAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   * @return If the initialization is successful.
+   */
+  bool Init(const CANCardParameter &param) override;
+    
+    #include 'modules/drivers/canbus/can_comm/can_receiver.h'
+    
+      sender.AddMessage(1, &mpd);
+  EXPECT_EQ(sender.Start(), common::ErrorCode::OK);
+  EXPECT_TRUE(sender.IsRunning());
+  EXPECT_TRUE(sender.enable_log());
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    #include 'gflags/gflags.h'
