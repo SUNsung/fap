@@ -1,350 +1,412 @@
 
         
-        
-    {  // Moving from a message on the arena should lead to a copy.
-  message2 = std::move(*message1_on_arena);
-  EXPECT_NE(nested, &message2.optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
-  TestUtil::ExpectAllFieldsSet(message2);
+        // Sent by the renderer when the draggable regions are updated.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
+                    std::vector<extensions::DraggableRegion> /* regions */)
+    
+    namespace {
+    }
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
+      int id() const { return id_; }
+  std::string extension_id_;
+  ObjectManager* object_manager() const { return object_manager_.get(); }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_primitive_field.h>
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
-      if (filename.empty()) {
-    *error = filename_error;
+    
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
     return false;
+    }
+    
+       void ExecuteCommand(int command_id, int event_flags) override;
+    
+    NwObjCallObjectMethodFunction::~NwObjCallObjectMethodFunction() {
+}
+    
+    
+    
+    #if !defined(BOOST_NO_WREGEX) && defined(BOOST_REGEX_HAS_OTHER_WCHAR_T)
+#define BOOST_REGEX_CHAR_T unsigned short
+#ifdef BOOST_REGEX_US_INSTANTIATE
+#  define BOOST_REGEX_INSTANTIATE
+#endif
+#include <boost/regex/v4/instances.hpp>
+#undef BOOST_REGEX_CHAR_T
+#ifdef BOOST_REGEX_INSTANTIATE
+#  undef BOOST_REGEX_INSTANTIATE
+#endif
+#endif
+    
+    void ActionCamera::setEye(const Vec3& eye)
+{
+    _eye = eye;
+    updateTransform();
+}
+    
+    
+    {    Vec3 _center;
+    Vec3 _eye;
+    Vec3 _up;
+};
+    
+    //
+// EaseBezierAction
+//
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
+    
+        //
+    // Overrides
+    //
+    virtual ProgressFromTo* clone() const override;
+    virtual ProgressFromTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressFromTo() {}
+    virtual ~ProgressFromTo() {}
+    
+    void ActionTween::update(float dt)
+{
+    dynamic_cast<ActionTweenDelegate*>(_target)->updateTweenAction(_to  - _delta * (1 - dt), _key);
+}
+    
+    NS_CC_END
+
+    
+        /** Width of each char. */
+    int    _itemWidth;
+    /** Height of each char. */
+    int    _itemHeight;
+    
+    Color3B    _colorUnmodified;
+    
+    TextureAtlas* _textureAtlas;
+    /** Protocol variables. */
+    bool _isOpacityModifyRGB;
+    BlendFunc _blendFunc;
+    
+      std::atomic<FlushReason> flush_reason_;
+    
+      using DBImpl::Put;
+  virtual Status Put(const WriteOptions& /*options*/,
+                     ColumnFamilyHandle* /*column_family*/,
+                     const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
   }
-  std::unique_ptr<io::ZeroCopyOutputStream> output(
-      generator_context->Open(filename));
-  io::Printer printer(output.get(), '$');
+  using DBImpl::Merge;
+  virtual Status Merge(const WriteOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/,
+                       const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Delete;
+  virtual Status Delete(const WriteOptions& /*options*/,
+                        ColumnFamilyHandle* /*column_family*/,
+                        const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status Write(const WriteOptions& /*options*/,
+                       WriteBatch* /*updates*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice* /*begin*/,
+                              const Slice* /*end*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
     
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    class MessageFieldGenerator : public FieldGeneratorBase {
+    // Param variant of DBTestBase::ChangeCompactOptions
+class DBTestCompactionFilterWithCompactParam
+    : public DBTestCompactionFilter,
+      public ::testing::WithParamInterface<DBTestBase::OptionConfig> {
  public:
-  MessageFieldGenerator(const FieldDescriptor* descriptor,
-                        int fieldOrdinal,
-                        const Options *options);
-  ~MessageFieldGenerator();
+  DBTestCompactionFilterWithCompactParam() : DBTestCompactionFilter() {
+    option_config_ = GetParam();
+    Destroy(last_options_);
+    auto options = CurrentOptions();
+    if (option_config_ == kDefault || option_config_ == kUniversalCompaction ||
+        option_config_ == kUniversalCompactionMultiLevel) {
+      options.create_if_missing = true;
     }
+    if (option_config_ == kLevelSubcompactions ||
+        option_config_ == kUniversalSubcompactions) {
+      assert(options.max_subcompactions > 1);
+    }
+    TryReopen(options);
+  }
+};
     
-    void PrimitiveFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if ($has_property_check$) {\n'
-    '  output.WriteRawTag($tag_bytes$);\n'
-    '  output.Write$capitalized_type_name$($property_name$);\n'
-    '}\n');
+    
+    {
+    {    if (data.ToString().find('foo567') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('v1.fetdq') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('bar123') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('v2.dfgkjdfghsd') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('dfgk') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+  }
+  if (encrypted_env_) {
+    ASSERT_EQ(hits, 0);
+  } else {
+    ASSERT_GE(hits, 4);
+  }
 }
     
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
+    class WriteCallback {
+ public:
+  virtual ~WriteCallback() {}
+    }
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_slow()
-{
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable:4127)
-#endif
-   unsigned count = 0;
-   const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   re_syntax_base* psingle = rep->next.p;
-   // match compulsary repeats first:
-   while(count < rep->min)
-   {
-      pstate = psingle;
-      if(!match_wild())
-         return false;
-      ++count;
-   }
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
-   if(greedy)
-   {
-      // normal repeat:
-      while(count < rep->max)
-      {
-         pstate = psingle;
-         if(!match_wild())
-            break;
-         ++count;
+    
+    {
+    {    // Increase the amount we map the next time, but capped at 1MB
+    if (map_size_ < (1 << 20)) {
+      map_size_ *= 2;
+    }
+  }
+  return Status::OK();
+}
+    
+      // When flush happens, it determines whether to trigger compaction. If
+  // triggered_writes_stop is true, it will also set the retry flag of
+  // compaction-task to true.
+  void OnFlushCompleted(
+      DB* db, const FlushJobInfo& info) override {
+    CompactionTask* task = PickCompaction(db, info.cf_name);
+    if (task != nullptr) {
+      if (info.triggered_writes_stop) {
+        task->retry_on_fail = true;
       }
-      if((rep->leading) && (count < rep->max))
-         restart = position;
-      pstate = rep;
-      return backtrack_till_match(count - rep->min);
-   }
-   else
-   {
-      // non-greedy, keep trying till we get a match:
-      BidiIterator save_pos;
-      do
-      {
-         if((rep->leading) && (rep->max == UINT_MAX))
-            restart = position;
-         pstate = rep->alt.p;
-         save_pos = position;
-         ++state_count;
-         if(match_all_states())
-            return true;
-         if((count >= rep->max) || !m_can_backtrack)
-            return false;
-         ++count;
-         pstate = psingle;
-         position = save_pos;
-         if(!match_wild())
-            return false;
-      }while(true);
-   }
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-}
-    
-    
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_grep.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Provides regex_grep implementation.
-  */
-    
-    
-namespace boost{
+      // Schedule compaction in a different thread.
+      ScheduleCompaction(task);
     }
+  }
     
-    template <class BaseT>
-struct default_wrapper : public BaseT
-{
-   typedef typename BaseT::char_type char_type;
-   std::string error_string(::boost::regex_constants::error_type e)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::get_default_error_string(e);
-   }
-   ::boost::regex_constants::syntax_type syntax_type(char_type c)const
-   {
-      return ((c & 0x7f) == c) ? get_default_syntax_type(static_cast<char>(c)) : ::boost::regex_constants::syntax_char;
-   }
-   ::boost::regex_constants::escape_syntax_type escape_syntax_type(char_type c)const
-   {
-      return ((c & 0x7f) == c) ? get_default_escape_syntax_type(static_cast<char>(c)) : ::boost::regex_constants::escape_type_identity;
-   }
-   int toi(const char_type*& p1, const char_type* p2, int radix)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::global_toi(p1, p2, radix, *this);
-   }
-   char_type translate(char_type c, bool icase)const
-   {
-      return (icase ? this->translate_nocase(c) : this->translate(c));
-   }
-   char_type translate(char_type c)const
-   {
-      return BaseT::translate(c);
-   }
-   char_type tolower(char_type c)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::global_lower(c);
-   }
-   char_type toupper(char_type c)const
-   {
-      return ::boost::BOOST_REGEX_DETAIL_NS::global_upper(c);
-   }
+      db->Get(ReadOptions(), 'key2', &value);
+  assert(value == 'value');
+    
+    // convert to alias_ref<T> from T
+template <typename T>
+struct Convert<alias_ref<T>> {
+  typedef JniType<T> jniType;
+  static alias_ref<jniType> fromJni(jniType t) {
+    return wrap_alias(t);
+  }
+  static jniType toJniRet(alias_ref<jniType> t) {
+    return t.get();
+  }
+  static jniType toCall(alias_ref<jniType> t) {
+    return t.get();
+  }
 };
     
-    inline Float8 operator+(Float8 lhs, const Float8& rhs) {
-  lhs += rhs;
-  return lhs;
-}
-inline Float8 operator-(Float8 lhs, const Float8& rhs) {
-  lhs -= rhs;
-  return lhs;
-}
-inline Float8 operator*(Float8 lhs, const Float8& rhs) {
-  lhs *= rhs;
-  return lhs;
-}
-inline Float8 operator/(Float8 lhs, const Float8& rhs) {
-  lhs /= rhs;
-  return lhs;
-}
-    
-    /*!
- * \brief perform numerically safe logsum
- * \param begin The begining iterator.
- * \param end The end iterator.
- * \return the iterator point to the maximum value.
- * \tparam Iterator The type of the iterator.
- */
-template<typename Iterator>
-inline float LogSum(Iterator begin, Iterator end) {
-  float mx = *begin;
-  for (Iterator it = begin; it != end; ++it) {
-    mx = std::max(mx, *it);
+      /**
+   * The offset within the current function
+   */
+  int functionOffset() const noexcept {
+    auto absoluteSymbol = static_cast<const char*>(functionAddress_);
+    auto absoluteabsoluteProgramCounter =
+        static_cast<const char*>(absoluteProgramCounter_);
+    return absoluteabsoluteProgramCounter - absoluteSymbol;
   }
-  float sum = 0.0f;
-  for (Iterator it = begin; it != end; ++it) {
-    sum += std::exp(*it - mx);
-  }
-  return mx + std::log(sum);
-}
     
-    namespace xgboost {
-namespace data {
-    }
-    }
-    
-    #if DMLC_ENABLE_STD_THREAD
-#include <dmlc/concurrency.h>
-#include <thread>
-#endif
-    
-    int16_t i16s[] = {
-    -(static_cast<int16_t>(1) << 8),
-    static_cast<int16_t>(1) << 12,
-    -(static_cast<int16_t>(1) << 14),
-};
-    
-    BENCHMARK_RELATIVE(exception_wrapper_create_and_throw_concurrent, iters) {
-  std::atomic<bool> go(false);
-  std::vector<std::thread> threads;
-  BENCHMARK_SUSPEND {
-    for (int t = 0; t < FLAGS_num_threads; ++t) {
-      threads.emplace_back([&go, iters] {
-        while (!go) { }
-        std::runtime_error e('payload');
-        for (size_t i = 0; i < iters; ++i) {
-          auto ew = folly::make_exception_wrapper<std::runtime_error>(e);
-          try {
-            ew.throw_exception();
-          } catch (std::runtime_error&) {
-          }
-        }
-      });
-    }
-  }
-  go.store(true);
-  for (auto& t : threads) {
-    t.join();
-  }
-}
-    
-    TEST(ExecutorTest, KeepAliveCopy) {
-  KeepAliveTestExecutor exec;
-    }
-    
-    // this test makes sure that the coroutine is destroyed properly
-TEST(Expected, CoroutineCleanedUp) {
-  int count_dest = 0;
-  auto r = [&]() -> Expected<int, Err> {
-    SCOPE_EXIT {
-      ++count_dest;
-    };
-    auto x = co_await Expected<int, Err>(makeUnexpected(Err::badder()));
-    ADD_FAILURE() << 'Should not be resuming';
-    co_return x;
-  }();
-  EXPECT_FALSE(r.hasValue());
-  EXPECT_EQ(1, count_dest);
-}
-    
-    template <class String> void clause11_21_4_7_9_d(String & test) {
-  String s;
-  randomString(&s, maxString);
-  int tristate = test.compare(s.c_str());
-  if (tristate > 0) {
-    tristate = 1;
-  } else if (tristate < 0) {
-    tristate = 2;
-  }
-  Num2String(test, tristate);
-}
-    
-    
-    {  char buf = 'x';
-  int p[2];
-  expectOK(::pipe(p));
-  int flags = ::fcntl(p[0], F_GETFL);
-  expectOK(flags);
-  expectOK(::fcntl(p[0], F_SETFL, flags | O_NONBLOCK));
-  expectWouldBlock(::read(p[0], &buf, 1));
-  {
-    File f(p[1]);
-    EXPECT_EQ(p[1], f.fd());
-  }
-  // Ensure that moving the file doesn't close it
-  {
-    File f(p[1]);
-    EXPECT_EQ(p[1], f.fd());
-    File f1(std::move(f));
-    EXPECT_EQ(-1, f.fd());
-    EXPECT_EQ(p[1], f1.fd());
-  }
-  expectWouldBlock(::read(p[0], &buf, 1));  // not closed
-  {
-    File f(p[1], true);
-    EXPECT_EQ(p[1], f.fd());
-  }
-  ssize_t r = ::read(p[0], &buf, 1);  // eof
-  expectOK(r);
-  EXPECT_EQ(0, r);
-  ::close(p[0]);
-}
-    
-      // writev-like
-  ssize_t operator()(int fd, const iovec* iov, int count);
-    
-    template <bool containerMode, class... Args>
-class TestExtendingFormatter
-    : public BaseFormatter<TestExtendingFormatter<containerMode, Args...>,
-                           containerMode,
-                           Args...> {
- private:
-  explicit TestExtendingFormatter(StringPiece& str, Args&&... args)
-      : BaseFormatter<TestExtendingFormatter<containerMode, Args...>,
-                      containerMode,
-                      Args...>(str, std::forward<Args>(args)...) {}
-    }
-    
-    #include 'DHTAbstractTask.h'
-#include 'a2time.h'
-    
-    class DHTResponseMessage : public DHTAbstractMessage {
+    class YogaTest_HadOverflowTests : public Test {
 protected:
-  virtual std::string toStringOptional() const { return A2STR::NIL; }
+  YogaTest_HadOverflowTests() {
+    config = YGConfigNew();
+    root = YGNodeNewWithConfig(config);
+    YGNodeStyleSetWidth(root, 200);
+    YGNodeStyleSetHeight(root, 100);
+    YGNodeStyleSetFlexDirection(root, YGFlexDirectionColumn);
+    YGNodeStyleSetFlexWrap(root, YGWrapNoWrap);
+  }
     }
     
-      Time getSerializedTime() const { return serializedTime_; }
+      YGFloatOptional operator+(const YGFloatOptional& op);
+  bool operator>(const YGFloatOptional& op) const;
+  bool operator<(const YGFloatOptional& op) const;
+  bool operator>=(const YGFloatOptional& op) const;
+  bool operator<=(const YGFloatOptional& op) const;
+  bool operator==(const YGFloatOptional& op) const;
+  bool operator!=(const YGFloatOptional& op) const;
     
-    DHTRoutingTableSerializer::DHTRoutingTableSerializer(int family)
-    : family_(family)
+      areNonFloatValuesEqual = areNonFloatValuesEqual &&
+      flexGrow.isUndefined() == style.flexGrow.isUndefined();
+  if (areNonFloatValuesEqual && !flexGrow.isUndefined()) {
+    areNonFloatValuesEqual = areNonFloatValuesEqual &&
+        flexGrow.getValue() == style.flexGrow.getValue();
+  }
+    
+    constexpr YGValue kYGValueUndefined = {0, YGUnitUndefined};
+    
+    struct Layout
 {
+    double left;
+    double right;
+    }
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(width, height);
+    }
+};
+
+    
+    NBIND_CLASS(Value)
+{
+    construct<>();
+    construct<int, double>();
 }
     
-    class DHTRoutingTableSerializer {
-private:
-  int family_;
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
     }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
     
-        routingTable->setTaskQueue(taskQueue.get());
-    routingTable->setTaskFactory(taskFactory.get());
+    #include <antlr/config.hpp>
+#ifdef __MINGW32__
+#include <cstring>
+#endif
+#include <string>
     
-    #include <vector>
-#include <deque>
-#include <memory>
+    	/** Walk the tree looking for all exact subtree matches.  Return
+	 *  a vector of RefAST that lets the caller walk the list
+	 *  of subtree roots found herein.
+	 */
+	virtual ANTLR_USE_NAMESPACE(std)vector<RefAST> findAll(RefAST t) = 0;
     
-    bool DHTUnknownMessage::isReply() const { return false; }
+    /* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ *
+ * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/ASTNULLType.hpp#2 $
+ */
     
-    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
+    #endif //INC_ASTPair_hpp__
+
+    
+    	class AST;
+    
+    
+    {	CircularQueue(const CircularQueue&);
+	const CircularQueue& operator=(const CircularQueue&);
+};
+    
+    	/** get the line the token is at (starting at 1)
+	 * @see CharScanner::newline()
+	 * @see CharScanner::tab()
+	 */
+	virtual int getLine() const
+	{
+		return line;
+	}
+	/** gt the column the token is at (starting at 1)
+	 * @see CharScanner::newline()
+	 * @see CharScanner::tab()
+	 */
+	virtual int getColumn() const
+	{
+		return col;
+	}
+    
+    
+    {	IOException( ANTLR_USE_NAMESPACE(std)exception& e )
+		: ANTLRException(e.what())
+	{
+	}
+	IOException( const ANTLR_USE_NAMESPACE(std)string& mesg )
+		: ANTLRException(mesg)
+	{
+	}
+	virtual ~IOException() throw()
+	{
+	}
+};
+    
+    	/** Sync up deferred consumption */
+	void syncConsume();
+    
+    /* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ *
+ * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/MismatchedCharException.hpp#2 $
+ */
+    
+    
+    {private:
+	/// Token names array for formatting
+	const char* const* tokenNames;
+	/// Max number of tokens in tokenNames
+	const int numTokens;
+	/// Return token name for tokenType
+	ANTLR_USE_NAMESPACE(std)string tokenName(int tokenType) const;
+};
+    
+    /* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ *
+ * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/NoViableAltForCharException.hpp#2 $
+ */
