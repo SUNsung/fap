@@ -1,133 +1,96 @@
 
         
-        def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
+          def all_signed_out?
+    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+    
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
       end
+    
+        def recall
+      header_info = if relative_url_root?
+        base_path = Pathname.new(relative_url_root)
+        full_path = Pathname.new(attempted_path)
+    
+    module Homebrew
+  module_function
+    
+        link_dir('share', mode) do |relative_path|
+      case relative_path.to_s
+      when 'locale/locale.alias' then :skip_file
+      when INFOFILE_RX then :info
+      when LOCALEDIR_RX then :mkpath
+      when %r{^icons/.*/icon-theme\.cache$} then :skip_file
+      # all icons subfolders should also mkpath
+      when %r{^icons/} then :mkpath
+      when /^zsh/ then :mkpath
+      when /^fish/ then :mkpath
+      # Lua, Lua51, Lua53 all need the same handling.
+      when %r{^lua/} then :mkpath
+      when %r{^guile/} then :mkpath
+      when *SHARE_PATHS then :mkpath
+      else :link
+      end
+    end
+    
+    RSpec::Matchers.define_negated_matcher :not_to_output, :output
+RSpec::Matchers.alias_matcher :have_failed, :be_failed
+RSpec::Matchers.alias_matcher :a_string_containing, :include
+    
+    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
+  class Photo < ApplicationRecord
+  end
+    
+    When /^I put in my password in '([^']*)'$/ do |field|
+ step %(I fill in '#{field}' with '#{@me.password}')
+end
+    
+    When /^I toggle nsfw posts$/ do
+  find('.toggle_nsfw_state', match: :first).click
+end
+    
+      def login_page
+    path_to 'the new user session page'
+  end
+    
+      def fill_in_new_user_form
+    @username = 'ohai'
+    fill_in('user_email', with: '#{@username}@example.com')
+    fill_in('user_username', with: @username)
+    fill_in('user_password', with: 'secret')
+    fill_in('user_password_confirmation', with: 'secret')
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
   end
 end
-    
-    class FiltersController < ApplicationController
-  include Authorization
-    
-      def outbox_presenter
-    if page_requested?
-      ActivityPub::CollectionPresenter.new(
-        id: account_outbox_url(@account, page_params),
-        type: :ordered,
-        part_of: account_outbox_url(@account),
-        prev: prev_page,
-        next: next_page,
-        items: @statuses
-      )
-    else
-      ActivityPub::CollectionPresenter.new(
-        id: account_outbox_url(@account),
-        type: :ordered,
-        size: @account.statuses_count,
-        first: account_outbox_url(@account, page: true),
-        last: account_outbox_url(@account, page: true, min_id: 0)
-      )
-    end
-  end
-    
-        private
-    
-        def destroy
-      authorize @email_domain_block, :destroy?
-      @email_domain_block.destroy!
-      log_action :destroy, @email_domain_block
-      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
-    end
-    
-          if @report_note.save
-        if params[:create_and_resolve]
-          @report.resolve!(current_account)
-          log_action :resolve, @report
-    
-    module Rex
-module Proto
-module Http
-    
-              case protocol
-          when 'tcp'
-            self.connection = create_tcp_connection
-          when 'udp'
-            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
-    
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-    
-              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Authorization Data decoding not supported'
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
-    
-              # Decodes the renew_till field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_renew_till(input)
-            input.value[0].value
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            seq_values = input.value
-    
-              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_msg_type(input)
-            input.value[0].value.to_i
-          end
-    
-        def self.package(plugins_args, target)
-      OfflinePluginPackager.new(plugins_args, target).execute
-    end
-  end
-end end
 
     
-      parameter '[PLUGIN] ...', 'Plugin name(s) to upgrade to latest version', :attribute_name => :plugins_arg
-  option '--[no-]verify', :flag, 'verify plugin validity before installation', :default => true
-  option '--local', :flag, 'force local-only plugin update. see bin/logstash-plugin package|unpack', :default => false
+          sign_in alice, scope: :user
+    end
     
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
-    
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
+          it 'doesn't post' do
+        expect(alice).not_to receive(:like!)
+        post :create, params: like_hash
+        expect(response.code).to eq('422')
+      end
     end
