@@ -1,324 +1,283 @@
 
         
-          // Return value from Code() is prelude_ + result_.
-  string prelude_;  // Code before function definition
-  string result_;   // Function definition
+        TegraBinaryOp_Invoker(max, max)
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    namespace tensorflow {
-    }
-    
-    #include 'tensorflow/stream_executor/cuda/cuda_activation.h'
-    
-    class CUDAExecutor;
-class ScopedActivateContext;
-    
-                v_srclo = vget_low_s16(v_src1);
-            v_srchi = vget_high_s16(v_src1);
-            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst1))),
-                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst1))));
-    
-    
-    {    void operator() (const T * src0, const T * src1, T * dst) const
-    {
-        dst[0] = internal::saturate_cast<T>((WT)src0[0] + (WT)src1[0]);
-    }
-};
-    
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        v_dst = veorq_u8(v_src0, v_src1);
-    }
-    
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
-    }
+    #ifdef CAROTENE_NEON
     
     
     {
-    {        size_t dj = 0u, j = 0u;
-        for (; j < roiw16; dj += 64, j += 16)
-        {
-            internal::prefetch(uv + j);
-            internal::prefetch(y1 + j);
-            internal::prefetch(y2 + j);
-#if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-            CONVERTYUV420TORGB(4, d0, d1, q6, q5)
-#else
-            convertYUV420.ToRGB(y1 + j, y2 + j, uv + j, dst1 + dj, dst2 + dj);
-#endif
+    {
+    {             vec128  vs = internal::vld1q( src + i);
+             vec128 vr1 = internal::vld1q(rng1 + i);
+             vec128 vr2 = internal::vld1q(rng2 + i);
+            uvec128 vd1 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+                     vs = internal::vld1q( src + i + 16/sizeof(T));
+                    vr1 = internal::vld1q(rng1 + i + 16/sizeof(T));
+                    vr2 = internal::vld1q(rng2 + i + 16/sizeof(T));
+            uvec128 vd2 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            vnst(dst + i, vd1, vd2);
         }
-        for (; j + 2 <= size.width; j+=2, dj += 8)
-        {
-            convertYUV420ToRGB<4, 0, 1>(y1+j, y2+j, uv+j, dst1 + dj, dst2 + dj);
+        vtail<T, sizeof(T)>::inRange(src, rng1, rng2, dst, i, size.width);
+        for( ; i < size.width; i++ )
+            dst[i] = (u8)(-(rng1[i] <= src[i] && src[i] <= rng2[i]));
+    }
+}
+    
+            // Inner state of the underlying reader.
+        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
+        // when the reader state is restored after the first StartEpoch call.
+        Internal::Optional<Dictionary> m_state;
+    
+    
+    {            // Arithmetic schedule - write at every m_frequency steps or if the update is one of the first m_firstN
+            // updates.
+            return update % m_frequency == 0 || update <= m_firstN;
         }
-    }
-#else
-    (void)size;
-    (void)yBase;
-    (void)yStride;
-    (void)uvBase;
-    (void)uvStride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
     
-        q0 = vmaxq_s16(q0, vminq_s16(ak0, d0_7));
-    q1 = vminq_s16(q1, vmaxq_s16(bk0, d0_7));
-    
-        for (; j < size.width; ++j)
-        sqsum[j] = (prev += src[j]*src[j]);
-    
-    #if !defined(__AVX__)
-// Implementation for non-avx archs.
-    
-    // Computes part of matrix.vector v = Wu. Computes N=16 results.
-// For details see PartialMatrixDotVector64 with N=16.
-static void PartialMatrixDotVector16(const int8_t* wi, const double* scales,
-                                     const int8_t* u, int num_in, int num_out,
-                                     double* v) {
-  // Register containing 16-bit ones for horizontal add with 16->32 bit
-  // conversion.
-  __m256i ones =
-      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
-  // Initialize all the results to 0.
-  __m256i result0 = _mm256_setzero_si256();
-  __m256i result1 = _mm256_setzero_si256();
-  // Iterate over the input (u), one registerful at a time.
-  for (int j = 0; j < num_in;) {
-    __m256i inputs =
-        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
-    // Inputs are processed in groups of kNumInputsPerGroup, replicated
-    // kNumInputGroups times.
-    for (int ig = 0; ig < kNumInputGroups && j < num_in;
-         ++ig, j += kNumInputsPerGroup) {
-      // Replicate the low 32 bits (4 inputs) 8 times.
-      __m256i rep_input =
-          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
-      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
-      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
-      __m256i weights, reps;
-      // Mul-add, with horizontal add of the 4 inputs to each of the results.
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
-    }
-  }
-  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  num_out -= kNumOutputsPerRegister;
-  ExtractResults(result1, shift_id, wi, scales,
-                 std::min(kNumOutputsPerRegister, num_out), v);
-}
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-    // Setter for the value.
-void ParamContent::SetValue(const char* val) {
-// TODO (wanke) Test if the values actually are properly converted.
-// (Quickly visible impacts?)
-  changed_ = true;
-  if (param_type_ == VT_INTEGER) {
-    iIt->set_value(atoi(val));
-  } else if (param_type_ == VT_BOOLEAN) {
-    bIt->set_value(atoi(val));
-  } else if (param_type_ == VT_DOUBLE) {
-    dIt->set_value(strtod(val, nullptr));
-  } else if (param_type_ == VT_STRING) {
-    sIt->set_value(val);
-  }
-}
-    
-        for (auto &pfd: pollfds) {
-      if (pfd.revents & (POLLERR | POLLHUP)) {
-        // some process died
-        DEBUG('detaching process');
-        auto &session = client_sessions.at(pfd.fd);
-        DEBUG('%d has died', session.pid);
-        to_remove.push_back(pfd.fd);
-      } else if (pfd.revents & POLLIN) {
-        if (pfd.fd == srv_socket->socket_fd) {
-          // someone is joining
-          DEBUG('registered new client');
-          auto client = srv_socket->accept();
-          int fd = client.socket_fd;
-          to_add.push_back(fd);
-          client_sessions.emplace(fd, std::move(client));
-        } else {
-          // someone wants to register a segment
-          DEBUG('got alloc info');
-          auto &session = client_sessions.at(pfd.fd);
-          AllocInfo info = session.socket.receive();
-          session.pid = info.pid;
-          DEBUG('got alloc info: %d %d %s', (int)info.free, info.pid, info.filename);
-          if (info.free) {
-            free_used_object(info.filename);
-          } else {
-            used_objects.insert(info.filename);
-            DEBUG('registered object %s', info.filename);
-            session.socket.confirm();
-          }
-        }
-      }
-    }
-    
-    namespace {
-    }
-    
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    class GetFlattenGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'ResizeLike', '', vector<string>{GO(0), I(0)}, vector<string>{GI(0)});
-  }
-};
-    
-    
+        template <typename T>
+    inline void ValidateType(const Dictionary& dict, const std::wstring& typeValue, size_t currentVersion)
     {
-    {    const float* Xdata = X.template data<float>();
-    float* Ydata = Y->template mutable_data<float>();
-    for (int i = 0; i < X.size(); ++i) {
-      Ydata[i] = std::floor(Xdata[i]);
-    }
-    return true;
-  }
-};
-    
-    namespace caffe2 {
+        if (!dict.Contains(typeKey))
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                       typeKey.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        } 
     }
     
-    // The RunFullyConnectedOpOnCUDADevice Function will use the pointer of current
-// op and the DoRunWithType will make sure to run the correct things.
-template <>
-bool FullyConnectedOp<CUDAContext>::RunOnDevice() {
-  return RunFullyConnectedOpOnCUDADevice(float16_compute_, this);
+    
+    {        colStarts[numCSCCols - 1] = (SparseIndexType)(nonZeroValues.size());
+        NDArrayViewPtr deviceValueData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), valueDataShape, colStarts.data(), rowIndices.data(), nonZeroValues.data(), nonZeroValues.size(), device, readOnly);
+        return MakeSharedObject<Value>(deviceValueData, deviceValueMask);
+    }
+    
+            NDShape m_shape;
+        VariableKind m_varKind;
+        ::CNTK::DataType m_dataType;
+        std::weak_ptr<Function> m_ownerFunction;
+        std::unique_ptr<std::once_flag> m_initValueFlag;
+        NDArrayViewPtr m_value;
+        std::unique_ptr<ParameterInitializer> m_valueInitializer;
+        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
+        bool m_needsGradient;
+        std::wstring m_name;
+        std::vector<Axis> m_dynamicAxes;
+        bool m_isSparse;
+        std::wstring m_uid;
+        std::atomic<size_t> m_valueTimeStamp;
+        Variable m_blockFunctionVariableMapping;
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            ImGui_ImplDX9_InvalidateDeviceObjects();
+            g_d3dpp.BackBufferWidth  = LOWORD(lParam);
+            g_d3dpp.BackBufferHeight = HIWORD(lParam);
+            HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
+            if (hr == D3DERR_INVALIDCALL)
+                IM_ASSERT(0);
+            ImGui_ImplDX9_CreateDeviceObjects();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hWnd, msg, wParam, lParam);
 }
     
-    namespace HPHP { namespace HHBBC {
-    }
+    int32 ImGui_Marmalade_KeyCallback(void* system_data, void* user_data)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    s3eKeyboardEvent* e = (s3eKeyboardEvent*)system_data;
+    if (e->m_Pressed == 1)
+        io.KeysDown[e->m_Key] = true;
+    if (e->m_Pressed == 0)
+        io.KeysDown[e->m_Key] = false;
     }
     
-    #endif
+        // Upload texture to graphics system
+    GLint last_texture;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    glGenTextures(1, &g_FontTexture);
+    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    
+    // Data
+static ALLEGRO_DISPLAY*         g_Display = NULL;
+static ALLEGRO_BITMAP*          g_Texture = NULL;
+static double                   g_Time = 0.0;
+static ALLEGRO_MOUSE_CURSOR*    g_MouseCursorInvisible = NULL;
+static ALLEGRO_VERTEX_DECL*     g_VertexDecl = NULL;
+static char*                    g_ClipboardTextData = NULL;
+    
+        g_MouseCursors[ImGuiMouseCursor_Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);   // FIXME: GLFW doesn't have this.
+    g_MouseCursors[ImGuiMouseCursor_ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeEW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);  // FIXME: GLFW doesn't have this.
+    g_MouseCursors[ImGuiMouseCursor_ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);  // FIXME: GLFW doesn't have this.
+    g_MouseCursors[ImGuiMouseCursor_Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+    
+    if (install_callbacks)
+        ImGui_ImplGlfw_InstallCallbacks(window);
+    
+    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks.
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
-    struct PhpFileDoesNotExistException : ExtendedException {
-  explicit PhpFileDoesNotExistException(const char* file)
-      : ExtendedException('File could not be loaded: %s', file) {}
-  explicit PhpFileDoesNotExistException(const char* msg,
-                                        DEBUG_ONLY bool empty_file)
-      : ExtendedException('%s', msg) {
-    assertx(empty_file);
-  }
-  EXCEPTION_COMMON_IMPL(PhpFileDoesNotExistException);
-};
+    /**
+ * Populate the vector with the current stack trace
+ *
+ * Note that this trace needs to be symbolicated to get the library offset even
+ * if it is to be symbolicated off-line.
+ *
+ * Beware of a bug on some platforms, which makes the trace loop until the
+ * buffer is full when it reaches a noexpr function. It seems to be fixed in
+ * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
+ *
+ * @param stackTrace The vector that will receive the stack trace. Before
+ * filling the vector it will be cleared. The vector will never grow so the
+ * number of frames captured is limited by the capacity of it.
+ *
+ * @param skip The number of frames to skip before capturing the trace
+ */
+FBEXPORT void getStackTrace(std::vector<InstructionPointer>& stackTrace,
+                            size_t skip = 0);
     
-      DIR *dir = opendir(fullPath.c_str());
-  if (dir == nullptr) {
-    Logger::Error('FileUtil::find(): unable to open directory %s',
-                  fullPath.c_str());
-    return;
-  }
+        jmethodID   (*FromReflectedMethod)(JNIEnv*, jobject);
+    jfieldID    (*FromReflectedField)(JNIEnv*, jobject);
+    /* spec doesn't show jboolean parameter */
+    jobject     (*ToReflectedMethod)(JNIEnv*, jclass, jmethodID, jboolean);
     
-            auto flatBufferOffset = AsTensorShape(Shape()).Locate(startOffset);
-        auto sliceViewMatrixDims = GetMatrixDimensions(sliceViewShape);
-        assert((flatBufferOffset % sliceViewMatrixDims.first) == 0);
-        auto sliceMatrixColumnOffset = flatBufferOffset / sliceViewMatrixDims.first;
-        void* tensorView = nullptr;
-        switch (m_dataType)
-        {
-        case DataType::Float:
-        {
-            auto currentMatrix = GetMatrix<float>();
-            std::pair<size_t, size_t> currentMatrixDims = { currentMatrix->GetNumRows(), currentMatrix->GetNumCols() };
-            std::shared_ptr<Matrix<float>> slicedMatrixView;
-            if (sliceViewMatrixDims.first != currentMatrixDims.first)
-                slicedMatrixView = make_shared<Matrix<float>>(currentMatrix->Reshaped(1, currentMatrix->GetNumElements()).ColumnSlice(flatBufferOffset, sliceViewShape.TotalSize()));
-            else
-                slicedMatrixView = make_shared<Matrix<float>>(currentMatrix->ColumnSlice(sliceMatrixColumnOffset, sliceViewMatrixDims.second));
-    }
-    }
-    
-            static FunctionPtr Deserialize(const Dictionary& dictionary,
-            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
-            const CNTK::DeviceDescriptor& device);
-    
-        template <typename ElementType>
-    /*static*/ ValuePtr Value::CreateBatch(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/)
-    {
-        //TODO: avoid data copy.
-        std::vector<std::vector<size_t>> input(batchData.size());
-        for (size_t i = 0; i < batchData.size(); i++)
-        {
-            input[i] = {batchData[i]};
-        }
-        // Pass the empty seqStartFlags means all sequences have the start flag with true.
-        return Create<ElementType>(dimension, input, {}, device, readOnly);
+    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
     }
     
-    public:
-    DeclareConstructorFromConfigWithNumInputs(ConstantNode);
-    ConstantNode(DEVICEID_TYPE deviceId, const wstring& name)
-        : Base(deviceId, name)
-    {
-        m_fillValue = ElemType(0);
+        static void destroy(Config * config);
+    
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
     }
-    ConstantNode(DEVICEID_TYPE deviceId, const wstring& name, double fillValue)
-        : Base(deviceId, name)
-    {
-        m_fillValue = ElemType(fillValue);
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
+    
+    
+    
+    #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+namespace antlr {
+#endif
     }
     
-    #include 'db/builder.h'
+    #endif //INC_ASTFactory_hpp__
+
     
-    Status DestroyDB(const std::string& dbname, const Options& options) {
-  Env* env = options.env;
-  std::vector<std::string> filenames;
-  Status result = env->GetChildren(dbname, &filenames);
-  if (!result.ok()) {
-    // Ignore error in case directory does not exist
-    return Status::OK();
-  }
+    #endif //INC_ASTNULLType_hpp__
+
+    
+    /** ASTPair:  utility class used for manipulating a pair of ASTs
+  * representing the current AST root and current AST sibling.
+  * This exists to compensate for the lack of pointers or 'var'
+  * arguments in Java.
+  *
+  * OK, so we can do those things in C++, but it seems easier
+  * to stick with the Java way for now.
+  */
+class ANTLR_API ASTPair {
+public:
+	RefAST root;		// current root of tree
+	RefAST child;		// current child to which siblings are added
     }
     
-      // Return an internal iterator over the current state of the database.
-  // The keys of this iterator are internal keys (see format.h).
-  // The returned iterator should be deleted when no longer needed.
-  Iterator* TEST_NewInternalIterator();
+    protected:
+	// character source
+	ANTLR_USE_NAMESPACE(std)istream& input;
     
+    #include <antlr/config.hpp>
+#include <antlr/ANTLRException.hpp>
     
-    {}  // namespace leveldb
+    class ANTLR_API CommonAST : public BaseAST {
+public:
+	CommonAST()
+	: BaseAST()
+	, ttype( Token::INVALID_TYPE )
+	, text()
+	{
+	}
+    }
     
-      // Return type, or one of the preceding special values
-  unsigned int ReadPhysicalRecord(Slice* result);
+    /* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ *
+ * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/CommonHiddenStreamToken.hpp#2 $
+ */
+    
+    #endif //INC_InputBuffer_hpp__
+
+    
+    	/** Mark a spot in the input and return the position.
+	 * Forwarded to TokenBuffer.
+	 */
+	virtual inline unsigned int mark()
+	{
+		return inputState->getInput().mark();
+	}
+	/// rewind to a previously marked position
+	virtual inline void rewind(unsigned int pos)
+	{
+		inputState->getInput().rewind(pos);
+	}
+	/** called by the generated parser to do error recovery, override to
+	 * customize the behaviour.
+	 */
+	virtual void recover(const RecognitionException& ex, const BitSet& tokenSet)
+	{
+        (void)ex;
+		consume();
+		consumeUntil(tokenSet);
+	}
