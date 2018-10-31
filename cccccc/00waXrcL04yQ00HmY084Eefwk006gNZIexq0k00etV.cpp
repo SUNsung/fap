@@ -1,257 +1,172 @@
 
         
-        class ClientModel;
-    
-        explicit reverse_lock(Lock& _lock) : lock(_lock) {
-        _lock.unlock();
-        _lock.swap(templock);
-    }
-    
-    #include <univalue.h>
-    
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
-    } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
-    }
-    
-    void test_ecdh_generator_basepoint(void) {
-    unsigned char s_one[32] = { 0 };
-    secp256k1_pubkey point[2];
-    int i;
-    }
-    
-    
-/// List of template arguments format(), held in a type-opaque way.
-///
-/// A const reference to FormatList (typedef'd as FormatListRef) may be
-/// conveniently used to pass arguments to non-template functions: All type
-/// information has been stripped from the arguments, leaving just enough of a
-/// common interface to perform formatting as required.
-class FormatList
-{
-    public:
-        FormatList(detail::FormatArg* formatters, int N)
-            : m_formatters(formatters), m_N(N) { }
-    }
-    
-        BOOST_CHECK(obj['key1'].isStr());
-    std::string correctValue('str');
-    correctValue.push_back('\0');
-    BOOST_CHECK_EQUAL(obj['key1'].getValStr(), correctValue);
-    BOOST_CHECK(obj['key2'].isNum());
-    BOOST_CHECK_EQUAL(obj['key2'].getValStr(), '800');
-    BOOST_CHECK(obj['key3'].isObject());
-    
-        typedef int8_t   s8;
-    typedef uint8_t  u8;
-    typedef int16_t  s16;
-    typedef uint16_t u16;
-    typedef int32_t  s32;
-    typedef uint32_t u32;
-    typedef float    f32;
-    typedef int64_t  s64;
-    typedef uint64_t u64;
-    typedef double   f64;
-    
-    void extract2(const Size2D &size,
-              const u8 * srcBase, ptrdiff_t srcStride,
-              u8 * dstBase, ptrdiff_t dstStride,
-              u32 coi)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-        for (size_t i = 0u; i < size.height; ++i)
+            void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
+                     const typename internal::VecTraits<T>::vec128 & v_src1,
+                     typename internal::VecTraits<T>::vec128 & v_dst) const
     {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t sj = 0u, dj = 0u, j = 0u;
+        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
+        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
+        v_dst = internal::vqsubq(v_max, v_min);
     }
     
-    template <typename T>
-inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
-{
-    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
-    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
-}
+                uint8x16x2_t v_y = vld2q_u8(srcy + syj);
+            uint8x16x4_t v_dst;
+            v_dst.val[0] = v_y.val[0];
+            v_dst.val[1] = vld1q_u8(srcu + sj);
+            v_dst.val[2] = v_y.val[1];
+            v_dst.val[3] = vld1q_u8(srcv + sj);
+            vst4q_u8(dst + dj, v_dst);
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && defined(__arm__)
-CVTS_FUNC(u8, s16, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
     {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.u8 q3, d4                                       \n\t'
-            'vmovl.u8 q4, d5                                       \n\t'
-            'vmovl.u16 q5, d6                                      \n\t'
-            'vmovl.u16 q6, d7                                      \n\t'
-            'vmovl.u16 q7, d8                                      \n\t'
-            'vmovl.u16 q8, d9                                      \n\t'
-            'vcvt.f32.u32 q9, q5                                   \n\t'
-            'vcvt.f32.u32 q10, q6                                  \n\t'
-            'vcvt.f32.u32 q11, q7                                  \n\t'
-            'vcvt.f32.u32 q12, q8                                  \n\t'
-            'vmul.f32 q13, q9, q0                                  \n\t'
-            'vmul.f32 q14, q10, q0                                 \n\t'
-            'vmul.f32 q15, q11, q0                                 \n\t'
-            'vmul.f32 q2, q12, q0                                  \n\t'
-            'vadd.f32 q3, q13, q1                                  \n\t'
-            'vadd.f32 q4, q14, q1                                  \n\t'
-            'vadd.f32 q5, q15, q1                                  \n\t'
-            'vadd.f32 q6, q2, q1                                   \n\t'
-            'vcvt.s32.f32 q7, q3                                   \n\t'
-            'vcvt.s32.f32 q8, q4                                   \n\t'
-            'vcvt.s32.f32 q9, q5                                   \n\t'
-            'vcvt.s32.f32 q10, q6                                  \n\t'
-            'vqmovn.s32 d22, q7                                    \n\t'
-            'vqmovn.s32 d23, q8                                    \n\t'
-            'vqmovn.s32 d24, q9                                    \n\t'
-            'vqmovn.s32 d25, q10                                   \n\t'
-            'vst1.16 {d22-d23}, [%[dst1]]                          \n\t'
-            'vst1.16 {d24-d25}, [%[dst2]]                          \n\t'
-            : //no output
-            : [src] 'r' (_src + i),
-              [dst1] 'r' (_dst + i + 0),
-              [dst2] 'r' (_dst + i + 8),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30','d31'
-        );
+        v_dst = internal::vcgt(v_src0, v_src1);
     }
-})
-#else
-CVTS_FUNC(u8, s16, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
+    
+    typedef void (* rshiftConstFunc)(const Size2D &size,
+                                const s16 * srcBase, ptrdiff_t srcStride,
+                                u8 * dstBase, ptrdiff_t dstStride,
+                                CONVERT_POLICY cpolicy);
+    
+                    if (border == BORDER_MODE_CONSTANT && x4 < 0)
+                    prevx[0] = prevx[1] = prevx[2] = borderValue;
+                else
+                {
+                    prevx[0] = srow0 ? srow0[x4] : borderValue;
+                    prevx[1] =         srow1[x4]              ;
+                    prevx[2] = srow2 ? srow2[x4] : borderValue;
+                }
+    
+    #include <vector>
+#include <cstring>
+    
+    #ifdef CAROTENE_NEON
+    
+                v_dst.val[0] = vcombine(vget_high(v_src.val[0]), vget_low(v_src.val[0]));
+            v_dst.val[1] = vcombine(vget_high(v_src.val[1]), vget_low(v_src.val[1]));
+            v_dst.val[2] = vcombine(vget_high(v_src.val[2]), vget_low(v_src.val[2]));
+    
+        for(size_t j = 0; j < size.height; ++j)
     {
-        internal::prefetch(_src + i);
-        uint8x16_t vline = vld1q_u8(_src + i);
-        uint16x8_t vline1_u16 = vmovl_u8(vget_low_u8 (vline));
-        uint16x8_t vline2_u16 = vmovl_u8(vget_high_u8(vline));
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline1_u16));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline1_u16));
-        uint32x4_t vline3_u32 = vmovl_u16(vget_low_u16 (vline2_u16));
-        uint32x4_t vline4_u32 = vmovl_u16(vget_high_u16(vline2_u16));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        float32x4_t vline3_f32 = vcvtq_f32_u32(vline3_u32);
-        float32x4_t vline4_f32 = vcvtq_f32_u32(vline4_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline3_f32 = vmulq_f32(vline3_f32, vscale);
-        vline4_f32 = vmulq_f32(vline4_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline3_f32 = vaddq_f32(vline3_f32, vshift);
-        vline4_f32 = vaddq_f32(vline4_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int32x4_t vline3_s32 = vcvtq_s32_f32(vline3_f32);
-        int32x4_t vline4_s32 = vcvtq_s32_f32(vline4_f32);
-        vst1q_s16(_dst + i + 0, vcombine_s16(vqmovn_s32(vline1_s32), vqmovn_s32(vline2_s32)));
-        vst1q_s16(_dst + i + 8, vcombine_s16(vqmovn_s32(vline3_s32), vqmovn_s32(vline4_s32)));
+        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
+        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
+        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
+             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
+        size_t i = 0;
+        for( ; i < width; i += 32/sizeof(T) )
+        {
+            internal::prefetch(src + i);
+            internal::prefetch(rng1 + i);
+            internal::prefetch(rng2 + i);
     }
-})
-#endif
-    
-                tnext[0] = x0;
-            tnext[1] = x1;
-            tnext[2] = x2;
-    
-    void reciprocal(const Size2D &size,
-                const s32 * srcBase, ptrdiff_t srcStride,
-                s32 * dstBase, ptrdiff_t dstStride,
-                f32 scale,
-                CONVERT_POLICY cpolicy)
-{
-    recip<s32>(size, srcBase, srcStride, dstBase, dstStride, scale, cpolicy);
-}
-    
-    void fillMinMaxLocs(const Size2D & size,
-                    const u16 * srcBase, ptrdiff_t srcStride,
-                    u16 minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
-                    u16 maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
+    //////////////////////////////////////////////////////////////////////
     
-    {  template <typename Tuple>
-  static void TersePrintPrefixToStrings(const Tuple& t, Strings* strings) {
-    ::std::stringstream ss;
-    UniversalTersePrint(::std::tr1::get<0>(t), &ss);
-    strings->push_back(ss.str());
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
+    }
+  } else {
+    decoded = url_decode(data, data_len);
   }
+  return req::make<MemFile>(decoded.data(), decoded.size());
+}
+    
+    struct ExecutionProfiler {
+  ExecutionProfiler(ThreadInfo *info, bool builtin) : m_info(info) {
+    m_executing = m_info->m_executing;
+    m_info->m_executing =
+      builtin ? ThreadInfo::ExtensionFunctions : ThreadInfo::UserFunctions;
+  }
+  explicit ExecutionProfiler(ThreadInfo::Executing executing) {
+    m_info = ThreadInfo::s_threadInfo.getNoCheck();
+    m_executing = m_info->m_executing;
+    m_info->m_executing = executing;
+  }
+  ~ExecutionProfiler() {
+    m_info->m_executing = m_executing;
+  }
+private:
+  ThreadInfo *m_info;
+  ThreadInfo::Executing m_executing;
 };
     
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED1.  Don't use
-// this in your code.
-#define GTEST_PRED1_(pred, v1, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred1Helper(#pred, \
-                                             #v1, \
-                                             pred, \
-                                             v1), on_failure)
+    #endif // HPHP_FILE_STREAM_WRAPPER_H
+
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5>
-struct Templates5 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates4<T2, T3, T4, T5> Tail;
-};
+      // Given a sequence number, return the sequence number of the
+  // earliest snapshot that this sequence number is visible in.
+  // The snapshots themselves are arranged in ascending order of
+  // sequence numbers.
+  // Employ a sequential search because the total number of
+  // snapshots are typically small.
+  inline SequenceNumber findEarliestVisibleSnapshot(
+      SequenceNumber in, SequenceNumber* prev_snapshot);
     
-    template <GTEST_TEMPLATE_ T1>
-struct Templates1 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates0 Tail;
-};
-    
-    #define CHECK_EQ(a, b) CHECK((a) == (b))
-#define CHECK_NE(a, b) CHECK((a) != (b))
-#define CHECK_GE(a, b) CHECK((a) >= (b))
-#define CHECK_LE(a, b) CHECK((a) <= (b))
-#define CHECK_GT(a, b) CHECK((a) > (b))
-#define CHECK_LT(a, b) CHECK((a) < (b))
-    
-    LeastSq MinimalLeastSq(const std::vector<int>& n,
-                       const std::vector<double>& time,
-                       BigOFunc* fitting_curve) {
-  double sigma_gn = 0.0;
-  double sigma_gn_squared = 0.0;
-  double sigma_time = 0.0;
-  double sigma_time_gn = 0.0;
+    TEST_F(DBTestDynamicLevel, DynamicLevelMaxBytesBaseInc) {
+  Options options = CurrentOptions();
+  options.create_if_missing = true;
+  options.write_buffer_size = 2048;
+  options.max_write_buffer_number = 2;
+  options.level0_file_num_compaction_trigger = 2;
+  options.level0_slowdown_writes_trigger = 2;
+  options.level0_stop_writes_trigger = 2;
+  options.target_file_size_base = 2048;
+  options.level_compaction_dynamic_level_bytes = true;
+  options.max_bytes_for_level_base = 10240;
+  options.max_bytes_for_level_multiplier = 4;
+  options.soft_rate_limit = 1.1;
+  options.max_background_compactions = 2;
+  options.num_levels = 5;
+  options.max_compaction_bytes = 100000000;
     }
     
-    namespace benchmark {
-#ifdef BENCHMARK_OS_WINDOWS
-// Window's Sleep takes milliseconds argument.
-void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
-void SleepForSeconds(double seconds) {
-  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
-}
-#else   // BENCHMARK_OS_WINDOWS
-void SleepForMicroseconds(int microseconds) {
-  struct timespec sleep_time;
-  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
-  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
-  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
-    ;  // Ignore signals and wait for the full interval to elapse.
-}
+    #pragma once
+    
+      env.now_micros_ += 1999900u;  // sleep debt 1000
+    
+    // EncryptedEnv implements an Env wrapper that adds encryption to files stored on disk.
+class EncryptedEnv : public EnvWrapper {
+ public:
+  EncryptedEnv(Env* base_env, EncryptionProvider *provider)
+      : EnvWrapper(base_env) {
+    provider_ = provider;
+  }
     }
+    
+      // Results of these can be affected by FakeSleepForMicroseconds()
+  virtual Status GetCurrentTime(int64_t* unix_time) override;
+  virtual uint64_t NowMicros() override;
+  virtual uint64_t NowNanos() override;
+    
+    #include 'env/mock_env.h'
+    
+      DB* db = nullptr;
+  DestroyDB(kDBPath, options);
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
+  assert(db);
+    
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+      ////////////////////////////////////////////////////////
+  //
+  // 'Repeatable Read' (Snapshot Isolation) Example
+  //   -- Using a single Snapshot
+  //
+  ////////////////////////////////////////////////////////
