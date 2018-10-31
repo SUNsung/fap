@@ -1,112 +1,130 @@
 
         
         
-    {}  // namespace atom
+    {    buf = buf.substr(info.bytes);
+  }
     
     
-    {}  // namespace atom
+    {  for (auto Entry : DCache.Entries) {
+    DCache.CBs.keyDestroyCB(Entry.first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry.second, nullptr);
+  }
+  DCache.Entries.clear();
+}
     
-    template <>
-struct Converter<atom::AutoResizeFlags> {
-  static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     atom::AutoResizeFlags* auto_resize_flags) {
-    mate::Dictionary params;
-    if (!ConvertFromV8(isolate, val, &params)) {
-      return false;
+      if (UnsupportedOS || UnsupportedArch)
+    return { UnsupportedOS, UnsupportedArch };
+    
+        // Special case: if the word in the name ends in 's', and we have
+    // a collection element type, see if this is a plural.
+    if (!typeName.CollectionElement.empty() && nameWord.size() > 2 &&
+        nameWord.back() == 's' && role != NameRole::BaseNameSelf) {
+      // Check <element name>s.
+      auto shortenedNameWord
+        = name.substr(0, nameWordRevIter.base().getPosition()-1);
+      auto newShortenedNameWord
+        = omitNeedlessWords(shortenedNameWord, typeName.CollectionElement,
+                            NameRole::Partial, allPropertyNames, scratch);
+      if (shortenedNameWord == newShortenedNameWord &&
+          shortenedNameWord.back() == 'e') {
+        (void)shortenedNameWord.drop_back();
+        newShortenedNameWord =
+          omitNeedlessWords(shortenedNameWord, typeName.CollectionElement,
+                            NameRole::Partial, allPropertyNames, scratch);
+      }
+    }
+    
+    
+    {    return name;
+  }
+    
+    
+    {        if (uniqueParameters.size() != parameters.size())
+            InvalidArgument('Learner's parameters list must not contain duplicates.');
+    }
+    
+        protected:
+    
+    namespace CNTK
+{
+    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
+    {
+        auto matrixDims = GetMatrixDimensions(viewShape);
+        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
     }
     }
+    
+    namespace
+{
+    const std::wstring versionPropertyName = L'Version';
+    const std::wstring learnersPropertyName = L'Learners';
+    const std::wstring externalStatePropertyName = L'ExternalState';
+    const std::wstring distributedStatePropertyName = L'DistributedState';
     }
     
-      v8::Local<v8::Value> GetWebContents();
-    
-    void Initialize(v8::Local<v8::Object> exports,
-                v8::Local<v8::Value> unused,
-                v8::Local<v8::Context> context,
-                void* priv) {
-  v8::Isolate* isolate = context->GetIsolate();
-  Menu::SetConstructor(isolate, base::Bind(&Menu::New));
+            VariableFields(const NDShape& shape, VariableKind varType, ::CNTK::DataType type, const std::weak_ptr<Function>& ownerFunction, const NDArrayViewPtr& value, bool needsGradient, const std::vector<Axis>& dynamicAxes, bool isSparse, const std::wstring& name, const std::wstring& uid)
+            : m_shape(shape), m_varKind(varType), m_dataType(type), m_ownerFunction(ownerFunction), m_value(value), m_needsGradient(needsGradient), m_dynamicAxes(dynamicAxes), m_isSparse(isSparse), m_name(name), m_uid(uid), m_valueTimeStamp(0)
+        {
+            if (value && (type != value->GetDataType()))
+                InvalidArgument('The DataType of the Parameter/Constant Variable '%S' does not match the DataType of the associated Value', AsString().c_str());
     }
     
     
-    {}  // namespace atom
+    {/*!
+ * \brief define compatible keywords in g++
+ *  Used to support g++-4.6 and g++4.7
+ */
+#if DMLC_USE_CXX11 && defined(__GNUC__) && !defined(__clang_version__)
+#if __GNUC__ == 4 && __GNUC_MINOR__ < 8
+#define override
+#define final
+#endif
+#endif
+}  // namespace xgboost
+#endif  // XGBOOST_BASE_H_
+
     
-    // static
-v8::Local<v8::Value> Screen::Create(v8::Isolate* isolate) {
-  if (!Browser::Get()->is_ready()) {
-    isolate->ThrowException(v8::Exception::Error(mate::StringToV8(
-        isolate, 'Cannot require \'screen\' module before app is ready')));
-    return v8::Null(isolate);
+    
+    {#define XGBOOST_REGISTER_PREDICTOR(UniqueId, Name)      \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::PredictorReg& \
+      __make_##PredictorReg##_##UniqueId##__ =          \
+          ::dmlc::Registry<::xgboost::PredictorReg>::Get()->__REGISTER__(Name)
+}  // namespace xgboost
+
+    
+    /*!
+ * \brief an iterator that iterates over a configure file and gets the configures
+ */
+class ConfigIterator: public ConfigStreamReader {
+ public:
+  /*!
+   * \brief constructor
+   * \param fname name of configure file
+   */
+  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi_) {
+    fi_.open(fname);
+    if (fi_.fail()) {
+      LOG(FATAL) << 'cannot open file ' << fname;
+    }
+    ConfigReaderBase::Init();
+  }
+  /*! \brief destructor */
+  ~ConfigIterator() {
+    fi_.close();
   }
     }
     
-            dict[dynamicAxisKey] = dictionaryValueVector;
-        dict[isSparseKey] = IsSparse();
-        if (!Name().empty())
-            dict[nameKey] = Name();
-        dict[needsGradientKey] = NeedsGradient();
-        dict[shapeKey] = Shape();
-        if (IsParameter() || IsConstant())
-        {
-            NDArrayView* value = Value().get();
-            if (value == nullptr)
-                LogicError('Uninitialized Parameter variable '%S' cannot be saved.', AsString().c_str());
-    }
-    
-        // this returns the map directly (read-only) and will lazily initialize it for a given seed
-    const std::vector<INDEXTYPE>& operator()(size_t seed) // throw()
-    {
-        // if wrong seed then lazily recache the sequence
-        if (seed != currentseed && randomizationrange != randomizeDisable)
-        {
-            // test for numeric overflow
-            if (map.size() - 1 != (INDEXTYPE)(map.size() - 1))
-                RuntimeError('RandomOrdering: INDEXTYPE has too few bits for this corpus');
-            // 0, 1, 2...
-            foreach_index (t, map)
-                map[t] = (INDEXTYPE) t;
-    }
-    }
-    
-    #pragma once
-    
-    Status LoggerConfigParserPlugin::update(const std::string& /* source */,
-                                        const ParserConfig& config) {
-  rj::Document& doc = data_.doc();
-    }
-    
-    namespace osquery {
-    }
-    
-    #include <iostream>
-    
-    
-    {REGISTER_INTERNAL(ViewsConfigParserPlugin, 'config_parser', 'views');
-}
-
-    
-      size_t pack_count = 0U;
-  c.packs(([&pack_count, query_attemts](const Pack& p) {
-    pack_count++;
-    // There is one pack without a discovery query.
-    EXPECT_EQ(p.getStats().total, query_attemts + 1);
-    EXPECT_EQ(p.getStats().hits, query_attemts);
-    EXPECT_EQ(p.getStats().misses, 1U);
-  }));
-    
-    bool PlatformProcess::operator==(const PlatformProcess& process) const {
-  return (nativeHandle() == process.nativeHandle());
-}
-    
-    #include <Objbase.h>
-#include <Windows.h>
-    
-    TEST_F(INotifyTests, test_inotify_match_subscription) {
-  event_pub_ = std::make_shared<INotifyEventPublisher>(true);
-  addMonitor('/etc', IN_ALL_EVENTS, false, false);
-  EXPECT_EQ(event_pub_->path_descriptors_.count('/etc'), 1U);
-  // This will fail because there is no trailing '/' at the end.
-  // The configure component should take care of these paths.
-  EXPECT_FALSE(event_pub_->isPathMonitored('/etc/passwd'));
-  event_pub_->path_descriptors_.clear();
-    }
+        const size_t* begin = dmlc::BeginPtr(row_indices_);
+    const size_t* end = dmlc::BeginPtr(row_indices_) + row_indices_.size();
+    elem_of_each_node_.emplace_back(Elem(begin, end, 0));
+  }
+  // split rowset into two
+  inline void AddSplit(unsigned node_id,
+                       const std::vector<Split>& row_split_tloc,
+                       unsigned left_node_id,
+                       unsigned right_node_id) {
+    const Elem e = elem_of_each_node_[node_id];
+    const auto nthread = static_cast<bst_omp_uint>(row_split_tloc.size());
+    CHECK(e.begin != nullptr);
+    size_t* all_begin = dmlc::BeginPtr(row_indices_);
+    size_t* begin = all_begin + (e.begin - all_begin);
