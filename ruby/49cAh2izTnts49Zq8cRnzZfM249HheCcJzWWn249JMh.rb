@@ -1,115 +1,67 @@
 
         
-        User.seed do |u|
-  u.id = -1
-  u.name = 'system'
-  u.username = 'system'
-  u.username_lower = 'system'
-  u.password = SecureRandom.hex
-  u.active = true
-  u.admin = true
-  u.moderator = true
-  u.approved = true
-  u.trust_level = TrustLevel[4]
-end
+        def bottle_file_outdated?(f, file)
+  filename = file.basename.to_s
+  return unless f.bottle && filename.match(Pathname::BOTTLE_EXTNAME_RX)
     
-          return did_show if did_show
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
+  end
     
-            tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
-        message = options[:message] || '#{tag} (fastlane)'
+        def self.cleanup_logs
+      return unless HOMEBREW_LOGS.directory?
+      HOMEBREW_LOGS.subdirs.each do |dir|
+        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
+      end
+    end
     
-          it 'works with all params' do
+        # Unbrewed uses the PREFIX, which will exist
+    # Things below use the CELLAR, which doesn't until the first formula is installed.
+    unless HOMEBREW_CELLAR.exist?
+      raise NoSuchKegError.new(ARGV.named.first) if ARGV.named.any?
+      return
+    end
+    
+      def self.canonical_name(name)
+    Formulary.canonical_name(name)
+  end
+    
+          @launch_event_sent = true
+      builder = AnalyticsEventBuilder.new(
+        p_hash: launch_context.p_hash,
+        session_id: session_id,
+        action_name: nil,
+        fastlane_client_language: launch_context.fastlane_client_language
+      )
+    
+          it 'adds docset_bundle_name param to command' do
         result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            name: 'test.keychain',
-            password: 'testpassword',
-            default_keychain: true,
-            unlock: true,
-            timeout: 600,
-            lock_when_sleeps: true,
-            lock_after_timeout: true,
-            add_to_search_list: false,
-          })
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_bundle_name: 'Bundle name'
+          )
         end').runner.execute(:test)
     
-            allow(File).to receive(:file?).and_return(false)
-        allow(File).to receive(:file?).with(keychain_path).and_return(true)
-        allow(File).to receive(:exist?).and_return(false)
-        expect(File).to receive(:exist?).with(cert_name).and_return(true)
-        allow(FastlaneCore::Helper).to receive(:backticks).with(allowed_command, print: false)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_command, print: false)
-    
-            it 'deprecated boolean changes the description' do
-          config_item = FastlaneCore::ConfigItem.new(key: :foo,
-                                                     description: 'foo. use bar instead',
-                                                     deprecated: true)
-          expect(config_item.description).to eq('**DEPRECATED!** foo. use bar instead')
-        end
-    
-    gem 'rake'
-gem 'thor'
-gem 'pry', '~> 0.11.0'
-gem 'activesupport', '~> 5.2', require: false
-gem 'yajl-ruby', require: false
-    
-        def filter_const(name)
-      if name.is_a? Array
-        name.map &method(:filter_const)
-      else
-        Docs.const_get '#{name}_filter'.camelize
-      end
-    end
-    
-        def path
-      @path ||= url.path
-    end
-    
-        def justify(str)
-      return str unless terminal_width
-      str = str.dup
-    
-      it 'accepts a Float' do
-    sleep(0.1).should be_close(0, 2)
-  end
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
-  end
-end
-    
-        after :each do
-      @tmp_file.close
-      rm_r @tmp_file
-    end
-    
-            -> { w.f4('foo', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: foo|)
-        -> { w.f4('foo', 1) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f1_call_lineno}: warning: foo|)
-        -> { w.f4('foo', 2) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f2_call_lineno}: warning: foo|)
-        -> { w.f4('foo', 3) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.f3_call_lineno}: warning: foo|)
-      end
-    
-    require 'formula'
-require 'keg'
-    
-          keg.lock do
-        print 'Unlinking #{keg}... '
-        puts if ARGV.verbose?
-        puts '#{keg.unlink(mode)} symlinks removed'
+            Fastlane::FastFile.new.parse('lane :test do
+          import_certificate ({
+            keychain_name: '#{keychain}',
+            certificate_path: '#{cert_name}',
+            certificate_password: '#{password}',
+            log_output: true
+          })
+        end').runner.execute(:test)
       end
     end
   end
 end
 
     
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
+            expect(result).to include(' -rule #{rule.shellescape} ')
+        expect(result).to include(' -disable-rule #{rule.shellescape} ')
       end
+    
+            FastlaneCore::CertChecker.installed_identies
+      end
+    end
