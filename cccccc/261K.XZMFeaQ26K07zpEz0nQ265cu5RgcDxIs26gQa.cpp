@@ -1,385 +1,350 @@
 
         
-        // Names that corresponds to a single input parameter.
-class ParamNames {
+        void BrowserView::Init(v8::Isolate* isolate,
+                       v8::Local<v8::Object> wrapper,
+                       const mate::Dictionary& options) {
+  mate::Dictionary web_preferences = mate::Dictionary::CreateEmpty(isolate);
+  options.Get(options::kWebPreferences, &web_preferences);
+  web_preferences.Set('isBrowserView', true);
+  mate::Handle<class WebContents> web_contents =
+      WebContents::Create(isolate, web_preferences);
+    }
+    
+    namespace api {
+    }
+    
+    class Menu : public mate::TrackableObject<Menu>,
+             public AtomMenuModel::Delegate,
+             public AtomMenuModel::Observer {
  public:
-  // Create param based on Arg.
-  ParamNames(const string& name, const string& rename_to) : name_(name) {
-    rename_to_ = AvoidPythonReserved(rename_to);
-  }
+  static mate::WrappableBase* New(mate::Arguments* args);
     }
     
-    namespace tensorflow {
-    }
+    #include 'atom/browser/api/atom_api_net.h'
+#include 'atom/browser/api/atom_api_url_request.h'
+#include 'atom/common/node_includes.h'
+#include 'native_mate/dictionary.h'
     
-    // A wrapper around io::RecordReader that is more easily SWIG wrapped for
-// Python.  An instance of this class is not safe for concurrent access
-// by multiple threads.
-class PyRecordReader {
- public:
-  // TODO(vrv): make this take a shared proto to configure
-  // the compression options.
-  static PyRecordReader* New(const string& filename, uint64 start_offset,
-                             const string& compression_type_string,
-                             TF_Status* out_status);
-    }
+    #include 'atom/browser/render_process_preferences.h'
+#include 'native_mate/handle.h'
+#include 'native_mate/wrappable.h'
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
-#include 'tensorflow/stream_executor/stream_executor.h'
-#include 'tensorflow/stream_executor/stream_executor_internal.h'
-    
-    // Activates a CUDA context within an enclosing scope.
-class ScopedActivateExecutorContext {
- public:
-  // Form that takes a CUDA executor implementation.
-  explicit ScopedActivateExecutorContext(CUDAExecutor* cuda_exec);
-    }
-    
-      // Helper function for implementing DoBlasGemvWithProfiling.
-  template <typename T>
-  bool DoBlasGemvWithProfilingImpl(Stream *stream, blas::Transpose trans,
-                                   uint64 m, uint64 n, const T &alpha,
-                                   const DeviceMemory<T> &a, int lda,
-                                   const DeviceMemory<T> &x, int incx,
-                                   const T &beta, DeviceMemory<T> *y, int incy,
-                                   blas::ProfileResult *output_profile_result);
-    
-      // If the conforming type is a class, add a class-constrained 'Self'
-  // parameter.
-  if (covariantSelf) {
-    auto paramTy = GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
-    builder.addGenericParameter(paramTy);
-  }
-    
-    
-    {  return true;
-}
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_common_screen, Initialize)
 
     
-    
-    {
-    {    auto newChunk = *nextChunk++;
-    auto result = (prevChunk | (newChunk << bitsRemaining)) & resultMask;
-    prevChunk = newChunk >> (numBitsWanted - bitsRemaining);
-    bitsRemaining = ChunkSizeInBits + bitsRemaining - numBitsWanted;
-    return result;
-  });
-}
+      // C++ can not distinguish overloaded member function.
+  template <AtomNetworkDelegate::SimpleEvent type>
+  void SetSimpleListener(mate::Arguments* args);
+  template <AtomNetworkDelegate::ResponseEvent type>
+  void SetResponseListener(mate::Arguments* args);
+  template <typename Listener, typename Method, typename Event>
+  void SetListener(Method method, Event type, mate::Arguments* args);
     
     
-    {  return Begin + oldSize;
-}  
-
-    
-    static const StringRef SupportedConditionalCompilationArches[] = {
-  'arm',
-  'arm64',
-  'i386',
-  'x86_64',
-  'powerpc64',
-  'powerpc64le',
-  's390x'
+    {  DISALLOW_COPY_AND_ASSIGN(Event);
 };
     
-    // We'd like the dump routine to be present in all builds, but it's
-// a pretty large amount of code, most of which is not sensitive to the
-// actual key and value data.  If we try to have a common implementation,
-// we're left with the problem of describing the layout of a node when
-// that's technically instantiation-specific.  Redefining the struct here
-// is technically an aliasing violation, but we can just tell the compilers
-// that actually use TBAA that this is okay.
-typedef struct _Node Node LLVM_MAY_ALIAS;
-struct _Node {
-  // If you change the layout in the header, you'll need to change it here.
-  // (This comment is repeated there.)
-  Node *Left, *Right, *Further;
-};
-    
-      while (!RawText.empty()) {
-    size_t Pos = RawText.find_first_of('\n\r');
-    if (Pos == StringRef::npos)
-      Pos = RawText.size();
+    /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
     
-    StringRef camel_case::getLastWord(StringRef string) {
-  if (string.empty())
-    return '';
-    }
+    #ifndef BITCOIN_REVERSELOCK_H
+#define BITCOIN_REVERSELOCK_H
     
-    namespace swift {
-namespace sys {
-void TaskProcessInformation::ResourceUsage::provideMapping(json::Output &out) {
-  out.mapRequired('utime', Utime);
-  out.mapRequired('stime', Stime);
-  out.mapRequired('maxrss', Maxrss);
-}
-    }
-    }
+    #include <script/script.h>
     
+        /* RFC6979 3.2.d. */
+    secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
+    secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
+    secp256k1_hmac_sha256_write(&hmac, zero, 1);
+    secp256k1_hmac_sha256_write(&hmac, key, keylen);
+    secp256k1_hmac_sha256_finalize(&hmac, rng->k);
+    secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
+    secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
+    secp256k1_hmac_sha256_finalize(&hmac, rng->v);
     
-    {  // The length of the transcoded string in UTF-16 code points.
-  Length = toPtr - &buffer[0];
-  return Length;
-}
+        secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
+    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
+    
+    BOOST_AUTO_TEST_SUITE_END()
 
     
-    class CFPointeeInfo {
-  bool IsValid;
-  bool IsConst;
-  llvm::PointerUnion<const clang::RecordDecl *, const clang::TypedefNameDecl *>
-      Decl;
-  CFPointeeInfo() = default;
+    const std::string& UniValue::get_str() const
+{
+    if (typ != VSTR)
+        throw std::runtime_error('JSON value is not a string as expected');
+    return getValStr();
+}
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    class ObjectManager;
+    
+    NwAppClearAppCacheFunction::NwAppClearAppCacheFunction() {
+}
+    
+        bool ReadImage(ClipboardData& data) {
+      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
+      std::vector<unsigned char> encoded_image;
+      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
     }
     
-    // Import As Member -- attempt to import C global functions and variables as
-// members on types or instances.
+    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
     
-    /**
- * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
- *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
- *        nodes, outgoing nodes, or their average.
- *
- * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
- * accounts for ReLU nonlinearities.
- *
- * Aside: for another perspective on the scaling factor, see the derivation of
- * [Saxe, McClelland, and Ganguli 2013 (v3)].
- *
- * It fills the incoming matrix by randomly sampling Gaussian data with std =
- * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
- * the variance_norm option. You should make sure the input blob has shape (num,
- * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
- * is currently not the case for inner product layers.
+    
+    {  private:
+    DISALLOW_COPY_AND_ASSIGN(NwScreenIsMonitorStartedFunction);
+  };
+    
+    A common use case is with the DeconvolutionLayer acting as upsampling.
+You can upsample a feature map with shape of (B, C, H, W) by any integer factor
+using the following proto.
+\code
+layer {
+  name: 'upsample', type: 'Deconvolution'
+  bottom: '{{bottom_name}}' top: '{{top_name}}'
+  convolution_param {
+    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
+    num_output: {{C}} group: {{C}}
+    pad: {{ceil((factor - 1) / 2.)}}
+    weight_filler: { type: 'bilinear' } bias_term: false
+  }
+  param { lr_mult: 0 decay_mult: 0 }
+}
+\endcode
+Please use this by replacing `{{}}` with your values. By specifying
+`num_output: {{C}} group: {{C}}`, it behaves as
+channel-wise convolution. The filter shape of this deconvolution layer will be
+(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
+interpolation kernel for every channel of the filter identically. The resulting
+shape of the top feature map will be (B, C, factor * H, factor * W).
+Note that the learning rate and the
+weight decay are set to 0 in order to keep coefficient values of bilinear
+interpolation unchanged during training. If you apply this to an image, this
+operation is equivalent to the following call in Python with Scikit.Image.
+\code{.py}
+out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
+\endcode
  */
 template <typename Dtype>
-class MSRAFiller : public Filler<Dtype> {
+class BilinearFiller : public Filler<Dtype> {
  public:
-  explicit MSRAFiller(const FillerParameter& param)
+  explicit BilinearFiller(const FillerParameter& param)
       : Filler<Dtype>(param) {}
   virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    int fan_in = blob->count() / blob->shape(0);
-    // Compatibility with ND blobs
-    int fan_out = blob->num_axes() > 1 ?
-                  blob->count() / blob->shape(1) :
-                  blob->count();
-    Dtype n = fan_in;  // default to fan_in
-    if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_AVERAGE) {
-      n = (fan_in + fan_out) / Dtype(2);
-    } else if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_FAN_OUT) {
-      n = fan_out;
+    CHECK_EQ(blob->num_axes(), 4) << 'Blob must be 4 dim.';
+    CHECK_EQ(blob->width(), blob->height()) << 'Filter must be square';
+    Dtype* data = blob->mutable_cpu_data();
+    int f = ceil(blob->width() / 2.);
+    Dtype c = (blob->width() - 1) / (2. * f);
+    for (int i = 0; i < blob->count(); ++i) {
+      Dtype x = i % blob->width();
+      Dtype y = (i / blob->width()) % blob->height();
+      data[i] = (1 - fabs(x / f - c)) * (1 - fabs(y / f - c));
     }
-    Dtype std = sqrt(Dtype(2) / n);
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
-        blob->mutable_cpu_data());
     CHECK_EQ(this->filler_param_.sparse(), -1)
          << 'Sparsity not supported by this Filler.';
   }
 };
     
+      /**
+   * @brief Adjust the shapes of top blobs and internal buffers to accommodate
+   *        the shapes of the bottom blobs.
+   *
+   * @param bottom the input blobs, with the requested input shapes
+   * @param top the top blobs, which should be reshaped as needed
+   *
+   * This method should reshape top blobs as needed according to the shapes
+   * of the bottom (input) blobs, as well as reshaping any internal buffers
+   * and making any other necessary adjustments so that the layer can
+   * accommodate the bottom blobs.
+   */
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) = 0;
     
-    {}  // namespace caffe
+      /// @brief The spatial dimensions of the input.
+  inline int input_shape(int i) {
+    return (*bottom_shape_)[channel_axis_ + i];
+  }
+  // reverse_dimensions should return true iff we are implementing deconv, so
+  // that conv helpers know which dimensions are which.
+  virtual bool reverse_dimensions() = 0;
+  // Compute height_out_ and width_out_ from other parameters.
+  virtual void compute_output_shape() = 0;
+    
+    
+    {  Blob<Dtype> transformed_data_;
+};
+    
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
+ public:
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
+    
+    
+    {
+    {  // Recursive copy function: this is similar to crop_copy() but loops over all
+  // but the last two dimensions to allow for ND cropping while still relying on
+  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
+  // alterantive implementation could rely on the kernel more by passing
+  // offsets, but this is problematic because of its variable length.
+  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
+  // could be achieved by not looping the application of the copy_kernel around
+  // these dimensions.
+  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
+                const vector<Blob<Dtype>*>& top,
+                const vector<int>& offsets,
+                vector<int> indices,
+                int cur_dim,
+                const Dtype* src_data,
+                Dtype* dest_data,
+                bool is_forward);
+};
+}  // namespace caffe
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
+    
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+
     
     #include <vector>
     
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
     
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-      // algorithms for forward and backwards convolutions
-  cudnnConvolutionFwdAlgo_t *fwd_algo_;
-  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
-  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    gpr_timespec CoreCodegen::gpr_inf_future(gpr_clock_type type) {
-  return ::gpr_inf_future(type);
+    {    return nullptr;
 }
     
-      static void OnDoneRecvTrailingMetadataCb(void* user_data, grpc_error* error);
     
-    MeasureInt64 RpcServerReceivedMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcServerReceivedMessagesPerRpcMeasureName,
-                             'Number of messages received per RPC', kCount);
-  return measure;
-}
-    
-    const ViewDescriptor& ClientSentMessagesPerRpcMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/client/sent_messages_per_rpc/minute')
-          .set_measure(kRpcClientSentMessagesPerRpcMeasureName)
-          .set_aggregation(CountDistributionAggregation())
-          .add_column(ClientMethodTagKey());
-  return descriptor;
-}
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    
-    
-    #ifdef BOOST_MSVC
-#pragma warning(pop)
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    
-    {  return Status();
-}
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    {    if (element->actions->num == 0)
+    {
+        if (_currentTarget == element)
+        {
+            _currentTargetSalvaged = true;
+        }
+        else
+        {
+            deleteHashElement(element);
+        }
     }
-    
-    TEST_F(PacksTests, test_check_version) {
-  Pack zpack('fake_version_pack', getPackWithFakeVersion().doc());
-  EXPECT_FALSE(zpack.checkVersion());
-    }
-    
-      /**
-   * @brief Compute the final hash and return it's result
-   *
-   * @return The final hash value
-   */
-  std::string digest();
-    
-      /// Inspect into the memory and CPU of the watcher process.
-  virtual Status isWatcherHealthy(const PlatformProcess& watcher,
-                                  PerformanceState& watcher_state) const;
-    
-    
-    {void alarm(int /* noop */) {
-  /* This function is a noop. */
-}
-} // namespace osquery
-
-    
-    Status INotifyEventPublisher::addSubscription(
-    const SubscriptionRef& subscription) {
-  WriteLock lock(subscription_lock_);
-  auto received_inotify_sc = getSubscriptionContext(subscription->context);
-  for (auto& sub : subscriptions_) {
-    auto inotify_sc = getSubscriptionContext(sub->context);
-    if (*received_inotify_sc == *inotify_sc) {
-      if (inotify_sc->mark_for_deletion) {
-        inotify_sc->mark_for_deletion = false;
-        return Status(0);
-      }
-      // Returning non zero signals EventSubscriber::subscribe
-      // do not bump up subscription_count_.
-      return Status(1);
-    }
-  }
-    }
-    
-        // Overrides
-    virtual void startWithTarget(Node *target) override;
-    virtual ActionCamera * reverse() const override;
-    virtual ActionCamera *clone() const override;
-    
-    // CatmullRom Spline formula:
-Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, float tension, float t)
-{
-    float t2 = t * t;
-    float t3 = t2 * t;
-    
-    /*
-     * Formula: s(-ttt + 2tt - t)P1 + s(-ttt + tt)P2 + (2ttt - 3tt + 1)P2 + s(ttt - 2tt + t)P3 + (-2ttt + 3tt)P3 + s(ttt - tt)P4
-     */
-    float s = (1 - tension) / 2;
-    }
-    
-    Shaky3D* Shaky3D::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) Shaky3D();
-    a->initWithDuration(_duration, _gridSize, _randrange, _shakeZ);
-    a->autorelease();
-    return a;
 }
     
-        /** Returns the numbers of actions that are running in a certain target. 
-     * Composable actions are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @return  The numbers of actions that are running in a certain target.
-     * @js NA
-     */
-    virtual ssize_t getNumberOfRunningActionsInTarget(const Node *target) const;
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
     
-    /** Returns the numbers of actions that are running in all targets.
-     * @return  The numbers of actions that are running in all target.
-     * @js NA
-     */
-    virtual ssize_t getNumberOfRunningActions() const;
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
     
-                p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
     
-        /**
-    @brief Get the amplitude of the effect.
-    @return Return the amplitude of the effect.
-    */
-    float getAmplitude() const { return _amplitude; }
+    {    return false;
+}
+    
     /**
-    @brief Set the amplitude to the effect.
-    @param amplitude The value of amplitude will be set.
-    */
-    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+@brief Progress to percentage.
+@details This action show the target node from current percentage to the specified percentage.
+        You should specify the destination percentage when creating the action.
+@since v0.99.1
+*/
+class CC_DLL ProgressTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes with a duration and a destination percentage.
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
+     */
+    static ProgressTo* create(float duration, float percent);
+    }
     
+    bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _key    = key;
+        _to       = to;
+        _from     = from;
+        return true;
+    }
+    }
     
-    {    frame->autorelease();
-    return frame;
-}
+    /**
+ * @addtogroup actions
+ * @{
+ */
+    }
     
     /** @class AnimationFrame
  *
@@ -428,86 +393,9 @@ public:
     }
     }
     
-            if ( frameNames.empty() )
-        {
-            CCLOG('cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to animation cache.', anim.first.c_str());
-            continue;
-        }
-    
-    BENCHMARK(skip_overhead, iter) {
-  auto prev = FLAGS_minloglevel;
-  FLAGS_minloglevel = 2;
-    }
-    
-    namespace folly {
-    }
-    
-    template <class... Args>
-void checkUnixErrorExplicit(ssize_t ret, int savedErrno, Args&&... args) {
-  if (UNLIKELY(ret == -1)) {
-    throwSystemErrorExplicit(savedErrno, std::forward<Args>(args)...);
-  }
-}
-    
-    [[noreturn]] void exception_wrapper::onNoExceptionError(
-    char const* const name) {
-  std::ios_base::Init ioinit_; // ensure std::cerr is alive
-  std::cerr << 'Cannot use `' << name
-            << '` with an empty folly::exception_wrapper' << std::endl;
-  std::terminate();
-}
-    
-     protected:
-  /**
-   * Returns true if the KeepAlive is constructed from an executor that does
-   * not support the keep alive ref-counting functionality
-   */
-  template <typename ExecutorT>
-  static bool isKeepAliveDummy(const KeepAlive<ExecutorT>& keepAlive) {
-    return reinterpret_cast<intptr_t>(keepAlive.executorAndDummyFlag_) &
-        KeepAlive<ExecutorT>::kDummyFlag;
-  }
-    
-    namespace folly {
-    }
-    
-        static constexpr result_type min() {
-      return std::numeric_limits<result_type>::min();
-    }
-    
-      tv.tv_sec = 0;
-  tv.tv_usec = 10;
-  EXPECT_EQ(10000ns, to<nanoseconds>(tv));
-  EXPECT_EQ(10us, to<microseconds>(tv));
-  EXPECT_EQ(0ms, to<milliseconds>(tv));
-  EXPECT_EQ(0s, to<seconds>(tv));
-    
-    #include <folly/io/Cursor.h>
-#include <folly/io/IOBuf.h>
-#include <folly/lang/Bits.h>
-    
-     public:
-  atomic_shared_ptr() noexcept {
-    init();
-  }
-  explicit atomic_shared_ptr(SharedPtr foo) /* noexcept */
-      : atomic_shared_ptr() {
-    store(std::move(foo));
-  }
-  atomic_shared_ptr(const atomic_shared_ptr<T>&) = delete;
-    
-    CacheLocality CacheLocality::uniform(size_t numCpus) {
-  CacheLocality rv;
-    }
-    
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    auto newslots = folly::make_unique<Slots>();
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(newslots->slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
-    }
-    }
+        /** Adds a Animation with a name.
+     *
+     * @param animation An animation.
+     * @param name The name of animation.
+     */
+    void addAnimation(Animation *animation, const std::string& name);
