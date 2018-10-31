@@ -1,118 +1,135 @@
 
         
-        class Devise::OmniauthCallbacksController < DeviseController
-  prepend_before_action { request.env['devise.skip_timeout'] = true }
+          </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-      # Sets the resource creating an instance variable
-  def resource=(new_resource)
-    instance_variable_set(:'@#{resource_name}', new_resource)
-  end
+            def start(opts)
+          @thread = Thread.new do
+            # Use epoll if the kernel supports it
+            EM.epoll
+            EM.run do
+              EM.error_handler { |e| log_error(e) }
     
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
     end
     
-    class BugTest < ActionDispatch::IntegrationTest
-  include Rack::Test::Methods
-  include Warden::Test::Helpers
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+    end
+  end
+end
+
     
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
+        it 'should raise an exception when encountering complex JSONPaths' do
+      expect { LiquidMigrator.convert_string('Received <$.content.text.*> from <$.content.name> .') }.
+        to raise_error('JSONPath '$.content.text.*' is too complex, please check your migration.')
+    end
+  end
+    
+          if first_warning
+        $stderr.puts <<~EOS
+          #{Tty.bold}Please note that these warnings are just used to help the Homebrew maintainers
+          with debugging if you file an issue. If everything you use Homebrew for is
+          working fine: please don't worry or file an issue; just ignore this. Thanks!#{Tty.reset}
+        EOS
+      end
+    
+        def to_s
+      s = []
+      s << 'Could not symlink #{src}'
+      s << 'Target #{dst}' << suggestion
+      s << <<~EOS
+        To force the link and overwrite all conflicting files:
+          brew link --overwrite #{keg.name}
+    
+          def self.visible
+        false
+      end
+    end
+  end
+end
+
+    
+          alias generic_find_matching_tag find_matching_tag
+    
+      def parse(*paths)
+    paths.flatten
+         .compact
+         .flat_map { |p| Pathname.new(p).to_path.split(File::PATH_SEPARATOR) }
+         .uniq
+  end
+end
+
+    
+            last_simple_subject = rest.empty? && sseq.subject?
+        if current_rule.nil? || first_sseq(current_rule).members != firsts ||
+            !!first_sseq(current_rule).subject? != !!last_simple_subject
+          current_rule = Tree::RuleNode.new([])
+          current_rule.parsed_rules = make_sseq(last_simple_subject, *firsts)
         end
     
-      def upgrade_account
-    if signed_request_account.ostatus?
-      signed_request_account.update(last_webfingered_at: nil)
-      ResolveAccountWorker.perform_async(signed_request_account.acct)
+          offset = line.offset + line.text.size - arg_string.size
+      args, keywords, splat, kwarg_splat =
+        Script::Parser.new(arg_string.strip, @line, to_parser_offset(offset), @options).
+          parse_mixin_include_arglist
+      Tree::MixinNode.new(name, args, keywords, splat, kwarg_splat)
     end
     
-        def resubscribe
-      authorize :instance, :resubscribe?
-      params.require(:by_domain)
-      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
-      redirect_to admin_instances_path
-    end
-    
-      def encoded_challenge
-    HTMLEntities.new.encode(params['hub.challenge'])
-  end
-    
-    # Don't use Rake::GemPackageTast because we want prerequisites to run
-# before we load the gemspec.
-desc 'Build all the packages.'
-task :package => [:revision_file, :date_file, :permissions] do
-  version = get_version
-  File.open(scope('VERSION'), 'w') {|f| f.puts(version)}
-  load scope('sass.gemspec')
-  Gem::Package.build(SASS_GEMSPEC)
-  sh %{git checkout VERSION}
-    
-          process_result
-    
-          output = input_path if @options[:in_place]
-      write_output(out, output)
-    rescue Sass::SyntaxError => e
-      raise e if @options[:trace]
-      file = ' of #{e.sass_filename}' if e.sass_filename
-      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
-    rescue LoadError => err
-      handle_load_error(err)
-    end
-    
-          # If the importer is based on files on the local filesystem
-      # this method should return folders which should be watched
-      # for changes.
+          # Find a Sass file, if it exists.
       #
-      # @return [Array<String>] List of absolute paths of directories to watch
-      def directories_to_watch
-        []
-      end
-    
-          # Given an `@import`ed path, returns an array of possible
-      # on-disk filenames and their corresponding syntaxes for that path.
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
       #
-      # @param name [String] The filename.
-      # @return [Array(String, Symbol)] An array of pairs.
-      #   The first element of each pair is a filename to look for;
-      #   the second element is the syntax that file would be in (`:sass` or `:scss`).
-      def possible_files(name)
-        name = escape_glob_characters(name)
-        dirname, basename, extname = split(name)
-        sorted_exts = extensions.sort
-        syntax = extensions[extname]
-    
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
       end
-    
-          def string_to_code string
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-          def author
-        first = page.last_version
-        return DEFAULT_AUTHOR unless first
-        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
-      end
-    
-      test 'h1 title sanitizes correctly' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-      def self.assets_path
-    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
-  end
