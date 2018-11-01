@@ -1,223 +1,225 @@
 
         
-        std::map<uint32_t, v8::Global<v8::Object>> g_download_item_objects;
-    
-      void Pause();
-  bool IsPaused() const;
-  void Resume();
-  bool CanResume() const;
-  void Cancel();
-  int64_t GetReceivedBytes() const;
-  int64_t GetTotalBytes() const;
-  std::string GetMimeType() const;
-  bool HasUserGesture() const;
-  std::string GetFilename() const;
-  std::string GetContentDisposition() const;
-  const GURL& GetURL() const;
-  const std::vector<GURL>& GetURLChain() const;
-  download::DownloadItem::DownloadState GetState() const;
-  bool IsDone() const;
-  void SetSavePath(const base::FilePath& path);
-  base::FilePath GetSavePath() const;
-  std::string GetLastModifiedTime() const;
-  std::string GetETag() const;
-  double GetStartTime() const;
-    
-    namespace api {
+        
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
     }
-    
-    display::Display Screen::GetDisplayMatching(const gfx::Rect& match_rect) {
-  return screen_->GetDisplayMatching(match_rect);
-}
-    
-      gfx::Point GetCursorScreenPoint();
-  display::Display GetPrimaryDisplay();
-  std::vector<display::Display> GetAllDisplays();
-  display::Display GetDisplayNearestPoint(const gfx::Point& point);
-  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
-    
-    void SyntaxASTMap::dumpSyntaxMap() const {
-  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
-    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
-    auto SemanticNode = SyntaxAndSemaNode.getSecond();
-    }
-    }
-    
-    
-    {}  // namespace tesseract.
-    
-    // Constructor.
-// Tests the architecture in a system-dependent way to detect AVX, SSE and
-// any other available SIMD equipment.
-// __GNUC__ is also defined by compilers that include GNU extensions such as
-// clang.
-SIMDDetect::SIMDDetect() {
-#if defined(X86_BUILD)
-#if defined(__GNUC__)
-  unsigned int eax, ebx, ecx, edx;
-  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
-    // Note that these tests all use hex because the older compilers don't have
-    // the newer flags.
-    sse_available_ = (ecx & 0x00080000) != 0;
-    avx_available_ = (ecx & 0x10000000) != 0;
-    if (avx_available_) {
-      // There is supposed to be a __get_cpuid_count function, but this is all
-      // there is in my cpuid.h. It is a macro for an asm statement and cannot
-      // be used inside an if.
-      __cpuid_count(7, 0, eax, ebx, ecx, edx);
-      avx2_available_ = (ebx & 0x00000020) != 0;
-      avx512F_available_ = (ebx & 0x00010000) != 0;
-      avx512BW_available_ = (ebx & 0x40000000) != 0;
-    }
+    return layer_types_str;
   }
-#elif defined(_WIN32)
-  int cpuInfo[4];
-  __cpuid(cpuInfo, 0);
-  if (cpuInfo[0] >= 1) {
-    __cpuid(cpuInfo, 1);
-    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
-    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
-  }
-#else
-#error 'I don't know how to test for SIMD with this compiler'
-#endif
-#endif  // X86_BUILD
-}
+};
+    
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
+    
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
 
     
-    // Setter for the value.
-void ParamContent::SetValue(const char* val) {
-// TODO (wanke) Test if the values actually are properly converted.
-// (Quickly visible impacts?)
-  changed_ = true;
-  if (param_type_ == VT_INTEGER) {
-    iIt->set_value(atoi(val));
-  } else if (param_type_ == VT_BOOLEAN) {
-    bIt->set_value(atoi(val));
-  } else if (param_type_ == VT_DOUBLE) {
-    dIt->set_value(strtod(val, nullptr));
-  } else if (param_type_ == VT_STRING) {
-    sIt->set_value(val);
-  }
-}
-    
-    
-  // Getters and Setters.
-  void SetValue(const char* val);
-  STRING GetValue() const;
-  const char* GetName() const;
-  const char* GetDescription() const;
-    
-    namespace tesseract {
-void Tesseract::tess_segment_pass_n(int pass_n, WERD_RES *word) {
-  int saved_enable_assoc = 0;
-  int saved_chop_enable = 0;
-    }
+    bool IsUserOnly(std::wstring opt)
+{
+	bool userOnly;
     }
     
+            std::unordered_map<Parameter, NDArrayViewPtr> m_smoothedGradientValues;
     
-    {    if (s.ok()) {
-      // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
-                                              meta->number,
-                                              meta->file_size);
-      s = it->status();
-      delete it;
-    }
-  }
-    
-    
+        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
     {
-    {      // Do not count any of the preceding work/delay in stats.
-      thread->stats.Start();
+        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
+        // GPU invocations for each MaskSection call.
     }
-  }
     
-      // Delete any unneeded files and stale in-memory entries.
-  void DeleteObsoleteFiles() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-    
+        void ProgressWriter::UpdateTraining(size_t samples, const ValuePtr& accumulatedLoss,
+                                        const ValuePtr& accumulatedMetric)
     {
-    {    env_->delay_data_sync_.Release_Store(env_);      // Block sync calls
-    Put('k1', std::string(100000, 'x'));             // Fill memtable
-    Put('k2', std::string(100000, 'y'));             // Trigger compaction
-    ASSERT_EQ('v1', Get('foo'));
-    env_->delay_data_sync_.Release_Store(nullptr);   // Release sync calls
-  } while (ChangeOptions());
+        m_training->Update(samples, accumulatedLoss, accumulatedMetric,
+            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
+                   const std::pair<double, double> aggregateLoss, std::pair<double, double> aggregateMetric)
+            {
+                OnWriteTrainingUpdate(samples, updates, aggregateLoss, aggregateMetric);
+            });
+        OnTrainingUpdateEnd();
+    }
+    
+        template <typename T> 
+    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
+    {
+        std::stringstream info;
+        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
+             << ', Dictionary version = ' << dictVersion;
+        return info.str();
+    }
+    
+        // now pass that to concurrent reader so we can read ahead
+    // m_DataReader = new ConcurrentReader<ElemType>(m_DataReader);
+    // NOW we can init
+    // TODO: merge with the code above, but we first need to get the nbrUttPerMinibatch initialized inside each reader
+    for (const auto& ioName : m_ioNames)
+    {
+        const ConfigRecordType& thisIO = hasMultipleReaders ? config(ioName) : config /*legacy*/;
+        m_dataReaders[ioName]->Init(thisIO);
+    }
+    
+    // -----------------------------------------------------------------------
+// DynamicAxisNode (/*no input*/)
+// This is a holder for MBLayout objects shared across inputs.
+// -----------------------------------------------------------------------
+template <class ElemType>
+class DynamicAxisNode : public ComputationNode<ElemType>, public NumInputs<0>
+{
+    typedef ComputationNode<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'DynamicAxis'; }
+public:
+    DynamicAxisNode(DEVICEID_TYPE deviceId, const wstring& name)
+        : Base(deviceId, name)
+    {
+        // BUGBUG: In BS, the node name is not known during node instantiation.
+        // This may require to pass the display name as a separate parameter.
+    }
+    }
+    
+        Size winSize = Director::getInstance()->getWinSize();
+    _fullScreenSize.set(winSize.width, winSize.height);
+    _halfScreenSize = _fullScreenSize * 0.5f;
+    _offsetX=xOffset;
+    _offsetY=yOffset;
+    _halfScreenSize.x += _offsetX;
+    _halfScreenSize.y += _offsetY;
+    
+    if (_boundarySet)
+    {
+        _leftBoundary = -((rect.origin.x+rect.size.width) - _fullScreenSize.x);
+        _rightBoundary = -rect.origin.x ;
+        _topBoundary = -rect.origin.y;
+        _bottomBoundary = -((rect.origin.y+rect.size.height) - _fullScreenSize.y);
+    }
+    
+    /** @class CatmullRomTo
+ * An action that moves the target with a CatmullRom curve to a destination point.
+ * A Catmull Rom is a Cardinal Spline with a tension of 0.5.
+ * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+ * @ingroup Actions
+ */
+class CC_DLL CatmullRomTo : public CardinalSplineTo
+{
+public:
+    }
+    
+    
+bool TargetedAction::initWithTarget(Node* target, FiniteTimeAction* action)
+{
+    if(ActionInterval::initWithDuration(action->getDuration()))
+    {
+        CC_SAFE_RETAIN(target);
+        _forcedTarget = target;
+        CC_SAFE_RETAIN(action);
+        _action = action;
+        return true;
+    }
+    return false;
 }
     
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-    unsigned int Reader::ReadPhysicalRecord(Slice* result) {
-  while (true) {
-    if (buffer_.size() < kHeaderSize) {
-      if (!eof_) {
-        // Last read was a full read, so this is a trailer to skip
-        buffer_.clear();
-        Status status = file_->Read(kBlockSize, &buffer_, backing_store_);
-        end_of_buffer_offset_ += buffer_.size();
-        if (!status.ok()) {
-          buffer_.clear();
-          ReportDrop(kBlockSize, status);
-          eof_ = true;
-          return kEof;
-        } else if (buffer_.size() < kBlockSize) {
-          eof_ = true;
-        }
-        continue;
-      } else {
-        // Note that if buffer_ is non-empty, we have a truncated header at the
-        // end of the file, which can be caused by the writer crashing in the
-        // middle of writing the header. Instead of considering this an error,
-        // just report EOF.
-        buffer_.clear();
-        return kEof;
-      }
-    }
-    }
+    void ActionManager::addAction(Action *action, Node *target, bool paused)
+{
+    CCASSERT(action != nullptr, 'action can't be nullptr!');
+    CCASSERT(target != nullptr, 'target can't be nullptr!');
+    if(action == nullptr || target == nullptr)
+        return;
     }
     
-      // Reports dropped bytes to the reporter.
-  // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(uint64_t bytes, const char* reason);
-  void ReportDrop(uint64_t bytes, const Status& reason);
-    
-        // Position at the first entry in list.
-    // Final state of iterator is Valid() iff list is not empty.
-    void SeekToFirst();
-    
-    class SnapshotList {
- public:
-  SnapshotList() : head_(0) {
-    head_.prev_ = &head_;
-    head_.next_ = &head_;
-  }
+    /**
+@brief FadeOutBLTiles action.
+@details Fades out the target node with many tiles from Top-Right to Bottom-Left.
+ */
+class CC_DLL FadeOutBLTiles : public FadeOutTRTiles
+{
+public:
+    /** 
+    * @brief Create the action with the grid size and the duration.
+    * @param duration Specify the duration of the FadeOutBLTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @return If the creation success, return a pointer of FadeOutBLTiles action; otherwise, return nil.
+    */
+    static FadeOutBLTiles* create(float duration, const Size& gridSize);
     }
     
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    
+    {    return s_sharedAnimationCache;
 }
     
-    void WriteFileOrDie(const char* filename, const std::string& contents) {
-  bool write_to_stdout = strncmp(filename, '-', 2) == 0;
+    AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
+{
+    AtlasNode * ret = new (std::nothrow) AtlasNode();
+    if (ret->initWithTileFile(tile, tileWidth, tileHeight, itemsToRender))
+    {
+        ret->autorelease();
+        return ret;
     }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
+}
     
-      int iquant[3 * kDCTBlockSize];
-  int idx = 0;
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < kDCTBlockSize; ++j) {
-      int v = quant[idx];
-      jpg->quant[i].values[j] = v;
-      iquant[idx++] = ((1 << kIQuantBits) + 1) / v;
-    }
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    
+    {  size_t len;
+  std::unique_ptr<uint8_t[]> data;
+  size_t pos;
+  uint64_t put_buffer;
+  int put_bits;
+  bool overflow;
+};
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
   }
+  return std::vector<uint8_t>();
+}
     
-    #include <stddef.h>
-#include <stdint.h>
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
