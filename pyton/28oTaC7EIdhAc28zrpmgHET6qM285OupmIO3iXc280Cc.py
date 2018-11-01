@@ -1,127 +1,153 @@
 
         
-            # Then we call the sorting method
-    sort_blocks()
+            if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.update(test_config)
     
     
-class ContentDecodingError(RequestException, BaseHTTPError):
-    '''Failed to decode response content'''
-    
-        def lower_items(self):
-        '''Like iteritems(), but with all lowercase keys.'''
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
         )
-    
-        def test_repr(self):
-        assert repr(self.lookup_dict) == '<lookup 'test'>'
-    
-        def __init__(self, handler=None, host='localhost', port=0, requests_to_handle=1, wait_to_close_event=None):
-        super(Server, self).__init__()
-    
-                if files:
-                raise NotImplementedError('Streamed bodies and files are mutually exclusive.')
-    
-        def update_origin_access_identity(self, caller_reference, comment, origin_access_identity_id, e_tag):
-        changed = False
-        new_config = {
-            'CallerReference': caller_reference,
-            'Comment': comment
-        }
-    
-        argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            image_ids=dict(default=[], type='list', aliases=['image_id']),
-            filters=dict(default={}, type='dict'),
-            owners=dict(default=[], type='list', aliases=['owner']),
-            executable_users=dict(default=[], type='list', aliases=['executable_user']),
-            describe_image_attributes=dict(default=False, type='bool')
-        )
-    )
+        g.db.row_factory = sqlite3.Row
     
     
-if __name__ == '__main__':
-    main()
-
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    
-DOCUMENTATION = '''
----
-module: elb_classic_lb_facts
-short_description: Gather facts about EC2 Elastic Load Balancers in AWS
-description:
-    - Gather facts about EC2 Elastic Load Balancers in AWS
-version_added: '2.0'
-author:
-  - 'Michael Schultz (github.com/mjschultz)'
-  - 'Fernando Jose Pando (@nand0p)'
-options:
-  names:
-    description:
-      - List of ELB names to gather facts about. Pass this option to gather facts about a set of ELBs, otherwise, all ELBs are returned.
-    aliases: ['elb_ids', 'ec2_elbs']
-extends_documentation_fragment:
-    - aws
-    - ec2
-requirements:
-  - botocore
-  - boto3
-'''
-    
-    # describe all roles matching a path prefix
-- iam_role_facts:
-    path_prefix: /application/path
-'''
-    
-        def report_not_exist(self, appid, ip):
-        self.logger.debug('report_not_exist:%s %s', appid, ip)
-        th = threading.Thread(target=self.process_appid_not_exist, args=(appid, ip))
-        th.start()
-    
-    
-def best_server(probe_nat=False):
-    best_server = None
-    prober = new_pteredor(probe_nat=probe_nat)
-    prober.qualified = True
-    if not probe_nat:
-        prober.nat_type = 'unknown'
-        prober.rs_cone_flag = 0
-    
-        def __init__(self, logger):
-        self.logger = logger
-    
-    URLFETCH_MAX = 2
-URLFETCH_MAXSIZE = 4*1024*1024
-URLFETCH_DEFLATE_MAXSIZE = 4*1024*1024
-URLFETCH_TIMEOUT = 60
-    
-        def __str__(self):
-        #return 'MismatchedTokenException('+self.expecting+')'
-        return 'MismatchedTokenException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
-    
-        def setInputStream(self, input):
-        pass
-    
-    def download_pdf(link, location, name):
+# Certain versions of pypy have a bug where clearing the exception stack
+# breaks the __exit__ function in a very peculiar way.  The second level of
+# exception blocks is necessary because pypy seems to forget to check if an
+# exception happened until the next bytecode instruction?
+#
+# Relevant PyPy bugfix commit:
+# https://bitbucket.org/pypy/pypy/commits/77ecf91c635a287e88e60d8ddb0f4e9df4003301
+# According to ronan on #pypy IRC, it is released in PyPy2 2.3 and later
+# versions.
+#
+# Ubuntu 14.04 has PyPy 2.2.1, which does exhibit this bug.
+BROKEN_PYPY_CTXMGR_EXIT = False
+if hasattr(sys, 'pypy_version_info'):
+    class _Mgr(object):
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            if hasattr(sys, 'exc_clear'):
+                # Python 3 (PyPy3) doesn't have exc_clear
+                sys.exc_clear()
     try:
-        response = requests.get(link)
-        with open(os.path.join(location, name), 'wb') as f:
-        	f.write(response.content)
-        	f.close()
-    except HTTPError:
-        print('>>> Error 404: cannot be downloaded!\n') 
-        raise   
-    except socket.timeout:
-        print(' '.join(('can't download', link, 'due to connection timeout!')) )
-        raise
+        try:
+            with _Mgr():
+                raise AssertionError()
+        except:
+            raise
+    except TypeError:
+        BROKEN_PYPY_CTXMGR_EXIT = True
+    except AssertionError:
+        pass
+
+    
+        assert (
+        not (base_url or subdomain or url_scheme)
+        or (base_url is not None) != bool(subdomain or url_scheme)
+    ), 'Cannot pass 'subdomain' or 'url_scheme' with 'base_url'.'
+    
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
+    
+        def __call__(self, func):
+        # Note that we are intentionally not using @wraps here for performance
+        # reasons. Refs #21109.
+        def inner(*args, **kwargs):
+            with self:
+                return func(*args, **kwargs)
+        return inner
+    
+            self.assertEqual(jws, JWS.from_json(jws.to_json()))
+    
+        # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
+    
+    csr = OpenSSL.crypto.load_certificate_request(
+    OpenSSL.crypto.FILETYPE_ASN1, pkg_resources.resource_string(
+        'acme', os.path.join('testdata', 'csr.der')))
+try:
+    acme.request_issuance(jose.util.ComparableX509(csr), (authzr,))
+except messages.Error as error:
+    print ('This script is doomed to fail as no authorization '
+           'challenges are ever solved. Error from server: {0}'.format(error))
+
+    
+        After removing '/files', this function splits vhost_path into the
+    file path and the remaining Augeas path.
+    
+        def test_ne(self):
+        self.assertTrue(self.vhost1 != self.vhost2)
+        self.assertFalse(self.vhost1 != self.vhost1b)
+    
+        Include {ssl_options_conf_path}
+    SSLCertificateFile {cert_path}
+    SSLCertificateKeyFile {key_path}
+    
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+            if not title:
+            self.title = vid
+    
+        return video_dict
+    
+    
+def download_url(url, merge, output_dir, title, info_only):
+    mime, ext, size = url_info(url)
+    print_info(site_info, title, mime, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
+    
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
+    
+    	type, ext, size = url_info(url)
+	print_info(site_info, title, type, size)
+	
+	if not info_only:
+		download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+    yinyuetai_embed_patterns = [ 'player\.yinyuetai\.com/video/swf/(\d+)' ]
+    
+    from ..common import *
+import json
+import random
+from urllib.parse import urlparse, parse_qs
