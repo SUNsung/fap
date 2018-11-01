@@ -1,190 +1,104 @@
 
         
-        def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
+                    if placeholder_required?(html_options)
+              raise ArgumentError, 'include_blank cannot be false for a required field.' if options[:include_blank] == false
+              options[:include_blank] ||= true unless options[:prompt]
+            end
     
-      all_files       = `git ls-files -z`.split('\x0')
-  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
-  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
-  s.bindir        = 'exe'
-  s.require_paths = ['lib']
-    
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
-        # rubocop:enable Metrics/AbcSize
+    
+          # Specify the layout to use for this class.
+      #
+      # If the specified layout is a:
+      # String:: the String is the template name
+      # Symbol:: call the method specified by the symbol
+      # Proc::   call the passed Proc
+      # false::  There is no layout
+      # true::   raise an ArgumentError
+      # nil::    Force default layout behavior with inheritance
+      #
+      # Return value of +Proc+ and +Symbol+ arguments should be +String+, +false+, +true+ or +nil+
+      # with the same meaning as described above.
+      # ==== Parameters
+      # * <tt>layout</tt> - The layout to use.
+      #
+      # ==== Options (conditions)
+      # * :only   - A list of actions to apply this layout to.
+      # * :except - Apply this layout to all actions but this one.
+      def layout(layout, conditions = {})
+        include LayoutConditions unless conditions.empty?
+    
+      gem 'danger'
+end
+    
+      autoload :AggregateTarget,           'cocoapods/target/aggregate_target'
+  autoload :Command,                   'cocoapods/command'
+  autoload :Deintegrator,              'cocoapods_deintegrate'
+  autoload :Executable,                'cocoapods/executable'
+  autoload :ExternalSources,           'cocoapods/external_sources'
+  autoload :Installer,                 'cocoapods/installer'
+  autoload :HooksManager,              'cocoapods/hooks_manager'
+  autoload :PodTarget,                 'cocoapods/target/pod_target'
+  autoload :Project,                   'cocoapods/project'
+  autoload :Resolver,                  'cocoapods/resolver'
+  autoload :Sandbox,                   'cocoapods/sandbox'
+  autoload :Target,                    'cocoapods/target'
+  autoload :Validator,                 'cocoapods/validator'
+    
+          super(argv)
+    ensure
+      UI.print_warnings
+    end
+    
+      gem.required_ruby_version = '>= 2.0'
+  gem.add_dependency 'airbrussh', '>= 1.0.0'
+  gem.add_dependency 'i18n'
+  gem.add_dependency 'rake', '>= 10.0.0'
+  gem.add_dependency 'sshkit', '>= 1.9.0'
+    
+        require 'capistrano/scm/#{scm_name}'
+    install_plugin #{built_in_scm_plugin_class_name}
+    
+            def lvalue(key)
+          key.to_s.chomp('=').to_sym
+        end
       end
     end
   end
 end
 
     
-        if f.keg_only?
-      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
-      unless Language::Python.in_sys_path?('python', keg_site_packages)
-        s = <<-EOS.undent
-          If you need Python to find bindings for this keg-only formula, run:
-            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
-        EOS
-        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
-      end
-      return s
-    end
+          private
     
-          open_dry_run_modal(agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('http://xkcd.com/')
-      end
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
+            def update
+          authorize! :update, @order, order_token
+          @address = find_address
     
-      it 'renders the import form' do
-    visit new_scenario_imports_path
-    expect(page).to have_text('Import a Public Scenario')
-  end
-    
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
-      end
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
-    
-        private
-    
-        def build_page(path)
-      response = request_one url_for(path)
-      result = handle_response(response)
-      yield result if block_given?
-      result
-    end
-    
-        def process_response?(response)
-      if response.error?
-        raise <<~ERROR
-          Error status code (#{response.code}): #{response.return_message}
-          #{response.url}
-          #{JSON.pretty_generate(response.headers).slice(2..-3)}
-        ERROR
-      elsif response.blank?
-        raise 'Empty response body: #{response.url}'
-      end
-    
-              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
-          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
-          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
-          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
-          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
-          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
-    
-      # add junk directories
-  attr_accessor :junk_directories
-    
-          dprint( ['RECV', phdr, stype, info].inspect )
-      case stype
-      when IAX_SUBTYPE_HANGUP
-        self.state = :hangup
-        self.client.send_ack(self)
-      when IAX_SUBTYPE_LAGRQ
-        # Lagrps echo the timestamp
-        self.client.send_lagrp(self, tstamp)
-      when IAX_SUBTYPE_ACK
-        # Nothing to do here
-      when IAX_SUBTYPE_PING
-        # Pongs echo the timestamp
-        self.client.send_pong(self, tstamp)
-      when IAX_SUBTYPE_PONG
-        self.client.send_ack(self)
-      else
-        dprint( ['RECV-QUEUE', phdr, stype, info].inspect )
-        self.queue.push( [phdr, stype, info ] )
-      end
-    
-              data = connection.get_once(length, timeout)
-          unless data && data.length == length
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
+              inventory_unit.transaction do
+            if inventory_unit.update_attributes(inventory_unit_params)
+              fire
+              render :show, status: 200
+            else
+              invalid_resource!(inventory_unit)
+            end
           end
+        end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos AuthorizationData data
-        # definition.
-        class AuthorizationData < Element
-          # @!attribute elements
-          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
-          #   @option [Integer] :type
-          #   @option [String] :data
-          attr_accessor :elements
+              if Spree::Cart::Update.call(order: @order, params: line_items_attributes).success?
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
     
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptionKey into an
-          # ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_value], 1, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
+            def new; end
     
-      gem 'bacon'
-  gem 'mocha'
-  gem 'mocha-on-bacon'
-  gem 'prettybacon'
-  gem 'webmock'
+              @line_item = Spree::Cart::AddItem.call(order: @order,
+                                                 variant: variant,
+                                                 quantity: quantity,
+                                                 options: { shipment: @shipment }).value
     
-    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
-    
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
-      end
-    end
-  end
-end
-
-    
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
-      end
+            private
