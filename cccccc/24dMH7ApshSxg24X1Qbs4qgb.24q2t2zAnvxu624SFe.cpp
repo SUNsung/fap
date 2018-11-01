@@ -1,216 +1,237 @@
 
         
-        
-    {  Corrupt(kTableFile, -2000, 500);
-  Reopen();
-  Check(5000, 9999);
-}
+          const Dtype* cpu_data() const;
+  void set_cpu_data(Dtype* data);
+  const int* gpu_shape() const;
+  const Dtype* gpu_data() const;
+  void set_gpu_data(Dtype* data);
+  const Dtype* cpu_diff() const;
+  const Dtype* gpu_diff() const;
+  Dtype* mutable_cpu_data();
+  Dtype* mutable_gpu_data();
+  Dtype* mutable_cpu_diff();
+  Dtype* mutable_gpu_diff();
+  void Update();
+  void FromProto(const BlobProto& proto, bool reshape = true);
+  void ToProto(BlobProto* proto, bool write_diff = false) const;
     
-    Status DBImpl::RecoverLogFile(uint64_t log_number, bool last_log,
-                              bool* save_manifest, VersionEdit* edit,
-                              SequenceNumber* max_sequence) {
-  struct LogReporter : public log::Reader::Reporter {
-    Env* env;
-    Logger* info_log;
-    const char* fname;
-    Status* status;  // null if options_.paranoid_checks==false
-    virtual void Corruption(size_t bytes, const Status& s) {
-      Log(info_log, '%s%s: dropping %d bytes; %s',
-          (this->status == nullptr ? '(ignoring error) ' : ''),
-          fname, static_cast<int>(bytes), s.ToString().c_str());
-      if (this->status != nullptr && this->status->ok()) *this->status = s;
+    /**
+ * Virtual class encapsulate boost::thread for use in base class
+ * The child class will acquire the ability to run a single thread,
+ * by reimplementing the virtual function InternalThreadEntry.
+ */
+class InternalThread {
+ public:
+  InternalThread() : thread_() {}
+  virtual ~InternalThread();
     }
-  };
+    
+    
+    {}  // namespace caffe
+    
+    /**
+ * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
+ *        'broadcast' to match the shape of the former. Equivalent to tiling
+ *        the latter Blob, then computing the elementwise sum.
+ *
+ * The second input may be omitted, in which case it's learned as a parameter
+ * of the layer. Note: in case bias and scaling are desired, both operations can
+ * be handled by `ScaleLayer` configured with `bias_term: true`.
+ */
+template <typename Dtype>
+class BiasLayer : public Layer<Dtype> {
+ public:
+  explicit BiasLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      // Compact the in-memory write buffer to disk.  Switches to a new
-  // log-file/memtable and writes a new descriptor iff successful.
-  // Errors are recorded in bg_error_.
-  void CompactMemTable() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-      const Comparator* user_comparator() const { return user_comparator_; }
-    
-      ASSERT_TRUE(ParseInternalKey(in, &decoded));
-  ASSERT_EQ(key, decoded.user_key.ToString());
-  ASSERT_EQ(seq, decoded.sequence);
-  ASSERT_EQ(vt, decoded.type);
-    
-    
-    {  ASSERT_EQ('correct', Read());
-  ASSERT_EQ('EOF', Read());
-  const size_t dropped = DroppedBytes();
-  ASSERT_LE(dropped, 2*kBlockSize + 100);
-  ASSERT_GE(dropped, 2*kBlockSize);
-}
-    
-        // Copy data.
-    Iterator* iter = NewTableIterator(t.meta);
-    int counter = 0;
-    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-      builder->Add(iter->key(), iter->value());
-      counter++;
+    namespace caffe {
     }
-    delete iter;
     
-    template BOOST_REGEX_DECL basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >& 
-   basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >::do_assign(
-      const BOOST_REGEX_CHAR_T* p1, 
-      const BOOST_REGEX_CHAR_T* p2, 
-      flag_type f);
-template BOOST_REGEX_DECL basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >::locale_type BOOST_REGEX_CALL 
-   basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >::imbue(locale_type l);
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
-    #ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
+    }
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    }
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
 #endif
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::unwind_assertion(bool r)
-{
-   saved_assertion<BidiIterator>* pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
-   pstate = pmp->pstate;
-   position = pmp->position;
-   bool result = (r == pmp->positive);
-   m_recursive_result = pmp->positive ? r : !r;
-   boost::BOOST_REGEX_DETAIL_NS::inplace_destroy(pmp++);
-   m_backup_state = pmp;
-   m_unwound_lookahead = true;
-   return !result; // return false if the assertion was matched to stop search.
+    void ChannelArguments::SetGrpclbFallbackTimeout(int fallback_timeout) {
+  SetInt(GRPC_ARG_GRPCLB_FALLBACK_TIMEOUT_MS, fallback_timeout);
 }
     
-    template <class T>
-bool concrete_protected_call<T>::call()const
-{
-   return (obj->*proc)();
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+}
+    
+    namespace grpc {
+    }
+    
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
+
+    
+    const ViewDescriptor& ClientCompletedRpcsCumulative() {
+  const static ViewDescriptor descriptor =
+      ViewDescriptor()
+          .set_name('grpc.io/client/completed_rpcs/cumulative')
+          .set_measure(kRpcClientRoundtripLatencyMeasureName)
+          .set_aggregation(Aggregation::Count())
+          .add_column(ClientMethodTagKey())
+          .add_column(ClientStatusTagKey());
+  return descriptor;
 }
     
     
+    {}  // namespace grpc
     
-    namespace detail {
-/*! \brief Implementation of gradient statistics pair. Template specialisation
- * may be used to overload different gradients types e.g. low precision, high
- * precision, integer, floating point. */
-template <typename T>
-class GradientPairInternal {
-  /*! \brief gradient statistics */
-  T grad_;
-  /*! \brief second order gradient statistics */
-  T hess_;
-    }
-    }
-    
-    // implementing configure.
-template<typename PairIter>
-inline void Learner::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
-    
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
-    }
-    
-      /**
-   * \brief Generate batch predictions for a given feature matrix. May use
-   * cached predictions if available instead of calculating from scratch.
-   *
-   * \param [in,out]  dmat        Feature matrix.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       The model to predict from.
-   * \param           tree_begin  The tree begin index.
-   * \param           ntree_limit (Optional) The ntree limit. 0 means do not
-   * limit trees.
-   */
-    
-     protected:
-  char GetChar() override {
-    return fin_.get();
+    bool ProtoServerReflectionPlugin::has_sync_methods() const {
+  if (reflection_service_) {
+    return reflection_service_->has_synchronous_methods();
   }
-  /*! \brief to be implemented by child, check if end of stream */
-  bool IsEnd() override {
-    return fin_.eof();
-  }
-    
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-    bool __CCCallFuncND::initWithTarget(Ref* selectorTarget, SEL_CallFuncND selector, void* d)
-{
-    if (CallFunc::initWithTarget(selectorTarget))
-    {
-        _data = d;
-        _callFuncND = selector;
-        return true;
-    }
-    
-    return false;
+  return false;
 }
     
     
-    {    delete action;
-    return nullptr;
+    {   const kmp_info<char_type>* info = access::get_kmp(re);
+   int len = info->len;
+   const char_type* x = info->pstr;
+   int j = 0; 
+   while (position != last) 
+   {
+      while((j > -1) && (x[j] != traits_inst.translate(*position, icase))) 
+         j = info->kmp_next[j];
+      ++position;
+      ++j;
+      if(j >= len) 
+      {
+         if(type == regbase::restart_fixed_lit)
+         {
+            std::advance(position, -j);
+            restart = position;
+            std::advance(restart, len);
+            m_result.set_first(position);
+            m_result.set_second(restart);
+            position = restart;
+            return true;
+         }
+         else
+         {
+            restart = position;
+            std::advance(position, -j);
+            if(match_prefix())
+               return true;
+            else
+            {
+               for(int k = 0; (restart != position) && (k < j); ++k, --restart)
+                     {} // dwa 10/20/2000 - warning suppression for MWCW
+               if(restart != last)
+                  ++restart;
+               position = restart;
+               j = 0;  //we could do better than this...
+            }
+         }
+      }
+   }
+   if((m_match_flags & match_partial) && (position == last) && j)
+   {
+      // we need to check for a partial match:
+      restart = position;
+      std::advance(position, -j);
+      return match_prefix();
+   }
+#endif
+   return false;
 }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
     
-        /** 
-     * @brief Initializes with a duration and destination percentage. 
-     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
-     * @param percent Specify the destination percentage.
-     * @return If the creation success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, float percent);
-    
-    // implementation of ShatteredTiles3D
-    
-     Another example: ScaleTo action could be rewritten using PropertyAction:
-    
-    // implementation of Animation
-    
-    bool AnimationCache::init()
-{
-    return true;
+    {   if(!result)
+   {
+      next_count = recursion_stack.back().repeater_stack;
+      *m_presult = recursion_stack.back().results;
+      recursion_stack.pop_back();
+      return false;
+   }
+   return true;
 }
+    
+    
+    {} // namespace boost
+#ifndef BOOST_REGEX_MATCH_HPP
+#include <boost/regex/v4/regex_match.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_SEARCH_HPP
+#include <boost/regex/v4/regex_search.hpp>
+#endif
+#ifndef BOOST_REGEX_ITERATOR_HPP
+#include <boost/regex/v4/regex_iterator.hpp>
+#endif
+#ifndef BOOST_REGEX_TOKEN_ITERATOR_HPP
+#include <boost/regex/v4/regex_token_iterator.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_GREP_HPP
+#include <boost/regex/v4/regex_grep.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_REPLACE_HPP
+#include <boost/regex/v4/regex_replace.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_MERGE_HPP
+#include <boost/regex/v4/regex_merge.hpp>
+#endif
+#ifndef BOOST_REGEX_SPLIT_HPP
+#include <boost/regex/v4/regex_split.hpp>
+#endif
+    
+    //
+// Forward declaration:
+//
+   template <class BidiIterator, class Allocator = BOOST_DEDUCED_TYPENAME std::vector<sub_match<BidiIterator> >::allocator_type >
+class match_results;
+    
+       pimpl pdata;
