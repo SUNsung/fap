@@ -1,271 +1,137 @@
 
         
-            def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
-
+            def append_to_front(self, node):
+        pass
     
-        response_iterator = paginator.paginate(
-        PaginationConfig={
-            'MaxItems': 1000,
-            'PageSize': 100
-        }
-    )
+        def can_fit_vehicle(self, vehicle):
+        if self.vehicle is not None:
+            return False
+        return vehicle.can_fit_in_spot(self)
+    
+        HOUSING = 0
+    FOOD = 1
+    GAS = 2
+    SHOPPING = 3
+    # ...
     
     
-RETURN = '''
-placement_groups:
-  description: Placement group attributes
-  returned: always
-  type: complex
-  contains:
-    name:
-      description: PG name
-      type: string
-      sample: my-cluster
-    state:
-      description: PG state
-      type: string
-      sample: 'available'
-    strategy:
-      description: PG strategy
-      type: string
-      sample: 'cluster'
+def plot_lfads(train_bxtxd, train_model_vals,
+               train_ext_input_bxtxi=None, train_truth_bxtxd=None,
+               valid_bxtxd=None, valid_model_vals=None,
+               valid_ext_input_bxtxi=None, valid_truth_bxtxd=None,
+               bidx=None, cf=1.0, output_dist='poisson'):
     
-        ecr = EcsEcr(module)
-    passed, result = run(ecr, module.params, module._verbosity)
+    # add train_ext_input and valid_ext input
+data = {'train_truth': rates_train,
+        'valid_truth': rates_valid,
+        'train_data' : spikes_train,
+        'valid_data' : spikes_valid,
+        'train_ext_input' : np.array(ext_input_train),
+        'valid_ext_input': np.array(ext_input_valid),
+        'train_percentage' : train_percentage,
+        'nreplications' : nreplications,
+        'dt' : FLAGS.dt,
+        'P_sxn' : P_nxn,
+        'condition_labels_train' : condition_labels_train,
+        'condition_labels_valid' : condition_labels_valid,
+        'conversion_factor': 1.0 / rnn_a['conversion_factor']}
     
-    requirements: [ json, botocore, boto3 ]
-options:
-    state:
-        description:
-          - The desired state of the service
-        required: true
-        choices: ['present', 'absent', 'deleting']
-    name:
-        description:
-          - The name of the service
-        required: true
-    cluster:
-        description:
-          - The name of the cluster in which the service exists
-        required: false
-    task_definition:
-        description:
-          - The task definition the service will run. This parameter is required when state=present
-        required: false
-    load_balancers:
-        description:
-          - The list of ELBs defined for this service
-        required: false
-    desired_count:
-        description:
-          - The count of how many instances of the service. This parameter is required when state=present
-        required: false
-    client_token:
-        description:
-          - Unique, case-sensitive identifier you provide to ensure the idempotency of the request. Up to 32 ASCII characters are allowed.
-        required: false
-    role:
-        description:
-          - The name or full Amazon Resource Name (ARN) of the IAM role that allows your Amazon ECS container agent to make calls to your load balancer
-            on your behalf. This parameter is only required if you are using a load balancer with your service, in a network mode other than `awsvpc`.
-        required: false
-    delay:
-        description:
-          - The time to wait before checking that the service is available
-        required: false
-        default: 10
-    repeat:
-        description:
-          - The number of times to check that the service is available
-        required: false
-        default: 10
-    deployment_configuration:
-        description:
-          - Optional parameters that control the deployment_configuration; format is '{'maximum_percent':<integer>, 'minimum_healthy_percent':<integer>}
-        required: false
-        version_added: 2.3
-    placement_constraints:
-        description:
-          - The placement constraints for the tasks in the service
-        required: false
-        version_added: 2.4
-    placement_strategy:
-        description:
-          - The placement strategy objects to use for tasks in your service. You can specify a maximum of 5 strategy rules per service
-        required: false
-        version_added: 2.4
-    network_configuration:
-        description:
-          - network configuration of the service. Only applicable for task definitions created with C(awsvpc) I(network_mode).
-          - assign_public_ip requires botocore >= 1.8.4
-        suboptions:
-          subnets:
-            description:
-              - A list of subnet IDs to associate with the task
-            version_added: 2.6
-          security_groups:
-            description:
-              - A list of security group names or group IDs to associate with the task
-            version_added: 2.6
-          assign_public_ip:
-            description:
-              - Whether the task's elastic network interface receives a public IP address. This option requires botocore >= 1.8.4.
-            type: bool
-            version_added: 2.7
-    launch_type:
-        description:
-          - The launch type on which to run your service
-        required: false
-        version_added: 2.7
-        choices: ['EC2', 'FARGATE']
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
+              eval_feed = {model.inputs: x, model.targets: y, model.present: p}
+    
+      ## Encoder forward variables.
+  if not FLAGS.seq2seq_share_embedding:
+    encoder_embedding = [
+        v for v in tf.trainable_variables()
+        if v.op.name == 'gen/encoder/rnn/embedding'
+    ][0]
+  encoder_lstm_w_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  encoder_lstm_b_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  encoder_lstm_w_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  encoder_lstm_b_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
+    
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.linkextractors import LinkExtractor
+    
+            self.crawler_process.crawl(spname, **opts.spargs)
+        self.crawler_process.start()
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
+    
+                # trustRoot set to platformTrust() will use the platform's root CAs.
+            #
+            # This means that a website like https://www.cacert.org will be rejected
+            # by default, since CAcert.org CA certificate is seldom shipped.
+            return optionsForClientTLS(hostname.decode('ascii'),
+                                       trustRoot=platformTrust(),
+                                       extraCertificateOptions={
+                                            'method': self._ssl_method,
+                                       })
+    
+        def _get_handler(self, scheme):
+        '''Lazy-load the downloadhandler for a scheme
+        only on the first request for that scheme.
+        '''
+        if scheme in self._handlers:
+            return self._handlers[scheme]
+        if scheme in self._notconfigured:
+            return None
+        if scheme not in self._schemes:
+            self._notconfigured[scheme] = 'no handler available for that scheme'
+            return None
+    
+    *References:
+http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
+https://fkromer.github.io/python-pattern-references/design/#factory-method
+https://sourcemaking.com/design_patterns/factory_method
     
     
-def get_tags(connection, load_balancer_name):
-    tags = connection.describe_tags(LoadBalancerNames=[load_balancer_name])['TagDescriptions']
-    if not tags:
-        return {}
-    return boto3_tag_list_to_ansible_dict(tags[0]['Tags'])
+class CatalogClass(object):
     
-    # Read lines from the linkcheck output file
-try:
-    with open('build/linkcheck/output.txt') as out:
-        output_lines = out.readlines()
-except IOError:
-    print('linkcheck output not found; please run linkcheck first.')
-    exit(1)
+        def scan(self):
+        '''Scan the dial to the next station'''
+        self.pos += 1
+        if self.pos == len(self.stations):
+            self.pos = 0
+        print(u'Scanning... Station is %s %s' % (self.stations[self.pos], self.name))
     
-    # Ignore noisy twisted deprecation warnings
-import warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning, module='twisted')
-del warnings
+    # Execute them
+for template in templates:
+    template()
     
-                if depth < opts.depth:
-                for req in requests:
-                    req.meta['_depth'] = depth + 1
-                    req.meta['_callback'] = req.callback
-                    req.callback = callback
-                return requests
+        sample_queue.put('sam')
+    test_object(sample_queue)
+    print('Outside func: {}'.format(sample_queue.get()))
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.shell import Shell
-from scrapy.http import Request
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
-from scrapy.utils.url import guess_scheme
     
-            e.g.:
-        @returns request
-        @returns request 2
-        @returns request 2 10
-        @returns request 0 10
+class MidnightTimeProvider(object):
+    '''
+    Class implemented as hard-coded stub (in contrast to configurable stub).
     '''
     
-    DIR_OF_THIS_SCRIPT = p.dirname( p.abspath( __file__ ) )
-DIR_OF_OLD_LIBS = p.join( DIR_OF_THIS_SCRIPT, 'python' )
-    
-        if not self._response_future.done():
-      # Nothing yet...
-      return True
-    
-    
-def EndsWithPython_Python3Paths_test():
-  python_paths = [
-    'python3',
-    '/usr/bin/python3.4',
-    '/home/user/.pyenv/shims/python3.4',
-    r'C:\Python34\python.exe'
-  ]
-    
-    
-def ExtractKeywordsFromGroup_KeywordAssign_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'nextgroup=zoo skipwhite foo bar',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-    from concurrent.futures import _base
-    
-    
-def ParseArguments():
-  parser = argparse.ArgumentParser()
-  parser.add_argument( '--skip-build', action = 'store_true',
-                       help = 'Do not build ycmd before testing' )
-  parser.add_argument( '--coverage', action = 'store_true',
-                       help = 'Enable coverage report' )
-  parser.add_argument( '--no-flake8', action = 'store_true',
-                       help = 'Do not run flake8' )
-    
-    
-class BaseRegisteredClass(object):
-    __metaclass__ = RegistryHolder
-    '''
-        Any class that will inherits from BaseRegisteredClass will be included
-        inside the dict RegistryHolder.REGISTRY, the key being the name of the
-        class and the associated value, the class itself.
-    '''
-    pass
-    
-    
-class FmState(State):
-    def __init__(self, radio):
-        self.radio = radio
-        self.stations = ['81.3', '89.1', '103.9']
-        self.pos = 0
-        self.name = 'FM'
-    
-        return _lazy_property
-    
-    AXIS_DEFAULT_HOST = '192.168.0.90'
-AXIS_DEFAULT_USERNAME = 'root'
-AXIS_DEFAULT_PASSWORD = 'pass'
-    
-    
-AWS_EXCEPTIONS = {
-    'UserNotFoundException': UserNotFound,
-    'NotAuthorizedException': Unauthenticated,
-    'UserNotConfirmedException': UserNotConfirmed,
-    'PasswordResetRequiredException': PasswordChangeRequired,
-}
-    
-                    name = None
-                for prop in device['properties']:
-                    if prop['name'] == 'userDeviceName':
-                        name = prop['value']
-                if not name:
-                    name = device.get('friendlyName', device['deviceID'])
-    
-    _LOGGER = logging.getLogger(__name__)
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/dominos/.
-'''
-import logging
-from datetime import timedelta
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_NAME): cv.string,
-        vol.Required(CONF_WHITELIST, default=[]):
-            vol.All(cv.ensure_list, [cv.entity_id]),
-    }),
-}, extra=vol.ALLOW_EXTRA)
-    
-        def stop(self):
-        '''Stop the server.'''
-        # Request for server
-        self._interrupted = True
-        self.join()
+        def now(self):
+        current_time_is_always_midnight = '24:01'
+        return current_time_is_always_midnight
