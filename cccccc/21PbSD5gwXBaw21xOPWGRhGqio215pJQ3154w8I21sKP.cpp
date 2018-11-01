@@ -1,130 +1,155 @@
 
         
-        
-    {    buf = buf.substr(info.bytes);
+          // Rounds the size up to a multiple of the input register size (in int8_t).
+  int RoundInputs(int size) const {
+    return Roundup(size, num_inputs_per_register_);
+  }
+  // Rounds the size up to a multiple of the output register size (in int32_t).
+  int RoundOutputs(int size) const {
+    return Roundup(size, num_outputs_per_register_);
   }
     
+    // Helper method to convert an orientation index to its value in degrees.
+// The value represents the amount of clockwise rotation in degrees that must be
+// applied for the text to be upright (readable).
+TESS_API int OrientationIdToValue(const int& id);
     
-    {  for (auto Entry : DCache.Entries) {
-    DCache.CBs.keyDestroyCB(Entry.first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry.second, nullptr);
+      /**
+   * Page/ResultIterators may be copied! This makes it possible to iterate over
+   * all the objects at a lower level, while maintaining an iterator to
+   * objects at a higher level. These constructors DO NOT CALL Begin, so
+   * iterations will continue from the location of src.
+   */
+  PageIterator(const PageIterator& src);
+  const PageIterator& operator=(const PageIterator& src);
+    
+    namespace tesseract {
+    }
+    
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
+    }
+    
+    #include 'elst.h'        // for ELIST_ITERATOR, ELISTIZEH, ELIST_LINK
+#include 'scrollview.h'  // for ScrollView (ptr only), SVEvent (ptr only)
+#include 'strngs.h'      // for STRING
+    
+    
+/**********************************************************************
+ * recog_word_recursive
+ *
+ * Convert the word to tess form and pass it to the tess segmenter.
+ * Convert the output back to editor form.
+ **********************************************************************/
+void Tesseract::recog_word_recursive(WERD_RES *word) {
+  int word_length = word->chopped_word->NumBlobs();  // no of blobs
+  if (word_length > MAX_UNDIVIDED_LENGTH) {
+    return split_and_recog_word(word);
   }
-  DCache.Entries.clear();
+  cc_recog(word);
+  word_length = word->rebuild_word->NumBlobs();  // No of blobs in output.
+    }
+    
+      AuthPropertyIterator begin() const override;
+    
+    // A CallData class will be created for every grpc call within a channel. It is
+// used to store data and methods specific to that call. CensusClientCallData is
+// thread-compatible, however typically only 1 thread should be interacting with
+// a call at a time.
+class CensusClientCallData : public CallData {
+ public:
+  // Maximum size of trace context is sent on the wire.
+  static constexpr uint32_t kMaxTraceContextLen = 64;
+  // Maximum size of tags that are sent on the wire.
+  static constexpr uint32_t kMaxTagsLen = 2048;
+    }
+    
+    #include <grpc/support/port_platform.h>
+    
+    #include <unordered_set>
+#include <vector>
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetInt(name_, value_);
+    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    /** @class RemoveSelf
+* @brief Remove the node.
+*/
+class CC_DLL RemoveSelf : public ActionInstant
+{
+public:
+    /** Create the action.
+     *
+     * @param isNeedCleanUp Is need to clean up, the default value is true.
+     * @return An autoreleased RemoveSelf object.
+     */
+    static RemoveSelf * create(bool isNeedCleanUp = true);
+    }
+    
+    /**
+@brief Progress to percentage.
+@details This action show the target node from current percentage to the specified percentage.
+        You should specify the destination percentage when creating the action.
+@since v0.99.1
+*/
+class CC_DLL ProgressTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes with a duration and a destination percentage.
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
+     */
+    static ProgressTo* create(float duration, float percent);
+    }
+    
+     @code
+     // scaleA and scaleB are equivalents
+     auto scaleA = ScaleTo::create(2, 3);                 // (duration, to)
+     auto scaleB = ActionTween::create(2, 'scale', 1, 3); // (duration, key, from, to)
+ @endcode
+    
+        /** Adds an animation from an NSDictionary.
+     * Make sure that the frames were previously loaded in the SpriteFrameCache.
+     * @param dictionary An NSDictionary.
+     * @param plist The path of the relative file,it use to find the plist path for load SpriteFrames.
+     * @since v1.1
+	 @js NA
+     */
+    void addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist);
+    
+    AtlasNode::AtlasNode()
+: _itemsPerRow(0)
+, _itemsPerColumn(0)
+, _itemWidth(0)
+, _itemHeight(0)
+, _textureAtlas(nullptr)
+, _isOpacityModifyRGB(false)
+, _quadsToDraw(0)
+, _uniformColor(0)
+, _ignoreContentScaleFactor(false)
+{
 }
     
-      if (UnsupportedOS || UnsupportedArch)
-    return { UnsupportedOS, UnsupportedArch };
-    
-        // Special case: if the word in the name ends in 's', and we have
-    // a collection element type, see if this is a plural.
-    if (!typeName.CollectionElement.empty() && nameWord.size() > 2 &&
-        nameWord.back() == 's' && role != NameRole::BaseNameSelf) {
-      // Check <element name>s.
-      auto shortenedNameWord
-        = name.substr(0, nameWordRevIter.base().getPosition()-1);
-      auto newShortenedNameWord
-        = omitNeedlessWords(shortenedNameWord, typeName.CollectionElement,
-                            NameRole::Partial, allPropertyNames, scratch);
-      if (shortenedNameWord == newShortenedNameWord &&
-          shortenedNameWord.back() == 'e') {
-        (void)shortenedNameWord.drop_back();
-        newShortenedNameWord =
-          omitNeedlessWords(shortenedNameWord, typeName.CollectionElement,
-                            NameRole::Partial, allPropertyNames, scratch);
-      }
-    }
-    
-    
-    {    return name;
-  }
-    
-    
-    {        if (uniqueParameters.size() != parameters.size())
-            InvalidArgument('Learner's parameters list must not contain duplicates.');
-    }
-    
-        protected:
-    
-    namespace CNTK
-{
-    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
-    {
-        auto matrixDims = GetMatrixDimensions(viewShape);
-        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
-    }
-    }
-    
-    namespace
-{
-    const std::wstring versionPropertyName = L'Version';
-    const std::wstring learnersPropertyName = L'Learners';
-    const std::wstring externalStatePropertyName = L'ExternalState';
-    const std::wstring distributedStatePropertyName = L'DistributedState';
-    }
-    
-            VariableFields(const NDShape& shape, VariableKind varType, ::CNTK::DataType type, const std::weak_ptr<Function>& ownerFunction, const NDArrayViewPtr& value, bool needsGradient, const std::vector<Axis>& dynamicAxes, bool isSparse, const std::wstring& name, const std::wstring& uid)
-            : m_shape(shape), m_varKind(varType), m_dataType(type), m_ownerFunction(ownerFunction), m_value(value), m_needsGradient(needsGradient), m_dynamicAxes(dynamicAxes), m_isSparse(isSparse), m_name(name), m_uid(uid), m_valueTimeStamp(0)
-        {
-            if (value && (type != value->GetDataType()))
-                InvalidArgument('The DataType of the Parameter/Constant Variable '%S' does not match the DataType of the associated Value', AsString().c_str());
-    }
-    
-    
-    {/*!
- * \brief define compatible keywords in g++
- *  Used to support g++-4.6 and g++4.7
- */
-#if DMLC_USE_CXX11 && defined(__GNUC__) && !defined(__clang_version__)
-#if __GNUC__ == 4 && __GNUC_MINOR__ < 8
-#define override
-#define final
-#endif
-#endif
-}  // namespace xgboost
-#endif  // XGBOOST_BASE_H_
-
-    
-    
-    {#define XGBOOST_REGISTER_PREDICTOR(UniqueId, Name)      \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::PredictorReg& \
-      __make_##PredictorReg##_##UniqueId##__ =          \
-          ::dmlc::Registry<::xgboost::PredictorReg>::Get()->__REGISTER__(Name)
-}  // namespace xgboost
-
-    
-    /*!
- * \brief an iterator that iterates over a configure file and gets the configures
- */
-class ConfigIterator: public ConfigStreamReader {
- public:
-  /*!
-   * \brief constructor
-   * \param fname name of configure file
-   */
-  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi_) {
-    fi_.open(fname);
-    if (fi_.fail()) {
-      LOG(FATAL) << 'cannot open file ' << fname;
-    }
-    ConfigReaderBase::Init();
-  }
-  /*! \brief destructor */
-  ~ConfigIterator() {
-    fi_.close();
-  }
-    }
-    
-        const size_t* begin = dmlc::BeginPtr(row_indices_);
-    const size_t* end = dmlc::BeginPtr(row_indices_) + row_indices_.size();
-    elem_of_each_node_.emplace_back(Elem(begin, end, 0));
-  }
-  // split rowset into two
-  inline void AddSplit(unsigned node_id,
-                       const std::vector<Split>& row_split_tloc,
-                       unsigned left_node_id,
-                       unsigned right_node_id) {
-    const Elem e = elem_of_each_node_[node_id];
-    const auto nthread = static_cast<bst_omp_uint>(row_split_tloc.size());
-    CHECK(e.begin != nullptr);
-    size_t* all_begin = dmlc::BeginPtr(row_indices_);
-    size_t* begin = all_begin + (e.begin - all_begin);
+    http://www.cocos2d-x.org
