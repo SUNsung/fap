@@ -1,115 +1,184 @@
 
         
-            def __init__(self, employee_id, name):
-        super(Operator, self).__init__(employee_id, name, Rank.DIRECTOR)
+                with open(self.srcPath, 'rb') as src:
+            shutil.copyfileobj(src, self.handler.wfile)
+    
+        for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
+    
+        classifiers=[
+        'Topic :: Multimedia :: Video',
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'License :: Public Domain',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
     
     
-if __name__ == '__main__':
-    SpendingByCategory.run()
+md5 = lambda s: hashlib.md5(s.encode('utf-8')).hexdigest()
+    
+    
+class TestIE(InfoExtractor):
+    pass
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+        def test_youtube_playlist_matching(self):
+        assertPlaylist = lambda url: self.assertMatch(url, ['youtube:playlist'])
+        assertPlaylist('ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
+        assertPlaylist('UUBABnxM4Ar9ten8Mdjj1j0Q')  # 585
+        assertPlaylist('PL63F0C78739B09958')
+        assertPlaylist('https://www.youtube.com/playlist?list=UUBABnxM4Ar9ten8Mdjj1j0Q')
+        assertPlaylist('https://www.youtube.com/course?list=ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
+        assertPlaylist('https://www.youtube.com/playlist?list=PLwP_SiAcdui0KVebT0mU9Apz359a4ubsC')
+        assertPlaylist('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012')  # 668
+        self.assertFalse('youtube:playlist' in self.matching_ies('PLtS2H6bU1M'))
+        # Top tracks
+        assertPlaylist('https://www.youtube.com/playlist?list=MCUS.20142101')
+    
+    
+@bp.route('/login', methods=('GET', 'POST'))
+def login():
+    '''Log in a registered user by adding the user id to the session.'''
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
+    
+    
+@bp.route('/create', methods=('GET', 'POST'))
+@login_required
+def create():
+    '''Create a new post for the current user.'''
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+    
+    
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)
 
     
-    The VAE has a modular design. The encoder, decoder and VAE
-are 3 models that share weights. After training the VAE model,
-the encoder can be used to  generate latent vectors.
-The decoder can be used to generate MNIST digits by sampling the
-latent vector from a Gaussian distribution with mean=0 and std=1.
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+def with_metaclass(meta, *bases):
+    '''Create a base class with a metaclass.'''
+    # This requires a bit of explanation: the basic idea is to make a
+    # dummy metaclass for one level of class instantiation that replaces
+    # itself with the actual metaclass.
+    class metaclass(type):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+    return type.__new__(metaclass, 'temporary_class', (), {})
+    
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
+    
+        def check(self, value):
+        return isinstance(value, UUID)
+    
+        If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
     '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
-    
-            from tensorflow.contrib.cudnn_rnn.python.ops import cudnn_rnn_ops
-        self._cudnn_gru = cudnn_rnn_ops.CudnnGRU(
-            num_layers=1,
-            num_units=self.units,
-            input_size=input_dim,
-            input_mode='linear_input')
+    return request.environ['wsgi.errors'] if request else sys.stderr
     
     
-def binary_accuracy(y_true, y_pred):
-    return K.mean(K.equal(y_true, K.round(y_pred)), axis=-1)
+class SessionMixin(MutableMapping):
+    '''Expands a basic dictionary with session attributes.'''
     
-                # Get or create layer.
-            if layer not in layer_map:
-                # Clone layer.
-                new_layer = layer.__class__.from_config(layer.get_config())
-                layer_map[layer] = new_layer
-                layer = new_layer
-            else:
-                # Reuse previously cloned layer.
-                layer = layer_map[layer]
-                # Don't call InputLayer multiple times.
-                if isinstance(layer, InputLayer):
-                    continue
+    signals_available = False
+try:
+    from blinker import Namespace
+    signals_available = True
+except ImportError:
+    class Namespace(object):
+        def signal(self, name, doc=None):
+            return _FakeSignal(name, doc)
+    
+            if subdomain:
+            http_host = '{0}.{1}'.format(subdomain, http_host)
     
     
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'echo test')
     
-        n_features = 10
-    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
-                                            [n_features], precompute=True)
+    Commands:
+   update - Retrieve new lists of packages
+   upgrade - Perform an upgrade
+   install - Install new packages (pkg is libc6 not libc6.deb)
+   remove - Remove packages
+   autoremove - Remove automatically all unused packages
+   purge - Remove packages and config files
+   source - Download source archives
+   build-dep - Configure build-dependencies for source packages
+   dist-upgrade - Distribution upgrade, see apt-get(8)
+   dselect-upgrade - Follow dselect selections
+   clean - Erase downloaded archive files
+   autoclean - Erase old downloaded archive files
+   check - Verify that there are no broken dependencies
+   changelog - Download and display the changelog for the given package
+   download - Download the binary package into the current directory
     
-    from time import time
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.metrics import roc_curve, auc
-from sklearn.datasets import fetch_kddcup99, fetch_covtype, fetch_mldata
-from sklearn.preprocessing import LabelBinarizer
+      # Last ditch effort to avoid multi-line comments.  This will not help
+  # if the comment started before the current line or ended after the
+  # current line, but it catches most of the false positives.  At least,
+  # it provides a way to workaround this warning for people who use
+  # multi-line comments in preprocessor macros.
+  #
+  # TODO(unknown): remove this once cpplint has better support for
+  # multi-line comments.
+  if line.find('/*') >= 0 or line.find('*/') >= 0:
+    return
     
-    from sklearn.linear_model import lars_path
-from sklearn.linear_model import lasso_path
-from sklearn.datasets.samples_generator import make_regression
+    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
     
-        if enable_spectral_norm:
-        title = '%s: spectral norm diff vs running time' % (dataset_name)
-        plot_time_vs_s(all_time, all_spectral, power_iter, title)
-    title = '%s: Frobenius norm diff vs running time' % (dataset_name)
-    plot_time_vs_s(all_time, all_frobenius, power_iter, title)
     
-    import time
+def is_semver_like(version):
+    return bool(re.match(r'([a-z]*)(\-)?v?(?:\d+\.)*\d+', version))
     
-    from docutils import nodes, utils
-from sphinx.util.nodes import split_explicit_title
+        def backwards(self, orm):
+        # Removing unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.delete_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
     
             # Changing field 'Environment.organization_id'
         db.alter_column(
-            'sentry_environment', 'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+            'sentry_environment',
+            'organization_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
         )
     
-            # Adding unique constraint on 'ReprocessingReport', fields ['project', 'event_id']
-        db.create_unique('sentry_reprocessingreport', ['project_id', 'event_id'])
-    
-                try:
-                with transaction.atomic():
-                    orm.EnvironmentProject.objects.filter(
-                        environment__in=from_envs,
-                    ).update(environment=to_env)
-            except IntegrityError:
-                for ep in orm.EnvironmentProject.objects.filter(environment__in=from_envs):
-                    try:
-                        with transaction.atomic():
-                            orm.EnvironmentProject.objects.filter(
-                                id=ep.id,
-                            ).update(environment=to_env)
-                    except IntegrityError:
-                        ep.delete()
-    
-        complete_apps = ['sentry']
-    symmetrical = True
-
+            db.start_transaction()
     
         models = {
         'sentry.activity': {
@@ -162,14 +231,14 @@ from sphinx.util.nodes import split_explicit_title
             }),
             'client_id': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''39e1c00e14514560a1b5c4997b1482d575cce74c270c4cc9a149faf1b67121a7'',
+                    'default': ''90ad7e5fa38040e5960b53783ae21ad05b6ce9e66b8a4dbbaeb29535bb086787'',
                     'unique': 'True',
                     'max_length': '64'
                 }
             ),
             'client_secret': (
                 'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
-                    'default': ''4816d2082b9d407f9b147f8c81842b16760031d9dbae4f6dabe48ea29544b6f7''
+                    'default': ''6dbc1fbf818c4d1da6461a83f8f540845bff496a57cb407d896dc41d2067c02e''
                 }
             ),
             'date_added':
@@ -187,7 +256,7 @@ from sphinx.util.nodes import split_explicit_title
             }),
             'name': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''Undiscernable Marley'',
+                    'default': ''Ungeneralized Ronan'',
                     'max_length': '64',
                     'blank': 'True'
                 }
@@ -259,14 +328,14 @@ from sphinx.util.nodes import split_explicit_title
             ),
             'code': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''9954eee7a2f1457e9f3287804256d7a2'',
+                    'default': ''507f7c453c134c73b1ab1a5d1ebddaee'',
                     'max_length': '64',
                     'db_index': 'True'
                 }
             ),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 19, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 22, 0, 0)',
                     'db_index': 'True'
                 }
             ),
@@ -357,7 +426,7 @@ from sphinx.util.nodes import split_explicit_title
             }),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 5, 19, 0, 0)',
+                    'default': 'datetime.datetime(2017, 4, 21, 0, 0)',
                     'null': 'True'
                 }
             ),
@@ -367,7 +436,7 @@ from sphinx.util.nodes import split_explicit_title
             }),
             'refresh_token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''57578933ddf2478396a8fdbc430468e0357b40e10c4f42e09d424c6b47363adc'',
+                    'default': ''e4f8c544288144d383de40706085c0362a60c7b1a2754f018ef80a3b4492282a'',
                     'max_length': '64',
                     'unique': 'True',
                     'null': 'True'
@@ -383,7 +452,7 @@ from sphinx.util.nodes import split_explicit_title
             }),
             'token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''96f5154907924b20a6cb94126f0b503c53c89da5c56c460db1a8ce4d1113406b'',
+                    'default': ''10941cc78a564b92a15ece43d456e7f4c4ee773360a54e4e910fa68af79ac307'',
                     'unique': 'True',
                     'max_length': '64'
                 }
@@ -577,7 +646,7 @@ from sphinx.util.nodes import split_explicit_title
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 26, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 29, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -672,18 +741,11 @@ from sphinx.util.nodes import split_explicit_title
         },
         'sentry.commitauthor': {
             'Meta': {
-                'unique_together':
-                '(('organization_id', 'email'), ('organization_id', 'external_id'))',
-                'object_name':
-                'CommitAuthor'
+                'unique_together': '(('organization_id', 'email'),)',
+                'object_name': 'CommitAuthor'
             },
             'email': ('django.db.models.fields.EmailField', [], {
                 'max_length': '75'
-            }),
-            'external_id':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '164',
-                'null': 'True'
             }),
             'id':
             ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
@@ -789,44 +851,6 @@ from sphinx.util.nodes import split_explicit_title
                     'blank': 'True'
                 }
             )
-        },
-        'sentry.dsymapp': {
-            'Meta': {
-                'unique_together': '(('project', 'platform', 'app_id'),)',
-                'object_name': 'DSymApp'
-            },
-            'app_id': ('django.db.models.fields.CharField', [], {
-                'max_length': '64'
-            }),
-            'data': ('jsonfield.fields.JSONField', [], {
-                'default': '{}'
-            }),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'last_synced':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'platform':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                'default': '0'
-            }),
-            'project': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Project']'
-                }
-            ),
-            'sync_id':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '64',
-                'null': 'True'
-            })
         },
         'sentry.dsymbundle': {
             'Meta': {
@@ -2547,33 +2571,6 @@ from sphinx.util.nodes import split_explicit_title
                 }
             )
         },
-        'sentry.releaseheadcommit': {
-            'Meta': {
-                'unique_together': '(('repository_id', 'release'),)',
-                'object_name': 'ReleaseHeadCommit'
-            },
-            'commit': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Commit']'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'organization_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'release': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Release']'
-                }
-            ),
-            'repository_id':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
-        },
         'sentry.releaseproject': {
             'Meta': {
                 'unique_together': '(('project', 'release'),)',
@@ -2719,12 +2716,6 @@ from sphinx.util.nodes import split_explicit_title
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '128'
             }),
-            'owner': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']',
-                    'null': 'True'
-                }
-            ),
             'project': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.Project']'
@@ -2991,7 +2982,7 @@ from sphinx.util.nodes import split_explicit_title
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'sOK4LVBQhrF1D3UgNb2yurDHRcNuO9WP'',
+                    'default': 'u'Q9uumn1w1BWKCPBB1u2SmjrLjq20dEy5'',
                     'max_length': '32'
                 }
             )
@@ -3056,38 +3047,25 @@ from sphinx.util.nodes import split_explicit_title
                     'to': 'orm['sentry.Project']'
                 }
             )
-        },
-        'sentry.versiondsymfile': {
-            'Meta': {
-                'unique_together': '(('dsym_file', 'version', 'build'),)',
-                'object_name': 'VersionDSymFile'
-            },
-            'build':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '32',
-                'null': 'True'
-            }),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'dsym_app': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.DSymApp']'
-                }
-            ),
-            'dsym_file': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ProjectDSymFile']',
-                    'null': 'True'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'version': ('django.db.models.fields.CharField', [], {
-                'max_length': '32'
-            })
         }
     }
+    
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+    
+@click.command()
+@click.argument('known_people_folder')
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means 'use all in system'')
+@click.option('--tolerance', default=0.6, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
+@click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
+def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
+    known_names, known_face_encodings = scan_known_people(known_people_folder)
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('two_people.jpg')
+    
+            if file.filename == '':
+            return redirect(request.url)
