@@ -1,94 +1,97 @@
 
         
-            def top_level_tasks
-      if tasks_without_stage_dependency.include?(@top_level_tasks.first)
-        @top_level_tasks
-      else
-        @top_level_tasks.unshift(ensure_stage.to_s)
-      end
+          UserOption.where(user_id: smoke_user.id).update_all(
+    email_direct: false,
+    email_digests: false,
+    email_private_messages: false,
+  )
+    
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
+    
+        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
+      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
     end
     
-          def warn_set_scm_is_deprecated
-        $stderr.puts(<<-MESSAGE)
-[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
-To ensure your project is compatible with future versions of Capistrano,
-remove the :scm setting and instead add these lines to your Capfile after
-`require 'capistrano/deploy'`:
-    
-          def add_property(key, value)
-        if respond_to?('#{key}=')
-          send('#{key}=', value)
-        else
-          set(key, value)
-        end
-      end
-    
-          def left_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, li                  = *line.match(/\-(\d+)/)
-          @left_diff_line_number = li.to_i
-          @current_line_number   = @left_diff_line_number
-          ret                    = '...'
-        elsif line[0] == ?-
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
-        elsif line[0] == ?+
-          ret = ' '
-        else
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
-        end
-        ret
-      end
-    
-      test 'creating page is blocked' do
-    Precious::App.set(:wiki_options, { allow_editing: false})
-    post '/create', :content => 'abc', :page => 'D',
-         :format             => 'markdown', :message => 'def'
-    assert !last_response.ok?
-    
-        @wiki.clear_cache
-    page2 = @wiki.page('B')
-    assert_not_equal page1.version.sha, page2.version.sha
-    assert_equal 'INITIAL', page2.raw_data.strip
-#    assert_equal 'Revert commit #7c45b5f', page2.version.message
+      # The global load paths for Sass files. This is meant for plugins and
+  # libraries to register the paths to their Sass stylesheets to that they may
+  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
+  # They are lower-precedence than any load paths passed in via the
+  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
+  #
+  # If the `SASS_PATH` environment variable is set,
+  # the initial value of `load_paths` will be initialized based on that.
+  # The variable should be a colon-separated list of path names
+  # (semicolon-separated on Windows).
+  #
+  # Note that files on the global load path are never compiled to CSS
+  # themselves, even if they aren't partials. They exist only to be imported.
+  #
+  # @example
+  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
+  # @return [Array<String, Pathname, Sass::Importers::Base>]
+  def self.load_paths
+    @load_paths ||= if ENV['SASS_PATH']
+                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
+                    else
+                      []
+                    end
   end
     
-      def self.assets_path
-    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
-  end
+          @options[:for_engine][:syntax] ||= :scss if input.is_a?(File) && input.path =~ /\.scss$/
+      @options[:for_engine][:syntax] ||= @default_syntax
+      engine =
+        if input.is_a?(File) && !@options[:check_syntax]
+          Sass::Engine.for_file(input.path, @options[:for_engine])
+        else
+          # We don't need to do any special handling of @options[:check_syntax] here,
+          # because the Sass syntax checking happens alongside evaluation
+          # and evaluation doesn't actually evaluate any code anyway.
+          Sass::Engine.new(input.read, @options[:for_engine])
+        end
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
+          # If this importer is based on files on the local filesystem This method
+      # should return true if the file, when changed, should trigger a
+      # recompile.
+      #
+      # It is acceptable for non-sass files to be watched and trigger a recompile.
+      #
+      # @param filename [String] The absolute filename for a file that has changed.
+      # @return [Boolean] When the file changed should cause a recompile.
+      def watched_file?(filename)
+        false
+      end
     end
   end
+end
+
     
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
     
-    Liquid::Template.register_tag('video', Jekyll::VideoTag)
+    Then(/^the shared path is created$/) do
+  run_vagrant_command(test_dir_exists(TestApp.shared_path))
+end
     
-      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
-    
-            expect(cop.highlights).to eq([close])
-        expect(cop.messages)
-          .to eq([described_class::SAME_LINE_MESSAGE])
+          def using_default_scm?
+        return @using_default_scm if defined? @using_default_scm
+        @using_default_scm = (fetch(:scm) == DEFAULT_GIT)
       end
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+          def title
+        'Comparison of #{@page.title}'
+      end
+    
+    dir = File.dirname(File.expand_path(__FILE__))
+$LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
+$LOAD_PATH.unshift(dir)
+    
+    def version
+  line = File.read('lib/#{name}.rb')[/^\s*VERSION\s*=\s*.*/]
+  line.match(/.*VERSION\s*=\s*[''](.*)['']/)[1]
+end
