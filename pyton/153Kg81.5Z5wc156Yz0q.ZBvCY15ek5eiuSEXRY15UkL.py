@@ -1,82 +1,130 @@
 
         
-        
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
-        title_re_match = link_re.match(raw_title)
-        if title_re_match:
-            sections[category].append(title_re_match.group(1).upper())
+        DEPLABEL_TO_ID = {label: lid for lid, label in enumerate(DEPLABELS)}
     
+      def load_labels(self, session, instances):
+    '''Loads the labels for these instances.
     
+    if S < N:
+  # Note that this isn't necessary for this synthetic example, but
+  # it's useful to see how the input factor matrices were initialized
+  # for actual neurophysiology data.
+  datasets = add_alignment_projections(datasets, npcs=FLAGS.npcs)
     
-        if len(sys.argv) > 1:
-        ip = sys.argv[1]
-    else:
-        ip = '46.134.208.94'
-        ip = '2001:ee0:3203:a::12'
-        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
-    print('test ip:%s' % ip)
+    from synthetic_data_utils import generate_data, generate_rnn
+from synthetic_data_utils import get_train_n_valid_inds
+from synthetic_data_utils import nparray_and_transpose
+from synthetic_data_utils import spikify_data, split_list_by_inds
+import tensorflow as tf
+from utils import write_datasets
     
-        value = lp[1].strip()
-    return value
+        import pdb
+    pdb.set_trace()
+    
+        yield (x, y, w)
 
     
-        if len(front.config.GAE_APPIDS):
-        xlog.info('GAE APPID          : %s', '|'.join(front.config.GAE_APPIDS))
+    
+def calculate_reinforce_objective(hparams,
+                                  log_probs,
+                                  dis_predictions,
+                                  present,
+                                  estimated_values=None):
+  '''Calculate the REINFORCE objectives.  The REINFORCE objective should
+  only be on the tokens that were missing.  Specifically, the final Generator
+  reward should be based on the Discriminator predictions on missing tokens.
+  The log probaibilities should be only for missing tokens and the baseline
+  should be calculated only on the missing tokens.
+    
+      Returns:
+    gen_train_op: Generator training op.
+  '''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
     else:
-        xlog.info('Using public APPID')
-    xlog.info('------------------------------------------------------')
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('\nOptimizing Generator vars:')
+    for v in gen_vars:
+      print(v)
     
-        return (major, minor, patch, beta)
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    logs = boto3_conn(module, conn_type='client', resource='logs', region=region, endpoint=ec2_url, **aws_connect_kwargs)
     
-        ANTLR generates code that throws exceptions upon recognition error and
-    also generates code to catch these exceptions in each rule.  If you
-    want to quit upon first error, you can turn off the automatic error
-    handling mechanism using rulecatch action, but you still need to
-    override methods mismatch and recoverFromMismatchSet.
-    
-    In general, the recognition exceptions can track where in a grammar a
-    problem occurred and/or what was the expected input.  While the parser
-    knows its state (such as current input symbol and line info) that
-    state can change before the exception is reported so current token index
-    is computed and stored at exception time.  From this info, you can
-    perhaps print an entire line of input not just a single token, for example.
-    Better to just say the recognizer had a problem and then let the parser
-    figure out a fancy report.
-    
-    '''
-    
-            ## The channel number for the current token
-        self.channel = None
-    
-            self.seek(p)
-        self.line = line
-        self.charPositionInLine = charPositionInLine
-        self.release(marker)
+        snaked_launch_configs = []
+    for launch_config in launch_configs['LaunchConfigurations']:
+        snaked_launch_configs.append(camel_dict_to_snake_dict(launch_config))
     
     
-logging.basicConfig(level=logging.DEBUG)
+RETURN = '''
+placement_groups:
+  description: Placement group attributes
+  returned: always
+  type: complex
+  contains:
+    name:
+      description: PG name
+      type: string
+      sample: my-cluster
+    state:
+      description: PG state
+      type: string
+      sample: 'available'
+    strategy:
+      description: PG strategy
+      type: string
+      sample: 'cluster'
     
-            '''
-        if self._addr_less_specific(addr):
-            return True
-        elif self.get_addr() == addr.get_addr():
-            if self.is_wildcard() or self.get_port() == addr.get_port():
-                return True
-        return False
+    
+if __name__ == '__main__':
+    main()
+
+    
+    ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+                if delete_policy:
+                original_policy = ecr.get_repository_policy(registry_id, name)
+    
+        except BotoServerError as e:
+        if e.error_message != 'No modifications were requested.':
+            module.fail_json(msg=e.error_message)
+        else:
+            changed = False
+    
+    
+@AWSRetry.exponential_backoff()
+def list_iam_roles_with_backoff(client, **kwargs):
+    paginator = client.get_paginator('list_roles')
+    return paginator.paginate(**kwargs).build_full_result()
+    
+        Basic Usage:
+        >>> client = boto3.client('kinesis')
+        >>> stream_name = 'test-stream'
+        >>> number_of_shards = 10
+        >>> tags = {'env': 'test'}
+        >>> create_stream(client, stream_name, number_of_shards, tags=tags)
+    
+    
+# -- Options for Texinfo output -------------------------------------------
+    
+        def check_parsing_errors(self, lens):
+        '''Verify Augeas can parse all of the lens files.
+    
+    
+UPDATED_MOD_SSL_CONF_DIGEST = '.updated-options-ssl-apache-conf-digest.txt'
+'''Name of the hash of the updated or informed mod_ssl_conf as saved in `IConfig.config_dir`.'''
+    
+        def test_include_missing(self):
+        # This should miss
+        self.verify_fnmatch('test_*.onf', False)
     
         def test_nonexistent_generic(self):
         with mock.patch('certbot.util.get_os_info') as mock_info:
@@ -85,64 +133,3 @@ logging.basicConfig(level=logging.DEBUG)
                 mock_like.return_value = ['unknonwn']
                 self.assertEqual(entrypoint.get_configurator(),
                                  configurator.ApacheConfigurator)
-    
-        def test_get_addrs_default(self):
-        self.sni.configurator.choose_vhost = mock.Mock(
-            return_value=obj.VirtualHost(
-                'path', 'aug_path',
-                set([obj.Addr.fromstring('_default_:443')]),
-                False, False)
-        )
-    
-                config_text += self._get_config_text(achall, achall_addrs)
-    
-    
-def LastEnteredCharIsIdentifierChar():
-  line, current_column = vimsupport.CurrentLineContentsAndCodepointColumn()
-  if current_column - 1 < 0:
-    return False
-  filetype = vimsupport.CurrentFiletypes()[ 0 ]
-  return (
-    identifier_utils.StartOfLongestIdentifierEndingAtIndex(
-        line, current_column, filetype ) != current_column )
-    
-    import logging
-    
-        return True
-    
-    
-def _GetAllDescendentats( root_group ):
-  descendants = []
-  for child in root_group.children:
-    descendants.append( child )
-    descendants.extend( _GetAllDescendentats( child ) )
-  return descendants
-    
-    
-def LastEnteredCharIsIdentifierChar_FiletypeHtml_test():
-  with MockCurrentFiletypes( [ 'html' ] ):
-    with MockCurrentColumnAndLineContents( 3, 'ab-' ):
-      ok_( base.LastEnteredCharIsIdentifierChar() )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def BuildCompletionNamespace( namespace = None,
-                              insertion_text = 'Test',
-                              menu_text = None,
-                              extra_menu_info = None,
-                              detailed_info = None,
-                              kind = None ):
-  return BuildCompletion( insertion_text = insertion_text,
-                          menu_text = menu_text,
-                          extra_menu_info = extra_menu_info,
-                          detailed_info = detailed_info,
-                          kind = kind,
-                          extra_data = {
-                            'required_namespace_import': namespace
-                          } )
