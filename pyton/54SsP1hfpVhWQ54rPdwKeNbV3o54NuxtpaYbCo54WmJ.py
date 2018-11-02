@@ -1,74 +1,73 @@
 
         
-            logvar_bxn = tf.tile(z_logvar_1xn, size_bx1)
-    self.logvar_bxn = logvar_bxn
-    self.noise_bxn = noise_bxn = tf.random_normal(tf.shape(logvar_bxn))
-    self.sample_bxn = mean_bxn + tf.exp(0.5 * logvar_bxn) * noise_bxn
-    
-        if np.isnan(log_perp):
-      sys.stderr.error('log_perplexity is Nan.\n')
-    else:
-      sum_num += log_perp * weights.mean()
-      sum_den += weights.mean()
-    if sum_den > 0:
-      perplexity = np.exp(sum_num / sum_den)
-    
-      def _score_patches(self, word_patches):
-    '''Score a 2D matrix of word_patches and stitch results together.'''
-    batch_size, num_timesteps = self.shape
-    nrow, ncol = len(word_patches), len(word_patches[0])
-    max_len = num_timesteps * ncol
-    probs = np.zeros([0, max_len])  # accumulate results into this.
-    
-      Raises:
-    ValueError: if batch_size or num_steps are too high.
-  '''
-  raw_data = np.array(raw_data, dtype=np.int32)
-    
-    FLAGS = tf.app.flags.FLAGS
-    
-          # Calculate the forward advantage only on the missing tokens.
-      cum_advantage = tf.zeros(shape=[FLAGS.batch_size])
-      for s in xrange(t, FLAGS.sequence_length):
-        cum_advantage += missing_list[s] * np.power(gamma, (s - t)) * (
-            rewards_list[s] - baselines[s])
-      # Clip advantages.
-      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
-                                       FLAGS.advantage_clipping)
-      advantages.append(missing_list[t] * cum_advantage)
-      final_gen_objective += tf.multiply(
-          log_probability, missing_list[t] * tf.stop_gradient(cum_advantage))
-    
-    *TL;DR80
-Creates objects without having to specify the exact class.
-'''
-    
-        @staticmethod
-    def _static_method_2():
-        print('executed method 2!')
-    
-        def execute(self):
-        self.rename(self.src, self.dest)
+            def iter_body(self):
+        return self.msg.iter_body(self.chunk_size)
     
     
-if __name__ == '__main__':
-    num_obj = NumObj(-1)
-    print(num_obj)
+def test_current_version():
+    version = Environment().config['__meta__']['httpie']
+    assert version == __version__
+
+    
+        def __getitem__(self, idx):
+        if idx < 0 or idx >= len(self):
+            raise IndexError(idx)
+        return self._pathcls._from_parsed_parts(self._drv, self._root,
+                                                self._parts[:-idx - 1])
+    
+        def testFileno(self):
+        self.createTempFile()
+        with open(self.filename, 'rb') as rawf:
+            bz2f = BZ2File(rawf)
+            try:
+                self.assertEqual(bz2f.fileno(), rawf.fileno())
+            finally:
+                bz2f.close()
+        self.assertRaises(ValueError, bz2f.fileno)
+    
+    Cela ressemble à un excellent recipie[1] déjeuner.
+    
+            try:
+            print(pool.apply(f, (5,)))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from pool.apply()')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
+    
+        # Start worker processes
+    for i in range(NUMBER_OF_PROCESSES):
+        Process(target=worker, args=(task_queue, done_queue)).start()
     
     
-def main():
-    message_center = Provider()
-    
-        class ClassRegistree(BaseRegisteredClass):
-        def __init__(self, *args, **kwargs):
-            pass
+def _CompileFilters( config ):
+  '''Given a filter config dictionary, return a list of compiled filters'''
+  filters = []
     
     
-# In some very complex cases, it might be desirable to pull out the building
-# logic into another function (or a method on another class), rather than being
-# in the base class '__init__'. (This leaves you in the strange situation where
-# a concrete class does not have a useful constructor)
+def HandlePollResponse_SingleDiagnostic_test():
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER' ] },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call( 'foo', [ 'PLACEHOLDER' ] )
+  ] )
     
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
+    from ycm.tests.test_utils import ( CurrentWorkingDirectory, ExtendedMock,
+                                   MockVimModule, MockVimBuffers, VimBuffer )
+MockVimModule()
+    
+      f = _CreateFilterForTypes( opts, [ 'java', 'xml' ] )
+    
+    
+def EndsWithPython_BadPaths_test():
+  not_python_paths = [
+    None,
+    '',
+    '/opt/local/bin/vim',
+    r'C:\Program Files\Vim\vim74\gvim.exe',
+    '/usr/bin/python2.5',
+    '/home/user/.pyenv/shims/python3.2',
+  ]
