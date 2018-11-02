@@ -1,236 +1,142 @@
 
         
-                def convert_direct_upload_option_to_url(options)
-          if options.delete(:direct_upload) && respond_to?(:rails_direct_uploads_url)
-            options['data-direct-upload-url'] = rails_direct_uploads_url
-          end
-          options
-        end
-    end
-  end
-end
-
-    
-              def generate_ids?
-            !@skip_default_ids
-          end
-      end
-    end
-  end
-end
-
-    
-    multitask :default => [:test, :features]
-    
-      </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-      p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
-      end
-    end
-  end
-end
-
-    
-      def self.source_dir; SOURCE_DIR; end
-end
-    
-        def render(options, screenshots)
-      Dir.mktmpdir do |dir|
-        path = generator.render(options, screenshots, dir)
-        return File.read(path)
-      end
-    end
-  end
-    
-          def self.return_value
-        # If your method provides a return value, you can describe here what it does
-      end
-    
-        # Pass a block which should be tracked. One block = one testcase
-    # @param step_name (String) the name of the currently built code (e.g. snapshot, sigh, ...)
-    #   This might be nil, in which case the step is not printed out to the terminal
-    def self.execute_action(step_name)
-      start = Time.now # before the raise block, since `start` is required in the ensure block
-      UI.crash!('No block given') unless block_given?
-    
-          def self.category
-        :misc
-      end
-    
-          def self.authors
-        ['lacostej']
-      end
-    
-          #####################################################
-      # @!group Documentation
-      #####################################################
-    
-        filter
-  end
-    
-            def template
-          @template ||= Coverage::Template.new(self)
+                # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
         end
     
-          def image_url
-        raise NotImplementedError
-      end
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
+        end
     
-      def existing
-    existing_path = select(&File.method(:directory?))
-    # return nil instead of empty PATH, to unset environment variables
-    existing_path unless existing_path.empty?
-  end
-    
-      # DBM stores ruby objects as a ruby `String`. Hence, when fetching the data,
-  # to convert the ruby string back into a ruby `Hash`, the string is converted
-  # into a JSON compatible string in `ruby_hash_to_json_string`, where it may
-  # later be parsed by `JSON.parse` in the `json_string_to_ruby_hash` method
-  #
-  # @param  [Hash] ruby `Hash` to be converted to `JSON` string
-  # @return [String]
-  def ruby_hash_to_json_string(hash)
-    hash.to_json
-  end
-    
-          SystemCommand.run('/bin/mkdir', args: ['-p', path], sudo: sudo)
-      SystemCommand.run('/bin/chmod', args: ['g+rwx', path], sudo: sudo)
-      SystemCommand.run('/usr/sbin/chown', args: [Utils.current_user, path], sudo: sudo)
-      SystemCommand.run('/usr/bin/chgrp', args: ['admin', path], sudo: sudo)
-    end
-    
-        def add_warning(message)
-      warnings << message
-    end
-    
-    desc 'Default deploy task'
-task :deploy do
-  # Check if preview posts exist, which should not be published
-  if File.exists?('.preview-mode')
-    puts '## Found posts in preview mode, regenerating files ...'
-    File.delete('.preview-mode')
-    Rake::Task[:generate].execute
-  end
-    
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+            # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
+        end
       end
     end
   end
+end
+
     
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
-  end
+    require 'vagrant/util/safe_puts'
     
-          # This method depends on the fact that we have guarded
-      # against implicit and empty literals.
-      def opening_brace_on_same_line?(node)
-        node.loc.begin.line == children(node).first.first_line
-      end
+              # Return the result
+          result
+        end
     
-            expect(new_source).to eq(<<-RUBY.strip_indent)
-          def func
-            [1, 2, 3].each do |n|
-              puts n
+      # open rmcpplus_request
+  def self.create_ipmi_session_open_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
+    
             end
+      end
+    end
+  end
+end
+    
+              # Encodes the data
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_data(data)
+            OpenSSL::ASN1::OctetString.new(data)
           end
-        RUBY
+        end
       end
+    end
+  end
+end
     
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for redundant `begin` blocks.
-      #
-      # Currently it checks for code like this:
-      #
-      # @example
-      #
-      #   # bad
-      #   def redundant
-      #     begin
-      #       ala
-      #       bala
-      #     rescue StandardError => e
-      #       something
-      #     end
-      #   end
-      #
-      #   # good
-      #   def preferred
-      #     ala
-      #     bala
-      #   rescue StandardError => e
-      #     something
-      #   end
-      #
-      #   # bad
-      #   # When using Ruby 2.5 or later.
-      #   do_something do
-      #     begin
-      #       something
-      #     rescue => ex
-      #       anything
-      #     end
-      #   end
-      #
-      #   # good
-      #   # In Ruby 2.5 or later, you can omit `begin` in `do-end` block.
-      #   do_something do
-      #     something
-      #   rescue => ex
-      #     anything
-      #   end
-      #
-      #   # good
-      #   # Stabby lambdas don't support implicit `begin` in `do-end` blocks.
-      #   -> do
-      #     begin
-      #       foo
-      #     rescue Bar
-      #       baz
-      #     end
-      #   end
-      class RedundantBegin < Cop
-        MSG = 'Redundant `begin` block detected.'.freeze
+              include Rex::Proto::Kerberos::Crypto
+          include Rex::Proto::Kerberos::Model
     
-          # Checks whether this node is an `unless` statement. (This is not true
-      # of ternary operators and `if` statements.)
-      #
-      # @return [Boolean] whether the node is an `unless` statement
-      def unless?
-        keyword == 'unless'
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the from field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_from(input)
+            input.value[0].value
+          end
+    
+                target 'Static' do
+                use_frameworks!(false)
+            end
+            target 'Dynamic' do
+                use_frameworks!(true)
+            end
+        end
+    end
+end
+    
+      module Generator
+    autoload :Acknowledgements,        'cocoapods/generator/acknowledgements'
+    autoload :Markdown,                'cocoapods/generator/acknowledgements/markdown'
+    autoload :Plist,                   'cocoapods/generator/acknowledgements/plist'
+    autoload :BridgeSupport,           'cocoapods/generator/bridge_support'
+    autoload :Constant,                'cocoapods/generator/constant'
+    autoload :CopyResourcesScript,     'cocoapods/generator/copy_resources_script'
+    autoload :DummySource,             'cocoapods/generator/dummy_source'
+    autoload :EmbedFrameworksScript,   'cocoapods/generator/embed_frameworks_script'
+    autoload :Header,                  'cocoapods/generator/header'
+    autoload :InfoPlistFile,           'cocoapods/generator/info_plist_file'
+    autoload :ModuleMap,               'cocoapods/generator/module_map'
+    autoload :PrefixHeader,            'cocoapods/generator/prefix_header'
+    autoload :UmbrellaHeader,          'cocoapods/generator/umbrella_header'
+    autoload :AppTargetHelper,         'cocoapods/generator/app_target_helper'
+  end
+    
+    require 'bootstrap/environment'
+    
+        subject { klass.new('uris' => uris, 'strings' => strings, 'required_strings' => required_strings) }
+    
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
+    
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
       end
+    end
+  end
+end
+
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      end
+    end
