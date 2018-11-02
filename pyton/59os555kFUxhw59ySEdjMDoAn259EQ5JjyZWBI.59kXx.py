@@ -1,119 +1,155 @@
 
         
-            def render(self, request):
-        now = time()
-        delta = now - self.lasttime
-    
-        requires_project = False
-    crawler_process = None
-    
-        def process_spider_arguments(self, opts):
-    
-        class ScrapyClientContextFactory(ClientContextFactory):
-        'A SSL context factory which is more permissive against SSL bugs.'
-        # see https://github.com/scrapy/scrapy/issues/82
-        # and https://github.com/scrapy/scrapy/issues/26
-        # and https://github.com/scrapy/scrapy/issues/981
-    
-            if response.status not in self.config.check_ip_accept_status:
-            return False
-    
-            self.decisionNumber = decisionNumber
-    
-            depth  local follow set     after call to rule
-          0         \<EOF>                    a (from main())
-          1          ']'                     b
-          3          '^'                     c
-    
-            For char streams, seeking forward must update the stream state such
-        as line number.  For seeking backwards, you will be presumably
-        backtracking using the mark/rewind mechanism that restores state and
-        so this method does not need to update state when seeking backwards.
-    
-        def setType(self, ttype):
-        self.type = ttype
-    
-    
-  def _ThreadMain( self ):
-    while True:
-      time.sleep( self._ping_interval_seconds )
-    
-      return [ config_entry ]
-    
-    
-  def PopulateLocationList( self ):
-    # Do nothing if loc list is already populated by diag_interface
-    if not self._user_options[ 'always_populate_location_list' ]:
-      self._UpdateLocationLists()
-    return bool( self._diagnostics )
-    
-    # Can't import these from setup.py because it makes nosetests go crazy.
-DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
-DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
-                            'ycmd' )
-WIN_PYTHON_PATH = os.path.join( sys.exec_prefix, 'python.exe' )
-PYTHON_BINARY_REGEX = re.compile(
-  r'python((2(\.[67])?)|(3(\.[3-9])?))?(.exe)?$', re.IGNORECASE )
-    
-    # The default options which are only relevant to the client, not the server and
-# thus are not part of default_options.json, but are required for a working
-# YouCompleteMe object.
-DEFAULT_CLIENT_OPTIONS = {
-  'g:ycm_server_python_interpreter': '',
-  'g:ycm_log_level': 'info',
-  'g:ycm_keep_logfiles': 0,
-  'g:ycm_extra_conf_vim_data': [],
-  'g:ycm_show_diagnostics_ui': 1,
-  'g:ycm_echo_current_diagnostic': 1,
-  'g:ycm_enable_diagnostic_signs': 1,
-  'g:ycm_enable_diagnostic_highlighting': 0,
-  'g:ycm_always_populate_location_list': 0,
-}
-    
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseInProgress() ):
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( False ) )
-    
-      for path in not_python_paths:
-    yield EndsWithPython_Bad, path
+        
+parser = youtube_dl.parseOpts()[0]
+build_completion(parser)
 
     
-      def shutdown( self, wait=True ):
-    with self._shutdown_lock:
-      self._shutdown = True
-      self._work_queue.put( None )
-    if wait:
-      for t in self._threads:
-        t.join()
-  shutdown.__doc__ = _base.Executor.shutdown.__doc__
+    compat_print('total downloads traffic: %s' % format_size(total_bytes))
 
     
-    # If true, the index is split into individual pages for each letter.
-#
-# html_split_index = False
+            info_dict = _make_result(list(formats_order), extractor='youtube')
+        ydl = YDL({'format': '(bestvideo[ext=none]/bestvideo[ext=webm])+bestaudio'})
+        yie = YoutubeIE(ydl)
+        yie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(info_dict)
+        downloaded_ids = [info['format_id'] for info in ydl.downloaded_info_dicts]
+        self.assertEqual(downloaded_ids, ['248+141'])
     
-                output[ATTR_UPDATE_DATE] = datetime.now().strftime(DATE_FORMAT)
+        if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.update(test_config)
     
-            request = requests.post(url, headers=headers, data=data, timeout=10)
+            if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
     
-        def see_vehicle(vehicle):
-        '''Handle the reporting of the vehicle position.'''
-        host_name = voc.vehicle_name(vehicle)
-        dev_id = 'volvo_{}'.format(slugify(host_name))
-        see(dev_id=dev_id,
-            host_name=host_name,
-            gps=(vehicle.position['latitude'],
-                 vehicle.position['longitude']),
-            icon='mdi:car')
     
-            else:
-            if req.status_code != 200:
-                _LOGGER.error(
-                    'Error saving data %s to %s (http status code = %d)',
-                    payload, fullurl, req.status_code)
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
     
-                    resp_socket.sendto(self.upnp_response, addr)
-                resp_socket.close()
+    
+def test_init_db_command(runner, monkeypatch):
+    class Recorder(object):
+        called = False
+    
+        static_folder = property(
+        _get_static_folder, _set_static_folder,
+        doc='The absolute path to the configured static folder.'
+    )
+    del _get_static_folder, _set_static_folder
+    
+        def should_set_cookie(self, app, session):
+        '''Used by session backends to determine if a ``Set-Cookie`` header
+        should be set for this session cookie for this response. If the session
+        has been modified, the cookie is set. If the session is permanent and
+        the ``SESSION_REFRESH_EACH_REQUEST`` config is true, the cookie is
+        always set.
+    
+            r = None
+        try:
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
+    
+        dirname = 'cifar-100-python'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
+    
+        There are two variants. The default one is based on 1406.1078v3 and
+    has reset gate applied to hidden state before matrix multiplication. The
+    other one is based on original 1406.1078v1 and has the order reversed.
+    
+        import matplotlib.pyplot as plt
+    fig = plt.figure('scikit-learn OMP vs. LARS benchmark results')
+    for i, (label, timings) in enumerate(sorted(six.iteritems(results))):
+        ax = fig.add_subplot(1, 2, i+1)
+        vmax = max(1 - timings.min(), -1 + timings.max())
+        plt.matshow(timings, fignum=False, vmin=1 - vmax, vmax=1 + vmax)
+        ax.set_xticklabels([''] + [str(each) for each in samples_range])
+        ax.set_yticklabels([''] + [str(each) for each in features_range])
+        plt.xlabel('n_samples')
+        plt.ylabel('n_features')
+        plt.title(label)
+    
+    
+def _linkcode_resolve(domain, info, package, url_fmt, revision):
+    '''Determine a link to online source for a class/method/function
+    
+            if cmd.startswith('#'):
+            log.write('%s' % cmd)
+            continue
+    
+            fn = os.path.join(current_path, 'sni_slice.txt')
+        self.slice = RandomGetSlice(fn, 20, '|')
+    
+                    if self.eot[s] >= 0:
+                    #print 'EOT to %d' % self.eot[s]
+                    
+                    s = self.eot[s]
+                    input.consume()
+                    continue
+    
+        @nonce.decoder
+    def nonce(value):  # pylint: disable=missing-docstring,no-self-argument
+        try:
+            return jose.decode_b64jose(value)
+        except jose.DeserializationError as error:
+            # TODO: custom error
+            raise jose.DeserializationError('Invalid nonce: {0}'.format(error))
+    
+        def test_jwk_serialize(self):
+        from acme.jws import JWS
+        jws = JWS.sign(payload=b'foo', key=self.privkey,
+                       alg=jose.RS256, nonce=self.nonce,
+                       url=self.url)
+        self.assertEqual(jws.signature.combined.kid, None)
+        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
+    
+    csr = OpenSSL.crypto.load_certificate_request(
+    OpenSSL.crypto.FILETYPE_ASN1, pkg_resources.resource_string(
+        'acme', os.path.join('testdata', 'csr.der')))
+try:
+    acme.request_issuance(jose.util.ComparableX509(csr), (authzr,))
+except messages.Error as error:
+    print ('This script is doomed to fail as no authorization '
+           'challenges are ever solved. Error from server: {0}'.format(error))
+
+    
+        def test_bad_parse(self):
+        # pylint: disable=protected-access
+        self.config.parser.parse_file(os.path.join(
+            self.config.parser.root, 'conf-available', 'bad_conf_file.conf'))
+        self.assertRaises(
+            errors.PluginError, self.config.check_parsing_errors, 'httpd.aug')
+    
+            :returns: All TLS-SNI-01 addresses used
+        :rtype: set
+    
+    # Additional templates that should be rendered to pages, maps page names to
+# template names.
+#html_additional_pages = {}
