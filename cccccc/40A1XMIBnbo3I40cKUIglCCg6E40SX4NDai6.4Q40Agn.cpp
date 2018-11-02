@@ -1,170 +1,82 @@
 
         
-        Base::~Base() {
+          class ConstOneofAccessor {
+   public:
+    explicit ConstOneofAccessor(const MessageDef* msg) : msg_(msg) {}
+    const_oneof_iterator begin() { return msg_->oneof_begin(); }
+    const_oneof_iterator end() { return msg_->oneof_end(); }
+   private:
+    const MessageDef* msg_;
+  };
+    
+    #include <google/protobuf/compiler/java/java_extension_lite.h>
+    
+    
+    {  (*variables)['default_entry'] = (*variables)['capitalized_name'] +
+      'DefaultEntryHolder.defaultEntry';
+  (*variables)['map_field_parameter'] = (*variables)['default_entry'];
+  (*variables)['descriptor'] =
+      name_resolver->GetImmutableClassName(descriptor->file()) +
+      '.internal_' + UniqueFileScopeIdentifier(descriptor->message_type()) +
+      '_descriptor, ';
+  (*variables)['ver'] = GeneratedCodeVersionSuffix();
 }
     
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
+    // Strip package name from a descriptor's full name.
+// For example:
+//   Full name   : foo.Bar.Baz
+//   Package name: foo
+//   After strip : Bar.Baz
+string StripPackageName(const string& full_name,
+                        const FileDescriptor* file) {
+  if (file->package().empty()) {
+    return full_name;
   } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+    // Strip package name
+    return full_name.substr(file->package().size() + 1);
   }
 }
     
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
-        
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
-    }
-    }
-    
-    #include 'base/run_loop.h'
-#include 'content/public/browser/browsing_data_remover.h'
-#include 'extensions/browser/extension_function.h'
-    
-          std::string encoded_image_base64;
-      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
-      base::Base64Encode(encoded_image_str, &encoded_image_base64);
-    
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnDeallocateObject(id);
-  return true;
-}
-    
-    Benchmark::Benchmark(const char* name)
-    : name_(name),
-      report_mode_(RM_Unspecified),
-      time_unit_(kNanosecond),
-      range_multiplier_(kRangeMultiplier),
-      min_time_(0),
-      iterations_(0),
-      repetitions_(0),
-      use_real_time_(false),
-      use_manual_time_(false),
-      complexity_(oNone),
-      complexity_lambda_(nullptr) {
-  ComputeStatistics('mean', StatisticsMean);
-  ComputeStatistics('median', StatisticsMedian);
-  ComputeStatistics('stddev', StatisticsStdDev);
-}
-    
-      bool term_supports_color = false;
-  for (const char* candidate : SUPPORTED_TERM_VALUES) {
-    if (term && 0 == strcmp(term, candidate)) {
-      term_supports_color = true;
-      break;
-    }
-  }
-    
-    // Function to return an string for the calculated complexity
-std::string GetBigOString(BigO complexity);
-    
-    #include 'benchmark/benchmark.h'
-#include 'internal_macros.h'
-    
-    #ifndef BENCHMARK_RE_H_
-#define BENCHMARK_RE_H_
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  virtual apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                         int32_t *const frame_num) = 0;
-    
-    /**
- * @namespace apollo::drivers::canbus::can
- * @brief apollo::drivers::canbus::can
- */
-namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
-    
-    TEST(HermesCanClient, receiver) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::HERMES_CAN);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-  HermesCanClient hermes_can;
-  EXPECT_TRUE(hermes_can.Init(param));
-    }
-    
-      /**
-   * @brief Stop the CAN receiver.
-   */
-  void Stop();
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+    #endif  // CAFFE_DATA_TRANSFORMER_HPP_
 
     
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
-#define MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
+    #include <vector>
     
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
+
     
-    #include 'modules/drivers/canbus/sensor_gflags.h'
+    #include 'caffe/blob.hpp'
+#include 'caffe/data_transformer.hpp'
+#include 'caffe/internal_thread.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/blocking_queue.hpp'
     
-    // System gflags
-DECLARE_string(sensor_node_name);
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
+    namespace caffe {
+    }
     
-    {
-    {
-    {} // namespace detail
-} // namespace atomics
-} // namespace mars_boost
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+namespace atomics {
+namespace detail {
+    }
+    }
+    }
+    
+    namespace atomics {
+    }
