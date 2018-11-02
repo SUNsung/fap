@@ -1,17 +1,172 @@
 
         
-            def backwards(self, orm):
-        'Write your backwards methods here.'
+        
+@pytest.fixture
+def source_root():
+    return Path(__file__).parent.parent.resolve()
     
-            # Adding field 'ApiToken.key'
-        db.add_column(
-            u'sentry_apitoken',
-            'key',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.ApiKey'], null=True
-            ),
-            keep_default=False
-        )
+    
+@pytest.mark.parametrize('app, help_text, operations', [
+    ('apt', apt_help, apt_operations),
+    ('apt-get', apt_get_help, apt_get_operations)
+])
+def test_get_operations(set_help, app, help_text, operations):
+    set_help(help_text)
+    assert _get_operations(app) == operations
+    
+    
+@pytest.mark.parametrize('command', [
+    Command('apt-cache search foo', ''),
+    Command('aptitude search foo', ''),
+    Command('apt search foo', ''),
+    Command('apt-get install foo', ''),
+    Command('apt-get source foo', ''),
+    Command('apt-get clean', ''),
+    Command('apt-get remove', ''),
+    Command('apt-get update', ''),
+    Command('sudo apt update', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+      * dynamodb
+'''
+    
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
+
+    
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    client = boto3_conn(module, conn_type='client', resource='waf', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    
+        def validate_etag_from_origin_access_identity_id(self, origin_access_identity_id):
+        try:
+            if origin_access_identity_id is None:
+                return
+            oai = self.__cloudfront_facts_mgr.get_origin_access_identity(origin_access_identity_id)
+            if oai is not None:
+                return oai.get('ETag')
+        except (ClientError, BotoCoreError) as e:
+            self.module.fail_json_aws(e, msg='Error getting etag from origin_access_identity.')
+    
+        rule_data = dict(
+        [(rf, module.params.get(rf)) for rf in CloudWatchEventRuleManager.RULE_FIELDS]
+    )
+    targets = module.params.get('targets')
+    state = module.params.get('state')
+    
+    # Search for the Launch Configurations that start with 'app'
+- ec2_lc_find:
+    name_regex: app.*
+    sort_order: descending
+    limit: 2
+'''
+    
+        def set_repository_policy(self, registry_id, name, policy_text, force):
+        if not self.check_mode:
+            policy = self.ecr.set_repository_policy(
+                repositoryName=name,
+                policyText=policy_text,
+                force=force,
+                **build_kwargs(registry_id))
+            self.changed = True
+            return policy
+        else:
+            self.skipped = True
+            if self.get_repository(registry_id, name) is None:
+                printable = name
+                if registry_id:
+                    printable = '{}:{}'.format(registry_id, name)
+                raise Exception(
+                    'could not find repository {}'.format(printable))
+            return
+    
+    
+try:
+    import botocore
+except ImportError:
+    pass  # handled by AnsibleAWSModule
+    
+    
+def delete(module, connection, name):
+    ''' Delete an Elasticache backup. '''
+    try:
+        response = connection.delete_snapshot(SnapshotName=name)
+        changed = True
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == 'SnapshotNotFoundFault':
+            response = {}
+            changed = False
+        elif e.response['Error']['Code'] == 'InvalidSnapshotState':
+            module.fail_json(msg='Error: InvalidSnapshotState. The snapshot is not in an available state or failed state to allow deletion.'
+                             'You may need to wait a few minutes.')
+        else:
+            module.fail_json(msg='Unable to delete the snapshot.', exception=traceback.format_exc())
+    return response, changed
+    
+        region, ec2_url, aws_connect_params = get_aws_connection_info(module, boto3=True)
+    client = boto3_conn(module, conn_type='client', resource='iam',
+                        region=region, endpoint=ec2_url, **aws_connect_params)
+    
+    
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+    try:
+    from botocore.exceptions import ClientError, ParamValidationError
+except ImportError:
+    pass  # caught by imported HAS_BOTO3
+    
+        @unittest.skipIf(posix is None, 'Test requires posix module')
+    def test_ismount_directory_not_readable(self):
+        # issue #2466: Simulate ismount run on a directory that is not
+        # readable, which used to return False.
+        save_lstat = os.lstat
+        def fake_lstat(path):
+            st_ino = 0
+            st_dev = 0
+            if path.startswith(ABSTFN) and path != ABSTFN:
+                # ismount tries to read something inside the ABSTFN directory;
+                # simulate this being forbidden (no read permission).
+                raise OSError('Fake [Errno 13] Permission denied')
+            if path == ABSTFN:
+                st_dev = 1
+                st_ino = 1
+            return posix.stat_result((0, st_ino, st_dev, 0, 0, 0, 0, 0, 0, 0))
+        try:
+            os.lstat = fake_lstat
+            self.assertIs(posixpath.ismount(ABSTFN), True)
+        finally:
+            os.lstat = save_lstat
+    
+    '''Send the contents of a directory as a MIME message.'''
+    
+    # An imaginary module that would make this work and be safe.
+from imaginary import magic_html_parser
+    
+    from argparse import ArgumentParser
+    
+        print('-' * 20)
+    
+                if len(version) >= 20 or is_travis_build(version) or \
+                    is_jenkins_build(version) or \
+                    is_word_and_date(version):
+                # if projects are across multiple environments, allow 1 week difference
+                if projects_split_by_env and date_diff and date_diff < 604800:
+                    merge(to_release=to_release, from_releases=from_releases, sentry_models=orm)
+                    continue
+                # +/- 4 hours
+                if date_diff and date_diff > 14400:
+                    for release in releases:
+                        update_version(release, orm)
+                else:
+                    merge(to_release=to_release, from_releases=from_releases, sentry_models=orm)
+                continue
     
         models = {
         'sentry.activity': {
@@ -53,146 +208,6 @@
                 }
             )
         },
-        'sentry.apiapplication': {
-            'Meta': {
-                'object_name': 'ApiApplication'
-            },
-            'allowed_origins':
-            ('django.db.models.fields.TextField', [], {
-                'null': 'True',
-                'blank': 'True'
-            }),
-            'client_id': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''135b6360d1764c58ba28e28e52d056db29d8b3aef78d44e3a1c6ceb7918584df'',
-                    'unique': 'True',
-                    'max_length': '64'
-                }
-            ),
-            'client_secret': (
-                'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
-                    'default': ''35c0167bca634f73bbdddf471c91d7a3afcaf4a4b5d345bd84fe06d63cfc1f27''
-                }
-            ),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'homepage_url':
-            ('django.db.models.fields.URLField', [], {
-                'max_length': '200',
-                'null': 'True'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'name': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''Capitalistic Bertram'',
-                    'max_length': '64',
-                    'blank': 'True'
-                }
-            ),
-            'owner': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']'
-                }
-            ),
-            'privacy_url':
-            ('django.db.models.fields.URLField', [], {
-                'max_length': '200',
-                'null': 'True'
-            }),
-            'redirect_uris': ('django.db.models.fields.TextField', [], {}),
-            'status': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'default': '0',
-                    'db_index': 'True'
-                }
-            ),
-            'terms_url':
-            ('django.db.models.fields.URLField', [], {
-                'max_length': '200',
-                'null': 'True'
-            })
-        },
-        'sentry.apiauthorization': {
-            'Meta': {
-                'unique_together': '(('user', 'application'),)',
-                'object_name': 'ApiAuthorization'
-            },
-            'application': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiApplication']',
-                    'null': 'True'
-                }
-            ),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
-                }
-            ),
-            'scopes': ('django.db.models.fields.BigIntegerField', [], {
-                'default': 'None'
-            }),
-            'user': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']'
-                }
-            )
-        },
-        'sentry.apigrant': {
-            'Meta': {
-                'object_name': 'ApiGrant'
-            },
-            'application': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiApplication']'
-                }
-            ),
-            'code': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''4c2bd8b2bdd44293a026aa45041b0d46'',
-                    'max_length': '64',
-                    'db_index': 'True'
-                }
-            ),
-            'expires_at': (
-                'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 3, 21, 0, 0)',
-                    'db_index': 'True'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'redirect_uri': ('django.db.models.fields.CharField', [], {
-                'max_length': '255'
-            }),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
-                }
-            ),
-            'scopes': ('django.db.models.fields.BigIntegerField', [], {
-                'default': 'None'
-            }),
-            'user': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']'
-                }
-            )
-        },
         'sentry.apikey': {
             'Meta': {
                 'object_name': 'ApiKey'
@@ -228,11 +243,6 @@
                     'to': 'orm['sentry.Organization']'
                 }
             ),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
-                }
-            ),
             'scopes': ('django.db.models.fields.BigIntegerField', [], {
                 'default': 'None'
             }),
@@ -247,49 +257,28 @@
             'Meta': {
                 'object_name': 'ApiToken'
             },
-            'application': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiApplication']',
-                    'null': 'True'
-                }
-            ),
             'date_added':
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
             }),
-            'expires_at': (
-                'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 20, 0, 0)',
-                    'null': 'True'
-                }
-            ),
             'id':
             ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
                 'primary_key': 'True'
             }),
-            'refresh_token': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''090b07daf204407997a0cb11512dc7ed45238bab733049c5a4c6ae2e026ea380'',
-                    'max_length': '64',
-                    'unique': 'True',
+            'key': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.ApiKey']',
                     'null': 'True'
-                }
-            ),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
                 }
             ),
             'scopes': ('django.db.models.fields.BigIntegerField', [], {
                 'default': 'None'
             }),
-            'token': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''555b5b6a1fb04abf92ec05642ce6eccdfc45f4dcabec48c6b4e5952595ae2a82'',
-                    'unique': 'True',
-                    'max_length': '64'
-                }
-            ),
+            'token':
+            ('django.db.models.fields.CharField', [], {
+                'unique': 'True',
+                'max_length': '64'
+            }),
             'user': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.User']'
@@ -362,7 +351,7 @@
                 'object_name': 'Authenticator',
                 'db_table': ''auth_authenticator''
             },
-            'config': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {}),
+            'config': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {}),
             'created_at':
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
@@ -390,7 +379,7 @@
                     'to': 'orm['sentry.AuthProvider']'
                 }
             ),
-            'data': ('sentry.db.models.fields.encrypted.EncryptedJsonField', [], {
+            'data': ('jsonfield.fields.JSONField', [], {
                 'default': '{}'
             }),
             'date_added':
@@ -422,8 +411,7 @@
             'Meta': {
                 'object_name': 'AuthProvider'
             },
-            'config':
-            ('sentry.db.models.fields.encrypted.EncryptedJsonField', [], {
+            'config': ('jsonfield.fields.JSONField', [], {
                 'default': '{}'
             }),
             'date_added':
@@ -479,7 +467,7 @@
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 3, 28, 0, 0)',
+                    'default': 'datetime.datetime(2017, 2, 17, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -638,53 +626,6 @@
             ),
             'value': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {})
         },
-        'sentry.deploy': {
-            'Meta': {
-                'object_name': 'Deploy'
-            },
-            'date_finished':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'date_started':
-            ('django.db.models.fields.DateTimeField', [], {
-                'null': 'True',
-                'blank': 'True'
-            }),
-            'environment_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'name': (
-                'django.db.models.fields.CharField', [], {
-                    'max_length': '64',
-                    'null': 'True',
-                    'blank': 'True'
-                }
-            ),
-            'organization_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'release': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Release']'
-                }
-            ),
-            'url': (
-                'django.db.models.fields.URLField', [], {
-                    'max_length': '200',
-                    'null': 'True',
-                    'blank': 'True'
-                }
-            )
-        },
         'sentry.dsymbundle': {
             'Meta': {
                 'object_name': 'DSymBundle'
@@ -794,39 +735,7 @@
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '64'
             }),
-            'organization_id':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
-            'project_id':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                'null': 'True'
-            }),
-            'projects': (
-                'django.db.models.fields.related.ManyToManyField', [], {
-                    'to': 'orm['sentry.Project']',
-                    'through': 'orm['sentry.EnvironmentProject']',
-                    'symmetrical': 'False'
-                }
-            )
-        },
-        'sentry.environmentproject': {
-            'Meta': {
-                'unique_together': '(('project', 'environment'),)',
-                'object_name': 'EnvironmentProject'
-            },
-            'environment': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Environment']'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'project': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Project']'
-                }
-            )
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
         },
         'sentry.event': {
             'Meta': {
@@ -898,26 +807,6 @@
                 'primary_key': 'True'
             }),
             'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {})
-        },
-        'sentry.eventprocessingissue': {
-            'Meta': {
-                'unique_together': '(('raw_event', 'processing_issue'),)',
-                'object_name': 'EventProcessingIssue'
-            },
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'processing_issue': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ProcessingIssue']'
-                }
-            ),
-            'raw_event': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.RawEvent']'
-                }
-            )
         },
         'sentry.eventtag': {
             'Meta': {
@@ -1720,7 +1609,7 @@
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
             }),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.organization': {
             'Meta': {
@@ -1963,35 +1852,7 @@
                     'to': 'orm['sentry.Organization']'
                 }
             ),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
-        },
-        'sentry.processingissue': {
-            'Meta': {
-                'unique_together': '(('project', 'checksum', 'type'),)',
-                'object_name': 'ProcessingIssue'
-            },
-            'checksum':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '40',
-                'db_index': 'True'
-            }),
-            'data': ('sentry.db.models.fields.gzippeddict.GzippedDictField', [], {}),
-            'datetime':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'project': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Project']'
-                }
-            ),
-            'type': ('django.db.models.fields.CharField', [], {
-                'max_length': '30'
-            })
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.project': {
             'Meta': {
@@ -2003,11 +1864,6 @@
                 'default': 'datetime.datetime.now'
             }),
             'first_event': ('django.db.models.fields.DateTimeField', [], {
-                'null': 'True'
-            }),
-            'flags':
-            ('django.db.models.fields.BigIntegerField', [], {
-                'default': '0',
                 'null': 'True'
             }),
             'forced_color': (
@@ -2172,7 +2028,7 @@
                     'to': 'orm['sentry.Project']'
                 }
             ),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.projectplatform': {
             'Meta': {
@@ -2195,35 +2051,6 @@
                 'max_length': '64'
             }),
             'project_id': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {})
-        },
-        'sentry.rawevent': {
-            'Meta': {
-                'unique_together': '(('project', 'event_id'),)',
-                'object_name': 'RawEvent'
-            },
-            'data':
-            ('sentry.db.models.fields.node.NodeField', [], {
-                'null': 'True',
-                'blank': 'True'
-            }),
-            'datetime':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'event_id':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '32',
-                'null': 'True'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'project': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Project']'
-                }
-            )
         },
         'sentry.release': {
             'Meta': {
@@ -2361,7 +2188,6 @@
             ),
             'project_id': (
                 'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'null': 'True',
                     'db_index': 'True'
                 }
             ),
@@ -2477,30 +2303,6 @@
                 'max_length': '200',
                 'null': 'True'
             })
-        },
-        'sentry.reprocessingreport': {
-            'Meta': {
-                'unique_together': '(('project', 'event_id'),)',
-                'object_name': 'ReprocessingReport'
-            },
-            'datetime':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'event_id':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '32',
-                'null': 'True'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'project': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Project']'
-                }
-            )
         },
         'sentry.rule': {
             'Meta': {
@@ -2815,7 +2617,7 @@
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'vWbHmbYO18VmmrAcL4njpJeydgCctzV3'',
+                    'default': 'u'l9fhzfrEFPbM9UG4KizuBO0UapI2lGb9'',
                     'max_length': '32'
                 }
             )
@@ -2843,7 +2645,7 @@
                     'to': 'orm['sentry.User']'
                 }
             ),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.userreport': {
             'Meta': {
@@ -2883,88 +2685,74 @@
         }
     }
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
-        db.delete_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
+            db.start_transaction()
     
-        complete_apps = ['sentry']
-
-    
-            # Adding field 'ReleaseFile.dist'
-        db.add_column(
-            'sentry_releasefile',
-            'dist',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.Distribution'], null=True
-            ),
-            keep_default=False
+            # The following code is provided here to aid in writing a correct migration
+        # Changing field 'ReleaseEnvironment.project_id'
+        db.alter_column(
+            'sentry_environmentrelease', 'project_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
         )
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+def make_handler(value):
+    return BitHandler(
+        keys=(
+            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
+            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
+            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
+        ),
+        value=value,
+    )
     
     
-  def OnCursorMoved( self ):
-    if self._user_options[ 'echo_current_diagnostic' ]:
-      line, _ = vimsupport.CurrentLineAndColumn()
-      line += 1  # Convert to 1-based
-      if line != self._previous_diag_line_number:
-        self._EchoDiagnosticForLine( line )
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'ReleaseHeadCommit'
+        db.create_table(
+            'sentry_releaseheadcommit', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'organization_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        db_index=True
+                    )
+                ), (
+                    'repository_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
+                ), (
+                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Release']
+                    )
+                ), (
+                    'commit', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Commit']
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ReleaseHeadCommit'])
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        '''catalog of multiple class methods that are executed depending on an init
+    
+    *TL;DR80
+Encapsulates how a set of objects interact.
+'''
     
     
-def _ExtractKeywordsFromGroup( group ):
-  keywords = []
-  for line in group.lines:
-    keywords.extend( _ExtractKeywordsFromLine( line ) )
-  return keywords
-
+class Provider:
+    def __init__(self):
+        self.msg_queue = []
+        self.subscribers = {}
     
+        def scan(self):
+        '''Scan the dial to the next station'''
+        self.pos += 1
+        if self.pos == len(self.stations):
+            self.pos = 0
+        print(u'Scanning... Station is %s %s' % (self.stations[self.pos], self.name))
     
-def LevelWarnings_test():
-  opts = _JavaFilter( { 'level' : 'warning' } )
-  f = _CreateFilterForTypes( opts, [ 'java' ] )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-@patch( 'ycm.vimsupport.GetVariableValue',
-        GetVariableValue_CompleteItemIs( 'Test', user_data='0' ) )
-@patch( 'ycm.vimsupport.ReplaceChunks' )
-def PostCompleteFixIt_ApplyFixIt_PickFirstUserData_test( replace_chunks,
-                                                         *args ):
-  completions = [
-    BuildCompletionFixIt( [ { 'chunks': 'one' } ] ),
-    BuildCompletionFixIt( [ { 'chunks': 'two' } ] ),
-  ]
-  with _SetUpCompleteDone( completions ) as request:
-    request._OnCompleteDone_FixIt()
-    replace_chunks.assert_called_once_with( 'one', silent = True )
-    
-      if parsed_args.coverage:
-    nosetests_args += [ '--with-coverage',
-                        '--cover-erase',
-                        '--cover-package=ycm',
-                        '--cover-html' ]
+        __metaclass__ = abc.ABCMeta
