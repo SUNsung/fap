@@ -1,172 +1,153 @@
 
         
-            dirname = 'cifar-100-python'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+                self.host = host
+        self.port = port
+        self.requests_to_handle = requests_to_handle
     
-    import gzip
-import os
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
-        def get_config(self):
-        return {'l1': float(self.l1),
-                'l2': float(self.l2)}
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
     
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
+    Compatibility code to be able to use `cookielib.CookieJar` with requests.
     
-    
-@keras_test
-def test_prelu():
-    layer_test(layers.PReLU, kwargs={},
-               input_shape=(2, 3, 4))
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--get', dest='get', metavar='SETTING',
-            help='print raw setting value')
-        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
-            help='print setting value, interpreted as a boolean')
-        parser.add_option('--getint', dest='getint', metavar='SETTING',
-            help='print setting value, interpreted as an integer')
-        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
-            help='print setting value, interpreted as a float')
-        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
-            help='print setting value, interpreted as a list')
-    
-    See documentation in docs/topics/shell.rst
-'''
-from threading import Thread
-    
-            if config.PROXY_ENABLE:
-            if config.PROXY_USER:
-                self.proxy = '%s://%s:%s@%s:%d' % \
-                    (config.PROXY_TYPE, config.PROXY_USER, config.PROXY_PASSWD, config.PROXY_HOST, config.PROXY_PORT)
-            else:
-                self.proxy = '%s://%s:%d' % \
-                    (config.PROXY_TYPE, config.PROXY_HOST, config.PROXY_PORT)
-        else:
-            self.proxy = None
-    
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
-        '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+    about = {}
+with open(os.path.join(here, 'requests', '__version__.py'), 'r', 'utf-8') as f:
+    exec(f.read(), about)
     
     
-    def matchAny(self, input):
-        '''Match the wildcard: in a symbol'''
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
+    
+        sourceType = info['sourceType']
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+    site = Bigthink()
+download = site.download_by_url
+
     
     
-class PollErrorTest(unittest.TestCase):
-    '''Tests for acme.errors.PollError.'''
+def get_coub_data(html):
+    coub_data = r1(r'<script id=\'coubPageCoubJson\' type=\'text/json\'>([^<]+)</script>', html)
+    json_data = json.loads(coub_data)
+    return json_data
     
-        def test_default_decoder_raises_deserialization_error(self):
-        from acme.fields import RFC3339Field
-        self.assertRaises(
-            jose.DeserializationError, RFC3339Field.default_decoder, '')
+    from ..common import *
+import urllib.parse
     
-            ip_addr:* == ip_addr
+        # Test an invalid call (bpo-34126)
+    def test_unbound_method_no_args(self):
+        def f(p):
+            dict.get()
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident)])
     
-        @unittest.skip('causes undesirable side-effects (#20128)')
-    def test_modules(self):
-        # See Helper.listmodules().
-        num_header_lines = 2
-        num_module_lines_min = 5  # Playing it safe.
-        num_footer_lines = 3
-        expected = num_header_lines + num_module_lines_min + num_footer_lines
     
-    def ext_decompress(data):
-    global has_cmdline_bunzip2
-    if has_cmdline_bunzip2 is None:
-        has_cmdline_bunzip2 = bool(shutil.which('bunzip2'))
-    if has_cmdline_bunzip2:
-        return subprocess.check_output(['bunzip2'], input=data)
+def splitext(p):
+    if isinstance(p, bytes):
+        return genericpath._splitext(p, b':', altsep, b'.')
     else:
-        return bz2.decompress(data)
+        return genericpath._splitext(p, sep, altsep, extsep)
+splitext.__doc__ = genericpath._splitext.__doc__
     
-    --Pepé
-''')
+        PurePath represents a filesystem path and offers operations which
+    don't imply any actual filesystem I/O.  Depending on your system,
+    instantiating a PurePath will return either a PurePosixPath or a
+    PureWindowsPath object.  You can also instantiate either of these classes
+    directly, regardless of your system.
+    '''
+    __slots__ = (
+        '_drv', '_root', '_parts',
+        '_str', '_hash', '_pparts', '_cached_cparts',
+    )
     
-    def test():
-    manager = MyManager()
-    manager.start()
+    import locale
+import os
+import sys
+import textwrap
+import unittest
+from test import support
+from test.support.script_helper import assert_python_ok, assert_python_failure
     
-    con.close()
-
-    
-            depending on self.param value
-        '''
-        self._instance_method_choices[self.param].__get__(self)()
-    
-        def setDB(self, db):
-        self._db = db
-    
-    ### OUTPUT ###
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# HexViewer: Subject Data 1 has data 0xa
-# Setting Data 2 = 15
-# HexViewer: Subject Data 2 has data 0xf
-# DecimalViewer: Subject Data 2 has data 15
-# Setting Data 1 = 3
-# DecimalViewer: Subject Data 1 has data 3
-# HexViewer: Subject Data 1 has data 0x3
-# Setting Data 2 = 5
-# HexViewer: Subject Data 2 has data 0x5
-# DecimalViewer: Subject Data 2 has data 5
-# Detach HexViewer from data1 and data2.
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# Setting Data 2 = 15
-# DecimalViewer: Subject Data 2 has data 15
-
-    
-        def __init__(self):
-        self.msg_queue = []
-        self.subscribers = {}
-    
-        @abstractmethod
-    def is_satisfied_by(self, candidate):
-        pass
-    
-        def __enter__(self):
-        if self.item is None:
-            self.item = self._queue.get()
-        return self.item
-    
-        def set_time_provider(self, time_provider):
-        self.time_provider = time_provider
-    
-    
-class Unit(object):
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
     
     ### OUTPUT ###
-# PRODUCT LIST:
-# (Fetching from Data Store)
-# cheese
-# eggs
-# milk
-#
-# (Fetching from Data Store)
-# PRODUCT INFORMATION:
-# Name: Cheese, Price: 2.00, Quantity: 10
-# (Fetching from Data Store)
-# PRODUCT INFORMATION:
-# Name: Eggs, Price: 0.20, Quantity: 100
-# (Fetching from Data Store)
-# PRODUCT INFORMATION:
-# Name: Milk, Price: 1.50, Quantity: 10
-# (Fetching from Data Store)
-# That product 'arepas' does not exist in the records
+# dog σκύλος
+# parrot parrot
+# cat γάτα
+# bear bear
+
+    
+    *References:
+https://en.wikipedia.org/wiki/Composite_pattern
+https://infinitescript.com/2014/10/the-23-gang-of-three-design-patterns/
+    
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
+    
+        # verify that none of the target files exist
+    assert not lexists('foo.txt')
+    assert not lexists('bar.txt')
+    assert not lexists('baz.txt')
+    try:
+        with open('foo.txt', 'w'):  # Creating the file
+            pass
+    
+        def run(self, msg):
+        print('{} got {}'.format(self.name, msg))
+    
+    '''
+Lazily-evaluated property pattern in Python.
+    
+        sample_queue = queue.Queue()
+    
+    
+class MidnightTimeProvider(object):
+    '''
+    Class implemented as hard-coded stub (in contrast to configurable stub).
+    '''
+    
+        def __init__(self, blackboard):
+        self.blackboard = blackboard
