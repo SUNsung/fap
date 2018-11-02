@@ -1,247 +1,246 @@
 
         
-        
-@pytest.fixture(autouse=True)
-def usage_tracker_io(usage_tracker):
-    io = StringIO()
-    usage_tracker.return_value \
-                 .open.return_value \
-                 .__enter__.return_value = io
-    return io
+            def __repr__(self):
+        return '<{0} {1}>'.format(type(self).__name__, str(self))
+
+    
+            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
+            if not converter and b'\0' in chunk:
+                converter = self.conversion.get_converter(self.mime)
+                if not converter:
+                    raise BinarySuppressedError()
+            body.extend(chunk)
+    
+            '''
+        r.headers['Authorization'] = type(self).make_header(
+            self.username, self.password).encode('latin1')
+        return r
+    
+        def test_binary_suppresses_when_not_terminal_but_pretty(self):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--pretty=all', 'GET', self.url,
+                 env=env)
+        assert BINARY_SUPPRESSED_NOTICE.decode() in r
     
     
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-    
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-        def find_condition_in_rules(self, condition_set_id):
-        rules_in_use = []
-        try:
-            all_rules = list_rules_with_backoff(self.client)
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            self.module.fail_json_aws(e, msg='Could not list rules')
-        for rule in all_rules:
-            try:
-                rule_details = get_rule_with_backoff(self.client, rule['RuleId'])
-            except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-                self.module.fail_json_aws(e, msg='Could not get rule details')
-            if condition_set_id in [predicate['DataId'] for predicate in rule_details['Predicates']]:
-                rules_in_use.append(rule_details['Name'])
-        return rules_in_use
-    
-    import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
-    
-    # Delete pipeline
-- data_pipeline:
-    name: test-dp
-    region: us-west-2
-    state: absent
-    
-            if len(interfaces) == 1:
-            return interfaces[0]
-    
-            for attr in ('alarm_actions', 'insufficient_data_actions', 'ok_actions'):
-            action = module.params.get(attr) or []
-            # Boto and/or ansible may provide same elements in lists but in different order.
-            # Compare on sets since they do not need any order.
-            if set(getattr(alarm, attr)) != set(action):
-                changed = True
-                setattr(alarm, attr, module.params.get(attr))
-    
-        connection = boto3_conn(module,
-                            resource='ec2', conn_type='client',
-                            region=region, endpoint=ec2_url, **aws_connect_params)
-    
+def test_default_headers_case_insensitive(httpbin):
     '''
+    <https://github.com/jakubroztocil/httpie/issues/644>
+    '''
+    r = http(
+        '--debug',
+        '--print=H',
+        httpbin.url + '/post',
+        'CONTENT-TYPE:application/json-patch+json',
+        'a=b',
+    )
+    assert 'CONTENT-TYPE: application/json-patch+json' in r
+    assert 'Content-Type' not in r
     
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
+            # syntax error
+        pytest.raises(ContentRangeError, parse, 'beers 100-199/*', 100)
     
-        if '_text' in dictified['video'][0]['size'][0]:  #size exists for 1 piece
-        video_dict['size'] = sum([int(i['size'][0]['_text']) for i in dictified['video']])
-    
-        if re.match(re_str, url):
-        html = get_content(url)
-        title = match1(html, r'<title>(.+)丨(.+)</title>')  #title
-        
-        # player loaded via internal iframe
-        frame_url = re.search(r'<iframe src=\'(.+?)\'', html).group(1)
-        logging.debug('dilidili_download: %s' % frame_url)
-        
-        #https://player.005.tv:60000/?vid=a8760f03fd:a04808d307&v=yun&sign=a68f8110cacd892bc5b094c8e5348432
-        html = get_content(frame_url, headers=headers, decoded=False).decode('utf-8')
-        
-        match = re.search(r'(.+?)var video =(.+?);', html)
-        vid = match1(html, r'var vid='(.+)'')
-        hd2 = match1(html, r'var hd2='(.+)'')
-        typ = match1(html, r'var typ='(.+)'')
-        sign = match1(html, r'var sign='(.+)'')
-        tmsign = match1(html, r'tmsign=([A-Za-z0-9]+)')
-        ulk =  match1(html, r'var ulk='(.+)'')
-    
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
-    
-            stdout, _, result = stdout.strip().rpartition('\n')
-        if not result:
-            self.output.put((None, None, None, None))
-            return True
-    
-    This module provides regular expression matching operations similar to
-those found in Perl.  It supports both 8-bit and Unicode strings; both
-the pattern and the strings being processed can contain null bytes and
-characters outside the US ASCII range.
-    
-        code.append(SUCCESS)
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
+
     
     
-# Split a path in root and extension.
-# The extension is everything starting at the last dot in the last
-# pathname component; the root is everything before that.
-# It is always true that root + ext == p.
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+
     
+        return inner
     
-def splitext(p):
-    if isinstance(p, bytes):
-        return genericpath._splitext(p, b':', altsep, b'.')
+    from requests.structures import CaseInsensitiveDict, LookupDict
+    
+    import urllib3
+import chardet
+import warnings
+from .exceptions import RequestsDependencyWarning
+    
+        if implementation == 'CPython':
+        implementation_version = platform.python_version()
+    elif implementation == 'PyPy':
+        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
+                                               sys.pypy_version_info.minor,
+                                               sys.pypy_version_info.micro)
+        if sys.pypy_version_info.releaselevel != 'final':
+            implementation_version = ''.join([
+                implementation_version, sys.pypy_version_info.releaselevel
+            ])
+    elif implementation == 'Jython':
+        implementation_version = platform.python_version()  # Complete Guess
+    elif implementation == 'IronPython':
+        implementation_version = platform.python_version()  # Complete Guess
     else:
-        return genericpath._splitext(p, sep, altsep, extsep)
-splitext.__doc__ = genericpath._splitext.__doc__
+        implementation_version = 'Unknown'
     
-        @classmethod
-    def cwd(cls):
-        '''Return a new path pointing to the current working directory
-        (as returned by os.getcwd()).
+    Available hooks:
+    
+            self.prepare_method(method)
+        self.prepare_url(url, params)
+        self.prepare_headers(headers)
+        self.prepare_cookies(cookies)
+        self.prepare_body(data, files, json)
+        self.prepare_auth(auth, url)
+    
+        def test_request_recovery_with_bigger_timeout(self):
+        '''a biggest timeout can be specified'''
+        server = Server.basic_response_server(request_timeout=3)
+        data = b'bananadine'
+    
+    from setuptools import setup, find_packages
+setup(
+    name = proj_info['name'],
+    version = VERSION,
+    
+    import urllib
+    
+        @staticmethod
+    def get_streams_by_id(account_number, video_id):
         '''
-        return cls(os.getcwd())
+        int, int->list
+        
+        Get the height of the videos.
+        
+        Since brightcove is using 3 kinds of links: rtmp, http and https,
+        we will be using the HTTPS one to make it secure.
+        
+        If somehow akamaihd.net is blocked by the Great Fucking Wall,
+        change the 'startswith https' to http.
+        '''
+        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
+        fake_header_id = fake_headers
+        #is this somehow related to the time? Magic....
+        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
     
-      # Remove old YCM libs if present so that YCM can start.
-  old_libs = (
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_core.*' ) ) +
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_client_support.*' ) ) +
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*clang*.*') ) )
-  for lib in old_libs:
-    os.remove( lib )
+    #----------------------------------------------------------------------
+#helper
+#https://stackoverflow.com/questions/2148119/how-to-convert-an-xml-string-to-a-dictionary-in-python
+def dictify(r,root=True):
+    if root:
+        return {r.tag : dictify(r, False)}
+    d=copy(r.attrib)
+    if r.text:
+        d['_text']=r.text
+    for x in r.findall('./*'):
+        if x.tag not in d:
+            d[x.tag]=[]
+        d[x.tag].append(dictify(x,False))
+    return d
     
-      if left_string == right_string:
-    return min( left_string_length, right_string_length )
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
     
-    
-def _HandlePollResponse( response, diagnostics_handler ):
-  if isinstance( response, list ):
-    for notification in response:
-      if 'message' in notification:
-        PostVimMessage( notification[ 'message' ],
-                        warning = False,
-                        truncate = True )
-      elif 'diagnostics' in notification:
-        diagnostics_handler.UpdateWithNewDiagnosticsForFile(
-          notification[ 'filepath' ],
-          notification[ 'diagnostics' ] )
-  elif response is False:
-    # Don't keep polling for this file
-    return False
-  # else any truthy response means 'nothing to see here; poll again in a
-  # while'
-    
-    
-  def Start( self ):
-    self.PostDataToHandler( {},
-                            'shutdown',
-                            TIMEOUT_SECONDS,
-                            display_message = False )
-    
-      def _Check( self, completion_id, completion_data, expected_vim_data ):
-    vim_data = completion_request._ConvertCompletionDataToVimData(
-        completion_id,
-        completion_data )
-    
-    
-@YouCompleteMeInstance()
-# Select the second item of the list which is the ycmd stderr logfile.
-@patch( 'ycm.vimsupport.SelectFromList', return_value = 1 )
-@patch( 'ycm.vimsupport.OpenFilename', new_callable = ExtendedMock )
-def YouCompleteMe_ToggleLogs_WithoutParameters_SelectLogfileNotAlreadyOpen_test(
-  ycm, open_filename, *args ):
-    
-    
-class Action(object):
-    def __init__(self, name):
-        self.name = name
-    
-        # commands are just pushed into the command stack
-    command_stack.append(MoveFileCommand('foo.txt', 'bar.txt'))
-    command_stack.append(MoveFileCommand('bar.txt', 'baz.txt'))
+            for i in range(len(titles)):
+            title = titles[i]
+            datas = {
+                'sid': song_id[i],
+                'ssid': song_ssid[i]
+            }
+            post_params = urllib.parse.urlencode(datas).encode('utf-8')
+            try:
+                resp = urllib.request.urlopen(get_song_url, post_params)
+                resp_data = json.loads(resp.read().decode('utf-8'))
+                real_url = resp_data['r']
+                type, ext, size = url_info(real_url)
+                print_info(site_info, title, type, size)
+            except:
+                pass
     
     
-class DB:
-    def __init__(self):
-        self._tm = None
+def linkcode_resolve(domain, info):
+    '''Determine the URL corresponding to Python object.'''
+    if domain != 'py':
+        return None
+    modname = info['module']
+    fullname = info['fullname']
+    submod = sys.modules.get(modname)
+    if submod is None:
+        return None
+    obj = submod
+    for part in fullname.split('.'):
+        try:
+            obj = getattr(obj, part)
+        except:
+            return None
+    try:
+        fn = inspect.getsourcefile(obj)
+    except:
+        fn = None
+    if not fn:
+        return None
+    try:
+        source, lineno = inspect.findsource(obj)
+    except:
+        lineno = None
+    if lineno:
+        linespec = '#L%d' % (lineno + 1)
+    else:
+        linespec = ''
+    index = fn.find('/homeassistant/')
+    if index == -1:
+        index = 0
     
-            return transaction
+    _LOGGER = logging.getLogger(__name__)
     
+        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
+                           lambda service:
+                           webbrowser.open(service.data[ATTR_URL]),
+                           schema=SERVICE_BROWSE_URL_SCHEMA)
     
-class StrategyExample:
-    def __init__(self, func=None):
-        self.name = 'Strategy Example 0'
-        if func is not None:
-            self.execute = types.MethodType(func, self)
+            # Check if the access point is accessible
+        response = self._make_request()
+        if not response.status_code == 200:
+            raise ConnectionError('Cannot connect to Linksys Access Point')
     
-    In Java and other languages, the Abstract Factory Pattern serves to provide an interface for
-creating related/dependent objects without need to specify their
-actual class.
+        for device in new_devices:
+        dev_id = (
+            id(device.gateway), device.node_id, device.child_id,
+            device.value_type)
+        async_dispatcher_connect(
+            hass, mysensors.const.SIGNAL_CALLBACK.format(*dev_id),
+            device.async_update_callback)
     
-        def build_size(self):
-        self.size = 'Small'
+            from nmap import PortScanner, PortScannerError
+        scanner = PortScanner()
     
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+            devices = {}
+        for device in request.json()['status']:
+            try:
+                devices[device['Key']] = {
+                    'ip': device['IPAddress'],
+                    'mac': device['PhysAddress'],
+                    'host': device['Name'],
+                    'status': device['Active']
+                    }
+            except (KeyError, requests.exceptions.RequestException):
+                pass
+        return devices
+
     
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/device_tracker.volvooncall/
 '''
+import logging
     
-        '''Graph search emulation in python, from source
-    http://www.python.org/doc/essays/graphs/'''
+    import requests
+import voluptuous as vol
+    
+        def __init__(self, name, cfg):
+        '''Initialize the graph.'''
+        self._name = name
+        self._hours = cfg[CONF_HOURS_TO_SHOW]
+        self._refresh = cfg[CONF_REFRESH]
+        self._entities = cfg[CONF_ENTITIES]
