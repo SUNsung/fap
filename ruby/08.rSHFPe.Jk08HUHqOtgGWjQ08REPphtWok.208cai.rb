@@ -1,78 +1,58 @@
 
         
-            # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
+            def limit_reached_for(user_id, date)
+      GivenDailyLike.find_for(user_id, date).pluck(:limit_reached)[0] || false
     end
     
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
+              pipelines.each do |pipeline|
+            self.new(pipeline).tap do |preloader|
+              preloader.preload_commit_authors
+              preloader.preload_pipeline_warnings
+              preloader.preload_stages_warnings
+            end
+          end
+        end
     
-      # Checks whether it's a devise mapped resource or not.
-  def assert_is_devise_resource! #:nodoc:
-    unknown_action! <<-MESSAGE unless devise_mapping
-Could not find devise mapping for path #{request.fullpath.inspect}.
-This may happen for two reasons:
+              def action_icon
+            'cancel'
+          end
     
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
+              def action_icon
+            'retry'
+          end
     
-          if message.is_a?(Symbol)
-        options = {}
-        options[:resource_name] = scope
-        options[:scope] = 'devise.failure'
-        options[:default] = [message]
-        auth_keys = scope_class.authentication_keys
-        keys = (auth_keys.respond_to?(:keys) ? auth_keys.keys : auth_keys).map { |key| scope_class.human_attribute_name(key) }
-        options[:authentication_keys] = keys.join(I18n.translate(:'support.array.words_connector'))
-        options = i18n_options(options)
+          @account_moderation_note = current_account.account_moderation_notes.new(resource_params)
     
-        if last_request_at.is_a? Integer
-      last_request_at = Time.at(last_request_at).utc
-    elsif last_request_at.is_a? String
-      last_request_at = Time.parse(last_request_at)
+          new_email = resource_params.fetch(:unconfirmed_email)
+    
+        def set_user
+      @user = Account.find(params[:account_id]).user || raise(ActiveRecord::RecordNotFound)
     end
     
-      # create list of plugins to update
-  def plugins_to_update(previous_gem_specs_map)
-    if update_all?
-      previous_gem_specs_map.values.map{|spec| spec.name}
-    else
-      # If the plugins isn't available in the gemspec or in 
-      # the gemfile defined with a local path, we assume the plugins is not
-      # installed.
-      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
-      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
-      plugins_arg
-    end
+        helper_method :paginated_instances
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
   end
     
-    project_versions_yaml_path = File.expand_path('../versions.yml', File.dirname(__FILE__))
-if File.exist?(project_versions_yaml_path)
-  # we need to copy the project level versions.yml into the gem root
-  # to be able to package it into the gems file structure
-  # as the require 'logstash-core-plugin-api/version' loads the yaml file from within the gem root.
-  #
-  # we ignore the copy in git and we overwrite an existing file
-  # each time we build the logstash-core gem
-  original_lines = IO.readlines(project_versions_yaml_path)
-  original_lines << ''
-  original_lines << '# This is a copy the project level versions.yml into this gem's root and it is created when the gemspec is evaluated.'
-  gem_versions_yaml_path = File.expand_path('./versions-gem-copy.yml', File.dirname(__FILE__))
-  File.open(gem_versions_yaml_path, 'w') do |new_file|
-    # create or overwrite
-    new_file.puts(original_lines)
+      def encoded_challenge
+    HTMLEntities.new.encode(params['hub.challenge'])
   end
-end
+    
+              # Encodes the options field
+          #
+          # @return [OpenSSL::ASN1::BitString]
+          def encode_options
+            OpenSSL::ASN1::BitString.new([options].pack('N'))
+          end
+    
+            if echo?
+          $stdin.gets
+        else
+          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
+        end
+      rescue Errno::EIO
+        # when stdio gets closed
+        return
+      end
