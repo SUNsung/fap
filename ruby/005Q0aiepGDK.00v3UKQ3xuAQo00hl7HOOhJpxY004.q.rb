@@ -1,145 +1,173 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+            describe '+' do
+      context 'applies to numeric formats bBdiouxXaAeEfgG' do
+        it 'adds a leading plus sign to non-negative numbers' do
+          format('%+b', 10).should == '+1010'
+          format('%+B', 10).should == '+1010'
+          format('%+d', 112).should == '+112'
+          format('%+i', 112).should == '+112'
+          format('%+o', 87).should == '+127'
+          format('%+u', 112).should == '+112'
+          format('%+x', 196).should == '+c4'
+          format('%+X', 196).should == '+C4'
     
-      dest.ascend do |f|
-    break if f == source
-    paths.unshift f.to_s
+      it 'accepts a Fixnum' do
+    sleep(0).should be_close(0, 2)
   end
     
-    Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
-  s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '2.2.2'
-  s.required_ruby_version = '>= 2.3.0'
-    
-            # config[kramdown][syntax_higlighter] >
-        #   config[kramdown][enable_coderay] >
-        #   config[highlighter]
-        # Where `enable_coderay` is now deprecated because Kramdown
-        # supports Rouge now too.
-        def highlighter
-          return @highlighter if @highlighter
-    
-        select_agent_type('Trigger Agent')
-    fill_in(:agent_name, with: 'Test Trigger Agent')
-    click_on('Toggle View')
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-    describe HuginnScheduler do
-  before(:each) do
-    @rufus_scheduler = Rufus::Scheduler.new
-    @scheduler = HuginnScheduler.new
-    stub(@scheduler).setup {}
-    @scheduler.setup!(@rufus_scheduler, Mutex.new)
+      it 'returns true when passed ?r if the argument is readable by the effective uid' do
+    Kernel.test(?r, @file).should be_true
   end
     
-      it 'is droppable' do
-    {
-      '{{location.lat}}' => '2.0',
-      '{{location.latitude}}' => '2.0',
-      '{{location.lng}}' => '3.0',
-      '{{location.longitude}}' => '3.0',
-      '{{location.latlng}}' => '2.0,3.0',
-    }.each { |template, result|
-      expect(Liquid::Template.parse(template).render('location' => location.to_liquid)).to eq(result),
-        'expected #{template.inspect} to expand to #{result.inspect}'
-    }
+    describe 'Kernel#throw' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:throw)
   end
 end
 
     
-        it 'interpolates jsonpath expressions between matching <>'s' do
-      expect(Utils.interpolate_jsonpaths('hello <$.there.world> this <escape works>', payload)).to eq('hello WORLD this should+work')
-    end
-    
-      describe 'up' do
-    it 'should update extract and template options for an existing WebsiteAgent' do
-      expect(agent.options).to include('extract' => old_extract,
-                                       'template' => old_template)
-      ConvertWebsiteAgentTemplateForMerge.new.up
-      agent.reload
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-    end
+      after :each do
+    Object.send :remove_method, :boom
   end
     
-          doc.css('#filecontents').css('h1, h2, h3, h4, h5, h6').each do |h|
-        next if h.inner_text.empty?
-        h['id'] =
-          case h.inner_text
-          when 'Referencing Parent Selectors: &'; 'parent-selector'
-          when /^Comments:/; 'comments'
-          when 'Strings'; 'sass-script-strings'
-          when 'Division and /'; 'division-and-slash'
-          when /^Subtraction,/; 'subtraction'
-          when '& in SassScript'; 'parent-script'
-          when '@-Rules and Directives'; 'directives'
-          when '@extend-Only Selectors'; 'placeholders'
-          when '@extend-Only Selectors'; 'placeholders'
-          when '@each'; 'each-directive'
-          when 'Multiple Assignment'; 'each-multi-assign'
-          when 'Mixin Directives'; 'mixins'
-          when /^Defining a Mixin:/; 'defining_a_mixin'
-          when /^Including a Mixin:/; 'including_a_mixin'
-          when 'Arguments'; 'mixin-arguments'
-          when 'Passing Content Blocks to a Mixin'; 'mixin-content'
-          else
-            h.inner_text.downcase.gsub(/[^a-z _-]/, '').gsub(' ', '_')
-          end
+    module Cask
+  class Cmd
+    class Cleanup < AbstractCommand
+      def self.help
+        'cleans up cached downloads and tracker symlinks'
       end
     
-        def parse_mixin_directive(parent, line, root, value, offset)
-      parse_mixin_definition(line)
+      class << self
+    # Expand the requirements of dependent recursively, optionally yielding
+    # `[dependent, req]` pairs to allow callers to apply arbitrary filters to
+    # the list.
+    # The default filter, which is applied when a block is not given, omits
+    # optionals and recommendeds based on what the dependent has asked for.
+    def expand(dependent, &block)
+      reqs = Requirements.new
+    
+      def initialize
+    @rebuild = 0
+    @prefix = Homebrew::DEFAULT_PREFIX
+    @cellar = Homebrew::DEFAULT_CELLAR
+    @collector = Utils::Bottles::Collector.new
+    @root_url_specs = {}
+  end
+    
+        desc 'Commits the version to github repository'
+    task :commit_version do
+      sh <<-SH
+        sed -i 's/.*VERSION.*/  VERSION = '#{source_version}'/' lib/sinatra/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' sinatra-contrib/lib/sinatra/contrib/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' rack-protection/lib/rack/protection/version.rb
+      SH
+    
+          def origin(env)
+        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
+      end
+    
+    opts = OptionParser.new do |opts|
+  # define program name (although this defaults to the name of the file, just in case...)
+  opts.program_name = 'gollum'
+    
+  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
+  opts.banner = '
+  Gollum is a multi-format Wiki Engine/API/Frontend.
+    
+  Usage:
+      gollum [options] [git-repo]
+    
+  Arguments:
+      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
+  
+  Notes:
+      Paths for all options are relative to <git-repo> unless absolute.
+      This message is only a basic description. For more information, please visit:
+          https://github.com/gollum/gollum
+  
+  OPTIONS'
+  
+  # define gollum options  
+  opts.separator ''
+  opts.separator '  Major:'
+  
+  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
+    options[:bind] = host
+  end
+  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
+    begin
+      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
+      options[:port] = Integer(port)
+    rescue ArgumentError
+      puts 'Error: '#{port}' is not a valid port number.'
+      exit 1
     end
+  end
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
+    options[:config] = file
+  end
+  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
+    wiki_options[:ref] = ref
+  end
+  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
+    wiki_options[:repo_is_bare] = true
+  end
+  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
+    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
+      
+    # first trim a leading slash, if any
+    base_path.sub!(/^\/+/, '')
     
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
+    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
+# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
+# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
+# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
+if $0 == __FILE__
+  LogStash::Bundler.setup!({:without => [:build, :development]})
+  require_relative 'patches/jar_dependencies'
+    
+        class Main < Clamp::Command
+      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
+      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
+      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
+      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
+      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
+      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
+      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
+      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
+      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
+    end
+  end
+end
+    
+          def pack_uri(plugin_name)
+        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
+        URI.parse(url)
       end
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+        # any errors will be logged to $stderr by invoke!
+    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
+    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
+    options[:local] = true if local?
+    output = LogStash::Bundler.invoke!(options)
+    # We currently dont removed unused gems from the logstash installation
+    # see: https://github.com/elastic/logstash/issues/6339
+    # output = LogStash::Bundler.invoke!(:clean => true)
+    display_updated_plugins(previous_gem_specs_map)
+  rescue => exception
+    gemfile.restore!
+    report_exception('Updated Aborted', exception)
+  ensure
+    display_bundler_output(output)
+  end
