@@ -1,263 +1,276 @@
 
         
-            def add_user(self, user):
-        pass
-    
-        def __init__(self, key, value):
-        self.key = key
-        self.value = value
+        
+def get_requests_kwargs(args, base_headers=None):
+    '''
+    Translate our `args` into `requests.request` keyword arguments.
     
     
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('a', 'test', b'Incorrect username.'),
-    ('test', 'a', b'Incorrect password.'),
-))
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
-    assert message in response.data
+class ConverterPlugin(object):
+    
+        for factor, suffix in abbrevs:
+        if n >= factor:
+            break
+    
+        def run_tests(self):
+        import pytest
+        sys.exit(pytest.main(self.test_args))
     
     
-# Certain versions of pypy have a bug where clearing the exception stack
-# breaks the __exit__ function in a very peculiar way.  The second level of
-# exception blocks is necessary because pypy seems to forget to check if an
-# exception happened until the next bytecode instruction?
+class TestMultipartFormDataFileUpload:
+    
+        Directories are *not* resources.
+    '''
+    package = _get_package(package)
+    _normalize_path(name)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.is_resource(name)
+    try:
+        package_contents = set(contents(package))
+    except (NotADirectoryError, FileNotFoundError):
+        return False
+    if name not in package_contents:
+        return False
+    # Just because the given file_name lives as an entry in the package's
+    # contents doesn't necessarily mean it's a resource.  Directories are not
+    # resources, so let's try to find out if it's a directory or not.
+    path = Path(package.__spec__.origin).parent / name
+    return path.is_file()
+    
+    # There's no reliable cross-platform way of checking locale alias
+# lists, so the only way of knowing which of these locales will work
+# is to try them with locale.setlocale(). We do that in a subprocess
+# in setUpModule() below to avoid altering the locale of the test runner.
 #
-# Relevant PyPy bugfix commit:
-# https://bitbucket.org/pypy/pypy/commits/77ecf91c635a287e88e60d8ddb0f4e9df4003301
-# According to ronan on #pypy IRC, it is released in PyPy2 2.3 and later
-# versions.
-#
-# Ubuntu 14.04 has PyPy 2.2.1, which does exhibit this bug.
-BROKEN_PYPY_CTXMGR_EXIT = False
-if hasattr(sys, 'pypy_version_info'):
-    class _Mgr(object):
-        def __enter__(self):
-            return self
-        def __exit__(self, *args):
-            if hasattr(sys, 'exc_clear'):
-                # Python 3 (PyPy3) doesn't have exc_clear
-                sys.exc_clear()
-    try:
-        try:
-            with _Mgr():
-                raise AssertionError()
-        except:
-            raise
-    except TypeError:
-        BROKEN_PYPY_CTXMGR_EXIT = True
-    except AssertionError:
-        pass
-
+# If the relevant locale module attributes exist, and we're not on a platform
+# where we expect it to always succeed, we also check that
+# `locale.nl_langinfo(locale.CODESET)` works, as if it fails, the interpreter
+# will skip locale coercion for that particular target locale
+_check_nl_langinfo_CODESET = bool(
+    sys.platform not in ('darwin', 'linux') and
+    hasattr(locale, 'nl_langinfo') and
+    hasattr(locale, 'CODESET')
+)
     
-                app.config['IMAGE_STORE_TYPE'] = 'fs'
-            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
-            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
-            image_store_config = app.config.get_namespace('IMAGE_STORE_')
+        def test_unbuffered_output(self):
+        # Test expected operation of the '-u' switch
+        for stream in ('stdout', 'stderr'):
+            # Binary is unbuffered
+            code = ('import os, sys; sys.%s.buffer.write(b'x'); os._exit(0)'
+                % stream)
+            rc, out, err = assert_python_ok('-u', '-c', code)
+            data = err if stream == 'stderr' else out
+            self.assertEqual(data, b'x', 'binary %s not unbuffered' % stream)
+            # Text is unbuffered
+            code = ('import os, sys; sys.%s.write('x'); os._exit(0)'
+                % stream)
+            rc, out, err = assert_python_ok('-u', '-c', code)
+            data = err if stream == 'stderr' else out
+            self.assertEqual(data, b'x', 'text %s not unbuffered' % stream)
     
-        def __repr__(self):
-        top = _app_ctx_stack.top
-        if top is not None:
-            return '<flask.g of %r>' % top.app.name
-        return object.__repr__(self)
+            'isolated': 0,
+        'site_import': 1,
+        'bytes_warning': 0,
+        'inspect': 0,
+        'interactive': 0,
+        'optimization_level': 0,
+        'parser_debug': 0,
+        'write_bytecode': 1,
+        'verbose': 0,
+        'quiet': 0,
+        'user_site_directory': 1,
+        'buffered_stdio': 1,
     
-    
-_request_ctx_err_msg = '''\
-Working outside of request context.
-    
-        This will send a JSON response like this to the browser::
-    
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
-    
-        :param template_name_or_list: the name of the template to be
-                                  rendered, or an iterable with template names
-                                  the first one existing will be rendered
-    :param context: the variables that should be available in the
-                    context of the template.
-    '''
-    ctx = _app_ctx_stack.top
-    ctx.app.update_template_context(context)
-    return _render(ctx.app.jinja_env.get_or_select_template(template_name_or_list),
-                   context, ctx.app)
+    --Pepé
+''')
     
     
-class FlaskCliRunner(CliRunner):
-    '''A :class:`~click.testing.CliRunner` for testing a Flask app's
-    CLI commands. Typically created using
-    :meth:`~flask.Flask.test_cli_runner`. See :ref:`testing-cli`.
-    '''
-    def __init__(self, app, **kwargs):
-        self.app = app
-        super(FlaskCliRunner, self).__init__(**kwargs)
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
     
-        if dataset_name == 'shuttle':
-        dataset = fetch_mldata('shuttle')
-        X = dataset.data
-        y = dataset.target
-        # we remove data with label 4
-        # normal data are then those of class 1
-        s = (y != 4)
-        X = X[s, :]
-        y = y[s]
-        y = (y != 1).astype(int)
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
     
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
+        # If no faces are found in the image, return an empty result.
+    if len(X_face_locations) == 0:
+        return []
     
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
     
-def setup(app):
-    # Format template for issues URI
-    # e.g. 'https://github.com/sloria/marshmallow/issues/{issue}
-    app.add_config_value('issues_uri', default=None, rebuild='html')
-    # Shortcut for GitHub, e.g. 'sloria/marshmallow'
-    app.add_config_value('issues_github_path', default=None, rebuild='html')
-    # Format template for user profile URI
-    # e.g. 'https://github.com/{user}'
-    app.add_config_value('issues_user_uri', default=None, rebuild='html')
-    app.add_role('issue', issue_role)
-    app.add_role('user', user_role)
-
+            # If you had more than 2 faces, you could make this logic a lot prettier
+        # but I kept it simple for the demo
+        name = None
+        if match[0]:
+            name = 'Lin-Manuel Miranda'
+        elif match[1]:
+            name = 'Alex Lacamoire'
     
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
+            # If a match was found in known_face_encodings, just use the first one.
+        if True in matches:
+            first_match_index = matches.index(True)
+            name = known_face_names[first_match_index]
     
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
+    # Open video file
+video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
+    
+    # Loop through each face found in the unknown image
+for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+    # See if the face is a match for the known face(s)
+    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
     
     
-if __name__ == '__main__':
-    try:
-        main({})
-    except Exception:
-        traceback.print_exc(file=sys.stdout)
-    except KeyboardInterrupt:
-        terminate()
-        sys.exit()
-
-    
-    __version__ = '3.1.1'
-    
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
-    
-        def test_str(self):
-        self.assertTrue('FOO' in str(self.error))
-        self.assertTrue('{}' in str(self.error))
-    
-        def unsaved_files(self):
-        '''Lists files that have modified Augeas DOM but the changes have not
-        been written to the filesystem yet, used by `self.save()` and
-        ApacheConfigurator to check the file state.
-    
-    ALL_SSL_OPTIONS_HASHES = [
-    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
-    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
-    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
-    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
-    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
-    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
-    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
-    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
-]
-'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
     
     
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
+class MessagesPoll( BaseRequest ):
+  def __init__( self ):
+    super( MessagesPoll, self ).__init__()
+    self._request_data = BuildRequestData()
+    self._response_future = None
     
-    from certbot import errors
+    import time
+from threading import Thread
+from ycm.client.base_request import BaseRequest
     
-        def test_nonexistent_generic(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                mock_like.return_value = ['unknonwn']
-                self.assertEqual(entrypoint.get_configurator(),
-                                 configurator.ApacheConfigurator)
-    
-        @classmethod
-    def setUpClass(cls):
-        cls.orig_handler = signal.signal(signal.SIGALRM, lambda *args: None)
-        signal.setitimer(signal.ITIMER_REAL, cls.signal_delay,
-                         cls.signal_period)
+    SYNTAX_REGION_ARGUMENT_REGEX = re.compile(
+  r'^(?:matchgroup|start)=.*$' )
     
     
-def findtestdir(path=None):
-    return path or os.path.dirname(os.path.dirname(__file__)) or os.curdir
-
+def _CreateFilterForTypes( opts, types ):
+  return DiagnosticFilter.CreateFromOptions( opts ).SubsetForTypes( types )
     
-        def printErrors(self):
-        if self.__verbose:
-            self.stream.write('\n')
-        self.printErrorList('ERROR', self.errors)
-        self.printErrorList('FAIL', self.failures)
     
-        return subpattern
+class FakeResponse( object ):
+  '''A fake version of a requests response object, just about suitable for
+  mocking a server response. Not usually used directly. See
+  MockServerResponse* methods'''
+  def __init__( self, response, exception ):
+    self._json = response
+    self._exception = exception
+    self.status_code = requests.codes.ok
+    self.text = not exception
     
-    def _check_arg_types(funcname, *args):
-    hasstr = hasbytes = False
-    for s in args:
-        if isinstance(s, str):
-            hasstr = True
-        elif isinstance(s, bytes):
-            hasbytes = True
-        else:
-            raise TypeError('%s() argument must be str or bytes, not %r' %
-                            (funcname, s.__class__.__name__)) from None
-    if hasstr and hasbytes:
-        raise TypeError('Can't mix strings and bytes in path components') from None
-
     
-        def test_mkdir_parents(self):
-        # Creating a chain of directories
-        p = self.cls(BASE, 'newdirB', 'newdirC')
-        self.assertFalse(p.exists())
-        with self.assertRaises(OSError) as cm:
-            p.mkdir()
-        self.assertEqual(cm.exception.errno, errno.ENOENT)
-        p.mkdir(parents=True)
-        self.assertTrue(p.exists())
-        self.assertTrue(p.is_dir())
-        with self.assertRaises(OSError) as cm:
-            p.mkdir(parents=True)
-        self.assertEqual(cm.exception.errno, errno.EEXIST)
-        # test `mode` arg
-        mode = stat.S_IMODE(p.stat().st_mode) # default mode
-        p = self.cls(BASE, 'newdirD', 'newdirE')
-        p.mkdir(0o555, parents=True)
-        self.assertTrue(p.exists())
-        self.assertTrue(p.is_dir())
-        if os.name != 'nt':
-            # the directory's permissions follow the mode argument
-            self.assertEqual(stat.S_IMODE(p.stat().st_mode), 0o7555 & mode)
-        # the parent's permissions follow the default process settings
-        self.assertEqual(stat.S_IMODE(p.parent.stat().st_mode), mode)
+def EndsWithPython_Python2Paths_test():
+  python_paths = [
+    'python',
+    'python2',
+    '/usr/bin/python2.7',
+    '/home/user/.pyenv/shims/python2.7',
+    r'C:\Python27\python.exe',
+    '/Contents/MacOS/Python'
+  ]
     
-        for url in urls:
-        if not url.startswith('http'):
-            print('markdown file name: ' + url)
-            continue
-        if check_live_url(url):
-            print(url)
-        else:
-            print(url, file=sys.stderr)
+      # Ordered to ensure that the calls to update are deterministic
+  diagnostics_per_file = [
+    ( '/current', [ {
+        'kind': 'ERROR',
+        'text': 'error text in current buffer',
+        'location': {
+          'filepath': '/current',
+          'line_num': 1,
+          'column_num': 1
+        },
+        'location_extent': {
+          'start': {
+            'filepath': '/current',
+            'line_num': 1,
+            'column_num': 1,
+          },
+          'end': {
+            'filepath': '/current',
+            'line_num': 1,
+            'column_num': 1,
+          }
+        },
+        'ranges': [],
+      } ] ),
+    ( '/separate_window', [ {
+        'kind': 'ERROR',
+        'text': 'error text in a buffer open in a separate window',
+        'location': {
+          'filepath': '/separate_window',
+          'line_num': 3,
+          'column_num': 3
+        },
+        'location_extent': {
+          'start': {
+            'filepath': '/separate_window',
+            'line_num': 3,
+            'column_num': 3,
+          },
+          'end': {
+            'filepath': '/separate_window',
+            'line_num': 3,
+            'column_num': 3,
+          }
+        },
+        'ranges': []
+      } ] ),
+    ( '/hidden', [ {
+        'kind': 'ERROR',
+        'text': 'error text in hidden buffer',
+        'location': {
+          'filepath': '/hidden',
+          'line_num': 4,
+          'column_num': 2
+        },
+        'location_extent': {
+          'start': {
+            'filepath': '/hidden',
+            'line_num': 4,
+            'column_num': 2,
+          },
+          'end': {
+            'filepath': '/hidden',
+            'line_num': 4,
+            'column_num': 2,
+          }
+        },
+        'ranges': []
+      } ] ),
+    ( '/not_open', [ {
+        'kind': 'ERROR',
+        'text': 'error text in buffer not open in Vim',
+        'location': {
+          'filepath': '/not_open',
+          'line_num': 8,
+          'column_num': 4
+        },
+        'location_extent': {
+          'start': {
+            'filepath': '/not_open',
+            'line_num': 8,
+            'column_num': 4,
+          },
+          'end': {
+            'filepath': '/not_open',
+            'line_num': 8,
+            'column_num': 4,
+          }
+        },
+        'ranges': []
+      } ] )
+  ]
