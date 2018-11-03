@@ -1,55 +1,61 @@
 
         
-                  return_val = lane_obj.call(parameters) # by default no parameters
+            def sort_fn(a, b)
+      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
+        a_split = a.split(SPLIT_INTS)
+        b_split = b.split(SPLIT_INTS)
     
-          new_path = File.join(FastlaneCore.fastlane_user_dir, file_name)
-      did_show = File.exist?(new_path)
-    
-            # Stub out calls related to the execution environment
-        client = double('ingester_client')
-        session = FastlaneCore::AnalyticsSession.new(analytics_ingester_client: client)
-        expect(client).to receive(:post_event).with({
-            client_id: p_hash,
-            category: 'fastlane Client Langauge - ruby',
-            action: :launch,
-            label: nil,
-            value: nil
-        })
-    
-            allow(File).to receive(:file?).and_return(false)
-        allow(File).to receive(:file?).with(keychain_path).and_return(true)
-        allow(File).to receive(:exist?).and_return(false)
-        expect(File).to receive(:exist?).with(cert_name).and_return(true)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_set_key_partition_list_command, print: false)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_security_import_command, print: false)
-    
-    module CrossplatformShellwords
-  # handle switching between implementations of shellescape
-  def shellescape(str)
-    if FastlaneCore::Helper.windows?
-      WindowsShellwords.shellescape(str)
-    else
-      # using `escape` instead of expected `shellescape` here
-      # which corresponds to Shellword's `String.shellescape` implementation
-      # https://github.com/ruby/ruby/blob/1cf2bb4b2085758112503e7da7414d1ef52d4f48/lib/shellwords.rb#L216
-      Shellwords.escape(str)
+        def url
+      @url ||= URL.parse request.base_url
     end
-  end
-  module_function :shellescape
     
-      include_examples 'multiline literal brace layout trailing comma' do
-    let(:open) { '[' }
-    let(:close) { ']' }
+        private
+    
+      it 'returns true when passed ?r if the argument is readable by the effective uid' do
+    Kernel.test(?r, @file).should be_true
+  end
+    
+      it 'can throw an object' do
+    lambda {
+      obj = Object.new
+      catch obj do
+        throw obj
+      end
+    }.should_not raise_error(NameError)
   end
 end
-
     
-          it 'detects closing brace on different line from last element' do
-        src = construct(false, true)
-        inspect_source(src)
+        reset
+  end
     
-    shared_examples_for 'multiline literal brace layout method argument' do
-  include MultilineLiteralBraceHelper
+      def hangup
+    self.client.send_hangup(self)
+    self.state = :hangup
+    true
+  end
     
-              raise ArgumentError unless valid_argument_types?
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
+          end
         end
+      end
+    end
+  end
+end
+    
+        def byte_to_str_pos(pos)
+      @s.string.byteslice(0, pos).length
+    end
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
