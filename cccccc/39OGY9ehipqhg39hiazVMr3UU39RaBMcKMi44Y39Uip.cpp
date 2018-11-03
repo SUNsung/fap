@@ -1,166 +1,129 @@
 
         
-        void CostAnalyzer::PreprocessCosts() {
-  for (int i = 0; i < op_perf_.op_performance_size(); i++) {
-    OpPerformance* perf = op_perf_.mutable_op_performance(i);
-    const OpPerformance& analytical = op_perf_analytical_.op_performance(i);
-    perf->set_compute_time(analytical.compute_time());
-    perf->set_memory_time(analytical.memory_time());
-    double measured_cost = perf->compute_cost();
-    }
-    }
-    
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-
-    
-    
-    {
-    {}  // namespace cuda
-}  // namespace stream_executor
-
-    
-    namespace atom {
-    }
-    
-      // WindowListObserver:
-  void OnWindowAllClosed() override;
-    
-    
-    {}  // namespace api
-    
-    namespace atom {
-    }
-    
-    template <>
-struct Converter<base::trace_event::TraceConfig> {
-  static bool FromV8(v8::Isolate* isolate,
-                     v8::Local<v8::Value> val,
-                     base::trace_event::TraceConfig* out) {
-    Dictionary options;
-    if (!ConvertFromV8(isolate, val, &options))
-      return false;
-    std::string category_filter, trace_options;
-    if (!options.Get('categoryFilter', &category_filter) ||
-        !options.Get('traceOptions', &trace_options))
-      return false;
-    *out = base::trace_event::TraceConfig(category_filter, trace_options);
-    return true;
+          void SetFlushReason(FlushReason flush_reason) {
+    flush_reason_ = flush_reason;
   }
-};
-    
-    GlobalShortcut::GlobalShortcut(v8::Isolate* isolate) {
-  Init(isolate);
-}
-    
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_in_app_purchase, Initialize)
-
-    
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/mac/in_app_purchase.h'
-#include 'atom/browser/mac/in_app_purchase_observer.h'
-#include 'atom/browser/mac/in_app_purchase_product.h'
-#include 'native_mate/handle.h'
-    
-    
-    {  delegate.Get('isCommandIdChecked', &is_checked_);
-  delegate.Get('isCommandIdEnabled', &is_enabled_);
-  delegate.Get('isCommandIdVisible', &is_visible_);
-  delegate.Get('getAcceleratorForCommandId', &get_accelerator_);
-  delegate.Get('executeCommand', &execute_command_);
-  delegate.Get('menuWillShow', &menu_will_show_);
-}
-    
-    // static
-void Net::BuildPrototype(v8::Isolate* isolate,
-                         v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'Net'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetProperty('URLRequest', &Net::URLRequest);
-}
-    
-    using atom::api::PowerMonitor;
-    
-    #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/ui/tray_icon.h'
-#include 'atom/browser/ui/tray_icon_observer.h'
-#include 'native_mate/handle.h'
-    
-      /*
-   * @brief the uri used to begin POSTing carve data
-   *
-   * This endpoint should negotiate the details of the carve, as well
-   * as give the client a session id used to continue POSTing the data.
-   */
-  std::string startUri_;
-    
-      auto it = doc.FindMember(kLoggerKey);
-  if (it != doc.MemberEnd()) {
-    doc.EraseMember(it);
+  FlushReason GetFlushReason() const { return flush_reason_; }
+  // thread-safe
+  const EnvOptions* soptions() const;
+  const ImmutableCFOptions* ioptions() const { return &ioptions_; }
+  // REQUIRES: DB mutex held
+  // This returns the MutableCFOptions used by current SuperVersion
+  // You should use this API to reference MutableCFOptions most of the time.
+  const MutableCFOptions* GetCurrentMutableCFOptions() const {
+    return &(super_version_->mutable_cf_options);
+  }
+  // REQUIRES: DB mutex held
+  // This returns the latest MutableCFOptions, which may be not in effect yet.
+  const MutableCFOptions* GetLatestMutableCFOptions() const {
+    return &mutable_cf_options_;
   }
     
-      // Generate content to update/add to the config.
-  std::string content;
-  auto s = readFile(kTestDataPath + 'test_parse_items.conf', content);
-  EXPECT_TRUE(s.ok());
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
     
+        std::string scratch;
+    scratch.reserve(fileSize);
+    Slice data;
+    status = seqFile->Read(fileSize, &data, (char*)scratch.data());
+    ASSERT_OK(status);
     
-    {
-    {  EXPECT_TRUE(doc.HasMember('custom_nested_json'));
-  EXPECT_FALSE(Flag::getValue('custom_nested_json').empty());
-  EXPECT_EQ(R'raw({'foo':1,'bar':'baz'})raw',
-            Flag::getValue('custom_nested_json'));
+      // Implementations of the DB interface
+  using DB::Get;
+  virtual Status Get(const ReadOptions& options,
+                     ColumnFamilyHandle* column_family, const Slice& key,
+                     PinnableSlice* value) override;
+    
+    std::unique_ptr<WriteControllerToken> WriteController::GetStopToken() {
+  ++total_stopped_;
+  return std::unique_ptr<WriteControllerToken>(new StopWriteToken(this));
 }
+    
+      // these three metods are querying the state of the WriteController
+  bool IsStopped() const;
+  bool NeedsDelay() const { return total_delayed_.load() > 0; }
+  bool NeedSpeedupCompaction() const {
+    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
+  }
+  // return how many microseconds the caller needs to sleep after the call
+  // num_bytes: how many number of bytes to put into the DB.
+  // Prerequisite: DB mutex held.
+  uint64_t GetDelay(Env* env, uint64_t num_bytes);
+  void set_delayed_write_rate(uint64_t write_rate) {
+    // avoid divide 0
+    if (write_rate == 0) {
+      write_rate = 1u;
+    } else if (write_rate > max_delayed_write_rate()) {
+      write_rate = max_delayed_write_rate();
+    }
+    delayed_write_rate_ = write_rate;
+  }
+    
+      // open DB with two column families
+  std::vector<ColumnFamilyDescriptor> column_families;
+  // have to open default column family
+  column_families.push_back(ColumnFamilyDescriptor(
+      kDefaultColumnFamilyName, ColumnFamilyOptions()));
+  // open the new one, too
+  column_families.push_back(ColumnFamilyDescriptor(
+      'new_cf', ColumnFamilyOptions()));
+  std::vector<ColumnFamilyHandle*> handles;
+  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
+  assert(s.ok());
+    
+      // Write a key OUTSIDE of transaction
+  db->Put(write_options, 'abc', 'xyz');
+    
+    int main() {
+  DB* db;
+  Options options;
+  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+  options.IncreaseParallelism();
+  options.OptimizeLevelStyleCompaction();
+  // create the DB if it's not already present
+  options.create_if_missing = true;
+    }
+    
+      void moveBucketHead(const std::shared_ptr<DHTNode>& node);
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                                   int numRetry)
+{
+  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
 }
-
     
-    #include 'osquery/tests/test_util.h'
+    public:
+  DHTTaskFactoryImpl();
     
-    TEST_F(QueryTests, test_add_and_get_current_results) {
-  // Test adding a 'current' set of results to a scheduled query instance.
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('foobar', query);
-  uint64_t counter = 128;
-  auto status = cf.addNewResults(getTestDBExpectedResults(), 0, counter);
-  EXPECT_TRUE(status.ok());
-  EXPECT_EQ(status.toString(), 'OK');
-  EXPECT_EQ(counter, 0UL);
+    
+    {} // namespace aria2
+    
+    void DHTTokenUpdateCommand::preProcess()
+{
+  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
+      getDownloadEngine()->isHaltRequested()) {
+    enableExit();
+  }
+}
+    
+    const std::string DHTUnknownMessage::UNKNOWN('unknown');
+    
+      template <typename OutputIterator>
+  void findAll(OutputIterator out, const std::string& hostname,
+               uint16_t port) const
+  {
+    auto target = std::make_shared<CacheEntry>(hostname, port);
+    auto i = entries_.find(target);
+    if (i != entries_.end()) {
+      (*i)->getAllGoodAddrs(out);
     }
-    
-    /**
- * @brief A performance state structure for an autoloaded extension or worker.
- *
- * A watcher thread will continue to check the performance state, and keep a
- * last-checked snapshot for each autoloaded extension and worker process.
- */
-struct PerformanceState {
-  /// A counter of how many intervals the process exceeded performance limits.
-  size_t sustained_latency;
-  /// The last checked user CPU time.
-  size_t user_time;
-  /// The last checked system CPU time.
-  size_t system_time;
-  /// A timestamp when the process/worker was last created.
-  size_t last_respawn_time;
-    }
-    
-        if (queries.IsObject()) {
-      for (const auto& query_entry : queries.GetObject()) {
-        if (!query_entry.name.IsString() || !query_entry.value.IsString()) {
-          return Status(1, 'Distributed query is not a string');
-        }
-    }
-    }
-    
-    static const size_t kINotifyMaxEvents = 512;
-static const size_t kINotifyEventSize =
-    sizeof(struct inotify_event) + (NAME_MAX + 1);
-static const size_t kINotifyBufferSize =
-    (kINotifyMaxEvents * kINotifyEventSize);
+  }
