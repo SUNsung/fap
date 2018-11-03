@@ -1,85 +1,113 @@
 
         
-        from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        
+def ensure_web_acl_absent(client, module):
+    web_acl_id = get_web_acl_by_name(client, module, module.params['name'])
+    if web_acl_id:
+        web_acl = get_web_acl(client, module, web_acl_id)
+        if web_acl['Rules']:
+            remove_rules_from_web_acl(client, module, web_acl_id)
+        try:
+            run_func_with_change_token_backoff(client, module, {'WebACLId': web_acl_id}, client.delete_web_acl, wait=True)
+            return True, {}
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, msg='Could not delete Web ACL')
+    return False, {}
+    
+    version_added: '2.2'
+author: 'Jose Armesto (@fiunchinho)'
+options:
+  region:
+    description:
+      - The AWS region to use.
+    required: true
+    aliases: ['aws_region', 'ec2_region']
+  name_regex:
+    description:
+      - A Launch Configuration to match
+      - It'll be compiled as regex
+    required: True
+  sort_order:
+    description:
+      - Order in which to sort results.
+    choices: ['ascending', 'descending']
+    default: 'ascending'
+  limit:
+    description:
+      - How many results to show.
+      - Corresponds to Python slice notation like list[:limit].
+requirements:
+  - 'python >= 2.6'
+  - boto3
+extends_documentation_fragment:
+    - aws
+'''
     
     
-def index_to_vocab_array(indices, vocab_size, sequence_length):
-  '''Convert the indices into an array with vocab_size one-hot encoding.'''
+if __name__ == '__main__':
+    main()
+
     
-    # Dependency imports
+        if not HAS_BOTO:
+        module.fail_json(msg='boto required for this module')
     
+                try:
+                if not module.check_mode:
+                    results = client.delete_alias(**api_params)
+                changed = True
+            except (ClientError, ParamValidationError, MissingParametersError) as e:
+                module.fail_json(msg='Error deleting function alias: {0}'.format(e))
     
-def _FormatYcmdDebugInfo( ycmd ):
-  python = ycmd[ 'python' ]
-  clang = ycmd[ 'clang' ]
-  message = ( 'Server Python interpreter: {0}\n'
-              'Server Python version: {1}\n'
-              'Server has Clang support compiled in: {2}\n'
-              'Clang version: {3}\n'.format( python[ 'executable' ],
-                                             python[ 'version' ],
-                                             clang[ 'has_support' ],
-                                             clang[ 'version' ] ) )
-  extra_conf = ycmd[ 'extra_conf' ]
-  extra_conf_path = extra_conf[ 'path' ]
-  if not extra_conf_path:
-    message += 'No extra configuration file found\n'
-  elif not extra_conf[ 'is_loaded' ]:
-    message += ( 'Extra configuration file found but not loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  else:
-    message += ( 'Extra configuration file found and loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  return message
+        noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
+    sys.path.append(noarch_lib)
     
-    import logging
+    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
+sys.path.append(noarch_lib)
     
-    TIMEOUT_SECONDS = 0.1
+            fn = os.path.join(current_path, 'sni_slice.txt')
+        self.slice = RandomGetSlice(fn, 20, '|')
     
+            if isinstance(types, (int, long)):
+            # called with a single type, wrap into set
+            types = set([types])
+            
+        filteredTokens = [
+            token for token in self.tokens[start:stop]
+            if types is None or token.type in types
+            ]
     
-@patch( 'ycm.client.messages_request.PostVimMessage',
-        new_callable = ExtendedMock )
-def HandlePollResponse_MultipleMessages_test( post_vim_message ):
-  assert_that( _HandlePollResponse( [ { 'message': 'this is a message' },
-                                      { 'message': 'this is another one' } ] ,
-                                    None ),
-               equal_to( True ) )
+            # here s the parser...
+        stream_types = dilidili_parser_data_to_stream_types(typ, vid, hd2, sign, tmsign, ulk)
+        
+        #get best
+        best_id = max([i['id'] for i in stream_types])
+        
+        parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = best_id, sign = sign, tmsign = tmsign, ulk = ulk)
+        
+        another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
     
+        if int(html['status']) != 100000:
+        raise Exception('API error!')
     
-def MockAsyncServerResponseDone( response ):
-  '''Return a fake future object that is complete with the supplied response
-  message. Suitable for mocking a response future within a client request. For
-  example:
+    site_info = 'FC2Video'
+download = fc2video_download
+download_playlist = playlist_not_supported('fc2video')
+
     
+    # (api_key, method, ext, page)
+tmpl_api_call = (
+    'https://api.flickr.com/services/rest?'
+    '&format=json&nojsoncallback=1'
+    # UNCOMMENT FOR TESTING
+    #'&per_page=5'
+    '&per_page=500'
+    # this parameter CANNOT take control of 'flickr.galleries.getPhotos'
+    # though the doc said it should.
+    # it's always considered to be 500
+    '&api_key=%s'
+    '&method=flickr.%s'
+    '&extras=url_sq,url_q,url_t,url_s,url_n,url_m,url_z,url_c,url_l,url_h,url_k,url_o,media'
+    '%s&page=%d'
+)
     
-def KeywordsFromSyntaxListOutput_PythonSyntax_test():
-  expected_keywords = (
-    'bytearray', 'IndexError', 'all', 'help', 'vars', 'SyntaxError', 'global',
-    'elif', 'unicode', 'sorted', 'memoryview', 'isinstance', 'except',
-    'nonlocal', 'NameError', 'finally', 'BytesWarning', 'dict', 'IOError',
-    'pass', 'oct', 'bin', 'SystemExit', 'return', 'StandardError', 'format',
-    'TabError', 'break', 'next', 'not', 'UnicodeDecodeError', 'False',
-    'RuntimeWarning', 'list', 'iter', 'try', 'reload', 'Warning', 'round',
-    'dir', 'cmp', 'set', 'bytes', 'UnicodeTranslateError', 'intern',
-    'issubclass', 'yield', 'Ellipsis', 'hash', 'locals', 'BufferError',
-    'slice', 'for', 'FloatingPointError', 'sum', 'VMSError', 'getattr', 'abs',
-    'print', 'import', 'True', 'FutureWarning', 'ImportWarning', 'None',
-    'EOFError', 'len', 'frozenset', 'ord', 'super', 'raise', 'TypeError',
-    'KeyboardInterrupt', 'UserWarning', 'filter', 'range', 'staticmethod',
-    'SystemError', 'or', 'BaseException', 'pow', 'RuntimeError', 'float',
-    'MemoryError', 'StopIteration', 'globals', 'divmod', 'enumerate', 'apply',
-    'LookupError', 'open', 'basestring', 'from', 'UnicodeError', 'zip', 'hex',
-    'long', 'IndentationError', 'int', 'chr', '__import__', 'type',
-    'Exception', 'continue', 'tuple', 'reduce', 'reversed', 'else', 'assert',
-    'UnicodeEncodeError', 'input', 'with', 'hasattr', 'delattr', 'setattr',
-    'raw_input', 'PendingDeprecationWarning', 'compile', 'ArithmeticError',
-    'while', 'del', 'str', 'property', 'def', 'and', 'GeneratorExit',
-    'ImportError', 'xrange', 'is', 'EnvironmentError', 'KeyError', 'coerce',
-    'SyntaxWarning', 'file', 'in', 'unichr', 'ascii', 'any', 'as', 'if',
-    'OSError', 'DeprecationWarning', 'min', 'UnicodeWarning', 'execfile', 'id',
-    'complex', 'bool', 'ValueError', 'NotImplemented', 'map', 'exec', 'buffer',
-    'max', 'class', 'object', 'repr', 'callable', 'ZeroDivisionError', 'eval',
-    '__debug__', 'ReferenceError', 'AssertionError', 'classmethod',
-    'UnboundLocalError', 'NotImplementedError', 'lambda', 'AttributeError',
-    'OverflowError', 'WindowsError' )
+    def check_live_url(url):
