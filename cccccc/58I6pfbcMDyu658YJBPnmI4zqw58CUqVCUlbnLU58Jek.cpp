@@ -1,163 +1,141 @@
 
         
-        // The inductive case.
-template <size_t N>
-struct TuplePrefixPrinter {
-  // Prints the first N fields of a tuple.
-  template <typename Tuple>
-  static void PrintPrefixTo(const Tuple& t, ::std::ostream* os) {
-    TuplePrefixPrinter<N - 1>::PrintPrefixTo(t, os);
-    *os << ', ';
-    UniversalPrinter<typename ::std::tr1::tuple_element<N - 1, Tuple>::type>
-        ::Print(::std::tr1::get<N - 1>(t), os);
-  }
+        using extensions::GlobalShortcutListener;
+    
+    namespace api {
     }
     
-      // Gets the summary of the failure message.
-  const char* summary() const { return summary_.c_str(); }
-    
-    // Boolean assertions. Condition can be either a Boolean expression or an
-// AssertionResult. For more information on how to use AssertionResult with
-// these macros see comments on that class.
-#define EXPECT_TRUE(condition) \
-  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
-                      GTEST_NONFATAL_FAILURE_)
-#define EXPECT_FALSE(condition) \
-  GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
-                      GTEST_NONFATAL_FAILURE_)
-#define ASSERT_TRUE(condition) \
-  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
-                      GTEST_FATAL_FAILURE_)
-#define ASSERT_FALSE(condition) \
-  GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
-                      GTEST_FATAL_FAILURE_)
-    
-    template <int k, GTEST_10_TYPENAMES_(T)>
-GTEST_ADD_REF_(GTEST_TUPLE_ELEMENT_(k, GTEST_10_TUPLE_(T)))
-get(GTEST_10_TUPLE_(T)& t) {
-  return gtest_internal::Get<k>::Field(t);
-}
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
 
     
-    // Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
+    bool PowerMonitor::ShouldShutdown() {
+  return !Emit('shutdown');
 }
     
-      // Gets the first element of the queue, or NULL if the queue is empty.
-  QueueNode<E>* Head() { return head_; }
-  const QueueNode<E>* Head() const { return head_; }
     
-    class SecureChannelCredentials final : public ChannelCredentials {
+    {}  // namespace atom
+    
+      // this.emit(name, event, args...);
+  template <typename... Args>
+  bool EmitCustomEvent(const base::StringPiece& name,
+                       v8::Local<v8::Object> event,
+                       const Args&... args) {
+    return EmitWithEvent(
+        name, internal::CreateCustomEvent(isolate(), GetWrapper(), event),
+        args...);
+  }
+    
+    
+    {}  // namespace tesseract
+
+    
+      // Rounds the size up to a multiple of the input register size (in int8_t).
+  int RoundInputs(int size) const {
+    return Roundup(size, num_inputs_per_register_);
+  }
+  // Rounds the size up to a multiple of the output register size (in int32_t).
+  int RoundOutputs(int size) const {
+    return Roundup(size, num_outputs_per_register_);
+  }
+    
+    namespace tesseract {
+    }
+    
+    template <typename T> class GenericVector;
+    
+    // A rather hackish helper structure which can take any kind of parameter input
+// (defined by ParamType) and do a couple of common operations on them, like
+// comparisond or getting its value. It is used in the context of the
+// ParamsEditor as a bridge from the internal tesseract parameters to the
+// ones displayed by the ScrollView server.
+class ParamContent : public ELIST_LINK {
  public:
-  explicit SecureChannelCredentials(grpc_channel_credentials* c_creds);
-  ~SecureChannelCredentials() { grpc_channel_credentials_release(c_creds_); }
-  grpc_channel_credentials* GetRawCreds() { return c_creds_; }
+  // Compare two VC objects by their name.
+  static int Compare(const void* v1, const void* v2);
     }
     
-    void ChannelArguments::SetString(const grpc::string& key,
-                                 const grpc::string& value) {
-  grpc_arg arg;
-  arg.type = GRPC_ARG_STRING;
-  strings_.push_back(key);
-  arg.key = const_cast<char*>(strings_.back().c_str());
-  strings_.push_back(value);
-  arg.value.string = const_cast<char*>(strings_.back().c_str());
+    ActionCamera* ActionCamera::clone() const
+{
+    auto action = new (std::nothrow) ActionCamera();
+    if (action)
+    {
+        action->autorelease();
+        return action;
     }
     
-    void CompletionQueue::CompleteAvalanching() {
-  // Check if this was the last avalanching operation
-  if (gpr_atm_no_barrier_fetch_add(&avalanches_in_flight_,
-                                   static_cast<gpr_atm>(-1)) == 1) {
-    grpc_completion_queue_shutdown(cq_);
-  }
+    delete action;
+    return nullptr;
 }
     
-    // Returns the incoming data size from the grpc call final info.
-uint64_t GetIncomingDataSize(const grpc_call_final_info* final_info);
+    PointArray* PointArray::create(ssize_t capacity)
+{
+    PointArray* pointArray = new (std::nothrow) PointArray();
+    if (pointArray && pointArray->initWithCapacity(capacity))
+    {
+        pointArray->autorelease();
+        return pointArray;
+    }
+    }
     
-    template <class T, typename = void>
-struct GetTypeInfo {
-	static const Variant::Type VARIANT_TYPE = Variant::NIL;
-	static inline PropertyInfo get_class_info() {
-		ERR_PRINT('GetTypeInfo fallback. Bug!');
-		return PropertyInfo(); // Not 'Nil', this is an error
-	}
-};
-    
-    void B_TO_G(btTransform const &inVal, Transform &outVal) {
-	B_TO_G(inVal.getBasis(), outVal.basis);
-	B_TO_G(inVal.getOrigin(), outVal.origin);
-}
-    
-    // Bullet to Godot
-extern void B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void INVERT_B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void INVERT_B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void B_TO_G(btTransform const &inVal, Transform &outVal);
-    
+        //
+    // Override
+    //
+    virtual RotateBy* clone() const override;
+    virtual RotateBy* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
     /**
-	@author AndreaCatania
-*/
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
     
-    #include 'csg_gizmos.h'
-#include 'csg_shape.h'
+CC_CONSTRUCTOR_ACCESS:
+    RotateBy();
+    virtual ~RotateBy() {}
     
-      // Must be called before any CompareBlock() calls can be called.
-  virtual void StartBlockComparisons() = 0;
-  // No more CompareBlock() calls can be called after this.
-  virtual void FinishBlockComparisons() = 0;
-    
-        std::sort(tree, tree + n, SortHuffmanTree);
-    
-    #endif  // GUETZLI_FDCT_H_
-
-    
-    #ifndef GUETZLI_IDCT_H_
-#define GUETZLI_IDCT_H_
-    
-    namespace guetzli {
+        if (element)
+    {
+        if (element->actions != nullptr)
+        {
+            auto limit = element->actions->num;
+            for (int i = 0; i < limit; ++i)
+            {
+                Action *action = static_cast<Action*>(element->actions->arr[i]);
+    }
+    }
     }
     
-    static const uint8_t kDefaultQuantMatrix[2][64] = {
-  { 16,  11,  10,  16,  24,  40,  51,  61,
-    12,  12,  14,  19,  26,  58,  60,  55,
-    14,  13,  16,  24,  40,  57,  69,  56,
-    14,  17,  22,  29,  51,  87,  80,  62,
-    18,  22,  37,  56,  68, 109, 103,  77,
-    24,  35,  55,  64,  81, 104, 113,  92,
-    49,  64,  78,  87, 103, 121, 120, 101,
-    72,  92,  95,  98, 112, 100, 103,  99 },
-  { 17,  18,  24,  47,  99,  99,  99,  99,
-    18,  21,  26,  66,  99,  99,  99,  99,
-    24,  26,  56,  99,  99,  99,  99,  99,
-    47,  66,  99,  99,  99,  99,  99,  99,
-    99,  99,  99,  99,  99,  99,  99,  99,
-    99,  99,  99,  99,  99,  99,  99,  99,
-    99,  99,  99,  99,  99,  99,  99,  99,
-    99,  99,  99,  99,  99,  99,  99,  99 }
-};
     
-    #include 'guetzli/jpeg_data.h'
+    {
+    {
+    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
+            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
+            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
+            p.z/=7;
+            //    Stop z coord from dropping beneath underlying page in a transition
+            // issue #751
+            if( p.z < 0.5f )
+            {
+                p.z = 0.5f;
+            }
+            
+            // Set new coords
+            p.x += getGridRect().origin.x;
+            setVertex(Vec2(i, j), p);
+            
+        }
+    }
+}
     
-    #define VERIFY_LEN(n)                                                   \
-  if (*pos + (n) > len) {                                               \
-    fprintf(stderr, 'Unexpected end of input: pos=%d need=%d len=%d\n', \
-            static_cast<int>(*pos), static_cast<int>(n),                \
-            static_cast<int>(len));                                     \
-    jpg->error = JPEG_UNEXPECTED_EOF;                                   \
-    return false;                                                       \
-  }
+        /**
+    @brief Hide the tile at specified position.
+    @param pos The position index of the tile should be hide.
+    */
+    void turnOffTile(const Vec2& pos);
+    
+        static BOOST_FORCEINLINE storage_type fetch_add(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        return static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD16(&storage, v));
+    }
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+    }
