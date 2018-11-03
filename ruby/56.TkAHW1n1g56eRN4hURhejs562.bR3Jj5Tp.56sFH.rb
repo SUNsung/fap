@@ -1,91 +1,107 @@
 
         
-            s = nil
-    homebrew_site_packages = Language::Python.homebrew_site_packages
-    user_site_packages = Language::Python.user_site_packages 'python'
-    pth_file = user_site_packages/'homebrew.pth'
-    instructions = <<-EOS.undent.gsub(/^/, '  ')
-      mkdir -p #{user_site_packages}
-      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
-    EOS
+          include SignatureVerification
     
-    Badge.seed do |b|
-  b.id = Badge::FirstLink
-  b.name = 'First Link'
-  b.badge_type_id = BadgeType::Bronze
-  b.multiple_grant = false
-  b.target_posts = true
-  b.show_posts = true
-  b.query = BadgeQueries::FirstLink
-  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
-  b.trigger = Badge::Trigger::PostRevision
-  b.system = true
-end
+        def set_account
+      @account = Account.find(params[:account_id])
+      @user = @account.user
+    end
     
-              if @job.blank?
-            @pipeline.coverage
-          else
-            @pipeline.builds
-              .find_by(name: @job)
-              .try(:coverage)
-          end
+          if @report_note.save
+        if params[:create_and_resolve]
+          @report.resolve!(current_account)
+          log_action :resolve, @report
+    
+              property = parse_property(name, parse_interp(name), value, :old, line, value_start_offset)
+          property.name_source_range = Sass::Source::Range.new(
+            Sass::Source::Position.new(@line, to_parser_offset(name_start_offset)),
+            Sass::Source::Position.new(@line, to_parser_offset(name_end_offset)),
+            @options[:filename], @options[:importer])
+          property
         end
+      when ?$
+        parse_variable(line)
+      when COMMENT_CHAR
+        parse_comment(line)
+      when DIRECTIVE_CHAR
+        parse_directive(parent, line, root)
+      when ESCAPE_CHAR
+        Tree::RuleNode.new(parse_interp(line.text[1..-1]), full_line_range(line))
+      when MIXIN_DEFINITION_CHAR
+        parse_mixin_definition(line)
+      when MIXIN_INCLUDE_CHAR
+        if line.text[1].nil? || line.text[1] == ?\s
+          Tree::RuleNode.new(parse_interp(line.text), full_line_range(line))
+        else
+          parse_mixin_include(line, root)
+        end
+      else
+        parse_property_or_rule(line)
       end
     end
-  end
+    
+          def inherited_hash_writer(name)
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          def set_#{name}(name, value)
+            name = name.tr('_', '-')
+            @#{name}s[name] = value unless try_set_#{name}(name, value)
+          end
+    
+        def split_colon_path(path)
+      one, two = path.split(':', 2)
+      if one && two && Sass::Util.windows? &&
+          one =~ /\A[A-Za-z]\Z/ && two =~ %r{\A[/\\]}
+        # If we're on Windows and we were passed a drive letter path,
+        # don't split on that colon.
+        one2, two = two.split(':', 2)
+        one = one + ':' + one2
+      end
+      return one, two
+    end
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
+    
+    Given(/^an invalid release named '(.+)'$/) do |filename|
+  run_vagrant_command('mkdir -p #{TestApp.release_path(filename)}')
 end
 
     
-            def metadata
-          @metadata ||= Pipeline::Metadata.new(self)
+      def exists?(type, path)
+    %Q{[ -#{type} '#{path}' ]}
+  end
+    
+          # Internal use only.
+      def peek(key, default=nil, &block)
+        value = fetch_for(key, default, &block)
+        while callable_without_parameters?(value)
+          value = (values[key] = value.call)
         end
-    
-            def key_width
-          62
-        end
-    
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+        value
       end
-    end
     
-              if arg.braces?
-            unless braces_around_second_from_end
-              add_arg_offense(arg, :redundant)
-            end
-          elsif braces_around_second_from_end
-            add_arg_offense(arg, :missing)
-          end
-        end
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
     
-        context 'but no comment after the last element' do
-      it 'autocorrects the closing brace' do
-        new_source = autocorrect_source(source)
+        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
+    # calling update without requirements will remove any previous requirements
+    plugins = plugins_to_update(previous_gem_specs_map)
+    # Skipping the major version validation when using a local cache as we can have situations
+    # without internet connection.
+    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
+      .compact
+      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
+      .each   { |plugin| gemfile.update(plugin.name) }
     
-          # Returns the inverse keyword of the `if` node as a string. Returns `if`
-      # for `unless` nodes and vice versa. Returns an empty string for ternary
-      # operators.
-      #
-      # @return [String] the inverse keyword of the `if` statement
-      def inverse_keyword
-        if keyword == 'if'
-          'unless'
-        elsif keyword == 'unless'
-          'if'
-        else
-          ''
-        end
-      end
+      it 'records when the config was read' do
+    expect(subject.read_at).to be <= Time.now
+  end
