@@ -1,128 +1,146 @@
 
         
-        
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
-    
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-        with open('supportedsites.html', 'w', encoding='utf-8') as sitesf:
-        sitesf.write(template)
-    
-    import io
-import sys
-import re
-    
-    DESCRIPTION = 'YouTube video downloader'
-LONG_DESCRIPTION = 'Command-line program to download videos from YouTube.com and other video sites'
-    
-        def to_screen(self, s, skip_eol=None):
-        print(s)
-    
-        argument_spec.update(dict(
-        state=dict(choices=['present', 'absent'], default='present'),
-        origin_access_identity_id=dict(),
-        caller_reference=dict(),
-        comment=dict(),
-    ))
+            with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
     
     
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(dict(
-        name=dict(required=True),
-        registry_id=dict(required=False),
-        state=dict(required=False, choices=['present', 'absent'],
-                   default='present'),
-        force_set_policy=dict(required=False, type='bool', default=False),
-        policy=dict(required=False, type='json'),
-        delete_policy=dict(required=False, type='bool')))
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
     
-    # Basic rename of existing certificate
-- iam_cert:
-    name: very_ssl
-    new_name: new_very_ssl
-    state: present
+        from inspect import getfullargspec as getargspec
+    from io import StringIO
     
-        state = module.params.get('state')
+                    request_close = getattr(self.request, 'close', None)
+                if request_close is not None:
+                    request_close()
+                clear_request = True
+        finally:
+            rv = _request_ctx_stack.pop()
     
-                appid = random.choice(self.working_appid_list)
-            return str(appid)
-        else:
-            for _ in xrange(0, 10):
-                appid = self.public_appid.get()
-                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
-                    continue
-                else:
-                    return appid
-            return None
-    
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
-    
-        for qualified, server, _, _ in server_list:
-        if qualified:
-            best_server = server[0]
-            break
-    log = Log()
-    if best_server:
-        log.write('best server is: %s.' % best_server)
+            kwargs.setdefault('sort_keys', current_app.config['JSON_SORT_KEYS'])
     else:
-        xlog.warning('no server detected, return default: teredo.remlab.net.')
-        log.write('no server detected, return default: teredo.remlab.net.')
-        best_server = 'teredo.remlab.net'
-    log.close()
-    return best_server
+        kwargs.setdefault('sort_keys', True)
+        kwargs.setdefault('cls', JSONEncoder)
     
-    __file__ = os.path.abspath(__file__)
-if os.path.islink(__file__):
-    __file__ = getattr(os, 'readlink', lambda x: x)(__file__)
-work_path = os.path.dirname(os.path.abspath(__file__))
-os.chdir(work_path)
+        def _get_source_fast(self, environment, template):
+        for srcobj, loader in self._iter_loaders(template):
+            try:
+                return loader.get_source(environment, template)
+            except TemplateNotFound:
+                continue
+        raise TemplateNotFound(template)
     
-            Using setter/getter methods is deprecated. Use o.line instead.'''
+            url = url_parse(path)
+        base_url = '{scheme}://{netloc}/{path}'.format(
+            scheme=url.scheme or url_scheme,
+            netloc=url.netloc or http_host,
+            path=app_root.lstrip('/')
+        )
+        path = url.path
+    
+        def iter_lines(self, chunk_size):
+        '''Return an iterator over the body yielding (`line`, `line_feed`).'''
+        raise NotImplementedError()
     
     
-# Are two filenames really pointing to the same file?
-def samefile(f1, f2):
-    '''Test whether two pathnames reference the same actual file'''
-    s1 = os.stat(f1)
-    s2 = os.stat(f2)
-    return samestat(s1, s2)
+def long_description():
+    with codecs.open('README.rst', encoding='utf8') as f:
+        return f.read()
     
-        @classmethod
-    def _from_parts(cls, args, init=True):
-        # We need to call _parse_args on the instance, so as to get the
-        # right flavour.
-        self = object.__new__(cls)
-        drv, root, parts = self._parse_args(args)
-        self._drv = drv
-        self._root = root
-        self._parts = parts
-        if init:
-            self._init()
-        return self
     
-        def test_run_code(self):
-        # Test expected operation of the '-c' switch
-        # Switch needs an argument
-        assert_python_failure('-c')
-        # Check we get an error for an uncaught exception
-        assert_python_failure('-c', 'raise Exception')
-        # All good if execution is successful
-        assert_python_ok('-c', 'pass')
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    handleSlideshow(dom)
+        def test_binary_suppresses_when_not_terminal_but_pretty(self):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--pretty=all', 'GET', self.url,
+                 env=env)
+        assert BINARY_SUPPRESSED_NOTICE.decode() in r
+    
+        def test_POST_form_Content_Type_override(self, httpbin):
+        r = http('--form', 'POST', httpbin.url + '/post',
+                 'Content-Type:application/xml')
+        assert HTTP_OK in r
+        assert ''Content-Type': 'application/xml'' in r
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
-    ##
+    site = Bigthink()
+download = site.download_by_url
+
+    
+            if not title:
+            self.title = vid
+    
+    
+site_info = 'fantasy.tv'
+download = fantasy_download
+download_playlist = playlist_not_supported('fantasy.tv')
+
+    
+    
+  def Response( self ):
+    return {
+      'completions': self._results,
+      'completion_start_column': self.request_data[ 'start_column' ]
+    }
+    
+    
+  def Start( self ):
+    self._keepalive_thread.start()
+    
+    
+  def UpdateWithNewDiagnostics( self, diags ):
+    self._diagnostics = [ _NormalizeDiagnostic( x ) for x in
+                            self._ApplyDiagnosticFilter( diags ) ]
+    self._ConvertDiagListToDict()
+    
+        try:
+      eq_( expected_vim_data, vim_data )
+    except Exception:
+      print( 'Expected:\n'{0}'\nwhen parsing:\n'{1}'\nBut found:\n'{2}''.format(
+          expected_vim_data,
+          completion_data,
+          vim_data ) )
+      raise
+    
+    
+@YouCompleteMeInstance()
+def SendCompletionRequest_UnicodeWorkingDirectory_test( ycm ):
+  unicode_dir = PathToTestFile( 'uni¢𐍈d€' )
+  current_buffer = VimBuffer( PathToTestFile( 'uni¢𐍈d€', 'current_buffer' ) )
+    
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
+    
+    
+def YouCompleteMe_NotifyUserIfServerCrashed_UnexpectedCore_test():
+  message = ( 'The ycmd server SHUT DOWN \(restart with ':YcmRestartServer'\). '
+              'Unexpected error while loading the YCM core library. Type '
+              '':YcmToggleLogs ycmd_\d+_stderr_.+.log' to check the logs.' )
+  RunNotifyUserIfServerCrashed( {
+    'return_code': 3,
+    'expected_message': matches_regexp( message )
+  } )
