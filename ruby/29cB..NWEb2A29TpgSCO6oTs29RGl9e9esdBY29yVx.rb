@@ -1,103 +1,58 @@
 
         
-        User.seed do |u|
-  u.id = -1
-  u.name = 'system'
-  u.username = 'system'
-  u.username_lower = 'system'
-  u.password = SecureRandom.hex
-  u.active = true
-  u.admin = true
-  u.moderator = true
-  u.approved = true
-  u.trust_level = TrustLevel[4]
-end
-    
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
-    
-                scenario_import.merges = {
-              '0' => {
-                'name' => 'a new name',
-                'schedule' => '6pm',
-                'keep_events_for' => 2.days.to_i.to_s,
-                'disabled' => 'true',
-                'options' => weather_agent_options.merge('api_key' => 'foo').to_json
-              }
-            }
-    
-    task :default => :test
-task :spec => :test
-    
-          def real_token(session)
-        decode_token(session[:csrf])
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-      describe '.random_token' do
-    it 'generates a base64 encoded 32 character string' do
-      expect(Base64.strict_decode64(token).length).to eq(32)
-    end
+        describe 'Kernel#throw' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:throw)
   end
 end
 
     
-    LogStash::Bundler.setup!
+        $Kernel_trace_var_global = 'foo'
+    captured.should == 'foo'
+  end
     
-    require_relative 'bundler'
-require_relative 'rubygems'
-require 'pathname'
+        def URIAddEncodedOctetToBuffer(octet, result, index)
+      result[index] = 37; # Char code of '%'.
+      index         += 1
+      result[index] = @@hexCharCodeArray[octet >> 4];
+      index         += 1
+      result[index] = @@hexCharCodeArray[octet & 0x0F];
+      index += 1
+      return index;
+    end
     
-    module LogStash
-  module PluginManager
-    class Error < StandardError; end
+        assert last_response.ok?
+    assert_match /りんご/, last_response.body
+    assert_match /みかん/, last_response.body
+    assert_match /バナナ/, last_response.body
+    assert_match /スイカ/, last_response.body
+  end
     
-        def self.find_by_name_with_wildcards(pattern)
-      re = transform_pattern_into_re(pattern)
-      ::Gem::Specification.find_all.select do |specification|
-        specification.name =~ re
+      base_path = wiki_options[:base_path]
+    
+        def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
+      else
+        fail ArgumentError, 'emoji `#{name}' not found'
       end
     end
     
-    Gem::Specification.new do |gem|
-  gem.authors       = ['Elastic']
-  gem.email         = ['info@elastic.co']
-  gem.description   = %q{Logstash plugin API}
-  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
-  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
-  gem.license       = 'Apache License (2.0)'
+      s.executables = ['gollum']
     
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
+          before_action :set_content_type
+      before_action :load_user
+      before_action :authorize_for_order, if: proc { order_token.present? }
+      before_action :authenticate_user
+      before_action :load_user_roles
     
-              after(:each) { logstash.delete_file(gem_path_on_vagrant) }
+            def state_callback(before_or_after = :before)
+          method_name = :'#{before_or_after}_#{@order.state}'
+          send(method_name) if respond_to?(method_name, true)
+        end
     
-          it 'display a list of installed plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
-    
-        let(:plugin_name) { 'logstash-filter-qatest' }
-    let(:previous_version) { '0.1.0' }
+            def cancel
+          authorize! :update, @order, params[:token]
+          @order.canceled_by(current_api_user)
+          respond_with(@order, default_template: :show)
+        end
