@@ -1,81 +1,165 @@
 
         
-              unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+            def join(*args)
+      self.class.join self, *args
     end
     
-            title = at_css('h1').content.strip
-        if root_page?
-          at_css('h1').content = 'Angular 2 Documentation'
-        elsif title == 'Index'
-          at_css('h1').content = result[:entries].first.name
-        elsif title == 'Angular'
-          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
-        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
-          at_css('h1').content = result[:entries].first.name
+          private
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
         end
     
-            subtitle = at_css('.hero-subtitle').try(:content)
-        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
     
-      ##
-  #
-  # Some individual request types.
-  #
-  ##
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
     
-                encoded
+              @__invalid_methods ||= Set.new
+          @__invalid_methods.add(name)
+    
+            # This should return a hash of information that explains how to
+        # SSH into the machine. If the machine is not at a point where
+        # SSH is even possible, then `nil` should be returned.
+        #
+        # The general structure of this returned hash should be the
+        # following:
+        #
+        #     {
+        #       host: '1.2.3.4',
+        #       port: '22',
+        #       username: 'mitchellh',
+        #       private_key_path: '/path/to/my/key'
+        #     }
+        #
+        # **Note:** Vagrant only supports private key based authentication,
+        # mainly for the reason that there is no easy way to exec into an
+        # `ssh` prompt with a password, whereas we can pass a private key
+        # via commandline.
+        #
+        # @return [Hash] SSH information. For the structure of this hash
+        #   read the accompanying documentation for this method.
+        def ssh_info
+          nil
+        end
+    
+            # Receives a kerberos response through the connection
+        #
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos
+        #   response message
+        # @raise [RuntimeError] if the connection isn't established, the transport protocol is unknown, not supported
+        #   or the response can't be parsed
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def recv_response
+          if connection.nil?
+            raise ::RuntimeError, 'Kerberos Client: connection not established'
           end
     
-                cipher = OpenSSL::Cipher.new('rc4')
-            cipher.encrypt
-            cipher.key = k3
-            encrypted = cipher.update(data_encrypt) + cipher.final
+              private
+    
+                k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+            k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
     
     module Rex
   module Proto
     module Kerberos
       module Model
-        # This class provides a representation of a Kerberos EncryptionKey data
-        # definition
-        class EncryptionKey < Element
+        # This class provides a representation of a KRB_AP_REQ definition, containing the Kerberos protocol version number,
+        # the message type KRB_AP_REQ, an options field to indicate any options in use, and the ticket and authenticator
+        # themselves
+        class ApReq < Element
+          # @!attribute pvno
+          #   @return [Integer] The protocol version number
+          attr_accessor :pvno
+          # @!attribute msg_type
+          #   @return [Integer] The type of the protocol message
+          attr_accessor :msg_type
+          # @!attribute options
+          #   @return [Integer] request options, affects processing
+          attr_accessor :options
+          # @!attribute ticket
+          #   @return [Rex::Proto::Kerberos::Model::Ticket] The ticket authenticating the client to the server
+          attr_accessor :ticket
+          # @!attribute authenticator
+          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] This contains the authenticator, which includes the
+          #   client's choice of a subkey
+          attr_accessor :authenticator
     
-              # Decodes the crealm field
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an String
           #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_crealm(input)
-            input.value[0].value
-          end
+          # @param input [String] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
+      # The global load paths for Sass files. This is meant for plugins and
+  # libraries to register the paths to their Sass stylesheets to that they may
+  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
+  # They are lower-precedence than any load paths passed in via the
+  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
+  #
+  # If the `SASS_PATH` environment variable is set,
+  # the initial value of `load_paths` will be initialized based on that.
+  # The variable should be a colon-separated list of path names
+  # (semicolon-separated on Windows).
+  #
+  # Note that files on the global load path are never compiled to CSS
+  # themselves, even if they aren't partials. They exist only to be imported.
+  #
+  # @example
+  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
+  # @return [Array<String, Pathname, Sass::Importers::Base>]
+  def self.load_paths
+    @load_paths ||= if ENV['SASS_PATH']
+                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
+                    else
+                      []
+                    end
   end
-end
-
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
     
-    namespace :test do
-  desc 'Run the ruby tests (without sass-spec)'
-  Rake::TestTask.new('ruby') do |t|
-    t.libs << 'test'
-    test_files = FileList[scope('test/**/*_test.rb')]
-    test_files.exclude(scope('test/rails/*'))
-    test_files.exclude(scope('test/plugins/*'))
-    t.test_files = test_files
-    t.warning = true
-    t.verbose = true
-  end
+          # If a full uri is passed, this removes the root from it
+      # otherwise returns the name unchanged
+      def remove_root(name)
+        if name.index(@root + '/') == 0
+          name[(@root.length + 1)..-1]
+        else
+          name
+        end
+      end
