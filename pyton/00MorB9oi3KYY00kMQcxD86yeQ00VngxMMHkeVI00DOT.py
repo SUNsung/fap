@@ -1,153 +1,64 @@
 
         
-            def get(self, query):
-        '''Get the stored query result from the cache.
+        
+class Director(Employee):
     
+        UNREAD = 0
+    READ = 1
+    ACCEPTED = 2
+    REJECTED = 3
+
     
-class Level(object):
+        def reducer(self, key, values):
+        '''Sum values for each key.
     
-        def current_year_month(self):
-        '''Return the current year and month.'''
+        def _hash_function(self, key):
+        return key % self.size
+    
+        def move_to_front(self, node):
         ...
     
-        def bfs(self, source, dest):
-        # Use self.visited_ids to track visited nodes
-        # Use self.lookup to translate a person_id to a Person
-        pass
-
+    The JWS implementation in josepy only implements the base JOSE standard. In
+order to support the new header fields defined in ACME, this module defines some
+ACME-specific classes that layer on top of josepy.
+'''
+import josepy as jose
     
-        By default, it represents the actual environment.
-    All of the attributes can be overwritten though, which
-    is used by the test suite to simulate various scenarios.
+    
+logging.basicConfig(level=logging.DEBUG)
+    
+    ALL_SSL_OPTIONS_HASHES = [
+    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
+    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
+    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
+    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
+    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
+    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
+    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
+    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
+]
+'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
     
             '''
-        raise NotImplementedError()
+        if self._addr_less_specific(addr):
+            return True
+        elif self.get_addr() == addr.get_addr():
+            if self.is_wildcard() or self.get_port() == addr.get_port():
+                return True
+        return False
     
-        # Adapters
-    def get_transport_plugins(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, TransportPlugin)]
-
+        def test_basic_variable_parsing_quotes(self):
+        matches = self.parser.find_dir('TestVariablePortStr')
     
+            with mock.patch('certbot.util.get_os_info') as mock_info:
+            for distro in entrypoint.OVERRIDE_CLASSES.keys():
+                mock_info.return_value = (distro, 'whatever')
+                self.assertEqual(entrypoint.get_configurator(),
+                                 entrypoint.OVERRIDE_CLASSES[distro])
     
-class TestAutoContentTypeAndAcceptHeaders:
-    '''
-    Test that Accept and Content-Type correctly defaults to JSON,
-    but can still be overridden. The same with Content-Type when --form
-    -f is used.
+    # A dictionary with options for the search language support, empty by default.
+# Now only 'ja' uses this config value
+#html_search_options = {'type': 'default'}
     
-    
-class Response(object):
-    # noinspection PyDefaultArgument
-    def __init__(self, url, headers={}, status_code=200):
-        self.url = url
-        self.headers = CaseInsensitiveDict(headers)
-        self.status_code = status_code
-    
-    
-def ensure_web_acl_present(client, module):
-    changed = False
-    result = None
-    name = module.params['name']
-    web_acl_id = get_web_acl_by_name(client, module, name)
-    if web_acl_id:
-        (changed, result) = find_and_update_web_acl(client, module, web_acl_id)
-    else:
-        metric_name = module.params['metric_name']
-        if not metric_name:
-            metric_name = re.sub(r'[^A-Za-z0-9]', '', module.params['name'])
-        default_action = module.params['default_action'].upper()
-        try:
-            params = {'Name': name, 'MetricName': metric_name, 'DefaultAction': {'Type': default_action}}
-            new_web_acl = run_func_with_change_token_backoff(client, module, params, client.create_web_acl)
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Could not create Web ACL')
-        (changed, result) = find_and_update_web_acl(client, module, new_web_acl['WebACL']['WebACLId'])
-    return changed, result
-    
-        if not HAS_BOTO3:
-        module.fail_json(msg='boto3 required for this module')
-    
-            print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
-    
-    plt.xlim([-0.05, 1.05])
-plt.ylim([-0.05, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic')
-plt.legend(loc='lower right')
-plt.show()
-
-    
-    import numpy as np
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-    import numpy as np
-from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
-    
-    try:
-    from urllib.request import urlopen
-except ImportError:
-    # Python 2
-    from urllib import urlopen
-    
-                    log.println('    platform: {}'.format(platform.platform()))
-                log.println('    python:   {}'.format(sys.version.split('\n')[0]))
-    
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
-    
-            self.prepare(vid = vid, title = title, **kwargs)
-    
-    site_info = 'CBS.com'
-download = cbs_download
-download_playlist = playlist_not_supported('cbs')
-
-    
-    
-def cntv_download_by_id(rid, **kwargs):
-    CNTV().download_by_vid(rid, **kwargs)
-    
-    
-def get_file_path(merge, output_dir, title, url):
-    mime, ext, size = url_info(url)
-    file_name = get_output_filename([], title, ext, output_dir, merge)
-    file_path = os.path.join(output_dir, file_name)
-    return file_name, file_path
-    
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
-    
-        quiet
-      Supress output other than linting errors, such as information about
-      which files have been processed and excluded.
-    
-        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
-    parser.add_argument('-d', action='store', dest='directory')
-    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
-    parser.add_argument('--overwrite', action='store_true', default = False)    
-    results = parser.parse_args()
+            #Sorting all filenames in the directory, to maintain the order of the PDF
+        allmd.sort()
