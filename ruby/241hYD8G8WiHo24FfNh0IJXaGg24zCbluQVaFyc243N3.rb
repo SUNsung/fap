@@ -1,166 +1,114 @@
 
         
-        class BuildEnvironment
-  def initialize(*settings)
-    @settings = Set.new(*settings)
-  end
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-        s = 'This formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX}.'
-    s << '\n\n#{f.keg_only_reason}'
-    if f.lib.directory? || f.include.directory?
-      s <<
-        <<-EOS.undent_________________________________________________________72
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-          if path.symlink? || path.directory?
-        next
-      elsif path.extname == '.la'
-        path.unlink
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    
+          #
+    
+    #
+    
+      all_files       = `git ls-files -z`.split('\x0')
+  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
+  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
+  s.bindir        = 'exe'
+  s.require_paths = ['lib']
+    
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+            def print_message(json_message)
+          msg = JSON.parse(json_message)
+          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
+          # on its purpose.
+          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
+        end
+    
+        def deprecation_message(message)
+      Jekyll.logger.warn 'Deprecation:', message
+    end
+    
+        # The path used after confirmation.
+    def after_confirmation_path_for(resource_name, resource)
+      if signed_in?(resource_name)
+        signed_in_root_path(resource)
       else
-        # Set permissions for executables and non-executables
-        perms = if path.mach_o_executable? || path.text_executable?
-          0555
-        else
-          0444
-        end
-        if ARGV.debug?
-          old_perms = path.stat.mode & 0777
-          if perms != old_perms
-            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
-          end
-        end
-        path.chmod perms
+        new_session_path(resource_name)
       end
     end
-  end
-end
-
     
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
     
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
+      def translation_scope
+    'devise.sessions'
   end
-  alias_method :python2, :python
-  alias_method :python3, :python
-end
-
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+      # Controllers inheriting DeviseController are advised to override this
+  # method so that other controllers inheriting from them would use
+  # existing translations.
+  def translation_scope
+    'devise.#{controller_name}'
   end
-  alias_method :standard_install, :install
     
-      before_action :set_account
-  before_action :set_statuses
+      # The parent mailer all Devise mailers inherit from.
+  # Defaults to ActionMailer::Base. This should be set early
+  # in the initialization process and should be set to a string.
+  mattr_accessor :parent_mailer
+  @@parent_mailer = 'ActionMailer::Base'
     
-            @user.send_confirmation_instructions
+          # Stores the provided location to redirect the user after signing in.
+      # Useful in combination with the `stored_location_for` helper.
+      #
+      # Example:
+      #
+      #   store_location_for(:user, dashboard_path)
+      #   redirect_to user_facebook_omniauth_authorize_path
+      #
+      def store_location_for(resource_or_scope, location)
+        session_key = stored_location_key_for(resource_or_scope)
+        
+        path = extract_path_from_location(location)
+        session[session_key] = path if path
       end
     
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
-  end
-end
-
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
     
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
-    
-              case protocol
-          when 'tcp'
-            self.connection = create_tcp_connection
-          when 'udp'
-            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
-    
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
-      end
-    end
-  end
-end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-            unless File.directory?(File.dirname(output))
-          puts_action :directory, :green, File.dirname(output)
-          FileUtils.mkdir_p(File.dirname(output))
-        end
-        puts_action :convert, :green, f
-        if File.exist?(output)
-          puts_action :overwrite, :yellow, output
-        else
-          puts_action :create, :green, output
+            def order
+          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
+          authorize! :update, @order, order_token
         end
     
-            found = possible_files(remove_root(name)).map do |f, s|
-          path = if dir == '.' || Sass::Util.pathname(f).absolute?
-                   f
-                 else
-                   '#{escape_glob_characters(dir)}/#{f}'
-                 end
-          Dir[path].map do |full_path|
-            full_path.gsub!(REDUNDANT_DIRECTORY, File::SEPARATOR)
-            [Sass::Util.cleanpath(full_path).to_s, s]
-          end
-        end.flatten(1)
-        return if found.empty?
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
-    
-        desc 'Halt all VM's involved in the acceptance test round'
-    task :halt, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+        end
