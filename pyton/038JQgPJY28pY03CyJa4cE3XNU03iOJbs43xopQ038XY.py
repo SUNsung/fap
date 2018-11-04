@@ -1,50 +1,49 @@
 
         
-            @abstractmethod
-    def escalate_call(self):
-        pass
+        
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
-        def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
+        def reraise(tp, value, tb=None):
+        if value.__traceback__ is not tb:
+            raise value.with_traceback(tb)
+        raise value
+    
+            app.config.from_envvar('YOURAPPLICATION_SETTINGS')
+    
+            buf.append('  Make sure to directly send your %s-request to this URL '
+                   'since we can\'t make browsers or HTTP clients redirect '
+                   'with form data reliably or without user interaction.' %
+                   request.method)
+        buf.append('\n\nNote: this exception is only raised in debug mode')
+        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
+    
+        if args and kwargs:
+        raise TypeError('jsonify() behavior undefined when passed both args and kwargs')
+    elif len(args) == 1:  # single args are passed directly to dumps()
+        data = args[0]
+    else:
+        data = args or kwargs
     
     
-class Level(object):
+class TaggedJSONSerializer(object):
+    '''Serializer that uses a tag system to compactly represent objects that
+    are not JSON types. Passed as the intermediate serializer to
+    :class:`itsdangerous.Serializer`.
     
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
+        if not has_level_handler(logger):
+        logger.addHandler(default_handler)
     
-    from mrjob.job import MRJob
-    
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
-    
-        def __init__(self, orig):
-        self._orig = orig
-    
-        def load_installed_plugins(self):
-        for entry_point_name in ENTRY_POINT_NAMES:
-            for entry_point in iter_entry_points(entry_point_name):
-                plugin = entry_point.load()
-                plugin.package_name = entry_point.dist.key
-                self.register(entry_point.load())
-    
-        '''
-    return path.replace('\\', '\\\\\\')
+      if message:
+    sys.exit('\nFATAL ERROR: ' + message)
+  else:
+    sys.exit(0)
