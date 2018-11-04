@@ -1,129 +1,166 @@
 
         
-              GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(1)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    
-        def fetch_remote_tags(folder: nil)
-      UI.message('Fetching remote git tags...')
-      Actions.sh('cd '#{folder}' && GIT_TERMINAL_PROMPT=0 git fetch --all --tags -q')
-    
-          @launch_event_sent = true
-      builder = AnalyticsEventBuilder.new(
-        p_hash: launch_context.p_hash,
-        session_id: session_id,
-        action_name: nil,
-        fastlane_client_language: launch_context.fastlane_client_language
-      )
-    
-          xcode_outdated = false
-      begin
-        unless FastlaneCore::Helper.xcode_at_least?(Fastlane::MINIMUM_XCODE_RELEASE)
-          xcode_outdated = true
-        end
-      rescue
-        # We don't care about exceptions here
-        # We'll land here if the user doesn't have Xcode at all for example
-        # which is fine for someone who uses fastlane just for Android project
-        # What we *do* care about is when someone links an old version of Xcode
-      end
-    
-            expect(result).to eq('carthage bootstrap --platform watchOS')
-      end
-    
-          it 'handles the exclude_dirs parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
-      end
-    
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0].shellescape} #{path[1].shellescape}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path})
-          end').runner.execute(:test)
-        end
-      end
-    
-            allow(File).to receive(:file?).and_return(false)
-        allow(File).to receive(:file?).with(keychain_path).and_return(true)
-        allow(File).to receive(:exist?).and_return(false)
-        expect(File).to receive(:exist?).with(cert_name).and_return(true)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_set_key_partition_list_command, print: false)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_security_import_command, print: false)
-    
-            FastlaneCore::CertChecker.wwdr_certificate_installed?
-      end
-    
-          def stored_location_key_for(resource_or_scope)
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        '#{scope}_return_to'
-      end
-    
-      def self.all
-    Dir['#{root_path}/docs/scrapers/**/*.rb'].
-      map { |file| File.basename(file, '.rb') }.
-      map { |name| const_get(name.camelize) }.
-      sort { |a, b| a.name.casecmp(b.name) }.
-      reject(&:abstract)
+        class BuildEnvironment
+  def initialize(*settings)
+    @settings = Set.new(*settings)
   end
     
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
+        s = 'This formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX}.'
+    s << '\n\n#{f.keg_only_reason}'
+    if f.lib.directory? || f.include.directory?
+      s <<
+        <<-EOS.undent_________________________________________________________72
     
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-        def load_capybara_selenium
-      require 'capybara/dsl'
-      require 'selenium/webdriver'
-      Capybara.register_driver :chrome do |app|
-        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+          if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
+        else
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+          end
+        end
+        path.chmod perms
       end
-      Capybara.javascript_driver = :chrome
-      Capybara.current_driver = :chrome
-      Capybara.run_server = false
-      Capybara
+    end
+  end
+end
+
+    
+      def external_commands
+    paths.reduce([]) do |cmds, path|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        cmds << cmd unless cmd.include?('.')
+      end
+      cmds
+    end.sort
+  end
+    
+          puts_columns Array(result)
+    else
+      query = ARGV.first
+      rx = query_regexp(query)
+      local_results = search_formulae(rx)
+      puts_columns(local_results)
+      tap_results = search_taps(rx)
+      puts_columns(tap_results)
+    
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
+end
+
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+      before_action :set_account
+  before_action :set_statuses
+    
+            @user.send_confirmation_instructions
+      end
+    
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
+end
+
+    
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
     end
     
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
-      end
+              case protocol
+          when 'tcp'
+            self.connection = create_tcp_connection
+          when 'udp'
+            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
     
-              node.remove_attribute('path')
-          node.remove_attribute('region')
-          node.remove_attribute('linenums')
-          node.remove_attribute('title')
-          node.remove_attribute('language')
-          node.remove_attribute('hidecopy')
-          node.remove_attribute('class')
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+            unless File.directory?(File.dirname(output))
+          puts_action :directory, :green, File.dirname(output)
+          FileUtils.mkdir_p(File.dirname(output))
+        end
+        puts_action :convert, :green, f
+        if File.exist?(output)
+          puts_action :overwrite, :yellow, output
+        else
+          puts_action :create, :green, output
         end
     
-    group :debugging do
-  gem 'cocoapods_debug'
+            found = possible_files(remove_root(name)).map do |f, s|
+          path = if dir == '.' || Sass::Util.pathname(f).absolute?
+                   f
+                 else
+                   '#{escape_glob_characters(dir)}/#{f}'
+                 end
+          Dir[path].map do |full_path|
+            full_path.gsub!(REDUNDANT_DIRECTORY, File::SEPARATOR)
+            [Sass::Util.cleanpath(full_path).to_s, s]
+          end
+        end.flatten(1)
+        return if found.empty?
     
-      desc 'Updates the last know version of CocoaPods in the specs repo'
-  task :post_release do
-    title 'Updating last known version in Specs repo'
-    specs_branch = 'master'
-    Dir.chdir('../Specs') do
-      puts Dir.pwd
-      sh 'git checkout #{specs_branch}'
-      sh 'git pull'
-    
-        # Checks that the podfile exists.
-    #
-    # @raise  If the podfile does not exists.
-    #
-    # @return [void]
-    #
-    def verify_podfile_exists!
-      unless config.podfile
-        raise Informative, 'No `Podfile' found in the project directory.'
-      end
+        private
+    def uncompress(source)
+      temporary_directory = Stud::Temporary.pathname
+      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
+      temporary_directory
+    rescue Zip::Error => e
+      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
+      # a `Zip::Error` exception with a file not found message...
+      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
     end
+    
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
