@@ -1,400 +1,439 @@
 
         
-        struct TemporaryFile {
-  std::string path;
-    }
+        // Get the python wrappers for a list of ops in a OpList.
+// `op_list_buf` should be a pointer to a buffer containing
+// the binary encoded OpList proto, and `op_list_len` should be the
+// length of that buffer.
+string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
     
     
-    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
-  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
-  y_shape.resize(canonical_axis + 1);
-  y_shape[canonical_axis] = N;
-  out[0] = CreateTensorShape(y_shape, in[0].data_type());
-  return out;
-}
+    {}  // end namespace tensorflow
+
     
-    class GetMergeSingleMapFeatureTensorsGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    vector<string> input_blob_names{};
-    vector<string> output_blob_names{};
-    }
-    }
-    
-    template <class Context>
-class FindDuplicateElementsOp final : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  USE_SIMPLE_CTOR_DTOR(FindDuplicateElementsOp);
-  USE_DISPATCH_HELPER;
-    }
-    
-    namespace caffe2 {
-namespace {
-    }
-    }
-    
-    class GetFloatToHalfGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'HalfToFloat', '', vector<string>{GO(0)}, vector<string>{GI(0)});
-  }
-};
-REGISTER_GRADIENT(FloatToHalf, GetFloatToHalfGradient);
-    
-    using LineNumber = uint32_t;
-using ColNumber  = uint32_t;
-using LineRange  = std::tuple<LineNumber,LineNumber>;
-    
-      void EmitXX2Form(const uint8_t op,
-                   const RegNumber t,
-                   const uint8_t uim,
-                   const RegNumber b,
-                   const uint16_t xo,
-                   const bool bx,
-                   const bool tx)  {
-    XX2_form_t xx2_formater {{
-      tx,
-      bx,
-      xo,
-      static_cast<uint32_t>(b),
-      static_cast<uint32_t>(uim & 0x3),
-      static_cast<uint32_t>(t),
-      op
-    }};
-    dword(xx2_formater.instruction);
-  }
-    
-    Variant PlainDirectory::read() {
-  struct dirent entry;
-  struct dirent *result;
-  int ret = readdir_r(m_dir, &entry, &result);
-  if (ret != 0 || !result) {
-    return false;
-  }
-  return String(entry.d_name, CopyString);
-}
-    
-        template <>
-    std::tuple<const void *, const SparseIndexType*, const SparseIndexType*, size_t, size_t, size_t> NDArrayView::SparseBlockColumnDataBuffers<int8_t>() const
-    {
-        return _SparseBlockColumnDataBuffers<int8_t, char>();
-    }
-    
-        NDMask::NDMask(const NDShape& shape, Matrix<char>* matrix)
-        : m_device(AsDeviceDescriptor(matrix->GetDeviceId())), m_maskShape(shape)
-    {
-        m_matrixView = std::shared_ptr<Matrix<char>>(matrix, [](Matrix<char>* ptr) { delete ptr; });
-    }
-    
-        ProgressWriter::ProgressWriter(size_t trainingUpdateWriteFrequency, size_t trainingFirstUpdatesToWrite,
-                                   size_t testUpdateWriteFrequency, size_t testFirstUpdatesToWrite,
-                                   size_t distributedSyncUpdateWriteFrequency, size_t distributedSyncFirstUpdatesToWrite)
-        : m_training(std::make_unique<Impl>(trainingUpdateWriteFrequency, trainingFirstUpdatesToWrite)),
-        m_test(std::make_unique<Impl>(testUpdateWriteFrequency, testFirstUpdatesToWrite)),
-        m_distributedSync(std::make_unique<Impl>(distributedSyncUpdateWriteFrequency, distributedSyncFirstUpdatesToWrite))
-    {
-    }
-    
-            // The return value is ignored here.
-        _wunlink(modelFilePath.c_str());
-        _wunlink(trainerStateCheckpointFilePath.c_str());
-    
-            static FunctionPtr Deserialize(const Dictionary& dictionary,
-            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
-            const CNTK::DeviceDescriptor& device);
-    
-    
-    {        memcpy(colStarts.data(), rawColStarts, numOfColsInMatrix * sizeof(SparseIndexType));
-        memcpy(nonZeroValues.data(), rawNonZeroValues, numNonZeroValues * sizeof(ElementType));
-        memcpy(rowIndices.data(), rawRowIndices, numNonZeroValues * sizeof(SparseIndexType));
-    }
-    
-            bool isSparse = dict[isSparseKey].Value<bool>();
-        std::wstring name = L'';
-        if (dict.Contains(nameKey))
-            name = dict[nameKey].Value<std::wstring>();
-        bool needsGradient = dict[needsGradientKey].Value<bool>();
-        const auto& shape = dict[shapeKey].Value<NDShape>();
-    
-    #pragma once
-    
-    // Rand based on Mersenne Twister.
-// We use our own distribution in order to match baselines between different operating systems,
-// because uniform_distribution is not guaranteed to provide the same numbers on different platforms.
-// TODO: Switching to Boost would eliminate this problem.
-static inline size_t RandMT(const size_t begin, const size_t end, std::mt19937_64& rng)
-{
-    const size_t randomNumber = rng();
-    return begin + randomNumber % (end - begin);
-}
-    
-    #include <string>
-    
-    #include <string>
-    
-    
-    {private:
-   // this type is not copyable:
-   c_regex_traits(const c_regex_traits&);
-   c_regex_traits& operator=(const c_regex_traits&);
-};
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_match.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Iterator traits for selecting an iterator type as
-  *                an integral constant expression.
-  */
-    
-    typedef enum _match_flags
-{
-   match_default = 0,
-   match_not_bol = 1,                                /* first is not start of line */
-   match_not_eol = match_not_bol << 1,               /* last is not end of line */
-   match_not_bob = match_not_eol << 1,               /* first is not start of buffer */
-   match_not_eob = match_not_bob << 1,               /* last is not end of buffer */
-   match_not_bow = match_not_eob << 1,               /* first is not start of word */
-   match_not_eow = match_not_bow << 1,               /* last is not end of word */
-   match_not_dot_newline = match_not_eow << 1,       /* \n is not matched by '.' */
-   match_not_dot_null = match_not_dot_newline << 1,  /* '\0' is not matched by '.' */
-   match_prev_avail = match_not_dot_null << 1,       /* *--first is a valid expression */
-   match_init = match_prev_avail << 1,               /* internal use */
-   match_any = match_init << 1,                      /* don't care what we match */
-   match_not_null = match_any << 1,                  /* string can't be null */
-   match_continuous = match_not_null << 1,           /* each grep match must continue from */
-                                                     /* uninterupted from the previous one */
-   match_partial = match_continuous << 1,            /* find partial matches */
-   
-   match_stop = match_partial << 1,                  /* stop after first match (grep) V3 only */
-   match_not_initial_null = match_stop,              /* don't match initial null, V4 only */
-   match_all = match_stop << 1,                      /* must find the whole of input even if match_any is set */
-   match_perl = match_all << 1,                      /* Use perl matching rules */
-   match_posix = match_perl << 1,                    /* Use POSIX matching rules */
-   match_nosubs = match_posix << 1,                  /* don't trap marked subs */
-   match_extra = match_nosubs << 1,                  /* include full capture information for repeated captures */
-   match_single_line = match_extra << 1,             /* treat text as single line and ignor any \n's when matching ^ and $. */
-   match_unused1 = match_single_line << 1,           /* unused */
-   match_unused2 = match_unused1 << 1,               /* unused */
-   match_unused3 = match_unused2 << 1,               /* unused */
-   match_max = match_unused3,
-    }
-    
-       const capture_sequence_type& captures(int i)const
-   {
-      if(m_is_singular)
-         raise_logic_error();
-      return (*this)[i].captures();
-   }
-#endif
-    
-    namespace boost{
-namespace BOOST_REGEX_DETAIL_NS{
-    }
-    }
-    
-    #endif  // BOOST_REGEX_NO_FWD
-    
-    #ifndef BOOST_NO_WREGEX
-inline bool regex_search(const wchar_t* str, 
-                        wcmatch& m, 
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_search(str, str + wregex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_search(const wchar_t* first, const wchar_t* last, 
-                  const wregex& e, 
-                  match_flag_type flags = match_default)
-{
-   wcmatch m;
-   return regex_search(first, last, m, e, flags | regex_constants::match_any);
-}
-#endif
-inline bool regex_search(const std::string& s, 
-                        smatch& m,
-                        const regex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_search(s.begin(), s.end(), m, e, flags);
-}
-#if !defined(BOOST_NO_WREGEX)
-inline bool regex_search(const std::basic_string<wchar_t>& s, 
-                        wsmatch& m,
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_search(s.begin(), s.end(), m, e, flags);
-}
-#endif
-    
-    namespace boost{
-    }
-    
-    #endif // include
-    
-    // Benchmark results on my dev server (20-core Intel Xeon E5-2660 v2 @ 2.20GHz)
-//
-// ============================================================================
-// folly/test/FormatBenchmark.cpp                  relative  time/iter  iters/s
-// ============================================================================
-// octal_snprintf                                              79.30ns   12.61M
-// octal_uintToOctal                               3452.19%     2.30ns  435.35M
-// ----------------------------------------------------------------------------
-// hex_snprintf                                                73.59ns   13.59M
-// hex_uintToHex                                   4507.53%     1.63ns  612.49M
-// ----------------------------------------------------------------------------
-// intAppend_snprintf                                         191.50us    5.22K
-// intAppend_to                                     552.46%    34.66us   28.85K
-// intAppend_format                                 215.76%    88.76us   11.27K
-// ----------------------------------------------------------------------------
-// bigFormat_snprintf                                         178.03us    5.62K
-// bigFormat_format                                  90.41%   196.91us    5.08K
-// ----------------------------------------------------------------------------
-// format_nested_strings                                      317.65us    3.15K
-// format_nested_fbstrings                           99.89%   318.01us    3.14K
-// format_nested_direct                             116.52%   272.62us    3.67K
-// ----------------------------------------------------------------------------
-// copy_short_string                                           28.33ns   35.30M
-// format_short_string_unsafe                        82.51%    34.33ns   29.13M
-// format_short_string_safe                          58.92%    48.08ns   20.80M
-// sformat_short_string_unsafe                       73.90%    38.33ns   26.09M
-// sformat_short_string_safe                         54.97%    51.53ns   19.41M
-// ----------------------------------------------------------------------------
-// copy_long_string                                            57.56ns   17.37M
-// format_long_string_unsafe                         68.79%    83.68ns   11.95M
-// format_long_string_safe                           69.44%    82.89ns   12.06M
-// sformat_long_string_unsafe                        65.58%    87.77ns   11.39M
-// sformat_long_string_safe                          68.14%    84.47ns   11.84M
-// ============================================================================
-    
-    static void align4Bytes(size_t& pos) {
-  if (pos % 4 != 0) {
-    pos += 4 - pos % 4;
-  }
-}
-    
-    template <
-    class Iterator = const char*,
-    class Base = folly::Range<boost::u8_to_u32_iterator<Iterator>>>
-class UTF8Range : public Base {
- public:
-  /* implicit */ UTF8Range(const folly::Range<Iterator> baseRange)
-      : Base(
-            boost::u8_to_u32_iterator<Iterator>(
-                baseRange.begin(),
-                baseRange.begin(),
-                baseRange.end()),
-            boost::u8_to_u32_iterator<Iterator>(
-                baseRange.end(),
-                baseRange.begin(),
-                baseRange.end())) {}
-  /* implicit */ UTF8Range(const std::string& baseString)
-      : Base(folly::Range<Iterator>(baseString)) {}
-};
-    
-    #pragma once
-    
-    #include <folly/Conv.h>
-#include <folly/hash/Hash.h>
-    
-    
-    { private:
-  const KeepAlive<> executor_;
-};
-    
-      tv = to<struct timeval>(10us);
-  EXPECT_EQ(0, tv.tv_sec);
-  EXPECT_EQ(10, tv.tv_usec);
-    
-    
-    {  /**
-   * @brief CanFrame string including essential information about the message.
-   * @return The info string.
-   */
-  std::string CanFrameString() const {
-    std::stringstream output_stream('');
-    output_stream << 'id:0x' << Byte::byte_to_hex(id)
-                  << ',len:' << static_cast<int>(len) << ',data:';
-    for (uint8_t i = 0; i < len; ++i) {
-      output_stream << Byte::byte_to_hex(data[i]);
-    }
-    output_stream << ',';
-    return output_stream.str();
-  }
-};
-    
-      const int32_t ret = canRead(dev_handler_, recv_frames_, frame_num, nullptr);
-  // rx timeout not log
-  if (ret == NTCAN_RX_TIMEOUT) {
-    return ErrorCode::OK;
-  }
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'receive message failed, error code: ' << ret << ', '
-           << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-    
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-      /**
-   * @brief Get the error string.
-   * @param status The status to get the error string.
-   */
-  std::string GetErrorString(const int32_t status) override;
-    
-      if (ret != ErrorCode::OK) {
-    AERROR << 'Open device error code: ' << ret
-           << ', channel id: ' << _card_port;
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-  AERROR << 'Open device succ code: ' << ret << ', channel id: ' << _card_port;
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                 int32_t *const frame_num) override;
-    
-    template <typename SensorType>
-void CanReceiver<SensorType>::Stop() {
-  if (IsRunning()) {
-    AINFO << 'Stopping can client receiver ...';
-    is_running_ = false;
-    if (thread_ != nullptr && thread_->joinable()) {
-      thread_->join();
-    }
-    thread_.reset();
-  } else {
-    AINFO << 'Can client receiver is not running.';
-  }
-  AINFO << 'Can client receiver stopped [ok].';
-}
-    
-    #include 'modules/drivers/canbus/can_comm/can_receiver.h'
-    
-    template <typename SensorType>
-template <class T, bool need_check>
-void MessageManager<SensorType>::AddRecvProtocolData() {
-  recv_protocol_data_.emplace_back(new T());
-  auto *dt = recv_protocol_data_.back().get();
-  if (dt == nullptr) {
+    void CostAnalyzer::PredictCosts(CostEstimator* cost_estimator,
+                                CostGraphDef* cost_graph, int64* total_time) {
+  TF_CHECK_OK(cost_estimator->Initialize(*item_));
+  Costs costs;
+  const Status status =
+      cost_estimator->PredictCosts(item_->graph, cost_graph, &costs);
+  *total_time = costs.execution_time.count();
+  if (!status.ok()) {
+    LOG(ERROR) << 'Could not estimate the cost for item ' << item_->id << ': '
+               << status.error_message();
     return;
   }
-  protocol_data_map_[T::ID] = dt;
-  if (need_check) {
-    check_ids_[T::ID].period = dt->GetPeriod();
-    check_ids_[T::ID].real_period = 0;
-    check_ids_[T::ID].last_time = 0;
-    check_ids_[T::ID].error_count = 0;
+}
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    // Comparisons on PyBfloat16s.
+PyObject* PyBfloat16_RichCompare(PyObject* a, PyObject* b, int op) {
+  bfloat16 x, y;
+  if (!AsBfloat16(a, &x) || !AsBfloat16(b, &y)) return nullptr;
+  bool result;
+  switch (op) {
+    case Py_LT:
+      result = x < y;
+      break;
+    case Py_LE:
+      result = x <= y;
+      break;
+    case Py_EQ:
+      result = x == y;
+      break;
+    case Py_NE:
+      result = x != y;
+      break;
+    case Py_GT:
+      result = x > y;
+      break;
+    case Py_GE:
+      result = x >= y;
+      break;
+    default:
+      LOG(FATAL) << 'Invalid op type ' << op;
+  }
+  return PyBool_FromLong(result);
+}
+    
+    
+    {}  // namespace tensorflow
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+
+    
+    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
+// will be deleted by TFE_DeleteTensorHandle.
+using Safe_TFE_TensorHandlePtr =
+    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
+Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
+    
+    namespace io {
+    }
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    ScopedActivateExecutorContext &&other)
+    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
+  other.driver_scoped_activate_context_ = nullptr;
+}
+    
+    void swift::UUID::toString(llvm::SmallVectorImpl<char> &out) const {
+  out.resize(UUID::StringBufferSize);
+#if defined(_WIN32)
+  ::UUID uuid;
+  memcpy(&uuid, Value, Size);
+    }
+    
+        internal::assertSupportedConfiguration();
+    
+    void blur3x3(const Size2D &size, s32 cn,
+             const s32 * srcBase, ptrdiff_t srcStride,
+             s32 * dstBase, ptrdiff_t dstStride,
+             BORDER_MODE borderType, s32 borderValue, Margin borderMargin)
+{
+    internal::assertSupportedConfiguration(isBlurS32Supported(size, cn, borderType));
+#ifdef CAROTENE_NEON
+    size_t colsn = size.width * cn;
+    }
+    
+    // converts R, G, B (B, G, R) pixels to  RGB(BGR)565 format respectively
+inline uint8x16x2_t convertTo565( const uint8x16_t& vR, const uint8x16_t& vG, const uint8x16_t& vB )
+{
+    uint8x16x2_t vRgb565;                               // rrrrRRRR ggggGGGG bbbbBBBB
+    }
+    
+    #include <carotene/functions.hpp>
+#include 'saturate_cast.hpp'
+    
+            for (; i < roiw8; i += 8 )
+        {
+            internal::prefetch(src + i + 6);
+            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
+            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
+            uint64x2_t vln3 = vld1q_u64((const u64*)(src + i + 4));
+            uint64x2_t vln4 = vld1q_u64((const u64*)(src + i + 6));
+    }
+    
+    
+    {        process(src, j, size.width, i,
+                minVal, minLocPtr, minLocCount, minLocCapacity,
+                maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+    }
+    
+        typedef typename VecTraits<T>::vec128 vec128;
+    typedef typename VecTraits<T>::vec64 vec64;
+    
+            //left&right borders
+        if (borderType != BORDER_MODE_CONSTANT)
+            for (s32 k = 0; k < cn; ++k)
+            {
+                lane[-cn+k] = lane[idx_l1 + k];
+                lane[-cn-cn+k] = lane[idx_l2 + k];
+    }
+    
+    /**
+ * @brief Fills a Blob with values @f$ x \sim U(-a, +a) @f$ where @f$ a @f$ is
+ *        set inversely proportional to number of incoming nodes, outgoing
+ *        nodes, or their average.
+ *
+ * A Filler based on the paper [Bengio and Glorot 2010]: Understanding
+ * the difficulty of training deep feedforward neuralnetworks.
+ *
+ * It fills the incoming matrix by randomly sampling uniform data from [-scale,
+ * scale] where scale = sqrt(3 / n) where n is the fan_in, fan_out, or their
+ * average, depending on the variance_norm option. You should make sure the
+ * input blob has shape (num, a, b, c) where a * b * c = fan_in and num * b * c
+ * = fan_out. Note that this is currently not the case for inner product layers.
+ *
+ * TODO(dox): make notation in above comment consistent with rest & use LaTeX.
+ */
+template <typename Dtype>
+class XavierFiller : public Filler<Dtype> {
+ public:
+  explicit XavierFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK(blob->count());
+    int fan_in = blob->count() / blob->shape(0);
+    // Compatibility with ND blobs
+    int fan_out = blob->num_axes() > 1 ?
+                  blob->count() / blob->shape(1) :
+                  blob->count();
+    Dtype n = fan_in;  // default to fan_in
+    if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_AVERAGE) {
+      n = (fan_in + fan_out) / Dtype(2);
+    } else if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_FAN_OUT) {
+      n = fan_out;
+    }
+    Dtype scale = sqrt(Dtype(3) / n);
+    caffe_rng_uniform<Dtype>(blob->count(), -scale, scale,
+        blob->mutable_cpu_data());
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
+};
+    
+     private:
+  // wrap im2col/col2im so we don't have to remember the (long) argument lists
+  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_cpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
+    }
+  }
+  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_cpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
+    }
+  }
+#ifndef CPU_ONLY
+  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_gpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(),
+          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
+    }
+  }
+  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_gpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
+          dilation_.gpu_data(), data);
+    }
+  }
+#endif
+    
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include <vector>
+    
+        class LearnerFSAdaGrad : public LearnerMomentumSGD
+    {
+    public:
+    }
+    
+    
+    {        return MakeSharedObject<NDArrayView>(GetDataType(), Device(), GetStorageFormat(), Shape(), IsReadOnly() || readOnly, tensorView);
+    }
+    
+    using namespace Microsoft::MSR::CNTK;
+    
+                m_totalSummaries++;
+            auto now = std::chrono::high_resolution_clock::now();
+            size_t durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_lastResetTime).count();
+    
+            size_t numSequences = oneHotSequences.size();
+        NDShape valueDataShape = sampleShape.AppendShape({ maxSequenceLength, numSequences });
+        size_t numCSCCols = valueDataShape.SubShape(1).TotalSize() + 1;
+        std::vector<SparseIndexType> colStarts(numCSCCols);
+        std::vector<ElementType> nonZeroValues;
+        std::vector<SparseIndexType> rowIndices;
+        for (size_t i = 0; i < numSequences; ++i)
+        {
+            size_t currentSequenceNumCols = oneHotSequences[i].size();
+            size_t j = 0;
+            for (; j < currentSequenceNumCols; ++j)
+            {
+                colStarts[(i * maxSequenceNumCols) + j] = (SparseIndexType)nonZeroValues.size();
+                size_t oneHotIdx = oneHotSequences[i][j];
+                if ((oneHotIdx & OneHotSkip) == OneHotSkip) // note that OneHotSkip used to be (size_t)-1, and later changed to (uint32_t)-1. Both are supported
+                {
+                    nonZeroValues.push_back(0);
+                    rowIndices.push_back(0);
+                }
+                else
+                {
+                    nonZeroValues.push_back(1);
+                    if (oneHotIdx >= dimension)
+                        InvalidArgument('Value::Create: one-hot index value (%zu) exceeds vocabulary size (%zu).', oneHotSequences[i][j], dimension);
+                    rowIndices.push_back((SparseIndexType)(oneHotSequences[i][j]));
+                }
+            }
+    }
+    
+    
+    {
+    {    private:
+        // Disallow copy and move construction and assignment
+        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
+    };
+}
+
+    
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
+    
+    class Clock
+{
+public:
+    static long long GetTimeStamp();
+    static long long GetTicksPerSecond();
+};
+    
+    template<class ElemType>
+class ComputationNetworkFromFile : public ComputationNetwork
+{
+public:
+    ComputationNetworkFromFile(const IConfigRecordPtr configp) :
+        ComputationNetwork()
+    {
+        let& config = *configp;
+    }
+    }
+    
+    static void Dump(benchmark::State& state, const char* filename, int indent)
+{
+    std::ifstream f(filename);
+    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+    json j = json::parse(str);
+    }
+    
+    // That gcc wants both of these prototypes seems mysterious. VC, for
+// its part, can't decide which to use (another mystery). Matching of
+// template overloads: the final frontier.
+#ifndef COMPILER_MSVC
+template <typename T, size_t N>
+char (&ArraySizeHelper(const T (&array)[N]))[N];
+#endif
+    
+    Benchmark* Benchmark::UseRealTime() {
+  CHECK(!use_manual_time_)
+      << 'Cannot set UseRealTime and UseManualTime simultaneously.';
+  use_real_time_ = true;
+  return this;
+}
+    
+    // Parses a string for a Double flag, in the form of
+// '--flag=value'.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseDoubleFlag(const char* str, const char* flag, double* value);
+    
+    void ConsoleReporter::PrintHeader(const Run& run) {
+  std::string str = FormatString('%-*s %13s %13s %10s', static_cast<int>(name_field_width_),
+                                 'Benchmark', 'Time', 'CPU', 'Iterations');
+  if(!run.counters.empty()) {
+    if(output_options_ & OO_Tabular) {
+      for(auto const& c : run.counters) {
+        str += FormatString(' %10s', c.first.c_str());
+      }
+    } else {
+      str += ' UserCounters...';
+    }
+  }
+  str += '\n';
+  std::string line = std::string(str.length(), '-');
+  GetOutputStream() << line << '\n' << str << line << '\n';
+}
+    
+    inline LogType& GetErrorLogInstance() {
+  static LogType log(&std::clog);
+  return log;
+}
+    
+    double BenchmarkReporter::Run::GetAdjustedRealTime() const {
+  double new_time = real_accumulated_time * GetTimeUnitMultiplier(time_unit);
+  if (iterations != 0) new_time /= static_cast<double>(iterations);
+  return new_time;
+}
+    
+    void DCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
+    }
   }
 }
     
-    #ifndef MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
-#define MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
+    
+    // Returns non-zero if and only if x has a zero byte, i.e. one of
+// x & 0xff, x & 0xff00, ..., x & 0xff00000000000000 is zero.
+inline uint64_t HasZeroByte(uint64_t x) {
+  return (x - 0x0101010101010101ULL) & ~x & 0x8080808080808080ULL;
+}
+    
+    // Quantization values for an 8x8 pixel block.
+struct JPEGQuantTable {
+  JPEGQuantTable() : values(kDCTBlockSize), precision(0),
+                     index(0), is_last(true) {}
+    }
