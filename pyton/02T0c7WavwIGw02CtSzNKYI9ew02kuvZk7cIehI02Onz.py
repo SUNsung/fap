@@ -1,204 +1,173 @@
 
         
-            total_cost = total_recon_cost = total_kl_cost = 0.0
-    # normalizing by batch done in distributions.py
-    epoch_size = len(collected_op_values)
-    for op_values in collected_op_values:
-      total_cost += op_values[0]
-      total_recon_cost += op_values[1]
-      total_kl_cost += op_values[2]
-    
-    from google.protobuf import text_format
-import data_utils
+              for iii in zip(idxs[0], shuffle_tidxs, idxs[2]):
+        S_bxtxd[iii] += 1
     
     
-def _file_to_word_ids(filename, word_to_id):
-  data = _read_words(filename)
-  return [word_to_id[word] for word in data if word in word_to_id]
+def plot_lfads_timeseries(data_bxtxn, model_vals, ext_input_bxtxi=None,
+                          truth_bxtxn=None, bidx=None, output_dist='poisson',
+                          conversion_factor=1.0, subplot_cidx=0,
+                          col_title=None):
     
-    import numpy as np
-from six.moves import xrange
-import tensorflow as tf
+    def get_train_n_valid_inds(num_trials, train_fraction, nreplications):
+  '''Split the numbers between 0 and num_trials-1 into two portions for
+  training and validation, based on the train fraction.
+  Args:
+    num_trials: the number of trials
+    train_fraction: (e.g. .80)
+    nreplications: the number of spiking trials per initial condition
+  Returns:
+    a 2-tuple of two lists: the training indices and validation indices
+    '''
+  train_inds = []
+  valid_inds = []
+  for i in range(num_trials):
+    # This line divides up the trials so that within one initial condition,
+    # the randomness of spikifying the condition is shared among both
+    # training and validation data splits.
+    if (i % nreplications)+1 > train_fraction * nreplications:
+      valid_inds.append(i)
+    else:
+      train_inds.append(i)
     
-        ## Load the Discriminator weights from the MaskGAN checkpoint if
-    # the weights are compatible.
-    if FLAGS.discriminator_model == 'seq2seq_vd':
-      dis_variable_maps = variable_mapping.dis_seq2seq_vd(hparams)
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+    
+def write_masked_log(log, id_to_word, sequence_eval, present_eval):
+  indices_arr = np.asarray(sequence_eval)
+  samples = convert_to_human_readable(id_to_word, indices_arr, present_eval,
+                                      FLAGS.batch_size)
+  for sample in samples:
+    log.write(sample + '\n')
+  log.flush()
+  return samples
+    
+      # Averages for real and fake token values.
+  real = tf.mul(values, present)
+  fake = tf.mul(values, missing)
+  real_avg = tf.reduce_sum(real) / real_count
+  fake_avg = tf.reduce_sum(fake) / fake_count
+    
+        # Cumulative Discounted Returns.  The true value function V*(s).
+    cumulative_rewards = []
+    for t in xrange(FLAGS.sequence_length):
+      cum_value = tf.zeros(shape=[FLAGS.batch_size / 2])
+      for s in xrange(t, FLAGS.sequence_length):
+        cum_value += reward_missing_list[s] * np.power(gamma, (
+            s - t)) * rewards_list[s]
+      cumulative_rewards.append(cum_value)
+    cumulative_rewards = tf.stack(cumulative_rewards, axis=1)
+    
+      Returns:
+    gen_train_op: Generator training op.
+  '''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
+    else:
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('\nOptimizing Generator vars:')
+    for v in gen_vars:
+      print(v)
+    
+        ## Discriminator Variables/Savers.
+    if FLAGS.discriminator_model == 'rnn_nas':
+      dis_variable_maps = variable_mapping.rnn_nas(hparams, model='dis')
       dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
       init_savers['dis_init_saver'] = dis_init_saver
     
+          next context state: `context_state`, this decoder function does not
+      modify the given context state. The context state could be modified when
+      applying e.g. beam search.
     
-def rnn_nas(hparams, model):
-  assert model == 'gen' or model == 'dis'
+        releaser = GitHubReleaser()
     
+        print('20 newsgroups')
+    print('=============')
+    print('X_train.shape = {0}'.format(X_train.shape))
+    print('X_train.format = {0}'.format(X_train.format))
+    print('X_train.dtype = {0}'.format(X_train.dtype))
+    print('X_train density = {0}'
+          ''.format(X_train.nnz / np.product(X_train.shape)))
+    print('y_train {0}'.format(y_train.shape))
+    print('X_test {0}'.format(X_test.shape))
+    print('X_test.format = {0}'.format(X_test.format))
+    print('X_test.dtype = {0}'.format(X_test.dtype))
+    print('y_test {0}'.format(y_test.shape))
+    print()
     
-python_3 = (u'thefuck/python3-bash',
-            u'FROM python:3',
-            u'sh')
+            X = np.random.randn(n_samples, n_features)
+        Y = np.random.randn(n_samples)
     
+                gc.collect()
+            print('benchmarking lars_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            G = np.dot(X.T, X)  # precomputed Gram matrix
+            Xy = np.dot(X.T, y)
+            lars_path(X, y, Xy=Xy, Gram=G, method='lasso')
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lars_path (with Gram)'].append(delta)
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
+                gc.collect()
+            print('benchmarking scikit-learn randomized_svd: n_iter=%d '
+                  % n_iter)
+            tstart = time()
+            randomized_svd(X, rank, n_iter=n_iter)
+            results['scikit-learn randomized_svd (n_iter=%d)'
+                    % n_iter].append(time() - tstart)
     
+        ###########################################################################
+    # Set transformer input
+    ###########################################################################
+    transformers = {}
     
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
+        ###########################################################################
+    # Remove unspecified algorithm
+    sampling_algorithm = dict((key, value)
+                              for key, value in sampling_algorithm.items()
+                              if key in selected_algorithm)
     
-    
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    You can install with Homebrew-Cask:
-  brew cask install osxfuse
-    
-    \tDid you mean `build`?
-'''
-    
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
+    Invoke with
+-----------
     
     
-    builtin_str = str
-    bytes = str
-    str = unicode
-    basestring = basestring
-    numeric_types = (int, long, float)
-    integer_types = (int, long)
+def run_vectorizer(Vectorizer, X, **params):
+    def f():
+        vect = Vectorizer(**params)
+        vect.fit_transform(X)
+    return f
     
-            :rtype: bool
-        '''
-        domains = []
-        for cookie in iter(self):
-            if cookie.domain is not None and cookie.domain in domains:
-                return True
-            domains.append(cookie.domain)
-        return False  # there is only one domain in jar
+            self.http_client = simple_http_client.Client(self.proxy, timeout=10)
     
-    from . import __version__ as requests_version
-    
-    Available hooks:
-    
-            self.method = method
-        self.url = url
-        self.headers = headers
-        self.files = files
-        self.data = data
-        self.json = json
-        self.params = params
-        self.auth = auth
-        self.cookies = cookies
-    
-    from requests.help import info
-    
-        @pytest.mark.parametrize(
-        'encoding', (
-            'utf-32', 'utf-8-sig', 'utf-16', 'utf-8', 'utf-16-be', 'utf-16-le',
-            'utf-32-be', 'utf-32-le'
-        ))
-    def test_encoded(self, encoding):
-        data = '{}'.encode(encoding)
-        assert guess_json_utf(data) == encoding
-    
-    # If your documentation needs a minimal Sphinx version, state it here.
-#needs_sphinx = '1.0'
+        try:
+        # hide console in MS windows
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
     
     
-root = Root()
-factory = Site(root)
-reactor.listenTCP(8880, factory)
-reactor.run()
+    def getLastRewriteTokenIndex(self, programName=DEFAULT_PROGRAM_NAME):
+        return self.lastRewriteTokenIndexes.get(programName, -1)
+    
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS}
 
     
-        def parse(self, response):
-        pass
-
     
-    __all__ = ['__version__', 'version_info', 'twisted_version',
-           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
-    
-        requires_project = False
-    crawler_process = None
-    
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-        def syntax(self):
-        return '[options] <spider>'
-    
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
-        else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
-    
-            Quoting https://twistedmatrix.com/documents/current/api/twisted.web.client.Agent.html:
-        'The default is to use a BrowserLikePolicyForHTTPS,
-        so unless you have special requirements you can leave this as-is.'
-    
-        def __init__(self, crawler):
-        self._crawler = crawler
-        self._schemes = {}  # stores acceptable schemes on instancing
-        self._handlers = {}  # stores instanced handlers for schemes
-        self._notconfigured = {}  # remembers failed handlers
-        handlers = without_none_values(
-            crawler.settings.getwithbase('DOWNLOAD_HANDLERS'))
-        for scheme, clspath in six.iteritems(handlers):
-            self._schemes[scheme] = clspath
-    
-        def _build_response(self, result, request, protocol):
-        self.result = result
-        respcls = responsetypes.from_args(url=request.url)
-        protocol.close()
-        body = protocol.filename or protocol.body.read()
-        headers = {'local filename': protocol.filename or '', 'size': protocol.size}
-        return respcls(url=request.url, status=200, body=to_bytes(body), headers=headers)
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return (self.filep == other.filep and self.path == other.path and
+                    self.addrs == other.addrs and
+                    self.get_names() == other.get_names() and
+                    self.ssl == other.ssl and
+                    self.enabled == other.enabled and
+                    self.modmacro == other.modmacro)
