@@ -1,234 +1,185 @@
 
         
-          /// When evaluating an expression in the context of an existing source file,
-  /// we may want to prefer declarations from that source file.
-  /// The DebuggerClient can return a private-discriminator to tell lookup to
-  /// prefer these certain decls.
-  virtual Identifier getPreferredPrivateDiscriminator() = 0;
-    
-      const llvm::UTF8 *SourceNext = SourceStart;
-  llvm::UTF32 C[2];
-  llvm::UTF32 *TargetStart = C;
-    
-    @interface CalendarBridgingTester : NSObject
-- (NSCalendar *)autoupdatingCurrentCalendar;
-- (BOOL)verifyAutoupdatingCalendar:(NSCalendar *)calendar;
-@end
-    
-    #include 'swift/Basic/LLVM.h'
-#include 'llvm/ADT/ArrayRef.h'
-#include 'llvm/ADT/StringRef.h'
-    
-    #ifndef SWIFT_AST_COMMENT_H
-#define SWIFT_AST_COMMENT_H
-    
-    #ifndef SWIFT_PRINTINGDIAGNOSTICCONSUMER_H
-#define SWIFT_PRINTINGDIAGNOSTICCONSUMER_H
-    
-      /// Expand this location to all individual fields it contains.
-  ///
-  /// In SIL, we can have a store to an aggregate and loads from its individual
-  /// fields. Therefore, we expand all the operations on aggregates onto
-  /// individual fields and process them separately.
-  static void expand(LSLocation Base, SILModule *Mod, LSLocationList &Locs,
-                     TypeExpansionAnalysis *TE);
-    
-      void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                        DiagnosticKind Kind,
-                        StringRef FormatString,
-                        ArrayRef<DiagnosticArgument> FormatArgs,
-                        const DiagnosticInfo &Info) override;
-    
-    #ifndef SWIFT_SILOPTIMIZER_UTILS_INDEXTREE_H
-#define SWIFT_SILOPTIMIZER_UTILS_INDEXTREE_H
-    
-    //! @endcond
-    
-    //
-// BEGIN OF CUSTOM FUNCTIONS
-//
-    
-    #endif // __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
-
-    
-    void cv::cuda::copyMakeBorder(InputArray, OutputArray, int, int, int, int, int, Scalar, Stream&) { throw_no_cuda(); }
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
+        class SubstitutionMap::Storage final
+  : public llvm::FoldingSetNode,
+    llvm::TrailingObjects<Storage, Type, ProtocolConformanceRef>
+{
+  friend TrailingObjects;
     }
     
-    ///////////////////////////////////////////////////////////////////////////////
     
-    #include <algorithm>
+    {  // For the rest, just generator chunks one at a time.
+  do {
+    auto claimedBits = std::min(numBits, size_t(ChunkSizeInBits));
+    *nextChunk++ = getMoreBits(claimedBits);
+    numBits -= claimedBits;
+  } while (numBits);
+}
     
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
- */
-Block* getBlock(IRGS& env, Offset offset);
     
-      bool isValidAddress(const CodeAddress tca) const {
-    return tca >= m_base && tca < (m_base + m_size);
-  }
+    {  return UuidCompare(&uuid1, &uuid2, &s);
+#else
+  return uuid_compare(Value, y.Value);
+#endif
+}
     
-      /*
-   * StringData objects allocated with MakeUncounted should be freed
-   * using this function. It will remove a reference via
-   * uncountedDecRef, and if necessary destroy the StringData and
-   * return true.
-   */
-  static void ReleaseUncounted(const StringData*);
     
-    struct hphp_string_hash {
-  size_t operator()(const String& s) const {
-    return s.get()->hash();
-  }
+    {    QWidget *m_dummyWidget;
+    QMenu *m_dockMenu;
+    QMainWindow *mainWindow;
 };
     
-      /*
-   * Size of the table.
-   */
-  size_t numLitstrs() const;
+    #ifndef BITCOIN_QT_NETWORKSTYLE_H
+#define BITCOIN_QT_NETWORKSTYLE_H
     
-    void TaggedSlabList::addRange(void* ptr, std::size_t size) {
-  if (!ptr) return;
-  while (size >= kSlabSize) {
-    push_front(ptr, 0);
-    size -= kSlabSize;
-    ptr = reinterpret_cast<char*>(ptr) + kSlabSize;
-  }
-}
+        /** Colorize an icon (given filename) with the icon color */
+    QIcon SingleColorIcon(const QString& filename) const;
     
-    // For 2M pages, we want more control over protection and mapping flags.  Note
-// that MAP_FIXED can overwrite the existing mapping without checking/failing.
-void* mmap_2m(void* addr, int prot, int node, bool map_shared, bool map_fixed);
+        /** Specify model role to use as ordinal value (defaults to Qt::UserRole) */
+    void setRole(int role);
     
-    template<class T>
-void implLdCachedSafe(IRLS& env, const IRInstruction* inst,
-                      const StringData* name) {
-  auto const dst = dstLoc(env, inst, 0).reg();
-  auto const ch = handleFrom<T>(NamedEntity::get(name));
-  auto& v = vmain(env);
+        ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
     }
     
-    /*
- * Map from DefLabel instructions to produced references.
- *
- * See comment in IRBuilder::cond for more details.
- */
-using LabelRefs = jit::hash_map<const IRInstruction*, jit::vector<uint32_t>>;
+        Round(a, b, c, d, e, f, g, h, 0xe49b69c1, w0 += sigma1(w14) + w9 + sigma0(w1));
+    Round(h, a, b, c, d, e, f, g, 0xefbe4786, w1 += sigma1(w15) + w10 + sigma0(w2));
+    Round(g, h, a, b, c, d, e, f, 0x0fc19dc6, w2 += sigma1(w0) + w11 + sigma0(w3));
+    Round(f, g, h, a, b, c, d, e, 0x240ca1cc, w3 += sigma1(w1) + w12 + sigma0(w4));
+    Round(e, f, g, h, a, b, c, d, 0x2de92c6f, w4 += sigma1(w2) + w13 + sigma0(w5));
+    Round(d, e, f, g, h, a, b, c, 0x4a7484aa, w5 += sigma1(w3) + w14 + sigma0(w6));
+    Round(c, d, e, f, g, h, a, b, 0x5cb0a9dc, w6 += sigma1(w4) + w15 + sigma0(w7));
+    Round(b, c, d, e, f, g, h, a, 0x76f988da, w7 += sigma1(w5) + w0 + sigma0(w8));
+    Round(a, b, c, d, e, f, g, h, 0x983e5152, w8 += sigma1(w6) + w1 + sigma0(w9));
+    Round(h, a, b, c, d, e, f, g, 0xa831c66d, w9 += sigma1(w7) + w2 + sigma0(w10));
+    Round(g, h, a, b, c, d, e, f, 0xb00327c8, w10 += sigma1(w8) + w3 + sigma0(w11));
+    Round(f, g, h, a, b, c, d, e, 0xbf597fc7, w11 += sigma1(w9) + w4 + sigma0(w12));
+    Round(e, f, g, h, a, b, c, d, 0xc6e00bf3, w12 += sigma1(w10) + w5 + sigma0(w13));
+    Round(d, e, f, g, h, a, b, c, 0xd5a79147, w13 += sigma1(w11) + w6 + sigma0(w14));
+    Round(c, d, e, f, g, h, a, b, 0x06ca6351, w14 += sigma1(w12) + w7 + sigma0(w15));
+    Round(b, c, d, e, f, g, h, a, 0x14292967, w15 += sigma1(w13) + w8 + sigma0(w0));
     
-    	wchar_t message[1024];
-	swprintf_s(message, L'%s\nFunction: %s\nLine: %d', buffer, func, line);
-	LocalFree(buffer);
-    
-    //-----------------------------------------------------------------------------
-// EXAMPLE APP CODE: CONSTRAINED RESIZE
-//-----------------------------------------------------------------------------
-    
-    
-    {        ImGui::Render();
+    int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *result, const secp256k1_pubkey *point, const unsigned char *scalar) {
+    int ret = 0;
+    int overflow = 0;
+    secp256k1_gej res;
+    secp256k1_ge pt;
+    secp256k1_scalar s;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(result != NULL);
+    ARG_CHECK(point != NULL);
+    ARG_CHECK(scalar != NULL);
     }
     
-        // Create texture
-    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
-    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
-    atlas->TexPixelsAlpha8 = (unsigned char*)ImGui::MemAlloc(atlas->TexWidth * atlas->TexHeight);
-    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-        // Create Vulkan Instance
+    #ifdef TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
+template<typename T, bool convertible = is_convertible<T, int>::value>
+struct formatZeroIntegerWorkaround
+{
+    static bool invoke(std::ostream& /**/, const T& /**/) { return false; }
+};
+template<typename T>
+struct formatZeroIntegerWorkaround<T,true>
+{
+    static bool invoke(std::ostream& out, const T& value)
     {
-        VkInstanceCreateInfo create_info = {};
-        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        create_info.enabledExtensionCount = extensions_count;
-        create_info.ppEnabledExtensionNames = extensions;
+        if (static_cast<int>(value) == 0 && out.flags() & std::ios::showpos)
+        {
+            out << '+0';
+            return true;
+        }
+        return false;
     }
+};
+#endif // TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
     
-    void CreateRenderTarget()
+    int64_t UniValue::get_int64() const
 {
-    ID3D10Texture2D* pBackBuffer;
-    g_pSwapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)&pBackBuffer);
-    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
-    pBackBuffer->Release();
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not an integer as expected');
+    int64_t retval;
+    if (!ParseInt64(getValStr(), &retval))
+        throw std::runtime_error('JSON integer out of range');
+    return retval;
 }
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+      // Computes matrix.vector v = Wu.
+  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
+  // u is imagined to have an extra element at the end with value 1, to
+  // implement the bias, but it doesn't actually have it.
+  // Computes the base C++ implementation, if there are no partial_funcs_.
+  // NOTE: The size of the input vector (u) must be padded using
+  // RoundInputs above.
+  // The input will be over-read to the extent of the padding. There are no
+  // alignment requirements.
+  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                       const GenericVector<double>& scales, const int8_t* u,
+                       double* v) const;
     
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    IntSimdMatrixAVX2::IntSimdMatrixAVX2() {
+#ifdef __AVX2__
+  num_outputs_per_register_ = kNumOutputsPerRegister;
+  max_output_registers_ = kMaxOutputRegisters;
+  num_inputs_per_register_ = kNumInputsPerRegister;
+  num_inputs_per_group_ = kNumInputsPerGroup;
+  num_input_groups_ = kNumInputGroups;
+  partial_funcs_ = {PartialMatrixDotVector64, PartialMatrixDotVector32,
+                    PartialMatrixDotVector16, PartialMatrixDotVector8};
+#endif  // __AVX2__
+}
+    
+    
+    {}  // namespace tesseract.
+
+    
+      /**
+   * Returns an image of the current object at the given level in greyscale
+   * if available in the input. To guarantee a binary image use BinaryImage.
+   * NOTE that in order to give the best possible image, the bounds are
+   * expanded slightly over the binary connected component, by the supplied
+   * padding, so the top-left position of the returned image is returned
+   * in (left,top). These will most likely not match the coordinates
+   * returned by BoundingBox.
+   * If you do not supply an original image, you will get a binary one.
+   * Use pixDestroy to delete the image after use.
+   */
+  Pix* GetImage(PageIteratorLevel level, int padding, Pix* original_img,
+                int* left, int* top) const;
+    
+    // Getter for the name.
+const char* ParamContent::GetName() const {
+  if (param_type_ == VT_INTEGER) { return iIt->name_str(); }
+  else if (param_type_ == VT_BOOLEAN) { return bIt->name_str(); }
+  else if (param_type_ == VT_DOUBLE) { return dIt->name_str(); }
+  else if (param_type_ == VT_STRING) { return sIt->name_str(); }
+  else
+    return 'ERROR: ParamContent::GetName()';
+}
+    
+    bool read_unlv_file(                    //print list of sides
+                     STRING name,        //basename of file
+                     int32_t xsize,        //image size
+                     int32_t ysize,        //image size
+                     BLOCK_LIST *blocks  //output list
+                    ) {
+  FILE *pdfp;                    //file pointer
+  BLOCK *block;                  //current block
+  int x;                         //current top-down coords
+  int y;
+  int width;                     //of current block
+  int height;
+  BLOCK_IT block_it = blocks;    //block iterator
     }
     
-    #define IM_VEC4_CLASS_EXTRA                                                 \
-        ImVec4(const MyVec4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
     
-    	std::string cache_dir;
-	if (NULL != _cache_dir) {
-		ScopedJstring cache_dir_jstr(env, _cache_dir);
-		cache_dir = cache_dir_jstr.GetChar();
-	}
+    class LearnerUniversal : public LearnerBase
+    {
+        std::unordered_map<Parameter, Variable> m_parameter_gradient_map;
+        FunctionPtr m_update_func;
+    }
     
-    #include <exception>
-#include 'comm/xlogger/xlogger.h'
+    #else // --- Linux version
     
-      private:
-    CommFrequencyLimit(CommFrequencyLimit&);
-    CommFrequencyLimit& operator=(CommFrequencyLimit&);
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-        Spy* GetSpy(const char* _name) const
-    { return m_strmap.find(_name)->second; }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #include 'comm/debugger/spy.inl'
+    // ===================================================================
+// construction from config
+// ===================================================================
