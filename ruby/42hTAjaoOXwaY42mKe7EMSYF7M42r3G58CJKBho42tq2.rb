@@ -1,141 +1,130 @@
 
         
-          it 'accepts a Bignum as a seed' do
-    srand(0x12345678901234567890)
-    srand.should == 0x12345678901234567890
-  end
+                def self.extended_statuses
+          []
+        end
     
-    describe :kernel_system, shared: true do
-  it 'executes the specified command in a subprocess' do
-    lambda { @object.system('echo a') }.should output_to_fd('a\n')
-    
-      # String arguments should be evaluated in the context of the caller.
-  it 'accepts a String argument instead of a Proc or block' do
-    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
-    end
+      def collection_presenter
+    ActivityPub::CollectionPresenter.new(
+      id: account_collection_url(@account, params[:id]),
+      type: :ordered,
+      size: @size,
+      items: @statuses
+    )
   end
 end
 
     
-    World(NavigationHelpers)
-
+      include SignatureVerification
     
-      # create the default testing aspects for a given user
-  def add_standard_aspects(user)
-    user.aspects.create(:name => 'Besties')
-    user.aspects.create(:name => 'Unicorns')
+        def create
+      authorize :status, :update?
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
   end
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-    
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
     end
+  end
     
-        class << self
-      # Returns an error report for an exception in CSS format.
-      #
-      # @param e [Exception]
-      # @param line_offset [Integer] The number of the first line of the Sass template.
-      # @return [String] The error report
-      # @raise [Exception] `e`, if the
-      #   {file:SASS_REFERENCE.md#full_exception-option `:full_exception`} option
-      #   is set to false.
-      def exception_to_css(e, line_offset = 1)
-        header = header_string(e, line_offset)
+    end
+end
+end
     
-          opts.on('--unix-newlines', 'Use Unix-style newlines in written files.',
-                                 ('Always true on Unix.' unless Sass::Util.windows?)) do
-        @options[:unix_newlines] = true if Sass::Util.windows?
-      end
     
-            if found.size > 1 && !@same_name_warnings.include?(found.first.first)
-          found.each {|(f, _)| @same_name_warnings << f}
-          relative_to = Sass::Util.pathname(dir)
-          if options[:_from_import_node]
-            # If _line exists, we're here due to an actual import in an
-            # import_node and we want to print a warning for a user writing an
-            # ambiguous import.
-            candidates = found.map do |(f, _)|
-              '  ' + Sass::Util.pathname(f).relative_path_from(relative_to).to_s
-            end.join('\n')
-            raise Sass::SyntaxError.new(<<MESSAGE)
-It's not clear which file to import for '@import '#{name}''.
-Candidates:
-#{candidates}
-Please delete or rename all but one of these files.
-MESSAGE
-          else
-            # Otherwise, we're here via StalenessChecker, and we want to print a
-            # warning for a user running `sass --watch` with two ambiguous files.
-            candidates = found.map {|(f, _)| '    ' + File.basename(f)}.join('\n')
-            Sass::Util.sass_warn <<WARNING
-WARNING: In #{File.dirname(name)}:
-  There are multiple files that match the name '#{File.basename(name)}':
-#{candidates}
-WARNING
+  # open rmcpplus_request with cipherzero
+  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
+    
+              # Decodes the sname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
           end
         end
-        found.first
-      end
-    
-    module LogStash
-  module PluginManager
-    class Error < StandardError; end
-    
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
-      else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
       end
     end
   end
 end
-
     
-      # Make sure we dont build this gem from a non jruby
-  # environment.
-  if RUBY_PLATFORM == 'java'
-    gem.platform = 'java'
-  else
-    raise 'The logstash-core-api need to be build on jruby'
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+              # Decodes the enc_part
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
+          def decode_enc_part(input)
+            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
+          end
+        end
+      end
+    end
   end
 end
-
     
-          context 'when the plugin doesnt exist' do
-        it 'fails to install and report an error' do
-          command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-output-impossible-plugin')
-          expect(command.stderr).to match(/Plugin not found, aborting/)
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+    end
+    
+      end
+    
+          def lines
+        lines = []
+        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
+          lines << { :line  => line,
+                     :class => line_class(line),
+                     :ldln  => left_diff_line_number(0, line),
+                     :rdln  => right_diff_line_number(0, line) }
+        end if @diff
+        lines
+      end
+    
+          def footer_format
+        has_footer && @footer.format.to_s
+      end
+    
+    # Set ruby to UTF-8 mode
+# This is required for Ruby 1.8.7 which gollum still supports.
+$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
+    
+          def api_key
+        request.headers['X-Spree-Token'] || params[:token]
+      end
+      helper_method :api_key
+    
+            # Should be overriden if you have areas of your checkout that don't match
+        # up to a step within checkout_steps, such as a registration step
+        def skip_state_validation?
+          false
+        end
+    
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
+          end
         end
       end
     end
@@ -143,10 +132,46 @@ end
 end
 
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
+            def order
+          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
+          authorize! :update, @order, order_token
+        end
+    
+            def index
+          if params[:ids]
+            @products = product_scope.where(id: params[:ids].split(',').flatten)
+          else
+            @products = product_scope.ransack(params[:q]).result
+          end
+    
+              if params[:page] || params[:per_page]
+            @states = @states.page(params[:page]).per(params[:per_page])
+          end
+    
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
     end
-  end
+    
+          def perform(yml)
+        (target, method_name, args) = YAML.load(yml)
+        msg = target.public_send(method_name, *args)
+        # The email method can return nil, which causes ActionMailer to return
+        # an undeliverable empty message.
+        if msg
+          deliver(msg)
+        else
+          raise '#{target.name}##{method_name} returned an undeliverable mail object'
+        end
+      end
+    
+      end
 end
