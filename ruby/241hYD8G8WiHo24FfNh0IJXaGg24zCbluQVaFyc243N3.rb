@@ -1,114 +1,156 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+              # Sort tags based on their version number
+      return git_tags
+             .select { |tag| FastlaneCore::TagVersion.correct?(tag) }
+             .sort_by { |tag| FastlaneCore::TagVersion.new(tag) }
+    end
+    
+        def suggest_ruby_reinstall(e)
+      ui = FastlaneCore::UI
+      ui.error('-----------------------------------------------------------------------')
+      ui.error(e.to_s)
+      ui.error('')
+      ui.error('SSL errors can be caused by various components on your local machine.')
+      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
+        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
+        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
+      end
+      ui.error('')
+      ui.error('The best solution is to use the self-contained fastlane version.')
+      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
+      ui.error(' - Use Homebrew')
+      ui.error('    - update brew with `brew update`')
+      ui.error('    - install fastlane using:')
+      ui.error('      - `brew cask install fastlane`')
+      ui.error(' - Use One-Click-Installer:')
+      ui.error('    - download fastlane at https://download.fastlane.tools')
+      ui.error('    - extract the archive and double click the `install`')
+      ui.error('-----------------------------------------------------------')
+      ui.error('for more details on ways to install fastlane please refer the documentation:')
+      ui.error('-----------------------------------------------------------')
+      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
+      ui.error('-----------------------------------------------------------')
+      ui.error('')
+      ui.error('You can also install a new version of Ruby')
+      ui.error('')
+      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
+      ui.error('- If you use system Ruby:')
+      ui.error('  - Run `brew update && brew install ruby`')
+      ui.error('- If you use rbenv with ruby-build:')
+      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
+      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
+      ui.error('- If you use rvm:')
+      ui.error('  - First run `rvm osx-ssl-certs update all`')
+      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
+      ui.error('')
+      ui.error('If that doesn't fix your issue, please google for the following error message:')
+      ui.error('  '#{e}'')
+      ui.error('-----------------------------------------------------------------------')
+    end
+    
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
+      end
+    
+            inner_command = 'git describe --tags `git rev-list --tags=#{tag_match_pattern.shellescape} --max-count=1`'
+        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
+        expect(result).to eq(pseudocommand)
+      end
+    
+          it 'works with unlock and name and password' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: 'testpassword',
+            unlock: true,
+          })
+        end').runner.execute(:test)
+    
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add #{path.shellescape}', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: '#{path}')
+          end').runner.execute(:test)
+        end
+      end
+    
+              value = config_item.auto_convert_value(nil)
+    
+        os = 'windows'
+    shelljoin_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        array = testcase['input']
+        expect_correct_implementation_to_be_called(array, :shelljoin, os)
+        joined = array.shelljoin
+        expect(joined).to eq(testcase['expect'][os])
+      end
+    end
+  end
+    
+      # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    yield resource if block_given?
+    
+      config.logger = Logger.new($stdout)
+  Rails.logger  = config.logger
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
+# requests with `config.assets.quiet`, because the default silence method of
+# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
+Logging::Logger.send :alias_method, :local_level, :level
+Logging::Logger.send :alias_method, :local_level=, :level=
+Logging::Logger.send :include, LoggerSilence
+
+    
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
 end
     
-    # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
+    RSpec::Matchers.define :have_path do |expected|
+  match do |actual|
+    await_condition { actual.current_path == expected }
+  end
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
-    
-          #
-    
-    #
-    
-      all_files       = `git ls-files -z`.split('\x0')
-  s.files         = all_files.grep(%r!^(exe|lib|rubocop)/|^.rubocop.yml$!)
-  s.executables   = all_files.grep(%r!^exe/!) { |f| File.basename(f) }
-  s.bindir        = 'exe'
-  s.require_paths = ['lib']
-    
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
-    
-            def print_message(json_message)
-          msg = JSON.parse(json_message)
-          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
-          # on its purpose.
-          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
-        end
-    
-        def deprecation_message(message)
-      Jekyll.logger.warn 'Deprecation:', message
+      def navigate_to(page_name)
+    path = path_to(page_name)
+    if path.is_a?(Hash)
+      visit(path[:path])
+      await_elem = path[:special_elem]
+      find(await_elem.delete(:selector), await_elem)
+    else
+      visit(path)
     end
+  end
     
-        # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
     end
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
   end
     
-      def translation_scope
-    'devise.sessions'
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
+    end
   end
+end
+
     
-      # Controllers inheriting DeviseController are advised to override this
-  # method so that other controllers inheriting from them would use
-  # existing translations.
-  def translation_scope
-    'devise.#{controller_name}'
-  end
-    
-      # The parent mailer all Devise mailers inherit from.
-  # Defaults to ActionMailer::Base. This should be set early
-  # in the initialization process and should be set to a string.
-  mattr_accessor :parent_mailer
-  @@parent_mailer = 'ActionMailer::Base'
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
-      end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-            def order
-          @order ||= Spree::Order.includes(:line_items).find_by!(number: order_id)
-          authorize! :update, @order, order_token
-        end
-    
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
-    
-            def stock_location
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
-        end
+        it 'supports a limit per_page parameter' do
+      2.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
+      get :index, params: {per_page: 2}
+      expect(assigns[:notifications].count).to eq(2)
+    end
