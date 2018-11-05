@@ -1,378 +1,224 @@
 
         
-        #if defined(OS_WIN)
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/files/file_path.h'
-#include 'base/files/file_util.h'
-#include 'base/win/shortcut.h'
-#include 'base/path_service.h'
-#include 'content/nw/src/common/shell_switches.h'
-#endif
-    
-    void Clipboard::SetText(std::string& text) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  ui::Clipboard::ObjectMap map;
-  map[ui::Clipboard::CBF_TEXT].push_back(
-      std::vector<char>(text.begin(), text.end()));
-  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
-}
-    
-       void ExecuteCommand(int command_id, int event_flags) override;
-    
-    MenuItem::MenuItem(int id,
-                   const base::WeakPtr<ObjectManager>& object_manager,
-                   const base::DictionaryValue& option,
-                   const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id) {
-  Create(option);
-}
-    
-    namespace nwapi {
-    }
-    
-    using namespace extensions::nwapi::nw__app;
-    
-    NwObjCallObjectMethodAsyncFunction::NwObjCallObjectMethodAsyncFunction() {
-}
-    
-     protected:
-  ~NwObjAllocateIdFunction() override;
-    
-        UINT createDeviceFlags = 0;
-    
-    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
-                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
-    
-    
-    {        findLinesCrossPoint(origin1, dir1, origin2, dir2, corners[i]);
-    }
-    
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-    
-    static void* openclamdblas_check_fn(int ID)
+        /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
 {
-    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
-    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
-    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
-    if (!func)
-    {
-        throw cv::Exception(cv::Error::OpenCLApiCallError,
-                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
-                CV_Func, __FILE__, __LINE__);
+public:
     }
-    *(e->ppFn) = func;
-    return func;
-}
     
-    struct DynamicFnEntry
+    #ifndef SECP256K1_FIELD_INNER5X52_IMPL_H
+#define SECP256K1_FIELD_INNER5X52_IMPL_H
+    
+    bool ParseInt32(const std::string& str, int32_t *out)
 {
-    const char* fnName; // 'clCreateContext'
-    void** ppFn; // &clCreateContext_pfn
-};
-    
-    const uchar g_Saturate8u[] =
-{
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
-    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
-    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255
-};
-    
-    // taken from TH (generic/THTensor.c)
-// with a little fixes done so as to allocate
-// and free memory the way it is done in THDTensor
-static void THDTensor_(_resize)(THDTensor *self, int nDimension, int64_t *size, int64_t *stride) {
-  int nDimension_;
-  ptrdiff_t totalSize;
-  bool hasRequiredSize = true;
-    }
-    
-    
-    {
-    {    if (PyObject_IsInstance(stream, THCPStreamClass)) {
-      streams.push_back( ((THCPStream *)stream)->cdata);
-    } else if (stream == Py_None) {
-      streams.push_back(NULL);
-    } else {
-      std::runtime_error('Unknown data type found in stream list. Need THCStream or None');
-    }
-  }
-  return streams;
-}
-    
-    
-    {            // for sequence training
-            if (!criterionNodes.empty() && criterionNodes[0]->OperationName() == L'SequenceWithSoftmax')
-            {
-                auto node = dynamic_pointer_cast<SequenceWithSoftmaxNode<ElemType>>(criterionNodes[0]);
-                assert(node);
-                m_netLatticePtr = node->getLatticePtr();
-                m_netExtrauttMapPtr = node->getextrauttmap();
-                m_netUidPtr = node->getuidprt();
-                m_netBoundariesPtr = node->getboundaryprt();
-                m_hasLattices = true;
-            }
-            else
-            {
-                m_netLatticePtr = nullptr;
-                m_netExtrauttMapPtr = nullptr;
-                m_netUidPtr = nullptr;
-                m_netBoundariesPtr = nullptr;
-                m_hasLattices = false;
-            }
-        }
-    
-        template <typename ElementType>
-    /*static*/ ValuePtr Value::CreateBatch(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/)
-    {
-        //TODO: avoid data copy.
-        std::vector<std::vector<size_t>> input(batchData.size());
-        for (size_t i = 0; i < batchData.size(); i++)
-        {
-            input[i] = {batchData[i]};
-        }
-        // Pass the empty seqStartFlags means all sequences have the start flag with true.
-        return Create<ElementType>(dimension, input, {}, device, readOnly);
-    }
-    
-        bool empty() const
-    {
-#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
-        if (numlattices.empty() ^ denlattices.empty())
-            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
-#endif
-        return denlattices.empty();
-    }
-    
-    // ===================================================================
-// behave like a config
-// This allows to access nodes inside a network as if it was an IConfigRecord.
-// This is meant to be used by whatever we will replace MEL.
-// ===================================================================
-    
-    
-    
-    
-    {
-    {
-    {
-    {
-    {        // return the 'done with all records' value
-        return (m_currentRecord >= m_recordCount);
-    }
-    virtual void SaveMapping(std::wstring saveId, const std::map<typename EvalWriter<ElemType>::LabelIdType, typename EvalWriter<ElemType>::LabelType>& /*labelMapping*/){};
-    virtual bool SupportMultiUtterances() const
-    {
+    if (!ParsePrechecks(str))
         return false;
-    };
-};
-} } }
-
+    char *endp = NULL;
+    errno = 0; // strtol will not set errno if valid
+    long int n = strtol(str.c_str(), &endp, 10);
+    if(out) *out = (int32_t)n;
+    // Note that strtol returns a *long int*, so even if strtol doesn't report a over/underflow
+    // we still have to check that the returned value is within the range of an *int32_t*. On 64-bit
+    // platforms the size of these types may be different.
+    return endp && *endp == 0 && !errno &&
+        n >= std::numeric_limits<int32_t>::min() &&
+        n <= std::numeric_limits<int32_t>::max();
+}
     
-    int register_all_cocos2dx_csloader(lua_State* tolua_S);
+    // Author: qrczak@google.com (Marcin Kowalczyk)
     
-    
-    
-    
-    
-    	void Keyboard(unsigned char key)
-	{
-		switch (key)
-		{
-		case 'd':
-			m_platform->SetType(b2_dynamicBody);
-			break;
-    }
-    }
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-    
-        ImFontAtlasBuildRegisterDefaultCustomRects(atlas);
-    
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-    // Copyright (C) 2015 by Giovanni Zito
-// This file is part of ImGui
-    
-    static bool show_demo_window = true;
-static bool show_another_window = false;
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
+    // A CodeGenerator that captures the FileDescriptor it's passed as a
+// FileDescriptorProto.
+class DescriptorCapturingGenerator : public CodeGenerator {
+ public:
+  // Does not own file; file must outlive the Generator.
+  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
+      : file_(file) {}
     }
     
-    //****************************
-// Simple Hash Functions
-//****************************
+    TEST(MovableMessageTest, Noexcept) {
+  EXPECT_TRUE(
+      std::is_nothrow_move_constructible<protobuf_unittest::TestAllTypes>());
+  EXPECT_TRUE(std::is_nothrow_move_assignable<protobuf_unittest::TestAllTypes>());
+}
     
-      virtual bool PartialMergeMulti(const Slice& key,
-                                 const std::deque<Slice>& operand_list,
-                                 std::string* new_value, Logger* logger) const
-      override;
-    
-    namespace rocksdb {
-JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
-  // Note: jcallback_obj may be accessed by multiple threads,
-  // so we ref the jvm not the env
-  const jint rs = env->GetJavaVM(&m_jvm);
-  if(rs != JNI_OK) {
-    // exception thrown
-    return;
+    void EnumGenerator::Generate(io::Printer* printer) {
+  WriteEnumDocComment(printer, descriptor_);
+  printer->Print('$access_level$ enum $name$ {\n',
+                 'access_level', class_access_level(),
+                 'name', descriptor_->name());
+  printer->Indent();
+  std::set<string> used_names;
+  std::set<int> used_number;
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+      WriteEnumValueDocComment(printer, descriptor_->value(i));
+      string original_name = descriptor_->value(i)->name();
+      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
+      // Make sure we don't get any duplicate names due to prefix removal.
+      while (!used_names.insert(name).second) {
+        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
+        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
+          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
+        name += '_';
+      }
+      int number = descriptor_->value(i)->number();
+      if (!used_number.insert(number).second) {
+          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      } else {
+          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      }
   }
-    }
-    }
-    
-    #include 'rocksjni/statisticsjni.h'
-    
-    // @lint-ignore TXT4 T25377293 Grandfathered in
-#endif  // JAVA_ROCKSJNI_STATISTICSJNI_H_
-    
-    #ifndef JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
-#define JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
-    
-    namespace rocksdb {
-    }
-    
-    Env::~Env() {
+  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('\n');
 }
     
+    const FieldDescriptor* ValueField(const FieldDescriptor* descriptor) {
+  GOOGLE_CHECK_EQ(FieldDescriptor::TYPE_MESSAGE, descriptor->type());
+  const Descriptor* message = descriptor->message_type();
+  GOOGLE_CHECK(message->options().map_entry());
+  return message->FindFieldByName('value');
+}
     
-    {        return NULL;
+    namespace protobuf {
+namespace compiler {
+namespace objectivec {
+    }
+    }
     }
     
-    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
-jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
-void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
+        enum COLOR_SPACE
+    {
+        COLOR_SPACE_BT601,
+        COLOR_SPACE_BT709
+    };
     
-            JavaVMAttachArgs args;
-        args.group = NULL;
-        args.name = 'default';
-        args.version = JNI_VERSION_1_6;
-        status_ = vm_->AttachCurrentThread(&env_, &args);
-    
-    
-    {  private:
-    JavaVM* vm_;
-    JNIEnv* env_;
-    bool we_attach_;
-    int status_;
-};
-    
-    void AbstractBtMessage::setPieceStorage(PieceStorage* pieceStorage)
+    void absDiff(const Size2D &size,
+             const s8 *src0Base, ptrdiff_t src0Stride,
+             const s8 *src1Base, ptrdiff_t src1Stride,
+             s8 *dstBase, ptrdiff_t dstStride)
 {
-  pieceStorage_ = pieceStorage;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiffSigned<s8>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-      virtual void enableReadOnly() CXX11_OVERRIDE;
-    
-    namespace aria2 {
+    void add(const Size2D &size,
+         const u32 * src0Base, ptrdiff_t src0Stride,
+         const u32 * src1Base, ptrdiff_t src1Stride,
+         u32 * dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<u32, u64>());
     }
-    
-    
-    {} // namespace aria2
-    
-    #endif // D_ABSTRACT_PROXY_RESPONSE_COMMAND_H
-
-    
-      BinaryStream* stream_;
-    
-    class AnnounceList {
-public:
-private:
-  std::deque<std::shared_ptr<AnnounceTier>> tiers_;
-  std::deque<std::shared_ptr<AnnounceTier>>::iterator currentTier_;
-  std::deque<std::string>::iterator currentTracker_;
-  bool currentTrackerInitialized_;
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<u32, u64>());
     }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
     
     
-    {} // namespace aria2
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+    {
+    {        for (; j < size.width; ++j, sj += 3, dj += 2)
+        {
+            convertTo565(src[sj], src[sj + 1], src[sj + 2], dst + dj);
+        }
     }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+             uint16x4_t vline1_u16 = vqmovun_s32(vline1_s32);
+         uint16x4_t vline2_u16 = vqmovun_s32(vline2_s32);
+    
+            const s32* ln0 = idx_rm2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm2) : tmp;
+        const s32* ln1 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
+        const s32* ln2 = internal::getRowPtr(srcBase, srcStride, i);
+        const s32* ln3 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
+        const s32* ln4 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
+    
+    ErrorCode FakeCanClient::Receive(std::vector<CanFrame> *const frames,
+                                 int32_t *const frame_num) {
+  if (frame_num == nullptr || frames == nullptr) {
+    AERROR << 'frames or frame_num pointer is null';
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+  frames->resize(*frame_num);
+  const int MOCK_LEN = 8;
+  for (size_t i = 0; i < frames->size(); ++i) {
+    for (int j = 0; j < MOCK_LEN; ++j) {
+      (*frames)[i].data[j] = j;
+    }
+    (*frames)[i].id = i;
+    (*frames)[i].len = MOCK_LEN;
+    ADEBUG << (*frames)[i].CanFrameString() << 'frame_num[' << i << ']';
+  }
+  usleep(USLEEP_INTERVAL);
+  ++recv_counter_;
+  return ErrorCode::OK;
+}
+    
+      /**
+   * @brief Destructor
+   */
+  virtual ~FakeCanClient() = default;
+    
+    #include <vector>
+    
+    
+    {  sender.Update();
+  sender.Stop();
+  EXPECT_FALSE(sender.IsRunning());
+}
+    
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    #include 'modules/drivers/canbus/common/byte.h'
