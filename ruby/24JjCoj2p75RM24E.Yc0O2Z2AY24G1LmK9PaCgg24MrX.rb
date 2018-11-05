@@ -1,184 +1,151 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
+            def path
+      @path ||= url.path
+    end
+    
+              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
+          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
+          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
+          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
+          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
+          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
+          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
+    
+          def run
+        odisabled '`brew cask --version`', '`brew --version`'
+      end
+    
+        it 'with misc deprecated options' do
+      expect_offense(<<~RUBY)
+        class Foo < Formula
+          url 'https://example.com/foo-1.0.tgz'
+          option 'without-check'
+          ^^^^^^^^^^^^^^^^^^^^^^ Use '--without-test' instead of '--without-check'. Migrate '--without-check' with `deprecated_option`.
+        end
+      RUBY
+    end
+  end
+end
+    
+          # bootstrap requires minimum precision of 8, see https://github.com/twbs/bootstrap-sass/issues/409
+      ::Sass::Script::Number.precision = [8, ::Sass::Script::Number.precision].max
+    end
+    
+        # next matching brace for brace at from
+    def close_brace_pos(css, from, depth = 0)
+      s = CharStringScanner.new(css[from..-1])
+      while (b = s.scan_next(BRACE_RE))
+        depth += (b == '}' ? -1 : +1)
+        break if depth.zero?
+      end
+      raise 'match not found for {' unless depth.zero?
+      from + s.pos - 1
+    end
+    
+      # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
+    
+      config.active_support.deprecation = :stderr
+end
+
+    
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
+    end
+    
+      def login_page
+    path_to 'the new user session page'
+  end
+    
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
+    end
+    
+          @conv2 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
+             .increase_unread(alice)
+    
+    describe StatusMessagesController, :type => :controller do
+  describe '#bookmarklet' do
+    before do
+      sign_in bob, scope: :user
+    end
+    
+        it 'marks a notification as unread if it is told to' do
+      note = FactoryGirl.create(:notification)
+      expect(Notification).to receive(:where).and_return([note])
+      expect(note).to receive(:set_read_state).with(false)
+      get :update, params: {id: note.id, set_unread: 'true'}, format: :json
+    end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      # Returns a title cased string based on John Gruber's title case http://daringfireball.net/2008/08/title_case_update
+  def titlecase(input)
+    input.titlecase
+  end
+    
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
+    
+          # Returns the collection the `for` loop is iterating over.
       #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
       #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
-    
-              def checked?(value)
-            case value
-            when TrueClass, FalseClass
-              value == !!@checked_value
-            when NilClass
-              false
-            when String
-              value == @checked_value
-            else
-              if value.respond_to?(:include?)
-                value.include?(@checked_value)
-              else
-                value.to_i == @checked_value.to_i
-              end
-            end
-          end
-    
-          def prepend_formats(formats) # :doc:
-        formats = Array(formats)
-        return if formats.empty? || @lookup_context.html_fallback_for_js
-    
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
     end
   end
 end
 
     
-      it 'converts values to Float' do
-    expect(location.lat).to be_a Float
-    expect(location.lat).to eq 2.0
-    expect(location.lng).to be_a Float
-    expect(location.lng).to eq 3.0
-    expect(location.radius).to be_a Float
-    expect(location.radius).to eq 300.0
-    expect(location.speed).to be_a Float
-    expect(location.speed).to eq 2.0
-    expect(location.course).to be_a Float
-    expect(location.course).to eq 30.0
-  end
-    
-    gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-      # Sets warden configuration using a block that will be invoked on warden
-  # initialization.
-  #
-  #  Devise.setup do |config|
-  #    config.allow_unconfirmed_access_for = 2.days
-  #
-  #    config.warden do |manager|
-  #      # Configure warden to use other strategies, like oauth.
-  #      manager.oauth(:twitter)
-  #    end
-  #  end
-  def self.warden(&block)
-    @@warden_config_blocks << block
-  end
-    
-        def current_url
-      context[:url]
-    end
-    
-        def root?
-      path == 'index'
-    end
-    
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-          def additional_options
-        if self.class.internal_urls
-          super.merge! \
-            only: self.class.internal_urls.to_set,
-            only_patterns: nil,
-            skip: nil,
-            skip_patterns: nil,
-            skip_links: nil,
-            fixed_internal_urls: true
-        else
-          super
+              delta(first.loc.operator, second.loc.operator)
         end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
       end
-    
-              # Default opts to a blank optionparser if none is given
-          opts ||= OptionParser.new
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
-        end
-    
-            # This returns all the registered guests.
-        #
-        # @return [Hash]
-        def guests
-          result = {}
-    
-            # Defines additional configuration keys to be available in the
-        # Vagrantfile. The configuration class should be returned by a
-        # block passed to this method. This is done to ensure that the class
-        # is lazy loaded, so if your class inherits from any classes that
-        # are specific to Vagrant 1.0, then the plugin can still be defined
-        # without breaking anything in future versions of Vagrant.
-        #
-        # @param [String] name Configuration key.
-        # @param [Boolean] upgrade_safe If this is true, then this configuration
-        #   key is safe to load during an upgrade, meaning that it depends
-        #   on NO Vagrant internal classes. Do _not_ set this to true unless
-        #   you really know what you're doing, since you can cause Vagrant
-        #   to crash (although Vagrant will output a user-friendly error
-        #   message if this were to happen).
-        def self.config(name=UNSET_VALUE, upgrade_safe=false, &block)
-          data[:config] ||= Registry.new
-    
-            # Defines a capability for the given provider. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] provider The name of the provider
-        # @param [String] cap The name of the capability
-        def self.provider_capability(provider, cap, &block)
-          components.provider_capabilities[provider.to_sym].register(cap.to_sym, &block)
-          nil
-        end
-    
-    module Admin
-  class InstancesController < BaseController
-    def index
-      authorize :instance, :index?
-      @instances = ordered_instances
     end
-    
-    __END__
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
+  end
+end
