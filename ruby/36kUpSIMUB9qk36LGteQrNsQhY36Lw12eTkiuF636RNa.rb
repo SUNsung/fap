@@ -1,162 +1,155 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-      # POST /resource/unlock
-  def create
-    self.resource = resource_class.send_unlock_instructions(resource_params)
-    yield resource if block_given?
-    
-      config.logger = Logger.new($stdout)
-  Rails.logger  = config.logger
-    
-          @@warden_config_blocks.map { |block| block.call Devise.warden_config }
-      true
-    end
-  end
-    
-            home_path = '#{scope}_root_path'
-    
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
-        end
-      end
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
+                  def value
+            if @allow_method_names_outside_object
+              object.public_send @method_name if object && object.respond_to?(@method_name)
+            else
+              object.public_send @method_name if object
             end
           end
-        end
-      end
     
-    gem 'rake'
-gem 'thor'
-gem 'pry', '~> 0.11.0'
-gem 'activesupport', '~> 5.2', require: false
-gem 'yajl-ruby', require: false
-    
-        return 404 unless @doc = find_doc(doc)
-    
-        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
-    
-        def effective_url
-      @effective_url ||= URL.parse super
-    end
-    
-            self.base_url.scheme = effective_base_url.scheme
-        self.base_url.host = effective_base_url.host
-        self.base_url.path = effective_base_url.path
-        super
-      ensure
-        self.base_url.scheme = original_scheme
-        self.base_url.host = original_host
-        self.base_url.path = original_path
+              def hidden_field_for_checkbox(options)
+            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
+          end
       end
     end
-    
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
-      end
-    
-            css('.status-badge').each do |node|
-          node.name = 'code'
-          node.content = node.content.strip
-          node.remove_attribute('class')
-        end
-    
-      #
-  # Dispatches the supplied request for a given connection.
-  #
-  def dispatch_request(cli, request)
-    # Is the client requesting keep-alive?
-    if ((request['Connection']) and
-       (request['Connection'].downcase == 'Keep-Alive'.downcase))
-      cli.keepalive = true
-    end
-    
-    
-end
-end
+  end
 end
 
     
-              data = connection.get_once(length, timeout)
-          unless data && data.length == length
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
+    module ActionView #:nodoc:
+  # = Action View PathSet
+  #
+  # This class is used to store and access paths in Action View. A number of
+  # operations are defined so that you can search among the paths in this
+  # set and also perform operations on other +PathSet+ objects.
+  #
+  # A +LookupContext+ will use a +PathSet+ to store the paths in its context.
+  class PathSet #:nodoc:
+    include Enumerable
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
+    module ActionView
+  # = Action View Railtie
+  class Railtie < Rails::Engine # :nodoc:
+    config.action_view = ActiveSupport::OrderedOptions.new
+    config.action_view.embed_authenticity_token_in_remote_forms = nil
+    config.action_view.debug_missing_translation = true
+    config.action_view.default_enforce_utf8 = nil
+    config.action_view.finalize_compiled_template_methods = true
     
-                seq = OpenSSL::ASN1::Sequence.new(seqs)
+        private
     
-              # Encodes the value field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_value
-            OpenSSL::ASN1::OctetString.new(value)
+      # True if a {Formula} is being built universally.
+  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
+  # <pre>args << '--universal-binary' if build.universal?</pre>
+  def universal?
+    include?('universal') && option_defined?('universal')
+  end
+    
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
+    end
+    
+      def doctor
+    doctor_args.parse
+    
+      def convert_man_page(markup, target)
+    manual = target.basename('.1')
+    organisation = 'Homebrew'
+    
+          def run
+        odisabled '`brew cask --version`', '`brew --version`'
+      end
+    
+      def root_url(var = nil, specs = {})
+    if var.nil?
+      @root_url ||= '#{HOMEBREW_BOTTLE_DOMAIN}/#{Utils::Bottles::Bintray.repository(tap)}'
+    else
+      @root_url = var
+      @root_url_specs.merge!(specs)
+    end
+  end
+    
+          def find_matching_tag(tag)
+        generic_find_matching_tag(tag) ||
+          find_altivec_tag(tag) ||
+          find_older_compatible_tag(tag)
+      end
+    
+                problem 'Use '--with#{Regexp.last_match(1)}-test' instead of '--#{option}'.'\
+                    ' Migrate '--#{option}' with `deprecated_option`.'
           end
         end
       end
     end
-  end
-end
     
-        def check_encoding!
-      return if @checked_encoding
-      @checked_encoding = true
-      @template, @original_encoding = Sass::Util.check_sass_encoding(@template)
+          private
+    
+          # Almost any real Unix terminal will support color,
+      # so we just filter for Windows terms (which don't set TERM)
+      # and not-real terminals, which aren't ttys.
+      return str if ENV['TERM'].nil? || ENV['TERM'].empty? || !STDOUT.tty?
+      '\e[#{COLORS[color]}m#{str}\e[0m'
     end
     
-    module Sass
-  # The abstract base class for lexical environments for SassScript.
-  class BaseEnvironment
-    class << self
-      # Note: when updating this,
-      # update sass/yard/inherited_hash.rb as well.
-      def inherited_hash_accessor(name)
-        inherited_hash_reader(name)
-        inherited_hash_writer(name)
+          output = input_path if @options[:in_place]
+      write_output(out, output)
+    rescue Sass::SyntaxError => e
+      raise e if @options[:trace]
+      file = ' of #{e.sass_filename}' if e.sass_filename
+      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
+    rescue LoadError => err
+      handle_load_error(err)
+    end
+    
+          # return path set in app.rb not @page.path
+      def path
+        @path
       end
     
-      class GistTagNoCache < GistTag
-    def initialize(tag_name, text, token)
-      super
-      @cache_disabled = true
-    end
-  end
+          def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          def footer_content
+        has_footer && @footer.formatted_data
+      end
+    
+        get page1
+    assert_match /Last edited by <b>user1/, last_response.body
+    
+    def version
+  line = File.read('lib/#{name}.rb')[/^\s*VERSION\s*=\s*.*/]
+  line.match(/.*VERSION\s*=\s*[''](.*)['']/)[1]
 end
     
-    module Jekyll
+        # Ensure path begins with a single leading slash
+    def clean_path(path)
+      if path
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
+      end
+    end
     
+    module Gollum
+  VERSION = '4.1.4'
+    
+    get '/' do
+  stats = Sidekiq::Stats.new
+  @failed = stats.failed
+  @processed = stats.processed
+  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
+  erb :index
+end
+    
+        def self.inherited(child)
+      child.app_url = self.app_url
+      child.session_secret = self.session_secret
+      child.redis_pool = self.redis_pool
+      child.sessions = self.sessions
     end
