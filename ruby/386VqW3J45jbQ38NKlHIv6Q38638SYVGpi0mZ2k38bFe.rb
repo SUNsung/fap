@@ -1,41 +1,130 @@
 
         
-          # Setup the root logger with the Rails log level and the desired set of
-  # appenders. The list of appenders to use should be set in the environment
-  # specific configuration file.
-  #
-  # For example, in a production application you would not want to log to
-  # STDOUT, but you would want to send an email for 'error' and 'fatal'
-  # messages:
-  #
-  # => config/environments/production.rb
-  #
-  #     config.log_to = %w[file email]
-  #
-  # In development you would want to log to STDOUT and possibly to a file:
-  #
-  # => config/environments/development.rb
-  #
-  #     config.log_to = %w[stdout file]
-  #
-  Logging.logger.root.appenders = config.log_to unless config.log_to.empty?
+                next unless path.file?
+        file = path
     
-        remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
-    
-    When /^I submit the password reset form$/ do
-  submit_password_reset_form
+      def find_internal_commands(directory)
+    directory.children.reduce([]) do |cmds, f|
+      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
+      cmds
+    end
+  end
 end
+
     
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
+        names = @@remote_tap_formulae['#{user}/#{repo}']
+    user = user.downcase if user == 'Homebrew' # special handling for the Homebrew organization
+    names.select { |name| rx === name }.map { |name| '#{user}/#{repo}/#{name}' }
+  rescue GitHub::HTTPNotFoundError => e
+    opoo 'Failed to search tap: #{user}/#{repo}. Please run `brew update`'
+    []
+  rescue GitHub::Error => e
+    SEARCH_ERROR_QUEUE << e
+    []
+  end
     
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+        updated_taps = []
+    Tap.each do |tap|
+      next unless tap.git?
+      begin
+        reporter = Reporter.new(tap)
+      rescue Reporter::ReporterRevisionUnsetError => e
+        onoe e if ARGV.homebrew_developer?
+        next
+      end
+      if reporter.updated?
+        updated_taps << tap.name
+        hub.add(reporter)
+      end
+    end
+    
+    module Commander
+  # This class override the run method with our custom stack trace handling
+  # In particular we want to distinguish between user_error! and crash! (one with, one without stack trace)
+  class Runner
+    # Code taken from https://github.com/commander-rb/commander/blob/master/lib/commander/runner.rb#L50
+    
+            session.action_launched(launch_context: launch_context)
+      end
+    end
+  end
+end
+
+    
+            expect(result).to eq('git tag -am #{message.shellescape} --force #{tag.shellescape}')
+      end
+    
+            expect(result).to eq('carthage bootstrap')
+      end
+    
+            expect(result[2]).to start_with('security set-keychain-settings')
+        expect(result[2]).to include('-t 300')
+        expect(result[2]).to_not(include('-l'))
+        expect(result[2]).to_not(include('-u'))
+        expect(result[2]).to include('~/Library/Keychains/test.keychain')
+      end
+    
+            # this command is also sent on macOS Sierra and we need to allow it or else the test will fail
+        allowed_command = 'security set-key-partition-list -S apple-tool:,apple: -k #{''.shellescape} #{keychain_path.shellescape} &> /dev/null'
+    
+          it 'works with single quote in rule name' do
+        rule = 'CoveredSwitchStatementsDon'tNeedDefault'
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              enable_rules: [\'#{rule}\'],
+              disable_rules: [\'#{rule}\']
+            )
+          end').runner.execute(:test)
+    
+        context 'external commands are failed' do
+      context 'with error_callback' do
+        it 'doesn't raise shell_error' do
+          allow(FastlaneCore::UI).to receive(:error)
+          called = false
+          expect_command('exit 1', exitstatus: 1)
+          Fastlane::Actions.sh('exit 1', error_callback: ->(_) { called = true })
+    
+        # [String] A description shown to the user
+    attr_accessor :description
+    
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
+    else
+      return str
+    end
+  end
+  module_function :shellescape
+end
+
+    
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
+    
+        os = 'windows'
+    shelljoin_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        array = testcase['input']
+        expect_correct_implementation_to_be_called(array, :shelljoin, os)
+        joined = array.shelljoin
+        expect(joined).to eq(testcase['expect'][os])
+      end
+    end
+  end
+    
+      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
+  name 'Adobe Photoshop Lightroom'
+  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
+    
+    # This is the version that ships with OS X 10.10, so be sure we test against it.
+# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
+# so we use a fork that makes a trivial change to a macro invocation.
+gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
     
       at_exit do
     if ENV['KEEP_RUNNING']
@@ -46,78 +135,80 @@ end
     end
   end
     
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
+        def append(key, *values)
+      set(key, Array(fetch(key)).concat(values))
+    end
     
-        validate_target_file
-    LogStash::Bundler.invoke!({:package => true, :all => true})
-    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
-    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
+          attr_reader :key, :default, :options
     
-      gem.files         = Dir.glob(['logstash-core-plugin-api.gemspec', 'lib/**/*.rb', 'spec/**/*.rb'])
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = 'logstash-core-plugin-api'
-  gem.require_paths = ['lib']
-  gem.version       = LOGSTASH_CORE_PLUGIN_API
-    
-        context 'without a username / password' do
-      let(:scheme) { 'myscheme' }
-      let(:user) { nil }
-      let(:password) { nil }
-      let(:hostname) { 'myhostname' }
-      let(:path) { '/my/path' }
-      let(:uri_str) { '#{scheme}://#{hostname}#{path}' }
-      let(:uri_hidden) { '#{scheme}://#{hostname}#{path}' }
-    
-        desc 'Halt all VM's involved in the acceptance test round'
-    task :halt, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-      module DSLRSpecProxyInstaller
-    module ClassMethods
-      def included(base)
-        if defined?(::RSpec::Matchers)
-          base.include(::Capybara::RSpecMatcherProxies) if base.include?(::RSpec::Matchers)
-        end
-        super
+            safe?(env) ||
+          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
+          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
+          ( options[:allow_if] && options[:allow_if].call(env) )
       end
-    end
     
-      context 'when launchy cannot be required' do
-    it 'prints out a correct warning message', requires: [:screenshot] do
-      file_path = File.join(Dir.tmpdir, 'test.png')
-      allow(@session).to receive(:warn)
-      allow(@session).to receive(:require).with('launchy').and_raise(LoadError)
-      @session.save_and_open_screenshot(file_path)
-      expect(@session).to have_received(:warn).with('File saved to #{file_path}.\nPlease install the launchy gem to open the file automatically.')
-    end
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
+      end
+    
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
+          end
+        end
+        @sidebar
+      end
+    
+          attr_reader :name, :path
+    
+          # Extracts title from page if present.
+      #
+      def page_header_from_content(content)
+        doc   = build_document(content)
+        title = find_header_node(doc).inner_text.strip
+        title = nil if title.empty?
+        title
+      end
+    
+    def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
   end
+  cloned
 end
-
     
-      s.authors = ['Thomas Walpole', 'Jonas Nicklas']
-  s.email = ['twalpole@gmail.com', 'jonas.nicklas@gmail.com']
-  s.description = 'Capybara is an integration testing tool for rack based web applications. It simulates how a user would interact with a website'
+        get '/compare/A/fc66539528eb96f21b2bbdbf557788fe8a1196ac..b26b791cb7917c4f37dd9cb4d1e0efb24ac4d26f'
     
-            if @expected_path.is_a? Regexp
-          @actual_path.to_s.match(@expected_path)
-        else
-          ::Addressable::URI.parse(@expected_path) == ::Addressable::URI.parse(@actual_path)
-        end
-      end
+        @wiki.clear_cache
+    assert_nil @wiki.paged('H', 'G')
+    page_2 = @wiki.paged('C', 'I')
+    assert_equal 'INITIAL\n\nSPAM2\n', page_2.raw_data
+    assert_equal 'def', page_2.version.message
+    assert_not_equal page_1.version.sha, page_2.version.sha
+  end
     
-      it 'should accept the alert if the text matches a regexp' do
-    @session.accept_alert(/op.{2}ed/) do
-      @session.click_link('Open alert')
+        # Test page_header_from_content(@content)
+    actual = @view.title
+    assert_equal '1 & 2', actual
+  end
+    
+        # Remove all slashes from the start of string.
+    # Remove all double slashes
+    def clean_url url
+      return url if url.nil?
+      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
     end
-    expect(@session).to have_xpath('//a[@id='open-alert' and @opened='true']')
-  end
     
-      it 'should raise an error if there are multiple matches' do
-    el = @session.find(:css, '#child')
-    expect { el.ancestor('//div') }.to raise_error(Capybara::Ambiguous)
-    expect { el.ancestor('//div', text: 'Ancestor') }.to raise_error(Capybara::Ambiguous)
-  end
+            self
+      end
