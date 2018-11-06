@@ -1,43 +1,91 @@
 
         
-              Notification.create!(read: false,
-                           user_id: user.id,
-                           topic_id: t.id,
-                           post_number: 1,
-                           data: '{}',
-                           notification_type: Notification.types[:private_message])
-    
-    gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
-    
-      if respond_to?(:helper_method)
-    helpers = %w(resource scope_name resource_name signed_in_resource
-                 resource_class resource_params devise_mapping)
-    helper_method(*helpers)
-  end
-    
-      def test_returns_success
-    Warden.test_mode!
-    
-      before do
-    if request.host == OUT_HOST && !request.path.start_with?('/s/')
-      query_string = '?#{request.query_string}' unless request.query_string.empty?
-      redirect 'https://devdocs.io#{request.path}#{query_string}', 302
-    end
-  end
-    
-          def store_page?(page)
-        page[:entries].present?
+              unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
       end
+    end
     
-        def filter_const(name)
-      if name.is_a? Array
-        name.map &method(:filter_const)
+        delegate :empty?, :blank?, to: :pages
+    
+        def self.subscribe_to(notifier)
+      attach_to(namespace, new, notifier)
+    end
+    
+          if dest.end_with? '/'
+        dest_dir.relative_path_from(base_dir).to_s.tap do |result|
+          result << '/' if result != '.'
+        end
       else
-        Docs.const_get '#{name}_filter'.camelize
+        dest_dir.parent.relative_path_from(base_dir).join(dest.split('/').last).to_s
       end
     end
     
-          private
+            title = at_css('h1').content.strip
+        if root_page?
+          at_css('h1').content = 'Angular 2 Documentation'
+        elsif title == 'Index'
+          at_css('h1').content = result[:entries].first.name
+        elsif title == 'Angular'
+          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
+        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
+          at_css('h1').content = result[:entries].first.name
+        end
     
-            reaction
+            name.prepend '#{breadcrumbs.join('.')}#' if breadcrumbs.present? && breadcrumbs[0] != name
+        name << '()' if %w(Function Method Constructor).include?(subtitle)
+        name
+      end
+    
+      it 'raises a TypeError when passed a String' do
+    lambda { srand('7') }.should raise_error(TypeError)
+  end
+end
+    
+      it 'does not raise an error on a tainted, frozen object' do
+    o = Object.new.taint.freeze
+    o.taint.should equal(o)
+  end
+    
+    describe 'Kernel#trace_var' do
+  before :each do
+    $Kernel_trace_var_global = nil
+  end
+    
+        def pos
+      byte_to_str_pos @s.pos
+    end
+    
+          less.gsub /&:extend\((#{SELECTOR_RE})(?: all)?\)/ do
+        selector = $1
+        selector =~ /\.([\w-]+)/
+        mixin    = $1
+        if mixin && mixin_names.include?(mixin)
+          '@include #{mixin}'
+        else
+          '@extend #{selector}'
+        end
+      end
+    end
+    
+      it 'ignores single-line arrays' do
+    expect_no_offenses('[a, b, c]')
+  end
+    
+          # Returns the keyword of the `if` statement as a string. Returns an empty
+      # string for ternary operators.
+      #
+      # @return [String] the keyword of the `if` statement
+      def keyword
+        ternary? ? '' : loc.keyword.source
+      end
+    
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
+      #
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
       end
