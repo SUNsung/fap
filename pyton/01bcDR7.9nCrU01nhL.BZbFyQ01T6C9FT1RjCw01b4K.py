@@ -1,173 +1,101 @@
 
         
-          with open(vocab_file) as f_in:
-    vocab = [line.strip() for line in f_in]
-    
-      @property
-  def logvar(self):
-    return self.logvar_bxn
-    
-      # Turn rates, noisy_data, and input into numpy arrays.
-  rates_train = nparray_and_transpose(rates_train)
-  rates_valid = nparray_and_transpose(rates_valid)
-  noisy_data_train = nparray_and_transpose(noisy_data_train)
-  noisy_data_valid = nparray_and_transpose(noisy_data_valid)
-  input_train = nparray_and_transpose(input_train)
-  inputs_valid = nparray_and_transpose(inputs_valid)
-    
-    rnn_a = generate_rnn(rnn_rngs[0], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnn_b = generate_rnn(rnn_rngs[1], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnns = [rnn_a, rnn_b]
-    
-    import numpy as np
-from six.moves import xrange
-import tensorflow as tf
-    
-      Args:
-    raw_data: one of the raw data outputs from imdb_raw_data.
-    batch_size: int, the batch size.
-    num_steps: int, the number of unrolls.
-    
-                # Statefulness for the Generator.
-            for i, (c, h) in enumerate(model.fake_gen_initial_state):
-              eval_feed[c] = fake_gen_initial_state_eval[i].c
-              eval_feed[h] = fake_gen_initial_state_eval[i].h
+        
+def unicode_is_ascii(u_string):
+    '''Determine if unicode string only contains ASCII characters.
     
     
-def convert_to_human_readable(id_to_word, arr, max_num_to_print):
-  '''Convert a np.array of indices into words using id_to_word dictionary.
-  Return max_num_to_print results.
-  '''
-  assert arr.ndim == 2
+class URLRequired(RequestException):
+    '''A valid URL is required to make a request.'''
     
-        # Group maintain averages op.
-    if averages_op:
-      gen_train_op = tf.group(maximize_op, averages_op)
-    else:
-      gen_train_op = maximize_op
+        def __repr__(self):
+        return '<lookup \'%s\'>' % (self.name)
     
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
-def hash_function(input_tuple):
-  '''Hash function for a tuple.'''
-  return hash(input_tuple)
+            Operator:                  '#582800',   # class: 'o'
+        Operator.Word:             'bold #004461',   # class: 'ow' - like keywords
     
-        '''
-    # The value that should be passed to --auth-type
-    # to use this auth plugin. Eg. 'my-auth'
-    auth_type = None
+            return {attr: getattr(self, attr, None) for attr in self.__attrs__}
     
-            def get_auth(self, username=None, password=None):
-            assert username is None
-            assert password is None
-            assert self.raw_auth == BASIC_AUTH_HEADER_VALUE
-            return basic_auth(self.raw_auth)
+    class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
     
+        if dataset_name == 'forestcover':
+        dataset = fetch_covtype()
+        X = dataset.data
+        y = dataset.target
+        # normal data are those with attribute 2
+        # abnormal those with attribute 4
+        s = (y == 2) + (y == 4)
+        X = X[s, :]
+        y = y[s]
+        y = (y != 2).astype(int)
     
-class Response(object):
-    # noinspection PyDefaultArgument
-    def __init__(self, url, headers={}, status_code=200):
-        self.url = url
-        self.headers = CaseInsensitiveDict(headers)
-        self.status_code = status_code
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
     
+    n_samples, n_features = 5000, 300
+X = np.random.randn(n_samples, n_features)
+inds = np.arange(n_samples)
+np.random.shuffle(inds)
+X[inds[int(n_features / 1.2):]] = 0  # sparsify input
+print('input data sparsity: %f' % sparsity_ratio(X))
+coef = 3 * np.random.randn(n_features)
+inds = np.arange(n_features)
+np.random.shuffle(inds)
+coef[inds[n_features // 2:]] = 0  # sparsify coef
+print('true coef sparsity: %f' % sparsity_ratio(coef))
+y = np.dot(X, coef)
     
-def test_headers_empty_value(httpbin_both):
-    r = http('GET', httpbin_both + '/headers')
-    assert r.json['headers']['Accept']  # default Accept has value
+        gc.collect()
     
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    # If true, sectionauthor and moduleauthor directives will be shown in the
+# output. They are ignored by default.
+#show_authors = False
     
-    from .theplatform import theplatform_download_by_pid
+    # generate_private_key requires cryptography>=0.5
+key = jose.JWKRSA(key=rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=BITS,
+    backend=default_backend()))
+acme = client.Client(DIRECTORY_URL, key)
     
+            self.vh_truth = util.get_vh_truth(
+            self.temp_dir, 'debian_apache_2_4/multiple_vhosts')
     
-def cntv_download(url, **kwargs):
-    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
-        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
-    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
-        rid = r1(r'var guid = '(\w+)'', get_content(url))
-    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
-         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
-         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
-        page = get_content(url)
-        rid = r1(r'videoCenterId','(\w+)'', page)
-        if rid is None:
-            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
-            rid = guid
-    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
-        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
-    else:
-        raise NotImplementedError(url)
+        def test_conflicts(self):
+        # Note: Defined IP is more important than defined port in match
+        self.assertTrue(self.addr.conflicts(self.addr1))
+        self.assertTrue(self.addr.conflicts(self.addr2))
+        self.assertTrue(self.addr.conflicts(self.addr_defined))
+        self.assertFalse(self.addr.conflicts(self.addr_default))
     
-    __all__ = ['dailymotion_download']
+            # Check to make sure challenge config path is included in apache config
+        self.assertEqual(
+            len(self.sni.configurator.parser.find_dir(
+                'Include', self.sni.challenge_conf)), 1)
+        self.assertEqual(len(responses), 1)
+        self.assertEqual(responses[0], response)
     
-            #type_ = ''
-        #size = 0
-    
-    	type, ext, size = url_info(url)
-	print_info(site_info, title, type, size)
-	
-	if not info_only:
-		download_urls([url], title, ext, size, output_dir, merge = merge)
-    
-    import os
-import warnings
-    
-    
-class FlicButton(BinarySensorDevice):
-    '''Representation of a flic button.'''
-    
-        def random_see(dev_id, name):
-        '''Randomize a sighting.'''
-        see(
-            dev_id=dev_id,
-            host_name=name,
-            gps=(hass.config.latitude + offset(),
-                 hass.config.longitude + offset()),
-            gps_accuracy=random.randrange(50, 150),
-            battery=random.randrange(10, 90)
-        )
-    
-        return scanner if scanner.success_init else None
-    
-    
-def get_scanner(hass, config):
-    '''Validate the configuration and return a Linksys AP scanner.'''
-    try:
-        return LinksysSmartWifiDeviceScanner(config[DOMAIN])
-    except ConnectionError:
-        return None
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_USERNAME): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Optional(CONF_SSL, default=DEFAULT_SSL): cv.boolean
-})
-    
-            try:
-            result = scanner.scan(hosts=' '.join(self.hosts),
-                                  arguments=options)
-        except PortScannerError:
-            return False
-    
-    _LOGGER = logging.getLogger(__name__)
+        point = readme_soup.find_all('h1')[1]
