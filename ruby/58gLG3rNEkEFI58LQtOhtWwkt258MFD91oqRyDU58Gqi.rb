@@ -1,65 +1,37 @@
 
         
-                  # WebSockets requests will have a Connection: Upgrade header
-          if parser.http_method != 'GET' || parser.upgrade?
-            super
-          elsif parser.request_url =~ %r!^\/livereload.js!
-            headers = [
-              'HTTP/1.1 200 OK',
-              'Content-Type: application/javascript',
-              'Content-Length: #{reload_size}',
-              '',
-              '',
-            ].join('\r\n')
-            send_data(headers)
-    
-      def effective_build_options_for(dependent)
-    args  = dependent.build.used_options
-    args |= Tab.for_formula(dependent).used_options
-    BuildOptions.new(args, dependent.options)
-  end
-    
-      def observe_file_removal(path)
-    path.extend(ObserverPathnameExtension).unlink if path.exist?
-  end
-    
-        def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
-            end
-          rescue ThreadError # ignore empty queue error
-          end
-        end
+            initializer 'action_view.finalize_compiled_template_methods' do |app|
+      ActiveSupport.on_load(:action_view) do
+        ActionView::Template.finalize_compiled_template_methods =
+          app.config.action_view.delete(:finalize_compiled_template_methods)
       end
-      workers.map(&:join)
     end
     
-        dump_formula_report :A, 'New Formulae'
-    dump_formula_report :M, 'Updated Formulae'
-    dump_formula_report :R, 'Renamed Formulae'
-    dump_formula_report :D, 'Deleted Formulae'
+          def extract_details(options) # :doc:
+        @lookup_context.registered_details.each_with_object({}) do |key, details|
+          value = options[key]
+    
+      describe '#yes_no' do
+    it 'returns a label 'Yes' if any truthy value is given' do
+      [true, Object.new].each { |value|
+        label = yes_no(value)
+        expect(label).to be_html_safe
+        expect(Nokogiri(label).text).to eq 'Yes'
+      }
+    end
+    
+        it 'html_safes the output unless :skip_safe is passed in' do
+      expect(Utils.jsonify({:foo => 'bar'})).to be_html_safe
+      expect(Utils.jsonify({:foo => 'bar'}, :skip_safe => false)).to be_html_safe
+      expect(Utils.jsonify({:foo => 'bar'}, :skip_safe => true)).not_to be_html_safe
+    end
   end
     
-        Group.refresh_automatic_groups!(:moderators)
-    gu = GroupUser.find_by(user_id: moderator.id, group_id: Group::AUTO_GROUPS[:moderators])
-    
-    Badge.seed do |b|
-  b.id = Badge::FirstFlag
-  b.name = 'First Flag'
-  b.badge_type_id = BadgeType::Bronze
-  b.multiple_grant = false
-  b.target_posts = true
-  b.show_posts = false
-  b.query = BadgeQueries::FirstFlag
-  b.badge_grouping_id = BadgeGrouping::GettingStarted
-  b.default_badge_grouping_id = BadgeGrouping::GettingStarted
-  b.trigger = Badge::Trigger::PostAction
-  b.auto_revoke = false
-  b.system = true
-end
+    describe ConvertWebsiteAgentTemplateForMerge do
+  let :old_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
+    }
+  end
