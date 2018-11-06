@@ -1,99 +1,130 @@
 
         
-            def xpath(*args)
-      doc.xpath(*args)
-    end
+              def can_be_resolved_in_ui?
+        # Try to parse each conflict. If the MR's mergeable status hasn't been
+        # updated, ensure that we don't say there are conflicts to resolve
+        # when there are no conflict files.
+        files.each(&:lines)
+        files.any?
+      rescue Gitlab::Git::CommandError,
+             Gitlab::Git::Conflict::Parser::UnresolvableError,
+             Gitlab::Git::Conflict::Resolver::ConflictSideMissing,
+             Gitlab::Git::Conflict::File::UnsupportedEncoding
+        false
+      end
+      cache_method :can_be_resolved_in_ui?
     
-        def insert_after(index, *names)
-      insert assert_index(index) + 1, *names
-    end
+          def arranged_checks
+        return [@skips, @runs] if @skips && @runs
     
-        private
+          def positive_condition_is_false?(object)
+        @positive_condition && !object.instance_exec(&@positive_condition)
+      end
     
-        def html?
-      mime_type.include? 'html'
-    end
+          def issue_table
+        Issue.arel_table
+      end
     
-        def root_url
-      @root_url ||= root_path? ? URL.parse(File.join(base_url.to_s, root_path)) : base_url.normalize
-    end
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
     
-            css('h1').each_with_index do |node, i|
-          next if i == 0
-          node.name = 'h2'
-        end
+      gem.licenses      = ['MIT']
     
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
+    Then(/^directories referenced in :linked_files are created in shared$/) do
+  dirs = TestApp.linked_files.map { |path| TestApp.shared_path.join(path).dirname }
+  dirs.each do |dir|
+    run_vagrant_command(test_dir_exists(dir))
+  end
+end
     
-              # Release access on this machine
-          unlocked_release(entry.id)
+      def symlinked?(symlink_path, target_path)
+    '[ #{symlink_path} -ef #{target_path} ]'
+  end
+    
+          def load_built_in_scm
+        require 'capistrano/scm/#{scm_name}'
+        scm_class = Object.const_get(built_in_scm_plugin_class_name)
+        # We use :load_immediately because we are initializing the SCM plugin
+        # late in the load process and therefore can't use the standard
+        # load:defaults technique.
+        install_plugin(scm_class, load_immediately: true)
+      end
+    
+          def add_property(key, value)
+        if respond_to?('#{key}=')
+          send('#{key}=', value)
+        else
+          set(key, value)
         end
       end
     
-    module Vagrant
-  module Plugin
-    module V1
-      # This is the superclass for all V1 plugins.
-      class Plugin
-        # Special marker that can be used for action hooks that matches
-        # all action sequences.
-        ALL_ACTIONS = :__all_actions__
+      let(:prefix) { '' } # A prefix before the opening brace.
+  let(:suffix) { '' } # A suffix for the line after the closing brace.
+  let(:open) { nil } # The opening brace.
+  let(:close) { nil } # The closing brace.
+  let(:a) { 'a' } # The first element.
+  let(:b) { 'b' } # The second element.
+  let(:b_comment) { '' } # Comment after the second element.
+  let(:multi_prefix) { '' } # Prefix multi and heredoc with this.
+  let(:multi) do # A viable multi-line element.
+    <<-RUBY.strip_indent.chomp
+      {
+      foo: bar
+      }
+    RUBY
+  end
+  # This heredoc is unsafe to edit around because it ends on the same line as
+  # the node itself.
+  let(:heredoc) do
+    <<-RUBY.strip_indent.chomp
+      <<-EOM
+      baz
+      EOM
+    RUBY
+  end
+  # This heredoc is safe to edit around because it ends on a line before the
+  # last line of the node.
+  let(:safe_heredoc) do
+    <<-RUBY.strip_indent.chomp
+      {
+      a: <<-EOM
+      baz
+      EOM
+      }
+    RUBY
+  end
     
-                # If we have this machine in our index, load that.
-            entry = @env.machine_index.get(name.to_s)
-            if entry
-              @env.machine_index.release(entry)
-    
-            # Helper method that will set a value if a value is given, or otherwise
-        # return the already set value.
-        #
-        # @param [Symbol] key Key for the data
-        # @param [Object] value Value to store.
-        # @return [Object] Stored value.
-        def self.get_or_set(key, value=UNSET_VALUE)
-          # If no value is to be set, then return the value we have already set
-          return data[key] if value.eql?(UNSET_VALUE)
-    
-      def scope_for_collection
-    case params[:id]
-    when 'featured'
-      @account.statuses.permitted_for(@account, signed_request_account).tap do |scope|
-        scope.merge!(@account.pinned_statuses)
+          # Returns an array of all the when branches in the `case` statement.
+      #
+      # @return [Array<WhenNode>] an array of `when` nodes
+      def when_branches
+        node_parts[1...-1]
       end
-    else
-      raise ActiveRecord::NotFound
+    
+          # Returns the body of the `for` loop.
+      #
+      # @return [Node, nil] The body of the `for` loop.
+      def body
+        node_parts[2]
+      end
     end
   end
+end
+
     
-        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
-    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
-    @statuses = cache_collection(@statuses, Status)
-  end
+            def keyword_splat?
+          [first, second].any?(&:kwsplat_type?)
+        end
+      end
     
-        def update
-      authorize @user, :change_email?
-    
-        def enable
-      authorize @custom_emoji, :enable?
-      @custom_emoji.update!(disabled: false)
-      log_action :enable, @custom_emoji
-      flash[:notice] = I18n.t('admin.custom_emojis.enabled_msg')
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
-    end
+          # Checks whether any argument of the node is a splat
+      # argument, i.e. `*splat`.
+      #
+      # @return [Boolean] whether the node is a splat argument
+      def splat_argument?
+        arguments? &&
+          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
+      end
+      alias rest_argument? splat_argument?
