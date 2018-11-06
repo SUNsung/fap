@@ -1,146 +1,95 @@
 
         
-            with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+            @property
+    def body(self):
+        # Only now the response body is fetched.
+        # Shouldn't be touched unless the body is actually needed.
+        return self._orig.content
+    
+            See https://github.com/jakubroztocil/httpie/issues/212
+    
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
     
     
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
-    
-        from inspect import getfullargspec as getargspec
-    from io import StringIO
-    
-                    request_close = getattr(self.request, 'close', None)
-                if request_close is not None:
-                    request_close()
-                clear_request = True
-        finally:
-            rv = _request_ctx_stack.pop()
-    
-            kwargs.setdefault('sort_keys', current_app.config['JSON_SORT_KEYS'])
-    else:
-        kwargs.setdefault('sort_keys', True)
-        kwargs.setdefault('cls', JSONEncoder)
-    
-        def _get_source_fast(self, environment, template):
-        for srcobj, loader in self._iter_loaders(template):
-            try:
-                return loader.get_source(environment, template)
-            except TemplateNotFound:
-                continue
-        raise TemplateNotFound(template)
-    
-            url = url_parse(path)
-        base_url = '{scheme}://{netloc}/{path}'.format(
-            scheme=url.scheme or url_scheme,
-            netloc=url.netloc or http_host,
-            path=app_root.lstrip('/')
-        )
-        path = url.path
-    
-        def iter_lines(self, chunk_size):
-        '''Return an iterator over the body yielding (`line`, `line_feed`).'''
-        raise NotImplementedError()
-    
-    
-def long_description():
-    with codecs.open('README.rst', encoding='utf8') as f:
-        return f.read()
-    
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        def test_binary_suppresses_when_not_terminal_but_pretty(self):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--pretty=all', 'GET', self.url,
-                 env=env)
-        assert BINARY_SUPPRESSED_NOTICE.decode() in r
-    
-        def test_POST_form_Content_Type_override(self, httpbin):
-        r = http('--form', 'POST', httpbin.url + '/post',
-                 'Content-Type:application/xml')
-        assert HTTP_OK in r
-        assert ''Content-Type': 'application/xml'' in r
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
     )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+    
+    
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+    
+    
+def test_missing_auth(httpbin):
+    r = http(
+        '--auth-type=basic',
+        'GET',
+        httpbin + '/basic-auth/user/password',
+        error_exit_ok=True
+    )
+    assert HTTP_OK not in r
+    assert '--auth required' in r.stderr
 
     
-    site = Bigthink()
-download = site.download_by_url
-
     
-            if not title:
-            self.title = vid
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
+        def test_request_body_from_file_by_path(self, httpbin):
+        r = http('--verbose',
+                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG)
+        assert HTTP_OK in r
+        assert FILE_CONTENT in r, r
+        assert ''Content-Type': 'text/plain'' in r
     
-site_info = 'fantasy.tv'
-download = fantasy_download
-download_playlist = playlist_not_supported('fantasy.tv')
-
+            link_list = self.get_streams_by_id(account_number, video_id)
     
-    
-  def Response( self ):
-    return {
-      'completions': self._results,
-      'completion_start_column': self.request_data[ 'start_column' ]
-    }
+    from .theplatform import theplatform_download_by_pid
     
     
-  def Start( self ):
-    self._keepalive_thread.start()
+def write_loop_file(records_number, loop_file_path, file_name):
+    with open(loop_file_path, 'a') as file:
+        for i in range(records_number):
+            file.write('file '{}'\n'.format(file_name))
+    
+    #----------------------------------------------------------------------
+def dilidili_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
+    global headers
+    re_str = r'http://www.dilidili.com/watch\S+'
+    if re.match(r'http://www.dilidili.wang', url):
+        re_str = r'http://www.dilidili.wang/watch\S+'
+        headers['Referer'] = 'http://www.dilidili.wang/'
+    elif re.match(r'http://www.dilidili.mobi', url):
+        re_str = r'http://www.dilidili.mobi/watch\S+'
+        headers['Referer'] = 'http://www.dilidili.mobi/'
+    
+    __all__ = ['facebook_download']
     
     
-  def UpdateWithNewDiagnostics( self, diags ):
-    self._diagnostics = [ _NormalizeDiagnostic( x ) for x in
-                            self._ApplyDiagnosticFilter( diags ) ]
-    self._ConvertDiagListToDict()
-    
-        try:
-      eq_( expected_vim_data, vim_data )
-    except Exception:
-      print( 'Expected:\n'{0}'\nwhen parsing:\n'{1}'\nBut found:\n'{2}''.format(
-          expected_vim_data,
-          completion_data,
-          vim_data ) )
-      raise
-    
-    
-@YouCompleteMeInstance()
-def SendCompletionRequest_UnicodeWorkingDirectory_test( ycm ):
-  unicode_dir = PathToTestFile( 'uni¢𐍈d€' )
-  current_buffer = VimBuffer( PathToTestFile( 'uni¢𐍈d€', 'current_buffer' ) )
-    
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, response ) )
-    
-    
-def YouCompleteMe_NotifyUserIfServerCrashed_UnexpectedCore_test():
-  message = ( 'The ycmd server SHUT DOWN \(restart with ':YcmRestartServer'\). '
-              'Unexpected error while loading the YCM core library. Type '
-              '':YcmToggleLogs ycmd_\d+_stderr_.+.log' to check the logs.' )
-  RunNotifyUserIfServerCrashed( {
-    'return_code': 3,
-    'expected_message': matches_regexp( message )
-  } )
+def fantasy_download_by_id_channelId(id = 0, channelId = 0, output_dir = '.', merge = True, info_only = False,
+                                     **kwargs):
+    api_url = 'http://www.fantasy.tv/tv/playDetails.action?' \
+              'myChannelId=1&id={id}&channelId={channelId}&t={t}'.format(id = id,
+                                                                         channelId = channelId,
+                                                                         t = str(random.random())
+                                                                         )
+    html = get_content(api_url)
+    html = json.loads(html)
