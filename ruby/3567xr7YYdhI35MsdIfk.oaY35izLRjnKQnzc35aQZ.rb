@@ -1,148 +1,99 @@
 
         
-        module ActionView #:nodoc:
-  # = Action View Raw Output Helper
-  module Helpers #:nodoc:
-    module OutputSafetyHelper
-      # This method outputs without escaping a string. Since escaping tags is
-      # now default, this can be used when you don't want Rails to automatically
-      # escape tags. This is not recommended if the data is coming from the user's
-      # input.
-      #
-      # For example:
-      #
-      #  raw @user.name
-      #  # => 'Jimmy <alert>Tables</alert>'
-      def raw(stringish)
-        stringish.to_s.html_safe
-      end
-    
-              def render_component(builder)
-            builder.radio_button + builder.label
-          end
-      end
-    end
-  end
-end
-
-    
-              super(object_name, method_name, template_object, options)
-        end
-    
-        def render_template(event)
-      info do
-        message = '  Rendered #{from_rails_root(event.payload[:identifier])}'.dup
-        message << ' within #{from_rails_root(event.payload[:layout])}' if event.payload[:layout]
-        message << ' (#{event.duration.round(1)}ms)'
-      end
+              nil
     end
     
-          def args_for_lookup(name, prefixes, partial, keys, details_options)
-        name, prefixes = normalize_name(name, prefixes)
-        details, details_key = detail_args_for(details_options)
-        [name, prefixes, partial || false, details, details_key, keys]
-      end
+              # We split the arguments into two: One set containing any
+          # flags before a word, and then the rest. The rest are what
+          # get actually sent on to the subcommand.
+          argv.each_index do |i|
+            if !argv[i].start_with?('-')
+              # We found the beginning of the sub command. Split the
+              # args up.
+              main_args   = argv[0, i]
+              sub_command = argv[i]
+              sub_args    = argv[i + 1, argv.length - i + 1]
     
-              return nil unless selected_attr
-    
-            def email
-          @email ||= username_and_email[:email].to_s
-        end
-    
-          attr_reader :request
-    
-          def perform(start_id, stop_id)
-        status_sql = Build
-          .where('ci_builds.commit_id = ci_stages.pipeline_id')
-          .where('ci_builds.stage = ci_stages.name')
-          .status_sql
-    
-            MergeRequest
-          .where(id: start_id..stop_id)
-          .where(latest_merge_request_diff_id: nil)
-          .each_batch(of: BATCH_SIZE) do |relation|
-    
-            def initialize(project, ref)
-          @project = project
-          @ref = ref
-    
-                    raise Errors::VMNoMatchError if vms.empty?
-              else
-                # String name, just look for a specific VM
-                vms << @env.vms[name.to_sym]
-                raise Errors::VMNotFoundError, name: name if !vms[0]
-              end
-            end
-          else
-            vms = @env.vms_ordered
-          end
-    
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
         #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
-        end
-    
-            # This clears out all the registered plugins. This is only used by
-        # unit tests and should not be called directly.
-        def reset!
-          @registered.clear
-        end
-    
-            # Registers additional provisioners to be available.
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
         #
-        # @param [String] name Name of the provisioner.
-        def self.provisioner(name=UNSET_VALUE, &block)
-          data[:provisioners] ||= Registry.new
+        # @param [V2::Root] new
+        def upgrade(new)
+        end
     
-        if @filter.save
-      redirect_to filters_path
-    else
-      render action: :new
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
+        end
+    
+            # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
+    
+            def initialize
+          @logger = Log4r::Logger.new('vagrant::plugin::v2::manager')
+          @registered = []
+        end
+    
+    namespace :bower do
+    
+          less = less.gsub(mixin_pattern) do |_|
+        scope, name, args = $1, $2, $3
+        scope = scope.scan(/[\w-]+/).join('-') + '-' unless scope.empty?
+        args = '(#{args.tr(';', ',')})' unless args.empty?
+        if name && mixin_names.include?('#{scope}#{name}')
+          '@include #{scope}#{name}#{args}'
+        else
+          '@extend .#{scope}#{name}'
+        end
+      end
+    
+      # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
+    
     end
-  end
     
-        def ordered_instances
-      paginated_instances.map { |account| Instance.new(account) }
+      end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
     end
-    
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
   end
+  output += '></#{tag}>'
 end
-
-    
-    # The module that contains everything Sass-related:
-#
-# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
-# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
-# * {Sass::SyntaxError} is raised when Sass encounters an error.
-# * {Sass::CSS} handles conversion of CSS to Sass.
-#
-# Also see the {file:SASS_REFERENCE.md full Sass reference}.
-module Sass
-  class << self
-    # @private
-    attr_accessor :tests_running
-  end
-    
-            firsts, rest = [sseq.members.first], sseq.members[1..-1]
-        firsts.push rest.shift if firsts.first.is_a?(Sass::Selector::Parent)
-    
-        # Returns the standard exception backtrace,
-    # including the Sass backtrace.
-    #
-    # @return [Array<String>]
-    def backtrace
-      return nil if super.nil?
-      return super if sass_backtrace.all? {|h| h.empty?}
-      sass_backtrace.map do |h|
-        '#{h[:filename] || '(sass)'}:#{h[:line]}' +
-          (h[:mixin] ? ':in `#{h[:mixin]}'' : '')
-      end + super
-    end
