@@ -1,135 +1,182 @@
 
         
-          </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+          #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
     
-            def start(opts)
-          @thread = Thread.new do
-            # Use epoll if the kernel supports it
-            EM.epoll
-            EM.run do
-              EM.error_handler { |e| log_error(e) }
+      def self.create_ipmi_getchannel_probe
+    [   # Get Channel Authentication Capabilities
+      0x06, 0x00, 0xff, 0x07, # RMCP Header
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x20, 0x18,
+      0xc8, 0x81, 0x00, 0x38, 0x8e, 0x04, 0xb5
+    ].pack('C*')
+  end
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
+    
+                k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+    
+              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
+            seq = OpenSSL::ASN1::Sequence.new(elems)
+    
+              # Decodes the srealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_srealm(input)
+            input.value[0].value
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+          if rails?
+        register_rails_engine
+      elsif lotus?
+        register_lotus
+      elsif sprockets?
+        register_sprockets
       end
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+          # generate variables template
+      save_file 'templates/project/_bootstrap-variables.sass',
+                '// Override Bootstrap variables here (defaults from bootstrap-sass v#{Bootstrap::VERSION}):\n\n' +
+                    File.read('#{save_to}/_variables.scss').lines[1..-1].join.gsub(/^(?=\$)/, '// ').gsub(/ !default;/, '')
     end
     
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
-end
-
-    
-        it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_string('Received <$.content.text.*> from <$.content.name> .') }.
-        to raise_error('JSONPath '$.content.text.*' is too complex, please check your migration.')
-    end
-  end
-    
-          if first_warning
-        $stderr.puts <<~EOS
-          #{Tty.bold}Please note that these warnings are just used to help the Homebrew maintainers
-          with debugging if you file an issue. If everything you use Homebrew for is
-          working fine: please don't worry or file an issue; just ignore this. Thanks!#{Tty.reset}
-        EOS
-      end
-    
-        def to_s
-      s = []
-      s << 'Could not symlink #{src}'
-      s << 'Target #{dst}' << suggestion
-      s << <<~EOS
-        To force the link and overwrite all conflicting files:
-          brew link --overwrite #{keg.name}
-    
-          def self.visible
-        false
-      end
-    end
-  end
-end
-
-    
-          alias generic_find_matching_tag find_matching_tag
-    
-      def parse(*paths)
-    paths.flatten
-         .compact
-         .flat_map { |p| Pathname.new(p).to_path.split(File::PATH_SEPARATOR) }
-         .uniq
-  end
-end
-
-    
-            last_simple_subject = rest.empty? && sseq.subject?
-        if current_rule.nil? || first_sseq(current_rule).members != firsts ||
-            !!first_sseq(current_rule).subject? != !!last_simple_subject
-          current_rule = Tree::RuleNode.new([])
-          current_rule.parsed_rules = make_sseq(last_simple_subject, *firsts)
+    # ECMA-262, section 15.1.3
+    def Encode(uri, unescape)
+      uriLength = uri.length;
+      # We are going to pass result to %StringFromCharCodeArray
+      # which does not expect any getters/setters installed
+      # on the incoming array.
+      result    = Array.new(uriLength);
+      index = 0;
+      k = -1;
+      while ((k+=1) < uriLength) do
+        cc1 = uri.charCodeAt(k);
+        next if cc1.nil?
+        if (self.send(unescape, cc1))
+          result[index] = cc1;
+          index += 1
+        else
+          if (cc1 >= 0xDC00 && cc1 <= 0xDFFF);
+            throw('URI malformed')
+          end
+          if (cc1 < 0xD800 || cc1 > 0xDBFF)
+            index = URIEncodeSingle(cc1, result, index);
+          else
+            k+=1;
+            if (k == uriLength);
+              throw('URI malformed')
+            end
+            cc2 = uri.charCodeAt(k);
+            if (cc2 < 0xDC00 || cc2 > 0xDFFF);
+              throw('URI malformed')
+            end
+            index = URIEncodePair(cc1, cc2, result, index);
+          end
         end
-    
-          offset = line.offset + line.text.size - arg_string.size
-      args, keywords, splat, kwarg_splat =
-        Script::Parser.new(arg_string.strip, @line, to_parser_offset(offset), @options).
-          parse_mixin_include_arglist
-      Tree::MixinNode.new(name, args, keywords, splat, kwarg_splat)
-    end
-    
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
       end
+      # use .compact to get rid of nils from charCodeAt
+      # return %StringFromCharCodeArray(result);
+      # 'c' = 8 bit signed char
+      # http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-pack
+      return result.compact.pack 'c*'
+    end
+  end # class << self
+end # module
+
+    
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          def _identicon_code(blob)
+        string_to_code blob + @request.host
+      end
+    
+          def sidebar_format
+        has_sidebar && @sidebar.format.to_s
+      end
+    
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+    def date
+  Date.today.to_s
+end
+    
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
+      options = {:debug => ENV['LS_QA_DEBUG']}
+    
+              it 'fails when installing a non logstash plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
+            expect(command).not_to install_successfully
+          end
