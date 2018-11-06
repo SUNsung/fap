@@ -1,133 +1,96 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
+        DOCUMENTATION = '''
+module: aws_waf_facts
+short_description: Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
+description:
+  - Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
+version_added: '2.4'
+requirements: [ boto3 ]
+options:
+  name:
+    description:
+      - The name of a Web Application Firewall
+    
+    
+def get_rule(client, module, rule_id):
     try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+        return client.get_rule(RuleId=rule_id)['Rule']
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Could not get WAF rule')
     
-    now = datetime.datetime.now()
-now_iso = now.isoformat() + 'Z'
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
+if __name__ == '__main__':
+    main()
 
     
-    import sys
-import os
-# Allows to import youtube_dl
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        elif module.params['state'] == 'absent':
+        if existing['CustomerGateways']:
+            existing['CustomerGateway'] = existing['CustomerGateways'][0]
+            results['gateway'] = existing
+            if not module.check_mode:
+                results['gateway'] = gw_mgr.ensure_cgw_absent(
+                    existing['CustomerGateway']['CustomerGatewayId']
+                )
+            results['changed'] = True
     
-        def test_pbs(self):
-        # https://github.com/rg3/youtube-dl/issues/2350
-        self.assertMatch('http://video.pbs.org/viralplayer/2365173446/', ['pbs'])
-        self.assertMatch('http://video.pbs.org/widget/partnerplayer/980042464/', ['pbs'])
+        required = [volume_id, snapshot_id, instance_id]
+    if required.count(None) != len(required) - 1:  # only 1 must be set
+        module.fail_json(msg='One and only one of volume_id or instance_id or snapshot_id must be specified')
+    if instance_id and not device_name or device_name and not instance_id:
+        module.fail_json(msg='Instance ID and device name must both be specified')
     
+            try:
+            matching_groups = conn.describe_cache_subnet_groups(group_name, max_records=100)
+            exists = len(matching_groups) > 0
+        except BotoServerError as e:
+            if e.error_code != 'CacheSubnetGroupNotFoundFault':
+                module.fail_json(msg=e.error_message)
     
-from youtube_dl.compat import (
-    compat_getenv,
-    compat_setenv,
-    compat_etree_fromstring,
-    compat_expanduser,
-    compat_shlex_split,
-    compat_str,
-    compat_struct_unpack,
-    compat_urllib_parse_unquote,
-    compat_urllib_parse_unquote_plus,
-    compat_urllib_parse_urlencode,
-)
+    EXAMPLES = '''
+---
+# Simple example to create a lambda function and publish a version
+- hosts: localhost
+  gather_facts: no
+  vars:
+    state: present
+    project_folder: /path/to/deployment/package
+    deployment_package: lambda.zip
+    account: 123456789012
+    production_version: 5
+  tasks:
+  - name: AWS Lambda Function
+    lambda:
+      state: '{{ state | default('present') }}'
+      name: myLambdaFunction
+      publish: True
+      description: lambda function description
+      code_s3_bucket: package-bucket
+      code_s3_key: 'lambda/{{ deployment_package }}'
+      local_path: '{{ project_folder }}/{{ deployment_package }}'
+      runtime: python2.7
+      timeout: 5
+      handler: lambda.handler
+      memory_size: 128
+      role: 'arn:aws:iam::{{ account }}:role/API2LambdaExecRole'
     
-            # Broken links can't be fixed and
-        # I am not sure what do with the local ones.
-        if errortype.lower() in ['broken', 'local']:
-            print('Not Fixed: ' + line)
-        else:
-            # If this is a new file
-            if newfilename != _filename:
+            fn = os.path.join(current_path, 'appids.txt')
+        self.public_appid = RandomGetSlice(fn, 60)
     
-            if now - self.lastmark >= 3:
-            self.lastmark = now
-            qps = len(self.tail) / sum(self.tail)
-            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
-    
-    # Apply monkey patches to fix issues in external libraries
-from . import _monkeypatches
-del _monkeypatches
-    
-        if settings is None:
-        settings = get_project_settings()
-        # set EDITOR from environment if available
-        try:
-            editor = os.environ['EDITOR']
-        except KeyError: pass
-        else:
-            settings['EDITOR'] = editor
-    check_deprecated_settings(settings)
-    
-        def syntax(self):
-        return '<spider>'
-    
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
-    
-        class ScrapyClientContextFactory(ClientContextFactory):
-        'A SSL context factory which is more permissive against SSL bugs.'
-        # see https://github.com/scrapy/scrapy/issues/82
-        # and https://github.com/scrapy/scrapy/issues/26
-        # and https://github.com/scrapy/scrapy/issues/981
+            fn = os.path.join(current_path, 'sni_slice.txt')
+        self.slice = RandomGetSlice(fn, 20, '|')
     
     
-class ReceivedDataProtocol(Protocol):
-    def __init__(self, filename=None):
-        self.__filename = filename
-        self.body = open(filename, 'wb') if filename else BytesIO()
-        self.size = 0
+def SendEventNotificationAsync( event_name,
+                                buffer_number = None,
+                                extra_data = None ):
+  event = EventNotification( event_name, buffer_number, extra_data )
+  event.Start()
+
     
-            check(['/usr/local'], '/usr/local')
-        check(['/usr/local', '/usr/local'], '/usr/local')
-        check(['/usr/local/', '/usr/local'], '/usr/local')
-        check(['/usr/local/', '/usr/local/'], '/usr/local')
-        check(['/usr//local', '//usr/local'], '/usr/local')
-        check(['/usr/./local', '/./usr/local'], '/usr/local')
-        check(['/', '/dev'], '/')
-        check(['/usr', '/dev'], '/')
-        check(['/usr/lib/', '/usr/lib/python3'], '/usr/lib')
-        check(['/usr/lib/', '/usr/lib64/'], '/usr')
+        raise RuntimeError( 'Path in 'g:ycm_server_python_interpreter' option '
+                        'does not point to a valid Python 2.7 or 3.4+.' )
     
-    
-@contextmanager
-def path(package: Package, resource: Resource) -> Iterator[Path]:
-    '''A context manager providing a file path object to the resource.
-    
-    def handleSlideTitle(title):
-    print('<h2>%s</h2>' % getText(title.childNodes))
-    
-        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
-    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
+      # Ignore 'contained' argument in first position.
+  if words[ 0 ] == 'contained':
+    words = words[ 1: ]
