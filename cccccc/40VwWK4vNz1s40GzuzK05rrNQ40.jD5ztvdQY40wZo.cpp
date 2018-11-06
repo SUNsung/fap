@@ -1,382 +1,653 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
+        
+    {    if (tmp.handle_data().is_set()) {
+      input_handle_shapes_and_types[i].reset(
+          new std::vector<std::pair<TensorShapeProto, DataType>>);
+      auto& v = *input_handle_shapes_and_types[i];
+      for (const auto& x : tmp.handle_data().shape_and_type()) {
+        v.emplace_back(x.shape(), x.dtype());
+      }
+    }
+  }
+    
+    class GenPythonOp {
+ public:
+  GenPythonOp(const OpDef& op_def, const ApiDef& api_def,
+              const string& function_name);
+  virtual ~GenPythonOp();
+    }
+    
+    namespace tensorflow {
+    }
+    
+    #include <Python.h>
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Safe_TF_TensorPtr make_safe(TF_Tensor* tensor) {
+  return Safe_TF_TensorPtr(tensor);
+}
+    
+    // Safe container for an owned PyObject. On destruction, the reference count of
+// the contained object will be decremented.
+using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
+Safe_PyObjectPtr make_safe(PyObject* o);
+    
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
+    
+    
+    {  SE_DISALLOW_COPY_AND_ASSIGN(ScopedActivateExecutorContext);
+};
     
     QT_BEGIN_NAMESPACE
-class QPaintEvent;
-class QTimer;
+class QIcon;
+class QMenu;
+class QWidget;
 QT_END_NAMESPACE
     
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
+        /** Specify model role to use as ordinal value (defaults to Qt::UserRole) */
+    void setRole(int role);
+    
+    
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+    
+    {    secp256k1_fe_mul(&r->z, &a->z, &a->y);
+    secp256k1_fe_mul_int(&r->z, 2);       /* Z' = 2*Y*Z (2) */
+    secp256k1_fe_sqr(&t1, &a->x);
+    secp256k1_fe_mul_int(&t1, 3);         /* T1 = 3*X^2 (3) */
+    secp256k1_fe_sqr(&t2, &t1);           /* T2 = 9*X^4 (1) */
+    secp256k1_fe_sqr(&t3, &a->y);
+    secp256k1_fe_mul_int(&t3, 2);         /* T3 = 2*Y^2 (2) */
+    secp256k1_fe_sqr(&t4, &t3);
+    secp256k1_fe_mul_int(&t4, 2);         /* T4 = 8*Y^4 (2) */
+    secp256k1_fe_mul(&t3, &t3, &a->x);    /* T3 = 2*X*Y^2 (1) */
+    r->x = t3;
+    secp256k1_fe_mul_int(&r->x, 4);       /* X' = 8*X*Y^2 (4) */
+    secp256k1_fe_negate(&r->x, &r->x, 4); /* X' = -8*X*Y^2 (5) */
+    secp256k1_fe_add(&r->x, &t2);         /* X' = 9*X^4 - 8*X*Y^2 (6) */
+    secp256k1_fe_negate(&t2, &t2, 1);     /* T2 = -9*X^4 (2) */
+    secp256k1_fe_mul_int(&t3, 6);         /* T3 = 12*X*Y^2 (6) */
+    secp256k1_fe_add(&t3, &t2);           /* T3 = 12*X*Y^2 - 9*X^4 (8) */
+    secp256k1_fe_mul(&r->y, &t1, &t3);    /* Y' = 36*X^3*Y^2 - 27*X^6 (1) */
+    secp256k1_fe_negate(&t2, &t4, 2);     /* T2 = -8*Y^4 (3) */
+    secp256k1_fe_add(&r->y, &t2);         /* Y' = 36*X^3*Y^2 - 27*X^6 - 8*Y^4 (4) */
+}
+    
+    #define Round(a,b,c,d,e,f,g,h,k,w) do { \
+    uint32_t t1 = (h) + Sigma1(e) + Ch((e), (f), (g)) + (k) + (w); \
+    uint32_t t2 = Sigma0(a) + Maj((a), (b), (c)); \
+    (d) += t1; \
+    (h) = t1 + t2; \
+} while(0)
+    
+    void test_ecdh_generator_basepoint(void) {
+    unsigned char s_one[32] = { 0 };
+    secp256k1_pubkey point[2];
+    int i;
+    }
+    
+    #include 'content/nw/src/api/clipboard/clipboard.h'
+    
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
+    
+       void ExecuteCommand(int command_id, int event_flags) override;
+    
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
+};
+    
+    void MenuItem::SetLabel(const std::string& label) {
+  is_modified_ = true;
+  label_ = base::UTF8ToUTF16(label);
+    }
+    
+    // This is initialized with a default, stub implementation.
+// If python-google.protobuf.cc is loaded, the function pointer is overridden
+// with a full implementation.
+const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
+    GetCProtoInsidePyProtoStub;
+Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
+    MutableCProtoInsidePyProtoStub;
+    
+    upb_pbdecoder *upb_pbdecoder_create(upb_env *e,
+                                    const upb_pbdecodermethod *method,
+                                    upb_sink *output);
+const upb_pbdecodermethod *upb_pbdecoder_method(const upb_pbdecoder *d);
+upb_bytessink *upb_pbdecoder_input(upb_pbdecoder *d);
+uint64_t upb_pbdecoder_bytesparsed(const upb_pbdecoder *d);
+size_t upb_pbdecoder_maxnesting(const upb_pbdecoder *d);
+bool upb_pbdecoder_setmaxnesting(upb_pbdecoder *d, size_t max);
+void upb_pbdecoder_reset(upb_pbdecoder *d);
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/compiler/plugin.pb.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    // Functions to create C# XML documentation comments.
+// Currently this only includes documentation comments containing text specified as comments
+// in the .proto file; documentation comments generated just from field/message/enum/proto names
+// is inlined in the relevant code. If more control is required, that code can be moved here.
+    
+    #include <gtest/gtest.h>
+    
+    ImmutableMapFieldGenerator::
+ImmutableMapFieldGenerator(const FieldDescriptor* descriptor,
+                                       int messageBitIndex,
+                                       int builderBitIndex,
+                                       Context* context)
+  : descriptor_(descriptor), name_resolver_(context->GetNameResolver())  {
+  SetMessageVariables(descriptor, messageBitIndex, builderBitIndex,
+                      context->GetFieldGeneratorInfo(descriptor),
+                      context, &variables_);
+}
+    
+      printer->Print(
+    'com.google.protobuf.Descriptors.FileDescriptor.'
+    'InternalDescriptorAssigner assigner =\n'
+    '    new com.google.protobuf.Descriptors.FileDescriptor.'
+    '    InternalDescriptorAssigner() {\n'
+    '      public com.google.protobuf.ExtensionRegistry assignDescriptors(\n'
+    '          com.google.protobuf.Descriptors.FileDescriptor root) {\n'
+    '        descriptor = root;\n'
+    // Custom options will be handled when immutable messages' outer class is
+    // loaded. Here we just return null and let custom options be unknown
+    // fields.
+    '        return null;\n'
+    '      }\n'
+    '    };\n');
+    
+    /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
+ public:
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+      virtual inline const char* type() const { return 'BatchNorm'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      virtual inline const char* type() const { return 'BatchReindex'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {}  // namespace caffe
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
+    }
+    
+      // Delete everything
+  for (int i = 0; i < kCount; i++) {
+    ASSERT_OK(db_->Delete(WriteOptions(), Key(i)));
+  }
+  ASSERT_OK(dbi->TEST_CompactMemTable());
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+      for (int i = 1; i < argc; i++) {
+    double d;
+    int n;
+    char junk;
+    if (leveldb::Slice(argv[i]).starts_with('--benchmarks=')) {
+      FLAGS_benchmarks = argv[i] + strlen('--benchmarks=');
+    } else if (sscanf(argv[i], '--compression_ratio=%lf%c', &d, &junk) == 1) {
+      FLAGS_compression_ratio = d;
+    } else if (sscanf(argv[i], '--histogram=%d%c', &n, &junk) == 1 &&
+               (n == 0 || n == 1)) {
+      FLAGS_histogram = n;
+    } else if (sscanf(argv[i], '--use_existing_db=%d%c', &n, &junk) == 1 &&
+               (n == 0 || n == 1)) {
+      FLAGS_use_existing_db = n;
+    } else if (sscanf(argv[i], '--reuse_logs=%d%c', &n, &junk) == 1 &&
+               (n == 0 || n == 1)) {
+      FLAGS_reuse_logs = n;
+    } else if (sscanf(argv[i], '--num=%d%c', &n, &junk) == 1) {
+      FLAGS_num = n;
+    } else if (sscanf(argv[i], '--reads=%d%c', &n, &junk) == 1) {
+      FLAGS_reads = n;
+    } else if (sscanf(argv[i], '--threads=%d%c', &n, &junk) == 1) {
+      FLAGS_threads = n;
+    } else if (sscanf(argv[i], '--value_size=%d%c', &n, &junk) == 1) {
+      FLAGS_value_size = n;
+    } else if (sscanf(argv[i], '--write_buffer_size=%d%c', &n, &junk) == 1) {
+      FLAGS_write_buffer_size = n;
+    } else if (sscanf(argv[i], '--max_file_size=%d%c', &n, &junk) == 1) {
+      FLAGS_max_file_size = n;
+    } else if (sscanf(argv[i], '--block_size=%d%c', &n, &junk) == 1) {
+      FLAGS_block_size = n;
+    } else if (sscanf(argv[i], '--cache_size=%d%c', &n, &junk) == 1) {
+      FLAGS_cache_size = n;
+    } else if (sscanf(argv[i], '--bloom_bits=%d%c', &n, &junk) == 1) {
+      FLAGS_bloom_bits = n;
+    } else if (sscanf(argv[i], '--open_files=%d%c', &n, &junk) == 1) {
+      FLAGS_open_files = n;
+    } else if (strncmp(argv[i], '--db=', 5) == 0) {
+      FLAGS_db = argv[i] + 5;
     } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
+      fprintf(stderr, 'Invalid flag '%s'\n', argv[i]);
+      exit(1);
     }
+  }
     
-    BOOST_AUTO_TEST_CASE(get_difficulty_for_very_high_target)
-{
-    TestDifficulty(0x12345678, 5913134931067755359633408.0);
+    // Convenience methods
+Status DBImpl::Put(const WriteOptions& o, const Slice& key, const Slice& val) {
+  return DB::Put(o, key, val);
 }
     
-    #include 'univalue.h'
     
-    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
-#define CONTENT_NW_SRC_API_BASE_BASE_H_
+    {}  // namespace leveldb
+
     
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
     
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+      // Offset of the last record returned by ReadRecord.
+  uint64_t last_record_offset_;
+  // Offset of the first location past the end of buffer_.
+  uint64_t end_of_buffer_offset_;
+    
+    namespace leveldb {
+    }
+    
+    template<typename Key, class Comparator>
+inline void SkipList<Key,Comparator>::Iterator::Prev() {
+  // Instead of using explicit 'prev' links, we just search for the
+  // last node that falls before key.
+  assert(Valid());
+  node_ = list_->FindLessThan(node_->key);
+  if (node_ == list_->head_) {
+    node_ = nullptr;
   }
 }
     
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return;
-  item->OnClick();
-}
-    
-       bool IsItemForCommandIdDynamic(int command_id) const override;
-   base::string16 GetLabelForCommandId(int command_id) const override;
-   bool GetIconForCommandId(int command_id,
-                                   gfx::Image* icon) const override;
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    ExtensionFunction::ResponseAction
-NwAppQuitFunction::Run() {
-  ExtensionService* service =
-    ExtensionSystem::Get(browser_context())->extension_service();
-  base::MessageLoop::current()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&ExtensionService::TerminateExtension,
-                   service->AsWeakPtr(),
-                   extension_id()));
-  return RespondNow(NoArguments());
-}
-    
-     protected:
-  ~NwObjDestroyFunction() override;
-    
-    
-    {    func(size, srcBase, srcStride, dstBase, dstStride);
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)shift;
-#endif
-}
-    
-        void operator() (const typename VecTraits<T>::vec128 & v_src0,
-                     const typename VecTraits<T>::vec128 & v_src1,
-                     typename VecTraits<T>::vec128 & v_dst) const
+        /*virtual*/ void LearnerRMSProp::ResetSmoothedGradients() /*override*/
     {
-        typename VecTraits<wtype>::vec128 vrl, vrh;
-        wideAdd(vmovl( vget_low(v_src0)), vmovl( vget_low(v_src1)), vrl);
-        wideAdd(vmovl(vget_high(v_src0)), vmovl(vget_high(v_src1)), vrh);
+        LearnerBase::ResetSmoothedGradients();
+        m_smoothedCount = 0.0;
     }
     
-        void operator() (const uint8x8_t & v_src0, const uint8x8_t & v_src1,
-                     uint8x8_t & v_dst) const
-    {
-        v_dst = vand_u8(v_src0, v_src1);
-    }
+        private:
     
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t sj = 0u, dj = 0u;
-    }
     
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-                    __asm__ __volatile__ (
-                    'vld4.32 {d0, d2, d4, d6}, [%[in0]]!                      \n\t'
-                    'vld4.32 {d1, d3, d5, d7}, [%[in0]]                       \n\t'
-                    'vld4.32 {d8, d10, d12, d14}, [%[in4]]!                   \n\t'
-                    'vld4.32 {d9, d11, d13, d15}, [%[in4]]                    \n\t'
-                    'vadd.i32 q0, q4                                          \n\t'
-                    'vadd.i32 q1, q5                                          \n\t'
-                    'vadd.i32 q2, q6                                          \n\t'
-                    'vadd.i32 q3, q7                                          \n\t'
-                    'vld4.32 {d16, d18, d20, d22}, [%[in1]]!                  \n\t'
-                    'vld4.32 {d17, d19, d21, d23}, [%[in1]]                   \n\t'
-                    'vld4.32 {d8, d10, d12, d14}, [%[in3]]!                   \n\t'
-                    'vld4.32 {d9, d11, d13, d15}, [%[in3]]                    \n\t'
-                    'vadd.i32 q4, q8                                          \n\t'
-                    'vadd.i32 q5, q9                                          \n\t'
-                    'vadd.i32 q6, q10                                         \n\t'
-                    'vadd.i32 q7, q11                                         \n\t'
-                    'vld4.32 {d16, d18, d20, d22}, [%[in2],:256]              \n\t'
-                    'vld4.32 {d17, d19, d21, d23}, [%[in22],:256]             \n\t'
-                    'vmla.i32 q0, q4, %q[c4]                                  \n\t'
-                    'vmla.i32 q1, q5, %q[c4]                                  \n\t'
-                    'vmla.i32 q2, q6, %q[c4]                                  \n\t'
-                    'vmla.i32 q3, q7, %q[c4]                                  \n\t'
-                    'vmla.i32 q0, q8, %q[c6]                                  \n\t'
-                    'vmla.i32 q1, q9, %q[c6]                                  \n\t'
-                    'vmla.i32 q2, q10, %q[c6]                                 \n\t'
-                    'vmla.i32 q3, q11, %q[c6]                                 \n\t'
-                    'vrshrn.i32 d8, q0, #8                                    \n\t'
-                    'vrshrn.i32 d9, q1, #8                                    \n\t'
-                    'vrshrn.i32 d10, q2, #8                                   \n\t'
-                    'vrshrn.i32 d11, q3, #8                                   \n\t'
-                   'vst4.16 {d8-d11}, [%[out]]                                \n\t'
-                    : [in0] '=r' (lidx0),
-                      [in1] '=r' (lidx1),
-                      [in3] '=r' (lidx3),
-                      [in4] '=r' (lidx4)
-                    : [out] 'r' (dst + x),
-                      '0' (lidx0),
-                      '1' (lidx1),
-                      '2' (lidx3),
-                      '3' (lidx4),
-                      [in2] 'r' (lane + x),
-                      [in22] 'r' (lane + x + 4*2),
-                      [c4] 'w' (vc4s32), [c6] 'w' (vc6s32)
-                    : 'd0','d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23'
-                );
-*/
-            for (; x <= colsn - 4; x += 4)
+    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
             {
-                internal::prefetch(lane + x);
-    }
-    
-    namespace {
-    }
-    
-      // Computes matrix.vector v = Wu.
-  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
-  // u is imagined to have an extra element at the end with value 1, to
-  // implement the bias, but it doesn't actually have it.
-  // Computes the base C++ implementation, if there are no partial_funcs_.
-  // NOTE: The size of the input vector (u) must be padded using
-  // RoundInputs above.
-  // The input will be over-read to the extent of the padding. There are no
-  // alignment requirements.
-  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                       const GenericVector<double>& scales, const int8_t* u,
-                       double* v) const;
-    
-    // Computes part of matrix.vector v = Wu. Computes N=16 results.
-// For details see PartialMatrixDotVector64 with N=16.
-static void PartialMatrixDotVector16(const int8_t* wi, const double* scales,
-                                     const int8_t* u, int num_in, int num_out,
-                                     double* v) {
-  // Register containing 16-bit ones for horizontal add with 16->32 bit
-  // conversion.
-  __m256i ones =
-      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
-  // Initialize all the results to 0.
-  __m256i result0 = _mm256_setzero_si256();
-  __m256i result1 = _mm256_setzero_si256();
-  // Iterate over the input (u), one registerful at a time.
-  for (int j = 0; j < num_in;) {
-    __m256i inputs =
-        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
-    // Inputs are processed in groups of kNumInputsPerGroup, replicated
-    // kNumInputGroups times.
-    for (int ig = 0; ig < kNumInputGroups && j < num_in;
-         ++ig, j += kNumInputsPerGroup) {
-      // Replicate the low 32 bits (4 inputs) 8 times.
-      __m256i rep_input =
-          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
-      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
-      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
-      __m256i weights, reps;
-      // Mul-add, with horizontal add of the 4 inputs to each of the results.
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
-    }
-  }
-  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  num_out -= kNumOutputsPerRegister;
-  ExtractResults(result1, shift_id, wi, scales,
-                 std::min(kNumOutputsPerRegister, num_out), v);
-}
-    
-    
-    {  /** Pointer to the page_res owned by the API. */
-  PAGE_RES* page_res_;
-  /** Pointer to the Tesseract object owned by the API. */
-  Tesseract* tesseract_;
-  /**
-   * The iterator to the page_res_. Owned by this ResultIterator.
-   * A pointer just to avoid dragging in Tesseract includes.
-   */
-  PAGE_RES_IT* it_;
-  /**
-   * The current input WERD being iterated. If there is an output from OCR,
-   * then word_ is nullptr. Owned by the API
-   */
-  WERD* word_;
-  /** The length of the current word_. */
-  int word_length_;
-  /** The current blob index within the word. */
-  int blob_index_;
-  /**
-   * Iterator to the blobs within the word. If nullptr, then we are iterating
-   * OCR results in the box_word.
-   * Owned by this ResultIterator.
-   */
-  C_BLOB_IT* cblob_it_;
-  /** Control over what to include in bounding boxes. */
-  bool include_upper_dots_;
-  bool include_lower_dots_;
-  /** Parameters saved from the Thresholder. Needed to rebuild coordinates.*/
-  int scale_;
-  int scaled_yres_;
-  int rect_left_;
-  int rect_top_;
-  int rect_width_;
-  int rect_height_;
-};
-    
-    
-    {  ScrollView* sv_window_;
-};
-    
-      /// Return true if no image has been set.
-  bool IsEmpty() const;
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
-  }
-  return true;
-}
-    
-    // That gcc wants both of these prototypes seems mysterious. VC, for
-// its part, can't decide which to use (another mystery). Matching of
-// template overloads: the final frontier.
-#ifndef COMPILER_MSVC
-template <typename T, size_t N>
-char (&ArraySizeHelper(const T (&array)[N]))[N];
-#endif
-    
-        if (family->ArgsCnt() == -1) {
-      family->Args({});
-    }
-    const std::vector<int>* thread_counts =
-        (family->thread_counts_.empty()
-             ? &one_thread
-             : &static_cast<const std::vector<int>&>(family->thread_counts_));
-    const size_t family_size = family->args_.size() * thread_counts->size();
-    // The benchmark will be run at least 'family_size' different inputs.
-    // If 'family_size' is very large warn the user.
-    if (family_size > kMaxFamilySize) {
-      Err << 'The number of inputs is very large. ' << family->name_
-          << ' will be repeated at least ' << family_size << ' times.\n';
-    }
-    // reserve in the special case the regex '.', since we know the final
-    // family size.
-    if (spec == '.') benchmarks->reserve(family_size);
-    
-            return value;
-#else // defined(BOOST_ATOMIC_DETAIL_NO_ASM_RAX_RDX_PAIRS)
-        storage_type value;
-    
-        static BOOST_FORCEINLINE storage_type fetch_or(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        switch (order)
-        {
-        case memory_order_relaxed:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR8_RELAXED(&storage, v));
-            break;
-        case memory_order_consume:
-        case memory_order_acquire:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR8_ACQUIRE(&storage, v));
-            break;
-        case memory_order_release:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR8_RELEASE(&storage, v));
-            break;
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-        default:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR8(&storage, v));
-            break;
+                if (m_shape.HasFreeDimension())
+                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
+            }
         }
-        return v;
+    
+    
+    {
+    {            if (map.size() > RAND_MAX * (size_t) RAND_MAX)
+                RuntimeError('RandomOrdering: too large training set: need to change to different random generator!');
+            srand((unsigned int) seed);
+            size_t retries = 0;
+            foreach_index (t, map)
+            {
+                for (int tries = 0; tries < 5; tries++)
+                {
+                    // swap current pos with a random position
+                    // Random positions are limited to t+randomizationrange.
+                    // This ensures some locality suitable for paging with a sliding window.
+                    const size_t tbegin = max((size_t) t, randomizationrange / 2) - randomizationrange / 2; // range of window  --TODO: use bounds() function above
+                    const size_t tend = min(t + randomizationrange / 2, map.size());
+                    assert(tend >= tbegin);                  // (guard against potential numeric-wraparound bug)
+                    const size_t trand = rand(tbegin, tend); // random number within windows
+                    assert((size_t) t <= trand + randomizationrange / 2 && trand < (size_t) t + randomizationrange / 2);
+                    // if range condition is fulfilled then swap
+                    if (trand <= map[t] + randomizationrange / 2 && map[t] < trand + randomizationrange / 2 && (size_t) t <= map[trand] + randomizationrange / 2 && map[trand] < (size_t) t + randomizationrange / 2)
+                    {
+                        std::swap(map[t], map[trand]);
+                        break;
+                    }
+                    // but don't multi-swap stuff out of its range (for swapping positions that have been swapped before)
+                    // instead, try again with a different random number
+                    retries++;
+                }
+            }
+            fprintf(stderr, 'RandomOrdering: %lu retries for %lu elements (%.1f%%) to ensure window condition\n', (unsigned long) retries, (unsigned long) map.size(), 100.0 * retries / map.size());
+            // ensure the window condition
+            foreach_index (t, map)
+                assert((size_t) t <= map[t] + randomizationrange / 2 && map[t] < (size_t) t + randomizationrange / 2);
+#if 0 // and a live check since I don't trust myself here yet
+            foreach_index (t, map) if (!((size_t) t <= map[t] + randomizationrange/2 && map[t] < (size_t) t + randomizationrange/2))
+            {
+                fprintf (stderr, 'RandomOrdering: windowing condition violated %d -> %d\n', t, map[t]);
+                LogicError('RandomOrdering: windowing condition violated');
+            }
+#endif
+#if 0 // test whether it is indeed a unique complete sequence
+            auto map2 = map;
+            ::sort (map2.begin(), map2.end());
+            foreach_index (t, map2) assert (map2[t] == (size_t) t);
+#endif
+            fprintf(stderr, 'RandomOrdering: recached sequence for seed %d: %d, %d, ...\n', (int) seed, (int) map[0], (int) map[1]);
+            currentseed = seed;
+        }
+        return map; // caller can now access it through operator[]
     }
