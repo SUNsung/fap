@@ -1,153 +1,217 @@
 
         
-        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
-  if (LangOpts.Target.isMacOSX()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::OSXApplicationExtension
-                : PlatformKind::OSX);
-  }
+          static vector<string> LayerTypeList() {
+    CreatorRegistry& registry = Registry();
+    vector<string> layer_types;
+    for (typename CreatorRegistry::iterator iter = registry.begin();
+         iter != registry.end(); ++iter) {
+      layer_types.push_back(iter->first);
     }
-    
-    STATISTIC(NumRequirementEnvironments, '# of requirement environments');
-    
-      Storage() = delete;
-    
-    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
-  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
-                                 const_cast<void*>(Key), Value_out);
-  return Ret == 0;
-}
-    
-      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
-    assert(decl);
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = decl;
-    return info;
+    return layer_types;
   }
     
-      // FIXME: Map over source ranges in the diagnostic.
-  auto emitDiag = [&ctx, this](clang::FullSourceLoc clangNoteLoc,
-                      clang::DiagnosticsEngine::Level clangDiagLevel,
-                      StringRef message) {
-    decltype(diag::error_from_clang) diagKind;
-    switch (clangDiagLevel) {
-    case clang::DiagnosticsEngine::Ignored:
-      return;
-    case clang::DiagnosticsEngine::Note:
-      diagKind = diag::note_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Remark:
-      // FIXME: We don't handle remarks yet.
-      return;
-    case clang::DiagnosticsEngine::Warning:
-      diagKind = diag::warning_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Error:
-    case clang::DiagnosticsEngine::Fatal:
-      // FIXME: What happens after a fatal error in the importer?
-      diagKind = diag::error_from_clang;
-      break;
+    
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
     }
-    }
-    
-    // Asserts that a given statement causes the program to exit, with an
-// integer exit status that satisfies predicate, and emitting error output
-// that matches regex.
-# define ASSERT_EXIT(statement, predicate, regex) \
-    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_FATAL_FAILURE_)
-    
-      // Gets the text streamed to this object so far as an std::string.
-  // Each '\0' character in the buffer is replaced with '\\0'.
-  //
-  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-  std::string GetString() const;
-    
-    // The helper function for {ASSERT|EXPECT}_EQ.
-template <typename T1, typename T2>
-AssertionResult CmpHelperEQ(const char* expected_expression,
-                            const char* actual_expression,
-                            const T1& expected,
-                            const T2& actual) {
-#ifdef _MSC_VER
-# pragma warning(push)          // Saves the current warning state.
-# pragma warning(disable:4389)  // Temporarily disables warning on
-                                // signed/unsigned mismatch.
-#endif
-    }
-    
-    // Ternary predicate assertion macros.
-#define EXPECT_PRED_FORMAT3(pred_format, v1, v2, v3) \
-  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
-#define EXPECT_PRED3(pred, v1, v2, v3) \
-  GTEST_PRED3_(pred, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
-#define ASSERT_PRED_FORMAT3(pred_format, v1, v2, v3) \
-  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_FATAL_FAILURE_)
-#define ASSERT_PRED3(pred, v1, v2, v3) \
-  GTEST_PRED3_(pred, v1, v2, v3, GTEST_FATAL_FAILURE_)
-    
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
   };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
 };
     
-      ////////////////////////////////////////////////////////////
-  //
-  // D'tor.  MyString is intended to be a final class, so the d'tor
-  // doesn't need to be virtual.
-  ~MyString() { delete[] c_string_; }
+        /** Returns a new action that performs the exact reverse of the action. 
+     *
+     * @return A new action that performs the exact reverse of the action.
+     * @js NA
+     */
+    virtual Action* reverse() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
     
     
-    {    return new_queue;
-  }
-    
-    Vec3 Grid3DAction::getVertex(const Vec2& position) const
-{
-    Grid3D *g = (Grid3D*)_gridNodeTarget->getGrid();
-    return g->getVertex(position);
+    {
+    {
+    {
+    {
+    {                    float l = logf(pre_log) * _lensEffect;
+                    float new_r = expf( l ) * _radius;
+                    
+                    if (vect.getLength() > 0)
+                    {
+                        vect.normalize();
+                        Vec2 new_vect = vect * new_r;
+                        v.z += (_concave ? -1.0f : 1.0f) * new_vect.getLength() * _lensEffect;
+                    }
+                }
+                
+                setVertex(Vec2(i, j), v);
+            }
+        }
+        
+        _dirty = false;
+    }
 }
     
-    protected:
-    bool _is3D;
-    Vec3 _positionDelta;
-    Vec3 _startPosition;
-    Vec3 _previousPosition;
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    Animation* Animation::clone() const
+    /** @class RotateBy
+ * @brief Rotates a Node object clockwise a number of degrees by modifying it's rotation attribute.
+*/
+class CC_DLL RotateBy : public ActionInterval
 {
-    // no copy constructor    
-    auto a = new (std::nothrow) Animation();
-    a->initWithAnimationFrames(_frames, _delayPerUnit, _loops);
-    a->setRestoreOriginalFrame(_restoreOriginalFrame);
-    a->autorelease();
-    return a;
-}
+public:
+    /** 
+     * Creates the action.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaAngle In degreesCW.
+     * @return An autoreleased RotateBy object.
+     */
+    static RotateBy* create(float duration, float deltaAngle);
+    /**
+     * Creates the action with separate rotation angles.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaAngleZ_X In degreesCW.
+     * @param deltaAngleZ_Y In degreesCW.
+     * @return An autoreleased RotateBy object.
+     * @warning The physics body contained in Node doesn't support rotate with different x and y angle.
+     */
+    static RotateBy* create(float duration, float deltaAngleZ_X, float deltaAngleZ_Y);
+    /** Creates the action with 3D rotation angles.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaAngle3D A Vec3 angle.
+     * @return An autoreleased RotateBy object.
+     */
+    static RotateBy* create(float duration, const Vec3& deltaAngle3D);
+    }
     
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-namespace atomics {
-namespace detail {
-    }
-    }
-    }
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionPageTurn3D.h'
+#include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
+    
+    #include 'platform/CCPlatformConfig.h'
+#include 'base/CCRef.h'
+#include 'base/CCValue.h'
+#include 'base/CCVector.h'
+#include '2d/CCSpriteFrame.h'
+    
+                AnimationFrame *animFrame = AnimationFrame::create(spriteFrame, delayUnits, userInfo.getType() == Value::Type::MAP ? userInfo.asValueMap() : ValueMapNull);
+    
+    
+    {                
+            case 4:
+            case 12:
+            case 14:
+                /* going LEFT with these cases:
+                 4          12          14
+                 +---+---+  +---+---+   +---+---+
+                 |   |   |  |   |   |   |   | 2 |
+                 +---+---+  +---+---+   +---+---+
+                 | 4 |   |  | 4 | 8 |   | 4 | 8 |
+                 +---+---+  +---+---+  	+---+---+
+                 */
+                stepx = -1;
+                stepy = 0;
+                break;
+                
+                
+            case 2 :
+            case 3 :
+            case 7 :
+                /* going RIGHT with these cases:
+                 2          3           7        
+                 +---+---+  +---+---+   +---+---+
+                 |   | 2 |  | 1 | 2 |   | 1 | 2 |
+                 +---+---+  +---+---+   +---+---+
+                 |   |   |  |   |   |   | 4 |   |
+                 +---+---+  +---+---+  	+---+---+
+                 */
+                stepx=1;
+                stepy=0;
+                break;
+            case 9 :
+                /*
+                 +---+---+
+                 | 1 |   |
+                 +---+---+
+                 |   | 8 |
+                 +---+---+
+                 this should normally go UP, but if we already been here, we go down
+                */
+                //find index from xy;
+                i = getIndexFromPos(curx, cury);
+                it = find (case9s.begin(), case9s.end(), i);
+                if (it != case9s.end())
+                {
+                    //found, so we go down, and delete from case9s;
+                    stepx = 0;
+                    stepy = 1;
+                    case9s.erase(it);
+                }
+                else
+                {
+                    //not found, we go up, and add to case9s;
+                    stepx = 0;
+                    stepy = -1;
+                    case9s.push_back(i);
+                }
+                break;
+            case 6 :
+                /*
+                 6
+                 +---+---+
+                 |   | 2 |
+                 +---+---+
+                 | 4 |   |
+                 +---+---+
+                 this normally go RIGHT, but if its coming from UP, it should go LEFT
+                 */
+                i = getIndexFromPos(curx, cury);
+                it = find (case6s.begin(), case6s.end(), i);
+                if (it != case6s.end())
+                {
+                    //found, so we go down, and delete from case9s;
+                    stepx = -1;
+                    stepy = 0;
+                    case6s.erase(it);
+                }
+                else{
+                    //not found, we go up, and add to case9s;
+                    stepx = 1;
+                    stepy = 0;
+                    case6s.push_back(i);
+                }
+                break;
+            default:
+                CCLOG('this shouldn't happen.');
+        }
+        //little optimization
+        // if previous direction is same as current direction,
+        // then we should modify the last vec to current
+        curx += stepx;
+        cury += stepy;
+        if(stepx == prevx && stepy == prevy)
+        {
+            _points.back().x = (float)(curx-rect.origin.x) / _scaleFactor;
+            _points.back().y = (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor;
+        }
+        else
+        {
+            _points.push_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor, (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
+        }
     
     
     {
@@ -155,7 +219,3 @@ namespace detail {
     {} // namespace detail
 } // namespace atomics
 } // namespace mars_boost
-    
-    #ifdef BOOST_HAS_PRAGMA_ONCE
-#pragma once
-#endif
