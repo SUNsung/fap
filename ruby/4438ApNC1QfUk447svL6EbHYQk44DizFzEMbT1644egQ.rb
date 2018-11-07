@@ -1,130 +1,214 @@
 
         
-                  def value
-            if @allow_method_names_outside_object
-              object.public_send @method_name if object && object.respond_to?(@method_name)
-            else
-              object.public_send @method_name if object
-            end
-          end
+                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
+          @checked_value   = checked_value
+          @unchecked_value = unchecked_value
+          super(object_name, method_name, template_object, options)
+        end
     
-    begin
-  error_pipe = UNIXSocket.open(ENV['HOMEBREW_ERROR_PIPE'], &:recv_io)
-  error_pipe.fcntl(Fcntl::F_SETFD, Fcntl::FD_CLOEXEC)
-    
-              if File.extname(file) == '.rb'
-            tree[subtree] ||= []
-            tree[subtree] << file
-          end
+        initializer 'action_view.default_enforce_utf8' do |app|
+      ActiveSupport.on_load(:action_view) do
+        default_enforce_utf8 = app.config.action_view.delete(:default_enforce_utf8)
+        unless default_enforce_utf8.nil?
+          ActionView::Helpers::FormTagHelper.default_enforce_utf8 = default_enforce_utf8
         end
       end
+    end
     
-              def action_title
-            'Stop'
-          end
+        s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
     
-          def version_slug
-        return if version.blank?
-        slug = version.downcase
-        slug.gsub! '+', 'p'
-        slug.gsub! '#', 's'
-        slug.gsub! %r{[^a-z0-9\_\.]}, '_'
-        slug
+      def dump_verbose_config(f = $stdout)
+    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
+    f.puts 'ORIGIN: #{origin}'
+    f.puts 'HEAD: #{head}'
+    f.puts 'Last commit: #{last_commit}'
+    if CoreTap.instance.installed?
+      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
+      f.puts 'Core tap HEAD: #{core_tap_head}'
+      f.puts 'Core tap last commit: #{core_tap_last_commit}'
+    else
+      f.puts 'Core tap: N/A'
+    end
+    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
+    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
+    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
+    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
+    f.puts hardware
+    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
+    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
+    f.puts 'CLT: #{clt ? clt : 'N/A'}'
+    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
+    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
+    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
+    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
+    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
+    f.puts 'X11: #{describe_x11}'
+    f.puts 'System Ruby: #{describe_system_ruby}'
+    f.puts 'Perl: #{describe_perl}'
+    f.puts 'Python: #{describe_python}'
+    f.puts 'Ruby: #{describe_ruby}'
+    f.puts 'Java: #{describe_java}'
+  end
+end
+
+    
+        cd HOMEBREW_PREFIX
+    exec 'find', *args
+  end
+    
+      def search_tap(user, repo, rx)
+    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
+       user != 'Caskroom'
+      return []
+    end
+    
+          renamed_formulae << [old_full_name, new_full_name] if @report[:A].include? new_full_name
+    end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
+  end
+end
+
+    
+          def as_json
+        json = { name: name, slug: slug, type: type }
+        json[:links] = links if links.present?
+        json[:version] = version if version.present? || defined?(@version)
+        json[:release] = release if release.present?
+        json
       end
     
-        def absolute_url_string?(str)
-      str =~ SCHEME_RGX
+        def to_a
+      @filters.dup
     end
     
-        def ==(other)
-      other.is_a?(self.class) && filters == other.filters
+        def build_and_queue_request(url, options, &block)
+      request = Request.new(url, request_options.merge(options))
+      request.on_complete(&block) if block
+      queue(request)
+      request
     end
     
-        def error?
-      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
-    end
-    
-            subclass.base_url = base_url
-        subclass.root_path = root_path
-        subclass.initial_paths = initial_paths.dup
-        subclass.options = options.deep_dup
-        subclass.html_filters = html_filters.inheritable_copy
-        subclass.text_filters = text_filters.inheritable_copy
-        subclass.stubs = stubs.dup
-      end
-    
-        self.base_url = 'http://localhost/'
-    
-          if base == dest
-        ''
-      elsif dest.start_with? File.join(base, '')
-        url.path[(path.length)..-1]
-      end
-    end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
+        def request_all(urls, &block)
+      if options[:rate_limit]
+        if @@rate_limiter
+          @@rate_limiter.limit = options[:rate_limit]
         else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+          @@rate_limiter = RateLimiter.new(options[:rate_limit])
+          Typhoeus.before(&@@rate_limiter.to_proc)
         end
       end
     
-      it 'raises #{frozen_error_class} on an untainted, frozen object' do
-    o = Object.new.freeze
-    lambda { o.taint }.should raise_error(frozen_error_class)
-  end
-    
-      it 'returns true when passed ?R if the argument is readable by the real uid' do
-    Kernel.test(?R, @file).should be_true
-  end
-    
-      def global_options_manpage_lines
-    lines = ['These options are applicable across all sub-commands.\n']
-    lines += Homebrew::CLI::Parser.global_options.values.map do |names, _, desc|
-      short, long = names
-      generate_option_doc(short, long, desc)
-    end
-    lines
-  end
-    
-    using CleanupRefinement
-    
-      # @private
-  def initialize(name, path, spec, alias_path: nil)
-    @name = name
-    @path = path
-    @alias_path = alias_path
-    @alias_name = if alias_path
-      File.basename(alias_path)
-    end
-    @revision = self.class.revision || 0
-    @version_scheme = self.class.version_scheme || 0
-    
-        module NewFormulaAudit
-      class Options < FormulaCop
-        DEP_OPTION = 'New formulae should not use `deprecated_option`'.freeze
-        OPTION = 'Formulae should not have an `option`'.freeze
-    
-      context 'When auditing options' do
-    it 'reports an offense when using the 32-bit option' do
-      expect_offense(<<~RUBY)
-        class Foo < Formula
-          url 'https://example.com/foo-1.0.tgz'
-          option 'with-32-bit'
-                       ^^^^^^ macOS has been 64-bit only since 10.6 so 32-bit options are deprecated.
-        end
-      RUBY
+        def origin
+      if scheme && host
+        origin = '#{scheme}://#{host}'
+        origin.downcase!
+        origin << ':#{port}' if port
+        origin
+      else
+        nil
+      end
     end
     
-      def to_ary
-    @paths.dup.to_ary
+          def include_default_entry?
+        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
+      end
+    
+      # Loaded immediately after dependencies to ensure proper override of their
+  # UI methods.
+  #
+  require 'cocoapods/user_interface'
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
   end
-  alias to_a to_ary
+  output += '></#{tag}>'
+end
+    
+        def get_gist_url_for(gist, file)
+      'https://gist.githubusercontent.com/raw/#{gist}/#{file}'
+    end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
+      end
+    end
+  end
+end
+
+    
+          # Calls the given block for each `value` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_value
+        return pairs.map(&:value).to_enum unless block_given?
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that can be used as hash elements:
+    # `pair`, `kwsplat`
+    module HashElementNode
+      # Returns the key of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the key of the hash element
+      def key
+        node_parts[0]
+      end
+    
+          # A shorthand for getting the first argument of the node.
+      # Equivalent to `arguments.first`.
+      #
+      # @return [Node, nil] the first argument of the node,
+      #                     or `nil` if there are no arguments
+      def first_argument
+        arguments[0]
+      end
