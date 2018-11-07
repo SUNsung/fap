@@ -1,157 +1,179 @@
 
         
-            if superenv?
-      ENV.keg_only_deps = keg_only_deps
-      ENV.deps = formula_deps
-      ENV.x11 = reqs.any? { |rq| rq.is_a?(X11Requirement) }
-      ENV.setup_build_environment(formula)
-      post_superenv_hacks
-      reqs.each(&:modify_build_environment)
-      deps.each(&:modify_build_environment)
+          # This allows generic Altivec PPC bottles to be supported in some
+  # formulae, while also allowing specific bottles in others; e.g.,
+  # sometimes a formula has just :tiger_altivec, other times it has
+  # :tiger_g4, :tiger_g5, etc.
+  def find_altivec_tag(tag)
+    if tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
+      altivec_tag = '#{$1}_altivec'.to_sym
+      altivec_tag if key?(altivec_tag)
+    end
+  end
+    
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
+  end
+    
+        def self.cleanup_logs
+      return unless HOMEBREW_LOGS.directory?
+      HOMEBREW_LOGS.subdirs.each do |dir|
+        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
+      end
+    end
+    
+      def clt
+    if instance_variable_defined?(:@clt)
+      @clt
+    elsif MacOS::CLT.installed? && MacOS::Xcode.version >= '4.3'
+      @clt = MacOS::CLT.version
+    end
+  end
+    
+        @@remote_tap_formulae ||= Hash.new do |cache, key|
+      user, repo = key.split('/', 2)
+      tree = {}
+    
+          case status
+      when 'A', 'D'
+        @report[status.to_sym] << tap.formula_file_to_name(src)
+      when 'M'
+        begin
+          formula = Formulary.factory(tap.path/src)
+          new_version = formula.pkg_version
+          old_version = FormulaVersions.new(formula).formula_at_revision(@initial_revision, &:pkg_version)
+          next if new_version == old_version
+        rescue Exception => e
+          onoe e if ARGV.homebrew_developer?
+        end
+        @report[:M] << tap.formula_file_to_name(src)
+      when /^R\d{0,3}/
+        @report[:D] << tap.formula_file_to_name(src) if tap.formula_file?(src)
+        @report[:A] << tap.formula_file_to_name(dst) if tap.formula_file?(dst)
+      end
+    end
+    
+      def command
+    abort 'This command requires a command argument' if ARGV.empty?
+    
+      def package(gem, ext='')
+    'pkg/#{gem}-#{source_version}' + ext
+  end
+    
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+          def empty_cookie(host, path)
+        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
+      end
+    
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    module Jekyll
+    
+    
+===============================================
+ Error for category_generator.rb plugin
+-----------------------------------------------
+ No 'category_index.html' in source/_layouts/
+ Perhaps you haven't installed a theme yet.
+===============================================
+    
+        def cache(gist, file, data)
+      cache_file = get_cache_file_for gist, file
+      File.open(cache_file, 'w') do |io|
+        io.write data
+      end
+    end
+    
+      class PageFilters < Octopress::Hooks::Page
+    def pre_render(page)
+      OctopressFilters::pre_filter(page)
+    end
+    
+        def render(context)
+      file_dir = (context.registers[:site].source || 'source')
+      file_path = Pathname.new(file_dir).expand_path
+      file = file_path + @file
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
+    
+            return nil
+      end
+    end
+  end
+end end end
+
+    
+        private
+    def uncompress(source)
+      temporary_directory = Stud::Temporary.pathname
+      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
+      temporary_directory
+    rescue Zip::Error => e
+      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
+      # a `Zip::Error` exception with a file not found message...
+      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+    end
+    
+      # create list of plugins to update
+  def plugins_to_update(previous_gem_specs_map)
+    if update_all?
+      previous_gem_specs_map.values.map{|spec| spec.name}
     else
-      ENV.setup_build_environment(formula)
-      reqs.each(&:modify_build_environment)
-      deps.each(&:modify_build_environment)
-    
-      def userpaths?
-    @settings.include? :userpaths
-  end
-end
-    
-        checks.inject_dump_stats! if ARGV.switch? 'D'
-    
-      private
-    
-        results.map do |name|
-      begin
-        formula = Formulary.factory(name)
-        canonical_name = formula.name
-        canonical_full_name = formula.full_name
-      rescue
-        canonical_name = canonical_full_name = name
-      end
-      # Ignore aliases from results when the full name was also found
-      if aliases.include?(name) && results.include?(canonical_full_name)
-        next
-      elsif (HOMEBREW_CELLAR/canonical_name).directory?
-        pretty_installed(name)
-      else
-        name
-      end
-    end.compact
-  end
-end
-
-    
-            def has_attribute?(attribute)
-          if attribute == :location
-            get_info(:address).present?
-          else
-            get_info(attribute).present?
-          end
-        end
-    
-      protected
-    
-      # POST /resource/unlock
-  def create
-    self.resource = resource_class.send_unlock_instructions(resource_params)
-    yield resource if block_given?
-    
-      # The realm used in Http Basic Authentication.
-  mattr_accessor :http_authentication_realm
-  @@http_authentication_realm = 'Application'
-    
-            ActiveSupport.on_load(:action_controller) do
-          if respond_to?(:helper_method)
-            helper_method 'current_#{mapping}', '#{mapping}_signed_in?', '#{mapping}_session'
-          end
-        end
-      end
-    
-            users.any?
-      end
-    
-          def add_fragment_back_to_path(uri, path)
-        [path, uri.fragment].compact.join('#')
-      end
+      # If the plugins isn't available in the gemspec or in 
+      # the gemfile defined with a local path, we assume the plugins is not
+      # installed.
+      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
+      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
+      plugins_arg
     end
   end
-end
-
     
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
+          def error_during_processing(exception)
+        Rails.logger.error exception.message
+        Rails.logger.error exception.backtrace.join('\n')
+    
+            def new; end
+    
+            def show
+          @option_type = Spree::OptionType.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@option_type)
         end
-    
-            # This returns all the registered commands.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        def commands
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.commands)
-            end
-          end
-        end
-    
-            # Set the name of the plugin. The moment that this is called, the
-        # plugin will be registered and available. Before this is called, a
-        # plugin does not exist. The name must be unique among all installed
-        # plugins.
-        #
-        # @param [String] name Name of the plugin.
-        # @return [String] The name of the plugin.
-        def self.name(name=UNSET_VALUE)
-          # Get or set the value first, so we have a name for logging when
-          # we register.
-          result = get_or_set(:name, name)
-    
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
-    
-      links = doc.css('a')
-  link = links.detect{ |link| link.text == link_text }
-  link = links.detect{ |link| link.attributes['href'].value.include?(link_text)} unless link
-  path = link.attributes['href'].value
-  visit URI::parse(path).request_uri
-end
-    
-    require File.join(File.dirname(__FILE__), 'integration_sessions_controller')
-require File.join(File.dirname(__FILE__), 'poor_mans_webmock')
-    
-          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
-      expect(response.status).to eq(404)
-      expect(response.body).to eq(I18n.t('likes.destroy.error'))
-      expect(Like.count).to eq(like_count)
-    end
-  end
-end
-
-    
-                return if after_update_attributes
     
             def index
-          @payments = @order.payments.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@payments)
-        end
+          if params[:ids]
+            @products = product_scope.where(id: params[:ids].split(',').flatten)
+          else
+            @products = product_scope.ransack(params[:q]).result
+          end
     
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+            def mine
+          if current_api_user.persisted?
+            @shipments = Spree::Shipment.
+                         reverse_chronological.
+                         joins(:order).
+                         where(spree_orders: { user_id: current_api_user.id }).
+                         includes(mine_includes).
+                         ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          else
+            render 'spree/api/errors/unauthorized', status: :unauthorized
+          end
         end
