@@ -1,160 +1,131 @@
 
         
-        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
-  if (LangOpts.Target.isMacOSX()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::OSXApplicationExtension
-                : PlatformKind::OSX);
-  }
+        grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
     }
-    
-        if (info.bytes > buf.size()) {
-      llvm::dbgs() << 'AST section too small.\n';
-      return false;
-    }
-    
-        unsigned major, minor, micro;
-    triple.getMacOSXVersion(major, minor, micro);
-    osx << major << '.' << minor;
-    if (micro != 0)
-      osx << '.' << micro;
-    
-    
-    {    return name;
   }
-    
-      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
-    assert(decl);
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = decl;
-    return info;
-  }
-    
-    void register_csg_types() {
-    }
-    
-    Mutex *dvector_lock = NULL;
-    
-    
-    {	function = p_func;
+  return '';
 }
     
-    #include 'networked_multiplayer_peer.h'
-    
-      if (allow_2pc_) {
-    autovector<MemTable*> empty_list;
-    auto imm_prep_log =
-        imm()->PrecomputeMinLogContainingPrepSection(empty_list);
-    auto mem_prep_log = mem()->GetMinLogContainingPrepSection();
-    }
-    
-      // A manual compaction will trigger the base level to become L2
-  // Keep Writing data until base level changed 2->1. There will be L0->L2
-  // compaction going on at the same time.
-  rocksdb::SyncPoint::GetInstance()->DisableProcessing();
-  rocksdb::SyncPoint::GetInstance()->ClearAllCallBacks();
-    
-    #include 'rocksdb/slice.h'
-#include 'rocksdb/status.h'
-    
-    class ChrootEnv : public EnvWrapper {
+    class CensusChannelData : public ChannelData {
  public:
-  ChrootEnv(Env* base_env, const std::string& chroot_dir)
-      : EnvWrapper(base_env) {
-#if defined(OS_AIX)
-    char resolvedName[PATH_MAX];
-    char* real_chroot_dir = realpath(chroot_dir.c_str(), resolvedName);
-#else
-    char* real_chroot_dir = realpath(chroot_dir.c_str(), nullptr);
-#endif
-    // chroot_dir must exist so realpath() returns non-nullptr.
-    assert(real_chroot_dir != nullptr);
-    chroot_dir_ = real_chroot_dir;
-#if !defined(OS_AIX)
-    free(real_chroot_dir);
-#endif
-  }
-    }
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
     
-    // Decrypt one or more (partial) blocks of data at the file offset.
-// Length of data is given in dataSize.
-Status BlockAccessCipherStream::Decrypt(uint64_t fileOffset, char *data, size_t dataSize) {
-  // Calculate block index
-  auto blockSize = BlockSize();
-  uint64_t blockIndex = fileOffset / blockSize;
-  size_t blockOffset = fileOffset % blockSize;
-  unique_ptr<char[]> blockBuffer;
-    }
-    
-      // Roundup x to a multiple of y
-  static size_t Roundup(size_t x, size_t y) { return ((x + y - 1) / y) * y; }
-    
-    // A simple compaction algorithm that always compacts everything
-// to the highest level whenever possible.
-class FullCompactor : public Compactor {
- public:
-  explicit FullCompactor(const Options options) : options_(options) {
-    compact_options_.compression = options_.compression;
-    compact_options_.output_file_size_limit =
-        options_.target_file_size_base;
-  }
-    }
-    
-      // close DB
-  delete cf;
-  delete db;
-    
-      delete db;
-    
-    void BENCHFUN(fillCtor)(int iters, int size) {
-  FOR_EACH_RANGE (i, 0, iters) {
-    VECTOR v(size_t(size), randomObject<VECTOR::value_type>());
-    doNotOptimizeAway(&v);
-  }
+    size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size) {
+  GrpcTraceContext trace_ctxt(context);
+  return TraceContextEncoding::Encode(trace_ctxt, tracing_buf,
+                                      tracing_buf_size);
 }
-BENCHMARK_PARAM(BENCHFUN(fillCtor), 16)
-BENCHMARK_PARAM(BENCHFUN(fillCtor), 128)
-BENCHMARK_PARAM(BENCHFUN(fillCtor), 1024)
     
-    using folly::Function;
-using folly::FunctionRef;
+    // Serializes the outgoing trace context. Field IDs are 1 byte followed by
+// field data. A 1 byte version ID is always encoded first.
+size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size);
     
-    #include <folly/GLog.h>
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_RPC_ENCODING_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_RPC_ENCODING_H
     
-    #include <boost/filesystem.hpp>
-#include <folly/Conv.h>
-#include <folly/Format.h>
-#include <folly/Random.h>
-#include <folly/String.h>
-#include <folly/Subprocess.h>
-#include <folly/lang/Bits.h>
-#include <folly/portability/GTest.h>
-#include <folly/portability/Unistd.h>
-#include <folly/tracing/StaticTracepoint.h>
-#include <folly/tracing/test/StaticTracepointTestModule.h>
+    #ifndef GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+#define GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+    
+    namespace grpc {
+    }
+    
+    bool GodotCollisionDispatcher::needsResponse(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsResponse(body0, body1);
+}
+
+    
+    #ifndef PIN_JOINT_BULLET_H
+#define PIN_JOINT_BULLET_H
+    
+    #include 'core/rid.h'
+    
+    	virtual PhysicsServer::JointType get_type() const { return PhysicsServer::JOINT_SLIDER; }
+    
+    
+    {	memdelete(resource_loader_dds);
+}
+
+    
+    #include 'func_ref.h'
+    
+            const std::unordered_map<StreamInformation, MinibatchData>& GetNextMinibatch(
+            size_t minibatchSizeInSamples,
+            size_t minibatchSizeInSequences,
+            size_t numberOfWorkers,
+            size_t workerRank,
+            const DeviceDescriptor& device = DeviceDescriptor::UseDefaultDevice()) override;
+    
+    
+    {        return newMask;
+    }
+    
+    
+    {            // Arithmetic schedule - write at every m_frequency steps or if the update is one of the first m_firstN
+            // updates.
+            return update % m_frequency == 0 || update <= m_firstN;
+        }
+    
+    
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        }
+    }
+    
+        /*TODO: merge with call site*/ void BackpropToRight(Matrix<ElemType>& inputFunctionValues, Matrix<ElemType>& inputGradientValues, Matrix<ElemType>& gradientValues)
+    {
+        size_t rows1 = inputGradientValues.GetNumRows(), cols1 = inputGradientValues.GetNumCols();
+        size_t rowsp = gradientValues.GetNumRows(), colsp = gradientValues.GetNumCols();
+        int wordsInEachSample = rows1 / inputFunctionValues.GetNumCols();
+    }
+    
+    
+    {REGISTER_INTERNAL(KafkaTopicsConfigParserPlugin,
+                  'config_parser',
+                  'kafka_topics');
+} // namespace osquery
+
+    
+    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_list) {
+  // Assume the decorators are disabled.
+  Config::get().update(config_data_);
+  auto parser = Config::getParser('decorators');
+  EXPECT_NE(parser, nullptr);
+    }
+    
+    TEST_F(PacksTests, test_parse) {
+  auto doc = getExamplePacksConfig();
+  EXPECT_TRUE(doc.doc().HasMember('packs'));
+}
     
       /**
-   * Returns a random uint32_t in [0, max) given a specific RNG.
-   * If max == 0, returns 0.
+   * @brief Return the state of autoloadable extensions.
+   *
+   * Some initialization decisions are made based on waiting for plugins to
+   * broadcast from potentially-loaded extensions. If no extensions are loaded
+   * and an active (selected at command line) plugin is missing, fail quickly.
    */
-  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
-  static uint32_t rand32(uint32_t max, RNG&& rng) {
-    return rand32(0, max, rng);
-  }
+  bool hasManagedExtensions() const;
     
-    namespace folly {
+    template< >
+struct make_storage_type< 1u, false >
+{
+    typedef mars_boost::uint8_t type;
     }
     
-    template <typename T>
-typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
-prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  prefix = Endian::little(prefix);
-  std::string result;
-  result.resize(n);
-  memcpy(&result[0], &prefix, n);
-  return result;
-}
+    using atomics::atomic_thread_fence;
+using atomics::atomic_signal_fence;
