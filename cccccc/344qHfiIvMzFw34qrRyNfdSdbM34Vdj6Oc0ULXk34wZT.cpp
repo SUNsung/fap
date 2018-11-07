@@ -1,21 +1,13 @@
 
         
-        Optional<PlatformKind> swift::platformFromString(StringRef Name) {
-  if (Name == '*')
-    return PlatformKind::none;
-  return llvm::StringSwitch<Optional<PlatformKind>>(Name)
-#define AVAILABILITY_PLATFORM(X, PrettyName) .Case(#X, PlatformKind::X)
-#include 'swift/AST/PlatformKinds.def'
-      .Case('macOS', PlatformKind::OSX)
-      .Case('macOSApplicationExtension', PlatformKind::OSXApplicationExtension)
-      .Default(Optional<PlatformKind>());
-}
-    
-    #include 'swift/AST/SyntaxASTMap.h'
-#include 'swift/AST/Expr.h'
-#include 'swift/AST/Decl.h'
-#include 'swift/AST/Stmt.h'
-#include 'swift/Syntax/Syntax.h'
+            if (info.status == serialization::Status::Valid) {
+      assert(info.bytes != 0);
+      if (!info.name.empty()) {
+        StringRef moduleData = buf.substr(0, info.bytes);
+        std::unique_ptr<llvm::MemoryBuffer> bitstream(
+          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
+    }
+    }
     
     VERB(abbreviate)
 VERB(accept)
@@ -804,250 +796,195 @@ VERB(yell)
 VERB(zip)
 VERB(zoom)
     
-    from GYBUnicodeDataUtils import GraphemeClusterBreakPropertyTable, get_extended_grapheme_cluster_rules_matrix
+        if (node->Further || node->Right) {
+      IndentScope ms(this, (childKind == ChildKind::Right ||
+                            childKind == ChildKind::Further ||
+                            childKind == ChildKind::Root) ? '  ' : '| ');
+    }
     
-        void emitCodeContext(clang::FullSourceLoc Loc,
-                         clang::DiagnosticsEngine::Level Level,
-                         SmallVectorImpl<clang::CharSourceRange>& Ranges,
-                         ArrayRef<clang::FixItHint> Hints) override {}
+      // If the word preceding the preposition extends the preposition, it
+  // will never be dropped.
+  if (std::next(nameWordRevIter) != nameWordRevIterEnd &&
+      priorWordExtendsPreposition(*std::next(nameWordRevIter), preposition)) {
+    ++nameWordRevIter;
+    preposition = StringRef((*nameWordRevIter).begin(),
+                            preposition.size() + (*nameWordRevIter).size());
+  }
     
-    #ifndef UINT32_MAX
-    #define UINT32_MAX (4294967295U)
+    #define TEGRA_ADDWEIGHTED(src1, sz1, src2, sz2, dst, sz, w, h, scales) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    CAROTENE_NS::addWeighted(CAROTENE_NS::Size2D(w, h), \
+                             src1, sz1, \
+                             src2, sz2, \
+                             dst, sz, \
+                             ((double *)scales)[0], ((double *)scales)[1], ((double *)scales)[2]), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
+    
+    
+    {        inline size_t total() const
+        {
+            return width * height;
+        }
+    };
+    
+    void absDiff(const Size2D &size,
+             const f32 * src0Base, ptrdiff_t src0Stride,
+             const f32 * src1Base, ptrdiff_t src1Stride,
+             f32 * dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<f32>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
 #endif
+}
     
-    namespace CAROTENE_NS {
+    bool isBlurU8Supported(const Size2D &size, s32 cn, BORDER_MODE border)
+{
+    return isSupportedConfiguration() &&
+           cn > 0 && cn <= 4 &&
+           size.width*cn >= 8 && size.height >= 2 &&
+           (border == BORDER_MODE_CONSTANT ||
+            border == BORDER_MODE_REFLECT101 ||
+            border == BORDER_MODE_REFLECT ||
+            border == BORDER_MODE_REPLICATE);
+}
+    
+    template <typename T>
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
+}
+    
+    #ifdef CAROTENE_NEON
+    
+    void FAST(const Size2D &size,
+          u8 *srcBase, ptrdiff_t srcStride,
+          KeypointStore *keypoints,
+          u8 threshold, bool nonmax_suppression)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    //keypoints.clear();
     }
     
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            internal::prefetch(dst + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vld1q_s16(dst + j);
-            int16x8_t v_dst1 = vld1q_s16(dst + j + 8);
-            int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_src1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-            v_dst0 = vqaddq_s16(v_dst0, v_src0);
-            v_dst1 = vqaddq_s16(v_dst1, v_src1);
-            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-            int16x8_t v_src16 = vreinterpretq_s16_u16(vmovl_u8(v_src));
-            int16x8_t v_dst = vld1q_s16(dst + j);
-            v_dst = vqaddq_s16(v_dst, v_src16);
-            vst1q_s16(dst + j, v_dst);
-        }
+                    vSum_0_4 = vmlaq_u16(vSum_0_4, vSum_3_1, vc4u16);
+                vSum_1_5 = vmlaq_u16(vSum_1_5, vSum_4_2, vc4u16);
+                vSum_2_6 = vmlaq_u16(vSum_2_6, vSum_5_6, vc4u16);
     
-            const s32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
-        const s32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
-        const s32* ln2 = internal::getRowPtr(srcBase, srcStride, i + 1);
-        const s32* ln3 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
-    
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t sj = 0u, dj = 0u;
-    }
-    
-                uint32x4_t vlx1 = vmvnq_u32(vequ1);
-            uint32x4_t vlx2 = vmvnq_u32(vequ2);
-            uint32x4_t vlx3 = vmvnq_u32(vequ3);
-            uint32x4_t vlx4 = vmvnq_u32(vequ4);
-    
-                vec128 v_src = vld3q(src + js), v_dst;
-            v_src.val[0] = vrev64q(v_src.val[0]);
-            v_src.val[1] = vrev64q(v_src.val[1]);
-            v_src.val[2] = vrev64q(v_src.val[2]);
-    
-            size_t x = 0;
-        for (; x <= colsn - 8; x += 8)
-        {
-            internal::prefetch(internal::getRowPtr(ln2 + x, srcStride, x % 5 - 2));
-            uint8x8_t v0 = vld1_u8(ln0+x);
-            uint8x8_t v1 = vld1_u8(ln1+x);
-            uint8x8_t v2 = vld1_u8(ln2+x);
-            uint8x8_t v3 = vld1_u8(ln3+x);
-            uint8x8_t v4 = vld1_u8(ln4+x);
-    }
-    
-    
-    {        smoothedGradientMatrix->template AdaDeltaUpdate<GradType>(*gradientMatrix, parameterMatrix, (AccumType)learningRate, (AccumType)m_rho, (AccumType)m_epsilon, timestamps, currentTimestamp);
-    }
-    
-    #pragma once
-    
-    
-    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
-            }
-            else if (!sampleDynamicAxes.empty())
-                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
-    
-    
-    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-};
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        auto sliceInputValue  = InputRef(0).ValueFor(fr);
-        auto sliceOutputValue =           ValueFor(fr); // row vector
-    }
-    
-    Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta) {
-  Status s;
-  meta->file_size = 0;
-  iter->SeekToFirst();
-    }
-    
-      std::vector<std::string> filenames;
-  env_->GetChildren(dbname_, &filenames);  // Ignoring errors on purpose
-  uint64_t number;
-  FileType type;
-  for (size_t i = 0; i < filenames.size(); i++) {
-    if (ParseFileName(filenames[i], &number, &type)) {
-      bool keep = true;
-      switch (type) {
-        case kLogFile:
-          keep = ((number >= versions_->LogNumber()) ||
-                  (number == versions_->PrevLogNumber()));
-          break;
-        case kDescriptorFile:
-          // Keep my manifest file, and any newer incarnations'
-          // (in case there is a race that allows other incarnations)
-          keep = (number >= versions_->ManifestFileNumber());
-          break;
-        case kTableFile:
-          keep = (live.find(number) != live.end());
-          break;
-        case kTempFile:
-          // Any temp files that are currently being written to must
-          // be recorded in pending_outputs_, which is inserted into 'live'
-          keep = (live.find(number) != live.end());
-          break;
-        case kCurrentFile:
-        case kDBLockFile:
-        case kInfoLogFile:
-          keep = true;
-          break;
+    template <class charT, class traits>
+void basic_regex_parser<charT, traits>::parse_set_literal(basic_char_set<charT, traits>& char_set)
+{
+   digraph<charT> start_range(get_next_set_literal(char_set));
+   if(m_end == m_position)
+   {
+      fail(regex_constants::error_brack, m_position - m_base);
+      return;
+   }
+   if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_dash)
+   {
+      // we have a range:
+      if(m_end == ++m_position)
+      {
+         fail(regex_constants::error_brack, m_position - m_base);
+         return;
       }
-    }
-    }
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-
-    
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
-    
-    namespace leveldb {
-    }
-    
-    
-    {REGISTER_INTERNAL(KafkaTopicsConfigParserPlugin,
-                  'config_parser',
-                  'kafka_topics');
-} // namespace osquery
-
-    
-    namespace osquery {
-    }
-    
-      // Generate content to update/add to the config.
-  std::string content;
-  auto s = readFile(kTestDataPath + 'test_parse_items.conf', content);
-  EXPECT_TRUE(s.ok());
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
-    
-    #include <osquery/config.h>
-#include <osquery/database.h>
-#include <osquery/registry.h>
-    
-      auto obj = data_.getObject();
-  data_.copyFrom(cv->second.doc(), obj);
-  data_.add('views', obj);
-    
-    TEST_F(PacksTests, test_should_pack_execute) {
-  Pack kpack('unrestricted_pack', getUnrestrictedPack().doc());
-  EXPECT_TRUE(kpack.shouldPackExecute());
-    }
-    
-    class TestTablePlugin : public TablePlugin {
- public:
-  void testSetCache(size_t step, size_t interval) {
-    QueryData r;
-    QueryContext ctx;
-    ctx.useCache(true);
-    setCache(step, interval, ctx, r);
-  }
-    }
-    
-    void Initializer::platformTeardown() {
-  // Before we shutdown, we must insure to free the COM libs in windows
-  ::CoUninitialize();
+      if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_set)
+      {
+         digraph<charT> end_range = get_next_set_literal(char_set);
+         char_set.add_range(start_range, end_range);
+         if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_dash)
+         {
+            if(m_end == ++m_position)
+            {
+               fail(regex_constants::error_brack, m_position - m_base);
+               return;
+            }
+            if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_set)
+            {
+               // trailing - :
+               --m_position;
+               return;
+            }
+            fail(regex_constants::error_range, m_position - m_base);
+            return;
+         }
+         return;
+      }
+      --m_position;
+   }
+   char_set.add_single(start_range);
 }
     
-      // inotify will not monitor recursively, new directories need watches.
-  if (sc->recursive && ec->action == 'CREATED' && isDirectory(ec->path)) {
-    const_cast<INotifyEventPublisher*>(this)->addMonitor(
-        ec->path + '/',
-        const_cast<INotifySubscriptionContextRef&>(sc),
-        sc->mask,
-        true);
-  }
     
-    /**
- * @brief Event details for INotifyEventPublisher events.
+    {#ifdef __cplusplus
+} /* namespace regex_constants */
+/*
+ * import names into boost for backwards compatiblity:
  */
-struct INotifyEventContext : public EventContext {
-  /// The inotify_event structure if the EventSubscriber want to interact.
-  std::unique_ptr<struct inotify_event> event{nullptr};
-    }
+using regex_constants::match_flag_type;
+using regex_constants::match_default;
+using regex_constants::match_not_bol;
+using regex_constants::match_not_eol;
+using regex_constants::match_not_bob;
+using regex_constants::match_not_eob;
+using regex_constants::match_not_bow;
+using regex_constants::match_not_eow;
+using regex_constants::match_not_dot_newline;
+using regex_constants::match_not_dot_null;
+using regex_constants::match_prev_avail;
+/* using regex_constants::match_init; */
+using regex_constants::match_any;
+using regex_constants::match_not_null;
+using regex_constants::match_continuous;
+using regex_constants::match_partial;
+/*using regex_constants::match_stop; */
+using regex_constants::match_all;
+using regex_constants::match_perl;
+using regex_constants::match_posix;
+using regex_constants::match_nosubs;
+using regex_constants::match_extra;
+using regex_constants::match_single_line;
+/*using regex_constants::match_max; */
+using regex_constants::format_all;
+using regex_constants::format_sed;
+using regex_constants::format_perl;
+using regex_constants::format_default;
+using regex_constants::format_no_copy;
+using regex_constants::format_first_only;
+/*using regex_constants::format_is_if;*/
     
-    
-    {    smallest_ever_ = smallest_subscription;
-  }
-    
-    namespace aria2 {
-    }
-    
-    #endif // D_DHT_TASK_H
-
-    
-    namespace aria2 {
-    }
-    
-    void DHTTokenUpdateCommand::preProcess()
+    template <class BidiIterator, class Allocator, class traits>
+void perl_matcher<BidiIterator, Allocator, traits>::push_recursion_pop()
 {
-  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
-      getDownloadEngine()->isHaltRequested()) {
-    enableExit();
-  }
+   saved_state* pmp = static_cast<saved_state*>(m_backup_state);
+   --pmp;
+   if(pmp < m_stack_base)
+   {
+      extend_stack();
+      pmp = static_cast<saved_state*>(m_backup_state);
+      --pmp;
+   }
+   (void) new (pmp)saved_state(15);
+   m_backup_state = pmp;
 }
     
-    void DNSCache::put(const std::string& hostname, const std::string& ipaddr,
-                   uint16_t port)
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.lower_bound(target);
-  if (i != entries_.end() && *(*i) == *target) {
-    (*i)->add(ipaddr);
-  }
-  else {
-    target->add(ipaddr);
-    entries_.insert(i, target);
-  }
-}
+    #ifndef BOOST_REGEX_TRAITS_HPP_INCLUDED
+#define BOOST_REGEX_TRAITS_HPP_INCLUDED
     
-      void put(const std::string& hostname, const std::string& ipaddr,
-           uint16_t port);
+    namespace atomics {
+    }
