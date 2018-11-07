@@ -1,107 +1,54 @@
 
         
-                # config[kramdown][syntax_higlighter] >
-        #   config[kramdown][enable_coderay] >
-        #   config[highlighter]
-        # Where `enable_coderay` is now deprecated because Kramdown
-        # supports Rouge now too.
-        def highlighter
-          return @highlighter if @highlighter
+            # Initializes a MachineIndex at the given file location.
+    #
+    # @param [Pathname] data_dir Path to the directory where data for the
+    #   index can be stored. This folder should exist and must be writable.
+    def initialize(data_dir)
+      @data_dir   = data_dir
+      @index_file = data_dir.join('index')
+      @lock       = Monitor.new
+      @machines  = {}
+      @machine_locks = {}
     
-    require 'sass/engine'
-require 'sass/plugin' if defined?(Merb::Plugins)
-require 'sass/railtie'
-require 'sass/features'
-
-    
-        # Transform
-    #
-    #     foo
-    #       bar
-    #         color: blue
-    #       baz
-    #         color: blue
-    #
-    # into
-    #
-    #     foo
-    #       bar, baz
-    #         color: blue
-    #
-    # @param root [Tree::Node] The parent node
-    def fold_commas(root)
-      prev_rule = nil
-      root.children.map! do |child|
-        unless child.is_a?(Tree::RuleNode)
-          fold_commas(child) if child.is_a?(Tree::DirectiveNode)
-          next child
+              result
         end
     
-        attr_writer :caller
-    attr_writer :content
-    attr_writer :selector
+    require 'log4r'
     
-        # @return [String] The error message
-    def to_s
-      @message
-    end
-    
-        def open_file(filename, flag = 'r')
-      return if filename.nil?
-      flag = 'wb' if @options[:unix_newlines] && flag == 'w'
-      file = File.open(filename, flag)
-      return file unless block_given?
-      yield file
-      file.close
-    end
-    
-        def process_file(input, output)
-      input_path, output_path = path_for(input), path_for(output)
-      if input_path
-        @options[:from] ||=
-          case input_path
-          when /\.scss$/; :scss
-          when /\.sass$/; :sass
-          when /\.less$/; raise 'sass-convert no longer supports LessCSS.'
-          when /\.css$/; :css
-          end
-      elsif @options[:in_place]
-        raise 'Error: the --in-place option requires a filename.'
-      end
-    
-          if @options[:update]
-        Sass::Plugin.update_stylesheets(files)
-        exit 1 if had_error
-        return
-      end
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+      def show
+    render json: collection_presenter,
+           serializer: ActivityPub::CollectionSerializer,
+           adapter: ActivityPub::Adapter,
+           content_type: 'application/activity+json',
+           skip_activities: true
   end
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
+        private
     
-          super
-    end
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
+end
+
     
-    module Jekyll
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
+    end
+  end
+    
+      # replace name version and date
+  replace_header(head, :name)
+  replace_header(head, :version)
+  replace_header(head, :date)
+  #comment this out if your rubyforge_project has a different name
+  replace_header(head, :rubyforge_project)
+    
+      class DuplicatePageError < Error
+    attr_accessor :dir
+    attr_accessor :existing_path
+    attr_accessor :attempted_path
