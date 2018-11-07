@@ -1,88 +1,215 @@
 
         
-              if @custom_emoji.update(resource_params)
-        log_action :update, @custom_emoji
-        flash[:notice] = I18n.t('admin.custom_emojis.updated_msg')
-      else
-        flash[:alert] =  I18n.t('admin.custom_emojis.update_failed_msg')
-      end
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+            def action_completed(action_name, status: nil, exception: nil)
+      #  https://github.com/fastlane/fastlane/issues/11913
+      # if exception.nil? || exception.fastlane_should_report_metrics?
+      #   action_completion_context = FastlaneCore::ActionCompletionContext.context_for_action_name(action_name, args: ARGV, status: status)
+      #   FastlaneCore.session.action_completed(completion_context: action_completion_context)
+      # end
     end
     
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --company-id \'COMPANY ID\' --exit-threshold \'2\' input/dir')
+      end
+    
+            keychain_path = File.expand_path(File.join('~', 'Library', 'Keychains', keychain))
+        expected_command = 'security import #{cert_name} -k '#{keychain_path}' -P #{password} -T /usr/bin/codesign -T /usr/bin/security'
+    
+                expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                swiftlint(ignore_exit_status: false)
+              end').runner.execute(:test)
+            end.to raise_error(/SwiftLint finished with errors/)
+          end
+        end
+      end
+    
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
+    else
+      return str
+    end
   end
+  module_function :shellescape
+end
+
     
-    namespace :bower do
+            describe '#values' do
+          it 'returns the user values' do
+            values = @config.values
+            expect(values[:output]).to eq('..')
+            expect(values[:cert_name]).to eq('asdf')
+            expect(values[:wait_processing_interval]).to eq(10)
+          end
     
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
+    shelljoin_testcases = [
+  {
+    'it' => '(#1) on array with entry with space',
+    'it_result' => {
+      'windows' => 'wraps this entry in double quotes',
+      'other'   => 'escapes the space in this entry'
+    },
+    'input' => ['a', 'b c', 'd'],
+    'expect' => {
+      'windows' => 'a 'b c' d',
+      'other'   => 'a b\ c d'
+    }
+  },
+  {
+    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
+    'it_result' => {
+      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
+      'other'   => 'escapes the double quotes and escapes the space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a '''b'' c' d',
+      'other'   => 'a \'b\'\ c d'
+    }
+  },
+  {
+    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
+    'it_result' => {
+      'windows' => 'no changes',
+      'other'   => 'escapes the single quotes and space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a \''b' c\' d',
+      'other'   => 'a \\'b\\'\\ c d'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
+  {
+    'it' => '(#4) on array with entry that is `$$`',
+    'it_result' => {
+      'windows' => 'the result includes the process id',
+      'other'   => 'the result includes the process id'
+    },
+    'input' => ['ps', '-p', $$],
+    'expect' => {
+      'windows' => 'ps -p #{$$}',
+      'other'   => 'ps -p #{$$}'
+    }
+  }
+]
+    
+    require 'rex/proto/ipmi/utils'
+    
+                encoded
+          end
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+            self.arguments = [
+          CLAide::Argument.new('NAME', false),
+        ]
+    
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
   end
 end
 
     
-        def read_files(path, files)
-      full_path = 'https://raw.githubusercontent.com/#@repo/#@branch_sha/#{path}'
-      contents = read_cached_files(path, files)
-      log_http_get_files contents.keys, full_path, true if contents.keys
-      files -= contents.keys
-      log_http_get_files files, full_path, false
-      files.map do |name|
-        Thread.start {
-          contents[name] = open('#{full_path}/#{name}').read
-          Thread.exclusive { write_cached_files path, name => contents[name] }
-        }
-      end.each(&:join)
-      contents
-    end
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-        # Flattens a single rule.
-    #
-    # @param rule [Tree::RuleNode] The candidate for flattening
-    # @see #flatten_rules
-    def flatten_rule(rule)
-      while rule.children.size == 1 && rule.children.first.is_a?(Tree::RuleNode)
-        child = rule.children.first
-    
-        # Modify the top Sass backtrace entries
-    # (that is, the most deeply nested ones)
-    # to have the given attributes.
-    #
-    # Specifically, this goes through the backtrace entries
-    # from most deeply nested to least,
-    # setting the given attributes for each entry.
-    # If an entry already has one of the given attributes set,
-    # the pre-existing attribute takes precedence
-    # and is not used for less deeply-nested entries
-    # (even if they don't have that attribute set).
-    #
-    # @param attrs [{Symbol => Object}] The information to add to the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def modify_backtrace(attrs)
-      attrs = attrs.reject {|_k, v| v.nil?}
-      # Move backwards through the backtrace
-      (0...sass_backtrace.size).to_a.reverse_each do |i|
-        entry = sass_backtrace[i]
-        sass_backtrace[i] = attrs.merge(entry)
-        attrs.reject! {|k, _v| entry.include?(k)}
-        break if attrs.empty?
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
+        end
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
       end
     end
     
-          protected
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+      end
+    end
+  end
+end
+
+    
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
+    
+        def render(context)
+      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
+        gist, file = parts[1].strip, parts[2].strip
+      else
+        gist, file = @text.strip, ''
+      end
+      if gist.empty?
+        ''
+      else
+        script_url = script_url_for gist, file
+        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
+        html_output_for script_url, code
+      end
+    end
+    
+    module Jekyll
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
