@@ -1,259 +1,366 @@
 
         
-        int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
-  }
-  return 0;
-}
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
+        #endif // BITCOIN_QT_OPENURIDIALOG_H
 
     
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
+    private:
+    Ui::SignVerifyMessageDialog *ui;
+    WalletModel *model;
+    const PlatformStyle *platformStyle;
     
-    #include 'caffe/common.hpp'
+    #ifndef BITCOIN_RPC_MINING_H
+#define BITCOIN_RPC_MINING_H
     
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    namespace caffe {
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
     }
     
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+    static void secp256k1_ge_set_gej_var(secp256k1_ge *r, secp256k1_gej *a) {
+    secp256k1_fe z2, z3;
+    r->infinity = a->infinity;
+    if (a->infinity) {
+        return;
+    }
+    secp256k1_fe_inv_var(&a->z, &a->z);
+    secp256k1_fe_sqr(&z2, &a->z);
+    secp256k1_fe_mul(&z3, &a->z, &z2);
+    secp256k1_fe_mul(&a->x, &a->x, &z2);
+    secp256k1_fe_mul(&a->y, &a->y, &z3);
+    secp256k1_fe_set_int(&a->z, 1);
+    r->x = a->x;
+    r->y = a->y;
+}
+    
+    
+    {        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, y, sizeof(y));
+        secp256k1_sha256_write(&sha, x, sizeof(x));
+        secp256k1_sha256_finalize(&sha, result);
+        ret = 1;
+    }
+    
+    
+    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
+    ret &= !overflow;
+    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
+    ret &= !overflow;
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
+    } else {
+        memset(sig, 0, sizeof(*sig));
+    }
+    return ret;
+}
+    
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+    }
+}
+    
+    BOOST_FIXTURE_TEST_SUITE(blockchain_tests, BasicTestingSetup)
+    
+        // Escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\ Baz\'', {
+            {'Foo', 'Bar Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\Baz\'', {
+            {'Foo', 'BarBaz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\@Baz\'', {
+            {'Foo', 'Bar@Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
+            {'Foo', 'Bar\'Baz'},
+            {'Spam', '\'Eggs\''},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\\Baz\'', {
+            {'Foo', 'Bar\\Baz'},
+        });
+    
+        BOOST_CHECK_EQUAL(obj['age'].getValStr(), '100');
+    BOOST_CHECK_EQUAL(obj['first'].getValStr(), 'John');
+    BOOST_CHECK_EQUAL(obj['last'].getValStr(), 'Smith');
+    BOOST_CHECK_EQUAL(obj['distance'].getValStr(), '25');
+    BOOST_CHECK_EQUAL(obj['time'].getValStr(), '3600');
+    BOOST_CHECK_EQUAL(obj['calories'].getValStr(), '12');
+    BOOST_CHECK_EQUAL(obj['temperature'].getValStr(), '90.012');
+    BOOST_CHECK_EQUAL(obj['moon'].getValStr(), '1');
+    BOOST_CHECK_EQUAL(obj['spoon'].getValStr(), '');
+    BOOST_CHECK_EQUAL(obj['cat1'].getValStr(), '9000');
+    BOOST_CHECK_EQUAL(obj['cat2'].getValStr(), '12345');
+    
+    #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
 #endif
     
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    // This is initialized with a default, stub implementation.
+// If python-google.protobuf.cc is loaded, the function pointer is overridden
+// with a full implementation.
+const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
+    GetCProtoInsidePyProtoStub;
+Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
+    MutableCProtoInsidePyProtoStub;
+    
+    TEST(MovableMessageTest, SelfMoveAssignment) {
+  // The `self` reference is necessary to defeat -Wself-move.
+  protobuf_unittest::TestAllTypes message, &self = message;
+  TestUtil::SetAllFields(&message);
+  message = std::move(self);
+  TestUtil::ExpectAllFieldsSet(message);
+}
+    
+    void ImmutableExtensionLiteGenerator::Generate(io::Printer* printer) {
+  std::map<string, string> vars;
+  const bool kUseImmutableNames = true;
+  InitTemplateVars(descriptor_, scope_, kUseImmutableNames, name_resolver_,
+                   &vars);
+  printer->Print(vars,
+      'public static final int $constant_name$ = $number$;\n');
     }
     
     
-    {}  // namespace caffe
+    {
+    {
+    {
+    {
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    void EnumFieldGenerator::DetermineForwardDeclarations(
+    std::set<string>* fwd_decls) const {
+  SingleFieldGenerator::DetermineForwardDeclarations(fwd_decls);
+  // If it is an enum defined in a different file, then we'll need a forward
+  // declaration for it.  When it is in our file, all the enums are output
+  // before the message, so it will be declared before it is needed.
+  if (descriptor_->file() != descriptor_->enum_type()->file()) {
+    // Enum name is already in 'storage_type'.
+    const string& name = variable('storage_type');
+    fwd_decls->insert('GPB_ENUM_FWD_DECLARE(' + name + ')');
+  }
+}
+    
+      vars['default_name'] = GPBGenericValueFieldName(descriptor_);
+  if (descriptor_->is_repeated()) {
+    vars['default'] = 'nil';
+  } else {
+    vars['default'] = DefaultValue(descriptor_);
+  }
+  string type = GetCapitalizedType(descriptor_);
+  vars['extension_type'] = string('GPBDataType') + type;
+    
+      static CreatorRegistry& Registry() {
+    static CreatorRegistry* g_registry_ = new CreatorRegistry();
+    return *g_registry_;
+  }
     
      protected:
-  /// @copydoc BNLLLayer
+  /// @copydoc AbsValLayer
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      int label_axis_, outer_num_, inner_num_;
+    
+    #include <vector>
+    
+    #endif  // CAFFE_CONV_LAYER_HPP_
+
+    
+    
+    {}  // namespace caffe
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    void Label::branchFar(Assembler& a,
-                  BranchConditions bc,
-                  LinkReg lr,
-                  ImmType immt,
-                  bool immMayChange) {
-  // Marking current address for patchAbsolute
-  addJump(&a);
+  virtual ~CuDNNLCNLayer();
     }
     
-        D_form_t d_formater {{
-                          static_cast<uint32_t>(imm),
-                          static_cast<uint32_t>(ra),
-                          static_cast<uint32_t>(rt),
-                          op
-                         }};
-    
-    #include 'hphp/runtime/base/apc-local-array.h'
-#include 'hphp/runtime/base/mixed-array-defs.h'
-#include 'hphp/runtime/base/memory-manager.h'
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
+    namespace tesseract {
+double DotProductSSE(const double* u, const double* v, int n) {
+  fprintf(stderr, 'DotProductSSE can't be used on Android\n');
+  abort();
 }
-    
-      bool isRecoverable() const { return m_recoverable; }
-    
-    namespace HPHP { namespace FileUtil {
-    }
-    }
-    
-    #include 'hphp/runtime/base/type-string.h'
-    
-    TEST(ExecutorTest, KeepAliveConvert) {
-  KeepAliveTestExecutor exec;
-    }
-    
-    #include <folly/GLog.h>
-    
-    static uint32_t manyArgTypesTestFunc() {
-  uint32_t a = folly::Random::rand32();
-  uint32_t b = folly::Random::rand32();
-  bool bool_ = (a % 2) == (b % 2);
-  char char_ = a & 255;
-  short short_ = b & 32767;
-  long long_ = a;
-  float float_ = float(a) / float(b);
-  double double_ = double(a) / double(b);
-  FOLLY_SDT(
-      folly,
-      test_static_tracepoint_many_arg_types,
-      a,
-      b,
-      bool_,
-      char_,
-      short_,
-      long_,
-      float_,
-      double_);
-  FOLLY_SDT_WITH_SEMAPHORE(folly, test_semaphore_local, long_, short_);
-  return a + b;
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
+  fprintf(stderr, 'IntDotProductSSE can't be used on Android\n');
+  abort();
 }
+}  // namespace tesseract
     
-    /**
- * Debug string for an exception: include type and what(), if
- * defined.
- */
-inline fbstring exceptionStr(const std::exception& e) {
-#ifdef FOLLY_HAS_RTTI
-  fbstring rv(demangle(typeid(e)));
-  rv += ': ';
-#else
-  fbstring rv('Exception (no RTTI available): ');
-#endif
-  rv += e.what();
-  return rv;
-}
+    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
+#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
     
-    exception_wrapper exception_wrapper::from_exception_ptr(
-    std::exception_ptr const& ptr) noexcept {
-  if (!ptr) {
-    return exception_wrapper();
-  }
-  try {
-    std::rethrow_exception(ptr);
-  } catch (std::exception& e) {
-    return exception_wrapper(std::current_exception(), e);
-  } catch (...) {
-    return exception_wrapper(std::current_exception());
-  }
-}
-    
-    template <class String>
-String Uri::toString() const {
-  String str;
-  if (hasAuthority_) {
-    toAppend(scheme_, '://', &str);
-    if (!password_.empty()) {
-      toAppend(username_, ':', password_, '@', &str);
-    } else if (!username_.empty()) {
-      toAppend(username_, '@', &str);
-    }
-    toAppend(host_, &str);
-    if (port_ != 0) {
-      toAppend(':', port_, &str);
+    // Computes matrix.vector v = Wu.
+// u is of size W.dim2() - 1 and the output v is of size W.dim1().
+// u is imagined to have an extra element at the end with value 1, to
+// implement the bias, but it doesn't actually have it.
+void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                                    const GenericVector<double>& scales,
+                                    const int8_t* u, double* v) const {
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  if (partial_funcs_.empty()) {
+    // Base implementation.
+    for (int i = 0; i < num_out; ++i) {
+      const int8_t* wi = w[i];
+      int total = 0;
+      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
+      // Add in the bias and correct for integer values.
+      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
     }
   } else {
-    toAppend(scheme_, ':', &str);
+    const int8_t* w_data = shaped_w_.data();
+    const double* scales_data = &scales[0];
+    // Each call to a partial_func_ produces group_size outputs, except the
+    // last one, which can produce less.
+    int group_size = num_outputs_per_register_ * max_output_registers_;
+    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+    int rounded_num_out = RoundOutputs(num_out);
+    int output = 0;
+    for (auto fn : partial_funcs_) {
+      // The amount of w_data consumed by each call to fn.
+      int w_step = (rounded_num_in + 1) * group_size;
+      // Run with this group size, until it would produce too much output, then
+      // switch to a smaller size.
+      for (; output + group_size <= rounded_num_out; output += group_size) {
+        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
+        w_data += w_step;
+        scales_data += group_size;
+        v += group_size;
+      }
+      group_size /= 2;
+    }
   }
-  toAppend(path_, &str);
-  if (!query_.empty()) {
-    toAppend('?', query_, &str);
-  }
-  if (!fragment_.empty()) {
-    toAppend('#', fragment_, &str);
-  }
-  return str;
 }
     
-    #include <folly/io/Cursor.h>
-#include <folly/io/IOBuf.h>
-#include <folly/lang/Bits.h>
+    // Constructor.
+// Tests the architecture in a system-dependent way to detect AVX, SSE and
+// any other available SIMD equipment.
+// __GNUC__ is also defined by compilers that include GNU extensions such as
+// clang.
+SIMDDetect::SIMDDetect() {
+#if defined(X86_BUILD)
+#if defined(__GNUC__)
+  unsigned int eax, ebx, ecx, edx;
+  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
+    // Note that these tests all use hex because the older compilers don't have
+    // the newer flags.
+    sse_available_ = (ecx & 0x00080000) != 0;
+    avx_available_ = (ecx & 0x10000000) != 0;
+    if (avx_available_) {
+      // There is supposed to be a __get_cpuid_count function, but this is all
+      // there is in my cpuid.h. It is a macro for an asm statement and cannot
+      // be used inside an if.
+      __cpuid_count(7, 0, eax, ebx, ecx, edx);
+      avx2_available_ = (ebx & 0x00000020) != 0;
+      avx512F_available_ = (ebx & 0x00010000) != 0;
+      avx512BW_available_ = (ebx & 0x40000000) != 0;
+    }
+  }
+#elif defined(_WIN32)
+  int cpuInfo[4];
+  __cpuid(cpuInfo, 0);
+  if (cpuInfo[0] >= 1) {
+    __cpuid(cpuInfo, 1);
+    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
+    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
+  }
+#else
+#error 'I don't know how to test for SIMD with this compiler'
+#endif
+#endif  // X86_BUILD
+}
+
+    
+      // Iterate over the blobs inside to_block, and set the blobs that we want to
+  // process to BSTT_NONE. (By default, they should be BSTT_SKIP). The function
+  // returns 0 upon success.
+  int LabelSpecialText(TO_BLOCK* to_block);
+    
+    int orientation_and_script_detection(STRING& filename,
+                                     OSResults*,
+                                     tesseract::Tesseract*);
+    
+      // go through the list again and this time create the menu structure.
+  vc_it.move_to_first();
+  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
+    ParamContent* vc = vc_it.data();
+    STRING tag;
+    STRING tag2;
+    STRING tag3;
+    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
+    }
+    
+    
+    {  // Create temporary file
+  auto fd = mkstemp(&tmp[0]);
+  if (fd == -1) {
+    throw std::system_error(errno, std::system_category());
+  }
+  close(fd);
+  return std::string(tmp.data(), tmp.size());
+}
+    
+    ```
