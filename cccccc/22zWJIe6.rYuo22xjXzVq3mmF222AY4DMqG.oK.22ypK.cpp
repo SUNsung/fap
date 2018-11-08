@@ -1,183 +1,214 @@
 
         
-          friend class SubstitutionMap;
-    
-    using namespace swift::sys;
-using llvm::StringRef;
-    
-      bool isRecord() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
-  }
-  const clang::RecordDecl *getRecord() const {
-    assert(isRecord());
-    return Decl.get<const clang::RecordDecl *>();
-  }
-    
-    ClangDiagnosticConsumer::ClangDiagnosticConsumer(
-    ClangImporter::Implementation &impl,
-    clang::DiagnosticOptions &clangDiagOptions,
-    bool dumpToStderr)
-  : TextDiagnosticPrinter(llvm::errs(), &clangDiagOptions),
-    ImporterImpl(impl), DumpToStderr(dumpToStderr) {}
-    
-    /// The result of out inference system
-struct IAMResult {
-  // The name to import as
-  DeclName name = {};
-    }
-    
-    #endif  // CONTENT_NW_SRC_API_APP_APP_H_
-    
-    namespace base {
-class DictionaryValue;
-class ListValue;
-}
-    
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
         
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
+    {}  // namespace
+    
+      void PurchaseProduct(const std::string& product_id, mate::Arguments* args);
+    
+    v8::Local<v8::Value> Net::URLRequest(v8::Isolate* isolate) {
+  return URLRequest::GetConstructor(isolate)->GetFunction();
+}
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(Screen);
+};
+    
+      if (conformanceSig) {
+    for (auto &rawReq : conformanceSig->getRequirements()) {
+      if (auto req = rawReq.subst(conformanceToSyntheticTypeFn,
+                                  conformanceToSyntheticConformanceFn))
+        builder.addRequirement(*req, source, nullptr);
     }
-    }
+  }
+    
+      // Set the 'runtime' platform condition.
+  if (EnableObjCInterop)
+    addPlatformConditionValue(PlatformConditionKind::Runtime, '_ObjC');
+  else
+    addPlatformConditionValue(PlatformConditionKind::Runtime, '_Native');
     
     
     {
-} // namespace extensions
-
-    
-    // Common functions and classes from std that caffe often uses.
-using std::fstream;
-using std::ios;
-using std::isnan;
-using std::isinf;
-using std::iterator;
-using std::make_pair;
-using std::map;
-using std::ostringstream;
-using std::pair;
-using std::set;
-using std::string;
-using std::stringstream;
-using std::vector;
-    
-    /// @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$.
-template <typename Dtype>
-class UniformFiller : public Filler<Dtype> {
- public:
-  explicit UniformFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), Dtype(this->filler_param_.min()),
-        Dtype(this->filler_param_.max()), blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
+    {
+    {      if (node->Right) {
+        print(node->Right, ChildKind::Right);
+      }
+    }
   }
 };
     
-      bool is_started() const;
-    
-    #endif  // CAFFE_ABSVAL_LAYER_HPP_
-
-    
-    #include <vector>
-    
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
- public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
+    // WIN32 doesn't natively support <uuid/uuid.h>. Instead, we use Win32 APIs.
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <objbase.h>
+#include <string>
+#else
+#include <uuid/uuid.h>
 #endif
     
-    #include 'constraint_bullet.h'
-    
-    class RIDBullet : public RID_Data {
-	RID self;
-	BulletPhysicsServer *physicsServer;
+    bool ParseBoolFlag(const char* str, const char* flag, bool* value) {
+  // Gets the value of the flag as a string.
+  const char* const value_str = ParseFlagValue(str, flag, true);
     }
     
-    void unregister_dds_types() {
+      for (auto& c : result.counters) {
+    const std::size_t cNameLen = std::max(std::string::size_type(10),
+                                          c.first.length());
+    auto const& s = HumanReadableNumber(c.second.value, 1000);
+    if (output_options_ & OO_Tabular) {
+      if (c.second.flags & Counter::kIsRate) {
+        printer(Out, COLOR_DEFAULT, ' %*s/s', cNameLen - 2, s.c_str());
+      } else {
+        printer(Out, COLOR_DEFAULT, ' %*s', cNameLen, s.c_str());
+      }
+    } else {
+      const char* unit = (c.second.flags & Counter::kIsRate) ? '/s' : '';
+      printer(Out, COLOR_DEFAULT, ' %s=%s%s', c.first.c_str(), s.c_str(),
+              unit);
+    }
+  }
+    
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
     }
     
-    	if (id == 0) {
-		r_error.error = Variant::CallError::CALL_ERROR_INSTANCE_IS_NULL;
-		return Variant();
-	}
-	Object *obj = ObjectDB::get_instance(id);
     
+    {void JSONReporter::Finalize() {
+  // Close the list of benchmarks and the top level object.
+  GetOutputStream() << '\n  ]\n}\n';
+}
     
-    {	ZipArchive *arch = ZipArchive::get_singleton();
-	ERR_FAIL_COND(!arch);
-	arch->close_handle(zfile);
-	zfile = NULL;
-};
+    #endif
+
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
+    }
+    
+        int32_t count = 0;
+    int32_t start_id = 0;
+    int32_t end_id = 0;
+    int32_t id = 0;
+    if (param->is_first_agent) {
+      start_id = 1;
+      end_id = 128;
+    } else {
+      start_id = 129;
+      end_id = start_id + 127;
+    }
+    id = start_id;
+    int32_t send_id = id;
+    AINFO << 'port:' << param->conf.ShortDebugString()
+          << ', start_id:' << start_id << ', end_id:' << end_id;
+    
+    class HermesCanClient : public CanClient {
+ public:
+  /**
+   * @brief Initialize the BCAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   */
+  // explicit HermesCanClient(const CANCardParameter &parameter);
+    }
+    
+    #include 'modules/drivers/canbus/can_comm/message_manager.h'
+    
+    /**
+ * @namespace apollo::drivers::canbus
+ * @brief apollo::drivers::canbus
+ */
+namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+    // System gflags
+DECLARE_string(node_name);
+DECLARE_string(canbus_driver_name);
