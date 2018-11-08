@@ -1,53 +1,52 @@
 
         
-            it 'ignores SHELL env var and always uses `sh`' do
-      ENV['SHELL'] = '/bin/fakeshell'
-      lambda { @object.system('echo $0') }.should output_to_fd('sh\n')
+            it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
+      open_dry_run_modal(agent)
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
     end
-  end
     
-      it 'sets the tainted bit' do
-    o = Object.new
-    o.taint
-    o.tainted?.should == true
-  end
-    
-      it 'transfers control to the innermost catch block waiting for the same sympol' do
-    one = two = three = 0
-    catch :duplicate do
-      catch :duplicate do
-        catch :duplicate do
-          one = 1
-          throw :duplicate
-        end
-        two = 2
-        throw :duplicate
+          it 'loads all workers' do
+        workers = @agent_runner.send(:load_workers)
+        expect(workers).to be_a(Hash)
+        expect(workers.keys).to eq(['HuginnScheduler', 'DelayedJobWorker'])
       end
-      three = 3
-      throw :duplicate
+    
+        it 'requires a valid log level' do
+      @log.level = nil
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:level)
+    
+      context 'when arguments to a method' do
+    let(:prefix) { 'bar(' }
+    let(:suffix) { ')' }
+    let(:source) { construct(false, true) }
+    
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
+    
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def colon?
+        false
+      end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
     end
-    [one, two, three].should == [1, 2, 3]
   end
-    
-    script_binding = binding
-    
-        if GitHub.api_credentials_type == :none
-      puts <<~EOS
-        You can create a new personal access token:
-          #{GitHub::ALL_SCOPES_URL}
-        #{Utils::Shell.set_variable_in_profile('HOMEBREW_GITHUB_API_TOKEN', 'your_token_here')}
-    
-        it 'with universal' do
-      expect_offense(<<~RUBY)
-        class Foo < Formula
-          url 'https://example.com/foo-1.0.tgz'
-          option :universal
-          ^^^^^^^^^^^^^^^^^ macOS has been 64-bit only since 10.6 so universal options are deprecated.
-        end
-      RUBY
-    end
-    
-        def pos=(i)
-      @s.pos = str_to_byte_pos i
-      i
-    end
+end
