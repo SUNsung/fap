@@ -1,1108 +1,413 @@
 
         
-        StringRef swift::prettyPlatformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return PrettyName;
-#include 'swift/AST/PlatformKinds.def'
-  }
-  llvm_unreachable('bad PlatformKind');
-}
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
     
-    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
-  }
-}
-
+     protected:
+  // Function to compute part of a matrix.vector multiplication. The weights
+  // are in a very specific order (see above) in w, which is multiplied by
+  // u of length num_in, to produce output v after scaling the integer results
+  // by the corresponding member of scales.
+  // The amount of w and scales consumed is fixed and not available to the
+  // caller. The number of outputs written to v will be at most num_out.
+  typedef void (*PartialFunc)(const int8_t* w, const double* scales,
+                              const int8_t* u, int num_in, int num_out,
+                              double* v);
     
-    namespace swift {
-    }
+    #ifndef DOCQUAL_H
+#define DOCQUAL_H
     
-    void CacheImpl::destroy() {
-  cache_destroy(static_cast<cache_t*>(Impl));
-}
-
+      // Search the nearest neighbor of part in one vertical direction as defined in
+  // search_bottom. It returns the neighbor found that major x overlap with it,
+  // or nullptr when not found.
+  ColPartition* SearchNNVertical(const bool search_bottom,
+                                 const ColPartition* part);
     
-    VERB(abbreviate)
-VERB(accept)
-VERB(activate)
-VERB(add)
-VERB(adjust)
-VERB(admire)
-VERB(admit)
-VERB(advise)
-VERB(afford)
-VERB(agree)
-VERB(alert)
-VERB(allow)
-VERB(alter)
-VERB(amuse)
-VERB(analyse)
-VERB(analyze)
-VERB(animate)
-VERB(announce)
-VERB(annoy)
-VERB(answer)
-VERB(apologise)
-VERB(appear)
-VERB(append)
-VERB(applaud)
-VERB(apply)
-VERB(apportion)
-VERB(appreciate)
-VERB(approve)
-VERB(argue)
-VERB(arrange)
-VERB(arrest)
-VERB(arrive)
-VERB(ask)
-VERB(assign)
-VERB(attach)
-VERB(attack)
-VERB(attempt)
-VERB(attend)
-VERB(attract)
-VERB(avoid)
-VERB(awake)
-VERB(back)
-VERB(bake)
-VERB(balance)
-VERB(ban)
-VERB(bang)
-VERB(bare)
-VERB(bat)
-VERB(bathe)
-VERB(battle)
-VERB(be)
-VERB(beat)
-VERB(become)
-VERB(beg)
-VERB(begin)
-VERB(behave)
-VERB(belong)
-VERB(bend)
-VERB(bet)
-VERB(bid)
-VERB(bite)
-VERB(bleach)
-VERB(bless)
-VERB(blind)
-VERB(blink)
-VERB(blot)
-VERB(blow)
-VERB(blush)
-VERB(boast)
-VERB(boil)
-VERB(bolt)
-VERB(bomb)
-VERB(book)
-VERB(bore)
-VERB(borrow)
-VERB(bounce)
-VERB(bow)
-VERB(box)
-VERB(brake)
-VERB(branch)
-VERB(break)
-VERB(breathe)
-VERB(bring)
-VERB(broadcast)
-VERB(bruise)
-VERB(brush)
-VERB(bubble)
-VERB(build)
-VERB(bump)
-VERB(burn)
-VERB(bury)
-VERB(buy)
-VERB(buzz)
-VERB(calculate)
-VERB(call)
-VERB(camp)
-VERB(cancel)
-VERB(capture)
-VERB(care)
-VERB(carry)
-VERB(carve)
-VERB(cast)
-VERB(catch)
-VERB(cause)
-VERB(center)
-VERB(challenge)
-VERB(change)
-VERB(charge)
-VERB(chase)
-VERB(cheat)
-VERB(check)
-VERB(cheer)
-VERB(chew)
-VERB(choke)
-VERB(choose)
-VERB(chop)
-VERB(claim)
-VERB(clap)
-VERB(clean)
-VERB(clear)
-VERB(click)
-VERB(close)
-VERB(coach)
-VERB(coil)
-VERB(collect)
-VERB(collapse)
-VERB(colour)
-VERB(comb)
-VERB(come)
-VERB(command)
-VERB(commit)
-VERB(communicate)
-VERB(compare)
-VERB(compete)
-VERB(complain)
-VERB(complete)
-VERB(concentrate)
-VERB(concern)
-VERB(confess)
-VERB(confuse)
-VERB(connect)
-VERB(consider)
-VERB(consist)
-VERB(contain)
-VERB(contains)
-VERB(continue)
-VERB(convert)
-VERB(copy)
-VERB(correct)
-VERB(cough)
-VERB(cost)
-VERB(count)
-VERB(cover)
-VERB(crack)
-VERB(crash)
-VERB(crawl)
-VERB(cross)
-VERB(crush)
-VERB(cry)
-VERB(cure)
-VERB(curl)
-VERB(curve)
-VERB(customize)
-VERB(cut)
-VERB(cycle)
-VERB(dam)
-VERB(damage)
-VERB(dance)
-VERB(dare)
-VERB(decay)
-VERB(deceive)
-VERB(decide)
-VERB(decode)
-VERB(decorate)
-VERB(defer)
-VERB(define)
-VERB(delay)
-VERB(delete)
-VERB(delight)
-VERB(deliver)
-VERB(depend)
-VERB(describe)
-VERB(deselect)
-VERB(desert)
-VERB(deserve)
-VERB(destroy)
-VERB(detach)
-VERB(detect)
-VERB(develop)
-VERB(dig)
-VERB(dim)
-VERB(disagree)
-VERB(disappear)
-VERB(disapprove)
-VERB(disarm)
-VERB(discover)
-VERB(dislike)
-VERB(dismiss)
-VERB(display)
-VERB(divide)
-VERB(do)
-VERB(double)
-VERB(doubt)
-VERB(drag)
-VERB(drain)
-VERB(draw)
-VERB(dream)
-VERB(dress)
-VERB(drink)
-VERB(drip)
-VERB(drive)
-VERB(drop)
-VERB(drown)
-VERB(drum)
-VERB(dry)
-VERB(duplicate)
-VERB(dust)
-VERB(earn)
-VERB(eat)
-VERB(echo)
-VERB(edit)
-VERB(educate)
-VERB(embarrass)
-VERB(employ)
-VERB(empty)
-VERB(enable)
-VERB(encode)
-VERB(encourage)
-VERB(end)
-VERB(enjoy)
-VERB(enter)
-VERB(entertain)
-VERB(enumerate)
-VERB(enqueue)
-VERB(escape)
-VERB(examine)
-VERB(excite)
-VERB(excuse)
-VERB(execute)
-VERB(exercise)
-VERB(exist)
-VERB(expand)
-VERB(expect)
-VERB(explain)
-VERB(explode)
-VERB(export)
-VERB(extend)
-VERB(face)
-VERB(fade)
-VERB(fail)
-VERB(fancy)
-VERB(fasten)
-VERB(fax)
-VERB(fear)
-VERB(feel)
-VERB(fence)
-VERB(fetch)
-VERB(fight)
-VERB(fill)
-VERB(film)
-VERB(find)
-VERB(finish)
-VERB(fire)
-VERB(fit)
-VERB(fix)
-VERB(flap)
-VERB(flash)
-VERB(flatten)
-VERB(flip)
-VERB(float)
-VERB(flood)
-VERB(flow)
-VERB(flower)
-VERB(fly)
-VERB(focus)
-VERB(fold)
-VERB(follow)
-VERB(fool)
-VERB(force)
-VERB(forget)
-VERB(forgive)
-VERB(form)
-VERB(found)
-VERB(freeze)
-VERB(frighten)
-VERB(fry)
-VERB(gain)
-VERB(gather)
-VERB(gaze)
-VERB(generate)
-VERB(get)
-VERB(give)
-VERB(glow)
-VERB(glue)
-VERB(go)
-VERB(grab)
-VERB(grate)
-VERB(grease)
-VERB(greet)
-VERB(grin)
-VERB(grip)
-VERB(groan)
-VERB(grow)
-VERB(guarantee)
-VERB(guard)
-VERB(guess)
-VERB(guide)
-VERB(hammer)
-VERB(hand)
-VERB(handle)
-VERB(hang)
-VERB(happen)
-VERB(harass)
-VERB(harm)
-VERB(hate)
-VERB(haunt)
-VERB(head)
-VERB(heal)
-VERB(heap)
-VERB(hear)
-VERB(heat)
-VERB(help)
-VERB(hide)
-VERB(highlight)
-VERB(hit)
-VERB(hold)
-VERB(hook)
-VERB(hop)
-VERB(hope)
-VERB(hover)
-VERB(hug)
-VERB(hum)
-VERB(hunt)
-VERB(hurry)
-VERB(hurt)
-VERB(identify)
-VERB(ignore)
-VERB(imagine)
-VERB(import)
-VERB(impress)
-VERB(improve)
-VERB(include)
-VERB(increase)
-VERB(influence)
-VERB(inform)
-VERB(inject)
-VERB(injure)
-VERB(insert)
-VERB(instruct)
-VERB(intend)
-VERB(interest)
-VERB(interfere)
-VERB(interrupt)
-VERB(intersect)
-VERB(intersects)
-VERB(introduce)
-VERB(invent)
-VERB(invite)
-VERB(irritate)
-VERB(itch)
-VERB(jail)
-VERB(jam)
-VERB(jog)
-VERB(join)
-VERB(joke)
-VERB(judge)
-VERB(juggle)
-VERB(jump)
-VERB(keep)
-VERB(kick)
-VERB(kill)
-VERB(kiss)
-VERB(kneel)
-VERB(knit)
-VERB(knock)
-VERB(knot)
-VERB(know)
-VERB(label)
-VERB(land)
-VERB(last)
-VERB(laugh)
-VERB(launch)
-VERB(lay)
-VERB(lead)
-VERB(learn)
-VERB(leave)
-VERB(lend)
-VERB(let)
-VERB(level)
-VERB(license)
-VERB(lick)
-VERB(lie)
-VERB(lighten)
-VERB(like)
-VERB(listen)
-VERB(live)
-VERB(load)
-VERB(localize)
-VERB(lock)
-VERB(long)
-VERB(look)
-VERB(lose)
-VERB(love)
-VERB(maintain)
-VERB(make)
-VERB(man)
-VERB(manage)
-VERB(march)
-VERB(mark)
-VERB(marry)
-VERB(match)
-VERB(mate)
-VERB(matter)
-VERB(mean)
-VERB(measure)
-VERB(meddle)
-VERB(meet)
-VERB(melt)
-VERB(memorise)
-VERB(mend)
-VERB(merge)
-VERB(mess)
-VERB(milk)
-VERB(mine)
-VERB(miss)
-VERB(minus)
-VERB(mix)
-VERB(moan)
-VERB(moor)
-VERB(mourn)
-VERB(move)
-VERB(muddle)
-VERB(mug)
-VERB(multiply)
-VERB(murder)
-VERB(nail)
-VERB(nest)
-VERB(nod)
-VERB(normalize)
-VERB(note)
-VERB(notice)
-VERB(notify)
-VERB(number)
-VERB(obey)
-VERB(observe)
-VERB(obtain)
-VERB(occur)
-VERB(offend)
-VERB(offer)
-VERB(open)
-VERB(order)
-VERB(overflow)
-VERB(owe)
-VERB(own)
-VERB(pack)
-VERB(paddle)
-VERB(paint)
-VERB(park)
-VERB(part)
-VERB(pass)
-VERB(paste)
-VERB(pat)
-VERB(pause)
-VERB(pay)
-VERB(peck)
-VERB(pedal)
-VERB(peel)
-VERB(peep)
-VERB(perform)
-VERB(permit)
-VERB(phone)
-VERB(pick)
-VERB(pinch)
-VERB(pine)
-VERB(place)
-VERB(plan)
-VERB(plant)
-VERB(play)
-VERB(please)
-VERB(plug)
-VERB(poke)
-VERB(polish)
-VERB(pop)
-VERB(possess)
-VERB(post)
-VERB(pour)
-VERB(practice)
-VERB(practise)
-VERB(pray)
-VERB(preach)
-VERB(precede)
-VERB(prefer)
-VERB(preload)
-VERB(prepare)
-VERB(prepend)
-VERB(present)
-VERB(preserve)
-VERB(press)
-VERB(pretend)
-VERB(prevent)
-VERB(prick)
-VERB(print)
-VERB(produce)
-VERB(program)
-VERB(promise)
-VERB(protect)
-VERB(provide)
-VERB(pull)
-VERB(pump)
-VERB(punch)
-VERB(puncture)
-VERB(punish)
-VERB(push)
-VERB(put)
-VERB(question)
-VERB(queue)
-VERB(race)
-VERB(radiate)
-VERB(rain)
-VERB(raise)
-VERB(reach)
-VERB(read)
-VERB(realise)
-VERB(receive)
-VERB(recognise)
-VERB(record)
-VERB(reduce)
-VERB(reflect)
-VERB(refuse)
-VERB(register)
-VERB(regret)
-VERB(reign)
-VERB(reject)
-VERB(rejoice)
-VERB(relax)
-VERB(release)
-VERB(rely)
-VERB(remain)
-VERB(remember)
-VERB(remind)
-VERB(remove)
-VERB(repair)
-VERB(repeat)
-VERB(replace)
-VERB(reply)
-VERB(report)
-VERB(request)
-VERB(require)
-VERB(resize)
-VERB(rescue)
-VERB(resolve)
-VERB(retain)
-VERB(retire)
-VERB(return)
-VERB(reverse)
-VERB(review)
-VERB(rhyme)
-VERB(ride)
-VERB(ring)
-VERB(rinse)
-VERB(rise)
-VERB(risk)
-VERB(rob)
-VERB(rock)
-VERB(roll)
-VERB(rot)
-VERB(rub)
-VERB(ruin)
-VERB(rule)
-VERB(run)
-VERB(rush)
-VERB(sack)
-VERB(sail)
-VERB(satisfy)
-VERB(save)
-VERB(saw)
-VERB(say)
-VERB(scale)
-VERB(scare)
-VERB(scatter)
-VERB(scold)
-VERB(scorch)
-VERB(scrape)
-VERB(scratch)
-VERB(scream)
-VERB(screw)
-VERB(scribble)
-VERB(scroll)
-VERB(scrub)
-VERB(seal)
-VERB(search)
-VERB(see)
-VERB(select)
-VERB(sell)
-VERB(send)
-VERB(separate)
-VERB(serve)
-VERB(settle)
-VERB(shade)
-VERB(share)
-VERB(shave)
-VERB(shelter)
-VERB(shiver)
-VERB(shock)
-VERB(shop)
-VERB(show)
-VERB(shrug)
-VERB(shut)
-VERB(sigh)
-VERB(sign)
-VERB(signal)
-VERB(sin)
-VERB(sing)
-VERB(sip)
-VERB(sit)
-VERB(ski)
-VERB(skip)
-VERB(slap)
-VERB(sleep)
-VERB(slip)
-VERB(slow)
-VERB(smash)
-VERB(smell)
-VERB(smile)
-VERB(smoke)
-VERB(snatch)
-VERB(sneeze)
-VERB(sniff)
-VERB(snore)
-VERB(snow)
-VERB(soak)
-VERB(soothe)
-VERB(sound)
-VERB(spare)
-VERB(spark)
-VERB(sparkle)
-VERB(speak)
-VERB(spell)
-VERB(spend)
-VERB(spill)
-VERB(spoil)
-VERB(spot)
-VERB(spray)
-VERB(sprout)
-VERB(squash)
-VERB(squeak)
-VERB(squeal)
-VERB(squeeze)
-VERB(stain)
-VERB(stamp)
-VERB(stand)
-VERB(standardise)
-VERB(standardize)
-VERB(stare)
-VERB(start)
-VERB(stay)
-VERB(steer)
-VERB(step)
-VERB(stir)
-VERB(stitch)
-VERB(stop)
-VERB(store)
-VERB(strap)
-VERB(strengthen)
-VERB(stretch)
-VERB(strip)
-VERB(stroke)
-VERB(stuff)
-VERB(subtract)
-VERB(succeed)
-VERB(suck)
-VERB(suffer)
-VERB(suggest)
-VERB(suit)
-VERB(supply)
-VERB(support)
-VERB(suppose)
-VERB(suppress)
-VERB(surprise)
-VERB(surround)
-VERB(suspect)
-VERB(suspend)
-VERB(swim)
-VERB(switch)
-VERB(take)
-VERB(talk)
-VERB(tame)
-VERB(tap)
-VERB(taste)
-VERB(teach)
-VERB(tear)
-VERB(tease)
-VERB(telephone)
-VERB(tell)
-VERB(tempt)
-VERB(terrify)
-VERB(test)
-VERB(thank)
-VERB(thaw)
-VERB(think)
-VERB(throw)
-VERB(tick)
-VERB(tickle)
-VERB(tie)
-VERB(time)
-VERB(tip)
-VERB(tire)
-VERB(toggle)
-VERB(touch)
-VERB(tour)
-VERB(tow)
-VERB(trace)
-VERB(trade)
-VERB(train)
-VERB(translate)
-VERB(transform)
-VERB(transport)
-VERB(trap)
-VERB(travel)
-VERB(traverse)
-VERB(treat)
-VERB(tremble)
-VERB(trick)
-VERB(trip)
-VERB(trot)
-VERB(trouble)
-VERB(truncate)
-VERB(trust)
-VERB(try)
-VERB(tug)
-VERB(tumble)
-VERB(turn)
-VERB(twist)
-VERB(understand)
-VERB(undress)
-VERB(unfasten)
-VERB(union)
-VERB(unite)
-VERB(unload)
-VERB(unlock)
-VERB(unpack)
-VERB(untidy)
-VERB(up)
-VERB(update)
-VERB(use)
-VERB(validate)
-VERB(vanish)
-VERB(visit)
-VERB(wail)
-VERB(wait)
-VERB(wake)
-VERB(walk)
-VERB(wander)
-VERB(want)
-VERB(warm)
-VERB(warn)
-VERB(wash)
-VERB(waste)
-VERB(watch)
-VERB(water)
-VERB(wave)
-VERB(wear)
-VERB(weigh)
-VERB(welcome)
-VERB(whine)
-VERB(whip)
-VERB(whirl)
-VERB(whisper)
-VERB(whistle)
-VERB(win)
-VERB(wink)
-VERB(wipe)
-VERB(wish)
-VERB(wobble)
-VERB(wonder)
-VERB(work)
-VERB(worry)
-VERB(wrap)
-VERB(wreck)
-VERB(wrestle)
-VERB(wriggle)
-VERB(write)
-VERB(yawn)
-VERB(yell)
-VERB(zip)
-VERB(zoom)
-    
-      const llvm::UTF8 *SourceNext = SourceStart;
-  llvm::UTF32 C[2];
-  llvm::UTF32 *TargetStart = C;
-    
-    %# Ignore the following admonition; it applies to the resulting .cpp file only
-//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
-//// Do Not Edit Directly!
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Swift.org open source project
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
-//===----------------------------------------------------------------------===//
-    
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-    /*!
- * \brief Whether to customize global PRNG.
+    /**
+ * Returns an image of the current object at the given level in greyscale
+ * if available in the input. To guarantee a binary image use BinaryImage.
+ * NOTE that in order to give the best possible image, the bounds are
+ * expanded slightly over the binary connected component, by the supplied
+ * padding, so the top-left position of the returned image is returned
+ * in (left,top). These will most likely not match the coordinates
+ * returned by BoundingBox.
+ * If you do not supply an original image, you will get a binary one.
+ * Use pixDestroy to delete the image after use.
  */
-#ifndef XGBOOST_CUSTOMIZE_GLOBAL_PRNG
-#define XGBOOST_CUSTOMIZE_GLOBAL_PRNG XGBOOST_STRICT_R_MODE
-#endif
-    
-    
-    {    for (size_t i = 0; i < batch.size; ++i) {
-      offset_[i + 1] = (i + 1) * num_col_;
-      Row<IndexType> row = batch[i];
-      for (uint32_t j = 0; j < num_col_; ++j) {
-        dense_index_[i * num_col_ + j] = j;
-      }
-      for (unsigned k = 0; k < row.length; ++k) {
-        uint32_t index = row.get_index(k);
-        CHECK_LT(index, num_col_)
-            << 'Featuere index larger than num_col';
-        dense_value_[i * num_col_ + index]  = row.get_value(k);
-      }
+Pix* PageIterator::GetImage(PageIteratorLevel level, int padding,
+                            Pix* original_img,
+                            int* left, int* top) const {
+  int right, bottom;
+  if (!BoundingBox(level, left, top, &right, &bottom))
+    return nullptr;
+  if (original_img == nullptr)
+    return GetBinaryImage(level);
     }
-    out_ = batch;
-    out_.index = dmlc::BeginPtr(dense_index_);
-    out_.value = dmlc::BeginPtr(dense_value_);
-    out_.offset = dmlc::BeginPtr(offset_);
+    
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
+    
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
+    }
+    
+    
+    {  name += UNLV_EXT;              //add extension
+  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
+    return false;                //didn't read one
+  } else {
+    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
+                                 //make rect block
+      block = new BLOCK (name.string (), TRUE, 0, 0,
+                         (int16_t) x, (int16_t) (ysize - y - height),
+                         (int16_t) (x + width), (int16_t) (ysize - y));
+                                 //on end of list
+      block_it.add_to_end (block);
+    }
+    fclose(pdfp);
+  }
+  return true;
+}
+    
+    REGISTER_CPU_OPERATOR(
+    MergeSingleMapFeatureTensorsGradient,
+    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleMapFeatureTensorsGradient)
+    .SetDoc(
+        'Explode given multi-feature tensors with map features into '
+        'multiple single-feature tensor.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_presence', '.presence')
+    .Input(2, 'out_values_values_grad', '.values.values_grad')
+    .Output(0, 'in1_values_grad', '.values_grad');
+REGISTER_GRADIENT(
+    MergeSingleMapFeatureTensors,
+    GetMergeSingleMapFeatureTensorsGradient);
+    
+    
+    {  bool RunOnDevice() override {
+    for (Blob* output : OperatorBase::Outputs()) {
+      output->Reset();
+    }
     return true;
   }
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
-  }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf_ != EOF) {
-      switch (ch_buf_) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf_ = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf_ = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf_;
-          ch_buf_ = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 };
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin_(fin) {}
     
-        const size_t* begin = dmlc::BeginPtr(row_indices_);
-    const size_t* end = dmlc::BeginPtr(row_indices_) + row_indices_.size();
-    elem_of_each_node_.emplace_back(Elem(begin, end, 0));
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+    namespace {
+float sigmoid(const float x) {
+  if (x >= 0) {
+    return 1. / (1. + exp(-x));
+  } else {
+    const float exp_x = exp(x);
+    return exp_x / (1 + exp_x);
   }
-  // split rowset into two
-  inline void AddSplit(unsigned node_id,
-                       const std::vector<Split>& row_split_tloc,
-                       unsigned left_node_id,
-                       unsigned right_node_id) {
-    const Elem e = elem_of_each_node_[node_id];
-    const auto nthread = static_cast<bst_omp_uint>(row_split_tloc.size());
-    CHECK(e.begin != nullptr);
-    size_t* all_begin = dmlc::BeginPtr(row_indices_);
-    size_t* begin = all_begin + (e.begin - all_begin);
+}
+} // namespace
+    
+    
+    {          return out;
+        });
+OPERATOR_SCHEMA(Float16ConstantFill)
+    .NumInputs(0)
+    .NumOutputs(1)
+    .TensorInferenceFunction(Float16FillerTensorInference)
+    .Arg('value', 'The value for the elements of the output tensor.')
+    .Arg('shape', 'The shape of the output tensor.')
+    .Output(
+        0,
+        'output',
+        'Output tensor of constant values specified by 'value'');
+    
+      virtual void PredictInstance(const SparsePage::Inst& inst,
+                               std::vector<bst_float>* out_preds,
+                               const gbm::GBTreeModel& model,
+                               unsigned ntree_limit = 0,
+                               unsigned root_index = 0) = 0;
     
     /*!
- * \brief Registry entry for sparse page format.
+ * \brief Registry entry for tree updater.
  */
-struct SparsePageFormatReg
-    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
-                                        std::function<SparsePageFormat* ()> > {
+struct TreeUpdaterReg
+    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
+                                        std::function<TreeUpdater* ()> > {
 };
-    
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
-    }
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
-
-    
-      // Send our synthetic config.
-  s = c.update(config);
-  EXPECT_TRUE(s.ok());
-  EXPECT_EQ(s.toString(), 'OK');
-    
-    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
-  Config c;
-  auto s = c.update(getTestConfigMap());
-  EXPECT_TRUE(s.ok());
-    }
-    
-    
-    {/**
- * @brief Compute a hash digest from the contents of a buffer.
- *
- * @param hash_type The osquery-supported hash algorithm.
- * @param buffer A caller-controlled buffer (already allocated).
- * @param size The length of buffer in bytes.
- * @return A string (hex) representation of the hash digest.
- */
-std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
-} // namespace osquery
-
-    
-    TEST_F(TablesTests, test_constraint_map_cast) {
-  ConstraintMap cm;
-    }
-    
-      /// Fork an extension process.
-  virtual void createExtension(const std::string& extension);
-    
-        std::unique_ptr<DHTMessageFactory> messageFactory;
-    
-    namespace aria2 {
-    }
-    
-    DHTRoutingTable::~DHTRoutingTable() = default;
     
     
     {
-    {    nodes.push_back(node);
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
   }
-  localNode_ = localNode;
-  nodes_ = nodes;
-  A2_LOG_INFO('DHT routing table was loaded successfully');
-}
-    
-    void DHTRoutingTableSerializer::setNodes(
-    const std::vector<std::shared_ptr<DHTNode>>& nodes)
-{
-  nodes_ = nodes;
-}
-    
-    
-    {} // namespace aria2
-    
-    void DHTTaskExecutor::update()
-{
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
     }
   }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
+
+    
+    void SparsePageWriter::PushWrite(std::shared_ptr<SparsePage>&& page) {
+  qworkers_[clock_ptr_].Push(std::move(page));
+  clock_ptr_ = (clock_ptr_ + 1) % workers_.size();
 }
     
-      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    namespace xgboost {
+namespace data {
+/*!
+ * \brief Format specification of SparsePage.
+ */
+class SparsePageFormat {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~SparsePageFormat() = default;
+  /*!
+   * \brief Load all the segments into page, advance fi to end of the block.
+   * \param page The data to read page into.
+   * \param fi the input stream of the file
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
+  /*!
+   * \brief read only the segments we are interested in, advance fi to end of the block.
+   * \param page The page to load the data into.
+   * \param fi the input stream of the file
+   * \param sorted_index_set sorted index of segments we are interested in
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page,
+                    dmlc::SeekStream* fi,
+                    const std::vector<bst_uint>& sorted_index_set) = 0;
+  /*!
+   * \brief save the data to fo, when a page was written.
+   * \param fo output stream
+   */
+  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
+  /*!
+   * \brief Create sparse page of format.
+   * \return The created format functors.
+   */
+  static SparsePageFormat* Create(const std::string& name);
+  /*!
+   * \brief decide the format from cache prefix.
+   * \return pair of row format, column format type of the cache prefix.
+   */
+  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
+};
+    }
+    }
     
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) = 0;
+    // logistic loss for binary classification task
+struct LogisticClassification : public LogisticRegression {
+  static const char* DefaultEvalMetric() { return 'error'; }
+};
     
-    void DHTTaskFactoryImpl::setCommonProperty(
-    const std::shared_ptr<DHTAbstractTask>& task)
-{
-  task->setRoutingTable(routingTable_);
-  task->setMessageDispatcher(dispatcher_);
-  task->setMessageFactory(factory_);
-  task->setTaskQueue(taskQueue_);
-  task->setLocalNode(localNode_);
+          CompressedIterator<int> ci(buffer.data(), alphabet_size);
+      std::vector<int> output(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output[i] = ci[i];
+      }
+    
+    SEXP XGBoosterGetAttr_R(SEXP handle, SEXP name) {
+  SEXP out;
+  R_API_BEGIN();
+  int success;
+  const char *val;
+  CHECK_CALL(XGBoosterGetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)),
+                              &val,
+                              &success));
+  if (success) {
+    out = PROTECT(allocVector(STRSXP, 1));
+    SET_STRING_ELT(out, 0, mkChar(val));
+  } else {
+    out = PROTECT(R_NilValue);
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return out;
 }
     
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) CXX11_OVERRIDE;
+    struct SplitEvaluatorReg
+    : public dmlc::FunctionRegEntryBase<SplitEvaluatorReg,
+        std::function<SplitEvaluator* (std::unique_ptr<SplitEvaluator>)> > {};
     
-    #include 'DHTNode.h'
-#include 'util.h'
-#include 'a2functional.h'
+      // truncated the value of the next key and output it without applying any
+  // compaction rules.  This is used for outputting a put after a single delete.
+  bool clear_and_output_next_key_ = false;
     
-      virtual ~DHTUnknownMessage();
+    class KeepFilterFactory : public CompactionFilterFactory {
+ public:
+  explicit KeepFilterFactory(bool check_context = false,
+                             bool check_context_cf_id = false)
+      : check_context_(check_context),
+        check_context_cf_id_(check_context_cf_id),
+        compaction_filter_created_(false) {}
+    }
     
-    DNSCache::DNSCache(const DNSCache& c) = default;
+      // Open all files and look for the values we've put in there.
+  // They should not be found if encrypted, otherwise
+  // they should be found.
+  std::vector<std::string> fileNames;
+  auto status = env_->GetChildren(dbname_, &fileNames);
+  ASSERT_OK(status);
+    
+    Status WriteBatchBase::DeleteRange(ColumnFamilyHandle* column_family,
+                                   const SliceParts& begin_key,
+                                   const SliceParts& end_key) {
+  std::string begin_key_buf, end_key_buf;
+  Slice begin_key_slice(begin_key, &begin_key_buf);
+  Slice end_key_slice(end_key, &end_key_buf);
+  return DeleteRange(column_family, begin_key_slice, end_key_slice);
+}
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    
+    {  char* rid = id;
+  rid = EncodeVarint64(rid, buf.st_dev);
+  rid = EncodeVarint64(rid, buf.st_ino);
+  rid = EncodeVarint64(rid, buf.st_gen);
+  assert(rid >= id);
+  return static_cast<size_t>(rid - id);
+}
+#endif
+/*
+ * PosixRandomAccessFile
+ *
+ * pread() based random-access
+ */
+PosixRandomAccessFile::PosixRandomAccessFile(const std::string& fname, int fd,
+                                             const EnvOptions& options)
+    : filename_(fname),
+      fd_(fd),
+      use_direct_io_(options.use_direct_reads),
+      logical_sector_size_(GetLogicalBufferSize(fd_)) {
+  assert(!options.use_direct_reads || !options.use_mmap_reads);
+  assert(!options.use_mmap_reads || sizeof(void*) < 8);
+}
+    
+    TEST_F(MockEnvTest, Corrupt) {
+  const std::string kGood = 'this is a good string, synced to disk';
+  const std::string kCorrupted = 'this part may be corrupted';
+  const std::string kFileName = '/dir/f';
+  unique_ptr<WritableFile> writable_file;
+  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
+  ASSERT_OK(writable_file->Append(kGood));
+  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
+    }
+    
+      // Put key-value
+  s = db->Put(WriteOptions(), 'key1', 'value');
+  assert(s.ok());
+  std::string value;
+  // get value
+  s = db->Get(ReadOptions(), 'key1', &value);
+  assert(s.ok());
+  assert(value == 'value');
+    
+      virtual Status NewRandomAccessFile(const std::string& /*fname*/,
+                                     unique_ptr<RandomAccessFile>* /*result*/,
+                                     const EnvOptions& /*options*/) override {
+    return notsup;
+  }
+    
+      double CompareBlock(const OutputImage& img,
+                      int off_x, int off_y) const override;
+    
+    #endif  // GUETZLI_DCT_DOUBLE_H_
+
+    
+    // Entropy encoding (Huffman) utilities.
+    
+      tmp0 = in[2 * stride];
+  tmp1 = kIDCTMatrix[ 2] * tmp0;
+  tmp2 = kIDCTMatrix[10] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] -= tmp2;
+  out[3] -= tmp1;
+  out[4] -= tmp1;
+  out[5] -= tmp2;
+  out[6] += tmp2;
+  out[7] += tmp1;
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
+    }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    #define VERIFY_MARKER_END()                                             \
+  if (start_pos + marker_len != *pos) {                                 \
+    fprintf(stderr, 'Invalid marker length: declared=%d actual=%d\n',   \
+            static_cast<int>(marker_len),                               \
+            static_cast<int>(*pos - start_pos));                        \
+    jpg->error = JPEG_WRONG_MARKER_SIZE;                                \
+    return false;                                                       \
+  }
