@@ -1,197 +1,124 @@
 
         
-                  def tag_id(index = nil)
-            # a little duplication to construct less strings
-            case
-            when @object_name.empty?
-              sanitized_method_name.dup
-            when index
-              '#{sanitized_object_name}_#{index}_#{sanitized_method_name}'
-            else
-              '#{sanitized_object_name}_#{sanitized_method_name}'
+        module Gitlab
+  module BackgroundMigration
+    class PopulateMergeRequestsLatestMergeRequestDiffId
+      BATCH_SIZE = 1_000
+    
+              pipelines.each do |pipeline|
+            self.new(pipeline).tap do |preloader|
+              preloader.preload_commit_authors
+              preloader.preload_pipeline_warnings
+              preloader.preload_stages_warnings
             end
           end
-    
-              if include_hidden
-            hidden = hidden_field_for_checkbox(options)
-            hidden + checkbox
-          else
-            checkbox
-          end
         end
     
-              if name_and_id['for']
-            name_and_id['id'] = name_and_id['for']
-          else
-            name_and_id.delete('id')
-          end
+          def add_collection(collection)
+        @checks |= collection.checks
+      end
     
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
+              # Build a `SELECT` query. We find the first of the `end_time_attrs` that isn't `NULL` (call this end_time).
+          # Next, we find the first of the start_time_attrs that isn't `NULL` (call this start_time).
+          # We compute the (end_time - start_time) interval, and give it an alias based on the current
+          # cycle analytics stage.
+          interval_query = Arel::Nodes::As.new(cte_table,
+            subtract_datetimes(stage_query(project_ids), start_time_attrs, end_time_attrs, name.to_s))
+    
+          def end_time_attrs
+        @end_time_attrs ||= mr_metrics_table[:first_deployed_to_production_at]
+      end
+    
+          offset = line.offset + line.text.size - arg_string.size
+      args, splat = Script::Parser.new(arg_string.strip, @line, to_parser_offset(offset), @options).
+        parse_function_definition_arglist
+      Tree::FunctionNode.new(name, args, splat)
+    end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
         end
+        bad_cookies.empty?
+      end
     
-        delegate :[], :include?, :pop, :size, :each, to: :paths
-    
-            keys.find do |key|
-          key_tag_version = tag_without_or_later(key)
-          begin
-            MacOS::Version.from_symbol(key_tag_version) <= tag_version
-          rescue ArgumentError
-            false
-          end
+              react_and_close(env, body) or [status, headers, body]
+        else
+          [status, headers, body]
         end
       end
-    end
-  end
-end
-
     
-      config.include(FileUtils)
-    
-        it 'with universal' do
-      expect_offense(<<~RUBY)
-        class Foo < Formula
-          url 'https://example.com/foo-1.0.tgz'
-          option :universal
-          ^^^^^^^^^^^^^^^^^ macOS has been 64-bit only since 10.6 so universal options are deprecated.
-        end
-      RUBY
-    end
-    
-      def to_str
-    @paths.join(File::PATH_SEPARATOR)
-  end
-  alias to_s to_str
-    
-        self.store(key, value) if (stored == false)
-    self.dcase_hash[key.downcase] = value
+      it 'accepts post requests with correct X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
+    expect(last_response).to be_ok
   end
     
-          send_e404(cli, request)
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+      def execute
+    signal_deprecation_warning_for_pack
+    
+        it 'should make password values hidden' do
+      expect(subject.password.to_s).to(be == '<password>')
+      expect(subject.password.inspect).to(be == '<password>')
     end
-    
-                components.each do |c|
-              encoded << [c.length].pack('N')
-              encoded << c
-            end
-    
-              # Encodes the renew_time field
-          #
-          # @return [String]
-          def encode_renew_time
-            [renew_till].pack('N')
-          end
-    
-              # Decodes the key from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [EncryptionKey]
-          def decode_key(input)
-            Rex::Proto::Kerberos::Model::EncryptionKey.decode(input.value[0])
-          end
-    
-      def safely_remove_file(_path)
-    run_vagrant_command('rm #{test_file}')
-  rescue
-    VagrantHelpers::VagrantSSHCommandError
-  end
-end
-    
-          # rubocop:disable Security/MarshalLoad
-      def add_role(role, hosts, options={})
-        options_deepcopy = Marshal.dump(options.merge(roles: role))
-        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
-      end
-      # rubocop:enable Security/MarshalLoad
-    
-    module Capistrano
-  class Configuration
-    # Decorates a Variables object to additionally perform an optional set of
-    # user-supplied validation rules. Each rule for a given key is invoked
-    # immediately whenever `set` is called with a value for that key.
-    #
-    # If `set` is called with a callable value or a block, validation is not
-    # performed immediately. Instead, the validation rules are invoked the first
-    # time `fetch` is used to access the value.
-    #
-    # A rule is simply a block that accepts two arguments: key and value. It is
-    # up to the rule to raise an exception when it deems the value is invalid
-    # (or just print a warning).
-    #
-    # Rules can be registered using the DSL like this:
-    #
-    #   validate(:my_key) do |key, value|
-    #     # rule goes here
-    #   end
-    #
-    class ValidatedVariables < SimpleDelegator
-      include Capistrano::ProcHelpers
-    
-        # @return [String] major.minor ruby version, ex 1.9
-    def ruby_abi_version
-      RUBY_VERSION[/(\d+\.\d+)(\.\d+)*/, 1]
-    end
-    
-    if $0 == __FILE__
-  begin
-    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
-  rescue LogStash::PluginManager::Error => e
-    $stderr.puts(e.message)
-    exit(1)
-  end
-end
-
-    
-      private
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-      gem.files         = Dir.glob(['logstash-core-plugin-api.gemspec', 'lib/**/*.rb', 'spec/**/*.rb'])
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = 'logstash-core-plugin-api'
-  gem.require_paths = ['lib']
-  gem.version       = LOGSTASH_CORE_PLUGIN_API
-    
-        it 'should raise configuration error when provided with too many spaces' do
-      expect {
-        Class.new(LogStash::Filters::Base) do
-          include LogStash::Config::Mixin
-          config_name 'test'
-          milestone 1
-          config :size_file, :validate => :bytes
-        end.new({'size_file' => '10  kib'})
-      }.to raise_error(LogStash::ConfigurationError)
-    end
-  end
-    
-        def raw_push(payloads)
-      @redis_pool.with do |conn|
-        conn.multi do
-          atomic_push(conn, payloads)
-        end
-      end
-      true
-    end
-    
-      end
-end
-
-    
-        def self.with_context(msg)
-      Thread.current[:sidekiq_context] ||= []
-      Thread.current[:sidekiq_context] << msg
-      yield
-    ensure
-      Thread.current[:sidekiq_context].pop
-    end
-    
-        EXPIRY = 60 * 60 * 24
