@@ -1,319 +1,111 @@
 
         
-        #include 'tensorflow/python/framework/cpp_shape_inference.h'
+        #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/strutil.h>
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-#define TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+    // Get the name of a message's Java class without package name prefix.
+string ClassNameWithoutPackage(const Descriptor* descriptor,
+                               bool immutable) {
+  return StripPackageName(descriptor->full_name(),
+                          descriptor->file());
+}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    EnumFieldGenerator::~EnumFieldGenerator() {}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  if (PyBfloat16_Check(arg)) {
-    Py_INCREF(arg);
-    return arg;
-  } else {
-    bfloat16 value;
-    if (!AsBfloat16(arg, &value)) {
-      return nullptr;
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace objectivec {
     }
-    return PyBfloat16_FromBfloat16(value).release();
-  }
+    }
+    }
+    }
+    
+    #include <grpc/grpc_security.h>
+    
+    MeasureDouble RpcServerServerLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerServerLatencyMeasureName,
+      'Time between first byte of request received to last byte of response '
+      'sent, or terminal error',
+      kUnitMilliseconds);
+  return measure;
 }
     
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
     
-    // Converts Python object `obj` representing a rectangular array of
-// Python values (a scalar, a sequence of scalars, a sequence of
-// sequences, etc.) into a C++ TensorFlow Tensor and stores it in
-// *ret.  If dtype is not None it should by a Python integer
-// representing the desired dtype of the resulting Tensor.
-// This is used only as a hint, *ret may not have that dtype on
-// success and may require a cast.
-Status PySeqToTensor(PyObject* obj, PyObject* dtype, Tensor* ret);
-    
-    Safe_PyObjectPtr make_safe(PyObject* object) {
-  return Safe_PyObjectPtr(object);
+    Aggregation MillisDistributionAggregation() {
+  return Aggregation::Distribution(BucketBoundaries::Explicit(
+      {0,   0.01, 0.05, 0.1,  0.3,   0.6,   0.8,   1,     2,   3,   4,
+       5,   6,    8,    10,   13,    16,    20,    25,    30,  40,  50,
+       65,  80,   100,  130,  160,   200,   250,   300,   400, 500, 650,
+       800, 1000, 2000, 5000, 10000, 20000, 50000, 100000}));
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #ifdef BOOST_REGEX_FI_WIN32_MAP // win32 mapfile
     
-      static string GetDevNodePath(int dev_node_ordinal);
     
-        base::FilePath shortcutPath(path);
-    result->AppendBoolean(base::win::CreateOrUpdateShortcutLink(shortcutPath, props, 
-      base::PathExists(shortcutPath) ? base::win::SHORTCUT_UPDATE_EXISTING : base::win::SHORTCUT_CREATE_ALWAYS));
-#else
-    result->AppendBoolean(false);
+    {   if(greedy)
+   {
+      if((rep->leading) && (count < rep->max))
+         restart = position;
+      // push backtrack info if available:
+      if(count - rep->min)
+         push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);
+      // jump to next state:
+      pstate = rep->alt.p;
+      return true;
+   }
+   else
+   {
+      // non-greedy, push state and return true if we can skip:
+      if(count < rep->max)
+         push_single_repeat(count, rep, position, saved_state_rep_short_set);
+      pstate = rep->alt.p;
+      return (position == last) ? (rep->can_be_null & mask_skip) : can_start(*position, rep->_map, mask_skip);
+   }
+#ifdef __BORLANDC__
+#pragma option pop
 #endif
-    return;
-  } else if (method == 'GetPackage') {
-    result->AppendString(shell->GetPackage()->package_string());
-    return;
-  } else if (method == 'SetCrashDumpDir') {
-    std::string path;
-    arguments.GetString(0, &path);
-    //FIXME: result->AppendBoolean(SetCrashDumpPath(path.c_str()));
-    return;
-  } else if (method == 'RegisterGlobalHotKey') {
-    int object_id = -1;
-    arguments.GetInteger(0, &object_id);
-    Shortcut* shortcut =
-        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
-    bool success = GlobalShortcutListener::GetInstance()->RegisterAccelerator(
-                       shortcut->GetAccelerator(), shortcut);
-    if (!success)
-      shortcut->OnFailed('Register global desktop keyboard shortcut failed.');
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Base);
-};
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
-};
-    
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-    
-    #include <cstdint>      // for int32_t
-    
-    class PAGE_RES_IT;
-class ROW;
-class WERD_RES;
-    
-      // The tesseract engine used for OCR. This pointer is passed in by the caller,
-  // so do NOT destroy it in this class.
-  Tesseract* lang_tesseract_;
-    
-      // go through the list again and this time create the menu structure.
-  vc_it.move_to_first();
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
-    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
-    }
-    
-    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
-  if (b->idx.named.grpc_server_stats_bin != nullptr) {
-    ServerStatsDeserialize(
-        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
-            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
-        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
-        elapsed_time);
-    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
-  }
-}
-    
-    
-    { private:
-  CensusContext context_;
-  // Metadata elements for tracing and census stats data.
-  grpc_linked_mdelem stats_bin_;
-  grpc_linked_mdelem tracing_bin_;
-  // Client method.
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // The recv trailing metadata callbacks.
-  grpc_metadata_batch* recv_trailing_metadata_;
-  grpc_closure* initial_on_done_recv_trailing_metadata_;
-  grpc_closure on_done_recv_trailing_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  // Start time (for measuring latency).
-  absl::Time start_time_;
-  // Server elapsed time in nanoseconds.
-  uint64_t elapsed_time_;
-  // The received message--may be null.
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  // Number of messages in this RPC.
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference when adding trace context
-  // metatdata to outgoing message.
-  char tracing_buf_[kMaxTraceContextLen];
-};
-    
-    void GenerateServerContext(absl::string_view tracing, absl::string_view stats,
-                           absl::string_view primary_role,
-                           absl::string_view method, CensusContext* context) {
-  GrpcTraceContext trace_ctxt;
-  TraceContextEncoding::Decode(tracing, &trace_ctxt);
-  SpanContext parent_ctx = trace_ctxt.ToSpanContext();
-  new (context) CensusContext(method, parent_ctx);
-}
-    
-    
-    {    uint8_t version = buf[kVersionIdOffset];
-    uint32_t fieldID = buf[kServerElapsedTimeOffset];
-    if (version != kVersionId || fieldID != kServerElapsedTimeField) {
-      *time = 0;
-      return kEncodeDecodeFailure;
-    }
-    *time = absl::little_endian::Load64(
-        &buf[kServerElapsedTimeOffset + kFieldIdSize]);
-    return kRpcServerStatsSize;
-  }
-    
-    void ProtoServerReflectionPlugin::InitServer(grpc::ServerInitializer* si) {
-  si->RegisterService(reflection_service_);
-}
-    
-    bool OrbitCamera::initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
-{
-    if ( ActionInterval::initWithDuration(t) )
-    {
-        _radius = radius;
-        _deltaRadius = deltaRadius;
-        _angleZ = angleZ;
-        _deltaAngleZ = deltaAngleZ;
-        _angleX = angleX;
-        _deltaAngleX = deltaAngleX;
-    }
-    }
-    
-        /** Get the value of a controlPoint at a given index.
-     *
-     * @js NA
-     * @param index Get the point in index.
-     * @return A Vec2.
-     */
-    const Vec2& getControlPointAtIndex(ssize_t index) const;
-    
-        /** 
-    @brief Initializes an action with duration, grid size, waves and amplitude.
-    @param duration Specify the duration of the Waves3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @param waves Specify the waves count of the Waves3D action.
-    @param amplitude Specify the amplitude of the Waves3D action.
-    @return If the initialization success, return true; otherwise, return false.
-    */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude);
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-        unsigned int t = 0;
-    for (unsigned int i = 0; i < _tilesCount; i++ )
-    {
-        t = _tilesOrder[i];
-        Vec2 tilePos( (unsigned int)(t / _gridSize.height), t % (unsigned int)_gridSize.height );
-    }
-    
-    bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _key    = key;
-        _to       = to;
-        _from     = from;
-        return true;
-    }
-    }
-    
-        /** Adds a frame with a texture and a rect. Internally it will create a SpriteFrame and it will add it.
-     * The frame will be added with one 'delay unit'.
-     * Added to facilitate the migration from v0.8 to v0.9.
-     * @param pobTexture A frame with a texture.
-     * @param rect The Texture of rect.
-     */
-    void addSpriteFrameWithTexture(Texture2D* pobTexture, const Rect& rect);
-    
-    
-
-    
-    
-    {
-    {}  // end namespace internal
-}  // end namespace benchmark
-    
-    Benchmark* Benchmark::Ranges(const std::vector<std::pair<int, int>>& ranges) {
-  CHECK(ArgsCnt() == -1 || ArgsCnt() == static_cast<int>(ranges.size()));
-  std::vector<std::vector<int>> arglists(ranges.size());
-  std::size_t total = 1;
-  for (std::size_t i = 0; i < ranges.size(); i++) {
-    AddRange(&arglists[i], ranges[i].first, ranges[i].second,
-             range_multiplier_);
-    total *= arglists[i].size();
-  }
-    }
-    
-    // The CHECK macro returns a std::ostream object that can have extra information
-// written to it.
-#ifndef NDEBUG
-#define CHECK(b)                                                             \
-  (b ? ::benchmark::internal::GetNullLogInstance()                           \
-     : ::benchmark::internal::CheckHandler(#b, __FILE__, __func__, __LINE__) \
-           .GetLog())
-#else
-#define CHECK(b) ::benchmark::internal::GetNullLogInstance()
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
-    
-    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...) {
-  va_list args;
-  va_start(args, fmt);
-  ColorPrintf(out, color, fmt, args);
-  va_end(args);
 }
     
+    template <class F, class M, class O>
+struct format_traits_imp
+{
+private:
+   //
+   // F must be a pointer, a function, or a class with a function call operator:
+   //
+   BOOST_STATIC_ASSERT((::boost::is_pointer<F>::value || ::boost::is_function<F>::value || ::boost::is_class<F>::value));
+   static formatter_wrapper<typename unwrap_reference<F>::type> f;
+   static M m;
+   static O out;
+   static boost::regex_constants::match_flag_type flags;
+public:
+   BOOST_STATIC_CONSTANT(int, value = sizeof(check_is_formatter(f(m), f(m, out), f(m, out, flags))));
+};
     
-    {  // Print user counters
-  for (const auto &ucn : user_counter_names_) {
-    auto it = run.counters.find(ucn);
-    if(it == run.counters.end()) {
-      Out << ',';
-    } else {
-      Out << ',' << it->second;
-    }
-  }
-  Out << '\n';
-}
+    template<>
+struct padding3<4>
+{
+   enum{
+      padding_size = 4,
+      padding_mask = 3
+   };
+};
     
-    #include 'check.h'
-    
-    namespace benchmark {
-    }
+    #endif  // BOOST_REGEX_V4_REGEX_SEARCH_HPP
