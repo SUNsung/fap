@@ -1,386 +1,388 @@
 
         
-        namespace {
-    }
-    
-    
-    {}  // namespace atom
-    
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/auto_updater.h'
-#include 'atom/browser/window_list_observer.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
-    
-    void GlobalShortcut::OnKeyPressed(const ui::Accelerator& accelerator) {
-  if (accelerator_callback_map_.find(accelerator) ==
-      accelerator_callback_map_.end()) {
-    // This should never occur, because if it does, GlobalGlobalShortcutListener
-    // notifes us with wrong accelerator.
-    NOTREACHED();
-    return;
-  }
-  accelerator_callback_map_[accelerator].Run();
-}
-    
-    class Screen : public mate::EventEmitter<Screen>,
-               public display::DisplayObserver {
- public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
-    }
-    
-      // TrayIconObserver:
-  void OnClicked(const gfx::Rect& bounds,
-                 const gfx::Point& location,
-                 int modifiers) override;
-  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnBalloonShow() override;
-  void OnBalloonClicked() override;
-  void OnBalloonClosed() override;
-  void OnDrop() override;
-  void OnDropFiles(const std::vector<std::string>& files) override;
-  void OnDropText(const std::string& text) override;
-  void OnDragEntered() override;
-  void OnDragExited() override;
-  void OnDragEnded() override;
-  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
-  void OnMouseExited(const gfx::Point& location, int modifiers) override;
-  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
-    
-    #include 'atom/common/api/api_messages.h'
-#include 'atom/common/native_mate_converters/string16_converter.h'
-#include 'atom/common/native_mate_converters/value_converter.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'native_mate/object_template_builder.h'
-    
-    
-static void secp256k1_rfc6979_hmac_sha256_initialize(secp256k1_rfc6979_hmac_sha256_t *rng, const unsigned char *key, size_t keylen) {
-    secp256k1_hmac_sha256_t hmac;
-    static const unsigned char zero[1] = {0x00};
-    static const unsigned char one[1] = {0x01};
-    }
-    
-            secp256k1_ecmult_const(&res, &pt, &s);
-        secp256k1_ge_set_gej(&pt, &res);
-        /* Compute a hash of the point in compressed form
-         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
-         * expect its output to be secret and has a timing sidechannel. */
-        secp256k1_fe_normalize(&pt.x);
-        secp256k1_fe_normalize(&pt.y);
-        secp256k1_fe_get_b32(x, &pt.x);
-        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
-    
-    // Verify that difficulty is 1.0 for an empty chain.
-BOOST_AUTO_TEST_CASE(get_difficulty_for_null_tip)
-{
-    double difficulty = GetDifficulty(nullptr);
-    RejectDifficultyMismatch(difficulty, 1.0);
-}
-    
-        UniValue v3(UniValue::VSTR, 'foo');
-    BOOST_CHECK(v3.isStr());
-    BOOST_CHECK_EQUAL(v3.getValStr(), 'foo');
-    
-        // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
-    
-    const Message* GetCProtoInsidePyProto(PyObject* msg) {
-  return GetCProtoInsidePyProtoPtr(msg);
-}
-Message* MutableCProtoInsidePyProto(PyObject* msg) {
-  return MutableCProtoInsidePyProtoPtr(msg);
-}
-    
-    void GeneratorContext::GetCompilerVersion(Version* version) const {
-  version->set_major(GOOGLE_PROTOBUF_VERSION / 1000000);
-  version->set_minor(GOOGLE_PROTOBUF_VERSION / 1000 % 1000);
-  version->set_patch(GOOGLE_PROTOBUF_VERSION % 1000);
-  version->set_suffix(GOOGLE_PROTOBUF_VERSION_SUFFIX);
-}
-    
-    TEST(MovableMessageTest, SelfMoveAssignment) {
-  // The `self` reference is necessary to defeat -Wself-move.
-  protobuf_unittest::TestAllTypes message, &self = message;
-  TestUtil::SetAllFields(&message);
-  message = std::move(self);
-  TestUtil::ExpectAllFieldsSet(message);
-}
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-      static const int kBytesPerLine = 40;  // allow for escaping
-  printer->Print(
-      '    static const char *valueNames =');
-  for (int i = 0; i < text_blob.size(); i += kBytesPerLine) {
-    printer->Print(
-        '\n        \'$data$\'',
-        'data', EscapeTrigraphs(CEscape(text_blob.substr(i, kBytesPerLine))));
-  }
-  printer->Print(
-      ';\n'
-      '    static const int32_t values[] = {\n');
-  for (int i = 0; i < all_values_.size(); i++) {
-    printer->Print('        $name$,\n',  'name', EnumValueName(all_values_[i]));
-  }
-  printer->Print('    };\n');
-    
-    EnumFieldGenerator::~EnumFieldGenerator() {}
-    
-    void ExtensionGenerator::GenerateMembersHeader(io::Printer* printer) {
-  std::map<string, string> vars;
-  vars['method_name'] = method_name_;
-  SourceLocation location;
-  if (descriptor_->GetSourceLocation(&location)) {
-    vars['comments'] = BuildCommentsString(location, true);
-  } else {
-    vars['comments'] = '';
-  }
-  // Unlike normal message fields, check if the file for the extension was
-  // deprecated.
-  vars['deprecated_attribute'] = GetOptionalDeprecatedAttribute(descriptor_, descriptor_->file());
-  printer->Print(vars,
-                 '$comments$'
-                 '+ (GPBExtensionDescriptor *)$method_name$$deprecated_attribute$;\n');
-}
-    
-      void GenerateMembersHeader(io::Printer* printer);
-  void GenerateStaticVariablesInitialization(io::Printer* printer);
-  void GenerateRegistrationSource(io::Printer* printer);
-    
-    CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    Follow()
-    : _followedNode(nullptr)
-    , _boundarySet(false)
-    , _boundaryFullyCovered(false)
-    , _leftBoundary(0.0)
-    , _rightBoundary(0.0)
-    , _topBoundary(0.0)
-    , _bottomBoundary(0.0)
-    , _offsetX(0.0)
-    , _offsetY(0.0)
-    , _worldRect(Rect::ZERO)
-    {}
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~Follow();
-    
-    /**
-     * Initializes the action with a set boundary or with no boundary.
-     *
-     * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
-     *              with no boundary.
-    */
-    bool initWithTarget(Node *followedNode, const Rect& rect = Rect::ZERO);
-    
-    
-    /**
-     * Initializes the action with a set boundary or with no boundary with offsets.
-     *
-     * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
-     *              with no boundary.
-     * @param xOffset The horizontal offset from the center of the screen from which the
-     *                node  is to be followed.It can be positive,negative or zero.If
-     *                set to zero the node will be horizontally centered followed.
-     * @param yOffset The vertical offset from the center of the screen from which the
-     *                node is to be followed.It can be positive,negative or zero.
-     *                If set to zero the node will be vertically centered followed.
-     *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
-    
-    void EaseBezierAction::update(float time)
-{
-    _inner->update(tweenfunc::bezieratFunction(_p0,_p1,_p2,_p3,time));
-}
-    
-    
-    {    return false;
-}
-    
-    NS_CC_END
-    
-    protected:
-    int _randrange;
-    bool _once;
-    bool _shatterZ;
-    
-            for (auto& frameName : frameNames)
-        {
-            SpriteFrame* spriteFrame = frameCache->getSpriteFrameByName(frameName.asString());
-    }
-    
-      void IncDone() {
-    num_done_++;
-  }
-    
-      // Input statistics
-  // TODO(noetzli): The stats are incomplete. They are lacking everything
-  // consumed by MergeHelper.
-  uint64_t num_input_records = 0;
-  uint64_t num_input_deletion_records = 0;
-  uint64_t num_input_corrupt_records = 0;
-  uint64_t total_input_raw_key_bytes = 0;
-  uint64_t total_input_raw_value_bytes = 0;
-    
-    
-    {
-    {  bool IsShuttingDown() {
-    // This is a best-effort facility, so memory_order_relaxed is sufficient.
-    return shutting_down_ && shutting_down_->load(std::memory_order_relaxed);
-  }
-};
-}  // namespace rocksdb
+        #endif // BITCOIN_QT_MACDOCKICONHANDLER_H
 
     
-    class DeleteFilterFactory : public CompactionFilterFactory {
- public:
-  virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context) override {
-    if (context.is_manual_compaction) {
-      return std::unique_ptr<CompactionFilter>(new DeleteFilter());
-    } else {
-      return std::unique_ptr<CompactionFilter>(nullptr);
-    }
-  }
-    }
     
-    
-    {
-    {    if (data.ToString().find('foo567') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('v1.fetdq') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('bar123') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('v2.dfgkjdfghsd') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('dfgk') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-  }
-  if (encrypted_env_) {
-    ASSERT_EQ(hits, 0);
-  } else {
-    ASSERT_GE(hits, 4);
-  }
-}
-    
-    
-    {  // return true if writes with this callback can be batched with other writes
-  virtual bool AllowWriteBatching() = 0;
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
 };
     
-      // Doesn't really sleep, just affects output of GetCurrentTime(), NowMicros()
-  // and NowNanos()
-  void FakeSleepForMicroseconds(int64_t micros);
     
-      // atomic write
-  WriteBatch batch;
-  batch.Put(handles[0], Slice('key2'), Slice('value2'));
-  batch.Put(handles[1], Slice('key3'), Slice('value3'));
-  batch.Delete(handles[0], Slice('key'));
-  s = db->Write(WriteOptions(), &batch);
-  assert(s.ok());
+    {    Lock& lock;
+    Lock templock;
+};
     
-      // When flush happens, it determines whether to trigger compaction. If
-  // triggered_writes_stop is true, it will also set the retry flag of
-  // compaction-task to true.
-  void OnFlushCompleted(
-      DB* db, const FlushJobInfo& info) override {
-    CompactionTask* task = PickCompaction(db, info.cf_name);
-    if (task != nullptr) {
-      if (info.triggered_writes_stop) {
-        task->retry_on_fail = true;
-      }
-      // Schedule compaction in a different thread.
-      ScheduleCompaction(task);
-    }
-  }
-    
-    #endif  // ROCKSDB_LITE
-
-    
-    namespace folly {
-    }
-    
-    BENCHMARK(BENCHFUN(zzInitRNG)) {
-  srand(seed);
-}
-    
-    #include <folly/Benchmark.h>
-#include <folly/FileUtil.h>
-#include <folly/init/Init.h>
-#include <folly/json.h>
-    
-    // Check the return code from a fopen-style function (returns a non-nullptr
-// FILE* on success, nullptr on error, sets errno).  Works with fopen, fdopen,
-// freopen, tmpfile, etc.
-template <class... Args>
-void checkFopenError(FILE* fp, Args&&... args) {
-  if (UNLIKELY(!fp)) {
-    throwSystemError(std::forward<Args>(args)...);
-  }
-}
-    
-    // Empirically, this indicates if the runtime supports
-// std::exception_ptr, as not all (arm, for instance) do.
-#if defined(__GNUC__) && defined(__GCC_ATOMIC_INT_LOCK_FREE) && \
-    __GCC_ATOMIC_INT_LOCK_FREE > 1
-inline fbstring exceptionStr(std::exception_ptr ep) {
-  try {
-    std::rethrow_exception(ep);
-  } catch (const std::exception& e) {
-    return exceptionStr(e);
-  } catch (...) {
-    return '<unknown exception>';
-  }
-}
-#endif
-    
-    /*
- * Encode a single unicode code point into a UTF-8 byte sequence.
- *
- * Return value is undefined if `cp' is an invalid code point.
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
  */
-std::string codePointToUtf8(char32_t cp);
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    }
     
-    #ifndef FOLLY_URI_H_
-#error This file may only be included from folly/Uri.h
+    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
+    (void) msg32;
+    (void) key32;
+    (void) algo16;
+    (void) data;
+    }
+    
+    BOOST_FIXTURE_TEST_SUITE(bech32_tests, BasicTestingSetup)
+    
+    
+    {    // These inputs are valid because PROTOCOLINFO accepts an OtherLine that is
+    // just an OptArguments, which enables multiple spaces to be present
+    // between the command and arguments.
+    CheckSplitTorReplyLine('COMMAND  ARGS', 'COMMAND', ' ARGS');
+    CheckSplitTorReplyLine('COMMAND   EVEN+more  ARGS', 'COMMAND', '  EVEN+more  ARGS');
+}
+    
+    
+    {
+    {        // For now reusing the shim to allow prefetch.
+        // Please only use a subset of the shim interface that includes
+        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
+        // Shim will be deleted in the future versions.
+        std::shared_ptr<ReaderShim<float>> m_shim;
+        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
+    };
+}
+
+    
+        // TODO: This could actually be strided?
+    const MaskKind* NDMask::DataBuffer() const
+    {
+        // First make sure that the underlying matrix is on the right device
+        auto matrix = GetMatrix();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
+        return (const MaskKind*)(matrix->Data());
+    }
+    
+    namespace CNTK
+{
+    const std::wstring versionKey = L'version';
+    const std::wstring typeKey = L'type';
+    const std::wstring uidKey = L'uid';
+    const std::wstring kindKey = L'kind';
+    const std::wstring dataTypeKey = L'data_type';
+    const std::wstring dynamicAxisKey = L'dynamic_axis';
+    const std::wstring isSparseKey = L'is_sparse';
+    const std::wstring nameKey = L'name';
+    const std::wstring needsGradientKey = L'needs_gradient';
+    const std::wstring shapeKey = L'shape';
+    const std::wstring valueKey = L'value';
+    const std::wstring opKey = L'op';
+    const std::wstring attributesKey = L'attributes';
+    const std::wstring inputsKey = L'inputs';
+    const std::wstring rootKey = L'root';
+    const std::wstring functionsKey = L'primitive_functions';
+    const std::wstring sampleCountKey = L'sample_count';
+    const std::wstring minibatchCountKey = L'minibatchCount'; // TODO: Python-style spelling
+    const std::wstring sweepCountKey = L'sweepCount';
+    const std::wstring unitKey = L'unit';
+    const std::wstring refMBSizeKey = L'ref_mb_size';
+    const std::wstring epochSizeKey = L'epoch_size';
+    const std::wstring scheduleKey = L'schedule';
+    const std::wstring learningRateScheduleKey = L'learnig_rate_schedule';
+    const std::wstring smoothedGradientsKey = L'smoothed_gradients';
+    const std::wstring noiseInjectionSeedKey = L'noise_injection_seed';
+    const std::wstring masterParameterUpdatedKey = L'master_parameter_updated';
+    const std::wstring smoothedCountKey = L'smoothed_count';
+    const std::wstring stateKey = L'state';
+    const std::wstring rngSeedKey = L'rng_seed';
+    const std::wstring rngOffsetKey = L'rng_offset';
+    const std::wstring blockFunctionCompositeKey = L'block_function_composite';
+    const std::wstring blockFunctionOpNameKey = L'block_function_op_name';
+    const std::wstring blockFunctionCompositeArgumentsMapKeysKey = L'block_function_composite_arguments_map_keys';
+    const std::wstring blockFunctionCompositeArgumentsMapValuesKey = L'block_function_composite_arguments_map_values';
+    const std::wstring internalWorkerStateKey = L'internal_worker_state';
+    const std::wstring externalWorkerStateKey = L'external_worker_state';
+    const std::wstring userDefinedStateKey = L'user_defined_state';
+    const std::wstring udfModuleNameKey = L'module';
+    const std::wstring udfFactoryMethodNameKey = L'deserialize_method';
+    const std::wstring nativeUDFKey = L'native';
+    }
+    
+        Dictionary Trainer::RestoreFromCheckpoint(const std::wstring& modelFilePath)
+    {
+        // Restore the model's parameters
+        m_combinedTrainingFunction->Restore(modelFilePath);
+    }
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+    
+            size_t rows1 = input1.GetNumRows(), cols1 = input1.GetNumCols();
+        size_t cols0 = input0.GetNumCols();
+    
+    template <class charT, class traits>
+bool basic_regex_parser<charT, traits>::parse_literal()
+{
+   // append this as a literal provided it's not a space character
+   // or the perl option regbase::mod_x is not set:
+   if(
+      ((this->flags() 
+         & (regbase::main_option_type|regbase::mod_x|regbase::no_perl_ex)) 
+            != regbase::mod_x)
+      || !this->m_traits.isctype(*m_position, this->m_mask_space))
+         this->append_literal(*m_position);
+   ++m_position;
+   return true;
+}
+    
+    template<>
+struct regex_iterator_traits<char*> : pointer_iterator_traits<char>{};
+template<>
+struct regex_iterator_traits<const char*> : const_pointer_iterator_traits<char>{};
+template<>
+struct regex_iterator_traits<wchar_t*> : pointer_iterator_traits<wchar_t>{};
+template<>
+struct regex_iterator_traits<const wchar_t*> : const_pointer_iterator_traits<wchar_t>{};
+//
+// the follwoing are needed for ICU support:
+//
+template<>
+struct regex_iterator_traits<unsigned char*> : pointer_iterator_traits<char>{};
+template<>
+struct regex_iterator_traits<const unsigned char*> : const_pointer_iterator_traits<char>{};
+template<>
+struct regex_iterator_traits<int*> : pointer_iterator_traits<int>{};
+template<>
+struct regex_iterator_traits<const int*> : const_pointer_iterator_traits<int>{};
+    
+       const_reference prefix() const
+   {
+      if(m_is_singular)
+         raise_logic_error();
+      return (*this)[-1];
+   }
+    
+       // try and match a single character, could be a multi-character
+   // collating element...
+   for(i = 0; i < set_->csingles; ++i)
+   {
+      ptr = next;
+      if(*p == static_cast<charT>(0))
+      {
+         // treat null string as special case:
+         if(traits_inst.translate(*ptr, icase) != *p)
+         {
+            while(*p == static_cast<charT>(0))++p;
+            continue;
+         }
+         return set_->isnot ? next : (ptr == next) ? ++next : ptr;
+      }
+      else
+      {
+         while(*p && (ptr != last))
+         {
+            if(traits_inst.translate(*ptr, icase) != *p)
+               break;
+            ++p;
+            ++ptr;
+         }
+    }
+    }
+    
+    #ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
+#define BOOST_REGEX_V4_PROTECTED_CALL_HPP
+    
+    
+    {   // output varies depending upon whether sub-expression v matched or not:
+   if(m_results[v].matched)
+   {
+      m_have_conditional = true;
+      format_all();
+      m_have_conditional = false;
+      if((m_position != m_end) && (*m_position == static_cast<char_type>(':')))
+      {
+         // skip the ':':
+         ++m_position;
+         // save output state, then turn it off:
+         output_state saved_state = m_state;
+         m_state = output_none;
+         // format the rest of this scope:
+         format_until_scope_end();
+         // restore output state:
+         m_state = saved_state;
+      }
+   }
+   else
+   {
+      // save output state, then turn it off:
+      output_state saved_state = m_state;
+      m_state = output_none;
+      // format until ':' or ')':
+      m_have_conditional = true;
+      format_all();
+      m_have_conditional = false;
+      // restore state:
+      m_state = saved_state;
+      if((m_position != m_end) && (*m_position == static_cast<char_type>(':')))
+      {
+         // skip the ':':
+         ++m_position;
+         // format the rest of this scope:
+         format_until_scope_end();
+      }
+   }
+}
+    
+       ~raw_storage()
+   {
+      ::operator delete(start);
+   }
+    
+    
+    {
+    {      // Record end time
+      uint64_t end_time = env->NowMicros();
+      double elapsed = static_cast<double>(end_time - start_time) * 1e-6;
+      uint32_t qps = static_cast<uint32_t>(
+          static_cast<double>(FLAGS_threads * FLAGS_ops_per_thread) / elapsed);
+      fprintf(stdout, 'Complete in %.3f s; QPS = %u\n', elapsed, qps);
+    }
+    return true;
+  }
+    
+      // Implementations of the DB interface
+  using DB::Get;
+  virtual Status Get(const ReadOptions& options,
+                     ColumnFamilyHandle* column_family, const Slice& key,
+                     PinnableSlice* value) override;
+  using DB::MultiGet;
+  virtual std::vector<Status> MultiGet(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>&,
+      const std::vector<Slice>& keys, std::vector<std::string>* values)
+    override;
+    
+    namespace rocksdb {
+    }
+    
+    class ChrootEnv : public EnvWrapper {
+ public:
+  ChrootEnv(Env* base_env, const std::string& chroot_dir)
+      : EnvWrapper(base_env) {
+#if defined(OS_AIX)
+    char resolvedName[PATH_MAX];
+    char* real_chroot_dir = realpath(chroot_dir.c_str(), resolvedName);
+#else
+    char* real_chroot_dir = realpath(chroot_dir.c_str(), nullptr);
 #endif
+    // chroot_dir must exist so realpath() returns non-nullptr.
+    assert(real_chroot_dir != nullptr);
+    chroot_dir_ = real_chroot_dir;
+#if !defined(OS_AIX)
+    free(real_chroot_dir);
+#endif
+  }
+    }
     
-      // Install a pointer to ourselves as the allocator.
-  *reinterpret_cast<SimpleAllocator**>(mem_) = this;
-  static_assert(max_align_v >= sizeof(SimpleAllocator*), 'alignment too small');
-  mem_ += std::min(sz_, max_align_v);
+    #if !defined(ROCKSDB_LITE) && !defined(OS_WIN)
+    
+    class DHTNode;
+class DHTRoutingTable;
+class DHTTaskQueue;
+class DHTTaskFactory;
+class DHTPeerAnnounceStorage;
+class DHTTokenTracker;
+class DHTMessageDispatcher;
+class DHTMessageReceiver;
+class DHTMessageFactory;
+    
+    void DHTReplaceNodeTask::startup() { sendMessage(); }
+    
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
+}
+    
+      char headerCompat[8];
+  memset(headerCompat, 0, sizeof(headerCompat));
+  // magic
+  headerCompat[0] = 0xa1u;
+  headerCompat[1] = 0xa2u;
+  // format ID
+  headerCompat[2] = 0x02u;
+  // version
+  headerCompat[6] = 0;
+  headerCompat[7] = 0x02u;
+    
+    #include 'common.h'
+    
+    class DHTSetup {
+public:
+  DHTSetup();
+    }
     
     
-    {  std::array<std::shared_ptr<T>, kNumSlots> slots_;
+    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
 };
+    
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
+    
+    std::string DHTUnknownMessage::toString() const
+{
+  size_t sampleLength = 8;
+  if (length_ < sampleLength) {
+    sampleLength = length_;
+  }
+  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
+             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
+             util::toHex(data_, sampleLength).c_str());
+}
+    
+            // We don't care for comparison result here; the previous value will be stored into value anyway.
+        // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %%rbx, %%rax\n\t'
+            'movq %%rcx, %%rdx\n\t'
+            'lock; cmpxchg16b %[storage]\n\t'
+            'movq %%rax, %[value]\n\t'
+            'movq %%rdx, 8+%[value]\n\t'
+            : [value] '=o' (value)
+            : [storage] 'm' (storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory', 'rax', 'rdx'
+        );
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %%rbx, %%rax\n\t'
+            'movq %%rcx, %%rdx\n\t'
+            'lock; cmpxchg16b %[storage]\n\t'
+            'movq %%rax, 0(%[value])\n\t'
+            'movq %%rdx, 8(%[value])\n\t'
+            :
+            : [storage] 'm' (storage), [value] 'r' (&value)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory', 'rax', 'rdx'
+        );
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
