@@ -1,26 +1,20 @@
 
         
-            describe 'A' do
-      it 'converts floating point argument as [-]0xh.hhhhp[+-]dd and use uppercase X and P' do
-        format('%A', 196).should == '0X1.88P+7'
-        format('%A', -196).should == '-0X1.88P+7'
-        format('%A', 196.1).should == '0X1.8833333333333P+7'
-        format('%A', 0.01).should == '0X1.47AE147AE147BP-7'
-        format('%A', -0.01).should == '-0X1.47AE147AE147BP-7'
-      end
-    
-      it 'calls #to_int on seed' do
-    srand(3.8)
-    srand.should == 3
-    
-      it 'returns true when passed ?e if the argument is a file' do
-    Kernel.test(?e, @file).should == true
+            @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
   end
     
-      # More readable inspect that only shows the url and resources
-  # @return [String]
-  def inspect
-    resources_str = resources.keys.map{|r| r.inspect }.join ', '
+          if new_email != @user.email
+        @user.update!(
+          unconfirmed_email: new_email,
+          # Regenerate the confirmation token:
+          confirmation_token: nil
+        )
+    
+      def payload
+    @_payload ||= request.body.read
+  end
     
     =begin
    +-------------+---------------+-------------------------------------+
@@ -65,82 +59,60 @@
    +-------------+---------------+-------------------------------------+
 =end
     
-              # Encodes the auth_time field
+              # Encodes the type
           #
-          # @return [String]
-          def encode_auth_time
-            [auth_time].pack('N')
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type(type)
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
+            end
           end
     
-                checksum = cipher[0, 16]
-            data = cipher[16, cipher.length - 1]
+      <h3>Messages</h3>
+  <% @messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
+
     
-              # Encodes the data
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_data(data)
-            OpenSSL::ASN1::OctetString.new(data)
+            ActiveSupport.on_load(:active_record) do
+          include Sidekiq::Extensions::ActiveRecord
+        end
+        ActiveSupport.on_load(:action_mailer) do
+          extend Sidekiq::Extensions::ActionMailer
+        end
+      end
+    
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
           end
         end
       end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
     end
-  end
-end
     
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def encode
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
+          # Drain and run all jobs for this worker
+      def drain
+        while jobs.any?
+          next_job = jobs.first
+          Queues.delete_for(next_job['jid'], next_job['queue'], self.to_s)
+          process_job(next_job)
         end
       end
+    
+        def watchdog(last_words)
+      yield
+    rescue Exception => ex
+      handle_exception(ex, { context: last_words })
+      raise ex
     end
-  end
-end
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_asn1_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-            def add_arg_offense(arg, type)
-          add_offense(arg.parent, location: arg.source_range,
-                                  message: format(MSG,
-                                                  type: type.to_s.capitalize))
-        end
-    
-            expect(cop.highlights).to eq([close])
-        expect(cop.messages)
-          .to eq([described_class::SAME_LINE_MESSAGE])
-      end
-    
-          # Checks whether the `if` is an `elsif`. Parser handles these by nesting
-      # `if` nodes in the `else` branch.
-      #
-      # @return [Boolean] whether the node is an `elsif`
-      def elsif?
-        keyword == 'elsif'
-      end
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
-      end
-    end
-  end
-end
