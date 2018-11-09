@@ -1,230 +1,360 @@
 
         
-        // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+        void add(const Size2D &size,
+         const s32 * src0Base, ptrdiff_t src0Stride,
+         const s32 * src1Base, ptrdiff_t src1Stride,
+         s32 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s32, s64>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s32, s64>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
+    
+    using namespace internal;
+    
+    template <>
+void lshiftConst<0>(const Size2D &size,
+                    const u8 * srcBase, ptrdiff_t srcStride,
+                    s16 * dstBase, ptrdiff_t dstStride)
+{
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-      std::string fname = TableFileName(dbname, meta->number);
-  if (iter->Valid()) {
-    WritableFile* file;
-    s = env->NewWritableFile(fname, &file);
-    if (!s.ok()) {
-      return s;
-    }
-    }
+        minLocCapacity <<= 1;
+    maxLocCapacity <<= 1;
     
-    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
     
-    // Maximum number of level-0 files.  We stop writes at this point.
-static const int kL0_StopWritesTrigger = 12;
+    {}
     
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
+    inline float32x4_t vrsqrtq_f32(float32x4_t val)
+{
+    float32x4_t e = vrsqrteq_f32(val);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    return e;
+}
+    
+    - https://github.com/caffe2/caffe2/blob/master/caffe2/operators/find_duplicate_elements_op.h
+- https://github.com/caffe2/caffe2/blob/master/caffe2/operators/find_duplicate_elements_op.cc
+    
+    // FreeOp frees the content of the output blob. We allow it to take in input
+// blobs purely for the reason that it can 'wait' on the input blobs to be
+// produced by some of the earlier operators before a free is called.
+template <class Context>
+class FreeOp : public Operator<Context> {
  public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
-  }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
+  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
+    }
+    
+    
+    {class GetHalfToFloatGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'FloatToHalf', '', vector<string>{GO(0)}, vector<string>{GI(0)});
   }
 };
-    
-      // Returns the physical offset of the last record returned by ReadRecord.
-  //
-  // Undefined before the first call to ReadRecord.
-  uint64_t LastRecordOffset();
-    
-    TEST(LogTest, Fragmentation) {
-  Write('small');
-  Write(BigString('medium', 50000));
-  Write(BigString('large', 100000));
-  ASSERT_EQ('small', Read());
-  ASSERT_EQ(BigString('medium', 50000), Read());
-  ASSERT_EQ(BigString('large', 100000), Read());
-  ASSERT_EQ('EOF', Read());
-}
-    
-    Writer::Writer(WritableFile* dest)
-    : dest_(dest),
-      block_offset_(0) {
-  InitTypeCrc(type_crc_);
-}
-    
-    TEST(RecoveryTest, LogFileReuse) {
-  if (!CanAppend()) {
-    fprintf(stderr, 'skipping test because env does not support appending\n');
-    return;
-  }
-  for (int i = 0; i < 2; i++) {
-    ASSERT_OK(Put('foo', 'bar'));
-    if (i == 0) {
-      // Compact to ensure current log is empty
-      CompactMemTable();
-    }
-    Close();
-    ASSERT_EQ(1, NumLogs());
-    uint64_t number = FirstLogFile();
-    if (i == 0) {
-      ASSERT_EQ(0, FileSize(LogName(number)));
-    } else {
-      ASSERT_LT(0, FileSize(LogName(number)));
-    }
-    Open();
-    ASSERT_EQ(1, NumLogs());
-    ASSERT_EQ(number, FirstLogFile()) << 'did not reuse log file';
-    ASSERT_EQ('bar', Get('foo'));
-    Open();
-    ASSERT_EQ(1, NumLogs());
-    ASSERT_EQ(number, FirstLogFile()) << 'did not reuse log file';
-    ASSERT_EQ('bar', Get('foo'));
-  }
-}
-    
-      // No-barrier variants that can be safely used in a few locations.
-  Node* NoBarrier_Next(int n) {
-    assert(n >= 0);
-    return reinterpret_cast<Node*>(next_[n].NoBarrier_Load());
-  }
-  void NoBarrier_SetNext(int n, Node* x) {
-    assert(n >= 0);
-    next_[n].NoBarrier_Store(x);
-  }
-    
-      bool empty() const { return head_.next_ == &head_; }
-  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
-  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
-    
-      bool keepAliveAcquire() override {
-    ++refCount;
-    return true;
-  }
-    
-    // Check a Linux kernel-style return code (>= 0 on success, negative error
-// number on error), throw on error.
-template <class... Args>
-void checkKernelError(ssize_t ret, Args&&... args) {
-  if (UNLIKELY(ret < 0)) {
-    throwSystemErrorExplicit(int(-ret), std::forward<Args>(args)...);
-  }
-}
-    
-        template <
-        typename OtherExecutor,
-        typename = typename std::enable_if<
-            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
-    /* implicit */ KeepAlive(KeepAlive<OtherExecutor>&& other) noexcept
-        : KeepAlive(other.get(), other.executorAndDummyFlag_ & kDummyFlag) {
-      other.executorAndDummyFlag_ = 0;
-    }
-    
-    namespace folly {
-    }
-    
-    /**
- * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
- * Returns true if the first n bytes are equal to prefix when interpreted as
- * a little endian T.
- */
-template <typename T>
-typename std::enable_if<std::is_unsigned<T>::value, bool>::type
-dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  T value;
-  Cursor cursor{data};
-  if (!cursor.tryReadLE(value)) {
-    return false;
-  }
-  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
-  return prefix == (value & mask);
-}
-    
-      /**
-   * windowSize is the base two logarithm of the window size (the size of the
-   * history buffer). It should be in the range 9..15. Larger values of this
-   * parameter result in better compression at the expense of memory usage.
-   *
-   * The default value is 15.
-   *
-   * NB: when inflating/uncompressing data, the windowSize must be greater than
-   * or equal to the size used when deflating/compressing.
-   */
-  int windowSize;
-    
-    
-    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    state.SetBytesProcessed(state.iterations() * file.tellg());
-}
-BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
-BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
-BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
-BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
-BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
-BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
-BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
-    
-    bool IsZero(double n);
-    
-    inline AbortHandlerT*& GetAbortHandler() {
-  static AbortHandlerT* handler = &std::abort;
-  return handler;
-}
-    
-    // Macros for declaring flags.
-#define DECLARE_bool(name) extern bool FLAG(name)
-#define DECLARE_int32(name) extern int32_t FLAG(name)
-#define DECLARE_int64(name) extern int64_t FLAG(name)
-#define DECLARE_double(name) extern double FLAG(name)
-#define DECLARE_string(name) extern std::string FLAG(name)
-    
-    #include 'check.h'
-#include 'colorprint.h'
-#include 'commandlineflags.h'
-#include 'internal_macros.h'
-#include 'string_util.h'
-#include 'timers.h'
-    
-    #if defined(BENCHMARK_OS_MACOSX)
-#include <mach/mach_time.h>
-#endif
-// For MSVC, we want to use '_asm rdtsc' when possible (since it works
-// with even ancient MSVC compilers), and when not possible the
-// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
-// environments, <windows.h> and <intrin.h> have conflicting
-// declarations of some other intrinsics, breaking compilation.
-// Therefore, we simply declare __rdtsc ourselves. See also
-// http://connect.microsoft.com/VisualStudio/feedback/details/262047
-#if defined(COMPILER_MSVC) && !defined(_M_IX86)
-extern 'C' uint64_t __rdtsc();
-#pragma intrinsic(__rdtsc)
-#endif
-    
-      // Called by each thread
-  bool wait() EXCLUDES(lock_) {
-    bool last_thread = false;
-    {
-      MutexLock ml(lock_);
-      last_thread = createBarrier(ml);
-    }
-    if (last_thread) phase_condition_.notify_all();
-    return last_thread;
-  }
-    
-    
-    {}  // end namespace benchmark
+REGISTER_GRADIENT(HalfToFloat, GetHalfToFloatGradient);
+NO_GRADIENT(Float16ConstantFill);
+} // namespace caffe2
 
     
-    #include 'internal_macros.h'
+    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
+  if (!ctx_) return false;
+  return grpc_auth_context_set_peer_identity_property_name(ctx_,
+                                                           name.c_str()) != 0;
+}
+    
+    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
+                                                        grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  GPR_ASSERT(calld != nullptr);
+  if (error == GRPC_ERROR_NONE) {
+    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
+    FilterTrailingMetadata(calld->recv_trailing_metadata_,
+                           &calld->elapsed_time_);
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
+                   GRPC_ERROR_REF(error));
+}
+    
+      static void OnDoneRecvTrailingMetadataCb(void* user_data, grpc_error* error);
+    
+    // Deserialize the incoming SpanContext and generate a new server context based
+// on that. This new span will never be a root span. This should only be called
+// with a blank CensusContext as it overwrites it.
+void GenerateServerContext(absl::string_view tracing, absl::string_view stats,
+                           absl::string_view primary_role,
+                           absl::string_view method, CensusContext* context);
+    
+    namespace grpc {
+    }
+    
+    class ProtoServerReflection final
+    : public reflection::v1alpha::ServerReflection::Service {
+ public:
+  ProtoServerReflection();
+    }
+    
+    
+    {   private:
+    DynamicThreadPool* pool_;
+    grpc_core::Thread thd_;
+    void ThreadFunc();
+  };
+  std::mutex mu_;
+  std::condition_variable cv_;
+  std::condition_variable shutdown_cv_;
+  bool shutdown_;
+  std::queue<std::function<void()>> callbacks_;
+  int reserve_threads_;
+  int nthreads_;
+  int threads_waiting_;
+  std::list<DynamicThread*> dead_threads_;
+    
+    TEST(CorruptionTest, CorruptedDescriptor) {
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  dbi->TEST_CompactRange(0, nullptr, nullptr);
+    }
+    
+      // Record a sample of bytes read at the specified internal key.
+  // Samples are taken approximately once every config::kReadBytesPeriod
+  // bytes.
+  void RecordReadSample(Slice key);
+    
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    class FormatTest { };
+    
+    std::string TempFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'dbtmp');
+}
+    
+    class StdoutPrinter : public WritableFile {
+ public:
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
+  }
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
+};
+    
+      // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+    
+    #include 'db/memtable.h'
+#include 'db/dbformat.h'
+#include 'leveldb/comparator.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'util/coding.h'
+    
+    extern const std::string kFeatureVectorsRootKey;
+    
+    /**
+ * @brief Parser plugin for logger configurations.
+ */
+class LoggerConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {kLoggerKey};
+  }
+    }
+    
+      const auto& doc = c.getParser('options')->getData().doc()['options'];
+    
+    namespace osquery {
+    }
+    
+    bool INotifyEventPublisher::monitorSubscription(
+    INotifySubscriptionContextRef& sc, bool add_watch) {
+  std::string discovered = sc->path;
+  if (sc->path.find('**') != std::string::npos) {
+    sc->recursive = true;
+    discovered = sc->path.substr(0, sc->path.find('**'));
+    sc->path = discovered;
+  }
+    }
+    
+      // Now update the config to contain sets of scheduled queries.
+  Config::get().update(
+      {{'data',
+        '{\'schedule\': {\'1\': {\'query\': \'select * from fake_events\', '
+        '\'interval\': 10}, \'2\':{\'query\': \'select * from time, '
+        'fake_events\', \'interval\': 19}, \'3\':{\'query\': \'select * '
+        'from fake_events, fake_events\', \'interval\': 5}}}'}});
+  // This will become 19 * 3, rounded up 60.
+  EXPECT_EQ(sub->min_expiration_, 60U);
+  EXPECT_EQ(sub->query_count_, 3U);
+    
+      using DBImpl::Put;
+  virtual Status Put(const WriteOptions& /*options*/,
+                     ColumnFamilyHandle* /*column_family*/,
+                     const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+  using DBImpl::Merge;
+  virtual Status Merge(const WriteOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/,
+                       const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+  using DBImpl::Delete;
+  virtual Status Delete(const WriteOptions& /*options*/,
+                        ColumnFamilyHandle* /*column_family*/,
+                        const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+  using DBImpl::SingleDelete;
+  virtual Status SingleDelete(const WriteOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+  virtual Status Write(const WriteOptions& /*options*/,
+                       WriteBatch* /*updates*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+  using DBImpl::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice* /*begin*/,
+                              const Slice* /*end*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+    
+    
+    {}  //  namespace rocksdb
+
+    
+    // WriteController is controlling write stalls in our write code-path. Write
+// stalls happen when compaction can't keep up with write rate.
+// All of the methods here (including WriteControllerToken's destructors) need
+// to be called while holding DB mutex
+class WriteController {
+ public:
+  explicit WriteController(uint64_t _delayed_write_rate = 1024u * 1024u * 32u,
+                           int64_t low_pri_rate_bytes_per_sec = 1024 * 1024)
+      : total_stopped_(0),
+        total_delayed_(0),
+        total_compaction_pressure_(0),
+        bytes_left_(0),
+        last_refill_time_(0),
+        low_pri_rate_limiter_(
+            NewGenericRateLimiter(low_pri_rate_bytes_per_sec)) {
+    set_max_delayed_write_rate(_delayed_write_rate);
+  }
+  ~WriteController() = default;
+    }
+    
+    Status PosixRandomRWFile::Write(uint64_t offset, const Slice& data) {
+  const char* src = data.data();
+  size_t left = data.size();
+  while (left != 0) {
+    ssize_t done = pwrite(fd_, src, left, offset);
+    if (done < 0) {
+      // error while writing to file
+      if (errno == EINTR) {
+        // write was interrupted, try again.
+        continue;
+      }
+      return IOError(
+          'While write random read/write file at offset ' + ToString(offset),
+          filename_, errno);
+    }
+    }
+    }
+    
+    // Example structure that describes a compaction task.
+struct CompactionTask {
+  CompactionTask(
+      DB* _db, Compactor* _compactor,
+      const std::string& _column_family_name,
+      const std::vector<std::string>& _input_file_names,
+      const int _output_level,
+      const CompactionOptions& _compact_options,
+      bool _retry_on_fail)
+          : db(_db),
+            compactor(_compactor),
+            column_family_name(_column_family_name),
+            input_file_names(_input_file_names),
+            output_level(_output_level),
+            compact_options(_compact_options),
+            retry_on_fail(_retry_on_fail) {}
+  DB* db;
+  Compactor* compactor;
+  const std::string& column_family_name;
+  std::vector<std::string> input_file_names;
+  int output_level;
+  CompactionOptions compact_options;
+  bool retry_on_fail;
+};
+    
+      // Do a write outside of the transaction to key 'y'
+  s = db->Put(write_options, 'y', 'y');
+    
+    
+    {  // close DB
+  for (auto* handle : handles) {
+    delete handle;
+  }
+  delete db;
+}
+
+    
+      ////////////////////////////////////////////////////////
+  //
+  // 'Read Committed' (Monotonic Atomic Views) Example
+  //   --Using multiple Snapshots
+  //
+  ////////////////////////////////////////////////////////
+    
+    Status GetStringFromColumnFamilyOptions(std::string* opts_str,
+                                        const ColumnFamilyOptions& cf_options,
+                                        const std::string& delimiter = ';  ');
