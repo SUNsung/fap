@@ -1,96 +1,60 @@
 
         
-        DOCUMENTATION = '''
-module: aws_waf_facts
-short_description: Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
-description:
-  - Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
-version_added: '2.4'
-requirements: [ boto3 ]
-options:
-  name:
-    description:
-      - The name of a Web Application Firewall
+        
+def source_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/blob/master/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, text, refuri=ref, **options)
+    return [node], []
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-c', dest='code',
+            help='evaluate the code in the shell, print the result and exit')
+        parser.add_option('--spider', dest='spider',
+            help='use this spider')
+        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
+            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
     
     
-def get_rule(client, module, rule_id):
-    try:
-        return client.get_rule(RuleId=rule_id)['Rule']
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Could not get WAF rule')
+class ScrapesContract(Contract):
+    ''' Contract to check presence of fields in scraped items
+        @scrapes page_name page_body
+    '''
+    
+    for face_location in face_locations:
+    
+        :param file: image file name or file object to load
+    :param mode: format to convert the image to. Only 'RGB' (8-bit RGB, 3 channels) and 'L' (black and white) are supported.
+    :return: image contents as numpy array
+    '''
+    im = PIL.Image.open(file)
+    if mode:
+        im = im.convert(mode)
+    return np.array(im)
+    
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+            self.assertEqual(len(detected_faces), 1)
+        self.assertAlmostEqual(detected_faces[0].rect.top(), 259, delta=25)
+        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 552, delta=25)
     
     
-if __name__ == '__main__':
-    main()
-
-    
-        elif module.params['state'] == 'absent':
-        if existing['CustomerGateways']:
-            existing['CustomerGateway'] = existing['CustomerGateways'][0]
-            results['gateway'] = existing
-            if not module.check_mode:
-                results['gateway'] = gw_mgr.ensure_cgw_absent(
-                    existing['CustomerGateway']['CustomerGatewayId']
-                )
-            results['changed'] = True
-    
-        required = [volume_id, snapshot_id, instance_id]
-    if required.count(None) != len(required) - 1:  # only 1 must be set
-        module.fail_json(msg='One and only one of volume_id or instance_id or snapshot_id must be specified')
-    if instance_id and not device_name or device_name and not instance_id:
-        module.fail_json(msg='Instance ID and device name must both be specified')
-    
-            try:
-            matching_groups = conn.describe_cache_subnet_groups(group_name, max_records=100)
-            exists = len(matching_groups) > 0
-        except BotoServerError as e:
-            if e.error_code != 'CacheSubnetGroupNotFoundFault':
-                module.fail_json(msg=e.error_message)
-    
-    EXAMPLES = '''
----
-# Simple example to create a lambda function and publish a version
-- hosts: localhost
-  gather_facts: no
-  vars:
-    state: present
-    project_folder: /path/to/deployment/package
-    deployment_package: lambda.zip
-    account: 123456789012
-    production_version: 5
-  tasks:
-  - name: AWS Lambda Function
-    lambda:
-      state: '{{ state | default('present') }}'
-      name: myLambdaFunction
-      publish: True
-      description: lambda function description
-      code_s3_bucket: package-bucket
-      code_s3_key: 'lambda/{{ deployment_package }}'
-      local_path: '{{ project_folder }}/{{ deployment_package }}'
-      runtime: python2.7
-      timeout: 5
-      handler: lambda.handler
-      memory_size: 128
-      role: 'arn:aws:iam::{{ account }}:role/API2LambdaExecRole'
-    
-            fn = os.path.join(current_path, 'appids.txt')
-        self.public_appid = RandomGetSlice(fn, 60)
-    
-            fn = os.path.join(current_path, 'sni_slice.txt')
-        self.slice = RandomGetSlice(fn, 20, '|')
-    
-    
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
-
-    
-        raise RuntimeError( 'Path in 'g:ycm_server_python_interpreter' option '
-                        'does not point to a valid Python 2.7 or 3.4+.' )
-    
-      # Ignore 'contained' argument in first position.
-  if words[ 0 ] == 'contained':
-    words = words[ 1: ]
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
