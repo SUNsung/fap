@@ -1,77 +1,73 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
-    
-    def local_require
-  require 'json'
-  JSON.pretty_generate(DATA)
-end
-    
-      s.authors       = ['Tom Preston-Werner']
-  s.email         = 'tom@mojombo.com'
-  s.homepage      = 'https://github.com/jekyll/jekyll'
-    
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
-    
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
-        end
-      end
-    
-          # Forcing colored to be included on String before Term::ANSIColor, so that Inch will work correctly.
-      require 'colored2'
-      ENV['GENERATE_COVERAGE'] = 'true'
-      puts '\033[0;32mUsing #{`ruby --version`}\033[0m'
-    
-      if ARGV.include? '--no-ansi'
-    STDERR.puts <<-DOC
-    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
-    end
+          it 'sets the tainted bit' do
+    o = Object.new
+    o.taint
+    o.tainted?.should == true
   end
-end
+    
+      it 'transfers control to the innermost catch block waiting for the same sympol' do
+    one = two = three = 0
+    catch :duplicate do
+      catch :duplicate do
+        catch :duplicate do
+          one = 1
+          throw :duplicate
+        end
+        two = 2
+        throw :duplicate
+      end
+      three = 3
+      throw :duplicate
+    end
+    [one, two, three].should == [1, 2, 3]
+  end
+    
+      it 'writes each array element on a line when passes an array' do
+    lambda {
+      $VERBOSE = true
+      warn(['line 1', 'line 2'])
+    }.should output(nil, 'line 1\nline 2\n')
+  end
+    
+        s = StringIO.new
+    SystemConfig.dump_verbose_config s
+    # Dummy summary file, asciibetically first, to control display title of gist
+    files['# #{f.name} - #{timestamp}.txt'] = { content: brief_build_info(f) }
+    files['00.config.out'] = { content: s.string }
+    files['00.doctor.out'] = { content: Utils.popen_read('#{HOMEBREW_PREFIX}/bin/brew', 'doctor', err: :out) }
+    unless f.core_formula?
+      tap = <<~EOS
+        Formula: #{f.name}
+        Tap: #{f.tap}
+        Path: #{f.path}
+      EOS
+      files['00.tap.out'] = { content: tap }
+    end
+    
+          clear_cache
+      super(new_user, new_repo)
+    
+        def assets_path
+      @assets_path ||= File.join gem_path, 'assets'
+    end
+    
+      find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+          attr_reader :key, :default, :options
