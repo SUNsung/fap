@@ -1,145 +1,155 @@
 
         
-          def caveats
-    caveats = []
-    begin
-      build, f.build = f.build, Tab.for_formula(f)
-      s = f.caveats.to_s
-      caveats << s.chomp + '\n' if s.length > 0
-    ensure
-      f.build = build
-    end
-    caveats << keg_only_text
-    caveats << bash_completion_caveats
-    caveats << zsh_completion_caveats
-    caveats << fish_completion_caveats
-    caveats << plist_caveats
-    caveats << python_caveats
-    caveats << app_caveats
-    caveats << elisp_caveats
-    caveats.compact.join('\n')
-  end
+              def instrument(name, **options) # :doc:
+        options[:identifier] ||= (@template && @template.identifier) || @path
     
-      def dump
-    # Key Legend: Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R)
-    
-        it 'does not send previously configured receivers when the current agent does not support them' do
-      select_agent_type('Website Agent scrapes')
-      sleep 0.5
-      select2('ZKCD', from: 'Receivers')
-      select_agent_type('Email Agent')
-      fill_in(:agent_name, with: 'No receivers')
-      click_on 'Save'
-      expect(page).to have_content('No receivers')
-      agent = Agent.find_by(name: 'No receivers')
-      expect(agent.receivers).to eq([])
-    end
-  end
-end
-
-    
-      it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
-  end
-end
-
-    
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+            Check your system for potential problems. Doctor exits with a non-zero status
+        if any potential problems are found. Please note that these warnings are just
+        used to help the Homebrew maintainers with debugging if you file an issue. If
+        everything you use Homebrew for is working fine: please don't worry or file
+        an issue; just ignore this.
+      EOS
+      switch '--list-checks',
+        description: 'List all audit methods.'
+      switch '-D', '--audit-debug',
+        description: 'Enable debugging and profiling of audit methods.'
+      switch :verbose
+      switch :debug
     end
   end
     
-    end
-
-    
-    describe Utils do
-  describe '#unindent' do
-    it 'unindents to the level of the greatest consistant indention' do
-      expect(Utils.unindent(<<-MD)).to eq('Hello World')
-        Hello World
-      MD
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-            a_split <=> b_split
+      class Satisfier
+    def initialize(options, &block)
+      case options
+      when Hash
+        @options = { build_env: true }
+        @options.merge!(options)
       else
-        a.casecmp(b)
+        @satisfied = options
       end
+      @proc = block
+    end
+    
+          def tag
+        if MacOS.version >= :lion
+          MacOS.cat
+        elsif MacOS.version == :snow_leopard
+          Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
+        else
+          # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
+          if Hardware::CPU.type == :ppc
+            tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
+          else
+            tag = MacOS.cat
+          end
+          MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
+        end
+      end
+    end
+    
+      def to_ary
+    @paths.dup.to_ary
+  end
+  alias to_a to_ary
+    
+    Then(/^I should not be able to sign up$/) do
+  confirm_not_signed_up
+end
+    
+      # fill out the fields on the sign_in page and press submit
+  def login_as(user, pass)
+    fill_in 'user_username', :with=>user
+    fill_in 'user_password', :with=>pass
+    click_button 'Sign in'
+  end
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
   end
 end
 
     
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-        private
-    
-        def terminal_width
-      return @terminal_width if defined? @terminal_width
-    
-            css('.file').each do |node|
-          node.content = node.content.strip
-        end
-    
-            css('td h3', '.l-sub-section > h3', '.alert h3', '.row-margin > h3').each do |node|
-          node.name = 'h4'
-        end
-    
-          close_client(cli)
-    end
-  end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-                decode_asn1(asn1)
-          end
-    
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
-    end
-    
-        def is_question?(key)
-      value = fetch_for(key, nil)
-      !value.nil? && value.is_a?(Question)
-    end
-    
-          private
-    
-          def fetch_primary(role)
-        hosts = roles_for([role])
-        hosts.find(&:primary) || hosts.first
+          # Give each option an anchor.
+      doc.css('#filecontents li p strong code').each do |c|
+        c['id'] = c.inner_text.gsub(/:/, '') + '-option'
       end
     
-      if wiki_options[:plantuml_url]
-    Gollum::Filter::PlantUML.configure do |config|
-      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-      config.url = wiki_options[:plantuml_url]
-    end
-  end
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
+        end
+      rescue Errno::EACCES
+        # pass
+      end
     
-      s.add_development_dependency 'rack-test', '~> 0.6.2'
-  s.add_development_dependency 'shoulda', '~> 3.5.0'
-  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
-  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
-  s.add_development_dependency 'mocha', '~> 1.1.0'
-  s.add_development_dependency 'test-unit', '~> 3.1.0'
-  s.add_development_dependency 'webrick', '~> 1.3.1'
+              def set_global_#{name}(name, value)
+            global_env.set_#{name}(name, value)
+          end
+        RUBY
+      end
+    end
+    
+        class << self
+      # Returns an error report for an exception in CSS format.
+      #
+      # @param e [Exception]
+      # @param line_offset [Integer] The number of the first line of the Sass template.
+      # @return [String] The error report
+      # @raise [Exception] `e`, if the
+      #   {file:SASS_REFERENCE.md#full_exception-option `:full_exception`} option
+      #   is set to false.
+      def exception_to_css(e, line_offset = 1)
+        header = header_string(e, line_offset)
+    
+      include_examples 'multiline literal brace layout trailing comma' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+  end
+end
+
+    
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
+    
+          # Returns an array of all the values in the `hash` literal.
+      #
+      # @return [Array<Node>] an array of values in the `hash` literal
+      def values
+        each_pair.map(&:value)
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `if` and `unless` nodes, to aid comparisons and conversions.
+      #
+      # @return [Array<Node>] the different parts of the `if` statement
+      def node_parts
+        if unless?
+          condition, false_branch, true_branch = *self
+        else
+          condition, true_branch, false_branch = *self
+        end
+    
+          def initialize
+        @entries = []
+        yield self if block_given?
+      end
+    
+        def fire_event(event, options={})
+      reverse = options[:reverse]
+      reraise = options[:reraise]
