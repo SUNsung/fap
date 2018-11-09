@@ -1,60 +1,60 @@
 
         
-        
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
+                if isinstance(headers, bytes):
+            # Python < 3
+            headers = headers.decode('utf8')
+        return headers
     
-        model = Sequential()
-    model.add(layers.GRU(8,
-                         input_shape=(x_train.shape[1], x_train.shape[2])))
-    model.add(layers.Dense(y_train.shape[-1], activation='softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='rmsprop',
-                  metrics=['accuracy'])
-    model.summary()
-    history = model.fit(x_train, y_train, epochs=4, batch_size=10,
-                        validation_data=(x_test, y_test),
-                        verbose=0)
-    assert(history.history['acc'][-1] >= 0.8)
-    config = model.get_config()
-    model = Sequential.from_config(config)
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return requests.auth.HTTPDigestAuth(username, password)
+
     
-                # check dropout
-            layer_test(convolutional_recurrent.ConvLSTM2D,
-                       kwargs={'data_format': data_format,
-                               'return_sequences': return_sequences,
-                               'filters': filters,
-                               'kernel_size': (num_row, num_col),
-                               'padding': 'same',
-                               'dropout': 0.1,
-                               'recurrent_dropout': 0.1},
-                       input_shape=inputs.shape)
-    
-    from ..utils.data_utils import get_file
-import numpy as np
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
+    UNICODE = FILE_CONTENT
+
     
     
-if __name__ == '__main__':
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    # This is a demo of running face recognition on a video file and saving the results to a new video file.
-#
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+            def get_auth(self, username=None, password=None):
+            assert username is None
+            assert password is None
+            assert self.raw_auth == BASIC_AUTH_HEADER_VALUE
+            return basic_auth(self.raw_auth)
     
-        # Save each frame of the video to a list
-    frame_count += 1
-    frames.append(frame)
     
-                # If a match was found in known_face_encodings, just use the first one.
-            if True in matches:
-                first_match_index = matches.index(True)
-                name = known_face_names[first_match_index]
+def test_current_version():
+    version = Environment().config['__meta__']['httpie']
+    assert version == __version__
+
     
-        :param train_dir: directory that contains a sub-directory for each known person, with its name.
+    
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
+    
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
+
+    
+    
+def test_unicode_headers_verbose(httpbin):
+    # httpbin doesn't interpret utf8 headers
+    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
