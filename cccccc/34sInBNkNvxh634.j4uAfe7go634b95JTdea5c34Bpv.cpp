@@ -1,137 +1,147 @@
 
         
-        
-    {    result->AppendBoolean(success);
-    return;
-  } else if (method == 'UnregisterGlobalHotKey') {
-    int object_id = -1;
-    arguments.GetInteger(0, &object_id);
-    Shortcut* shortcut =
-        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
-    GlobalShortcutListener::GetInstance()->UnregisterAccelerator(
-        shortcut->GetAccelerator(), shortcut);
-    return;
-  } else if (method == 'SetProxyConfig') {
-    std::string proxy_config;
-    arguments.GetString(0, &proxy_config);
-    SetProxyConfig(GetRenderProcessHost(), proxy_config);
-    return;
-  } else if (method == 'DoneMenuShow') {
-    dispatcher_host->quit_run_loop();
-    return;
-  }
+         protected:
+   /**
+   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
+   *
+   * @param n
+   *    The upperbound (exclusive) value of the random number.
+   * @return
+   *    A uniformly random integer value from ({0, 1, ..., n-1}).
+   */
+  virtual int Rand(int n);
     
     
-    {}  // namespace remote
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-    namespace nw {
-    }
-    
-      private:
-    bool ReadText(ClipboardData& data) {
-      DCHECK(data.type == TYPE_TEXT);
-      base::string16 text;
-      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
-      return true;
-    }
-    
-    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardGetListSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
+    
+    
+    {  /// Whether to ignore instances with a certain label.
+  bool has_ignore_label_;
+  /// The label indicating that an instance should be ignored.
+  int ignore_label_;
+  /// Keeps counts of the number of samples per class.
+  Blob<Dtype> nums_buffer_;
+};
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
+ public:
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    namespace caffe {
+    }
     
      protected:
-  ~NwObjCallObjectMethodSyncFunction() override;
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
- */
-template <typename Dtype>
-class DataTransformer {
- public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
-    }
-    
-    
-    {  shared_ptr<boost::thread> thread_;
-};
-    
-    namespace caffe {
-    }
-    
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_BATCHREINDEX_LAYER_HPP_
-
-    
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
- public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
+    #include 'caffe/layers/base_conv_layer.hpp'
     
     #ifdef USE_CUDNN
 template <typename Dtype>
@@ -147,174 +157,107 @@ class CuDNNLCNLayer : public LRNLayer<Dtype> {
   virtual ~CuDNNLCNLayer();
     }
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
+      virtual void PredictInteractionContributions(DMatrix* dmat,
+                                   std::vector<bst_float>* out_contribs,
+                                   const gbm::GBTreeModel& model,
+                                   unsigned ntree_limit = 0,
+                                   bool approximate = false) = 0;
+    
+      void BeforeFirst() override {
+    parser_->BeforeFirst();
+  }
+    
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
  */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
+class SparsePageWriter {
  public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #endif  // TESSERACT_ARCH_DOTPRODUCTSSE_H_
+    {
+    {
+    {  // base margin
+  bst_float base_margin;
+  // model parameter
+  GBTreeModelParam param;
+  /*! \brief vector of trees stored in the model */
+  std::vector<std::unique_ptr<RegTree> > trees;
+  /*! \brief for the update process, a place to keep the initial trees */
+  std::vector<std::unique_ptr<RegTree> > trees_to_update;
+  /*! \brief some information indicator of the tree, reserved */
+  std::vector<int> tree_info;
+};
+}  // namespace gbm
+}  // namespace xgboost
 
     
-    int16_t word_blob_quality(WERD_RES *word, ROW *row);
-void reject_whole_page(PAGE_RES_IT &page_res_it);
-    
-    #ifndef TESSERACT_CCMAIN_OSDETECT_H_
-#define TESSERACT_CCMAIN_OSDETECT_H_
-    
-    /**
- * Returns a binary image of the current object at the given level.
- * The position and size match the return from BoundingBoxInternal, and so this
- * could be upscaled with respect to the original input image.
- * Use pixDestroy to delete the image after use.
- * The following methods are used to generate the images:
- * RIL_BLOCK: mask the page image with the block polygon.
- * RIL_TEXTLINE: Clip the rectangle of the line box from the page image.
- * TODO(rays) fix this to generate and use a line polygon.
- * RIL_WORD: Clip the rectangle of the word box from the page image.
- * RIL_SYMBOL: Render the symbol outline to an image for cblobs (prior
- * to recognition) or the bounding box otherwise.
- * A reconstruction of the original image (using xor to check for double
- * representation) should be reasonably accurate,
- * apart from removed noise, at the block level. Below the block level, the
- * reconstruction will be missing images and line separators.
- * At the symbol level, kerned characters will be invade the bounding box
- * if rendered after recognition, making an xor reconstruction inaccurate, but
- * an or construction better. Before recognition, symbol-level reconstruction
- * should be good, even with xor, since the images come from the connected
- * components.
- */
-Pix* PageIterator::GetBinaryImage(PageIteratorLevel level) const {
-  int left, top, right, bottom;
-  if (!BoundingBoxInternal(level, &left, &top, &right, &bottom))
-    return nullptr;
-  if (level == RIL_SYMBOL && cblob_it_ != nullptr &&
-      cblob_it_->data()->area() != 0)
-    return cblob_it_->data()->render();
-  Box* box = boxCreate(left, top, right - left, bottom - top);
-  Pix* pix = pixClipRectangle(tesseract_->pix_binary(), box, nullptr);
-  boxDestroy(&box);
-  if (level == RIL_BLOCK || level == RIL_PARA) {
-    // Clip to the block polygon as well.
-    TBOX mask_box;
-    Pix* mask = it_->block()->block->render_mask(&mask_box);
-    int mask_x = left - mask_box.left();
-    int mask_y = top - (tesseract_->ImageHeight() - mask_box.top());
-    // AND the mask and pix, putting the result in pix.
-    pixRasterop(pix, std::max(0, -mask_x), std::max(0, -mask_y), pixGetWidth(pix),
-                pixGetHeight(pix), PIX_SRC & PIX_DST, mask, std::max(0, mask_x),
-                std::max(0, mask_y));
-    pixDestroy(&mask);
+    bool SetDepth(int p0, HuffmanTree *pool, uint8_t *depth, int max_depth) {
+  int stack[17];
+  int level = 0;
+  int p = p0;
+  assert(max_depth <= 16);
+  stack[0] = -1;
+  while (true) {
+    if (pool[p].index_left_ >= 0) {
+      level++;
+      if (level > max_depth) return false;
+      stack[level] = pool[p].index_right_or_value_;
+      p = pool[p].index_left_;
+      continue;
+    } else {
+      depth[pool[p].index_right_or_value_] = static_cast<uint8_t>(level);
+    }
+    while (level >= 0 && stack[level] == -1) level--;
+    if (level < 0) return true;
+    p = stack[level];
+    stack[level] = -1;
   }
-  return pix;
 }
     
-      /**
-   * Returns the polygon outline of the current block. The returned Pta must
-   * be ptaDestroy-ed after use. Note that the returned Pta lists the vertices
-   * of the polygon, and the last edge is the line segment between the last
-   * point and the first point. nullptr will be returned if the iterator is
-   * at the end of the document or layout analysis was not used.
-   */
-  Pta* BlockPolygon() const;
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
+    std::string ReadFileOrDie(const char* filename) {
+  bool read_from_stdin = strncmp(filename, '-', 2) == 0;
     }
     
-      if (bytes_left_ >= num_bytes) {
-    bytes_left_ -= num_bytes;
-    return 0;
-  }
-  // The frequency to get time inside DB mutex is less than one per refill
-  // interval.
-  auto time_now = NowMicrosMonotonic(env);
     
+    {}  // namespace guetzli
     
-    {  std::unique_ptr<RateLimiter> low_pri_rate_limiter_;
-};
-    
-    
-    {    std::vector<std::string> input_file_names;
-    for (auto level : cf_meta.levels) {
-      for (auto file : level.files) {
-        if (file.being_compacted) {
-          return nullptr;
-        }
-        input_file_names.push_back(file.name);
-      }
+    // Huffman code and decoding lookup table used for DC and AC coefficients.
+struct JPEGHuffmanCode {
+  JPEGHuffmanCode() : counts(kJpegHuffmanMaxBitLength + 1),
+                      values(kJpegHuffmanAlphabetSize + 1),
+                      slot_id(0),
+                      is_last(true) {}
     }
-    return new CompactionTask(
-        db, this, cf_name, input_file_names,
-        options_.num_levels - 1, compact_options_, false);
-  }
     
-      // Initialize pointer options for each column family
-  for (size_t i = 0; i < loaded_cf_descs.size(); ++i) {
-    auto* loaded_bbt_opt = reinterpret_cast<BlockBasedTableOptions*>(
-        loaded_cf_descs[0].options.table_factory->GetOptions());
-    // Expect the same as BlockBasedTableOptions will be loaded form file.
-    assert(loaded_bbt_opt->block_size == bbt_opts.block_size);
-    // However, block_cache needs to be manually initialized as documented
-    // in rocksdb/utilities/options_util.h.
-    loaded_bbt_opt->block_cache = cache;
-  }
-  // In addition, as pointer options are initialized with default value,
-  // we need to properly initialized all the pointer options if non-defalut
-  // values are used before calling DB::Open().
-  assert(loaded_cf_descs[0].options.compaction_filter == nullptr);
-  loaded_cf_descs[0].options.compaction_filter = compaction_filter.get();
-    
-      // Write a key OUTSIDE of this transaction.
-  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
-  // here, the transaction would fail to commit.
-  s = txn_db->Put(write_options, 'xyz', 'zzz');
-    
-    #if USE_ESD_CAN
-  CANCardParameter can_card_parameter;
-  can_card_parameter.set_brand(CANCardParameter::ESD_CAN);
-  can_card_parameter.set_type(CANCardParameter::PCI_CARD);
-  can_card_parameter.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-    
-    
-    { private:
-  bool is_receiving_ = false;
-  bool is_sending_finish_ = false;
-  CanAgent *other_agent_ = nullptr;
-  TestCanParam *param_ptr_ = nullptr;
-  std::unique_ptr<std::thread> thread_recv_;
-  std::unique_ptr<std::thread> thread_send_;
-};
-    
-    #ifdef NTCAN_ERROR_FORMAT_LONG
-  {
-    NTCAN_RESULT res;
-    char sz_error_text[60];
-    }
+      void AddOtherAgent(CanAgent *agent) { other_agent_ = agent; }
     
     
     {
@@ -324,32 +267,55 @@ class RowInfo {
 }  // namespace canbus
 }  // namespace drivers
 }  // namespace apollo
+
     
-      /**
-   * @brief Initialize the fake CAN client by specified CAN card parameters.
-   * @param parameter CAN card parameters to initialize the CAN client.
-   * @return If the initialization is successful.
+    #include 'gflags/gflags.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    #include <vector>
+    
+    /**
+ * @class MessageManager
+ *
+ * @brief message manager manages protocols. It supports parse and can get
+ * protocol data by message id.
+ */
+template <typename SensorType>
+class MessageManager {
+ public:
+  /*
+  * @brief constructor function
+  */
+  MessageManager() {}
+  /*
+   * @brief destructor function
    */
-  bool Init(const CANCardParameter &param) override;
-    
-    // buf size must be 8 bytes, every time, we receive only one frame
-ErrorCode SocketCanClientRaw::Receive(std::vector<CanFrame> *const frames,
-                                      int32_t *const frame_num) {
-  if (!is_started_) {
-    AERROR << 'Nvidia can client is not init! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
-  }
+  virtual ~MessageManager() = default;
     }
     
+    #include 'gtest/gtest.h'
     
-    {  receiver.Init(&can_client, &pm, false);
-  EXPECT_EQ(receiver.Start(), common::ErrorCode::OK);
-  EXPECT_TRUE(receiver.IsRunning());
-  receiver.Stop();
-  EXPECT_FALSE(receiver.IsRunning());
+    // (SUM(input))^0xFF
+template <typename SensorType>
+uint8_t ProtocolData<SensorType>::CalculateCheckSum(const uint8_t *input,
+                                                    const uint32_t length) {
+  return std::accumulate(input, input + length, 0) ^ 0xFF;
 }
     
-    #include 'gtest/gtest.h'
+    std::string Byte::to_binary_string() const { return byte_to_binary(*value_); }
     
       /**
    * @brief Reset the lower 4 bits as the lower 4 bits of a specified one-byte
@@ -359,11 +325,9 @@ ErrorCode SocketCanClientRaw::Receive(std::vector<CanFrame> *const frames,
    */
   void set_value_low_4_bits(const uint8_t value);
     
-    template <typename SensorType>
-Status SensorCanbus<SensorType>::Start() {
-  // 1. init and start the can card hardware
-  if (can_client_->Start() != ErrorCode::OK) {
-    return OnError('Failed to start can client');
-  }
-  AINFO << 'Can client is started.';
-    }
+      // last step: publish monitor messages
+  common::monitor::MonitorLogBuffer buffer(&monitor_logger_);
+  buffer.INFO('Canbus is started.');
+    
+    // System gflags
+DEFINE_string(sensor_node_name, '', 'Sensor node name.');
