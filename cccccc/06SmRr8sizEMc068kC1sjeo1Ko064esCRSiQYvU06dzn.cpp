@@ -1,371 +1,266 @@
 
         
-        #ifndef ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
-#define ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
+        #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
+  }
+}
+#endif
     
-    namespace api {
+      size_t numTrailingObjects(OverloadToken<Type>) const {
+    return getNumReplacementTypes();
+  }
+    
+      if (triple.getOS() == llvm::Triple::Darwin &&
+      triple.getVendor() == llvm::Triple::Apple) {
+    // Rewrite darwinX.Y triples to macosx10.X'.Y ones.
+    // It affects code generation on our platform.
+    llvm::SmallString<16> osxBuf;
+    llvm::raw_svector_ostream osx(osxBuf);
+    osx << llvm::Triple::getOSTypeName(llvm::Triple::MacOSX);
     }
     
-      // GlobalShortcutListener::Observer implementation.
-  void OnKeyPressed(const ui::Accelerator& accelerator) override;
+    bool swift::canBeMemberName(StringRef identifier) {
+  return llvm::StringSwitch<bool>(identifier)
+    .Case('init', false)
+    .Case('Protocol', false)
+    .Case('self', false)
+    .Case('Type', false)
+    .Default(true);
+}
     
-      // ui::SimpleMenuModel::Delegate:
-  bool IsCommandIdChecked(int command_id) const override;
-  bool IsCommandIdEnabled(int command_id) const override;
-  bool IsCommandIdVisible(int command_id) const override;
-  bool GetAcceleratorForCommandIdWithParams(
-      int command_id,
-      bool use_default_accelerator,
-      ui::Accelerator* accelerator) const override;
-  void ExecuteCommand(int command_id, int event_flags) override;
-  void MenuWillShow(ui::SimpleMenuModel* source) override;
+    #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
+#endif
     
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_net, Initialize)
-
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+    
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    void Context::InitializeFieldGeneratorInfoForMessage(
+    const Descriptor* message) {
+  for (int i = 0; i < message->nested_type_count(); ++i) {
+    InitializeFieldGeneratorInfoForMessage(message->nested_type(i));
+  }
+  std::vector<const FieldDescriptor*> fields;
+  for (int i = 0; i < message->field_count(); ++i) {
+    fields.push_back(message->field(i));
+  }
+  InitializeFieldGeneratorInfoForFields(fields);
+    }
+    
+      string::size_type pos = result.find_first_of('\n');
+  if (pos != string::npos) {
+    result.erase(pos);
+  }
+    
+    #include <google/protobuf/compiler/java/java_generator_factory.h>
+    
+    string ClassNameResolver::GetFileDefaultImmutableClassName(
+    const FileDescriptor* file) {
+  string basename;
+  string::size_type last_slash = file->name().find_last_of('/');
+  if (last_slash == string::npos) {
+    basename = file->name();
+  } else {
+    basename = file->name().substr(last_slash + 1);
+  }
+  return UnderscoresToCamelCase(StripProto(basename), true);
+}
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_OBJECTIVEC_EXTENSION_H__
+#define GOOGLE_PROTOBUF_COMPILER_OBJECTIVEC_EXTENSION_H__
+    
+    std::string tmppath() {
+  // TMPFILE is for manual test execution during which the user will specify
+  // the full temp file path using the environmental variable TMPFILE
+  const char* tmpfile = getenv('TMPFILE');
+  if (tmpfile) {
+    return std::string(tmpfile);
+  }
+    }
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+    ```
+    
+    namespace caffe2 {
+    }
     
     
-    {}  // namespace atom
+    {} // namespace caffe2
     
-      // display::DisplayObserver:
-  void OnDisplayAdded(const display::Display& new_display) override;
-  void OnDisplayRemoved(const display::Display& old_display) override;
-  void OnDisplayMetricsChanged(const display::Display& display,
-                               uint32_t changed_metrics) override;
+    ```
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    APCHandle::Pair APCCollection::WrapArray(APCHandle::Pair inner,
+                                         CollectionType colType) {
+  auto const col = new APCCollection;
+  col->m_arrayHandle = inner.handle;
+  col->m_colType = colType;
+  return { &col->m_handle, inner.size + sizeof(APCCollection) };
+}
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
+    {private:
+  APCHandle m_handle;
+  APCHandle* m_arrayHandle;
+  CollectionType m_colType;
 };
     
-    #include 'swift/AST/SyntaxASTMap.h'
-#include 'swift/AST/Expr.h'
-#include 'swift/AST/Decl.h'
-#include 'swift/AST/Stmt.h'
-#include 'swift/Syntax/Syntax.h'
-    
-        if (info.bytes == 0)
-      return false;
-    
-    #include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
-    
-      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
-    
-      // Set the '_endian' platform condition.
-  switch (Target.getArch()) {
-  case llvm::Triple::ArchType::arm:
-  case llvm::Triple::ArchType::thumb:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
-    break;
-  case llvm::Triple::ArchType::aarch64:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
-    break;
-  case llvm::Triple::ArchType::ppc64:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'big');
-    break;
-  case llvm::Triple::ArchType::ppc64le:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
-    break;
-  case llvm::Triple::ArchType::x86:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
-    break;
-  case llvm::Triple::ArchType::x86_64:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'little');
-    break;
-  case llvm::Triple::ArchType::systemz:
-    addPlatformConditionValue(PlatformConditionKind::Endianness, 'big');
-    break;
-  default:
-    llvm_unreachable('undefined architecture endianness');
-  }
-    
-    #include 'swift/Basic/UUID.h'
-    
-      if (clangDiag.getID() == clang::diag::err_module_not_built &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    SourceLoc loc = DiagLoc;
-    if (clangDiag.getLocation().isValid())
-      loc = resolveSourceLocation(clangDiag.getSourceManager(),
-                                  clangDiag.getLocation());
+    struct FatalErrorException : ExtendedException {
+  explicit FatalErrorException(const char *msg)
+    : ExtendedException('%s', msg)
+  {}
+  FatalErrorException(int, ATTRIBUTE_PRINTF_STRING const char *msg, ...)
+    ATTRIBUTE_PRINTF(3,4);
+  FatalErrorException(const std::string&, const Array& backtrace,
+                      bool isRecoverable = false);
     }
     
-    #include <grpc/support/port_platform.h>
+    inline TypedValue ExecutionContext::invokeMethod(
+  ObjectData* obj,
+  const Func* meth,
+  InvokeArgs args,
+  bool dynamic
+) {
+  return invokeFuncFew(
+    meth,
+    ActRec::encodeThis(obj),
+    nullptr /* invName */,
+    args.size(),
+    args.start(),
+    dynamic
+  );
+}
     
-    #include <grpc/support/port_platform.h>
+        // skipping 'tags' files
+    if (strcmp(ename, 'tags') == 0) {
+      continue;
+    }
     
-      Status GetFileContainingExtension(
-      ServerContext* context,
-      const reflection::v1alpha::ExtensionRequest* request,
-      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
     
     
     {
-    {   private:
-    const grpc::string name_;
-    const int value_;
-  };
-  return std::unique_ptr<ServerBuilderOption>(new IntOption(name, value));
-}
-    
-    /**
-	@author AndreaCatania
-*/
-    
-    void ConstraintBullet::setup(btTypedConstraint *p_constraint) {
-	constraint = p_constraint;
-	constraint->setUserConstraintPtr(this);
-}
-    
-    public:
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
-    
-    class JointBullet : public ConstraintBullet {
-    }
-    
-    	const RigidBodyBullet *getRigidBodyA() const;
-	const RigidBodyBullet *getRigidBodyB() const;
-	const Transform getCalculatedTransformA() const;
-	const Transform getCalculatedTransformB() const;
-	const Transform getFrameOffsetA() const;
-	const Transform getFrameOffsetB() const;
-	Transform getFrameOffsetA();
-	Transform getFrameOffsetB();
-	real_t getLowerLinLimit() const;
-	void setLowerLinLimit(real_t lowerLimit);
-	real_t getUpperLinLimit() const;
-	void setUpperLinLimit(real_t upperLimit);
-	real_t getLowerAngLimit() const;
-	void setLowerAngLimit(real_t lowerLimit);
-	real_t getUpperAngLimit() const;
-	void setUpperAngLimit(real_t upperLimit);
-    
-    	jclass activityThread = env->FindClass('android/app/ActivityThread');
-	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
-	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
-	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
-	jobject context = env->CallObjectMethod(at, getApplication);
-    
-    FuncRef::FuncRef() {
-    }
-    
-      Status OpenCompactionOutputFile(CompactionState* compact);
-  Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
-  Status InstallCompactionResults(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-      explicit ModelDB(const Options& options): options_(options) { }
-  ~ModelDB() { }
-  virtual Status Put(const WriteOptions& o, const Slice& k, const Slice& v) {
-    return DB::Put(o, k, v);
-  }
-  virtual Status Delete(const WriteOptions& o, const Slice& key) {
-    return DB::Delete(o, key);
-  }
-  virtual Status Get(const ReadOptions& options,
-                     const Slice& key, std::string* value) {
-    assert(false);      // Not implemented
-    return Status::NotFound(key);
-  }
-  virtual Iterator* NewIterator(const ReadOptions& options) {
-    if (options.snapshot == nullptr) {
-      KVMap* saved = new KVMap;
-      *saved = map_;
-      return new ModelIter(saved, true);
-    } else {
-      const KVMap* snapshot_state =
-          &(reinterpret_cast<const ModelSnapshot*>(options.snapshot)->map_);
-      return new ModelIter(snapshot_state, false);
-    }
-  }
-  virtual const Snapshot* GetSnapshot() {
-    ModelSnapshot* snapshot = new ModelSnapshot;
-    snapshot->map_ = map_;
-    return snapshot;
-  }
-    
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
-    
-    
-    {}  // namespace leveldb
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
-  }
-  return (ok ? 0 : 1);
-}
-
-    
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-    unsigned int Reader::ReadPhysicalRecord(Slice* result) {
-  while (true) {
-    if (buffer_.size() < kHeaderSize) {
-      if (!eof_) {
-        // Last read was a full read, so this is a trailer to skip
-        buffer_.clear();
-        Status status = file_->Read(kBlockSize, &buffer_, backing_store_);
-        end_of_buffer_offset_ += buffer_.size();
-        if (!status.ok()) {
-          buffer_.clear();
-          ReportDrop(kBlockSize, status);
-          eof_ = true;
-          return kEof;
-        } else if (buffer_.size() < kBlockSize) {
-          eof_ = true;
-        }
-        continue;
-      } else {
-        // Note that if buffer_ is non-empty, we have a truncated header at the
-        // end of the file, which can be caused by the writer crashing in the
-        // middle of writing the header. Instead of considering this an error,
-        // just report EOF.
-        buffer_.clear();
-        return kEof;
-      }
-    }
-    }
-    }
-    
-      // Offset at which to start looking for the first record to return
-  uint64_t const initial_offset_;
-    
-    static void InitTypeCrc(uint32_t* type_crc) {
-  for (int i = 0; i <= kMaxRecordType; i++) {
-    char t = static_cast<char>(i);
-    type_crc[i] = crc32c::Value(&t, 1);
-  }
-}
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-        // Select Surface Format
-    const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
-    const VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-    wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, wd->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
-    
-    #define IM_VEC4_CLASS_EXTRA                                                 \
-        ImVec4(const MyVec4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplAllegro5_Init(display);
-    
-        // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    
-    
-    {    // Create texture sampler
     {
-        D3D11_SAMPLER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-        desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.MipLODBias = 0.f;
-        desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
-        g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
-    }
-}
+} // namespace BOOST_REGEX_DETAIL_NS
+using boost::BOOST_REGEX_DETAIL_NS::directory_iterator;
+using boost::BOOST_REGEX_DETAIL_NS::file_iterator;
+using boost::BOOST_REGEX_DETAIL_NS::mapfile;
+} // namespace boost
     
+       format_perl = 0,                                  /* perl style replacement */
+   format_default = 0,                               /* ditto. */
+   format_sed = match_max << 1,                      /* sed style replacement. */
+   format_all = format_sed << 1,                     /* enable all extentions to sytax. */
+   format_no_copy = format_all << 1,                 /* don't copy non-matching segments. */
+   format_first_only = format_no_copy << 1,          /* Only replace first occurance. */
+   format_is_if = format_first_only << 1,            /* internal use only. */
+   format_literal = format_is_if << 1                /* treat string as a literal */
     
-    {        return true;
-    }
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+    template <class BidiIterator, class Allocator, class traits>
+inline void perl_matcher<BidiIterator, Allocator, traits>::push_repeater_count(int i, repeater_count<BidiIterator>** s)
 {
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
+   saved_repeater<BidiIterator>* pmp = static_cast<saved_repeater<BidiIterator>*>(m_backup_state);
+   --pmp;
+   if(pmp < m_stack_base)
+   {
+      extend_stack();
+      pmp = static_cast<saved_repeater<BidiIterator>*>(m_backup_state);
+      --pmp;
+   }
+   (void) new (pmp)saved_repeater<BidiIterator>(i, s, position, this->recursion_stack.size() ? this->recursion_stack.back().idx : (INT_MIN + 3));
+   m_backup_state = pmp;
 }
     
-    void DHTResponseMessage::fillMessage(Dict* msgDict)
+    
+    {
+    {}
+} // namespace boost
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_format.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides formatting output routines for search and replace
+  *                operations.  Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+    
+    #ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
+    
+    typedef regex_token_iterator<const char*> cregex_token_iterator;
+typedef regex_token_iterator<std::string::const_iterator> sregex_token_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_token_iterator<const wchar_t*> wcregex_token_iterator;
+typedef regex_token_iterator<std::wstring::const_iterator> wsregex_token_iterator;
+#endif
+    
+    #ifndef BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
+#define BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
+    
+    template< >
+struct make_storage_type< 8u, true >
 {
-  msgDict->put(R, getResponse());
-}
-    
-      char headerCompat[8];
-  memset(headerCompat, 0, sizeof(headerCompat));
-  // magic
-  headerCompat[0] = 0xa1u;
-  headerCompat[1] = 0xa2u;
-  // format ID
-  headerCompat[2] = 0x02u;
-  // version
-  headerCompat[6] = 0;
-  headerCompat[7] = 0x02u;
-    
-    #include <algorithm>
-    
-      ~DHTTaskExecutor();
-    
-    #endif // D_DHT_TASK_QUEUE_H
-
-    
-    bool DHTUnknownMessage::isReply() const { return false; }
-    
-    BENCHMARK_PARAM(BENCHFUN(pushBack), 16)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 128)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 1024)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 10240)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 102400)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 1024000)
-
-    
-        // Check address information of the tracepoint
-    intptr_t probeAddr = getAddr(note, pos);
-    CHECK_GT(probeAddr, 0);
-    remaining -= kAddrWidth;
-    
-    namespace std {
+    typedef mars_boost::int64_t type;
     }
     
-      /**
-   * @brief Transform an integer with the size of 4 bytes to its hexadecimal
-   *        represented by a string.
-   * @param value The target integer to transform.
-   * @return Hexadecimal representing the target integer.
-   */
-  static std::string byte_to_hex(const uint32_t value);
-    
-    // Send the error to monitor and return it
-template <typename SensorType>
-Status SensorCanbus<SensorType>::OnError(const std::string &error_msg) {
-  common::monitor::MonitorLogBuffer buffer(&monitor_logger_);
-  buffer.ERROR(error_msg);
-  return Status(ErrorCode::CANBUS_ERROR, error_msg);
+    #if BOOST_ATOMIC_SIGNAL_FENCE > 0
+BOOST_FORCEINLINE void atomic_signal_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::signal_fence(order);
 }
-    
-    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
-              'The adapter config file');
-    
-    DECLARE_string(adapter_config_filename);
+#else
+BOOST_FORCEINLINE void atomic_signal_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::signal_fence();
+}
+#endif
