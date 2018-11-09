@@ -1,62 +1,40 @@
 
         
-        #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
-
+        
+    {}  // namespace
     
-    static SECP256K1_INLINE void secp256k1_ge_storage_cmov(secp256k1_ge_storage *r, const secp256k1_ge_storage *a, int flag) {
-    secp256k1_fe_storage_cmov(&r->x, &a->x, flag);
-    secp256k1_fe_storage_cmov(&r->y, &a->y, flag);
-}
-    
-    #include 'univalue.h'
-    
-    // Multiply-included file, no traditional include guard.
-#include <string>
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
     
-namespace nwapi {
+    {}  // namespace atom
+    
+      // content::DownloadManager::Observer:
+  void OnDownloadCreated(content::DownloadManager* manager,
+                         download::DownloadItem* item) override;
+    
+    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
+ public:
+  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
+  ~AtomJavaScriptDialogManager() override;
     }
     
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
+    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
+    
+    RenderView* GetCurrentRenderView() {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::Local<v8::Context> ctx = isolate->GetCurrentContext();
+  return GetRenderView(ctx);
 }
     
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/message_loop/message_loop_current.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
-    
-          // strip off data uri header if raw is set
-      if (!(data.raw.get() && *(data.raw))) {
-        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kPNGDataUriPrefix));
-        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kJPEGDataUriPrefix));
-        } else {
-          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
-          return false;
-        }
-      }
+    bool MenuDelegate::IsCommandIdChecked(int command_id) const {
+  if (command_id < 0)
+    return false;
+    }
     
     class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
  public:
@@ -64,225 +42,161 @@ namespace nwapi {
   bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
  public:
-  NwMenuGetNSStringFWithFixupFunction() {}
+  NwMenuGetNSStringWithFixupFunction(){}
   bool RunNWSync(base::ListValue* response, std::string* error) override;
     
  protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
+  ~NwMenuGetNSStringWithFixupFunction() override {}
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
  private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
 };
     
+    #include 'modules/common/macro.h'
+#include 'modules/common/util/factory.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
     
-    {
-} // namespace extensions
-
-    
-    
-    {}  // namespace tesseract.
-    
-    int os_detect_blobs(const GenericVector<int>* allowed_scripts,
-                    BLOBNBOX_CLIST* blob_list,
-                    OSResults* osr,
-                    tesseract::Tesseract* tess);
-    
-    /**
- * Returns the bounding rectangle of the current object at the given level in
- * coordinates of the original image.
- * See comment on coordinate system above.
- * Returns false if there is no such object at the current position.
- */
-bool PageIterator::BoundingBox(PageIteratorLevel level,
-                               int* left, int* top,
-                               int* right, int* bottom) const {
-  return BoundingBox(level, 0, left, top, right, bottom);
-}
-    
-    
-/**********************************************************************
- * join_words
- *
- * The opposite of split_word():
- *  join word2 (including any recognized data / seam array / etc)
- *  onto the right of word and then delete word2.
- *  Also, if orig_bb is provided, stitch it back into word.
- **********************************************************************/
-void Tesseract::join_words(WERD_RES *word,
-                           WERD_RES *word2,
-                           BlamerBundle *orig_bb) const {
-  TBOX prev_box = word->chopped_word->blobs.back()->bounding_box();
-  TBOX blob_box = word2->chopped_word->blobs[0]->bounding_box();
-  // Tack the word2 outputs onto the end of the word outputs.
-  word->chopped_word->blobs += word2->chopped_word->blobs;
-  word->rebuild_word->blobs += word2->rebuild_word->blobs;
-  word2->chopped_word->blobs.clear();
-  word2->rebuild_word->blobs.clear();
-  TPOINT split_pt;
-  split_pt.x = (prev_box.right() + blob_box.left()) / 2;
-  split_pt.y = (prev_box.top() + prev_box.bottom() +
-                blob_box.top() + blob_box.bottom()) / 4;
-  // Move the word2 seams onto the end of the word1 seam_array.
-  // Since the seam list is one element short, an empty seam marking the
-  // end of the last blob in the first word is needed first.
-  word->seam_array.push_back(new SEAM(0.0f, split_pt));
-  word->seam_array += word2->seam_array;
-  word2->seam_array.truncate(0);
-  // Fix widths and gaps.
-  word->blob_widths += word2->blob_widths;
-  word->blob_gaps += word2->blob_gaps;
-  // Fix the ratings matrix.
-  int rat1 = word->ratings->dimension();
-  int rat2 = word2->ratings->dimension();
-  word->ratings->AttachOnCorner(word2->ratings);
-  ASSERT_HOST(word->ratings->dimension() == rat1 + rat2);
-  word->best_state += word2->best_state;
-  // Append the word choices.
-  *word->raw_choice += *word2->raw_choice;
+      CANCardParameter can_client_conf_b;
+  std::unique_ptr<CanClient> client_b;
+  if (!FLAGS_only_one_send) {
+    if (!apollo::common::util::GetProtoFromFile(FLAGS_can_client_conf_file_b,
+                                                &can_client_conf_b)) {
+      AERROR << 'Unable to load canbus conf file: '
+             << FLAGS_can_client_conf_file_b;
+      return 1;
+    } else {
+      AINFO << 'Conf file is loaded: ' << FLAGS_can_client_conf_file_b;
     }
-    
-        template <typename ElementType>
-    void LearnerMomentumSGD::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
-                                    const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const
-    {
-        GET_WRITABLE_MATRICES;
-        /*
-        Let
-            u_t = \beta_1 u_{t-1} + \bar{\beta_1}  g_t 
-        With our scaling, the correct momentum update rule should be: 
-        \begin{itemize}
-        \item For classic momentum SGD, $\bar{\beta_1} = 1$
-        \item For unit gain momentum SGD, $\bar{\beta_1} = 1 - \beta_1$
-        \end{itemize}
-        The model update at time step $t$  is
-        \begin{align}
-        w_{t+1} &= w_{t} - \eta u_{t} \\
-        &= w_{t} - \bar{\beta_1} \sum_{j=1}^t \beta_1^{t - j} \sum_{x_i \in B_j} \frac{\eta}{M}\nabla_{w_{t}} l(w_{t}, x_i)\\
-        &= w_0 -  \sum_{k=0}^{T}[j(T) - j(k) + 1]\frac{\eta  \bar{\beta_1} \beta_1^{j(T) - j(k)} }{M}  \nabla_{w} l(w_{j(k)}, x_k)   \\
-        &= w_0 -  \sum_{k=0}^{T}(\lfloor \frac{T - k}{M} \rfloor + 1)\frac{\eta  \bar{\beta_1} \beta_1^{j(T) - j(k)} }{M}  \nabla_{w} l(w_{j(k)}, x_k)       \\
-        &= w_0 -  \sum_{k=0}^{T}(\lfloor \frac{T - k}{M} \rfloor + 1)\beta_1^{\lfloor \frac{T - k}{M} \rfloor}  \left[\frac{\eta  \bar{\beta_1} }{M}  \nabla_{w} l(w_{j(k)}, x_k) \right]
-        \end{align}
-        As a result, for variable size minibatches we can see the momentum can be expressed as: 
-        \begin{align}
-            u_t &=  \sum_{k=1}^{T}\frac{1}{|B_{j(k)}|} \bar{\beta_1} \left[\prod_{l=1}^{j(T) - j(k)}(\beta_1^{\frac{|B_{j(K)}|}{M}})\right]  \nabla_{w} l(w_{j(k)}, x_k)
-        \end{align}
-        Therefore,  we can adjust the momentum $\beta_1$ designed for minibatch size $M$ adapting to the encountered individual minibatch $B_j$ as the following:
-        \begin{align}
-            \beta_j &=  \beta_1 ^{\frac{|B_j|}{M}}
-        \end{align}
-        *Note that the \beta_1 should not be scaled according to the minibatch size for the unit gain factor*.
-        */
-        const auto learningRate = ElementType(LearningRate(trainingSampleCount));
-        const auto momentum = ElementType(MomentumValueForMB(trainingSampleCount));
-        const auto unitGainFactor = UnitGainFactor<ElementType>(trainingSampleCount);
-        parameterMatrix->MomentumSGDUpdate(*gradientMatrix, *smoothedGradientMatrix,
-                                           learningRate, momentum, unitGainFactor);
+    AINFO << can_client_conf_b.ShortDebugString();
+    client_b = can_client_factory->CreateObject(can_client_conf_b.brand());
+    if (!client_b || !client_b->Init(can_client_conf_b) ||
+        client_b->Start() != ErrorCode::OK) {
+      AERROR << 'Create can client b failed.';
+      return 1;
     }
-    
-            LearnerFSAdaGrad(const std::vector<Parameter>& parameters,
-                         const LearningRateSchedule& learningRateSchedule,
-                         const MomentumSchedule& momentumSchedule,
-                         bool unitGain,
-                         const MomentumSchedule& varianceMomentumSchedule,
-                         AdditionalLearningOptions additionalOptions);
-    
-    
-    {            return { m_packedData->GetMatrix<ElementType>(), m_packedDataLayout };
-        }
-    
-    //SupportsDistributedMBRead - Tells if the reader supports distributed minibatch reading for parallel training
-bool DataReader::SupportsDistributedMBRead() const
-{
-    bool supportsDistributedMBRead = true;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-    {
-        auto currReaderIter = m_dataReaders.find(m_ioNames[i]);
-        assert(currReaderIter != m_dataReaders.end());
-    }
-    }
-    
-    using namespace std;
-    
-    const static set<wstring> nodeGroupNames{ L'feature', L'label', L'criterion', L'evaluation', L'output' };
-    
-        virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override
-    {
-        Base::CopyTo(nodeP, newName, flags);
-        if (flags & CopyNodeFlags::copyNodeValue)
-        {
-            auto node = dynamic_pointer_cast<DiagTimesNode<ElemType>>(nodeP);
-            node->m_innerproduct->SetValue(*m_innerproduct);
-            node->m_rightGradient->SetValue(*m_rightGradient);
-        }
-    }
-    // request matrices that are needed for gradient computation
-    virtual void RequestMatricesBeforeBackprop(MatrixPool& matrixPool)
-    {
-        Base::RequestMatricesBeforeBackprop(matrixPool);
-        RequestMatrixFromPool(m_innerproduct, matrixPool);
-        RequestMatrixFromPool(m_rightGradient, matrixPool);
-    }
-    
-    
-    {  std::unique_ptr<RateLimiter> low_pri_rate_limiter_;
-};
-    
-      Status Append(const Slice& data) override { 
-    AlignedBuffer buf;
-    Status status;
-    Slice dataToAppend(data); 
-    if (data.size() > 0) {
-      auto offset = file_->GetFileSize(); // size including prefix
-      // Encrypt in cloned buffer
-      buf.Alignment(GetRequiredBufferAlignment());
-      buf.AllocateNewBuffer(data.size());
-      memmove(buf.BufferStart(), data.data(), data.size());
-      status = stream_->Encrypt(offset, buf.BufferStart(), data.size());
-      if (!status.ok()) {
-        return status;
-      }
-      dataToAppend = Slice(buf.BufferStart(), data.size());
-    }
-    status = file_->Append(dataToAppend); 
-    if (!status.ok()) {
-      return status;
-    }
-    return status;
+    param_ptr_b->can_client = client_b.get();
+    param_ptr_b->conf = can_client_conf_b;
   }
     
-    #include <atomic>
-#include <map>
-#include <string>
-#include <vector>
-#include 'rocksdb/env.h'
-#include 'rocksdb/status.h'
-#include 'port/port.h'
-#include 'util/mutexlock.h'
+    #ifdef NTCAN_ERROR_FORMAT_LONG
+  {
+    NTCAN_RESULT res;
+    char sz_error_text[60];
+    }
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
     
     
-    {  // Add new data and corrupt it
-  ASSERT_OK(writable_file->Append(kCorrupted));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size() + kCorrupted.size());
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kCorrupted), 0);
-  // Corrupted
-  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_NE(result.compare(kCorrupted), 0);
+    {  if (static_cast<size_t>(*frame_num) != frames.size()) {
+    AERROR << 'frame num is incorrect.';
+    return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
+  }
+  for (size_t i = 0; i < frames.size(); ++i) {
+    ADEBUG << 'send frame i:' << i;
+    ADEBUG << frames[i].CanFrameString();
+    frame_info_ << frames[i].CanFrameString();
+  }
+  ++send_counter_;
+  return ErrorCode::OK;
 }
     
-      ////////////////////////////////////////////////////////
-  //
-  // 'Repeatable Read' (Snapshot Isolation) Example
-  //   -- Using a single Snapshot
-  //
-  ////////////////////////////////////////////////////////
+    #endif  // MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_HERMES_CAN_CLIENT_H
     
-    #endif // BOOST_ATOMIC_FENCES_HPP_INCLUDED_
+      if (ret < 0) {
+    AERROR << 'bind socket to network interface error code: ' << ret;
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+    
+      /**
+   * @brief Send messages
+   * @param frames The messages to send.
+   * @param frame_num The amount of messages to send.
+   * @return The status of the sending action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
+                                 int32_t *const frame_num) override;
+    
+      /**
+   * @brief Constructor which takes a reference to a one-byte unsigned integer.
+   * @param value The reference to a one-byte unsigned integer for construction.
+   */
+  Byte(const Byte &value);
+    
+    TEST(ByteTest, ByteToString) {
+  unsigned char value = 0x34;
+  EXPECT_EQ('34', Byte::byte_to_hex(value));
+  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
+  uint32_t int_value = 0xE13A;
+  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+}
+    
+      if (can_receiver_.Init(can_client_.get(), sensor_message_manager_.get(),
+                         canbus_conf_.enable_receiver_log()) != ErrorCode::OK) {
+    return OnError('Failed to init can receiver.');
+  }
+  AINFO << 'The can receiver is successfully initialized.';
+    
+    namespace v8 {
+namespace internal {
+    }
+    }
+    
+    void Builtins::Generate_InterpreterPushArgsThenCallWithFinalSpread(
+    MacroAssembler* masm) {
+  return Generate_InterpreterPushArgsThenCallImpl(
+      masm, ConvertReceiverMode::kAny,
+      InterpreterPushArgsMode::kWithFinalSpread);
+}
+    
+    // ES6 #sec-math.sqrt
+TF_BUILTIN(MathSqrt, MathBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* x = Parameter(Descriptor::kX);
+  MathUnaryOperation(context, x, &CodeStubAssembler::Float64Sqrt);
+}
+    
+    #ifndef V8_BUILTINS_BUILTINS_MATH_GEN_H_
+#define V8_BUILTINS_BUILTINS_MATH_GEN_H_
+    
+      BIND(&u8);
+  Return(SmiFromInt32((this->*function)(MachineType::Uint8(), backing_store,
+                                        index_word, value_word32)));
+    
+    class TestBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
+ public:
+  explicit TestBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : BaseBuiltinsFromDSLAssembler(state) {}
+};
+    
+    QStringList ListLikeKeyModel::getColumnNames()
+{
+    return QStringList() << 'row'  << 'value';
+}
+    
+    class StringKeyModel : public KeyModel<QByteArray>
+{    
+public:
+    StringKeyModel(QSharedPointer<RedisClient::Connection> connection,
+                   QByteArray fullPath, int dbIndex, long long ttl);
+    }
+    
+            public:
+            enum class State { READY, RUNNING, FINISHED };
+        public:
+            CurrentOperation(QSharedPointer<RedisClient::Connection> connection, int dbIndex,
+                             Manager::Operation op=Manager::Operation::DELETE_KEYS,
+                             QRegExp keyPattern=QRegExp('*', Qt::CaseSensitive, QRegExp::Wildcard));
+    
+        QObject::connect(manager, SIGNAL(finished(QNetworkReply*)),
+        this, SLOT(requestFinished(QNetworkReply*)));
