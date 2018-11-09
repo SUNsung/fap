@@ -1,244 +1,272 @@
 
         
-            Returns:
-      The test predictions.
-    '''
-    predictions, _ = zip(*self.predict_with_score(session, inputs))
-    return np.array(predictions)
+            if not advapi32.SetServiceStatus(handle, ctypes.byref(svcStatus)):
+        raise OSError('SetServiceStatus failed: %r' % ctypes.FormatError())
     
-        distribution = session.run(p_distributions,
-                               feed_dict={
-                                   p_path_embedding: np.reshape(
-                                       curr_path_vector,
-                                       [1, model.lstm_output_dim])})
     
-    import numpy as np
-import tensorflow as tf
+if len(sys.argv) <= 1:
+    print('Specify the version number as parameter')
+    sys.exit()
+version = sys.argv[1]
     
-    _START_SPECIAL_CHARS = ['.', ',', '?', '!', ';', ':', '[', ']', '\'', '+', '/',
-                        '\xc2\xa3', '$', '~', '*', '%', '{', '}', '#', '&', '-',
-                        ''', '(', ')', '='] + list(_SPECIAL_CHAR_MAP.keys())
-_SPECIAL_CHARS = _START_SPECIAL_CHARS + [
-    '\'s', '\'m', '\'t', '\'re', '\'d', '\'ve', '\'ll']
     
-          else:
-        to_fill_in = num_steps - len(example)
-        final_x = example + [EOS_INDEX] * to_fill_in
-        final_y = final_x[1:] + [EOS_INDEX]
-        w[i] = [1] * len(example) + [0] * to_fill_in
+def format_size(bytes):
+    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
     
-    import collections
-import os
-# Dependency imports
-import numpy as np
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+from youtube_dl.version import __version__
+version = __version__
+# The full version, including alpha/beta/rc tags.
+release = version
     
-      Returns:
-    Tuple of the (sequence, logits, log_probs) of the Generator.   Sequence
-      and logits have shape [batch_size, sequence_length, vocab_size].  The
-      log_probs will have shape [batch_size, sequence_length].  Log_probs
-      corresponds to the log probability of selecting the words.
-  '''
-  if FLAGS.generator_model == 'rnn':
-    (sequence, logits, log_probs, initial_state, final_state) = rnn.generator(
-        hparams,
-        inputs,
-        targets,
-        present,
-        is_training=is_training,
-        is_validating=is_validating,
-        reuse=reuse)
-  elif FLAGS.generator_model == 'rnn_zaremba':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = rnn_zaremba.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_zaremba':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq_zaremba.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'rnn_nas':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = rnn_nas.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_nas':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq_nas.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_vd':
-    (sequence, logits, log_probs, initial_state, final_state,
-     encoder_states) = seq2seq_vd.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  else:
-    raise NotImplementedError
-  return (sequence, logits, log_probs, initial_state, final_state,
-          encoder_states)
+            info_dict = _make_result(formats)
+        ydl = YDL({'format': 'best'})
+        ie = YoutubeIE(ydl)
+        ie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(copy.deepcopy(info_dict))
+        downloaded = ydl.downloaded_info_dicts[0]
+        self.assertEqual(downloaded['format_id'], 'aac-64')
     
-          # Now calculate the attention-weighted vector.
-      alignments = tf.expand_dims(alignments, 2)
-      context_vector = tf.reduce_sum(alignments * values, [1])
-      context_vector.set_shape([None, num_units])
+        def test_cbc_encrypt(self):
+        data = bytes_to_intlist(self.secret_msg)
+        encrypted = intlist_to_bytes(aes_cbc_encrypt(data, self.key, self.iv))
+        self.assertEqual(
+            encrypted,
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd')
     
-    RETURN = '''
-wafs:
-  description: The WAFs that match the passed arguments
-  returned: success
-  type: complex
-  contains:
-    name:
-      description: A friendly name or description of the WebACL
-      returned: always
-      type: string
-      sample: test_waf
-    default_action:
-      description: The action to perform if none of the Rules contained in the WebACL match.
-      returned: always
-      type: int
-      sample: BLOCK
-    metric_name:
-      description: A friendly name or description for the metrics for this WebACL
-      returned: always
-      type: string
-      sample: test_waf_metric
-    rules:
-      description: An array that contains the action for each Rule in a WebACL , the priority of the Rule
-      returned: always
-      type: complex
-      contains:
-        action:
-          description: The action to perform if the Rule matches
-          returned: always
-          type: string
-          sample: BLOCK
-        metric_name:
-          description: A friendly name or description for the metrics for this Rule
-          returned: always
-          type: string
-          sample: ipblockrule
-        name:
-          description: A friendly name or description of the Rule
-          returned: always
-          type: string
-          sample: ip_block_rule
-        predicates:
-          description: The Predicates list contains a Predicate for each
-            ByteMatchSet, IPSet, SizeConstraintSet, SqlInjectionMatchSet or XssMatchSet
-            object in a Rule
-          returned: always
-          type: list
-          sample:
-            [
-              {
-                'byte_match_set_id': '47b822b5-abcd-1234-faaf-1234567890',
-                'byte_match_tuples': [
-                  {
-                    'field_to_match': {
-                      'type': 'QUERY_STRING'
-                    },
-                    'positional_constraint': 'STARTS_WITH',
-                    'target_string': 'bobbins',
-                    'text_transformation': 'NONE'
-                  }
-                ],
-                'name': 'bobbins',
-                'negated': false,
-                'type': 'ByteMatch'
-              }
-            ]
-'''
-    
-        argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(type='str'),
-            tags=dict(type='dict'),
-        )
-    )
-    module = AnsibleModule(argument_spec=argument_spec)
-    
-    # Snapshot of volume mounted on device_name attached to instance_id
-- ec2_snapshot:
-    instance_id: i-12345678
-    device_name: /dev/sdb1
-    description: snapshot of /data from DB123 taken 2013/11/28 12:18:32
-    
+        def validate_origin_access_identity_id_from_caller_reference(
+            self, caller_reference):
         try:
-        response = conn.delete_egress_only_internet_gateway(DryRun=module.check_mode, EgressOnlyInternetGatewayId=eigw_id)
-    except botocore.exceptions.ClientError as e:
-        # When boto3 method is run with DryRun=True it returns an error on success
-        # We need to catch the error and return something valid
-        if e.response.get('Error', {}).get('Code') == 'DryRunOperation':
-            changed = True
+            origin_access_identities = self.__cloudfront_facts_mgr.list_origin_access_identities()
+            origin_origin_access_identity_ids = [oai.get('Id') for oai in origin_access_identities]
+            for origin_access_identity_id in origin_origin_access_identity_ids:
+                oai_config = (self.__cloudfront_facts_mgr.get_origin_access_identity_config(origin_access_identity_id))
+                temp_caller_reference = oai_config.get('CloudFrontOriginAccessIdentityConfig').get('CallerReference')
+                if temp_caller_reference == caller_reference:
+                    return origin_access_identity_id
+        except (ClientError, BotoCoreError) as e:
+            self.module.fail_json_aws(e, msg='Error getting Origin Access Identity from caller_reference.')
+    
+            for lc in response['LaunchConfigurations']:
+            data = {
+                'name': lc['LaunchConfigurationName'],
+                'arn': lc['LaunchConfigurationARN'],
+                'created_time': lc['CreatedTime'],
+                'user_data': lc['UserData'],
+                'instance_type': lc['InstanceType'],
+                'image_id': lc['ImageId'],
+                'ebs_optimized': lc['EbsOptimized'],
+                'instance_monitoring': lc['InstanceMonitoring'],
+                'classic_link_vpc_security_groups': lc['ClassicLinkVPCSecurityGroups'],
+                'block_device_mappings': lc['BlockDeviceMappings'],
+                'keyname': lc['KeyName'],
+                'security_groups': lc['SecurityGroups'],
+                'kernel_id': lc['KernelId'],
+                'ram_disk_id': lc['RamdiskId'],
+                'associate_public_address': lc.get('AssociatePublicIpAddress', False),
+            }
+    
+        results = []
+    for placement_group in response['PlacementGroups']:
+        results.append({
+            'name': placement_group['GroupName'],
+            'state': placement_group['State'],
+            'strategy': placement_group['Strategy'],
+        })
+    return results
+    
+    
+def create_vpc(connection, module, cidr_block, tenancy):
+    try:
+        if not module.check_mode:
+            vpc_obj = connection.create_vpc(CidrBlock=cidr_block, InstanceTenancy=tenancy)
         else:
-            module.fail_json_aws(e, msg='Could not delete Egress-Only Internet Gateway {0} from VPC {1}'.format(eigw_id, module.vpc_id))
-    except botocore.exceptions.BotoCoreError as e:
-        module.fail_json_aws(e, msg='Could not delete Egress-Only Internet Gateway {0} from VPC {1}'.format(eigw_id, module.vpc_id))
+            module.exit_json(changed=True)
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, 'Failed to create the VPC')
     
-        orig_cert_names = [ctb['server_certificate_name'] for ctb in
-                       iam.get_all_server_certs().list_server_certificates_result.server_certificate_metadata_list]
-    orig_cert_bodies = [iam.get_server_certificate(thing).get_server_certificate_result.certificate_body
-                        for thing in orig_cert_names]
-    if new_name == name:
-        new_name = None
-    if new_path == path:
-        new_path = None
-    
-    # Remove all managed policies from an existing user with an empty list
-- iam_user:
-    name: testuser1
-    state: present
-    purge_policy: true
-    
-        for param in module_params:
-        module_param = module.params.get(param, None)
-        if module_param:
-            api_params[pc(param)] = module_param
-    
-        function_name = module.params.get('function_name')
-    if function_name:
-        lambda_facts[function_name] = {}
-        lambda_facts[function_name].update(config_details(client, module)[function_name])
-        lambda_facts[function_name].update(alias_details(client, module)[function_name])
-        lambda_facts[function_name].update(policy_details(client, module)[function_name])
-        lambda_facts[function_name].update(version_details(client, module)[function_name])
-        lambda_facts[function_name].update(mapping_details(client, module)[function_name])
+        :param registry_id: Optional string containing the registryId.
+    :return: kwargs dict with registryId, if given
+    '''
+    if not registry_id:
+        return dict()
     else:
-        lambda_facts.update(config_details(client, module))
+        return dict(registryId=registry_id)
+    
+                if not res or not res.ok:
+                xlog.debug('ip:%s fail', ip)
+                continue
+    
+                    if self.eot[s] >= 0:
+                    #print 'EOT to %d' % self.eot[s]
+                    
+                    s = self.eot[s]
+                    input.consume()
+                    continue
+    
+        @classmethod
+    def default_encoder(cls, value):
+        return pyrfc3339.generate(value)
+    
+    
+class ResourceTest(unittest.TestCase):
+    '''Tests for acme.fields.Resource.'''
+    
+    
+class Header(jose.Header):
+    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    '''
+    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
+    kid = jose.Field('kid', omitempty=True)
+    url = jose.Field('url', omitempty=True)
+    
+    # The name of an image file (relative to this directory) to place at the top of
+# the title page.
+#latex_logo = None
+    
+        :returns: filename of vhost
+    :rtype: str
+    
+    MANAGED_COMMENT = 'DO NOT REMOVE - Managed by Certbot'
+MANAGED_COMMENT_ID = MANAGED_COMMENT+', VirtualHost id: {0}'
+'''Managed by Certbot comments and the VirtualHost identification template'''
+
+    
+            =========================================  =====
+        ``127.0.0.1:\*.conflicts(127.0.0.1:443)``  True
+        ``127.0.0.1:443.conflicts(127.0.0.1:\*)``  False
+        ``\*:443.conflicts(\*:80)``                False
+        ``_default_:443.conflicts(\*:443)``        True
+        =========================================  =====
+    
+    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'EnvironmentProject'
+        db.create_table(
+            'sentry_environmentproject', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Environment']
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['EnvironmentProject'])
+    
+            for project in RangeQuerySetWrapperWithProgressBar(orm.Project.objects.all()):
+            orm.Environment.objects.filter(
+                project_id=project.id, organization_id__isnull=True
+            ).update(organization_id=project.organization_id)
+    
+            # User chose to not deal with backwards NULL issues for 'ReleaseEnvironment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'ReleaseEnvironment.project_id' and its values cannot be restored.'
+        )
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'VersionDSymFile'
+        db.create_table(
+            'sentry_versiondsymfile', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'dsym_file', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ProjectDSymFile'], null=True
+                    )
+                ), (
+                    'dsym_app', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.DSymApp']
+                    )
+                ), ('version', self.gf('django.db.models.fields.CharField')(max_length=32)),
+                ('build', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['VersionDSymFile'])
+    
+        complete_apps = ['sentry']
+    symmetrical = True
+
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'UserOption.organization'
+        db.add_column(
+            'sentry_useroption',
+            'organization',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Organization'], null=True
+            ),
+            keep_default=False
+        )
+    
+        # STEP 2: Using the trained classifier, make predictions for unknown images
+    for image_file in os.listdir('knn_examples/test'):
+        full_file_path = os.path.join('knn_examples/test', image_file)
+    
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
+    
+        :param face_image: image to search
+    :param face_locations: Optionally provide a list of face locations to check.
+    :param model: Optional - which model to use. 'large' (default) or 'small' which only returns 5 points but is faster.
+    :return: A list of dicts of face feature locations (eyes, nose, etc)
+    '''
+    landmarks = _raw_face_landmarks(face_image, face_locations, model)
+    landmarks_as_tuples = [[(p.x, p.y) for p in landmark.parts()] for landmark in landmarks]
+    
+    
+@click.command()
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
+@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
+def main(image_to_check, cpus, model):
+    # Multi-core processing only supported on Python 3.4 or greater
+    if (sys.version_info < (3, 4)) and cpus != 1:
+        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
+        cpus = 1
+    
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
+    
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
+    
+        # Print the location of each facial feature in this image
+    for facial_feature in face_landmarks.keys():
+        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+    
+    
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
