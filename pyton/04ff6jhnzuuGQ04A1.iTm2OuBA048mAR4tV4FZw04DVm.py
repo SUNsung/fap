@@ -1,79 +1,90 @@
 
         
-        sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-import youtube_dl
-from youtube_dl.utils import shell_quote
+        
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-    # We must be able to import youtube_dl
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+            Operator:                  '#582800',   # class: 'o'
+        Operator.Word:             'bold #004461',   # class: 'ow' - like keywords
     
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+    This module handles import compatibility issues between Python 2 and
+Python 3.
+'''
     
-            ydl = YDL({'format': '[filesize<1MiB]'})
-        ydl.process_ie_result(info_dict)
-        downloaded = ydl.downloaded_info_dicts[0]
-        self.assertEqual(downloaded['format_id'], 'G')
-    
-        def format_headers(self, headers):
-        for p in self.enabled_plugins:
-            headers = p.format_headers(headers)
-        return headers
-    
-        '''
-    req_h = OUT_REQ_HEAD in output_options
-    req_b = OUT_REQ_BODY in output_options
-    resp_h = OUT_RESP_HEAD in output_options
-    resp_b = OUT_RESP_BODY in output_options
-    req = req_h or req_b
-    resp = resp_h or resp_b
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-    # sdist
-if 'bdist_wheel' not in sys.argv:
-    try:
-        # noinspection PyUnresolvedReferences
-        import argparse
-    except ImportError:
-        install_requires.append('argparse>=1.2.1')
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
+        try:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
     
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+class TestExtractZippedPaths:
+    
+    >>> requests.codes['temporary_redirect']
+307
+>>> requests.codes.teapot
+418
+>>> requests.codes['\o/']
+200
     
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+def get(url, params=None, **kwargs):
+    r'''Sends a GET request.
     
+        allow_remote = args.get('allow_remote', 0)
+    if allow_remote:
+        listen_ip = '0.0.0.0'
+    else:
+        listen_ip = front.config.listen_ip
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+        # inflate = lambda x:zlib.decompress(x, -zlib.MAX_WBITS)
+    wsgi_input = environ['wsgi.input']
+    input_data = wsgi_input.read()
+    
+    - BaseRecognizer: Base class with common recognizer functionality.
+- Lexer: Base class for lexers.
+- Parser: Base class for parsers.
+- tree.TreeParser: Base class for %tree parser.
+    
+            p = subprocess.Popen(cmd,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             universal_newlines=True,
+                             env=env)
+        (out, err) = p.communicate()
+        if p.returncode != 0 and support.verbose:
+            print(f'--- {cmd} failed ---')
+            print(f'stdout:\n{out}')
+            print(f'stderr:\n{err}')
+            print(f'------')
+    
+        def testSeekForwardAcrossStreams(self):
+        self.createTempFile(streams=2)
+        with BZ2File(self.filename) as bz2f:
+            self.assertRaises(TypeError, bz2f.seek)
+            bz2f.seek(len(self.TEXT) + 150)
+            self.assertEqual(bz2f.read(), self.TEXT[150:])
+    
+            try:
+            print(pool.map(f, list(range(10))))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from pool.map()')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
