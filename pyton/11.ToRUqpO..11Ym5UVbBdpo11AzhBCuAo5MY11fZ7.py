@@ -1,126 +1,239 @@
 
         
-            data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
+                # Insert the import statement to setup.py if not present
+        with open(setup_path, 'a+') as setup:
+            setup.seek(0)
+            setup_content = setup.read()
+            if not 'import fastentrypoints' in setup_content:
+                setup.seek(0)
+                setup.truncate()
+                setup.write('import fastentrypoints\n' + setup_content)
     
-        alpha = 0.01  # regularization parameter
+    
+def test_when_already_configured(usage_tracker_io, shell_pid,
+                                 shell, shell_config, logs):
+    shell.get_history.return_value = ['fuck']
+    shell_pid.return_value = 12
+    _change_tracker(usage_tracker_io, 12)
+    shell_config.read.return_value = 'eval $(thefuck --alias)'
+    main()
+    logs.already_configured.assert_called_once()
     
     
-def compute_bench_2(chunks):
-    results = defaultdict(lambda: [])
-    n_features = 50000
-    means = np.array([[1, 1], [-1, -1], [1, -1], [-1, 1],
-                      [0.5, 0.5], [0.75, -0.5], [-1, 0.75], [1, 0]])
-    X = np.empty((0, 2))
-    for i in range(8):
-        X = np.r_[X, means[i] + 0.8 * np.random.randn(n_features, 2)]
-    max_it = len(chunks)
-    it = 0
-    for chunk in chunks:
-        it += 1
-        print('==============================')
-        print('Iteration %03d of %03d' % (it, max_it))
-        print('==============================')
-        print()
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'echo test')
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
+            Did you mean `build`?
+'''
     
-        ###########################################################################
-    # Set GaussianRandomProjection input
-    gaussian_matrix_params = {
-        'n_components': opts.n_components,
-        'random_state': opts.random_seed
-    }
-    transformers['GaussianRandomProjection'] = \
-        GaussianRandomProjection(**gaussian_matrix_params)
+        '''
+    is_windows = is_windows
+    config_dir = DEFAULT_CONFIG_DIR
+    stdin = sys.stdin
+    stdin_isatty = stdin.isatty()
+    stdin_encoding = None
+    stdout = sys.stdout
+    stdout_isatty = stdout.isatty()
+    stdout_encoding = None
+    stderr = sys.stderr
+    stderr_isatty = stderr.isatty()
+    colors = 256
+    if not is_windows:
+        if curses:
+            try:
+                curses.setupterm()
+                colors = curses.tigetnum('colors')
+            except curses.error:
+                pass
+    else:
+        # noinspection PyUnresolvedReferences
+        import colorama.initialise
+        stdout = colorama.initialise.wrap_stream(
+            stdout, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        stderr = colorama.initialise.wrap_stream(
+            stderr, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        del colorama
     
-    Typical output
---------------
     
-    PROJ_NAME = 'you-get'
-PACKAGE_NAME = 'you_get'
+class PyTest(TestCommand):
+    # `$ python setup.py test' simply installs minimal requirements
+    # and runs the tests with no fancy stuff like parallel execution.
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = [
+            '--doctest-modules', '--verbose',
+            './httpie', './tests'
+        ]
+        self.test_suite = True
     
-            elif stream_id == []:
-            print('streams:             # Available quality and codecs')
-            # Print DASH streams
-            if self.dash_streams:
-                print('    [ DASH ] %s' % ('_' * 36))
-                itags = sorted(self.dash_streams,
-                               key=lambda i: -self.dash_streams[i]['size'])
-                for stream in itags:
-                    self.p_stream(stream)
-            # Print all other available streams
-            print('    [ DEFAULT ] %s' % ('_' * 33))
-            for stream in self.streams_sorted:
-                self.p_stream(stream['id'] if 'id' in stream else stream['itag'])
     
-    site = Bigthink()
-download = site.download_by_url
+FILE_PATH_ARG = patharg(FILE_PATH)
+BIN_FILE_PATH_ARG = patharg(BIN_FILE_PATH)
+JSON_FILE_PATH_ARG = patharg(JSON_FILE_PATH)
+    
+    
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
 
     
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+        parser = argparse.ArgumentParser()
+    parser.add_argument('-e', '--estimators', nargs='+', required=True,
+                        choices=ESTIMATORS)
+    args = vars(parser.parse_args())
     
-            #type_, ext, size = url_info(url)
-        #print_info(site_info, title, type_, size)
-        #if not info_only:
-            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
+        time_ridge = np.empty(n_iter)
+    time_ols = np.empty(n_iter)
+    time_lasso = np.empty(n_iter)
     
-    def facebook_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
+        label = 'scikit-learn singular value decomposition benchmark results'
+    fig = plt.figure(label)
+    ax = fig.gca(projection='3d')
+    for c, (label, timings) in zip('rbg', sorted(six.iteritems(results))):
+        X, Y = np.meshgrid(samples_range, features_range)
+        Z = np.asarray(timings).reshape(samples_range.shape[0],
+                                        features_range.shape[0])
+        # plot the actual surface
+        ax.plot_surface(X, Y, Z, rstride=8, cstride=8, alpha=0.3,
+                        color=c)
+        # dummy point plot to stick the legend to since surface plot do not
+        # support legends (yet?)
+        ax.plot([1], [1], [1], color=c, label=label)
     
-        try:
-        smart_home_config = config[CONF_SMART_HOME]
-    except KeyError:
-        pass
-    else:
-        smart_home_config = smart_home_config or SMART_HOME_SCHEMA({})
-        smart_home.async_setup(hass, smart_home_config)
+        ###########################################################################
+    # Set Python core input
+    sampling_algorithm['python-core-sample'] = \
+        lambda n_population, n_sample: \
+            random.sample(xrange(n_population), n_sample)
     
-            # Ignore changes to state attributes if from/to is in use
-        if (not match_all and from_s is not None and to_s is not None and
-                from_s.state == to_s.state):
-            return
+        xx = range(0, n * step, step)
+    plt.figure('scikit-learn tree benchmark results')
+    plt.subplot(211)
+    plt.title('Learning with varying number of samples')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
     
-    import voluptuous as vol
     
-            zone_state = hass.states.get(zone_entity_id)
-        if from_s:
-            from_match = condition.zone(hass, zone_state, from_s)
+proxy_server = None
+# launcher/module_init will check this value for start/stop finished
+ready = False
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
+    
+                if isinstance(self.input, TokenStream):
+                self.token = self.input.LT(1)
+                self.line = self.token.line
+                self.charPositionInLine = self.token.charPositionInLine
+    
+            ## What character index in the stream did the current token start at?
+        # Needed, for example, to get the text for current token.  Set at
+        # the start of nextToken.
+        self.tokenStartCharIndex = -1
+    
+            # You may have multiple, named streams of rewrite operations.
+        # I'm calling these things 'programs.'
+        #  Maps String (name) -> rewrite (List)
+        self.programs = {}
+        self.programs[self.DEFAULT_PROGRAM_NAME] = []
+        
+ 	# Map String (program name) -> Integer index
+        self.lastRewriteTokenIndexes = {}
+        
+    
+            Lines are numbered 1..n
+        
+        Using setter/getter methods is deprecated. Use o.line instead.'''
+    
+    def _check_arg_types(funcname, *args):
+    hasstr = hasbytes = False
+    for s in args:
+        if isinstance(s, str):
+            hasstr = True
+        elif isinstance(s, bytes):
+            hasbytes = True
         else:
-            from_match = False
-        to_match = condition.zone(hass, zone_state, to_s)
+            raise TypeError('%s() argument must be str or bytes, not %r' %
+                            (funcname, s.__class__.__name__)) from None
+    if hasstr and hasbytes:
+        raise TypeError('Can't mix strings and bytes in path components') from None
+
     
-            if was_queued and self._queued_event_check(click_type, time_diff):
-            return
+        def test_different_flavours_unordered(self):
+        p = pathlib.PurePosixPath('a')
+        q = pathlib.PureWindowsPath('a')
+        with self.assertRaises(TypeError):
+            p < q
+        with self.assertRaises(TypeError):
+            p <= q
+        with self.assertRaises(TypeError):
+            p > q
+        with self.assertRaises(TypeError):
+            p >= q
     
-        @_handle_cloud_errors
-    @RequestDataValidator(vol.Schema({
-        vol.Required('email'): str,
-        vol.Required('password'): vol.All(str, vol.Length(min=6)),
-    }))
-    async def post(self, request, data):
-        '''Handle registration request.'''
-        hass = request.app['hass']
-        cloud = hass.data[DOMAIN]
+    def test_main():
+    test.support.run_unittest(
+        LocaleConfigurationTests,
+        LocaleCoercionTests
+    )
+    test.support.reap_children()
     
-        @asyncio.coroutine
-    def post(self, request):
-        '''Validate configuration and return results.'''
-        errors = yield from async_check_ha_config_file(request.app['hass'])
+        def test_io(self):
+        code = textwrap.dedent('''
+            import sys
+            filename = sys.argv[1]
+            with open(filename) as fp:
+                print(f'{fp.encoding}/{fp.errors}')
+        ''')
+        filename = __file__
     
-    CONFIG_PATH = 'customize.yaml'
+        # Initialize and populate our database.
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
+    tasks = (
+        'give food to fish',
+        'prepare group meeting',
+        'fight with a zebra',
+        )
+    for task in tasks:
+        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
     
+    def handleSlides(slides):
+    for slide in slides:
+        handleSlide(slide)
     
-@asyncio.coroutine
-def async_setup(hass):
-    '''Set up the Hassbian config.'''
-    # Test if is Hassbian
-    test_mode = 'FORCE_HASSBIAN' in os.environ
-    is_hassbian = test_mode
+            results = [pool.apply_async(calculate, t) for t in TASKS]
+        imap_it = pool.imap(calculatestar, TASKS)
+        imap_unordered_it = pool.imap_unordered(calculatestar, TASKS)
+    
+    def mul(a, b):
+    time.sleep(0.5*random.random())
+    return a * b
