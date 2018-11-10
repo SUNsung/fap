@@ -1,128 +1,150 @@
 
         
-        
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'git help')
+            def escalate_call(self):
+        self.call.level = Rank.SUPERVISOR
+        self._escalate_call()
     
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
+        def __init__(self, user_id, name, pass_hash):
+        self.user_id = user_id
+        self.name = name
+        self.pass_hash = pass_hash
+        self.friends_by_id = {}  # key: friend id, value: User
+        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
+        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
+        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+    
+            The shuffle/sort step of MapReduce will then do a
+        distributed sort on the keys, resulting in:
+    
+        def unregister(self, plugin):
+        self._plugins.remove(plugin)
+    
+        '''
+    abbrevs = [
+        (1 << 50, 'PB'),
+        (1 << 40, 'TB'),
+        (1 << 30, 'GB'),
+        (1 << 20, 'MB'),
+        (1 << 10, 'kB'),
+        (1, 'B')
+    ]
+    
+    
+def test_auth_plugin_require_auth_false_and_auth_provided(httpbin):
+    
+    
+def test_migrate_implicit_content_type():
+    config = MockEnvironment().config
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+    
+def test_unicode_headers_verbose(httpbin):
+    # httpbin doesn't interpret utf8 headers
+    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+    DOCUMENTATION = '''
+module: aws_waf_rule
+short_description: create and delete WAF Rules
+description:
+  - Read the AWS documentation for WAF
+    U(https://aws.amazon.com/documentation/waf/)
+version_added: '2.5'
+    
+    RETURN = '''
+gateway.customer_gateways:
+    description: details about the gateway that was created.
+    returned: success
+    type: complex
+    contains:
+        bgp_asn:
+            description: The Border Gateway Autonomous System Number.
+            returned: when exists and gateway is available.
+            sample: 65123
+            type: string
+        customer_gateway_id:
+            description: gateway id assigned by amazon.
+            returned: when exists and gateway is available.
+            sample: cgw-cb6386a2
+            type: string
+        ip_address:
+            description: ip address of your gateway device.
+            returned: when exists and gateway is available.
+            sample: 1.2.3.4
+            type: string
+        state:
+            description: state of gateway.
+            returned: when gateway exists and is available.
+            state: available
+            type: string
+        tags:
+            description: any tags on the gateway.
+            returned: when gateway exists and is available, and when tags exist.
+            state: available
+            type: string
+        type:
+            description: encryption type.
+            returned: when gateway exists and is available.
+            sample: ipsec.1
+            type: string
 '''
     
-        def __init__(self):
-        self.name = 'btree_gin'
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import (ansible_dict_to_boto3_filter_list,
+                                      boto3_tag_list_to_ansible_dict,
+                                      camel_dict_to_snake_dict)
+try:
+    from botocore.exceptions import (BotoCoreError, ClientError)
+except ImportError:
+    pass  # caught by imported AnsibleAWSModule
     
-        def load(self):
-        try:
-            session_data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            session_data = None
-        if session_data is not None:
-            return session_data
-        self._session_key = None
-        return {}
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import boto3_conn, ec2_argument_spec, get_aws_connection_info
+from ansible.module_utils.ec2 import camel_dict_to_snake_dict, AWSRetry
+from ansible.module_utils.ec2 import boto3_tag_list_to_ansible_dict
     
-        def delete(self, session_key=None):
-        '''
-        To delete, clear the session key and the underlying data structure
-        and set the modified flag so that the cookie is set on the client for
-        the current request.
-        '''
-        self._session_key = ''
-        self._session_cache = {}
-        self.modified = True
-    
-        Provide both the name and the version of the Python implementation
-    currently running. For example, on CPython 2.7.5 it will return
-    {'name': 'CPython', 'version': '2.7.5'}.
+        state = module.params.get('state')
+    name = module.params.get('name')
+    path = module.params.get('path')
+    new_name = module.params.get('new_name')
+    new_path = module.params.get('new_path')
+    dup_ok = module.params.get('dup_ok')
+    if state == 'present' and not new_name and not new_path:
+        cert, key, cert_chain = load_data(cert=module.params.get('cert'),
+                                          key=module.params.get('key'),
+                                          cert_chain=module.params.get('cert_chain'))
+    else:
+        cert = key = cert_chain = None
     
     
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or dict()
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
+def find_stream(client, stream_name, check_mode=False):
+    '''Retrieve a Kinesis Stream.
+    Args:
+        client (botocore.client.EC2): Boto3 client.
+        stream_name (str): Name of the Kinesis stream.
     
+        return lambda_facts
     
-@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
-def test_system_ssl_py26():
-    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
-    blow up in this case.
-    '''
-    assert info()['system_ssl'] == {'version': ''}
+            if self.audiolang:
+            print('audio-languages:')
+            for i in self.audiolang:
+                print('    - lang:          {}'.format(i['lang']))
+                print('      download-url:  {}\n'.format(i['url']))
     
-        def test_copy(self):
-        copy = self.case_insensitive_dict.copy()
-        assert copy is not self.case_insensitive_dict
-        assert copy == self.case_insensitive_dict
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
     
-        def _close_server_sock_ignore_errors(self):
-        try:
-            self.server_sock.close()
-        except IOError:
-            pass
+    import urllib.request, urllib.parse
+from ..common import *
     
-    _codes = {
-    }
-    
-    # General information about the project.
-project = u'Requests'
-copyright = u'MMXVIII. A <a href='http://kennethreitz.com/pages/open-projects.html'>Kenneth Reitz</a> Project'
-author = u'Kenneth Reitz'
-    
-    requires = [
-    'chardet>=3.0.2,<3.1.0',
-    'idna>=2.5,<2.8',
-    'urllib3>=1.21.1,<1.24',
-    'certifi>=2017.4.17'
-    
-        def __getstate__(self):
-        # Consume everything; accessing the content attribute makes
-        # sure the content has been fully read.
-        if not self._content_consumed:
-            self.content
-    
-        for filename in filenames:
-        fd = codecs.open(filename, mode='r', encoding='utf-8')
-        for line in fd.readlines():
-            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
-            for ref in refs:
-                if ref not in urls:
-                    urls.append(ref)
+        if int(html['status']) != 100000:
+        raise Exception('API error!')
