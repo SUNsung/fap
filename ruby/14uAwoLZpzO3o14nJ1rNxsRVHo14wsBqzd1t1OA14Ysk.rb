@@ -1,80 +1,50 @@
 
         
-              self.runner.add_lane(Lane.new(platform: self.current_platform,
-                                       block: block,
-                                 description: desc_collection,
-                                        name: lane_name,
-                                  is_private: false), true)
-    
-          if @actions_requiring_special_handling.include?(action_name)
-        command_return = run_action_requiring_special_handling(
-          command: command,
-          parameter_map: parameter_map,
-          action_return_type: action_class_ref.return_type
-        )
-        return command_return
-      end
-    
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '#{path}')
-          end').runner.execute(:test)
-        end
-      end
-    
-          it 'works with multiple ignore patterns' do
-        pattern1 = 'Pods/*'
-        pattern2 = '../**/*/Xcode*'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          slather({
-            ignore: ['#{pattern1}', '#{pattern2}'],
-            proj: 'foo.xcodeproj'
-          })
-        end').runner.execute(:test)
-    
-    # test monkey patched method on both (simulated) OSes
-describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
-  describe 'on Windows' do
-    before(:each) do
-      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+            def form_status_batch_params
+      params.require(:form_status_batch).permit(status_ids: [])
     end
     
-      task :examples => 'examples:build'
-  namespace :examples do
-    desc 'Open all example workspaces in Xcode, which recreates the schemes.'
-    task :recreate_workspace_schemes do
-      Dir['examples/*'].each do |example|
-        Dir.chdir(example.to_s) do
-          # TODO: we need to open the workspace in Xcode at least once, otherwise it might not contain schemes.
-          # The schemes do not seem to survive a SCM round-trip.
-          sh 'open *.xcworkspace'
-          sleep 5
-        end
-      end
-    end
+      def status_finder
+    StatusFinder.new(params[:url])
+  end
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
+    class Api::PushController < Api::BaseController
+  include SignatureVerification
+    
+      def activity
+    weeks = []
+    
+          def remove_bad_cookies(request, response)
+        return if bad_cookies.empty?
+        paths = cookie_paths(request.path)
+        bad_cookies.each do |name|
+          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
         end
       end
+    
+          def call(env)
+        request               = Request.new(env)
+        status, headers, body = app.call(env)
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
 end
+
+    
+    
+    
+        def html_output_for(script_url, code)
+      code = CGI.escapeHTML code
+      <<-HTML
+<div><script src='#{script_url}'></script>
+<noscript><pre><code>#{code}</code></pre></noscript></div>
+      HTML
+    end
+    
+      # Condenses multiple spaces and tabs into a single space
+  def condense_spaces(input)
+    input.gsub(/\s{2,}/, ' ')
+  end
