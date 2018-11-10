@@ -1,60 +1,111 @@
 
         
-              parse(content, @path)
-    end
+            # Is the given key a platform block or a lane?
+    def is_platform_block?(key)
+      UI.crash!('No key given') unless key
     
-        context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
+          command.args.each do |arg|
+        arg_value = arg.value
+        if arg.value_type.to_s.to_sym == :string_closure
+          closure = proc { |string_value| closure_argument_value = string_value }
+          arg_value = closure
+        end
+        parameter_map[arg.name.to_sym] = arg_value
       end
     
-          def self.details
-        list = <<-LIST.markdown_list
-          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
-          `lane` is the name of the current fastlane lane
-          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
-          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
-          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
-        LIST
+            message = 'builds/test/#{prefix}#{build_number} (fastlane)'
+        tag = 'builds/test/#{prefix}#{build_number}'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
+      end
     
-          it 'generates the correct git command with an array of paths and/or pathspecs' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
-        end').runner.execute(:test)
+              expect(value).to eq(nil)
+        end
     
-        describe 'shell escaping' do
-      let(:keychain_name) { 'keychain with spaces.keychain' }
-      let(:shell_escaped_name) { keychain_name.shellescape }
-      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
+  end
+end
+
     
-            it 'auto converts Array values to Strings if allowed' do
-          config_item = FastlaneCore::ConfigItem.new(key: :xcargs,
-                                                     description: 'xcargs',
-                                                     type: :shell_string)
+        res = 0
+    b.each_byte { |byte| res |= byte ^ l.shift }
+    res == 0
+  end
+end
     
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
+          # The main accessor for the warden proxy instance
+      def warden
+        request.env['warden'] or raise MissingWarden
+      end
+    
+          def remember_key(resource, scope)
+        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
+      end
+    end
+  end
+end
+
+    
+            expire_data_after_sign_in!
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+    describe 'Kernel.srand' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:srand)
   end
     
-      # GET /resource/password/edit?reset_password_token=abcdef
-  def edit
-    self.resource = resource_class.new
-    set_minimum_password_length
-    resource.reset_password_token = params[:reset_password_token]
+      def test_file_exists(path)
+    exists?('f', path)
   end
     
-      # DELETE /resource/sign_out
-  def destroy
-    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    set_flash_message! :notice, :signed_out if signed_out
-    yield if block_given?
-    respond_to_on_destroy
+            standard_rake_options.each { |args| opts.on(*args) }
+        opts.environment('RAKEOPT')
+      end.parse!
+    end
+    
+          def self.[](host)
+        host.is_a?(Server) ? host : new(host)
+      end
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+          def safe?(env)
+        %w[GET HEAD OPTIONS TRACE].include? env['REQUEST_METHOD']
+      end
+    
+      include_examples 'multiline literal brace layout method argument' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) { ['[', '1', ']'] }
   end
     
-    1) You forgot to wrap your route inside the scope block. For example:
+          # A shorthand for getting the first argument of the node.
+      # Equivalent to `arguments.first`.
+      #
+      # @return [Node, nil] the first argument of the node,
+      #                     or `nil` if there are no arguments
+      def first_argument
+        arguments[0]
+      end
