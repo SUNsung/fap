@@ -1,387 +1,250 @@
 
         
-          // Unimplemented Instructions
-  void dcmpu(const RegXMM& fra, const RegXMM& frb) {
-    EmitXForm(59, rn(0), rn(fra), rn(frb), 642);
-  }
-  void fabs(const RegXMM& frt, const RegXMM& frb, bool rc = 0) {
-    EmitXForm(63, rn(frt), rn(0), rn(frb), 264, rc);
-  }
-  void fcfid(const RegXMM& frt, const RegXMM& frb, bool rc = 0) {
-    EmitXForm(63, rn(frt), rn(0), rn(frb), 846, rc);
-  }
-    
-    APCHandle::Pair APCCollection::WrapArray(APCHandle::Pair inner,
-                                         CollectionType colType) {
-  auto const col = new APCCollection;
-  col->m_arrayHandle = inner.handle;
-  col->m_colType = colType;
-  return { &col->m_handle, inner.size + sizeof(APCCollection) };
-}
-    
-    #define CONFIG_BODY(T, METHOD) \
-T Config::Get##METHOD(const IniSetting::Map &ini, const Hdf& config, \
-                      const std::string &name /* = '' */, \
-                      const T defValue /* = 0ish */, \
-                      const bool prepend_hhvm /* = true */) { \
-  auto ini_name = IniName(name, prepend_hhvm); \
-  /* If we don't pass a name, then we just use the raw config as-is. */ \
-  /* This could happen when we are at a known leaf of a config node. */ \
-  Hdf hdf = name != '' ? config[name] : config; \
-  auto value = ini_iterate(ini, ini_name); \
-  if (value.isString()) { \
-    T ini_ret, hdf_ret; \
-    ini_on_update(value.toString(), ini_ret); \
-    /* I don't care what the ini_ret was if it isn't equal to what  */ \
-    /* is returned back from from an HDF get call, which it will be */ \
-    /* if the call just passes back ini_ret because either they are */ \
-    /* the same or the hdf option associated with this name does    */ \
-    /* not exist.... REMEMBER HDF WINS OVER INI UNTIL WE WIPE HDF   */ \
-    hdf_ret = hdf.configGet##METHOD(ini_ret); \
-    if (hdf_ret != ini_ret) { \
-      ini_ret = hdf_ret; \
-      IniSetting::SetSystem(ini_name, variant_init(ini_ret)); \
-    } \
-    return ini_ret; \
-  } \
-  /* If there is a value associated with this setting in the hdf config */ \
-  /* then return it; otherwise the defValue will be returned as it is   */ \
-  /* assigned to the return value for this call when nothing exists     */ \
-  return hdf.configGet##METHOD(defValue); \
-} \
-void Config::Bind(T& loc, const IniSetting::Map &ini, const Hdf& config, \
-                  const std::string& name /* = '' */, \
-                  const T defValue /* = 0ish */, \
-                  const bool prepend_hhvm /* = true */) { \
-  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
-  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
-                   IniName(name, prepend_hhvm), &loc); \
-}
-    
-    
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
-    }
-  }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
-    
-    #include 'hphp/util/portability.h'
-#include 'hphp/util/exception.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/req-root.h'
-    
-    struct Directory;
-    
-        NDArrayViewPtr NDArrayView::DeepClone(const DeviceDescriptor& device, bool readOnly/* = false*/) const
-    {
-        NDArrayViewPtr newView = MakeSharedObject<NDArrayView>(this->GetDataType(), this->GetStorageFormat(), this->Shape(), device);
-        switch (m_dataType)
-        {
-        case DataType::Float:
-        {
-            auto newMatrix = newView->GetWritableMatrix<float>();
-            auto thisMatrix = GetMatrix<float>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Double:
-        {
-            auto newMatrix = newView->GetWritableMatrix<double>();
-            auto thisMatrix = GetMatrix<double>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Float16:
-        {
-            auto newMatrix = newView->GetWritableMatrix<half>();
-            auto thisMatrix = GetMatrix<half>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Int8:
-        {
-            auto newMatrix = newView->GetWritableMatrix<char>();
-            auto thisMatrix = GetMatrix<char>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Int16:
-        {
-            auto newMatrix = newView->GetWritableMatrix<short>();
-            auto thisMatrix = GetMatrix<short>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        default:
-            LogicError('NDArrayView::DeepClone: Unsupported DataType %s', DataTypeName(m_dataType));
-            break;
-        }
+        // Base class for a SIMD function to multiply a matrix by a vector, with sources
+// of 8-bit signed integer, and result in a double, after appropriate scaling.
+// Assumes a specific method of multiplication that can be applied to any size
+// and number of SIMD registers as follows:
+// int32_t results are computed with num_outputs_per_register_ in each of
+// max_output_registers_ result registers, repeatedly until it would make too
+// many results, then the number of registers is halved, and so-on down to a
+// single result register. The last calculation only outputs the required number
+// of results instead of writing beyond the bounds. Eg: matrix has 75 outputs,
+//  num_outputs_per_register_ = 4, and max_output_registers_ = 8,
+// Step 1: 8x4=32 results are computed,
+// Step 2: 8x4=32 again, total 64,
+// Step 3: 2x4=8 (since 8x4 is too many, so is 4x4), total 72,
+// Step 4: 1x3, total 75.
+// Each step above is computed using a PartialFunc, which runs over the input
+// vector once. The input is read one registerful of num_inputs_per_register_
+// at a time (presumably 4x num_outputs_per_register_ since they are int8_t)
+// so the inputs MUST BE PADDED to a multiple of num_inputs_per_register_.
+// Since it is slow (on Intel at least) to horizontally add in a register,
+// provision is made to process num_inputs_per_group_ inputs at a time, with
+// the group being replicated num_input_groups_ times and multiplied by a
+// num_inputs_per_group_ by num_input_groups_ rectangle of the weights matrix.
+// This is most convenient if num_inputs_per_group_ is 4, and the product
+// sign-extends and sums 8x8=16 bit results to 32 bits, adding 4 adjacent
+// results in the process, but it doesn't have to be implemented that way.
+// The weights are re-ordered by Init() to be used sequentially by the above
+// algorithm, followed by the biases, so they can be added at the end.
+// The base class computes the base C++ implementation.
+// NOTE that, although the subclasses execute on different SIMD hardware, no
+// virtual methods are needed, as the constructor sets up everything that
+// is required to allow the base class implementation to do all the work.
+class IntSimdMatrix {
+ public:
+  // Constructor should set the data members to indicate the sizes.
+  // NOTE: Base constructor public only for test purposes.
+  IntSimdMatrix()
+      : num_outputs_per_register_(1),
+        max_output_registers_(1),
+        num_inputs_per_register_(1),
+        num_inputs_per_group_(1),
+        num_input_groups_(1) {}
     }
     
-        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
-    // function waits until mutex is released
-    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
-    bool Acquire(bool wait)
-    {
-        assert(m_handle == NULL);
-        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
-        if (m_handle == NULL)
-        {
-            if (!wait)
-                return false;   // can't lock due to access permissions: lock already exists, consider not available
-            else
-                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
-        }
-    }
-    
-    // ===================================================================
-// ComputationNetworkWithEdits
-// scripting wrapper to construct by modifying an input network (aka 'Edit')
-// ===================================================================
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        auto sliceInputValue  = InputRef(0).ValueFor(fr);
-        auto sliceOutputValue =           ValueFor(fr); // row vector
-    }
-    
-    
-    {        // change to other values so can support multiple sentences in each minibatch
-        ForwardCompute(alpha, backtrace, pos_scores, pair_scores, stt);
-        BackwardCompute(functionValues, backtrace, stp);
-    };
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
-    
-    class WritableFile;
-    
-    namespace boost{
-namespace BOOST_REGEX_DETAIL_NS{
-    }
-    }
-    
-    typedef enum _match_flags
-{
-   match_default = 0,
-   match_not_bol = 1,                                /* first is not start of line */
-   match_not_eol = match_not_bol << 1,               /* last is not end of line */
-   match_not_bob = match_not_eol << 1,               /* first is not start of buffer */
-   match_not_eob = match_not_bob << 1,               /* last is not end of buffer */
-   match_not_bow = match_not_eob << 1,               /* first is not start of word */
-   match_not_eow = match_not_bow << 1,               /* last is not end of word */
-   match_not_dot_newline = match_not_eow << 1,       /* \n is not matched by '.' */
-   match_not_dot_null = match_not_dot_newline << 1,  /* '\0' is not matched by '.' */
-   match_prev_avail = match_not_dot_null << 1,       /* *--first is a valid expression */
-   match_init = match_prev_avail << 1,               /* internal use */
-   match_any = match_init << 1,                      /* don't care what we match */
-   match_not_null = match_any << 1,                  /* string can't be null */
-   match_continuous = match_not_null << 1,           /* each grep match must continue from */
-                                                     /* uninterupted from the previous one */
-   match_partial = match_continuous << 1,            /* find partial matches */
-   
-   match_stop = match_partial << 1,                  /* stop after first match (grep) V3 only */
-   match_not_initial_null = match_stop,              /* don't match initial null, V4 only */
-   match_all = match_stop << 1,                      /* must find the whole of input even if match_any is set */
-   match_perl = match_all << 1,                      /* Use perl matching rules */
-   match_posix = match_perl << 1,                    /* Use POSIX matching rules */
-   match_nosubs = match_posix << 1,                  /* don't trap marked subs */
-   match_extra = match_nosubs << 1,                  /* include full capture information for repeated captures */
-   match_single_line = match_extra << 1,             /* treat text as single line and ignor any \n's when matching ^ and $. */
-   match_unused1 = match_single_line << 1,           /* unused */
-   match_unused2 = match_unused1 << 1,               /* unused */
-   match_unused3 = match_unused2 << 1,               /* unused */
-   match_max = match_unused3,
-    }
-    
-       void BOOST_REGEX_CALL set_second(BidiIterator i, size_type pos, bool m = true, bool escape_k = false)
-   {
-      if(pos)
-         m_last_closed_paren = static_cast<int>(pos);
-      pos += 2;
-      BOOST_ASSERT(m_subs.size() > pos);
-      m_subs[pos].second = i;
-      m_subs[pos].matched = m;
-      if((pos == 2) && !escape_k)
-      {
-         m_subs[0].first = i;
-         m_subs[0].matched = (m_subs[0].first != m_subs[0].second);
-         m_null.first = i;
-         m_null.second = i;
-         m_null.matched = false;
-         m_is_singular = false;
-      }
-   }
-   void BOOST_REGEX_CALL set_size(size_type n, BidiIterator i, BidiIterator j)
-   {
-      value_type v(j);
-      size_type len = m_subs.size();
-      if(len > n + 2)
-      {
-         m_subs.erase(m_subs.begin()+n+2, m_subs.end());
-         std::fill(m_subs.begin(), m_subs.end(), v);
-      }
-      else
-      {
-         std::fill(m_subs.begin(), m_subs.end(), v);
-         if(n+2 != len)
-            m_subs.insert(m_subs.end(), n+2-len, v);
-      }
-      m_subs[1].first = i;
-      m_last_closed_paren = 0;
-   }
-   void BOOST_REGEX_CALL set_base(BidiIterator pos)
-   {
-      m_base = pos;
-   }
-   BidiIterator base()const
-   {
-      return m_base;
-   }
-   void BOOST_REGEX_CALL set_first(BidiIterator i)
-   {
-      BOOST_ASSERT(m_subs.size() > 2);
-      // set up prefix:
-      m_subs[1].second = i;
-      m_subs[1].matched = (m_subs[1].first != i);
-      // set up $0:
-      m_subs[2].first = i;
-      // zero out everything else:
-      for(size_type n = 3; n < m_subs.size(); ++n)
-      {
-         m_subs[n].first = m_subs[n].second = m_subs[0].second;
-         m_subs[n].matched = false;
-      }
-   }
-   void BOOST_REGEX_CALL set_first(BidiIterator i, size_type pos, bool escape_k = false)
-   {
-      BOOST_ASSERT(pos+2 < m_subs.size());
-      if(pos || escape_k)
-      {
-         m_subs[pos+2].first = i;
-         if(escape_k)
-         {
-            m_subs[1].second = i;
-            m_subs[1].matched = (m_subs[1].first != m_subs[1].second);
-         }
-      }
-      else
-         set_first(i);
-   }
-   void BOOST_REGEX_CALL maybe_assign(const match_results<BidiIterator, Allocator>& m);
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_soft_buffer_end()
-{
-   if(m_match_flags & match_not_eob)
-      return false;
-   BidiIterator p(position);
-   while((p != last) && is_separator(traits_inst.translate(*p, icase)))++p;
-   if(p != last)
-      return false;
-   pstate = pstate->next.p;
-   return true;
-}
-    
-          //
-      // options common to all groups:
-      //
-      no_escape_in_lists = 1 << 16,                     // '\' not special inside [...]
-      newline_alt = 1 << 17,                            // \n is the same as |
-      no_except = 1 << 18,                              // no exception on error
-      failbit = 1 << 19,                                // error flag
-      icase = 1 << 20,                                  // characters are matched regardless of case
-      nocollate = 0,                                    // don't use locale specific collation (deprecated)
-      collate = 1 << 21,                                // use locale specific collation
-      nosubs = 1 << 22,                                 // don't mark sub-expressions
-      save_subexpression_location = 1 << 23,            // save subexpression locations
-      no_empty_expressions = 1 << 24,                   // no empty expressions allowed
-      optimize = 0,                                     // not really supported
-      
-    
-    //
-// regex_grep:
-// find all non-overlapping matches within the sequence first last:
-//
-template <class Predicate, class BidiIterator, class charT, class traits>
-inline unsigned int regex_grep(Predicate foo, 
-                               BidiIterator first, 
-                               BidiIterator last, 
-                               const basic_regex<charT, traits>& e, 
-                               match_flag_type flags = match_default)
-{
-   if(e.flags() & regex_constants::failbit)
-      return false;
-    }
-    
-    
+    #endif
 
     
     
-    {   void BOOST_REGEX_CALL align()
-   {
-      // move end up to a boundary:
-      end = start + (((end - start) + padding_mask) & ~padding_mask);
-   }
-   void swap(raw_storage& that)
-   {
-      std::swap(start, that.start);
-      std::swap(end, that.end);
-      std::swap(last, that.last);
-  }
-};
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace atomics
-} // namespace mars_boost
-    
-    template< >
-struct make_storage_type< 16u, true >
-{
-    typedef mars_boost::int128_type type;
+/**********************************************************************
+ * split_and_recog_word
+ *
+ * Split the word into 2 smaller pieces at the largest gap.
+ * Recognize the pieces and stick the results back together.
+ **********************************************************************/
+void Tesseract::split_and_recog_word(WERD_RES *word) {
+  // Find the biggest blob gap in the chopped_word.
+  int bestgap = -INT32_MAX;
+  int split_index = 0;
+  for (int b = 1; b < word->chopped_word->NumBlobs(); ++b) {
+    TBOX prev_box = word->chopped_word->blobs[b - 1]->bounding_box();
+    TBOX blob_box = word->chopped_word->blobs[b]->bounding_box();
+    int gap = blob_box.left() - prev_box.right();
+    if (gap > bestgap) {
+      bestgap = gap;
+      split_index = b;
     }
+  }
+  ASSERT_HOST(split_index > 0);
+    }
+    
+      // Gets a pix that contains an 8 bit threshold value at each pixel. The
+  // returned pix may be an integer reduction of the binary image such that
+  // the scale factor may be inferred from the ratio of the sizes, even down
+  // to the extreme of a 1x1 pixel thresholds image.
+  // Ideally the 8 bit threshold should be the exact threshold used to generate
+  // the binary image in ThresholdToPix, but this is not a hard constraint.
+  // Returns nullptr if the input is binary. PixDestroy after use.
+  virtual Pix* GetPixRectThresholds();
+    
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
+    
+      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
+      GTEST_BY_REF_(T2) f2, GTEST_BY_REF_(T3) f3, GTEST_BY_REF_(T4) f4,
+      GTEST_BY_REF_(T5) f5, GTEST_BY_REF_(T6) f6, GTEST_BY_REF_(T7) f7,
+      GTEST_BY_REF_(T8) f8, GTEST_BY_REF_(T9) f9) : f0_(f0), f1_(f1), f2_(f2),
+      f3_(f3), f4_(f4), f5_(f5), f6_(f6), f7_(f7), f8_(f8), f9_(f9) {}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+      std::vector<std::thread> workers;
+  for (auto worker = size_t{0}; worker < num_threads; ++worker) {
+    workers.push_back(std::thread([&] {
+      try {
+        hphp_thread_init();
+        hphp_session_init(Treadmill::SessionKind::HHBBC);
+        SCOPE_EXIT {
+          hphp_context_exit();
+          hphp_session_exit();
+          hphp_thread_exit();
+        };
+    }
+    }
+    }
+    
+    
+    {}
+    
+    void Assembler::lhz(const Reg64& rt, MemoryRef m) {
+  assertx(Reg64(-1) == m.r.index);  // doesn't support base+index
+  EmitDForm(40, rn(rt), rn(m.r.base), m.r.disp);
+}
+    
+      /**
+   * Dump detailed information to return string.
+   */
+  virtual String debuggerDump() {
+    return String();
+  }
+    
+    /*
+ * ExtendedException is the exception type for C++ exceptions that carry PHP
+ * stack traces, but do not represent user-visible PHP exception objects.
+ *
+ * This class should probably eventually be merged with FatalErrorException;
+ * for now it's still here for historical reasons, though.
+ *
+ * You generally should not have to add new subclasses of these Exception types
+ * in extension code---normally you want to go through the raise_error
+ * machinery.
+ */
+struct ExtendedException : Exception {
+  enum class SkipFrame {};
+    }
+    
+    #define ERROR_RAISE_WARNING(exp)        \
+  int ret = (exp);                      \
+  if (ret != 0) {                       \
+    raise_warning(                      \
+      '%s(): %s',                       \
+      __FUNCTION__,                     \
+      folly::errnoStr(errno).c_str()    \
+    );                                  \
+  }                                     \
+    
+    #endif
+
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+
+    
+    #include <string>
+#include <vector>
+    
+    /**
+ * @brief Parser plugin for logger configurations.
+ */
+class LoggerConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {kLoggerKey};
+  }
+    }
+    
+    #include <osquery/config.h>
+#include <osquery/registry.h>
+    
+    std::shared_ptr<PlatformProcess> PlatformProcess::launchWorker(
+    const std::string& exec_path, int argc /* unused */, char** argv) {
+  auto worker_pid = ::fork();
+  if (worker_pid < 0) {
+    return std::shared_ptr<PlatformProcess>();
+  } else if (worker_pid == 0) {
+    setEnvVar('OSQUERY_WORKER', std::to_string(::getpid()).c_str());
+    ::execve(exec_path.c_str(), argv, ::environ);
+    }
+    }
+    
+    TEST_F(QueryTests, test_get_query_results) {
+  // Grab an expected set of query data and add it as the previous result.
+  auto encoded_qd = getSerializedQueryDataJSON();
+  auto query = getOsqueryScheduledQuery();
+  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
+  EXPECT_TRUE(status.ok());
+    }
+    
+    
+    {  for (const auto& category : doc.doc()['exclude_paths'].GetObject()) {
+    for (const auto& excl_path : category.value.GetArray()) {
+      std::string pattern = excl_path.GetString();
+      if (pattern.empty()) {
+        continue;
+      }
+      exclude_paths_.insert(pattern);
+    }
+  }
+}
+    
+      QueryData generate(QueryContext& request) {
+    QueryData results;
+    }
+    
+    #define BENCHMARK_PRIVATE_DECLARE_F(BaseClass, Method)        \
+  class BaseClass##_##Method##_Benchmark : public BaseClass { \
+   public:                                                    \
+    BaseClass##_##Method##_Benchmark() : BaseClass() {        \
+      this->SetName(#BaseClass '/' #Method);                  \
+    }                                                         \
+                                                              \
+   protected:                                                 \
+    virtual void BenchmarkCase(::benchmark::State&);          \
+  };
+    
+    // That gcc wants both of these prototypes seems mysterious. VC, for
+// its part, can't decide which to use (another mystery). Matching of
+// template overloads: the final frontier.
+#ifndef COMPILER_MSVC
+template <typename T, size_t N>
+char (&ArraySizeHelper(const T (&array)[N]))[N];
+#endif
+    
+    #include <cstdarg>
+#include <iostream>
+#include <string>
+    
+      // Calculate least square fitting parameter
+  for (size_t i = 0; i < n.size(); ++i) {
+    double gn_i = fitting_curve(n[i]);
+    sigma_gn += gn_i;
+    sigma_gn_squared += gn_i * gn_i;
+    sigma_time += time[i];
+    sigma_time_gn += time[i] * gn_i;
+  }
+    
+    #ifdef BENCHMARK_OS_EMSCRIPTEN
+#include <emscripten.h>
+#endif
+    
+    #endif
+
+    
+      // Compile a regular expression matcher from spec.  Returns true on success.
+  //
+  // On failure (and if error is not nullptr), error is populated with a human
+  // readable error message if an error occurs.
+  bool Init(const std::string& spec, std::string* error);
