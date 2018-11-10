@@ -1,124 +1,152 @@
 
         
-        module Gitlab
-  module BackgroundMigration
-    class PopulateMergeRequestsLatestMergeRequestDiffId
-      BATCH_SIZE = 1_000
-    
-              pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
-          end
-        end
-    
-          def add_collection(collection)
-        @checks |= collection.checks
-      end
-    
-              # Build a `SELECT` query. We find the first of the `end_time_attrs` that isn't `NULL` (call this end_time).
-          # Next, we find the first of the start_time_attrs that isn't `NULL` (call this start_time).
-          # We compute the (end_time - start_time) interval, and give it an alias based on the current
-          # cycle analytics stage.
-          interval_query = Arel::Nodes::As.new(cte_table,
-            subtract_datetimes(stage_query(project_ids), start_time_attrs, end_time_attrs, name.to_s))
-    
-          def end_time_attrs
-        @end_time_attrs ||= mr_metrics_table[:first_deployed_to_production_at]
-      end
-    
-          offset = line.offset + line.text.size - arg_string.size
-      args, splat = Script::Parser.new(arg_string.strip, @line, to_parser_offset(offset), @options).
-        parse_function_definition_arglist
-      Tree::FunctionNode.new(name, args, splat)
+            # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
     end
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
-      end
-    
-              react_and_close(env, body) or [status, headers, body]
+            if Pathname::BOTTLE_EXTNAME_RX === file.to_s
+          version = bottle_resolve_version(file) rescue file.version
         else
-          [status, headers, body]
+          version = file.version
         end
-      end
+        next unless version
+        next unless (name = file.basename.to_s[/(.*)-(?:#{Regexp.escape(version)})/, 1])
     
-      it 'accepts post requests with correct X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
-    expect(last_response).to be_ok
+          # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
+      end
+    end
   end
     
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
+          return_val = nil
     
-      def execute
-    signal_deprecation_warning_for_pack
-    
-        it 'should make password values hidden' do
-      expect(subject.password.to_s).to(be == '<password>')
-      expect(subject.password.inspect).to(be == '<password>')
+        def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
+      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
+      return action_return
     end
+    
+    require_relative '../env'
+require_relative '../globals'
+require_relative '../analytics/action_completion_context'
+require_relative '../analytics/action_launch_context'
+require_relative 'errors'
+    
+          it 'adds install_docset param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            install_docset: true
+          )
+        end').runner.execute(:test)
+    
+          it 'handles the extensions parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+          it 'generates the correct git command with a shell-escaped message' do
+        message = 'message with 'quotes' (and parens)'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: './fastlane/README.md', message: \'#{message}\')
+        end').runner.execute(:test)
+        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
+      end
+    end
+  end
+end
+
+    
+            it 'can push and pop configuration values' do
+          name = FastlaneCore::ConfigItem.new(key: :name)
+          platform = FastlaneCore::ConfigItem.new(key: :platform)
+          other = FastlaneCore::ConfigItem.new(key: :other)
+    
+        os = 'other'
+    shellescape_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        str = testcase['str'].to_s
+        expect_correct_implementation_to_be_called(str, :shellescape, os)
+        escaped = str.shellescape
+        expect(escaped).to eq(testcase['expect'][os])
+      end
+    end
+  end
+end
+    
+            # this command is also sent on macOS Sierra and we need to allow it or else the test will fail
+        allowed_command = 'security set-key-partition-list -S apple-tool:,apple: -k #{''.shellescape} #{Dir.home}/Library/Keychains/login.keychain-db &> /dev/null'
+    
+    Given(/^I make (\d+) deployments$/) do |count|
+  step 'all linked files exists in shared path'
+    
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
+    end
+  end
+end
+
+    
+          # Parse through mail to get the from/sender headers
+      mail = Mail.new(raw_message.split('\r\n\r\n', 2).first)
+      from_headers = {'from' => mail.from, 'sender' => mail.sender}
+      authenticated_domain = identity.server.find_authenticated_domain_from_headers(from_headers)
+    
+      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
+  before_action { params[:id] && @address_endpoint = @server.address_endpoints.find_by_uuid!(params[:id]) }
+    
+      def update
+    if @ip_address.update(safe_params)
+      redirect_to_with_json [:edit, @ip_pool]
+    else
+      render_form_errors 'edit', @ip_address
+    end
+  end
+    
+      class TimeUndetermined < Postal::Error; end
+    
+      def ip
+    render :plain => 'ip: #{request.ip} remote ip: #{request.remote_ip}'
+  end
+    
+      def index
+    @track_domains = @server.track_domains.order(:name).to_a
+  end
+    
+      def update
+    @organization_user = organization.user_assignment(@user)
+    if @organization_user.update(params.require(:organization_user).permit(:admin))
+      redirect_to_with_json [organization, :users], :notice => 'Permissions for #{@organization_user.user.name} have been updated successfully.'
+    else
+      render_form_errors 'edit', @organization_user
+    end
+  end
+    
+          # $TMUXINATOR_CONFIG (and create directory) or ''.
+      def environment
+        environment = ENV['TMUXINATOR_CONFIG']
+        return '' if environment.to_s.empty? # variable is unset (nil) or blank
+        FileUtils::mkdir_p(environment) unless File.directory?(environment)
+        environment
+      end
+    
+          it 'returns false' do
+        expect(Tmuxinator::Doctor.installed?).to be_falsey
+      end
+    end
+  end
+    
+      it { expect(instance).to respond_to :wemux? }
+  it { expect(instance).to respond_to :load_wemux_overrides }
