@@ -1,162 +1,260 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
-    
-      // base::SingleThreadTaskRunner:
-  bool PostDelayedTask(const base::Location& from_here,
-                       base::OnceClosure task,
-                       base::TimeDelta delay) override;
-  bool RunsTasksInCurrentSequence() const override;
-  bool PostNonNestableDelayedTask(const base::Location& from_here,
-                                  base::OnceClosure task,
-                                  base::TimeDelta delay) override;
-    
-    void Initialize(v8::Local<v8::Object> exports,
-                v8::Local<v8::Value> unused,
-                v8::Local<v8::Context> context,
-                void* priv) {
-  v8::Isolate* isolate = context->GetIsolate();
-  mate::Dictionary dict(isolate, exports);
-  dict.Set('autoUpdater', AutoUpdater::Create(isolate));
-  dict.Set('AutoUpdater', AutoUpdater::GetConstructor(isolate)->GetFunction());
-}
-    
-    #endif  // ATOM_BROWSER_API_ATOM_API_BROWSER_VIEW_H_
-
-    
-    namespace atom {
-    }
-    
-    #include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/native_mate_converters/file_path_converter.h'
-#include 'base/bind.h'
-#include 'base/files/file_util.h'
-#include 'content/public/browser/tracing_controller.h'
-#include 'native_mate/dictionary.h'
-    
-    void GlobalShortcut::OnKeyPressed(const ui::Accelerator& accelerator) {
-  if (accelerator_callback_map_.find(accelerator) ==
-      accelerator_callback_map_.end()) {
-    // This should never occur, because if it does, GlobalGlobalShortcutListener
-    // notifes us with wrong accelerator.
-    NOTREACHED();
-    return;
+          // Rounds the size up to a multiple of the input register size (in int8_t).
+  int RoundInputs(int size) const {
+    return Roundup(size, num_inputs_per_register_);
   }
-  accelerator_callback_map_[accelerator].Run();
-}
-    
-    
-    {}  // namespace atom
-    
-    void Menu::InsertItemAt(int index,
-                        int command_id,
-                        const base::string16& label) {
-  model_->InsertItemAt(index, command_id, label);
-}
-    
-      // The window used for processing events.
-  HWND window_;
-#endif
-    
-    void Screen::OnDisplayMetricsChanged(const display::Display& display,
-                                     uint32_t changed_metrics) {
-  Emit('display-metrics-changed', display, MetricsToArray(changed_metrics));
-}
-    
-    namespace tesseract {
-    }
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
-  int max_offset = n - 8;
-  int offset = 0;
-  // Accumulate a set of 4 32-bit sums in sum, by loading 8 pairs of 8-bit
-  // values, extending to 16 bit, multiplying to make 32 bit results.
-  __m128i sum = _mm_setzero_si128();
-  if (offset <= max_offset) {
-    offset = 8;
-    __m128i packed1 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(u));
-    __m128i packed2 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(v));
-    sum = _mm_cvtepi8_epi16(packed1);
-    packed2 = _mm_cvtepi8_epi16(packed2);
-    // The magic _mm_add_epi16 is perfect here. It multiplies 8 pairs of 16 bit
-    // ints to make 32 bit results, which are then horizontally added in pairs
-    // to make 4 32 bit results that still fit in a 128 bit register.
-    sum = _mm_madd_epi16(sum, packed2);
-    while (offset <= max_offset) {
-      packed1 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(u + offset));
-      packed2 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(v + offset));
-      offset += 8;
-      packed1 = _mm_cvtepi8_epi16(packed1);
-      packed2 = _mm_cvtepi8_epi16(packed2);
-      packed1 = _mm_madd_epi16(packed1, packed2);
-      sum = _mm_add_epi32(sum, packed1);
-    }
+  // Rounds the size up to a multiple of the output register size (in int32_t).
+  int RoundOutputs(int size) const {
+    return Roundup(size, num_outputs_per_register_);
   }
-  // Sum the 4 packed 32 bit sums and extract the low result.
-  sum = _mm_hadd_epi32(sum, sum);
-  sum = _mm_hadd_epi32(sum, sum);
-  int32_t result = _mm_cvtsi128_si32(sum);
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
+    
+    #ifndef TESSERACT_CCMAIN_OSDETECT_H_
+#define TESSERACT_CCMAIN_OSDETECT_H_
     
       /**
-   * Returns orientation for the block the iterator points to.
-   *   orientation, writing_direction, textline_order: see publictypes.h
-   *   deskew_angle: after rotating the block so the text orientation is
-   *                 upright, how many radians does one have to rotate the
-   *                 block anti-clockwise for it to be level?
-   *                   -Pi/4 <= deskew_angle <= Pi/4
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
    */
-  void Orientation(tesseract::Orientation *orientation,
-                   tesseract::WritingDirection *writing_direction,
-                   tesseract::TextlineOrder *textline_order,
-                   float *deskew_angle) const;
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
     
-    #define arraysize(array) (sizeof(::benchmark::internal::ArraySizeHelper(array)))
+      SVMenuNode* std_menu = svMenuRoot->AddChild ('Build Config File');
     
-    // Internal function to calculate the different scalability forms
-BigOFunc* FittingCurve(BigO complexity) {
-  switch (complexity) {
-    case oN:
-      return [](int n) -> double { return n; };
-    case oNSquared:
-      return [](int n) -> double { return std::pow(n, 2); };
-    case oNCubed:
-      return [](int n) -> double { return std::pow(n, 3); };
-    case oLogN:
-      return [](int n) { return log2(n); };
-    case oNLogN:
-      return [](int n) { return n * log2(n); };
-    case o1:
-    default:
-      return [](int) { return 1.0; };
-  }
+    // scripts/fuse_gtest.py depends on gtest's own header being #included
+// *unconditionally*.  Therefore these #includes cannot be moved
+// inside #if GTEST_HAS_PARAM_TEST.
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-param-util.h'
+#include 'gtest/internal/gtest-param-util-generated.h'
+    
+    TEST_P(DerivedTest, DoesBlah) {
+  // GetParam works just the same here as if you inherit from TestWithParam.
+  EXPECT_TRUE(foo.Blah(GetParam()));
 }
     
-    // Return a vector containing the bigO and RMS information for the specified
-// list of reports. If 'reports.size() < 2' an empty vector is returned.
-std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports);
-    
-    bool ConsoleReporter::ReportContext(const Context& context) {
-  name_field_width_ = context.name_field_width;
-  printed_header_ = false;
-  prev_counters_.clear();
+    namespace internal {
     }
     
+     private:
+  // Replaces multiple consecutive separators with a single separator.
+  // For example, 'bar///foo' becomes 'bar/foo'. Does not eliminate other
+  // redundancies that might be in a pathname involving '.' or '..'.
+  //
+  // A pathname with multiple consecutive separators may occur either through
+  // user error or as a result of some scripts or APIs that generate a pathname
+  // with a trailing separator. On other platforms the same API or script
+  // may NOT generate a pathname with a trailing '/'. Then elsewhere that
+  // pathname may have another '/' and pathname components added to it,
+  // without checking for the separator already being there.
+  // The script language and operating system may allow paths like 'foo//bar'
+  // but some of the functions in FilePath will not handle that correctly. In
+  // particular, RemoveTrailingPathSeparator() only removes one separator, and
+  // it is called in CreateDirectoriesRecursively() assuming that it will change
+  // a pathname from directory syntax (trailing separator) to filename syntax.
+  //
+  // On Windows this method also replaces the alternate path separator '/' with
+  // the primary path separator '\\', so that for example 'bar\\/\\foo' becomes
+  // 'bar\\foo'.
     
-    {
-    {} // end namespace internal
-} // end namespace benchmark
+      // Compares two C strings, ignoring case.  Returns true iff they
+  // have the same content.
+  //
+  // Unlike strcasecmp(), this function can handle NULL argument(s).
+  // A NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool CaseInsensitiveCStringEquals(const char* lhs,
+                                           const char* rhs);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31>
+struct Types31 {
+  typedef T1 Head;
+  typedef Types30<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31> Tail;
+};
+    
+    #endif  // GTEST_SAMPLES_PRIME_TABLES_H_
 
     
-    inline int& LogLevel() {
-  static int log_level = 0;
-  return log_level;
+      auto cv = config.find(kLoggerKey);
+  if (cv != config.end()) {
+    auto obj = data_.getObject();
+    data_.copyFrom(cv->second.doc(), obj);
+    data_.add(kLoggerKey, obj);
+  }
+    
+      update['awesome'] = R'raw({
+    'options': {
+      'custom_nested_json': 
+        {'foo':1,'bar':'baz'}
+    }
+  })raw';
+  auto s = c.update(update);
+  EXPECT_TRUE(s.ok());
+  EXPECT_EQ(s.toString(), 'OK');
+    
+    TEST_F(QueryTests, test_get_query_results) {
+  // Grab an expected set of query data and add it as the previous result.
+  auto encoded_qd = getSerializedQueryDataJSON();
+  auto query = getOsqueryScheduledQuery();
+  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
+  EXPECT_TRUE(status.ok());
+    }
+    
+    static const int kCbToGreenTable[256] = {
+  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
+  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
+  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
+  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
+  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
+  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
+  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
+  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
+  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
+  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
+  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
+   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
+   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
+   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
+   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
+   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
+    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
+  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
+  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
+  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
+  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
+  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
+ -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
+ -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
+ -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
+ -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
+ -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
+ -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
+ -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
+ -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
+ -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
+ -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
+};
+    
+      // Returns true if the argument of the last Compare() call (or the baseline
+  // image, if Compare() was not called yet) meets the image acceptance
+  // criteria. The target_mul modifies the acceptance criteria used in this call
+  // the following way:
+  //    = 1.0 : the original acceptance criteria is used,
+  //    < 1.0 : a more strict acceptance criteria is used,
+  //    > 1.0 : a less strict acceptance criteria is used.
+  virtual bool DistanceOK(double target_mul) const = 0;
+    
+    
+    {}  // namespace
+    
+        std::sort(tree, tree + n, SortHuffmanTree);
+    
+    namespace guetzli {
+    }
+    
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
+    
+    #include 'guetzli/gamma_correct.h'
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
+    }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
 }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    // Writes a string using the out callback.
+inline bool JPEGWrite(JPEGOutput out, const std::string& s) {
+  const uint8_t* data = reinterpret_cast<const uint8_t*>(&s[0]);
+  return JPEGWrite(out, data, s.size());
+}
+    
+      JpegHistogram() { Clear(); }
+  void Clear() {
+    memset(counts, 0, sizeof(counts));
+    counts[kSize - 1] = 1;
+  }
+  void Add(int symbol) {
+    counts[symbol] += 2;
+  }
+  void Add(int symbol, int weight) {
+    counts[symbol] += 2 * weight;
+  }
+  void AddHistogram(const JpegHistogram& other) {
+    for (int i = 0; i + 1 < kSize; ++i) {
+      counts[i] += other.counts[i];
+    }
+    counts[kSize - 1] = 1;
+  }
+  int NumSymbols() const {
+    int n = 0;
+    for (int i = 0; i + 1 < kSize; ++i) {
+      n += (counts[i] > 0 ? 1 : 0);
+    }
+    return n;
+  }
+    
+    
+    {    static BOOST_FORCEINLINE storage_type fetch_xor(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+        switch (order)
+        {
+        case memory_order_relaxed:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_XOR16_RELAXED(&storage, v));
+            break;
+        case memory_order_consume:
+        case memory_order_acquire:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_XOR16_ACQUIRE(&storage, v));
+            break;
+        case memory_order_release:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_XOR16_RELEASE(&storage, v));
+            break;
+        case memory_order_acq_rel:
+        case memory_order_seq_cst:
+        default:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_XOR16(&storage, v));
+            break;
+        }
+        return v;
+    }
+};
+    
+    template< std::size_t Size >
+struct buffer_storage
+{
+    BOOST_ALIGNMENT(16) unsigned char data[Size];
+    }
