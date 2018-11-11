@@ -1,155 +1,90 @@
 
         
-                  def name_and_id_index(options)
-            if options.key?('index')
-              options.delete('index') || ''
-            elsif @generate_indexed_names
-              @auto_index || ''
-            end
-          end
-    
-              super(object_name, method_name, template_object, options)
-        end
-    
-            class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
-          end
-        end
-    
-                DateTimeSelector.new(datetime, options, html_options)
-          end
-    
-        initializer 'action_view.setup_action_pack' do |app|
-      ActiveSupport.on_load(:action_controller) do
-        ActionView::RoutingUrlFor.include(ActionDispatch::Routing::UrlFor)
-      end
+          def outbox_presenter
+    if page_requested?
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account, page_params),
+        type: :ordered,
+        part_of: account_outbox_url(@account),
+        prev: prev_page,
+        next: next_page,
+        items: @statuses
+      )
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account),
+        type: :ordered,
+        size: @account.statuses_count,
+        first: account_outbox_url(@account, page: true),
+        last: account_outbox_url(@account, page: true, min_id: 0)
+      )
     end
-    
-          def instrument(name, **options) # :doc:
-        options[:identifier] ||= (@template && @template.identifier) || @path
-    
-          def store_meta(store)
-        json = as_json
-        json[:mtime] = Time.now.to_i
-        json[:db_size] = store.size(DB_FILENAME)
-        store.write(META_FILENAME, json.to_json)
-      end
-    end
-    
-        def to_a
-      @filters.dup
-    end
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-        def initialize(options = {})
-      @request_options = options.extract!(:request_options)[:request_options].try(:dup) || {}
-      options[:max_concurrency] ||= 20
-      options[:pipelining] = false
-      super
-    end
-    
-        def blank?
-      body.blank?
-    end
-    
-        def merge!(hash)
-      return super unless hash.is_a? Hash
-      hash.assert_valid_keys URI::Generic::COMPONENT
-      hash.each_pair do |key, value|
-        send '#{key}=', value
-      end
-      self
-    end
-    
-      def set_filter
-    @filter = current_account.custom_filters.find(params[:id])
   end
     
-      before_action :set_account
-  before_action :set_size
-  before_action :set_statuses
-    
-      before_action :set_account
-    
-            log_action :change_email, @user
-    
-        def filtered_custom_emojis
-      CustomEmojiFilter.new(filter_params).results
+          redirect_to admin_report_path(@report)
     end
     
-        def index
-      authorize :email_domain_block, :index?
-      @email_domain_blocks = EmailDomainBlock.page(params[:page])
-    end
-    
-      def hub_topic
-    params['hub.topic']
-  end
-    
-        # The default options for Sass::Engine.
-    # @api public
-    DEFAULT_OPTIONS = {
-      :style => :nested,
-      :load_paths => [],
-      :cache => true,
-      :cache_location => './.sass-cache',
-      :syntax => :sass,
-      :filesystem_importer => Sass::Importers::Filesystem
-    }.freeze
-    
-        # @param msg [String] The error message
-    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def initialize(msg, attrs = {})
-      @message = msg
-      @sass_backtrace = []
-      add_backtrace(attrs)
-    end
-    
-          # This double assignment is to prevent an 'unused variable' warning on
-      # Ruby 1.9.3.  Yes, it is dumb, but I don't like Ruby yelling at me.
-      frames = frames = exception.backtrace.map { |line|
-        frame = OpenStruct.new
-        if line =~ /(.*?):(\d+)(:in `(.*)')?/
-          frame.filename = $1
-          frame.lineno = $2.to_i
-          frame.function = $4
-    }
-    
-          def call(env)
-        unless accepts? env
-          instrument env
-          result = react env
-        end
-        result or app.call(env)
-      end
-    
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
-    end
-    
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
+          # Find a Sass file, if it exists.
       #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
       end
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Then(/^directories referenced in :linked_files are created in shared$/) do
+  dirs = TestApp.linked_files.map { |path| TestApp.shared_path.join(path).dirname }
+  dirs.each do |dir|
+    run_vagrant_command(test_dir_exists(dir))
+  end
+end
+    
+          super
+    end
+    
+          def warn_add_git_to_capfile
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] Future versions of Capistrano will not load the Git SCM
+plugin by default. To silence this deprecation warning, add the following to
+your Capfile after `require 'capistrano/deploy'`:
