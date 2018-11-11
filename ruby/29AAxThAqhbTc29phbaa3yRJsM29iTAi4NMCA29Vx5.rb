@@ -1,35 +1,14 @@
 
         
-            keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
-      end
-      f.puts s
-    end
-  end
-end
-
-    
-      def zsh_completion_caveats
-    if keg && keg.completion_installed?(:zsh) then <<-EOS.undent
-      zsh completion has been installed to:
-        #{HOMEBREW_PREFIX}/share/zsh/site-functions
-      EOS
-    end
-  end
-    
-      private
-    
-            # Executes a command and returns true if the command succeeded,
-        # and false otherwise. By default, this executes as a normal user,
-        # and it is up to the communicator implementation if they expose an
-        # option for running tests as an administrator.
-        #
-        # @see #execute
-        def test(command, opts=nil)
+                case array.length
+        when 0
+          ''.html_safe
+        when 1
+          ERB::Util.html_escape(array[0])
+        when 2
+          safe_join([array[0], array[1]], options[:two_words_connector])
+        else
+          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
         end
       end
     end
@@ -37,74 +16,80 @@ end
 end
 
     
-            # This is an internal initialize function that should never be
-        # overridden. It is used to initialize some common internal state
-        # that is used in a provider.
-        def _initialize(name, machine)
-          initialize_capabilities!(
-            name.to_sym,
-            { name.to_sym => [Class.new, nil] },
-            Vagrant.plugin('2').manager.provider_capabilities,
-            machine,
-          )
-        end
-      end
+            private
+    
+    require 'action_view/helpers/tags/placeholderable'
+    
+    module ActionView #:nodoc:
+  # = Action View PathSet
+  #
+  # This class is used to store and access paths in Action View. A number of
+  # operations are defined so that you can search among the paths in this
+  # set and also perform operations on other +PathSet+ objects.
+  #
+  # A +LookupContext+ will use a +PathSet+ to store the paths in its context.
+  class PathSet #:nodoc:
+    include Enumerable
+    
+        private
+    
+      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
+  # see https://github.com/Homebrew/homebrew-cask/pull/8887
+  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
+    
+        # @return [String] jruby, ruby, rbx, ...
+    def ruby_engine
+      RUBY_ENGINE
     end
-  end
-end
-
     
-        if !PostRequests.include?(self.method)
-      if param_string.size > 0
-        str << '?' + param_string
-      end
-    end
-    str
-  end
+    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
+  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
+  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
     
-        '#<#{self.class} http#{ssl ? 's' : ''}://#{listen_host}:#{listen_port} [ #{resources_str} ]>'
-  end
-    
-    IAX_IE_CALLED_NUMBER  = 1
-IAX_IE_CALLING_NUMBER = 2
-IAX_IE_AUTH_METHODS   = 3
-IAX_IE_CALLING_NAME   = 4
-IAX_IE_USERNAME       = 6
-IAX_IE_DESIRED_CODEC  = 9
-IAX_IE_ORIGINAL_DID   = 10
-IAX_IE_ACTUAL_CODECS  = 8
-IAX_IE_PROTO_VERSION  = 11
-IAX_IE_REG_REFRESH    = 19
-IAX_IE_CHALLENGE_DATA = 15
-IAX_IE_CHALLENGE_RESP = 16
-IAX_IE_APPARENT_ADDR  = 18
-IAX_IE_REGREJ_CAUSE   = 22
-IAX_IE_HANGUP_CAUSE   = 42
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
-          #
-          # @return [String] encoded principal
-          def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
           end
     
-          output = input_path if @options[:in_place]
-      write_output(out, output)
-    rescue Sass::SyntaxError => e
-      raise e if @options[:trace]
-      file = ' of #{e.sass_filename}' if e.sass_filename
-      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
-    rescue LoadError => err
-      handle_load_error(err)
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
     end
+  end
+end
+    
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def capture
+          perform_payment_action(:capture)
+        end
+    
+            def show
+          respond_with(stock_location)
+        end
+    
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
