@@ -1,155 +1,212 @@
 
         
-                  def value
-            if @allow_method_names_outside_object
-              object.public_send @method_name if object && object.respond_to?(@method_name)
-            else
-              object.public_send @method_name if object
-            end
-          end
-    
-              def hidden_field_for_checkbox(options)
-            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
-          end
-      end
-    end
-  end
+        def graceful_require
+  Jekyll::External.require_with_graceful_fail('json')
+  JSON.pretty_generate(DATA)
 end
-
     
-    module ActionView #:nodoc:
-  # = Action View PathSet
-  #
-  # This class is used to store and access paths in Action View. A number of
-  # operations are defined so that you can search among the paths in this
-  # set and also perform operations on other +PathSet+ objects.
-  #
-  # A +LookupContext+ will use a +PathSet+ to store the paths in its context.
-  class PathSet #:nodoc:
-    include Enumerable
+    require 'jekyll'
+require 'mercenary'
     
-    module ActionView
-  # = Action View Railtie
-  class Railtie < Rails::Engine # :nodoc:
-    config.action_view = ActiveSupport::OrderedOptions.new
-    config.action_view.embed_authenticity_token_in_remote_forms = nil
-    config.action_view.debug_missing_translation = true
-    config.action_view.default_enforce_utf8 = nil
-    config.action_view.finalize_compiled_template_methods = true
+            def initialize(config)
+          @main_fallback_highlighter = config['highlighter'] || 'rouge'
+          @config = config['kramdown'] || {}
+          @highlighter = nil
+          setup
+        end
     
-        private
-    
-      # True if a {Formula} is being built universally.
-  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
-  # <pre>args << '--universal-binary' if build.universal?</pre>
-  def universal?
-    include?('universal') && option_defined?('universal')
+      def expand_reqs
+    formula.recursive_requirements do |dependent, req|
+      build = effective_build_options_for(dependent)
+      if (req.optional? || req.recommended?) && build.without?(req)
+        Requirement.prune
+      elsif req.build? && dependent != formula
+        Requirement.prune
+      elsif req.satisfied? && req.default_formula? && (dep = req.to_dependency).installed?
+        deps << dep
+        Requirement.prune
+      end
+    end
   end
     
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
+      def caveats
+    caveats = []
+    begin
+      build, f.build = f.build, Tab.for_formula(f)
+      s = f.caveats.to_s
+      caveats << s.chomp + '\n' if s.length > 0
+    ensure
+      f.build = build
+    end
+    caveats << keg_only_text
+    caveats << bash_completion_caveats
+    caveats << zsh_completion_caveats
+    caveats << fish_completion_caveats
+    caveats << plist_caveats
+    caveats << python_caveats
+    caveats << app_caveats
+    caveats << elisp_caveats
+    caveats.compact.join('\n')
+  end
+    
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
+      end
     end
     
-      def doctor
-    doctor_args.parse
+        @report = Hash.new { |h, k| h[k] = [] }
+    return @report unless updated?
     
-      def convert_man_page(markup, target)
-    manual = target.basename('.1')
-    organisation = 'Homebrew'
+            # Checks if the target machine is ready for communication. If this
+        # returns true, then all the other methods for communicating with
+        # the machine are expected to be functional.
+        #
+        # @return [Boolean]
+        def ready?
+          false
+        end
     
-          def run
-        odisabled '`brew cask --version`', '`brew --version`'
-      end
-    
-      def root_url(var = nil, specs = {})
-    if var.nil?
-      @root_url ||= '#{HOMEBREW_BOTTLE_DOMAIN}/#{Utils::Bottles::Bintray.repository(tap)}'
+        # Set the manpage date to the existing one if we're checking for changes.
+    # This avoids the only change being e.g. a new date.
+    date = if args.fail_if_changed? &&
+              target.extname == '.1' && target.exist?
+      /'(\d{1,2})' '([A-Z][a-z]+) (\d{4})' '#{organisation}' '#{manual}'/ =~ target.read
+      Date.parse('#{Regexp.last_match(1)} #{Regexp.last_match(2)} #{Regexp.last_match(3)}')
     else
-      @root_url = var
-      @root_url_specs.merge!(specs)
+      Date.today
     end
+    date = date.strftime('%Y-%m-%d')
+    
+          attr_reader :cache_location
+    
+          # This allows generic Altivec PPC bottles to be supported in some
+      # formulae, while also allowing specific bottles in others; e.g.,
+      # sometimes a formula has just :tiger_altivec, other times it has
+      # :tiger_g4, :tiger_g5, etc.
+      def find_altivec_tag(tag)
+        return unless tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
+    
+        false
   end
     
-          def find_matching_tag(tag)
-        generic_find_matching_tag(tag) ||
-          find_altivec_tag(tag) ||
-          find_older_compatible_tag(tag)
-      end
+      attr_accessor :caller_name
+  attr_accessor :caller_number
+  attr_accessor :dtmf
     
-                problem 'Use '--with#{Regexp.last_match(1)}-test' instead of '--#{option}'.'\
-                    ' Migrate '--#{option}' with `deprecated_option`.'
+      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
+    head = [
+      0x06, 0x00, 0xff, 0x07,  # RMCP Header
+      0x06,                    # RMCP+ Authentication Type
+      PAYLOAD_RAKP1,           # Payload Type
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+    ].pack('C*')
+    
+            private
+    
+              # Encrypts the cipher using RC4-HMAC schema
+          #
+          # @param data [String] the data to encrypt
+          # @param key [String] the key to encrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the encrypted data
+          def encrypt_rc4_hmac(data, key, msg_type)
+            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+    
+                elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 0, :CONTEXT_SPECIFIC) if options
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_cname], 1, :CONTEXT_SPECIFIC) if cname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_realm], 2, :CONTEXT_SPECIFIC) if realm
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_sname], 3, :CONTEXT_SPECIFIC) if sname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_from], 4, :CONTEXT_SPECIFIC) if from
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_till], 5, :CONTEXT_SPECIFIC) if till
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_rtime], 6, :CONTEXT_SPECIFIC) if rtime
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_nonce], 7, :CONTEXT_SPECIFIC) if nonce
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_etype], 8, :CONTEXT_SPECIFIC) if etype
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_enc_auth_data], 10, :CONTEXT_SPECIFIC) if enc_auth_data
+    
+              # Decodes the sname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
           end
+    
+          positions = []
+      while (rule_start = s.scan_next(rule_start_re))
+        pos = s.pos
+        positions << (pos - rule_start.length..close_brace_pos(less, pos - 1))
+      end
+      replace_substrings_at(less, positions, &block)
+      less
+    end
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+          def line_class(line)
+        if line =~ /^@@/
+          'gc'
+        elsif line =~ /^\+/
+          'gi'
+        elsif line =~ /^\-/
+          'gd'
+        else
+          ''
         end
       end
-    end
     
-          private
-    
-          # Almost any real Unix terminal will support color,
-      # so we just filter for Windows terms (which don't set TERM)
-      # and not-real terminals, which aren't ttys.
-      return str if ENV['TERM'].nil? || ENV['TERM'].empty? || !STDOUT.tty?
-      '\e[#{COLORS[color]}m#{str}\e[0m'
-    end
-    
-          output = input_path if @options[:in_place]
-      write_output(out, output)
-    rescue Sass::SyntaxError => e
-      raise e if @options[:trace]
-      file = ' of #{e.sass_filename}' if e.sass_filename
-      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
-    rescue LoadError => err
-      handle_load_error(err)
-    end
-    
-          # return path set in app.rb not @page.path
-      def path
-        @path
+          def is_create_page
+        false
       end
     
-          def string_to_code(string)
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-          def footer_content
-        has_footer && @footer.formatted_data
+          def header_content
+        has_header && @header.formatted_data
       end
     
-        get page1
-    assert_match /Last edited by <b>user1/, last_response.body
+        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
+    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
+    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
+    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
+    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
     
-    def version
-  line = File.read('lib/#{name}.rb')[/^\s*VERSION\s*=\s*.*/]
-  line.match(/.*VERSION\s*=\s*[''](.*)['']/)[1]
-end
+        # test `get %r{/(.+?)/([0-9a-f]{40})} do` in app.rb
+    get '/' + page_c.escaped_url_path + '/' + page_c.version.to_s
+    assert last_response.ok?
+    assert_match /create_msg/, last_response.body
     
-        # Ensure path begins with a single leading slash
-    def clean_path(path)
-      if path
-        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
+      if wiki_options[:plantuml_url]
+    Gollum::Filter::PlantUML.configure do |config|
+      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
+      config.url = wiki_options[:plantuml_url]
+    end
+  end
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
       end
     end
     
-    module Gollum
-  VERSION = '4.1.4'
     
-    get '/' do
-  stats = Sidekiq::Stats.new
-  @failed = stats.failed
-  @processed = stats.processed
-  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
-  erb :index
-end
-    
-        def self.inherited(child)
-      child.app_url = self.app_url
-      child.session_secret = self.session_secret
-      child.redis_pool = self.redis_pool
-      child.sessions = self.sessions
-    end
