@@ -1,107 +1,115 @@
 
         
-        if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
+        require 'formula'
+require 'erb'
+require 'ostruct'
+require 'cli_parser'
+require 'dev-cmd/audit'
+require 'dev-cmd/bottle'
+require 'dev-cmd/bump-formula-pr'
+require 'dev-cmd/create'
+require 'dev-cmd/edit'
+require 'dev-cmd/extract'
+require 'dev-cmd/formula'
+require 'dev-cmd/irb'
+require 'dev-cmd/linkage'
+require 'dev-cmd/mirror'
+require 'dev-cmd/prof'
+require 'dev-cmd/pull'
+require 'dev-cmd/release-notes'
+require 'dev-cmd/ruby'
+require 'dev-cmd/tap-new'
+require 'dev-cmd/test'
+require 'dev-cmd/tests'
+require 'dev-cmd/update-test'
+    
+          # This allows generic Altivec PPC bottles to be supported in some
+      # formulae, while also allowing specific bottles in others; e.g.,
+      # sometimes a formula has just :tiger_altivec, other times it has
+      # :tiger_g4, :tiger_g5, etc.
+      def find_altivec_tag(tag)
+        return unless tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
+    
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+    Then(/^the releases path is created$/) do
+  run_vagrant_command(test_dir_exists(TestApp.releases_path))
 end
+    
+    World(VagrantHelpers)
 
     
-      [before || '.',
-    after || '.',]
-end
-    
-            def initialize
-          @websockets = []
-          @connections_count = 0
-          @started_event = Utils::ThreadEvent.new
-          @stopped_event = Utils::ThreadEvent.new
-        end
-    
-                @config['syntax_highlighter_opts'] = begin
-              strip_coderay_prefix(
-                @config['syntax_highlighter_opts'] \
-                  .merge(CODERAY_DEFAULTS) \
-                  .merge(@config['coderay'])
-              )
-            end
-          end
-        end
+        def exit_because_of_exception(ex)
+      if respond_to?(:deploying?) && deploying?
+        exit_deploy_because_of_exception(ex)
+      else
+        super
       end
     end
-  end
-end
-
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
+      class Configuration
+    def self.env
+      @env ||= new
     end
     
-        it 'allows to delete a user' do
-      visit admin_users_path
-      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
-      expect(page).to have_text('User 'bob' was deleted.')
-      expect(page).to have_no_text('bob@example.com')
+            if echo?
+          $stdin.gets
+        else
+          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
+        end
+      rescue Errno::EIO
+        # when stdio gets closed
+        return
+      end
+    
+              if Spree::Cart::Update.call(order: @order, params: line_items_attributes).success?
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+    
+            def find_property
+          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
+        end
+    
+          private
+    
+        # Sidekiq::Client normally uses the default Redis pool but you may
+    # pass a custom ConnectionPool if you want to shard your
+    # Sidekiq jobs across several Redis instances (for scalability
+    # reasons, e.g.)
+    #
+    #   Sidekiq::Client.new(ConnectionPool.new { Redis.new })
+    #
+    # Generally this is only needed for very large Sidekiq installs processing
+    # thousands of jobs per second.  I don't recommend sharding unless you
+    # cannot scale any other way (e.g. splitting your app into smaller apps).
+    def initialize(redis_pool=nil)
+      @redis_pool = redis_pool || Thread.current[:sidekiq_via_pool] || Sidekiq.redis_pool
     end
     
-    describe ApplicationHelper do
-  describe '#icon_tag' do
-    it 'returns a Glyphicon icon element' do
-      icon = icon_tag('glyphicon-help')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
-    end
+          ObjectSpace.each_object(File) do |fp|
+        begin
+          if !fp.closed? && fp.stat.file? && fp.sync && (fp.fcntl(Fcntl::F_GETFL) & append_flags) == append_flags
+            to_reopen << fp
+          end
+        rescue IOError, Errno::EBADF
+        end
+      end
     
-        it 'can not be turned off' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-  end
-end
-
+          def initialize
+        @entries = []
+        yield self if block_given?
+      end
     
-        context 'when an a scenario already exists with the given guid for the importing user' do
-      let!(:existing_scenario) do
-        _existing_scenerio = users(:bob).scenarios.build(:name => 'an existing scenario', :description => 'something')
-        _existing_scenerio.guid = guid
-        _existing_scenerio.save!
-    
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
-    
-      it 'ignores invalid values' do
-    location2 = Location.new(
-      lat: 2,
-      lng: 3,
-      radius: -1,
-      speed: -1,
-      course: -1)
-    expect(location2.radius).to be_nil
-    expect(location2.speed).to be_nil
-    expect(location2.course).to be_nil
-  end
+          # Queue for this worker
+      def queue
+        self.sidekiq_options['queue']
+      end
