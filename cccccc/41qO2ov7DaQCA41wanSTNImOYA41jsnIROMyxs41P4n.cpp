@@ -1,338 +1,285 @@
 
         
-        namespace tesseract {
-    }
-    
-    // Computes part of matrix.vector v = Wu. Computes N=32 results.
-// For details see PartialMatrixDotVector64 with N=32.
-static void PartialMatrixDotVector32(const int8_t* wi, const double* scales,
-                                     const int8_t* u, int num_in, int num_out,
-                                     double* v) {
-  // Register containing 16-bit ones for horizontal add with 16->32 bit
-  // conversion.
-  __m256i ones =
-      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
-  // Initialize all the results to 0.
-  __m256i result0 = _mm256_setzero_si256();
-  __m256i result1 = _mm256_setzero_si256();
-  __m256i result2 = _mm256_setzero_si256();
-  __m256i result3 = _mm256_setzero_si256();
-  // Iterate over the input (u), one registerful at a time.
-  for (int j = 0; j < num_in;) {
-    __m256i inputs =
-        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
-    // Inputs are processed in groups of kNumInputsPerGroup, replicated
-    // kNumInputGroups times.
-    for (int ig = 0; ig < kNumInputGroups && j < num_in;
-         ++ig, j += kNumInputsPerGroup) {
-      // Replicate the low 32 bits (4 inputs) 8 times.
-      __m256i rep_input =
-          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
-      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
-      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
-      __m256i weights, reps;
-      // Mul-add, with horizontal add of the 4 inputs to each of the results.
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result2);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result3);
-    }
+        
+    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    // FIXME: Not thread-safe! It should avoid deleting the value until
+    // 'releaseValue is called on it.
+    *Value_out = Entry->second;
+    return true;
   }
-  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  ExtractResults(result1, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  ExtractResults(result2, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  num_out -= kNumOutputsPerRegister * 3;
-  ExtractResults(result3, shift_id, wi, scales,
-                 std::min(kNumOutputsPerRegister, num_out), v);
+  return false;
 }
     
-    
-    {}  // namespace tesseract.
-
-    
-    class PAGE_RES_IT;
-class ROW;
-class WERD_RES;
-    
-    struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
-    }
-    
-    #endif  // TESSERACT_CCMAIN_PARAGRAPHS_H_
-
-    
-    
-    {  svMenuRoot->BuildMenu(sv, false);
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-      CensusServerCallData()
-      : gc_(nullptr),
-        auth_context_(nullptr),
-        recv_initial_metadata_(nullptr),
-        initial_on_done_recv_initial_metadata_(nullptr),
-        initial_on_done_recv_message_(nullptr),
-        recv_message_(nullptr),
-        recv_message_count_(0),
-        sent_message_count_(0) {
-    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&path_, 0, sizeof(grpc_slice));
-    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
-    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
-  }
-    
-      // RegXMM is used for both FP and SIMD registers. Registers from 0 to 15 are
-  // reserved to FP and register from 16 to 29 are reserved to SIMD.
-  // Ignoring the vector registers 30, 31 due to kMaxRegs == 64
-  constexpr RegXMM f0(0);   // volatile scratch register
-  /* volatile, argument passing floating point registers */
-  constexpr RegXMM f1(1);
-  constexpr RegXMM f2(2);
-  constexpr RegXMM f3(3);
-  constexpr RegXMM f4(4);
-  constexpr RegXMM f5(5);
-  constexpr RegXMM f6(6);
-  constexpr RegXMM f7(7);
-  constexpr RegXMM f8(8);
-  constexpr RegXMM f9(9);
-  constexpr RegXMM f10(10);
-  constexpr RegXMM f11(11);
-  constexpr RegXMM f12(12);
-  constexpr RegXMM f13(13);
-  /* nonvolatile, local variables */
-  constexpr RegXMM f14(14);
-  constexpr RegXMM f15(15);
-    
-    #include <sys/types.h>
-#include <tuple>
-    
-    
-    {}
-
-    
-    struct PhpFileDoesNotExistException : ExtendedException {
-  explicit PhpFileDoesNotExistException(const char* file)
-      : ExtendedException('File could not be loaded: %s', file) {}
-  explicit PhpFileDoesNotExistException(const char* msg,
-                                        DEBUG_ONLY bool empty_file)
-      : ExtendedException('%s', msg) {
-    assertx(empty_file);
-  }
-  EXCEPTION_COMMON_IMPL(PhpFileDoesNotExistException);
-};
-    
-    template <typename F>
-void find(const std::string &root, const std::string& path, bool php,
-          const F& callback) {
-  auto spath = path.empty() || !isDirSeparator(path[0]) ?
-    path : path.substr(1);
-    }
-    
-    String FileUtil::relativePath(const std::string& fromDir,
-                              const String& toFile) {
-    }
-    
-    #define IM_VEC4_CLASS_EXTRA                                                 \
-        ImVec4(const MyVec4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    
-        for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
-    }
-    
-            // Rendering
-        ImGui::EndFrame();
-        g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
-        g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
-        g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
-        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x*255.0f), (int)(clear_color.y*255.0f), (int)(clear_color.z*255.0f), (int)(clear_color.w*255.0f));
-        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
-        if (g_pd3dDevice->BeginScene() >= 0)
-        {
-            ImGui::Render();
-            ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-            g_pd3dDevice->EndScene();
-        }
-        HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
-    
-          // Test compact range works
-      dbfull()->CompactRange(CompactRangeOptions(), nullptr, nullptr);
-      // All data should be in the last level.
-      ColumnFamilyMetaData cf_meta;
-      db_->GetColumnFamilyMetaData(&cf_meta);
-      ASSERT_EQ(5U, cf_meta.levels.size());
-      for (int i = 0; i < 4; i++) {
-        ASSERT_EQ(0U, cf_meta.levels[i].files.size());
-      }
-      ASSERT_GT(cf_meta.levels[4U].files.size(), 0U);
-      verify_func();
-    
-      // Open all files and look for the values we've put in there.
-  // They should not be found if encrypted, otherwise
-  // they should be found.
-  std::vector<std::string> fileNames;
-  auto status = env_->GetChildren(dbname_, &fileNames);
-  ASSERT_OK(status);
-    
-    #include 'rocksdb/status.h'
-    
-      const uint64_t kMicrosPerSecond = 1000000;
-  const uint64_t kRefillInterval = 1024U;
-    
-      RateLimiter* low_pri_rate_limiter() { return low_pri_rate_limiter_.get(); }
-    
-      size_t TruncateToPageBoundary(size_t s) {
-    s -= (s & (page_size_ - 1));
-    assert((s % page_size_) == 0);
-    return s;
-  }
-    
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
-    return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
-    
-    #include 'rocksdb/db.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/options.h'
-    
-    template <typename ValueType>
-class ForEach {
- public:
-  template <typename InputIterator>
-  ForEach(InputIterator begin, InputIterator end)
-      : func_([begin, end](FunctionRef<void(ValueType)> f) {
-          for (auto it = begin; it != end; ++it) {
-            f(*it);
-          }
-        }) {}
-    }
-    
-    template <class... Args>
-[[noreturn]] void throwSystemErrorExplicit(int err, Args&&... args) {
-  throw makeSystemErrorExplicit(err, std::forward<Args>(args)...);
-}
-    
-    template <typename RNG>
-using StateSizeT = _t<StateSize<RNG>>;
-    
-    namespace folly {
-    }
-    
-    
-    {
-    {} // namespace detail
-} // namespace folly
-
-    
-    /**
- * Get the default options for gzip compression.
- * A codec created with these options will have type CodecType::GZIP.
- */
-Options defaultGzipOptions();
-    
-    /// Returns the best real CacheLocality information available
-static CacheLocality getSystemLocalityInfo() {
-  if (kIsLinux) {
-    try {
-      return CacheLocality::readFromSysfs();
-    } catch (...) {
-      // keep trying
-    }
-  }
-    }
-    
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    auto newslots = folly::make_unique<Slots>();
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(newslots->slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
-    }
-    }
-    
-    static const int kCrToRedTable[256] = {
-  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
-  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
-  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
-  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
-  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
-   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
-   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
-   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
-   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
-   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
-   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
-     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
-    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
-    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
-    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
-    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
-    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
-   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
-   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
-   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
-   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
-   174,  175,  177,  178
-};
-    
-    #endif  // GUETZLI_COMPARATOR_H_
-
-    
-    namespace guetzli {
-    }
-    
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
-    
-    inline int Log2Floor(uint32_t n) {
-  return n == 0 ? -1 : Log2FloorNonZero(n);
-}
-    
-    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
-    _mm_pause();
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-    __asm__ __volatile__('pause;');
+    #ifndef DIRECTIONAL_PREPOSITION
+#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
 #endif
+    
+      if (*BufferPtr == '\n')
+    return 1;
+    
+    
+    {      ExecutingTasks.push(PidTaskPair(Pid, std::move(T)));
+    }
+    
+    StringRef swift::unicode::extractFirstExtendedGraphemeCluster(StringRef S) {
+  // Extended grapheme cluster segmentation algorithm as described in Unicode
+  // Standard Annex #29.
+  if (S.empty())
+    return StringRef();
+    }
+    
+    namespace {
+  // Quasi-lexicographic order: string length first, then string data.
+  // Since we don't care about the actual length, we can use this, which
+  // lets us ignore the string data a larger proportion of the time.
+  struct SortByLengthComparator {
+    bool operator()(StringRef lhs, StringRef rhs) const {
+      return (lhs.size() < rhs.size() ||
+              (lhs.size() == rhs.size() && lhs < rhs));
+    }
+  };
+} // end anonymous namespace
+    
+    extern 'C' {
+  PyMODINIT_FUNC INITFUNC() {
+#if PY_MAJOR_VERSION >= 3
+    PyObject *module = PyModule_Create(&_module);
+#else
+    PyObject *module = Py_InitModule3(
+        const_cast<char*>(kModuleName),
+        NULL,
+        const_cast<char*>(kModuleDocstring));
+#endif
+    if (module == NULL) {
+      return INITFUNC_ERRORVAL;
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+
+    
+    // A CodeGenerator that captures the FileDescriptor it's passed as a
+// FileDescriptorProto.
+class DescriptorCapturingGenerator : public CodeGenerator {
+ public:
+  // Does not own file; file must outlive the Generator.
+  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
+      : file_(file) {}
+    }
+    
+    
+    {  for (int i = 0; i < parts.size(); i++) {
+    string::size_type equals_pos = parts[i].find_first_of('=');
+    std::pair<string, string> value;
+    if (equals_pos == string::npos) {
+      value.first = parts[i];
+      value.second = '';
+    } else {
+      value.first = parts[i].substr(0, equals_pos);
+      value.second = parts[i].substr(equals_pos + 1);
+    }
+    output->push_back(value);
+  }
 }
     
-    template< >
-struct make_storage_type< 8u, true >
+    
+    {  // Moving to a message on the arena should lead to a copy.
+  *message2_on_arena = std::move(message1);
+  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
+  TestUtil::ExpectAllFieldsSet(message1);
+  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+}
+    
+      // Oneofs
+  if (descriptor->oneof_decl_count() > 0) {
+      std::vector<std::string> oneofs;
+      for (int i = 0; i < descriptor->oneof_decl_count(); i++) {
+          oneofs.push_back(UnderscoresToCamelCase(descriptor->oneof_decl(i)->name(), true));
+      }
+      printer->Print('new[]{ \'$oneofs$\' }, ', 'oneofs', JoinStrings(oneofs, '\', \''));
+  }
+  else {
+      printer->Print('null, ');
+  }
+    
+      char prev = '*';
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {
+    {
+    {
+    {
+    {  printer->Print(
+      '      return YES;\n'
+      '    default:\n'
+      '      return NO;\n'
+      '  }\n'
+      '}\n\n');
+}
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    
+    {
+    {
+    {
+    {void ExtensionGenerator::GenerateRegistrationSource(io::Printer* printer) {
+  printer->Print(
+      '[registry addExtension:$root_class_and_method_name$];\n',
+      'root_class_and_method_name', root_class_and_method_name_);
+}
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    class ExtensionGenerator {
+ public:
+  ExtensionGenerator(const string& root_class_name,
+                     const FieldDescriptor* descriptor);
+  ~ExtensionGenerator();
+    }
+    
+    
+<details>
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+      std::vector<grpc::string_ref> FindPropertyValues(
+      const grpc::string& name) const override;
+    
+    #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
+    
+    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
+    
+    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
+    : reflection_service_(new grpc::ProtoServerReflection()) {}
+    
+    
+    { private:
+  std::istream &fin_;
+};
+    
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
+    }
+    }
+    
+    
+    {// end of actions group
+/// @}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    
+    {
+    {
+    {            setVertex(Vec2(i, j), v);
+        }
+    }
+}
+    
+    Sequence::~Sequence()
 {
-    typedef mars_boost::int64_t type;
+    CC_SAFE_RELEASE(_actions[0]);
+    CC_SAFE_RELEASE(_actions[1]);
+}
+    
+    /** @class ScaleTo
+ @brief Scales a Node object to a zoom factor by modifying it's scale attribute.
+ @warning This action doesn't support 'reverse'.
+ @warning The physics body contained in Node doesn't support this action.
+ */
+class CC_DLL ScaleTo : public ActionInterval
+{
+public:
+    /** 
+     * Creates the action with the same scale factor for X and Y.
+     * @param duration Duration time, in seconds.
+     * @param s Scale factor of x and y.
+     * @return An autoreleased ScaleTo object.
+     */
+    static ScaleTo* create(float duration, float s);
+    }
+    
+    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
+
+    
+    
+    {        for(const auto &value : spritesheets) {
+            std::string path = FileUtils::getInstance()->fullPathFromRelativeFile(value.asString(),plist);
+            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
+        }
     }
