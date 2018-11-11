@@ -1,291 +1,218 @@
 
         
-          x_embedding_id = tf.squeeze(features['x_embedding_id'], [-1])
-  y_embedding_id = tf.squeeze(features['y_embedding_id'], [-1])
-  nc_embedding_id = tf.squeeze(features['nc_embedding_id'], [-1])
-  labels = tf.squeeze(features['rel_id'], [-1])
-  path_counts = tf.to_float(tf.reshape(features['counts'], [batch_size, -1]))
+        
+if __name__ == '__main__':
+    SalesRanker.run()
+
     
-    rnn_a = generate_rnn(rnn_rngs[0], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnn_b = generate_rnn(rnn_rngs[1], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnns = [rnn_a, rnn_b]
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
+
     
-      E = len(data_e)
-  mfr = max_firing_rate
-  gauss_e = []
-  for e in range(E):
-    data = data_e[e]
-    N,T = data.shape
-    noisy_data = data * mfr + np.random.randn(N,T) * (5.0*mfr) * np.sqrt(dt)
-    gauss_e.append(noisy_data)
+      # Print header
+  header = empty_cell + ' '
+  header += ''.join([' %{0}s '.format(columnwidth) % label
+                     for label in short_labels])
     
-      # Dictionary and reverse dictionry.
-  if FLAGS.data_set == 'ptb':
-    word_to_id = ptb_loader.build_vocab(
-        os.path.join(FLAGS.data_dir, 'ptb.train.txt'))
-  elif FLAGS.data_set == 'imdb':
-    word_to_id = imdb_loader.build_vocab(
-        os.path.join(FLAGS.data_dir, 'vocab.txt'))
-  id_to_word = {v: k for k, v in word_to_id.iteritems()}
+    # Pull out some commonly used parameters.
+# These are user parameters (configuration)
+rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N
+S = FLAGS.S
+input_magnitude = FLAGS.input_magnitude
+nreplications = FLAGS.nreplications
+E = nreplications * C         # total number of trials
+# S is the number of measurements in each datasets, w/ each
+# dataset having a different set of observations.
+ndatasets = N/S                 # ok if rounded down
+train_percentage = FLAGS.train_percentage
+ntime_steps = int(T / FLAGS.dt)
+# End of user parameters
+    
+        batch_size, num_timesteps = self.shape
+    softmax = softmax.reshape((num_timesteps, batch_size, -1))
+    softmax = np.transpose(softmax, [1, 0, 2])
+    probs = np.array([[softmax[row, col, target_ids[row, col]]
+                       for col in range(num_timesteps)]
+                      for row in range(batch_size)])
+    print(probs)
+    return probs
+    
+    
+def build_vocab(vocab_file):
+  word_to_id = {}
+    
+    
+def _file_to_word_ids(filename, word_to_id):
+  data = _read_words(filename)
+  return [word_to_id[word] for word in data if word in word_to_id]
     
       Args:
-    gen_logits:  Generator logits.
-    gen_labels:  Labels for the correct token.
-    dis_values:  Discriminator values Tensor of shape [batch_size,
-      sequence_length].
-    is_real_input:  Tensor indicating whether the label is present.
+    predictions:  Discriminator linear predictions Tensor of shape [batch_size,
+      sequence_length]
+    labels: Labels for predictions, Tensor of shape [batch_size,
+      sequence_length]
+    missing_tokens:  Indicator for the missing tokens.  Evaluate the loss only
+      on the tokens that were missing.
     
-        ## Discriminator Variables/Savers.
-    if FLAGS.discriminator_model == 'rnn_nas':
-      dis_variable_maps = variable_mapping.rnn_nas(hparams, model='dis')
-      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
-      init_savers['dis_init_saver'] = dis_init_saver
+      ## Load Generator weights from MaskGAN checkpoint.
+  if FLAGS.maskgan_ckpt:
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    init_saver = tf.train.Saver(var_list=gen_vars)
+    init_savers['init_saver'] = init_saver
     
-      for t in ngrams_list:
-    key = hash_function(t)
-    if key in counts:
-      counts[key] += 1
-    else:
-      counts[key] = 1
-  return counts
-    
-      if not FLAGS.dis_share_embedding:
-    decoder_embedding = [
-        v for v in tf.trainable_variables()
-        if v.op.name == 'dis/decoder/rnn/embedding'
-    ][0]
-    
-        '''
-    with tf.name_scope(
-        name, 'attention_decoder_fn_inference',
-        [time, cell_state, cell_input, cell_output, context_state]):
-      if cell_input is not None:
-        raise ValueError(
-            'Expected cell_input to be None, but saw: %s' % cell_input)
-      if cell_output is None:
-        # invariant that this is time == 0
-        next_input_id = tf.ones(
-            [
-                batch_size,
-            ], dtype=dtype) * (
-                start_of_sequence_id)
-        done = tf.zeros(
-            [
-                batch_size,
-            ], dtype=tf.bool)
-        cell_state = encoder_state
-        cell_output = tf.zeros([num_decoder_symbols], dtype=tf.float32)
-        cell_input = tf.gather(embeddings, next_input_id)
-    
-            # Insert the include statement to MANIFEST.in if not present
-        with open(manifest_path, 'a+') as manifest:
-            manifest.seek(0)
-            manifest_content = manifest.read()
-            if not 'include fastentrypoints.py' in manifest_content:
-                manifest.write(('\n' if manifest_content else '')
-                               + 'include fastentrypoints.py')
-    
-    
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'git help')
-    
-    
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
-    
-    
-@pytest.mark.parametrize('app, help_text, operations', [
-    ('apt', apt_help, apt_operations),
-    ('apt-get', apt_get_help, apt_get_operations)
-])
-def test_get_operations(set_help, app, help_text, operations):
-    set_help(help_text)
-    assert _get_operations(app) == operations
-    
-    
-Invalid choice: 'dynamdb', maybe you meant:
-    
-    
-no_such_subcommand_old = '''No such subcommand
-    
-            # No redirect was found. Return the response.
-        return response
-
-    
-        def __call__(self, func):
-        # Note that we are intentionally not using @wraps here for performance
-        # reasons. Refs #21109.
-        def inner(*args, **kwargs):
-            with self:
-                return func(*args, **kwargs)
-        return inner
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        def create_client(self, resource):
-        try:
-            region, ec2_url, aws_connect_kwargs = get_aws_connection_info(self.module, boto3=True)
-            self.client = boto3_conn(self.module, conn_type='client', resource=resource, region=region, endpoint=ec2_url, **aws_connect_kwargs)
-        except (ClientError, BotoCoreError) as e:
-                self.module.fail_json_aws(e, msg='Unable to establish connection.')
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    
-def get_elasticache_clusters(client, module, region):
-    try:
-        clusters = describe_cache_clusters_with_backoff(client, cluster_id=module.params.get('name'))
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Couldn't obtain cache cluster info')
-    
-        if function_name:
-        params['FunctionName'] = module.params.get('function_name')
-    
-        tstart = datetime.now()
-    isotonic_regression(Y)
-    delta = datetime.now() - tstart
-    return total_seconds(delta)
-    
-    
-def plot_feature_errors(all_errors, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_errors['pca'], label='PCA')
-    plot_results(all_components, all_errors['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. n_components\n'
-                 'LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Mean absolute error')
-    
-            ax.set_xlabel('n_samples')
-        ax.set_ylabel('n_features')
-        ax.set_zlabel('Time (s)')
-        ax.set_zlim3d(0.0, max_time * 1.1)
-        ax.set_title(label)
-        # ax.legend()
-        i += 1
-    plt.show()
-
-    
-        plt.figlegend((c_bar, q_bar), ('construction', 'N-point query'),
-                  'upper right')
-    
-        op.add_option('--algorithm',
-                  dest='selected_algorithm',
-                  default=default_algorithms,
-                  type=str,
-                  help='Comma-separated list of transformer to benchmark. '
-                       'Default: %default. \nAvailable: %default')
-    
-    if __name__ == '__main__':
-    list_n_samples = np.linspace(100, 10000, 5).astype(np.int)
-    list_n_features = [10, 100, 1000]
-    n_test = 1000
-    max_iter = 1000
-    noise = 0.1
-    alpha = 0.01
-    sgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    elnet_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    ridge_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    asgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    for i, n_train in enumerate(list_n_samples):
-        for j, n_features in enumerate(list_n_features):
-            X, y, coef = make_regression(
-                n_samples=n_train + n_test, n_features=n_features,
-                noise=noise, coef=True)
-    
-    
-def benchmark_sparse_predict():
-    X_test_sparse = csr_matrix(X_test)
-    for _ in range(300):
-        clf.predict(X_test_sparse)
-    
-        scikit_regressor_results.append(
-        delta.seconds + delta.microseconds / mu_second)
-    
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
-    
-    
-def main(path):
-    
-    PY_MAJOR, PY_MINOR, PY_PATCH = sys.version_info[ 0 : 3 ]
-if not ( ( PY_MAJOR == 2 and PY_MINOR == 7 and PY_PATCH >= 1 ) or
-         ( PY_MAJOR == 3 and PY_MINOR >= 4 ) or
-         PY_MAJOR > 3 ):
-  sys.exit( 'YouCompleteMe requires Python >= 2.7.1 or >= 3.4; '
-            'your version of Python is ' + sys.version )
-    
-    
-  def Poll( self, diagnostics_handler ):
-    '''This should be called regularly to check for new messages in this buffer.
-    Returns True if Poll should be called again in a while. Returns False when
-    the completer or server indicated that further polling should not be done
-    for the requested file.'''
-    
-    
-def _ListOf( config_entry ):
-  if isinstance( config_entry, list ):
-    return config_entry
-    
-    
-def StopServer( ycm ):
-  try:
-    ycm.OnVimLeave()
-    WaitUntilProcessIsTerminated( ycm._server_popen )
-    CloseStandardStreams( ycm._server_popen )
-  except Exception:
-    pass
-    
-    from nose.tools import eq_
-from ycm.tests.test_utils import MockVimModule
-vim_mock = MockVimModule()
-    
-      # 0 is not False
-  assert_that( _HandlePollResponse( 0, None ), equal_to( True ) )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
+    from __future__ import absolute_import
 from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+from __future__ import print_function
     
-      _assert_rejects( f, 'This is a Taco' )
-  _assert_accepts( f, 'This is a Burrito' )
+        @classmethod
+    def get_model_class(cls):
+        # Avoids a circular import and allows importing SessionStore when
+        # django.contrib.sessions is not in INSTALLED_APPS.
+        from django.contrib.sessions.models import Session
+        return Session
+    
+    DOCUMENTATION = '''
+module: aws_waf_facts
+short_description: Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
+description:
+  - Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
+version_added: '2.4'
+requirements: [ boto3 ]
+options:
+  name:
+    description:
+      - The name of a Web Application Firewall
     
     
-def EndsWithPython_Python2Paths_test():
-  python_paths = [
-    'python',
-    'python2',
-    '/usr/bin/python2.7',
-    '/home/user/.pyenv/shims/python2.7',
-    r'C:\Python27\python.exe',
-    '/Contents/MacOS/Python'
-  ]
+def list_rules(client, module):
+    try:
+        return list_rules_with_backoff(client)
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Could not list WAF rules')
+    
+        def _sync_rule(self, enabled=True):
+        '''Syncs local rule state with AWS'''
+        if not self._rule_matches_aws():
+            self.rule.put(enabled)
     
     
-@patch( 'ycm.vimsupport.GetVariableValue',
-        GetVariableValue_CompleteItemIs( 'Test' ) )
-@patch( 'ycm.vimsupport.ReplaceChunks' )
-def PostCompleteFixIt_ApplyFixIt_EmptyFixIt_test( replace_chunks, *args ):
-  completions = [
-    BuildCompletionFixIt( [ { 'chunks': [] } ] )
-  ]
-  with _SetUpCompleteDone( completions ) as request:
-    request._OnCompleteDone_FixIt()
-    replace_chunks.assert_called_once_with( [], silent = True )
+if __name__ == '__main__':
+    main()
+
+    
+        if sort:
+        snaked_launch_configs.sort(key=lambda e: e[sort], reverse=(sort_order == 'descending'))
+    
+        if state == 'present':
+        for required in ['name', 'description', 'subnets']:
+            if not module.params.get(required):
+                module.fail_json(msg=str('Parameter %s required for state='present'' % required))
+    else:
+        for not_allowed in ['description', 'subnets']:
+            if module.params.get(not_allowed):
+                module.fail_json(msg=str('Parameter %s not allowed for state='absent'' % not_allowed))
+    
+        else:
+        node_value = node
+    
+    ESTIMATORS = {
+    'dummy': DummyClassifier(),
+    'random_forest': RandomForestClassifier(n_estimators=100,
+                                            max_features='sqrt',
+                                            min_samples_split=10),
+    'extra_trees': ExtraTreesClassifier(n_estimators=100,
+                                        max_features='sqrt',
+                                        min_samples_split=10),
+    'logistic_regression': LogisticRegression(),
+    'naive_bayes': MultinomialNB(),
+    'adaboost': AdaBoostClassifier(n_estimators=10),
+}
+    
+        args = parser.parse_args()
+    
+        print('vectorizing data')
+    
+    try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
+    
+        def appid_exist(self, appids):
+        for appid in appids.split('|'):
+            if appid == '':
+                continue
+            if appid in self.config.GAE_APPIDS:
+                return True
+        return False
+    
+        if len(sys.argv) > 1:
+        ip = sys.argv[1]
+    else:
+        ip = '46.134.208.94'
+        ip = '2001:ee0:3203:a::12'
+        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
+    print('test ip:%s' % ip)
+    
+            # If you are parsing a tree node stream, you will encounter som
+        # imaginary nodes w/o line/col info.  We now search backwards looking
+        # for most recent token with line/col info, but notify getErrorHeader()
+        # that info is approximate.
+        self.approximateLineInfo = False
+    
+    
+    def skipOffTokenChannelsReverse(self, i):
+        while i >= 0 and self.tokens[i].channel != self.channel:
+            i -= 1
+    
+    # If false, no module index is generated.
+#html_domain_indices = True
+    
+        # Remove the drawing library from memory as per the Pillow docs
+    del draw
+    
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    rgb_frame = frame[:, :, ::-1]
+    
+        # Loop through each face in this frame of video
+    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+        # See if the face is a match for the known face(s)
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    
+    # This code finds all faces in a list of images using the CNN model.
+#
+# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
+# are the exact same size. This is common in video processing applications where you have lots of video frames
+# to process.
+#
+# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
+# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+        def test_fd_command_line_interface_cnn_model(self):
+        target_string = 'obama.jpg'
+        runner = CliRunner()
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+    from setuptools import setup
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
