@@ -1,354 +1,233 @@
 
         
-        namespace parallel {
+          /// The number of conformance requirements, cached to avoid constantly
+  /// recomputing it on conformance-buffer access.
+  const unsigned numConformanceRequirements : 31;
+    
+    void ClusteredBitVector::appendReserved(size_t numBits,
+                llvm::function_ref<ChunkType(size_t numBitsWanted)> generator) {
+  assert(LengthInBits + numBits <= getCapacityInBits());
+  assert(numBits > 0);
     }
     
-    
-    {  // We had a counted inner array---we need to do an O(N) copy to get the
-  // collection into the request local heap.
-  auto const apcArr = APCArray::fromHandle(m_arrayHandle);
-  auto const col = Object::attach(collections::alloc(m_colType));
-  switch (m_colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    fillCollection(static_cast<BaseVector*>(col.get()), apcArr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    fillCollection(static_cast<BaseSet*>(col.get()), apcArr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    fillMap(static_cast<BaseMap*>(col.get()), apcArr);
-    break;
-  case CollectionType::Pair:
-    always_assert(0);
-    break;
-  }
-  return col;
-}
-    
-    public:
-  static void Add(InfoVec& out, const char* name, const std::string& value);
-  static void AddServerStats(InfoVec& out, const char* name,
-                             const char* statsName = nullptr);
-    
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
-    
-      if (!spath.empty() && !isDirSeparator(spath.back())) {
-    spath += getDirSeparator();
-  }
-  auto fullPath = root + spath;
-  if (fullPath.empty()) {
-    return;
-  }
-  if (!callback(spath, true)) {
-    return;
-  }
-    
-    
-    {
-    {///////////////////////////////////////////////////////////////////////////////
-}
-}
-    
-    int64_t File::writeCSV(const Array& fields, char delimiter_char /* = ',' */,
-                     char enclosure_char /* = ''' */,
-                     char escape_char /* = '\' */) {
-  int line = 0;
-  int count = fields.size();
-  StringBuffer csvline(1024);
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  llvm::SmallString<32> NameBuf(Name);
+  cache_attributes_t Attrs = {
+    CACHE_ATTRIBUTES_VERSION_2,
+    CBs.keyHashCB,
+    CBs.keyIsEqualCB,
+    nullptr,
+    CBs.keyDestroyCB,
+    CBs.valueReleaseCB,
+    nullptr,
+    nullptr,
+    CBs.UserData,
+    CBs.valueRetainCB,
+  };
     }
     
-    template<>
-struct regex_iterator_traits<char*> : pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<const char*> : const_pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<wchar_t*> : pointer_iterator_traits<wchar_t>{};
-template<>
-struct regex_iterator_traits<const wchar_t*> : const_pointer_iterator_traits<wchar_t>{};
-//
-// the follwoing are needed for ICU support:
-//
-template<>
-struct regex_iterator_traits<unsigned char*> : pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<const unsigned char*> : const_pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<int*> : pointer_iterator_traits<int>{};
-template<>
-struct regex_iterator_traits<const int*> : const_pointer_iterator_traits<int>{};
-    
-       format_perl = 0,                                  /* perl style replacement */
-   format_default = 0,                               /* ditto. */
-   format_sed = match_max << 1,                      /* sed style replacement. */
-   format_all = format_sed << 1,                     /* enable all extentions to sytax. */
-   format_no_copy = format_all << 1,                 /* don't copy non-matching segments. */
-   format_first_only = format_no_copy << 1,          /* Only replace first occurance. */
-   format_is_if = format_first_only << 1,            /* internal use only. */
-   format_literal = format_is_if << 1                /* treat string as a literal */
-    
-       const_reference get_last_closed_paren()const
-   {
-      if(m_is_singular)
-         raise_logic_error();
-      return m_last_closed_paren == 0 ? m_null : (*this)[m_last_closed_paren];
-   }
-    
-    
-    {   ~mem_block_cache()
-   {
-      while(next)
-      {
-         mem_block_node* old = next;
-         next = next->next;
-         ::operator delete(old);
-      }
-   }
-   void* get()
-   {
-#ifdef BOOST_HAS_THREADS
-      boost::static_mutex::scoped_lock g(mut);
-#endif
-     if(next)
-      {
-         mem_block_node* result = next;
-         next = next->next;
-         --cached_blocks;
-         return result;
-      }
-      return ::operator new(BOOST_REGEX_BLOCKSIZE);
-   }
-   void put(void* p)
-   {
-#ifdef BOOST_HAS_THREADS
-      boost::static_mutex::scoped_lock g(mut);
-#endif
-      if(cached_blocks >= BOOST_REGEX_MAX_CACHE_BLOCKS)
-      {
-         ::operator delete(p);
-      }
-      else
-      {
-         mem_block_node* old = static_cast<mem_block_node*>(p);
-         old->next = next;
-         next = old;
-         ++cached_blocks;
-      }
-   }
-};
-    
-    
-    {   BOOST_ASSERT(rep->type == syntax_element_short_set_rep);
-   BOOST_ASSERT(rep->next.p != 0);
-   BOOST_ASSERT(rep->alt.p != 0);
-   BOOST_ASSERT(rep->next.p->type == syntax_element_set);
-   BOOST_ASSERT(count < rep->max);
-   
-   if(position != last)
-   {
-      // wind forward until we can skip out of the repeat:
-      do
-      {
-         if(!map[static_cast<unsigned char>(traits_inst.translate(*position, icase))])
-         {
-            // failed repeat match, discard this state and look for another:
-            destroy_single_repeat();
-            return true;
-         }
-         ++count;
-         ++ position;
-         ++state_count;
-         pstate = rep->next.p;
-      }while((count < rep->max) && (position != last) && !can_start(*position, rep->_map, mask_skip));
-   }   
-   // remember where we got to if this is a leading repeat:
-   if((rep->leading) && (count < rep->max))
-      restart = position;
-   if(position == last)
-   {
-      // can't repeat any more, remove the pushed state: 
-      destroy_single_repeat();
-      if((m_match_flags & match_partial) && (position == last) && (position != search_base))
-         m_has_partial_match = true;
-      if(0 == (rep->can_be_null & mask_skip))
-         return true;
-   }
-   else if(count == rep->max)
-   {
-      // can't repeat any more, remove the pushed state: 
-      destroy_single_repeat();
-      if(!can_start(*position, rep->_map, mask_skip))
-         return true;
-   }
-   else
-   {
-      pmp->count = count;
-      pmp->last_position = position;
-   }
-   pstate = rep->alt.p;
-   return false;
-}
-    
-    #ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4103)
-#endif
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
-    
-    
-    
-    namespace boost{
+    bool LangOptions::
+checkPlatformCondition(PlatformConditionKind Kind, StringRef Value) const {
+  // Check a special case that 'macOS' is an alias of 'OSX'.
+  if (Kind == PlatformConditionKind::OS && Value == 'macOS')
+    return checkPlatformCondition(Kind, 'OSX');
     }
     
-    #ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable: 4800)
-#endif
+    DIRECTIONAL_PREPOSITION(above)
+DIRECTIONAL_PREPOSITION(after)
+DIRECTIONAL_PREPOSITION(along)
+DIRECTIONAL_PREPOSITION(alongside)
+DIRECTIONAL_PREPOSITION(as)
+DIRECTIONAL_PREPOSITION(at)
+DIRECTIONAL_PREPOSITION(before)
+DIRECTIONAL_PREPOSITION(below)
+DIRECTIONAL_PREPOSITION(by)
+DIRECTIONAL_PREPOSITION(following)
+DIRECTIONAL_PREPOSITION(for)
+DIRECTIONAL_PREPOSITION(from)
+DIRECTIONAL_PREPOSITION(given)
+DIRECTIONAL_PREPOSITION(in)
+DIRECTIONAL_PREPOSITION(including)
+DIRECTIONAL_PREPOSITION(inside)
+DIRECTIONAL_PREPOSITION(into)
+DIRECTIONAL_PREPOSITION(matching)
+DIRECTIONAL_PREPOSITION(of)
+DIRECTIONAL_PREPOSITION(on)
+DIRECTIONAL_PREPOSITION(passing)
+DIRECTIONAL_PREPOSITION(preceding)
+DIRECTIONAL_PREPOSITION(since)
+DIRECTIONAL_PREPOSITION(to)
+DIRECTIONAL_PREPOSITION(until)
+DIRECTIONAL_PREPOSITION(using)
+DIRECTIONAL_PREPOSITION(via)
+DIRECTIONAL_PREPOSITION(when)
+PREPOSITION(with)
+DIRECTIONAL_PREPOSITION(within)
     
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
-}
-    
-    Status PrometheusMetricsConfigParserPlugin::update(const std::string& source,
-                                                   const ParserConfig& config) {
-  auto prometheus_targets = config.find(kPrometheusParserRootKey);
-  if (prometheus_targets != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(prometheus_targets->second.doc(), obj);
-    data_.add(kPrometheusParserRootKey, obj);
-  }
-    }
-    
-      // serialize the QueryLogItem and make sure decorations go top level
-  auto doc = JSON::newObject();
-  auto status = serializeQueryLogItem(item, doc);
-  std::string expected = 'test';
-  std::string result = doc.doc()['load_test'].GetString();
-  EXPECT_EQ(result, expected);
-    
-    
-    {  // This should work.
-  ASSERT_TRUE(doc.HasMember('custom_fake'));
-  EXPECT_TRUE(doc['custom_fake'].IsNumber());
-  EXPECT_EQ(1U, doc['custom_fake'].GetUint());
-  EXPECT_FALSE(Flag::getValue('custom_fake').empty());
-}
-    
-    TEST_F(QueryTests, test_query_name_not_found_in_db) {
-  // Try to retrieve results from a query that has not executed.
-  QueryDataSet previous_qd;
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('not_a_real_query', query);
-  auto status = cf.getPreviousQueryResults(previous_qd);
-  EXPECT_FALSE(status.ok());
-  EXPECT_TRUE(previous_qd.empty());
-}
-    
-    TEST_F(AuditTests, test_audit_value_decode) {
-  // In the normal case the decoding only removes ''' characters from the ends.
-  auto decoded_normal = DecodeAuditPathValues('\'/bin/ls\'');
-  EXPECT_EQ(decoded_normal, '/bin/ls');
-    }
-    
-    
-    {    return 0;
+    llvm::raw_ostream &swift::operator<<(llvm::raw_ostream &os, UUID uuid) {
+  llvm::SmallString<UUID::StringBufferSize> buf;
+  uuid.toString(buf);
+  os << buf;
+  return os;
 }
 
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    /// Classify a potential CF typedef.
+CFPointeeInfo
+CFPointeeInfo::classifyTypedef(const clang::TypedefNameDecl *typedefDecl) {
+  clang::QualType type = typedefDecl->getUnderlyingType();
+    }
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_Marmalade_Init(true);
+    #endif // BITCOIN_QT_PLATFORMSTYLE_H
     
-        if (device->QueryInterface(IID_PPV_ARGS(&pDXGIDevice)) == S_OK)
-        if (pDXGIDevice->GetParent(IID_PPV_ARGS(&pDXGIAdapter)) == S_OK)
-            if (pDXGIAdapter->GetParent(IID_PPV_ARGS(&pFactory)) == S_OK)
-            {
-                g_pd3dDevice = device;
-                g_pFactory = pFactory;
-            }
-    if (pDXGIDevice) pDXGIDevice->Release();
-    if (pDXGIAdapter) pDXGIAdapter->Release();
-    
-    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                                       const std::shared_ptr<DHTNode>& newNode)
-    : bucket_(bucket),
-      newNode_(newNode),
-      numRetry_(0),
-      timeout_(DHT_MESSAGE_TIMEOUT)
+    class SignVerifyMessageDialog : public QDialog
 {
+    Q_OBJECT
+    }
+    
+    
+    {    /* cleanup */
+    secp256k1_context_destroy(none);
+    secp256k1_context_destroy(sign);
+    secp256k1_context_destroy(vrfy);
+    secp256k1_context_destroy(both);
 }
     
-      virtual std::string toString() const CXX11_OVERRIDE;
-    
-        DHTRoutingTableDeserializer deserializer(family);
-    const std::string& dhtFile = e->getOption()->get(
-        family == AF_INET ? PREF_DHT_FILE_PATH : PREF_DHT_FILE_PATH6);
-    try {
-      deserializer.deserialize(dhtFile);
-      localNode = deserializer.getLocalNode();
-    }
-    catch (RecoverableException& e) {
-      A2_LOG_ERROR_EX(
-          fmt('Exception caught while loading DHT routing table from %s',
-              dhtFile.c_str()),
-          e);
-    }
-    if (!localNode) {
-      localNode = std::make_shared<DHTNode>();
-    }
-    
-    
-    {} // namespace aria2
-    
-      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() = 0;
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
-    
-      DHTTaskExecutor periodicTaskQueue2_;
-    
-      // TODO handle exception thrown by this function.
-  std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port) const;
-    
-    namespace aria2 {
-    }
-    
-      virtual ~DHTUnknownMessage();
-    
-    bool DNSCache::CacheEntry::contains(const std::string& addr) const
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
 {
-  return find(addr) != addrEntries_.end();
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
 }
+    
+    #include <rpc/blockchain.h>
+#include <test/test_bitcoin.h>
+    
+    #define TINYFORMAT_PASSARGS_TAIL_1
+#define TINYFORMAT_PASSARGS_TAIL_2 , v2
+#define TINYFORMAT_PASSARGS_TAIL_3 , v2, v3
+#define TINYFORMAT_PASSARGS_TAIL_4 , v2, v3, v4
+#define TINYFORMAT_PASSARGS_TAIL_5 , v2, v3, v4, v5
+#define TINYFORMAT_PASSARGS_TAIL_6 , v2, v3, v4, v5, v6
+#define TINYFORMAT_PASSARGS_TAIL_7 , v2, v3, v4, v5, v6, v7
+#define TINYFORMAT_PASSARGS_TAIL_8 , v2, v3, v4, v5, v6, v7, v8
+#define TINYFORMAT_PASSARGS_TAIL_9 , v2, v3, v4, v5, v6, v7, v8, v9
+#define TINYFORMAT_PASSARGS_TAIL_10 , v2, v3, v4, v5, v6, v7, v8, v9, v10
+#define TINYFORMAT_PASSARGS_TAIL_11 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11
+#define TINYFORMAT_PASSARGS_TAIL_12 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12
+#define TINYFORMAT_PASSARGS_TAIL_13 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13
+#define TINYFORMAT_PASSARGS_TAIL_14 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14
+#define TINYFORMAT_PASSARGS_TAIL_15 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15
+#define TINYFORMAT_PASSARGS_TAIL_16 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16
+    
+    
+    {} // namespace bech32
+    
+        // Create the vertex shader
+    {
+        static const char* vertexShader =
+            'cbuffer vertexBuffer : register(b0) \
+            {\
+            float4x4 ProjectionMatrix; \
+            };\
+            struct VS_INPUT\
+            {\
+            float2 pos : POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            PS_INPUT main(VS_INPUT input)\
+            {\
+            PS_INPUT output;\
+            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+            output.col = input.col;\
+            output.uv  = input.uv;\
+            return output;\
+            }';
+    }
+    
+    void ImGui_ImplOpenGL2_DestroyFontsTexture()
+{
+    if (g_FontTexture)
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        glDeleteTextures(1, &g_FontTexture);
+        io.Fonts->TexID = 0;
+        g_FontTexture = 0;
+    }
+}
+    
+        // Render characters, setup ImFont and glyphs for runtime
+    for (int input_i = 0; input_i < atlas->ConfigData.Size; input_i++)
+    {
+        ImFontConfig& cfg = atlas->ConfigData[input_i];
+        FreeTypeFont& font_face = fonts[input_i];
+        ImFont* dst_font = cfg.DstFont;
+        if (cfg.MergeMode)
+            dst_font->BuildLookupTable();
+    }
+    
+    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
+{
+    //printf('key_up_func %d\n', key);
+    ImGuiIO& io = ImGui::GetIO();
+    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
+        io.KeysDown[key + 256] = false;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
+}
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
+}
+
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        static BOOST_FORCEINLINE storage_type fetch_add(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+        switch (order)
+        {
+        case memory_order_relaxed:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64_RELAXED(&storage, v));
+            break;
+        case memory_order_consume:
+        case memory_order_acquire:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64_ACQUIRE(&storage, v));
+            break;
+        case memory_order_release:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64_RELEASE(&storage, v));
+            break;
+        case memory_order_acq_rel:
+        case memory_order_seq_cst:
+        default:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64(&storage, v));
+            break;
+        }
+        return v;
+    }
