@@ -1,69 +1,100 @@
 
         
-          it 'accepts a Float' do
-    sleep(0.1).should be_close(0, 2)
+              def initialize(options = {})
+        if options[:uri] && options[:token]
+          @api = ::Fogbugz::Interface.new(options)
+        elsif options[:uri] && options[:email] && options[:password]
+          @api = ::Fogbugz::Interface.new(options)
+          @api.authenticate
+          @api
+        end
+      end
+    
+          def id
+        raw_data['ixProject']
+      end
+    
+          def initialize(raw_change)
+        if raw_change.is_a?(Gitaly::GetRawChangesResponse::RawChange)
+          @blob_id = raw_change.blob_id
+          @blob_size = raw_change.size
+          @old_path = raw_change.old_path.presence
+          @new_path = raw_change.new_path.presence
+          @operation = raw_change.operation&.downcase || :unknown
+        else
+          parse(raw_change)
+        end
+      end
+    
+    class PolymorphicMentions < ActiveRecord::Migration[4.2]
+  def change
+    remove_index :mentions, column: %i(post_id)
+    remove_index :mentions, column: %i(person_id post_id), unique: true
+    rename_column :mentions, :post_id, :mentions_container_id
+    add_column :mentions, :mentions_container_type, :string
+    add_index :mentions,
+              %i(mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_mc_id_and_mc_type',
+              length: {mentions_container_type: 191}
+    add_index :mentions,
+              %i(person_id mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
+              length: {mentions_container_type: 191},
+              unique: true
+    
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
+    end
   end
     
-        path = Commands.path(cmd)
+      # fill change password section on the user edit page
+  def fill_change_password_section(cur_pass, new_pass, confirm_pass)
+    fill_in 'user_current_password', :with => cur_pass
+    fill_in 'user_password', :with => new_pass
+    fill_in 'user_password_confirmation', :with => confirm_pass
+  end
     
-    module Homebrew
-  module_function
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
     
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def find_property
+          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
+        end
+    
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
+            @country.states.accessible_by(current_ability, :read).order('name ASC')
+          else
+            State.accessible_by(current_ability, :read).order('name ASC')
+          end
+        end
       end
     end
   end
 end
 
     
-    profile = Profile.new
-# puts profile.generate
-command = ['/usr/bin/sandbox-exec', '-p', profile.generate, profile.pod_bin, *ARGV]
-exec(*command)
-
-    
-        # Checks that the lockfile exists.
-    #
-    # @raise  If the lockfile does not exists.
-    #
-    # @return [void]
-    #
-    def verify_lockfile_exists!
-      unless config.lockfile
-        raise Informative, 'No `Podfile.lock' found in the project directory, run `pod install'.'
-      end
-    end
-    
-          ::Bundler.settings[:path] = LogStash::Environment::BUNDLE_DIR
-      ::Bundler.settings[:gemfile] = LogStash::Environment::GEMFILE_PATH
-      ::Bundler.settings[:without] = options[:without].join(':')
-      ::Bundler.settings[:force] = options[:force]
-    
-          explicit_plugins_specs = explicitly_declared_plugins_specs
-    
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
+          end
         end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
-    
-    shared_examples 'logstash update' do |logstash|
-  describe 'logstash-plugin update on #{logstash.hostname}' do
-    before :each do
-      logstash.install({:version => LOGSTASH_VERSION})
-    end
