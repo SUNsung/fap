@@ -1,218 +1,273 @@
 
         
-        
-if __name__ == '__main__':
-    SalesRanker.run()
-
-    
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
-
-    
-      # Print header
-  header = empty_cell + ' '
-  header += ''.join([' %{0}s '.format(columnwidth) % label
-                     for label in short_labels])
-    
-    # Pull out some commonly used parameters.
-# These are user parameters (configuration)
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-S = FLAGS.S
-input_magnitude = FLAGS.input_magnitude
-nreplications = FLAGS.nreplications
-E = nreplications * C         # total number of trials
-# S is the number of measurements in each datasets, w/ each
-# dataset having a different set of observations.
-ndatasets = N/S                 # ok if rounded down
-train_percentage = FLAGS.train_percentage
-ntime_steps = int(T / FLAGS.dt)
-# End of user parameters
-    
-        batch_size, num_timesteps = self.shape
-    softmax = softmax.reshape((num_timesteps, batch_size, -1))
-    softmax = np.transpose(softmax, [1, 0, 2])
-    probs = np.array([[softmax[row, col, target_ids[row, col]]
-                       for col in range(num_timesteps)]
-                      for row in range(batch_size)])
-    print(probs)
-    return probs
+        from httpie.plugins.base import AuthPlugin
     
     
-def build_vocab(vocab_file):
-  word_to_id = {}
+with open(BIN_FILE_PATH, 'rb') as f:
+    BIN_FILE_CONTENT = f.read()
     
     
-def _file_to_word_ids(filename, word_to_id):
-  data = _read_words(filename)
-  return [word_to_id[word] for word in data if word in word_to_id]
-    
-      Args:
-    predictions:  Discriminator linear predictions Tensor of shape [batch_size,
-      sequence_length]
-    labels: Labels for predictions, Tensor of shape [batch_size,
-      sequence_length]
-    missing_tokens:  Indicator for the missing tokens.  Evaluate the loss only
-      on the tokens that were missing.
-    
-      ## Load Generator weights from MaskGAN checkpoint.
-  if FLAGS.maskgan_ckpt:
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    init_saver = tf.train.Saver(var_list=gen_vars)
-    init_savers['init_saver'] = init_saver
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-        @classmethod
-    def get_model_class(cls):
-        # Avoids a circular import and allows importing SessionStore when
-        # django.contrib.sessions is not in INSTALLED_APPS.
-        from django.contrib.sessions.models import Session
-        return Session
-    
-    DOCUMENTATION = '''
-module: aws_waf_facts
-short_description: Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
-description:
-  - Retrieve facts for WAF ACLs, Rule , Conditions and Filters.
-version_added: '2.4'
-requirements: [ boto3 ]
-options:
-  name:
-    description:
-      - The name of a Web Application Firewall
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
     
-def list_rules(client, module):
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+    
+def has_docutils():
     try:
-        return list_rules_with_backoff(client)
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Could not list WAF rules')
-    
-        def _sync_rule(self, enabled=True):
-        '''Syncs local rule state with AWS'''
-        if not self._rule_matches_aws():
-            self.rule.put(enabled)
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        if sort:
-        snaked_launch_configs.sort(key=lambda e: e[sort], reverse=(sort_order == 'descending'))
-    
-        if state == 'present':
-        for required in ['name', 'description', 'subnets']:
-            if not module.params.get(required):
-                module.fail_json(msg=str('Parameter %s required for state='present'' % required))
-    else:
-        for not_allowed in ['description', 'subnets']:
-            if module.params.get(not_allowed):
-                module.fail_json(msg=str('Parameter %s not allowed for state='absent'' % not_allowed))
-    
-        else:
-        node_value = node
-    
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
-    
-        args = parser.parse_args()
-    
-        print('vectorizing data')
-    
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-        def appid_exist(self, appids):
-        for appid in appids.split('|'):
-            if appid == '':
-                continue
-            if appid in self.config.GAE_APPIDS:
-                return True
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
         return False
     
-        if len(sys.argv) > 1:
-        ip = sys.argv[1]
-    else:
-        ip = '46.134.208.94'
-        ip = '2001:ee0:3203:a::12'
-        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
-    print('test ip:%s' % ip)
+        def test_download_no_Content_Length(self, httpbin_both):
+        devnull = open(os.devnull, 'w')
+        downloader = Downloader(output_file=devnull, progress_file=devnull)
+        downloader.start(Response(url=httpbin_both.url + '/'))
+        time.sleep(1.1)
+        downloader.chunk_downloaded(b'12345')
+        downloader.finish()
+        assert not downloader.interrupted
     
-            # If you are parsing a tree node stream, you will encounter som
-        # imaginary nodes w/o line/col info.  We now search backwards looking
-        # for most recent token with line/col info, but notify getErrorHeader()
-        # that info is approximate.
-        self.approximateLineInfo = False
+        def test_cert_pem(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', CLIENT_PEM)
+        assert HTTP_OK in r
     
     
-    def skipOffTokenChannelsReverse(self, i):
-        while i >= 0 and self.tokens[i].channel != self.channel:
-            i -= 1
+def test_unicode_raw_json_item_verbose(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
     
-    # If false, no module index is generated.
-#html_domain_indices = True
+    # convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
     
-        # Remove the drawing library from memory as per the Pillow docs
-    del draw
     
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
     
-        # Loop through each face in this frame of video
-    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        # See if the face is a match for the known face(s)
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+        def get_config(self):
+        config = {
+            'units': self.units,
+            'kernel_initializer': initializers.serialize(self.kernel_initializer),
+            'recurrent_initializer':
+                initializers.serialize(self.recurrent_initializer),
+            'bias_initializer': initializers.serialize(self.bias_initializer),
+            'unit_forget_bias': self.unit_forget_bias,
+            'kernel_regularizer': regularizers.serialize(self.kernel_regularizer),
+            'recurrent_regularizer':
+                regularizers.serialize(self.recurrent_regularizer),
+            'bias_regularizer': regularizers.serialize(self.bias_regularizer),
+            'activity_regularizer':
+                regularizers.serialize(self.activity_regularizer),
+            'kernel_constraint': constraints.serialize(self.kernel_constraint),
+            'recurrent_constraint': constraints.serialize(self.recurrent_constraint),
+            'bias_constraint': constraints.serialize(self.bias_constraint)}
+        base_config = super(CuDNNLSTM, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
     
-    # This code finds all faces in a list of images using the CNN model.
-#
-# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
-# are the exact same size. This is common in video processing applications where you have lots of video frames
-# to process.
-#
-# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
-# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
-#
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+        # Example
     
-        def test_fd_command_line_interface_cnn_model(self):
-        target_string = 'obama.jpg'
-        runner = CliRunner()
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
+
     
-    from setuptools import setup
     
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True),
+            metric_name=dict(),
+            state=dict(default='present', choices=['present', 'absent']),
+            conditions=dict(type='list'),
+            purge_conditions=dict(type='bool', default=False)
+        ),
+    )
+    module = AnsibleAWSModule(argument_spec=argument_spec)
+    state = module.params.get('state')
+    
+        # Purge rules before adding new ones in case a deletion shares the same
+    # priority as an insertion.
+    params = {
+        'WebACLId': acl['WebACLId'],
+        'DefaultAction': acl['DefaultAction']
+    }
+    change_tokens = []
+    if deletions:
+        try:
+            params['Updates'] = deletions
+            result = run_func_with_change_token_backoff(client, module, params, client.update_web_acl)
+            change_tokens.append(result['ChangeToken'])
+            get_waiter(
+                client, 'change_token_in_sync',
+            ).wait(
+                ChangeToken=result['ChangeToken']
+            )
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, msg='Could not update Web ACL')
+    if insertions:
+        try:
+            params['Updates'] = insertions
+            result = run_func_with_change_token_backoff(client, module, params, client.update_web_acl)
+            change_tokens.append(result['ChangeToken'])
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, msg='Could not update Web ACL')
+    if change_tokens:
+        for token in change_tokens:
+            get_waiter(
+                client, 'change_token_in_sync',
+            ).wait(
+                ChangeToken=token
+            )
+    if changed:
+        acl = get_web_acl(client, module, web_acl_id)
+    return changed, acl
+    
+        argument_spec.update(dict(
+        state=dict(choices=['present', 'absent'], default='present'),
+        origin_access_identity_id=dict(),
+        caller_reference=dict(),
+        comment=dict(),
+    ))
+    
+        def _targets_to_put(self):
+        '''Returns a list of targets that need to be updated or added remotely'''
+        remote_targets = self.rule.list_targets()
+        return [t for t in self.targets if t not in remote_targets]
+    
+            if matched_name and matched_tags:
+            asg = camel_dict_to_snake_dict(asg)
+            # compatibility with ec2_asg module
+            asg['launch_config_name'] = asg['launch_configuration_name']
+            # workaround for https://github.com/ansible/ansible/pull/25015
+            if 'target_group_ar_ns' in asg:
+                asg['target_group_arns'] = asg['target_group_ar_ns']
+                del(asg['target_group_ar_ns'])
+            if asg.get('target_group_arns'):
+                if elbv2:
+                    try:
+                        tg_paginator = elbv2.get_paginator('describe_target_groups')
+                        tg_result = tg_paginator.paginate(TargetGroupArns=asg['target_group_arns']).build_full_result()
+                        asg['target_group_names'] = [tg['TargetGroupName'] for tg in tg_result['TargetGroups']]
+                    except ClientError as e:
+                        if e.response['Error']['Code'] == 'TargetGroupNotFound':
+                            asg['target_group_names'] = []
+            else:
+                asg['target_group_names'] = []
+            matched_asgs.append(asg)
+    
+    try:
+    import botocore
+except ImportError:
+    pass  # handled by AnsibleAWSModule
+    
+        connection = boto3_conn(module, conn_type='client', resource='iam', region=region, endpoint=ec2_url, **aws_connect_params)
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+        html = get_content(rebuilt_url(url))
+    info = json.loads(match1(html, r'qualities':({.+?}),''))
+    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
+            match1(html, r''title'\s*:\s*'([^']+)'')
+    title = unicodize(title)
+    
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
+    
+        def test_commonprefix(self):
+        commonprefix = self.pathmodule.commonprefix
+        self.assertEqual(
+            commonprefix([]),
+            ''
+        )
+        self.assertEqual(
+            commonprefix(['/home/swenson/spam', '/home/swen/spam']),
+            '/home/swen'
+        )
+        self.assertEqual(
+            commonprefix(['/home/swen/spam', '/home/swen/eggs']),
+            '/home/swen/'
+        )
+        self.assertEqual(
+            commonprefix(['/home/swen/spam', '/home/swen/spam']),
+            '/home/swen/spam'
+        )
+        self.assertEqual(
+            commonprefix(['home:swenson:spam', 'home:swen:spam']),
+            'home:swen'
+        )
+        self.assertEqual(
+            commonprefix([':home:swen:spam', ':home:swen:eggs']),
+            ':home:swen:'
+        )
+        self.assertEqual(
+            commonprefix([':home:swen:spam', ':home:swen:spam']),
+            ':home:swen:spam'
+        )
+    
+                if '0x0' in main:
+                # XXX Fix on Windows (and other platforms): something
+                # is going on with the pointers in Programs/_testembed.c.
+                # interp.interp is 0x0 and interp.modules is the same
+                # between interpreters.
+                raise unittest.SkipTest('platform prints pointers as 0x0')
+    
+        # Initialize and populate our database.
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
+    tasks = (
+        'give food to fish',
+        'prepare group meeting',
+        'fight with a zebra',
+        )
+    for task in tasks:
+        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
+    
+    # Proxy type for generator objects
+class GeneratorProxy(BaseProxy):
+    _exposed_ = ['__next__']
+    def __iter__(self):
+        return self
+    def __next__(self):
+        return self._callmethod('__next__')
