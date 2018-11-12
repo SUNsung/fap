@@ -1,58 +1,59 @@
 
         
-                case array.length
-        when 0
-          ''.html_safe
-        when 1
-          ERB::Util.html_escape(array[0])
-        when 2
-          safe_join([array[0], array[1]], options[:two_words_connector])
-        else
-          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
-        end
+            def parsing_binding
+      binding
+    end
+    
+          it 'adds docset_bundle_filename param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_bundle_filename: 'DocSet bundle filename'
+          )
+        end').runner.execute(:test)
+    
+          it 'handles extension and extensions parameters correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
       end
+    
+          it 'generates the correct git command with an array of paths' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+          it 'works with select regex when regex is string' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: \'\/AppDelegate\'
+            )
+          end').runner.execute(:test)
+    
+        it 'recognizes an array as the first element of a command' do
+      message = 'A message'
+      command = command_from_args(['/usr/local/bin/git', 'git'], 'commit', '-m', message)
+      expect(command).to eq('/usr/local/bin/git commit -m #{message.shellescape}')
     end
   end
 end
-
     
-              def retrieve_object(object)
-            if object
-              object
-            elsif @template_object.instance_variable_defined?('@#{@object_name}')
-              @template_object.instance_variable_get('@#{@object_name}')
-            end
-          rescue NameError
-            # As @object_name may contain the nested syntax (item[subobject]) we need to fallback to nil.
-            nil
-          end
-    
-              def render_collection
-            @collection.map do |item|
-              value = value_for_collection(item, @value_method)
-              text  = value_for_collection(item, @text_method)
-              default_html_options = default_html_options_for_collection(item, value)
-              additional_html_options = option_html_attributes(item)
-    
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class CollectionRadioButtons < Base # :nodoc:
-        include CollectionHelpers
-    
-        initializer 'action_view.setup_action_pack' do |app|
-      ActiveSupport.on_load(:action_controller) do
-        ActionView::RoutingUrlFor.include(ActionDispatch::Routing::UrlFor)
+          def check
+        create_event :payload => {}
       end
     end
     
-    Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, timeout: 30)
-end
+          redirect_to admin_report_path(@report)
+    end
     
-      # fill out the fields on the sign_in page and press submit
-  def login_as(user, pass)
-    fill_in 'user_username', :with=>user
-    fill_in 'user_password', :with=>pass
-    click_button 'Sign in'
-  end
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
+    end
