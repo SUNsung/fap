@@ -1,291 +1,213 @@
 
         
-        void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
-        }
-        os << ']';
-      }
-      os << std::endl;
+        #include <google/protobuf/python/python_protobuf.h>
+    
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+    
+    #ifdef __cplusplus
+    
+    
+bool GetAnyFieldDescriptors(const Message& message,
+                            const FieldDescriptor** type_url_field,
+                            const FieldDescriptor** value_field) {
+    const Descriptor* descriptor = message.GetDescriptor();
+    if (descriptor->full_name() != kAnyFullTypeName) {
+      return false;
     }
+    *type_url_field = descriptor->FindFieldByNumber(1);
+    *value_field = descriptor->FindFieldByNumber(2);
+    return (*type_url_field != NULL &&
+            (*type_url_field)->type() == FieldDescriptor::TYPE_STRING &&
+            *value_field != NULL &&
+            (*value_field)->type() == FieldDescriptor::TYPE_BYTES);
+}
+    
+    #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/test_util.h>
+#include <google/protobuf/unittest.pb.h>
+#include <gtest/gtest.h>
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    string EscapeJavadoc(const string& input) {
+  string result;
+  result.reserve(input.size() * 2);
+    }
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    string ClassNameResolver::GetClassName(const ServiceDescriptor* descriptor,
+                                       bool immutable) {
+  return GetClassFullName(ClassNameWithoutPackage(descriptor, immutable),
+                          descriptor->file(), immutable,
+                          MultipleJavaFiles(descriptor->file(), immutable));
+}
+    
+    #include <memory>
+    
+    EnumFieldGenerator::EnumFieldGenerator(const FieldDescriptor* descriptor,
+                                       const Options& options)
+    : SingleFieldGenerator(descriptor, options) {
+  SetEnumVariables(descriptor, &variables_);
+}
+    
+      std::vector<string> options;
+  if (descriptor_->is_repeated()) options.push_back('GPBExtensionRepeated');
+  if (descriptor_->is_packed()) options.push_back('GPBExtensionPacked');
+  if (descriptor_->containing_type()->options().message_set_wire_format())
+    options.push_back('GPBExtensionSetWireFormat');
+    
+      void wait(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    while (n_ < n) {
+      cv_.wait(lock);
+    }
+    n_ -= n;
   }
-    }
     
-    // Caches pointers to numpy arrays which need to be dereferenced.
-static std::vector<void*>* DecrefCache() {
-  static std::vector<void*>* decref_cache = new std::vector<void*>;
-  return decref_cache;
+    workspace.ResetWorkspace()
+    
+    #ifndef CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
+#define CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
+    
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+    OPERATOR_SCHEMA(GivenTensorInt64Fill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT64>);
+    
+    
+    {          return out;
+        });
+OPERATOR_SCHEMA(Float16ConstantFill)
+    .NumInputs(0)
+    .NumOutputs(1)
+    .TensorInferenceFunction(Float16FillerTensorInference)
+    .Arg('value', 'The value for the elements of the output tensor.')
+    .Arg('shape', 'The shape of the output tensor.')
+    .Output(
+        0,
+        'output',
+        'Output tensor of constant values specified by 'value'');
+    
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+    Array Directory::getMetaData() {
+  return make_map_array(
+    s_wrapper_type, s_plainfile, // PHP5 compatibility
+    s_stream_type,  s_dir,
+    s_mode,         s_r,
+    s_unread_bytes, 0,
+    s_seekable,     false,
+    s_timed_out,    false,
+    s_blocked,      true,
+    s_eof,          isEof()
+  );
 }
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/framework/types.pb.h'
-#include 'tensorflow/core/lib/core/status.h'
-    
-    
-    {}  // namespace tensorflow
-    
-    namespace tensorflow {
+    req::ptr<File>
+GlobStreamWrapper::open(const String& filename, const String& /*mode*/,
+                        int /*options*/,
+                        const req::ptr<StreamContext>& /*context*/) {
+  // Can't open a glob as a file, it's meant to be opened as a directory
     }
     
-    namespace tensorflow {
-namespace swig {
-    }
-    }
+      // Input statistics
+  // TODO(noetzli): The stats are incomplete. They are lacking everything
+  // consumed by MergeHelper.
+  uint64_t num_input_records = 0;
+  uint64_t num_input_deletion_records = 0;
+  uint64_t num_input_corrupt_records = 0;
+  uint64_t total_input_raw_key_bytes = 0;
+  uint64_t total_input_raw_value_bytes = 0;
     
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    ScopedActivateExecutorContext &&other)
-    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
-  other.driver_scoped_activate_context_ = nullptr;
-}
+      Reopen(options);
     
-    # if !GTEST_OS_WINDOWS
-// Tests that an exit code describes an exit due to termination by a
-// given signal.
-class GTEST_API_ KilledBySignal {
+      void set_max_delayed_write_rate(uint64_t write_rate) {
+    // avoid divide 0
+    if (write_rate == 0) {
+      write_rate = 1u;
+    }
+    max_delayed_write_rate_ = write_rate;
+    // update delayed_write_rate_ as well
+    delayed_write_rate_ = write_rate;
+  }
+    
+    // This is an example interface of external-compaction algorithm.
+// Compaction algorithm can be implemented outside the core-RocksDB
+// code by using the pluggable compaction APIs that RocksDb provides.
+class Compactor : public EventListener {
  public:
-  explicit KilledBySignal(int signum);
-  bool operator()(int exit_status) const;
- private:
-  const int signum_;
-};
-# endif  // !GTEST_OS_WINDOWS
-    
-      // Returns the number of TestPartResult objects in the array.
-  int size() const;
-    
-    # define TYPED_TEST_P(CaseName, TestName) \
-  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
-  template <typename gtest_TypeParam_> \
-  class TestName : public CaseName<gtest_TypeParam_> { \
-   private: \
-    typedef CaseName<gtest_TypeParam_> TestFixture; \
-    typedef gtest_TypeParam_ TypeParam; \
-    virtual void TestBody(); \
-  }; \
-  static bool gtest_##TestName##_defined_ GTEST_ATTRIBUTE_UNUSED_ = \
-      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).AddTestName(\
-          __FILE__, __LINE__, #CaseName, #TestName); \
-  } \
-  template <typename gtest_TypeParam_> \
-  void GTEST_CASE_NAMESPACE_(CaseName)::TestName<gtest_TypeParam_>::TestBody()
-    
-    // This macro is for implementing ASSERT_DEATH*, EXPECT_DEATH*,
-// ASSERT_EXIT*, and EXPECT_EXIT*.
-# define GTEST_DEATH_TEST_(statement, predicate, regex, fail) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (::testing::internal::AlwaysTrue()) { \
-    const ::testing::internal::RE& gtest_regex = (regex); \
-    ::testing::internal::DeathTest* gtest_dt; \
-    if (!::testing::internal::DeathTest::Create(#statement, &gtest_regex, \
-        __FILE__, __LINE__, &gtest_dt)) { \
-      goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
-    } \
-    if (gtest_dt != NULL) { \
-      ::testing::internal::scoped_ptr< ::testing::internal::DeathTest> \
-          gtest_dt_ptr(gtest_dt); \
-      switch (gtest_dt->AssumeRole()) { \
-        case ::testing::internal::DeathTest::OVERSEE_TEST: \
-          if (!gtest_dt->Passed(predicate(gtest_dt->Wait()))) { \
-            goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
-          } \
-          break; \
-        case ::testing::internal::DeathTest::EXECUTE_TEST: { \
-          ::testing::internal::DeathTest::ReturnSentinel \
-              gtest_sentinel(gtest_dt); \
-          GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, gtest_dt); \
-          gtest_dt->Abort(::testing::internal::DeathTest::TEST_DID_NOT_DIE); \
-          break; \
-        } \
-        default: \
-          break; \
-      } \
-    } \
-  } else \
-    GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__): \
-      fail(::testing::internal::DeathTest::LastMessage())
-// The symbol 'fail' here expands to something into which a message
-// can be streamed.
-    
-    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
-// character in the buffer is replaced with '\\0'.
-GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-    #define FAIL_ON_ERROR(x) { DWORD ec; if ((ec = (x)) != ERROR_SUCCESS) { ShowErrorAndExit(ec, __WFUNCTION__, __LINE__); } }
-    
-    #endif
-
-    
-    
-    {      dword(ds_formater.instruction);
-   }
-    
-    inline void APCLocalArray::scan(type_scan::Scanner& scanner) const {
-  scanner.scan(*localCache(), m_size * sizeof(TypedValue));
-}
-    
-      // RFC 2397 specifies 'data:' as the prefix,
-  // but zend's PHP supports 'data://' as well
-  if (data_len >= 2 && data[0] == '/' && data[1] == '/') {
-    data_len -= 2;
-    data += 2;
-  }
-    
-    struct DataStreamWrapper final : Stream::Wrapper {
-  DataStreamWrapper() {
-    m_isLocal = true;
-  }
+  // Picks and returns a compaction task given the specified DB
+  // and column family.  It is the caller's responsibility to
+  // destroy the returned CompactionTask.  Returns 'nullptr'
+  // if it cannot find a proper compaction task.
+  virtual CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) = 0;
     }
     
-    /**
- * Implement this interface to report information to debugger or execute
- * debugger commands.
- */
-struct IDebuggable {
-  enum Support {
-    SupportInfo = 1,
-    SupportDump = 2,
-    SupportVerb = 4,
-  };
-    }
-    
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
-    
-        // Create the pixel shader
-    {
-        static const char* pixelShader =
-            'struct PS_INPUT\
-            {\
-            float4 pos : SV_POSITION;\
-            float4 col : COLOR0;\
-            float2 uv  : TEXCOORD0;\
-            };\
-            sampler sampler0;\
-            Texture2D texture0;\
-            \
-            float4 main(PS_INPUT input) : SV_Target\
-            {\
-            float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
-            return out_col; \
-            }';
-    }
-    
-        // Create buffers with a default size (they will later be grown as needed)
-    for (int i = 0; i < num_frames_in_flight; i++)
-    {
-        g_pFrameResources[i].IB = NULL;
-        g_pFrameResources[i].VB = NULL;
-        g_pFrameResources[i].VertexBufferSize = 5000;
-        g_pFrameResources[i].IndexBufferSize = 10000;
-    }
-    
-        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
-    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
-    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
-    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
-    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete]      = 127;
-    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
-    io.KeyMap[ImGuiKey_Space]       = ' ';
-    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
-    io.KeyMap[ImGuiKey_Escape]      = 27;
-    io.KeyMap[ImGuiKey_A]           = 'A';
-    io.KeyMap[ImGuiKey_C]           = 'C';
-    io.KeyMap[ImGuiKey_V]           = 'V';
-    io.KeyMap[ImGuiKey_X]           = 'X';
-    io.KeyMap[ImGuiKey_Y]           = 'Y';
-    io.KeyMap[ImGuiKey_Z]           = 'Z';
-    
-    
-    {    return true;
-}
-    
-    bool ImGui::InputTextMultiline(const char* label, std::string* str, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
-    }
-    
-    
-    {
-    {
-    {
-    {                    // Bind texture, Draw
-                    glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
-                    glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer_offset);
-                }
-            }
-            idx_buffer_offset += pcmd->ElemCount;
-        }
-    }
-    glDeleteVertexArrays(1, &vao_handle);
-    
-    //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
-
-    
-    
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
-    }
+      // number of records being replaced by newer record associated with same key.
+  // this could be a new value or a deletion entry for that key so this field
+  // sums up all updated and deleted keys
+  uint64_t num_records_replaced;
