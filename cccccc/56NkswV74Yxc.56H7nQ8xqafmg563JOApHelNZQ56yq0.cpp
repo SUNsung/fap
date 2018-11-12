@@ -1,502 +1,660 @@
 
         
-        /* QComboBox that can be used with QDataWidgetMapper to select ordinal values from a model. */
-class QValueComboBox : public QComboBox
+          // Map from attr name to the first input arg it is inferred from
+  std::unordered_map<string, string> inferred_attrs_;
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+
+    
+    #include 'tensorflow/python/lib/core/numpy.h'
+    
+    // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
+    
+    
+    {}  // namespace tensorflow
+
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    CUDAExecutor *cuda_exec):
+      driver_scoped_activate_context_(
+          new ScopedActivateContext{ExtractCudaContext(cuda_exec)}) { }
+    
+    private:
+    MacDockIconHandler();
+    
+    class TrafficGraphWidget : public QWidget
 {
     Q_OBJECT
     }
     
-    QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
     
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    }
-    
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
-    }
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-    
-    {    // Inputs that are effectively invalid under the target grammar.
-    // PROTOCOLINFO accepts an OtherLine that is just an OptArguments, which
-    // would make these inputs valid. However,
-    // - This parser is never used in that situation, because the
-    //   SplitTorReplyLine parser enables OtherLine to be skipped.
-    // - Even if these were valid, an OptArguments contains no semantic data,
-    //   so there is no point in parsing it.
-    CheckParseTorReplyMapping('ARGS', {});
-    CheckParseTorReplyMapping('MORE ARGS', {});
-    CheckParseTorReplyMapping('MORE  ARGS', {});
-    CheckParseTorReplyMapping('EVEN more=ARGS', {});
-    CheckParseTorReplyMapping('EVEN+more ARGS', {});
-}
-    
-        typedef int8_t   s8;
-    typedef uint8_t  u8;
-    typedef int16_t  s16;
-    typedef uint16_t u16;
-    typedef int32_t  s32;
-    typedef uint32_t u32;
-    typedef float    f32;
-    typedef int64_t  s64;
-    typedef uint64_t u64;
-    typedef double   f64;
-    
-    #include 'common.hpp'
-#include 'vtransform.hpp'
-    
-            //horizontal convolution (last 3 lines)
-        x = 0;
-        f32* dstb = internal::getRowPtr(dstBase, dstStride, i-1);
-        f32* dstc = internal::getRowPtr(dstBase, dstStride, i);
-        for (; x <= colsn - 4; x += 4)
-        {
-            internal::prefetch(laneA + x + cn);
-            internal::prefetch(laneB + x + cn);
-            internal::prefetch(lanea + x + cn);
-box3x3f32_horiz_ll:
-            float32x4_t lane0a = vld1q_f32(laneA + x - cn);
-            float32x4_t lane2a = vld1q_f32(laneA + x + cn);
-            float32x4_t lane1a = vld1q_f32(laneA + x);
-    }
+    #endif /* SECP256K1_MODULE_ECDH_TESTS_H */
+
     
     
+    {    /* Test r/s equal to zero */
     {
-    {        vst1q_s32(_norm + j + 4, normh);
-        vst1q_s32(_norm + j + 0, norml);
+        /* (1,1) encoded in DER. */
+        unsigned char sigcder[8] = {0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01};
+        unsigned char sigc64[64] = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
+        };
+        secp256k1_pubkey pubkeyc;
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyc, &rsig, msg32) == 1);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 1);
+        sigcder[4] = 0;
+        sigc64[31] = 0;
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
+        sigcder[4] = 1;
+        sigcder[7] = 0;
+        sigc64[31] = 1;
+        sigc64[63] = 0;
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
     }
-    for (; j < colscn; j++)
-        _norm[j] = std::abs(s32(_dx[j])) + std::abs(s32(_dy[j]));
 }
     
-    #define FILL_LINES2(macro,type) \
-            macro##_LINE(type,0) \
-            macro##_LINE(type,1)
-#define FILL_LINES3(macro,type) \
-            FILL_LINES2(macro,type) \
-            macro##_LINE(type,2)
-#define FILL_LINES4(macro,type) \
-            FILL_LINES3(macro,type) \
-            macro##_LINE(type,3)
-    
-    #include <cstddef>
-#include <cstdlib>
-#include <algorithm>
-    
-                {
-                // combine 3 'shifted' vectors
-                t0 = vext_u8(tprev[2], tcurr[2], 7);
-                t1 = tcurr[2];
-                t2 = vext_u8(tcurr[2], tnext[2], 1);
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
     }
+    return true;
+}
     
-    #define INRANGEFUNC(T)                                       \
-void inRange(const Size2D &_size,                            \
-             const T * srcBase, ptrdiff_t srcStride,         \
-             const T * rng1Base, ptrdiff_t rng1Stride,       \
-             const T * rng2Base, ptrdiff_t rng2Stride,       \
-             u8 * dstBase, ptrdiff_t dstStride)              \
-{                                                            \
-    internal::assertSupportedConfiguration();                \
-    inRangeCheck(_size, srcBase, srcStride,                  \
-                 rng1Base, rng1Stride, rng2Base, rng2Stride, \
-                 dstBase, dstStride);                        \
+    // Verify that difficulty is 1.0 for an empty chain.
+BOOST_AUTO_TEST_CASE(get_difficulty_for_null_tip)
+{
+    double difficulty = GetDifficulty(nullptr);
+    RejectDifficultyMismatch(difficulty, 1.0);
 }
-#else
-#define INRANGEFUNC(T)                                       \
-void inRange(const Size2D &,                                 \
-             const T *, ptrdiff_t,                           \
-             const T *, ptrdiff_t,                           \
-             const T *, ptrdiff_t,                           \
-             u8 *, ptrdiff_t)                                \
-{                                                            \
-    internal::assertSupportedConfiguration();                \
-}
-#endif
     
     CallCredentials::~CallCredentials() {}
     
-    class SecureAuthContext final : public AuthContext {
- public:
-  SecureAuthContext(grpc_auth_context* ctx, bool take_ownership);
-    }
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
-    
-    void RegisterOpenCensusViewsForExport() {
-  ClientSentMessagesPerRpcCumulative().RegisterForExport();
-  ClientSentBytesPerRpcCumulative().RegisterForExport();
-  ClientReceivedMessagesPerRpcCumulative().RegisterForExport();
-  ClientReceivedBytesPerRpcCumulative().RegisterForExport();
-  ClientRoundtripLatencyCumulative().RegisterForExport();
-  ClientServerLatencyCumulative().RegisterForExport();
-    }
-    
-    int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPTSTR    lpCmdLine,
-	_In_ int       nCmdShow)
-{
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
-    }
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    namespace HPHP { struct UnitEmitter; }
-namespace HPHP { namespace HHBBC {
-    }
-    }
-    
-    uint64_t* VMTOC::getAddr(int64_t index) {
-  return reinterpret_cast<uint64_t*>(
-      static_cast<intptr_t>(index) + getPtrVector());
+    void ChannelArguments::SetMaxSendMessageSize(int size) {
+  SetInt(GRPC_ARG_MAX_SEND_MESSAGE_LENGTH, size);
 }
     
-      bool empty() const {
-    return codeBlock.empty();
+    
+    {}  // namespace grpc
+
+    
+     private:
+  // Parses the next field from the incoming buffer and stores the parsed value
+  // in a GrpcTraceContext struct.  If it does not recognize the field ID it
+  // will return 0, otherwise it returns the number of bytes read.
+  static size_t ParseField(absl::string_view buf, GrpcTraceContext* tc) {
+    // TODO: Add support for multi-byte field IDs.
+    if (buf.empty()) {
+      return 0;
+    }
+    // Field ID is always the first byte in a field.
+    uint32_t field_id = buf[0];
+    size_t bytes_read = kFieldIdSize;
+    switch (field_id) {
+      case kTraceIdField:
+        bytes_read += kTraceIdSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->trace_id, &buf[kFieldIdSize],
+               opencensus::trace::TraceId::kSize);
+        break;
+      case kSpanIdField:
+        bytes_read += kSpanIdSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->span_id, &buf[kFieldIdSize],
+               opencensus::trace::SpanId::kSize);
+        break;
+      case kTraceOptionsField:
+        bytes_read += kTraceOptionsSize;
+        if (bytes_read > buf.size()) {
+          return 0;
+        }
+        memcpy(tc->trace_options, &buf[kFieldIdSize],
+               opencensus::trace::TraceOptions::kSize);
+        break;
+      default:  // Invalid field ID
+        return 0;
+    }
+    }
+    
+    #include <grpc/support/port_platform.h>
+    
+      const protobuf::Descriptor* desc =
+      descriptor_pool_->FindMessageTypeByName(type);
+  if (desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Type not found.');
   }
     
-    APCHandle::Pair APCCollection::WrapArray(APCHandle::Pair inner,
-                                         CollectionType colType) {
-  auto const col = new APCCollection;
-  col->m_arrayHandle = inner.handle;
-  col->m_colType = colType;
-  return { &col->m_handle, inner.size + sizeof(APCCollection) };
-}
+    void ProtoServerReflectionPlugin::ChangeArguments(const grpc::string& name,
+                                                  void* value) {}
     
-    ALWAYS_INLINE
-APCLocalArray* APCLocalArray::asApcArray(ArrayData* ad) {
-  assertx(ad->kind() == kApcKind);
-  return static_cast<APCLocalArray*>(ad);
-}
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, const grpc::string& value) {
+  class StringOption final : public ServerBuilderOption {
+   public:
+    StringOption(const grpc::string& name, const grpc::string& value)
+        : name_(name), value_(value) {}
+    }
+    }
     
-      /**
-   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
-   * These Bind()s should be used for ini settings. Specifically, they
-   * should be used when the bound setting is needed before the main ini
-   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
-   * value in an ini setting if it is set otherwise it will use the defValue.
-   */
-  static void Bind(bool& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const bool defValue = false,
-                   const bool prepend_hhvm = true);
-  static void Bind(const char*& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char *defValue = nullptr,
-                   const bool prepend_hhvm = true);
-  static void Bind(std::string& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const std::string defValue = '',
-                   const bool prepend_hhvm = true);
-  static void Bind(char& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char defValue = 0, const bool prepend_hhvm = true);
-  static void Bind(unsigned char& loc,const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const unsigned char defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(double& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const double defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name,
-                   HackStrictOption def);
-  static void
-  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<std::string>& defValue = std::vector<std::string>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::unordered_map<std::string, int>& loc,
-       const IniSettingMap& ini, const Hdf& config,
-       const std::string& name = '',
-       const std::unordered_map<std::string, int>& defValue =
-         std::unordered_map<std::string, int>{},
-       const bool prepend_hhvm = true);
-  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMap& defValue = ConfigMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMapC& defValue = ConfigMapC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSet& defValue = ConfigSet(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSetC& defValue = ConfigSetC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigIMap& defValue = ConfigIMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
-                   const Hdf& config, const std::string& name = '',
-                   const ConfigFlatSet& defValue = ConfigFlatSet(),
-                   const bool prepend_hhvm = true);
+    #include <condition_variable>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <queue>
     
-          if (section != ini_section) {
-        ini_section = section;
-        write(ini_fd, '[', 1);
-        write(ini_fd, section.c_str(), section.length());
-        write(ini_fd, ']\n', 2);
-      }
+       const charT* base = m_position;  // where the '[' was
+   const charT* item_base = m_position;  // where the '[' or '^' was
     
-    struct ResourceExceededException : FatalErrorException {
-  ResourceExceededException(const std::string& msg, const Array& backtrace)
-    : FatalErrorException(msg, backtrace)
-  {}
-  EXCEPTION_COMMON_IMPL(ResourceExceededException);
-};
+    #if !defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_REGEX_ICU_INSTANCES)
+namespace BOOST_REGEX_DETAIL_NS{
+template BOOST_REGEX_DECL
+std::locale cpp_regex_traits_base<BOOST_REGEX_CHAR_T>::imbue(const std::locale& l);
+    }
     
-    #ifndef incl_HPHP_FILE_UTIL_H_
-#define incl_HPHP_FILE_UTIL_H_
     
-          char *readptr = m_data->m_buffer + m_data->m_readpos;
-      const char *eol = nullptr;
-      const char *cr;
-      const char *lf;
-      cr = (const char *)memchr(readptr, '\r', avail);
-      lf = (const char *)memchr(readptr, '\n', avail);
-      if (cr && lf != cr + 1 && !(lf && lf < cr) && cr != &readptr[avail - 1]) {
-        /* mac */
-        eol = cr;
-      } else if ((cr && lf && cr == lf - 1) || (lf)) {
-        /* dos or unix endings */
-        eol = lf;
-      } else if (cr != &readptr[avail - 1]) {
-        eol = cr;
-      }
     
-    inline Float8 operator+(Float8 lhs, const Float8& rhs) {
-  lhs += rhs;
-  return lhs;
-}
-inline Float8 operator-(Float8 lhs, const Float8& rhs) {
-  lhs -= rhs;
-  return lhs;
-}
-inline Float8 operator*(Float8 lhs, const Float8& rhs) {
-  lhs *= rhs;
-  return lhs;
-}
-inline Float8 operator/(Float8 lhs, const Float8& rhs) {
-  lhs /= rhs;
-  return lhs;
-}
-    
-      // stores the row indices in the set
-  std::vector<size_t> row_indices_;
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
+    template <class BidiIterator, class Allocator>
+class match_results
+{ 
+private:
+#ifndef BOOST_NO_STD_ALLOCATOR
+   typedef          std::vector<sub_match<BidiIterator>, Allocator> vector_type;
+#else
+   typedef          std::vector<sub_match<BidiIterator> >           vector_type;
 #endif
-}  // namespace tree
-}  // namespace xgboost
+public: 
+   typedef          sub_match<BidiIterator>                         value_type;
+#if  !defined(BOOST_NO_STD_ALLOCATOR) && !(defined(BOOST_MSVC) && defined(_STLPORT_VERSION))
+   typedef typename Allocator::const_reference                              const_reference;
+#else
+   typedef          const value_type&                                       const_reference;
+#endif
+   typedef          const_reference                                         reference;
+   typedef typename vector_type::const_iterator                             const_iterator;
+   typedef          const_iterator                                          iterator;
+   typedef typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<
+                                    BidiIterator>::difference_type          difference_type;
+   typedef typename Allocator::size_type                                    size_type;
+   typedef          Allocator                                               allocator_type;
+   typedef typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<
+                                    BidiIterator>::value_type               char_type;
+   typedef          std::basic_string<char_type>                            string_type;
+   typedef          BOOST_REGEX_DETAIL_NS::named_subexpressions                         named_sub_type;
+    }
+    
+    #endif
 
     
-    
-    {        if (!cfg.GlyphRanges)
-            cfg.GlyphRanges = atlas->GetGlyphRangesDefault();
-        for (const ImWchar* in_range = cfg.GlyphRanges; in_range[0] && in_range[ 1 ]; in_range += 2, total_ranges_count++) 
-            total_glyphs_count += (in_range[1] - in_range[0]) + 1;
-    }
-    
-        // Setup GLUT display function
-    // We will also call ImGui_ImplFreeGLUT_InstallFuncs() to get all the other functions installed for us, 
-    // otherwise it is possible to install our own functions and call the imgui_impl_freeglut.h functions ourselves.
-    glutDisplayFunc(glut_display_func);
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX10 sample code but remove this dependency you can: 
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
-    
-        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
-    struct BACKUP_DX11_STATE
-    {
-        UINT                        ScissorRectsCount, ViewportsCount;
-        D3D11_RECT                  ScissorRects[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        D3D11_VIEWPORT              Viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        ID3D11RasterizerState*      RS;
-        ID3D11BlendState*           BlendState;
-        FLOAT                       BlendFactor[4];
-        UINT                        SampleMask;
-        UINT                        StencilRef;
-        ID3D11DepthStencilState*    DepthStencilState;
-        ID3D11ShaderResourceView*   PSShaderResource;
-        ID3D11SamplerState*         PSSampler;
-        ID3D11PixelShader*          PS;
-        ID3D11VertexShader*         VS;
-        UINT                        PSInstancesCount, VSInstancesCount;
-        ID3D11ClassInstance*        PSInstances[256], *VSInstances[256];   // 256 is max according to PSSetShader documentation
-        D3D11_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
-        ID3D11Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
-        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
-        DXGI_FORMAT                 IndexBufferFormat;
-        ID3D11InputLayout*          InputLayout;
-    };
-    BACKUP_DX11_STATE old;
-    old.ScissorRectsCount = old.ViewportsCount = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
-    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
-    ctx->RSGetState(&old.RS);
-    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
-    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
-    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
-    ctx->PSGetSamplers(0, 1, &old.PSSampler);
-    old.PSInstancesCount = old.VSInstancesCount = 256;
-    ctx->PSGetShader(&old.PS, old.PSInstances, &old.PSInstancesCount);
-    ctx->VSGetShader(&old.VS, old.VSInstances, &old.VSInstancesCount);
-    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
-    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
-    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
-    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
-    ctx->IAGetInputLayout(&old.InputLayout);
-    
-    class ButteraugliComparator : public Comparator {
- public:
-  ButteraugliComparator(const int width, const int height,
-                        const std::vector<uint8_t>* rgb,
-                        const float target_distance, ProcessStats* stats);
-    }
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-    void Usage() {
-  fprintf(stderr,
-      'Guetzli JPEG compressor. Usage: \n'
-      'guetzli [flags] input_filename output_filename\n'
-      '\n'
-      'Flags:\n'
-      '  --verbose    - Print a verbose trace of all attempts to standard output.\n'
-      '  --quality Q  - Visual quality to aim for, expressed as a JPEG quality value.\n'
-      '                 Default value is %d.\n'
-      '  --memlimit M - Memory limit in MB. Guetzli will fail if unable to stay under\n'
-      '                 the limit. Default limit is %d MB.\n'
-      '  --nomemlimit - Do not limit memory usage.\n', kDefaultJPEGQuality, kDefaultMemlimitMB);
-  exit(1);
+    template <class BidiIterator, class Allocator, class charT, class traits>
+bool regex_search(BidiIterator first, BidiIterator last, 
+                  match_results<BidiIterator, Allocator>& m, 
+                  const basic_regex<charT, traits>& e, 
+                  match_flag_type flags = match_default)
+{
+   return regex_search(first, last, m, e, flags, first);
 }
     
+    template <class BidirectionalIterator, 
+          class charT = BOOST_DEDUCED_TYPENAME BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::value_type,
+          class traits = regex_traits<charT> >
+class regex_token_iterator 
+#ifndef BOOST_NO_STD_ITERATOR
+   : public std::iterator<
+         std::forward_iterator_tag, 
+         sub_match<BidirectionalIterator>,
+         typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::difference_type,
+         const sub_match<BidirectionalIterator>*,
+         const sub_match<BidirectionalIterator>& >         
+#endif
+{
+private:
+   typedef regex_token_iterator_implementation<BidirectionalIterator, charT, traits> impl;
+   typedef shared_ptr<impl> pimpl;
+public:
+   typedef          basic_regex<charT, traits>                   regex_type;
+   typedef          sub_match<BidirectionalIterator>                        value_type;
+   typedef typename BOOST_REGEX_DETAIL_NS::regex_iterator_traits<BidirectionalIterator>::difference_type 
+                                                                            difference_type;
+   typedef          const value_type*                                       pointer;
+   typedef          const value_type&                                       reference; 
+   typedef          std::forward_iterator_tag                               iterator_category;
+   
+   regex_token_iterator(){}
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
+                        int submatch = 0, match_flag_type m = match_default)
+                        : pdata(new impl(&re, b, submatch, m))
+   {
+      if(!pdata->init(a))
+         pdata.reset();
+   }
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
+                        const std::vector<int>& submatches, match_flag_type m = match_default)
+                        : pdata(new impl(&re, b, submatches, m))
+   {
+      if(!pdata->init(a))
+         pdata.reset();
+   }
+#if !BOOST_WORKAROUND(__HP_aCC, < 60700)
+#if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
+      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
+      || BOOST_WORKAROUND(__HP_aCC, < 60700)
+   template <class T>
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
+                        const T& submatches, match_flag_type m = match_default)
+                        : pdata(new impl(&re, b, submatches, m))
+   {
+      if(!pdata->init(a))
+         pdata.reset();
+   }
+#else
+   template <std::size_t N>
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
+                        const int (&submatches)[N], match_flag_type m = match_default)
+                        : pdata(new impl(&re, b, submatches, m))
+   {
+      if(!pdata->init(a))
+         pdata.reset();
+   }
+#endif
+#endif
+   regex_token_iterator(const regex_token_iterator& that)
+      : pdata(that.pdata) {}
+   regex_token_iterator& operator=(const regex_token_iterator& that)
+   {
+      pdata = that.pdata;
+      return *this;
+   }
+   bool operator==(const regex_token_iterator& that)const
+   { 
+      if((pdata.get() == 0) || (that.pdata.get() == 0))
+         return pdata.get() == that.pdata.get();
+      return pdata->compare(*(that.pdata.get())); 
+   }
+   bool operator!=(const regex_token_iterator& that)const
+   { return !(*this == that); }
+   const value_type& operator*()const
+   { return pdata->get(); }
+   const value_type* operator->()const
+   { return &(pdata->get()); }
+   regex_token_iterator& operator++()
+   {
+      cow();
+      if(0 == pdata->next())
+      {
+         pdata.reset();
+      }
+      return *this;
+   }
+   regex_token_iterator operator++(int)
+   {
+      regex_token_iterator result(*this);
+      ++(*this);
+      return result;
+   }
+private:
+    }
     
-    {}  // namespace guetzli
+      // Seek to the beginning of the compaction iterator output.
+  //
+  // REQUIRED: Call only once.
+  void SeekToFirst();
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    #include <string>
+    
+    namespace rocksdb {
+static std::string IOErrorMsg(const std::string& context,
+                              const std::string& file_name) {
+  if (file_name.empty()) {
+    return context;
+  }
+  return context + ': ' + file_name;
+}
+    }
+    
+      // close the db.
+  delete db;
+    
+      // Start a transaction
+  Transaction* txn = txn_db->BeginTransaction(write_options);
+  assert(txn);
+    
+    
+    {  return 0;
+}
 
     
-      JpegHistogram() { Clear(); }
-  void Clear() {
-    memset(counts, 0, sizeof(counts));
-    counts[kSize - 1] = 1;
-  }
-  void Add(int symbol) {
-    counts[symbol] += 2;
-  }
-  void Add(int symbol, int weight) {
-    counts[symbol] += 2 * weight;
-  }
-  void AddHistogram(const JpegHistogram& other) {
-    for (int i = 0; i + 1 < kSize; ++i) {
-      counts[i] += other.counts[i];
+    Status GetDBOptionsFromString(
+    const DBOptions& base_options,
+    const std::string& opts_str,
+    DBOptions* new_options);
+    
+    namespace rocksdb {
     }
-    counts[kSize - 1] = 1;
-  }
-  int NumSymbols() const {
-    int n = 0;
-    for (int i = 0; i + 1 < kSize; ++i) {
-      n += (counts[i] > 0 ? 1 : 0);
+    
+    void BENCHFUN(insertFront)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
+  });
+}
+    
+    namespace folly {
     }
-    return n;
-  }
+    
+    #pragma once
+    
+    namespace folly {
+    }
+    
+    #include <glog/logging.h>
+    
+    // Some utility routines relating to unicode.
+    
+      std::sort(cpus.begin(), cpus.end(), [&](size_t lhs, size_t rhs) -> bool {
+    // sort first by equiv class of cache with highest index,
+    // direction doesn't matter.  If different cpus have
+    // different numbers of caches then this code might produce
+    // a sub-optimal ordering, but it won't crash
+    auto& lhsEquiv = equivClassesByCpu[lhs];
+    auto& rhsEquiv = equivClassesByCpu[rhs];
+    for (ssize_t i = ssize_t(std::min(lhsEquiv.size(), rhsEquiv.size())) - 1;
+         i >= 0;
+         --i) {
+      auto idx = size_t(i);
+      if (lhsEquiv[idx] != rhsEquiv[idx]) {
+        return lhsEquiv[idx] < rhsEquiv[idx];
+      }
+    }
+    }
