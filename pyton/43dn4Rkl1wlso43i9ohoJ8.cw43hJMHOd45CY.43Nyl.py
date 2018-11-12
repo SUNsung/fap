@@ -1,124 +1,198 @@
 
         
-        
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
-    
-    versions_info['versions'][version] = new_version
-versions_info['latest'] = version
-    
-    try:
-    input = raw_input
-except NameError:
-    pass
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    module_src = '\n'.join(module_contents) + '\n'
-    
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-    compat_print('total downloads traffic: %s' % format_size(total_bytes))
+        print()
 
     
+        with io.open(changelog_file, encoding='utf-8') as inf:
+        changelog = inf.read()
     
-def assertGreaterEqual(self, got, expected, msg=None):
-    if not (got >= expected):
-        if msg is None:
-            msg = '%r not greater than or equal to %r' % (got, expected)
-        self.assertTrue(got >= expected, msg)
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-            assert_syntax_error('bestvideo,,best')
-        assert_syntax_error('+bestaudio')
-        assert_syntax_error('bestvideo+')
-        assert_syntax_error('/')
-    
-        if not opts and not args:
-        # Display help.
-        print(_help)
-        # Enter GUI mode.
-        #from .gui import gui_main
-        #gui_main()
-    else:
-        conf = {}
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                # Display help.
-                print(_help)
-    
-            else:
-            if 'stream_id' in kwargs and kwargs['stream_id']:
-                # Download the stream
-                stream_id = kwargs['stream_id']
-            else:
-                # Download stream with the best quality
-                from .processor.ffmpeg import has_ffmpeg_installed
-                stream_id = self.streams_sorted[0]['id'] if 'id' in self.streams_sorted[0] else self.streams_sorted[0]['itag']
-    
-        Download Acfun video by vid.
-    
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
+    entries_str = textwrap.indent(''.join(entries), '\t')
+atom_template = atom_template.replace('@ENTRIES@', entries_str)
     
     
-def get_coub_data(html):
-    coub_data = r1(r'<script id=\'coubPageCoubJson\' type=\'text/json\'>([^<]+)</script>', html)
-    json_data = json.loads(coub_data)
-    return json_data
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-        mime, ext, size = url_info(real_url)
-    
-    headers = {
-    'DNT': '1',
-    'Accept-Encoding': 'gzip, deflate, sdch, br',
-    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Cache-Control': 'max-age=0',
-    'Referer': 'http://www.dilidili.com/',
-    'Connection': 'keep-alive',
-    'Save-Data': 'on',
-}
-    
-    import markdown
-    
-    import os
+    # Allow direct execution
+import os
 import sys
-import vim
-import re
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-    KEYWORD_REGEX = re.compile( r'^(\w+),?$' )
+    
+RETURN = '''
+placement_groups:
+  description: Placement group attributes
+  returned: always
+  type: complex
+  contains:
+    name:
+      description: PG name
+      type: string
+      sample: my-cluster
+    state:
+      description: PG state
+      type: string
+      sample: 'available'
+    strategy:
+      description: PG strategy
+      type: string
+      sample: 'cluster'
+    
+        youngest_snapshot = max(snapshots, key=_get_snapshot_starttime)
+    
+    
+def get_cidr_network_bits(module, cidr_block):
+    fixed_cidrs = []
+    for cidr in cidr_block:
+        split_addr = cidr.split('/')
+        if len(split_addr) == 2:
+            # this_ip is a IPv4 CIDR that may or may not have host bits set
+            # Get the network bits.
+            valid_cidr = to_subnet(split_addr[0], split_addr[1])
+            if cidr != valid_cidr:
+                module.warn('One of your CIDR addresses ({0}) has host bits set. To get rid of this warning, '
+                            'check the network mask and make sure that only network bits are set: {1}.'.format(cidr, valid_cidr))
+            fixed_cidrs.append(valid_cidr)
+        else:
+            # let AWS handle invalid CIDRs
+            fixed_cidrs.append(cidr)
+    return fixed_cidrs
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True, type='str'),
+            state=dict(required=True, type='str', choices=['present', 'absent', 'copy']),
+            replication_id=dict(type='str'),
+            cluster_id=dict(type='str'),
+            target=dict(type='str'),
+            bucket=dict(type='str'),
+        )
+    )
+    
+    
+DOCUMENTATION = '''
+---
+module: iam_server_certificate_facts
+short_description: Retrieve the facts of a server certificate
+description:
+  - Retrieve the attributes of a server certificate
+version_added: '2.2'
+author: 'Allen Sanabria (@linuxdynasty)'
+requirements: [boto3, botocore]
+options:
+  name:
+    description:
+      - The name of the server certificate you are retrieving attributes for.
+    required: true
+extends_documentation_fragment:
+    - aws
+    - ec2
+'''
+    
+    
+ALL_SSL_OPTIONS_HASHES = [
+    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
+    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
+    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
+    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
+    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
+    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
+]
+'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
+    
+        @classmethod
+    def default_decoder(cls, value):
+        try:
+            return pyrfc3339.parse(value)
+        except ValueError as error:
+            raise jose.DeserializationError(error)
+    
+        # TODO: decoder should check that nonce is in the protected header
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
+
+    
+        After removing '/files', this function splits vhost_path into the
+    file path and the remaining Augeas path.
+    
+    OLD_REWRITE_HTTPS_ARGS = [
+    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,QSA,R=permanent]'],
+    ['^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,QSA,R=permanent]']]
+    
+            self.assertRaises(
+            errors.PluginError, self.config.recovery_routine)
+    
+        @certbot_util.patch_get_utility()
+    def test_successful_choice(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 3)
+        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
+    
+    
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
+
+    
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_HOST): cv.string,
+})
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+    DEPENDENCIES = ['history']
+    
+        session.sensor = Pyhiveapi.Sensor()
+    session.heating = Pyhiveapi.Heating()
+    session.hotwater = Pyhiveapi.Hotwater()
+    session.light = Pyhiveapi.Light()
+    session.switch = Pyhiveapi.Switch()
+    session.weather = Pyhiveapi.Weather()
+    session.attributes = Pyhiveapi.Attributes()
+    hass.data[DATA_HIVE] = session
+    
+    from functools import wraps
+import logging
+    
+      # Remove old YCM libs if present so that YCM can start.
+  old_libs = (
+    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_core.*' ) ) +
+    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_client_support.*' ) ) +
+    glob.glob( p.join( DIR_OF_OLD_LIBS, '*clang*.*') ) )
+  for lib in old_libs:
+    os.remove( lib )
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData( self._buffer_number )
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    request_data[ 'event_name' ] = self._event_name
     
     from __future__ import unicode_literals
 from __future__ import print_function
@@ -128,62 +202,30 @@ from __future__ import absolute_import
 from builtins import *  # noqa
     
     
+def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found but not loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
+    
+    from ycm.client.messages_request import _HandlePollResponse
+from ycm.tests.test_utils import ExtendedMock
+    
+      opts = { 'filter_diagnostics' : {
+    'java,c,cs' : { 'regex' : '.*taco.*' } } }
+    
+    
 @YouCompleteMeInstance()
-@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
-def SendCompletionRequest_ResponseContainingError_test( ycm, post_vim_message ):
-  current_buffer = VimBuffer( 'buffer' )
-    
-      post_data_to_handler_async.reset_mock()
-    
-      def shutdown( self, wait=True ):
-    with self._shutdown_lock:
-      self._shutdown = True
-      self._work_queue.put( None )
-    if wait:
-      for t in self._threads:
-        t.join()
-  shutdown.__doc__ = _base.Executor.shutdown.__doc__
-
-    
-    *References:
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-https://fkromer.github.io/python-pattern-references/design/#factory-method
-https://sourcemaking.com/design_patterns/factory_method
-    
-        def __init__(self, delegate):
-        self.delegate = delegate
-    
-        _static_method_choices = {'param_value_1': _static_method_1, 'param_value_2': _static_method_2}
-    
-    
-class ConcreteHandler2(Handler):
-    def _handle(self, request):
-        if 10 < request <= 20:
-            print('request {} handled in handler 2'.format(request))
-            return True
-    
-        def restore():
-        obj.__dict__.clear()
-        obj.__dict__.update(state)
-    
-    
-class Subject(object):
-    def __init__(self):
-        self._observers = []
-    
-    ### OUTPUT ###
-# Scanning... Station is 1380 AM
-# Scanning... Station is 1510 AM
-# Switching to FM
-# Scanning... Station is 89.1 FM
-# Scanning... Station is 103.9 FM
-# Scanning... Station is 81.3 FM
-# Scanning... Station is 89.1 FM
-# Switching to AM
-# Scanning... Station is 1250 AM
-# Scanning... Station is 1380 AM
-
-    
-    *Where is the pattern used practically?
-    
-    class TimeDisplay(object):
+# Select the second item of the list which is the ycmd stderr logfile.
+@patch( 'ycm.vimsupport.SelectFromList', return_value = 1 )
+@patch( 'ycm.vimsupport.OpenFilename', new_callable = ExtendedMock )
+def YouCompleteMe_ToggleLogs_WithoutParameters_SelectLogfileNotAlreadyOpen_test(
+  ycm, open_filename, *args ):
