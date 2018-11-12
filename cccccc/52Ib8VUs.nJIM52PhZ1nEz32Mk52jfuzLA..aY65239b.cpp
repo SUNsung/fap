@@ -1,278 +1,252 @@
 
         
-          /**
-   * @brief Returns the vector of learnable parameter blobs.
-   */
-  vector<shared_ptr<Blob<Dtype> > >& blobs() {
-    return blobs_;
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
+  const base::CommandLine::StringType dashdash(2, '-');
+  bool block_args = false;
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i] == dashdash)
+      break;
+    if (block_args) {
+      return false;
+    } else if (IsUrlArg(argv[i])) {
+      block_args = true;
+    }
   }
+  return true;
+}
+    
+    // TaskRunner implementation that posts tasks into libuv's default loop.
+class UvTaskRunner : public base::SingleThreadTaskRunner {
+ public:
+  explicit UvTaskRunner(uv_loop_t* loop);
+    }
+    
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
+    
+    v8::Local<v8::Value> Net::URLRequest(v8::Isolate* isolate) {
+  return URLRequest::GetConstructor(isolate)->GetFunction();
+}
+    
+    static gfx::Rect DIPToScreenRect(atom::NativeWindow* window,
+                                 const gfx::Rect& rect) {
+  HWND hwnd = window ? window->GetAcceleratedWidget() : nullptr;
+  return display::win::ScreenWin::DIPToScreenRect(hwnd, rect);
+}
+    
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/net/atom_network_delegate.h'
+#include 'native_mate/arguments.h'
+#include 'native_mate/handle.h'
+    
+    v8::Local<v8::Object> CreateCustomEvent(v8::Isolate* isolate,
+                                        v8::Local<v8::Object> object,
+                                        v8::Local<v8::Object> custom_event) {
+  v8::Local<v8::Object> event = CreateEventObject(isolate);
+  (void)event->SetPrototype(custom_event->CreationContext(), custom_event);
+  mate::Dictionary(isolate, event).Set('sender', object);
+  return event;
+}
+    
+    #include <string>
+    
+    namespace api {
+    }
+    
+    // See comment in |PostMainMessageLoopStart()|, where sigaction is called.
+void SIGHUPHandler(int signal) {
+  RAW_CHECK(signal == SIGHUP);
+  GracefulShutdownHandler(signal);
+}
+    
+        const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
+    
+    #endif // BITCOIN_QT_OPENURIDIALOG_H
+
+    
+    private:
+    int role;
+    
+    
+    {private:
+    Ui::TransactionDescDialog *ui;
+};
+    
+    /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
+{
+public:
+    }
+    
+        /* Check all NULLs are detected */
+    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
+    CHECK(ecount == 0);
+    CHECK(secp256k1_ecdh(tctx, NULL, &point, s_one) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdh(tctx, res, NULL, s_one) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdh(tctx, res, &point, NULL) == 0);
+    CHECK(ecount == 3);
+    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
+    CHECK(ecount == 3);
+    
+    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
+{
+    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
+    auto ret = SplitTorReplyLine(input);
+    BOOST_CHECK_EQUAL(ret.first, command);
+    BOOST_CHECK_EQUAL(ret.second, args);
+}
+    
+    #define CLASS_INFO(m_type)                                    \
+	(GetTypeInfo<m_type *>::VARIANT_TYPE != Variant::NIL ?    \
+					GetTypeInfo<m_type *>::get_class_info() : \
+					GetTypeInfo<m_type>::get_class_info())
+    
+    #ifndef BULLET_TYPES_CONVERTER_H
+#define BULLET_TYPES_CONVERTER_H
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    bool GodotCollisionDispatcher::needsResponse(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsResponse(body0, body1);
+}
+
+    
+    public:
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
+    
+    size_t MemoryPool::total_memory = 0;
+size_t MemoryPool::max_memory = 0;
+    
+    ZipArchive *ZipArchive::get_singleton() {
+    }
+    
+    void DHTRoutingTable::getClosestKNodes(
+    std::vector<std::shared_ptr<DHTNode>>& nodes,
+    const unsigned char* key) const
+{
+  dht::findClosestKNodes(nodes, root_.get(), key);
+}
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+      virtual std::shared_ptr<DHTTask>
+  createNodeLookupTask(const unsigned char* targetID) = 0;
+    
+    
+    {  void setTimeout(std::chrono::seconds timeout)
+  {
+    timeout_ = std::move(timeout);
+  }
+};
+    
+    std::vector<DNSCache::AddrEntry>::const_iterator
+DNSCache::CacheEntry::find(const std::string& addr) const
+{
+  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
+    if ((*i).addr_ == addr) {
+      return i;
+    }
+  }
+  return addrEntries_.end();
+}
+    
+      void WaitForAllThreads() EXCLUDES(end_cond_mutex_) {
+    MutexLock lock(end_cond_mutex_);
+    end_condition_.wait(lock.native_handle(),
+                        [this]() { return alive_threads_ == 0; });
+  }
+    
+    #include 'benchmark/benchmark.h'
+    
+    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
+                 va_list args);
+void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...);
+    
+      // If def_optional is true and there are more characters after the
+  // flag name, or if def_optional is false, there must be a '=' after
+  // the flag name.
+  if (flag_end[0] != '=') return nullptr;
+    
+    // Macro for referencing flags.
+#define FLAG(name) FLAGS_##name
+    
+      // Only add label to mean/stddev if it is same for all runs
+  Run rms;
+  big_o.report_label = reports[0].report_label;
+  rms.benchmark_name = benchmark_name + '_RMS';
+  rms.report_label = big_o.report_label;
+  rms.iterations = 0;
+  rms.real_accumulated_time = result_real.rms / multiplier;
+  rms.cpu_accumulated_time = result_cpu.rms / multiplier;
+  rms.report_rms = true;
+  rms.complexity = result_cpu.complexity;
+  // don't forget to keep the time unit, or we won't be able to
+  // recover the correct value.
+  rms.time_unit = reports[0].time_unit;
+    
+    #include 'sleep.h'
+    
+    
+    {  /**
+   * @brief CanFrame string including essential information about the message.
+   * @return The info string.
+   */
+  std::string CanFrameString() const {
+    std::stringstream output_stream('');
+    output_stream << 'id:0x' << Byte::byte_to_hex(id)
+                  << ',len:' << static_cast<int>(len) << ',data:';
+    for (uint8_t i = 0; i < len; ++i) {
+      output_stream << Byte::byte_to_hex(data[i]);
+    }
+    output_stream << ',';
+    return output_stream.str();
+  }
+};
     
     #include <vector>
     
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    
-    {}  // namespace caffe
-    
-        public:
-        CompositeMinibatchSource(const MinibatchSourceConfig& configuration);
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-        static void noOpAlarmHandler(int /*signum*/)
-    {
-        // this handler is intentionally NO-OP
-        // the side effect of execution this handler
-        // will be a termination of fcntl call below with EINTR
-    }
-    
-    // construct a network from a list of roots (passed in 'workList')
-// This will add to m_nameToNodeMap[] all roots and all nodes reachable from those roots.
-// If 'replacements' is given, all root pointers as well as all input pointers of reachable nodes will be mapped. This is needed for model editing.
-void ComputationNetwork::ConstructFromRoots(DEVICEID_TYPE deviceId, deque<ComputationNodeBasePtr>&& workList, const map<ComputationNodeBasePtr, ComputationNodeBasePtr>& replacements)
-{
-    SetDeviceId(deviceId);
-    assert(this->GetTotalNumberOfNodes() == 0);
-    }
-    
-                    for (size_t j = 0; j < secondSize + 1; j++)
-                {
-                    grid(0, j) = (float)(j * insPen);
-                    insMatrix(0, j) = (float)j;
-                }
-                for (size_t i = 1; i < firstSize + 1; i++)
-                {
-                    for (size_t j = 1; j < secondSize + 1; j++)
-                    {
-                        if (firstSeqVec[i - 1] == secondSeqVec[j - 1])
-                        {
-                            grid(i, j) = grid(i - 1, j - 1);
-                            insMatrix(i, j) = insMatrix(i - 1, j - 1);
-                            delMatrix(i, j) = delMatrix(i - 1, j - 1);
-                            subMatrix(i, j) = subMatrix(i - 1, j - 1);
-                        }
-                        else
-                        {
-                            del = grid(i - 1, j) + delPen; //deletion 
-                            ins = grid(i, j - 1) + insPen;  //insertion
-                            sub = grid(i - 1, j - 1) + subPen; //substitution 
-                            if (sub <= del && sub <= ins)
-                            {
-                                insMatrix(i, j) = insMatrix(i - 1, j - 1);
-                                delMatrix(i, j) = delMatrix(i - 1, j - 1);
-                                subMatrix(i, j) = subMatrix(i - 1, j - 1) + 1.0f;
-                                grid(i, j) = sub;
-                            }
-                            else if (del < ins)
-                            {
-                                insMatrix(i, j) = insMatrix(i - 1, j);
-                                subMatrix(i, j) = subMatrix(i - 1, j);
-                                delMatrix(i, j) = delMatrix(i - 1, j) + 1.0f;
-                                grid(i, j) = del;
-                            }
-                            else
-                            {
-                                delMatrix(i, j) = delMatrix(i, j - 1);
-                                subMatrix(i, j) = subMatrix(i, j - 1);
-                                insMatrix(i, j) = insMatrix(i, j - 1) + 1.0f;
-                                grid(i, j) = ins;
-                            }
-                        }
-                    }
-                }
-    
     /**
- *@brief Base class for Camera actions.
- *@ingroup Actions
+ * @file
+ * @brief Defines CanReceiver class.
  */
-class CC_DLL ActionCamera : public ActionInterval
-{
-public:
-    /**
-     * @js ctor
-     * @lua new
-     */
-    ActionCamera();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~ActionCamera(){};
-    }
     
-        // Override
-    virtual FlipX3D* clone() const override;
-    virtual void update(float time) override;
+    #include <memory>
+#include <set>
     
-CC_CONSTRUCTOR_ACCESS:
-    FlipX3D() {}
-    virtual ~FlipX3D() {}
-    
-    
-    {        // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
-        if (_currentTargetSalvaged && _currentTarget->actions->num == 0)
-        {
-            deleteHashElement(_currentTarget);
-        }
-        //if some node reference 'target', it's reference count >= 2 (issues #14050)
-        else if (_currentTarget->target->getReferenceCount() == 1)
-        {
-            deleteHashElement(_currentTarget);
-        }
-    }
-    
-    
-    {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
-            {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
-        }
-    }
-}
-    
-    
-    {// end of actions group
-/// @}
-    
-    ActionTween* ActionTween::reverse() const
-{
-    return ActionTween::create(_duration, _key, _to, _from);
-}
-    
-    #endif // __CCATLAS_NODE_H__
-    
-    #pragma once
-#ifndef ROCKSDB_LITE
-#include 'db/db_impl.h'
-#include <vector>
-#include <string>
-    
-      // State
-  //
-  // Points to a copy of the current compaction iterator output (current_key_)
-  // if valid_.
-  Slice key_;
-  // Points to the value in the underlying iterator that corresponds to the
-  // current output.
-  Slice value_;
-  // The status is OK unless compaction iterator encounters a merge operand
-  // while not having a merge operator defined.
-  Status status_;
-  // Stores the user key, sequence number and type of the current compaction
-  // iterator output (or current key in the underlying iterator during
-  // NextFromInput()).
-  ParsedInternalKey ikey_;
-  // Stores whether ikey_.user_key is valid. If set to false, the user key is
-  // not compared against the current key in the underlying iterator.
-  bool has_current_user_key_ = false;
-  bool at_next_ = false;  // If false, the iterator
-  // Holds a copy of the current compaction iterator output (or current key in
-  // the underlying iterator during NextFromInput()).
-  IterKey current_key_;
-  Slice current_user_key_;
-  SequenceNumber current_user_key_sequence_;
-  SequenceNumber current_user_key_snapshot_;
-    
-    namespace rocksdb {
-    }
-    
-    
-    {  if (close(fd_) < 0) {
-    s = IOError('While closing file after writing', filename_, errno);
-  }
-  fd_ = -1;
-  return s;
-}
-    
-      // create column family
-  ColumnFamilyHandle* cf;
-  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
-  assert(s.ok());
-    
-    using namespace rocksdb;
-std::string kDBPath = '/tmp/rocksdb_compact_files_example';
-struct CompactionTask;
-    
-      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
-                          const rocksdb::Slice& existing_value) const override {
-    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
-    ++merge_count_;
-    return existing_value == 'bad';
+      // load conf
+  if (!common::util::GetProtoFromFile(FLAGS_sensor_conf_file, &canbus_conf_)) {
+    return OnError('Unable to load canbus conf file: ' +
+                   FLAGS_sensor_conf_file);
   }
     
-      // Transaction could not commit since the write outside of the txn conflicted
-  // with the read!
-  assert(s.IsBusy());
-    
-    #include 'rocksdb/db.h'
-#include 'rocksdb/options.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/utilities/transaction.h'
-#include 'rocksdb/utilities/transaction_db.h'
-    
-      // number of bytes that has been written.
-  uint64_t bytes_written;
-  // number of bytes that has been read.
-  uint64_t bytes_read;
+    // System gflags
+DEFINE_string(node_name, 'chassis', 'The chassis module name in proto');
+DEFINE_string(canbus_driver_name, 'canbus', 'Driver name.');
