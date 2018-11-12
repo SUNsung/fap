@@ -1,67 +1,38 @@
 
         
-                array.flatten.map! { |i| ERB::Util.unwrapped_html_escape(i) }.join(sep).html_safe
-      end
+            def empty?
+      @entries.empty?
+    end
     
-              super(object_name, method_name, template_object, options)
-        end
+        def add(path, content)
+      @pages[path] = content
+    end
     
-            private
+        def initialize(content)
+      @content = content
+      @html = document? ? parse_as_document : parse_as_fragment
+    end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
-        class Principal < Element
-          # @!attribute name_type
-          #   @return [Integer]
-          attr_accessor :name_type
-          # @!attribute realm
-          #   @return [String]
-          attr_accessor :realm
-          # @!attribute components
-          #   @return [Array<String>]
-          attr_accessor :components
+        def relative_path_from(url)
+      self.class.parse(url).relative_path_to(self)
+    end
+  end
+end
+
     
-              # Decodes the cname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
-          def decode_cname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
+      gem.required_ruby_version = '>= 2.0'
+  gem.add_dependency 'airbrussh', '>= 1.0.0'
+  gem.add_dependency 'i18n'
+  gem.add_dependency 'rake', '>= 10.0.0'
+  gem.add_dependency 'sshkit', '>= 1.9.0'
     
-          # users should be able to set price when importing orders via api
-      def permitted_line_item_attributes
-        if @current_user_roles.include?('admin')
-          super + [:price, :variant_id, :sku]
-        else
-          super
-        end
-      end
+    Given(/^the configuration is in a custom location$/) do
+  TestApp.move_configuration_to_custom_location('app')
+end
     
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
+      def test_file_exists(path)
+    exists?('f', path)
+  end
     
-            def show
-          @option_value = scope.find(params[:id])
-          respond_with(@option_value)
-        end
-    
-            def index
-          @product_properties = @product.product_properties.accessible_by(current_ability, :read).
-                                ransack(params[:q]).result.
-                                page(params[:page]).per(params[:per_page])
-          respond_with(@product_properties)
-        end
-    
-            def create
-          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
-          authorize! :read, @order
-          authorize! :create, Shipment
-          quantity = params[:quantity].to_i
-          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
+            # Skip validation behavior if no validators are registered for this key
+        return super unless validators.key?(key)
