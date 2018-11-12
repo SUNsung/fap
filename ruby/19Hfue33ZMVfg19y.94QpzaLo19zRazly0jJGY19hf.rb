@@ -1,174 +1,155 @@
 
         
-              Dir.chdir(FastlaneCore::FastlaneFolder.path || Dir.pwd) do # context: fastlane subfolder
-        # create nice path that we want to print in case of some problem
-        relative_path = path.nil? ? '(eval)' : Pathname.new(path).relative_path_from(Pathname.new(Dir.pwd)).to_s
-    
-        context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
-      end
-    
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --ignore \'ignored/path\' --exit-threshold \'2\' input/dir')
-      end
-    
-            expect(result[3]).to start_with('security set-keychain-settings')
-        expect(result[3]).to include('-t 600')
-        expect(result[3]).to include('-l')
-        expect(result[3]).to include('-u')
-        expect(result[3]).to include('~/Library/Keychains/test.keychain')
-      end
-    end
-  end
-end
-
-    
-          it 'generates the correct git command with an array of paths and/or pathspecs' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
-        end').runner.execute(:test)
-    
-            Fastlane::FastFile.new.parse('lane :test do
-          import_certificate ({
-            keychain_name: '#{keychain}',
-            keychain_password: '#{password}',
-            certificate_path: '#{cert_name}',
-            certificate_password: '#{password}'
-          })
-        end').runner.execute(:test)
-      end
-    
-              expect(value).to eq(987)
-        end
-    
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
-  end
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
-  end
-end
-
-    
-    Then(/^I should not be able to sign up$/) do
-  confirm_not_signed_up
+        def global_require
+  JSON.pretty_generate(DATA)
 end
     
-        sign_in(alice, scope: :user)
-  end
+    require 'benchmark/ips'
+require 'pathutil'
     
-    Then(/^references in the remote repo are listed$/) do
-  expect(@output).to include('refs/heads/master')
-end
+            MergeRequest
+          .where(id: start_id..stop_id)
+          .where(latest_merge_request_diff_id: nil)
+          .each_batch(of: BATCH_SIZE) do |relation|
     
-      # Returns a url without the protocol (http://)
-  def shorthand_url(input)
-    input.gsub /(https?:\/\/)(\S+)/ do
-      $2
-    end
-  end
+          def id
+        raw_data['ixProject']
+      end
     
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :selected  => @page.version.id == v.id,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
+                    type = nil
+              elsif line[0] == '\\'
+                type = 'nonewline'
+                lines << {
+                  full_line: full_line,
+                  type: type,
+                  line_obj_index: line_obj_index,
+                  line_old: line_old,
+                  line_new: line_new
+                }
+              else
+                lines << {
+                  full_line: full_line,
+                  type: type,
+                  line_obj_index: line_obj_index,
+                  line_old: line_old,
+                  line_new: line_new
+                }
+    
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+            # The configuration for this provisioner. This will be an instance of
+        # the `Config` class which is part of the provisioner.
+        attr_reader :config
+    
+              # Determine if we require a local Vagrant environment. There are
+          # two cases that we require a local environment:
+          #
+          #   * We're asking for ANY/EVERY VM (no names given).
+          #
+          #   * We're asking for specific VMs, at least once of which
+          #     is NOT in the local machine index.
+          #
+          requires_local_env = false
+          requires_local_env = true if names.empty?
+          requires_local_env ||= names.any? { |n|
+            !@env.machine_index.include?(n)
           }
+          raise Errors::NoEnvironmentError if requires_local_env && !@env.root_path
+    
+                [block.call, parent]
+          end
+          nil
+        end
+    
+            it 'collapse negative number representation if it equals 1' do
+          format('%#{f}', -1).should_not == '..11'
+          format('%#{f}', -1).should == '..1'
         end
       end
+    end
     
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
+      it 'accepts a negative seed' do
+    srand(-17)
+    srand.should == -17
+  end
+    
+            -> { w.f4('', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
+        -> { w.f4(nil, 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
       end
     
-        def self.teardown(&block)
-      define_method(:teardown, &block)
+      it 'creates a public method in script binding' do
+    eval @code, script_binding
+    Object.should have_method :boom
+  end
+    
+          # @see Base#\_retrieve
+      def _retrieve(key, version, sha)
+        return unless File.readable?(path_to(key))
+        begin
+          File.open(path_to(key), 'rb') do |f|
+            if f.readline('\n').strip == version && f.readline('\n').strip == sha
+              return f.read
+            end
+          end
+          File.unlink path_to(key)
+        rescue Errno::ENOENT
+          # Already deleted. Race condition?
+        end
+        nil
+      rescue EOFError, TypeError, ArgumentError => e
+        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
+      end
+    
+          root.options = @options
+      if @options[:cache] && key && sha
+        begin
+          old_options = root.options
+          root.options = {}
+          @options[:cache_store].store(key, sha, root)
+        ensure
+          root.options = old_options
+        end
+      end
+      root
+    rescue SyntaxError => e
+      e.modify_backtrace(:filename => @options[:filename], :line => @line)
+      e.sass_template = @template
+      raise e
     end
-  end
-  (
-  class << klass;
-    self
-  end).send(:define_method, :name) { name.gsub(/\W/, '_') }
-  $contexts << klass
-  klass.class_eval &block
-end
     
-      test 'clean path with double leading slash' do
-    assert_equal '/Mordor', clean_path('//Mordor')
-  end
-end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
+        def handle_load_error(err)
+      dep = err.message[/^no such file to load -- (.*)/, 1]
+      raise err if @options[:trace] || dep.nil? || dep.empty?
+      $stderr.puts <<MESSAGE
+Required dependency #{dep} not found!
+    Run 'gem install #{dep}' to get it.
+  Use --trace for backtrace.
+MESSAGE
+      exit 1
+    end
   end
 end
 
     
-      setup do
-    @path = cloned_testpath('examples/revert.git')
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
-  end
-    
-    if options[:irb]
-  require 'irb'
-  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
-  module IRB # :nodoc:
-    def self.start_session(binding)
-      unless @__initialized
-        args = ARGV
-        ARGV.replace(ARGV.dup)
-        IRB.setup(nil)
-        ARGV.replace(args)
-        @__initialized = true
+          opts.on('-s', '--stdin', :NONE,
+              'Read input from standard input instead of an input file.',
+              'This is the default if no input file is specified. Requires --from.') do
+        @options[:input] = $stdin
       end
-    
-    LogStash::Bundler.setup!
-    
-        # To make sure we have the maximum compatibility
-    # we will ignore theses gems and they won't be included in the pack
-    IGNORE_GEMS_IN_PACK = %w(
-      logstash-core
-      logstash-core-plugin-api
-      jar-dependencies
-    )
-    
-    Gem::Specification.new do |gem|
-  gem.authors       = ['Elastic']
-  gem.email         = ['info@elastic.co']
-  gem.description   = %q{Logstash plugin API}
-  gem.summary       = %q{Define the plugin API that the plugin need to follow.}
-  gem.homepage      = 'http://www.elastic.co/guide/en/logstash/current/index.html'
-  gem.license       = 'Apache License (2.0)'
-    
-      it 'returns the merged `ConfigPart#config_string`' do
-    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
-  end
-    
-    platforms = PlatformConfig.new
-    
-        after :each do
-      logstash.uninstall
-    end
