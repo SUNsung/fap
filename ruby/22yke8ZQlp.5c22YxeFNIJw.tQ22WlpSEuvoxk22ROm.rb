@@ -1,63 +1,66 @@
 
         
-          context 'successful dry runs' do
-    before do
-      stub_request(:get, 'http://xkcd.com/').
-        with(:headers => {'Accept-Encoding'=>'gzip,deflate', 'User-Agent'=>'Huginn - https://github.com/huginn/huginn'}).
-        to_return(:status => 200, :body => File.read(Rails.root.join('spec/data_fixtures/xkcd.html')), :headers => {})
-    end
-    
-    describe ApplicationHelper do
-  describe '#icon_tag' do
-    it 'returns a Glyphicon icon element' do
-      icon = icon_tag('glyphicon-help')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
-    end
-    
-        it 'unregisters deleted SchedulerAgents' do
-      @scheduler.schedule_scheduler_agents
-    
-      it 'is droppable' do
-    {
-      '{{location.lat}}' => '2.0',
-      '{{location.latitude}}' => '2.0',
-      '{{location.lng}}' => '3.0',
-      '{{location.longitude}}' => '3.0',
-      '{{location.latlng}}' => '2.0,3.0',
-    }.each { |template, result|
-      expect(Liquid::Template.parse(template).render('location' => location.to_liquid)).to eq(result),
-        'expected #{template.inspect} to expand to #{result.inspect}'
-    }
-  end
+          caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
 end
 
     
-        it 'optionally supports treating values that start with '$' as raw JSONPath' do
-      expect(Utils.interpolate_jsonpaths('$.there.world', payload)).to eq('$.there.world')
-      expect(Utils.interpolate_jsonpaths('$.there.world', payload, :leading_dollarsign_is_jsonpath => true)).to eq('WORLD')
+      class Blockquote < Liquid::Block
+    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
+    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
+    Author =  /(.+)/
+    
+        def post_render(post)
+      OctopressFilters::post_filter(post)
     end
   end
-    
-          it 'should track when events have been seen and not received them again' do
-        mock.any_instance_of(Agents::TriggerAgent).receive(anything).once
-        Agent.async_check(agents(:bob_weather_agent).id)
-        expect {
-          Agent.receive!
-        }.to change { agents(:bob_rain_notifier_agent).reload.last_checked_event_id }
-    
-    describe 'Kernel.sleep' do
-  it 'needs to be reviewed for spec completeness'
 end
-
     
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
+      it 'ignores implicit arrays' do
+    expect_no_offenses(<<-RUBY.strip_indent)
+      foo = a,
+      b
+    RUBY
   end
-end
     
-          ruby_bug '#14846', '2.5'...'2.6' do
-        it 'raises ArgumentError if passed -1' do
-          -> { warn '', uplevel: -1 }.should raise_error(ArgumentError)
-        end
+          # Calls the given block for each `when` node in the `case` statement.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_when
+        return when_branches.to_enum(__method__) unless block_given?
+    
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
+    
+          # Returns the body of the `for` loop.
+      #
+      # @return [Node, nil] The body of the `for` loop.
+      def body
+        node_parts[2]
+      end
+    end
+  end
+end
+
+    
+          # Checks whether any argument of the node is a splat
+      # argument, i.e. `*splat`.
+      #
+      # @return [Boolean] whether the node is a splat argument
+      def splat_argument?
+        arguments? &&
+          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
+      end
+      alias rest_argument? splat_argument?
