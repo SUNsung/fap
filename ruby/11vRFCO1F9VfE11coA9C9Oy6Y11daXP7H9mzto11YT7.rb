@@ -1,54 +1,34 @@
 
         
-                def render
-          error_wrapping(datetime_selector(@options, @html_options).send('select_#{select_type}').html_safe)
+                    DateTimeSelector.new(datetime, options, html_options)
+          end
+    
+        def find_file(path, prefixes = [], *args)
+      _find_all(path, prefixes, args, true).first || raise(MissingTemplate.new(self, path, prefixes, *args))
+    end
+    
+        initializer 'action_view.default_enforce_utf8' do |app|
+      ActiveSupport.on_load(:action_view) do
+        default_enforce_utf8 = app.config.action_view.delete(:default_enforce_utf8)
+        unless default_enforce_utf8.nil?
+          ActionView::Helpers::FormTagHelper.default_enforce_utf8 = default_enforce_utf8
         end
+      end
+    end
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+      it_behaves_like :kernel_system, :system, KernelSpecs::Method.new
+end
     
-    #
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
+end
+
     
-    Gem::Specification.new do |s|
-  s.specification_version = 2 if s.respond_to? :specification_version=
-  s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
-  s.rubygems_version = '2.2.2'
-  s.required_ruby_version = '>= 2.3.0'
+      end
+end
     
-    require 'erb'
-    
-        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
-                   args: [
-                           '--mode=silent',
-                         ],
-                   sudo: true
-  end
-    
-    module Sass
-  module CacheStores
-    # A backend for the Sass cache using the filesystem.
-    class Filesystem < Base
-      # The directory where the cached files will be stored.
-      #
-      # @return [String]
-      attr_accessor :cache_location
-    
-        # Flattens a single rule.
-    #
-    # @param rule [Tree::RuleNode] The candidate for flattening
-    # @see #flatten_rules
-    def flatten_rule(rule)
-      while rule.children.size == 1 && rule.children.first.is_a?(Tree::RuleNode)
-        child = rule.children.first
-    
-          # @see Base#directories_to_watch
-      def directories_to_watch
-        [root]
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
       end
