@@ -1,57 +1,109 @@
 
         
-              GivenDailyLike.increment_for(user.id)
-      expect(value_for(user.id, dt)).to eq(2)
-      expect(limit_reached_for(user.id, dt)).to eq(true)
+                  def initialize(template_object, object_name, method_name, object, tag_value)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @tag_value = tag_value
+          end
     
-    # pulling this out cause I don't want an observer
-describe Notification do
-  describe '#recent_report' do
-    let(:user) { Fabricate(:user) }
-    let(:post) { Fabricate(:post) }
+    module ActionView
+  # This class defines the interface for a renderer. Each class that
+  # subclasses +AbstractRenderer+ is used by the base +Renderer+ class to
+  # render a specific type of object.
+  #
+  # The base +Renderer+ class uses its +render+ method to delegate to the
+  # renderers. These currently consist of
+  #
+  #   PartialRenderer - Used for rendering partials
+  #   TemplateRenderer - Used for rendering other types of templates
+  #   StreamingTemplateRenderer - Used for streaming
+  #
+  # Whenever the +render+ method is called on the base +Renderer+ class, a new
+  # renderer object of the correct type is created, and the +render+ method on
+  # that new object is called in turn. This abstracts the setup and rendering
+  # into a separate classes for partials and templates.
+  class AbstractRenderer #:nodoc:
+    delegate :find_template, :find_file, :template_exists?, :any_templates?, :with_fallbacks, :with_layout_format, :formats, to: :@lookup_context
     
-    BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
+    UserEmail.seed do |ue|
+  ue.id = -1
+  ue.email = 'no_email'
+  ue.primary = true
+  ue.user_id = -1
+end
     
-      def set_statuses
-    return unless page_requested?
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
+        end
     
-        def destroy
-      authorize @report_note, :destroy?
-      @report_note.destroy!
-      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
-    end
-    
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
+        t.wakeup
+    t.value.should == 5
   end
 end
-
     
-    module Sass
-  module CacheStores
-    # A backend for the Sass cache using the filesystem.
-    class Filesystem < Base
-      # The directory where the cached files will be stored.
-      #
-      # @return [String]
-      attr_accessor :cache_location
+        s = mock('seed')
+    s.should_receive(:to_int).and_return 0
+    srand(s)
+  end
     
-        # variable
-    # Script::Value
-    inherited_hash_writer :var
+      it 'accepts a proc argument instead of a block' do
+    captured = nil
     
-        # Wraps the given string in terminal escapes
-    # causing it to have the given color.
-    # If terminal escapes aren't supported on this platform,
-    # just returns the string instead.
+        # Returns the standard exception backtrace,
+    # including the Sass backtrace.
     #
-    # @param color [Symbol] The name of the color to use.
-    #   Can be `:red`, `:green`, or `:yellow`.
-    # @param str [String] The string to wrap in the given color.
-    # @return [String] The wrapped string.
-    def color(color, str)
-      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
+    # @return [Array<String>]
+    def backtrace
+      return nil if super.nil?
+      return super if sass_backtrace.all? {|h| h.empty?}
+      sass_backtrace.map do |h|
+        '#{h[:filename] || '(sass)'}:#{h[:line]}' +
+          (h[:mixin] ? ':in `#{h[:mixin]}'' : '')
+      end + super
+    end
     
-            # JRuby chokes when trying to import files from JARs when the path starts with './'.
-        ret.map {|f, s| [f.sub(%r{^\./}, ''), s]}
+          if examples
+        title 'Running examples'
+        Rake::Task['examples:build'].invoke
       end
+    
+          def report
+        <<-EOS
+    
+      <a href='/'>Refresh page</a>
+    
+        def retrieve_work
+      work = Sidekiq.redis { |conn| conn.brpop(*queues_cmd) }
+      UnitOfWork.new(*work) if work
+    end
+    
+          ObjectSpace.each_object(File) do |fp|
+        begin
+          if !fp.closed? && fp.stat.file? && fp.sync && (fp.fcntl(Fcntl::F_GETFL) & append_flags) == append_flags
+            to_reopen << fp
+          end
+        rescue IOError, Errno::EBADF
+        end
+      end
+    
+          def __set_test_mode(mode)
+        if block_given?
+          current_mode = self.__test_mode
+          begin
+            self.__test_mode = mode
+            yield
+          ensure
+            self.__test_mode = current_mode
+          end
+        else
+          self.__test_mode = mode
+        end
+      end
+    
+        def app
+      @app ||= build
+    end
