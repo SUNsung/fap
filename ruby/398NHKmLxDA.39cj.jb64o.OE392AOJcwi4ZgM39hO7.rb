@@ -1,20 +1,78 @@
-      # Creates a {Vagrant::Environment} for this entry.
-      #
-      # @return [Vagrant::Environment]
-      def vagrant_env(home_path, **opts)
-        Vagrant::Util::SilenceWarnings.silence! do
-          Environment.new({
-            cwd: @vagrantfile_path,
-            home_path: home_path,
-            local_data_path: @local_data_path,
-            vagrantfile_name: @vagrantfile_name,
-          }.merge(opts))
+
+        
+            def build_and_queue_request(url, options, &block)
+      request = Request.new(url, request_options.merge(options))
+      request.on_complete(&block) if block
+      queue(request)
+      request
+    end
+    
+        def self.join(*args)
+      PARSER.join(*args)
+    end
+    
+            # Remove ng-* attributes
+        css('*').each do |node|
+          node.attributes.each_key do |attribute|
+            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
+          end
         end
+    
+      def set_account
+    @account = Account.find_local!(params[:account_username])
+  end
+    
+        def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
+    end
+  end
+end
+
+    
+        def resubscribe
+      authorize :instance, :resubscribe?
+      params.require(:by_domain)
+      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
+      redirect_to admin_instances_path
+    end
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
+    
+          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
+      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
+    
+        context 'float types' do
+      it 'controls the number of decimal places displayed in fraction part' do
+        format('%.10e', 109.52).should == '1.0952000000e+02'
+        format('%.10E', 109.52).should == '1.0952000000E+02'
+        format('%.10f', 10.952).should == '10.9520000000'
+        format('%.10a', 196).should == '0x1.8800000000p+7'
+        format('%.10A', 196).should == '0X1.8800000000P+7'
       end
     
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
+      it 'creates a public method in script binding' do
+    eval @code, script_binding
+    Object.should have_method :boom
+  end
+    
+          def api_key
+        request.headers['X-Spree-Token'] || params[:token]
+      end
+      helper_method :api_key
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
         end
       end
     end
@@ -22,66 +80,53 @@
 end
 
     
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
+            def show
+          @image = Image.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@image)
         end
     
-              @registered.each do |plugin|
-            plugin.components.provider_capabilities.each do |provider, caps|
-              results[provider].merge!(caps)
-            end
-          end
-    
-      #
-  # Parses a header from a string.
-  #
-  # XXX - Putting : in a header value breaks this badly
-  def from_s(header)
-    reset
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
-    
-              # Decodes the srealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_srealm(input)
-            input.value[0].value
-          end
-    
-              # Decodes the cname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_cname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-    
-    Then(/^references in the remote repo are listed$/) do
-  expect(@output).to include('refs/heads/master')
-end
-    
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-          super
-    end
-    
-          private
-    
-          def servers_by_key
-        @servers_by_key ||= {}
+            def inventory_unit_params
+          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        end
       end
+    end
+  end
+end
+
+    
+            def show
+          expires_in 15.minutes, public: true
+          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
+          headers['Surrogate-Key'] = 'product_id=1'
+          respond_with(@product)
+        end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            private
+    
+              @stock_item = scope.new(stock_item_params)
+          if @stock_item.save
+            @stock_item.adjust_count_on_hand(count_on_hand)
+            respond_with(@stock_item, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_item)
+          end
+        end
+    
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
+        end
