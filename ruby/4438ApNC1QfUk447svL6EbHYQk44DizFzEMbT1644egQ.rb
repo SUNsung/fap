@@ -1,78 +1,146 @@
 
         
-            # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
-      end
+                # rubocop:disable Metrics/MethodLength
+        def dispatch(data)
+          parser = Http::Parser.new
+          parser << data
+    
+        def arg_is_present?(args, deprecated_argument, message)
+      deprecation_message(message) if args.include?(deprecated_argument)
     end
     
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
+          show_github_issues(e.message) if e.show_github_issues
+      display_user_error!(e, e.message)
     end
     
-    class DeviseCreateUsers < ActiveRecord::Migration
-  def change
-    create_table(:users) do |t|
-      t.string :email,              null: false
-      t.string :encrypted_password, null: true
-      t.timestamps null: false
-    end
+          it 'analytics session: launch' do
+        expect(SecureRandom).to receive(:uuid).and_return(session_id)
     
-      # Defines which strategy can be used to lock an account.
-  # Values: :failed_attempts, :none
-  mattr_accessor :lock_strategy
-  @@lock_strategy = :failed_attempts
+          it 'adds docset_bundle_name param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_bundle_name: 'Bundle name'
+          )
+        end').runner.execute(:test)
     
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
+          it 'handles the extensions parameter with a single element correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: ['m'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.m')
       end
     
-        # @mixin transition($transition) {
-    # to:
-    # @mixin transition($transition...) {
-    def varargify_mixin_definitions(scss, *mixins)
-      scss = scss.dup
-      replaced = []
-      mixins.each do |mixin|
-        if scss.gsub! /(@mixin\s*#{Regexp.quote(mixin)})\((#{SCSS_MIXIN_DEF_ARGS_RE})\)/, '\1(\2...)'
-          replaced << mixin
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add *.h *.m', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: #{path}, shell_escape: false)
+          end').runner.execute(:test)
         end
       end
-      log_transform *replaced unless replaced.empty?
-      scss
-    end
-    }
-    }
     
-      # Set to :debug to see everything in the log.
-  config.log_level = :info
+            # this command is also sent on macOS Sierra and we need to allow it or else the test will fail
+        allowed_command = 'security set-key-partition-list -S apple-tool:,apple: -k #{''.shellescape} #{Dir.home}/Library/Keychains/login.keychain-db &> /dev/null'
     
-      namespace :release do
-    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-      desc 'Release #{gem} as a package'
-      task gem => 'package:#{gem}' do
-        sh <<-SH
-          gem install #{package(gem, '.gem')} --local &&
-          gem push #{package(gem, '.gem')}
-        SH
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
+  end
+end
+    
+      # Disable Rails's static asset server (Apache or nginx will already do this).
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+          out =
+        Sass::Util.silence_sass_warnings do
+          if @options[:from] == :css
+            require 'sass/css'
+            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
+          else
+            if input_path
+              Sass::Engine.for_file(input_path, @options[:for_engine])
+            else
+              Sass::Engine.new(read(input), @options[:for_engine])
+            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
+          end
+        end
+    
+    run SinatraStaticServer
+
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
       end
+      super
     end
     
-          def initialize(app, options = {})
-        @app, @options = app, default_options.merge(options)
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
+      super
+    end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+        execute 'ensure-sidekiq-is-setup-with-monit' do 
+      command %Q{ 
+        monit reload 
+      } 
+    end
+    
+    class SinatraWorker
+  include Sidekiq::Worker
+    
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
+          end
+        end
+      end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+    end
+    
+        def identity
+      @@identity ||= '#{hostname}:#{$$}:#{process_nonce}'
     end
