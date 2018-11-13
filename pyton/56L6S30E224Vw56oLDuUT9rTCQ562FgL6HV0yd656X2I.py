@@ -1,237 +1,285 @@
 
         
-        
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
+        A second approach implemented relies on a list of porn domains, to activate it
+pass the list filename as the only argument
+'''
+    
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
             continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
-        title_re_match = link_re.match(raw_title)
-        if title_re_match:
-            sections[category].append(title_re_match.group(1).upper())
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
-    names = []
-for ie in ordered_cls:
-    name = ie.__name__
-    src = build_lazy_ie(ie, name)
-    module_contents.append(src)
-    if ie in _ALL_CLASSES:
-        names.append(name)
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
     
-        with io.open(README_FILE, encoding='utf-8') as f:
-        readme = f.read()
+    make_valid_template = '''
+    @classmethod
+    def _make_valid_url(cls):
+        return {valid_url!r}
+'''
     
-        def test_ie_key(self):
-        self.assertEqual(get_info_extractor(YoutubeIE.ie_key()), YoutubeIE)
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-            def fname(templ):
-            ydl = YoutubeDL({'outtmpl': templ})
-            return ydl.prepare_filename(info)
-        self.assertEqual(fname('%(id)s.%(ext)s'), '1234.mp4')
-        self.assertEqual(fname('%(id)s-%(width)s.%(ext)s'), '1234-NA.mp4')
-        # Replace missing fields with 'NA'
-        self.assertEqual(fname('%(uploader_date)s-%(id)s.%(ext)s'), 'NA-1234.mp4')
-        self.assertEqual(fname('%(height)d.%(ext)s'), '1080.mp4')
-        self.assertEqual(fname('%(height)6d.%(ext)s'), '  1080.mp4')
-        self.assertEqual(fname('%(height)-6d.%(ext)s'), '1080  .mp4')
-        self.assertEqual(fname('%(height)06d.%(ext)s'), '001080.mp4')
-        self.assertEqual(fname('%(height) 06d.%(ext)s'), ' 01080.mp4')
-        self.assertEqual(fname('%(height)   06d.%(ext)s'), ' 01080.mp4')
-        self.assertEqual(fname('%(height)0 6d.%(ext)s'), ' 01080.mp4')
-        self.assertEqual(fname('%(height)0   6d.%(ext)s'), ' 01080.mp4')
-        self.assertEqual(fname('%(height)   0   6d.%(ext)s'), ' 01080.mp4')
-        self.assertEqual(fname('%%'), '%')
-        self.assertEqual(fname('%%%%'), '%%')
-        self.assertEqual(fname('%%(height)06d.%(ext)s'), '%(height)06d.mp4')
-        self.assertEqual(fname('%(width)06d.%(ext)s'), 'NA.mp4')
-        self.assertEqual(fname('%(width)06d.%%(ext)s'), 'NA.%(ext)s')
-        self.assertEqual(fname('%%(width)06d.%(ext)s'), '%(width)06d.mp4')
-        self.assertEqual(fname('Hello %(title1)s'), 'Hello $PATH')
-        self.assertEqual(fname('Hello %(title2)s'), 'Hello %PATH%')
+    from youtube_dl.compat import (
+    compat_print,
+    compat_urllib_request,
+)
+from youtube_dl.utils import format_bytes
     
-        def test_encrypt(self):
-        msg = b'message'
-        key = list(range(16))
-        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
-        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
-        self.assertEqual(decrypted, msg)
+        def test_tumblr(self):
+        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430/orphan-black-dvd-extra-behind-the-scenes', ['Tumblr'])
+        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430', ['Tumblr'])
     
-        def test_youtube_user_matching(self):
-        self.assertMatch('http://www.youtube.com/NASAgovVideo/videos', ['youtube:user'])
+        def test_all_present(self):
+        import youtube_dl.compat
+        all_names = youtube_dl.compat.__all__
+        present_names = set(filter(
+            lambda c: '_' in c and not c.startswith('_'),
+            dir(youtube_dl.compat))) - set(['unicode_literals'])
+        self.assertEqual(all_names, sorted(present_names))
     
-    UNICODE = FILE_CONTENT
-
-    
-        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
-        r = http('--json', 'GET', httpbin.url + '/headers',
-                 'Accept:application/xml',
-                 'Content-Type:application/xml')
-        assert HTTP_OK in r
-        assert ''Accept': 'application/xml'' in r
-        assert ''Content-Type': 'application/xml'' in r
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+    (c) 2016, Aaron Christianson
+http://github.com/ninjaaron/fast-entry_points
+'''
+from setuptools.command import easy_install
+import re
+TEMPLATE = '''\
+# -*- coding: utf-8 -*-
+# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
+__requires__ = '{3}'
+import re
+import sys
     
     
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
-        def __init__(self):
-        self.name = 'hstore'
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
     
+        # Fit the model on the batches generated by datagen.flow().
+    model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
+                        validation_data=(x_test, y_test),
+                        epochs=epochs, verbose=1, workers=4,
+                        callbacks=callbacks)
     
-# -- Options for manual page output ---------------------------------------
-    
-    class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
-    
-    # urllib3's DependencyWarnings should be silenced.
-from urllib3.exceptions import DependencyWarning
-warnings.simplefilter('ignore', DependencyWarning)
-    
-        def prepare(self,
-            method=None, url=None, headers=None, files=None, data=None,
-            params=None, auth=None, cookies=None, hooks=None, json=None):
-        '''Prepares the entire request with the given parameters.'''
-    
-    
-    
-        for qualified, server, _, _ in server_list:
-        if qualified:
-            best_server = server[0]
-            break
-    log = Log()
-    if best_server:
-        log.write('best server is: %s.' % best_server)
+        if layer is None or node_index:
+        layer, node_index, _ = tensor._keras_history
+    if not layer._inbound_nodes:
+        return [tensor]
     else:
-        xlog.warning('no server detected, return default: teredo.remlab.net.')
-        log.write('no server detected, return default: teredo.remlab.net.')
-        best_server = 'teredo.remlab.net'
-    log.close()
-    return best_server
-    
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-      for match in regex.finditer( line ):
-    if match.end() == previous_char_index:
-      return True
-  # If the whole line is whitespace, that means the user probably finished an
-  # identifier on the previous line.
-  return line[ : current_column ].isspace()
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from ycm.client.completion_request import CompletionRequest
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-        # build a new DiagnosticFilter merging all filters
-    #  for the provided filetypes
-    spec = []
-    for filetype in filetypes:
-      type_specific = self._all_filters.get( filetype, [] )
-      spec.extend( type_specific )
-    
-        raise RuntimeError( 'Path in 'g:ycm_server_python_interpreter' option '
-                        'does not point to a valid Python 2.7 or 3.4+.' )
-    
-    
-def _ExtractKeywordsFromGroup( group ):
-  keywords = []
-  for line in group.lines:
-    keywords.extend( _ExtractKeywordsFromLine( line ) )
-  return keywords
+        node = layer._inbound_nodes[node_index]
+        if not node.inbound_layers:
+            # Reached an Input layer, stop recursion.
+            return node.input_tensors
+        else:
+            source_tensors = []
+            for i in range(len(node.inbound_layers)):
+                x = node.input_tensors[i]
+                layer = node.inbound_layers[i]
+                node_index = node.node_indices[i]
+                previous_sources = get_source_inputs(x,
+                                                     layer,
+                                                     node_index)
+                # Avoid input redundancy.
+                for x in previous_sources:
+                    if x not in source_tensors:
+                        source_tensors.append(x)
+            return source_tensors
 
     
     
-  def All_Fields_test( self ):
-    self._Check( 0, {
-      'insertion_text':  'INSERTION TEXT',
-      'menu_text':       'MENU TEXT',
-      'extra_menu_info': 'EXTRA MENU INFO',
-      'kind':            'K',
-      'detailed_info':   'DETAILED INFO',
-      'extra_data': {
-        'doc_string':    'DOC STRING',
-      },
-    }, {
-      'word'     : 'INSERTION TEXT',
-      'abbr'     : 'MENU TEXT',
-      'menu'     : 'EXTRA MENU INFO',
-      'kind'     : 'k',
-      'info'     : 'DETAILED INFO\nDOC STRING',
-      'dup'      : 1,
-      'empty'    : 1,
-      'user_data': '0',
-    } )
+def test_objective_shapes_3d():
+    y_a = K.variable(np.random.random((5, 6, 7)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    for obj in allobj:
+        objective_output = obj(y_a, y_b)
+        assert K.eval(objective_output).shape == (5, 6)
     
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseInProgress() ):
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( False ) )
+    
+def test_regularization_shared_model():
+    dense_layer = Dense(num_classes,
+                        kernel_regularizer=regularizers.l1(),
+                        activity_regularizer=regularizers.l1())
+    
+             try:
+             parallel_model = multi_gpu_model(model, cpu_merge=False)
+             print('Training using multiple GPUs..')
+         except:
+             parallel_model = model
+             print('Training using single GPU or CPU..')
+    
+    from .. import backend as K
+from .. import initializers
+from .. import regularizers
+from .. import constraints
+from .recurrent import RNN
+from ..layers import InputSpec
+    
+        def __init__(self, units,
+                 activation='tanh',
+                 recurrent_activation='hard_sigmoid',
+                 use_bias=True,
+                 kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal',
+                 bias_initializer='zeros',
+                 unit_forget_bias=True,
+                 kernel_regularizer=None,
+                 recurrent_regularizer=None,
+                 bias_regularizer=None,
+                 kernel_constraint=None,
+                 recurrent_constraint=None,
+                 bias_constraint=None,
+                 dropout=0.,
+                 recurrent_dropout=0.,
+                 implementation=1,
+                 **kwargs):
+        super(LSTMCell, self).__init__(**kwargs)
+        self.units = units
+        self.activation = activations.get(activation)
+        self.recurrent_activation = activations.get(recurrent_activation)
+        self.use_bias = use_bias
+    
+    model.add(Flatten())
+model.add(Dense(512))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+    
+    
+# Artificial data generation:
+# Generate movies with 3 to 7 moving squares inside.
+# The squares are of shape 1x1 or 2x2 pixels,
+# which move linearly over time.
+# For convenience we first create movies with bigger width and height (80x80)
+# and at the end we select a 40x40 window.
+    
+    # Documents to append as an appendix to all manuals.
+#texinfo_appendices = []
+    
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
+    
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # See if the first face in the uploaded image matches the known face of Obama
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
+    
+    
+def _rect_to_css(rect):
+    '''
+    Convert a dlib 'rect' object to a plain tuple in (top, right, bottom, left) order
+    
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+        context['show_on_github_url'] = show_url
+    context['edit_on_github_url'] = edit_url
+    
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#
+# This is also used if you do content translation via gettext catalogs.
+# Usually you set 'language' from the command line for these cases.
+language = None
+    
+        def random_see(dev_id, name):
+        '''Randomize a sighting.'''
+        see(
+            dev_id=dev_id,
+            host_name=name,
+            gps=(hass.config.latitude + offset(),
+                 hass.config.longitude + offset()),
+            gps_accuracy=random.randrange(50, 150),
+            battery=random.randrange(10, 90)
+        )
+    
+            self._userid = None
+    
+    
+def get_scanner(hass, config):
+    '''Validate the configuration and return a THOMSON scanner.'''
+    scanner = ThomsonDeviceScanner(config[DOMAIN])
+    
+        @property
+    def state(self):
+        '''Return the state either closed, orderable or unorderable.'''
+        if self.dominos.closest_store is None:
+            return 'closed'
+        return 'orderable' if self._orderable else 'unorderable'
+    
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_API_KEY): cv.string,
+        vol.Required(CONF_URL): cv.string,
+        vol.Required(CONF_INPUTNODE): cv.positive_int,
+        vol.Required(CONF_WHITELIST): cv.entity_ids,
+        vol.Optional(CONF_SCAN_INTERVAL, default=30): cv.positive_int,
+    }),
+}, extra=vol.ALLOW_EXTRA)
+    
+    
+def clean_socket_close(sock):
+    '''Close a socket connection and logs its closure.'''
+    _LOGGER.info('UPNP responder shutting down.')
+    
+            def process(self, event):
+            '''On Watcher event, fire HA event.'''
+            _LOGGER.debug('process(%s)', event)
+            if not event.is_directory:
+                folder, file_name = os.path.split(event.src_path)
+                self.hass.bus.fire(
+                    DOMAIN, {
+                        'event_type': event.event_type,
+                        'path': event.src_path,
+                        'file': file_name,
+                        'folder': folder,
+                        })
+    
+        for ha_type, hive_type in DEVICETYPES.items():
+        for key, devices in devicelist.items():
+            if key == hive_type:
+                for hivedevice in devices:
+                    load_platform(hass, ha_type, DOMAIN, hivedevice, config)
+    return True
