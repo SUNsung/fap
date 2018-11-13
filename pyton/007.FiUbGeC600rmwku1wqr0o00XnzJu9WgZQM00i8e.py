@@ -1,205 +1,95 @@
 
         
-        
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
-        title_re_match = link_re.match(raw_title)
-        if title_re_match:
-            sections[category].append(title_re_match.group(1).upper())
+            with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
+    
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
+    
+            ydl.add_info_extractor(Foo1IE(ydl))
+        ydl.add_info_extractor(Foo2IE(ydl))
+        ydl.add_info_extractor(Foo3IE(ydl))
+        ydl.extract_info('foo1:')
+        downloaded = ydl.downloaded_info_dicts[0]
+        self.assertEqual(downloaded['url'], TEST_URL)
+        self.assertEqual(downloaded['title'], 'foo1 title')
+        self.assertEqual(downloaded['id'], 'testid')
+        self.assertEqual(downloaded['extractor'], 'testex')
+        self.assertEqual(downloaded['extractor_key'], 'TestEx')
     
     
-@classmethod
-def get_args(cls, dist, header=None):
-    '''
-    Yield write_script() argument tuples for a distribution's
-    console_scripts and gui_scripts entry points.
-    '''
-    if header is None:
-        header = cls.get_header()
-    spec = str(dist.as_requirement())
-    for type_ in 'console', 'gui':
-        group = type_ + '_scripts'
-        for name, ep in dist.get_entry_map(group).items():
-            # ensure_safe_name
-            if re.search(r'[\\/]', name):
-                raise ValueError('Path separators not allowed in script names')
-            script_text = TEMPLATE.format(
-                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
-                          spec, group, name)
-            args = cls._get_script_args(type_, name, header, script_text)
-            for res in args:
-                yield res
+if __name__ == '__main__':
+    unittest.main()
+
     
-    
-@pytest.fixture
-def no_memoize(monkeypatch):
-    monkeypatch.setattr('thefuck.utils.memoize.disabled', True)
-    
-    
-def history_changed(proc, TIMEOUT, to):
-    '''Ensures that history changed.'''
-    proc.send('\033[A')
-    assert proc.expect([TIMEOUT, to])
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-    
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    query                                    | scan
-update-item                              | update-table
-    
-    
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_match(brew_no_available_formula, brew_already_installed,
-               brew_install_no_argument):
-    assert match(Command('brew install elsticsearch',
-                         brew_no_available_formula))
-    assert not match(Command('brew install git',
-                             brew_already_installed))
-    assert not match(Command('brew install', brew_install_no_argument))
-    
-    
-class BtreeGinExtension(CreateExtension):
-    
-    KEY_PREFIX = 'django.contrib.sessions.cached_db'
-    
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
-    '''
-    objects = SessionManager()
-    
-    
-MOD_SSL_CONF_DEST = 'options-ssl-nginx.conf'
-'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
-    
+        def delete(self, session_key=None):
         '''
-    # Strip off /files
-    file_path = vhost_path[6:]
-    internal_path = []
+        To delete, clear the session key and the underlying data structure
+        and set the modified flag so that the cookie is set on the client for
+        the current request.
+        '''
+        self._session_key = ''
+        self._session_cache = {}
+        self.modified = True
     
-        @certbot_util.patch_get_utility()
-    def test_multiple_names(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 5)
+        def scan_completed_callback(scan_wizard, result, address, name):
+        '''Restart scan wizard to constantly check for new buttons.'''
+        if result == pyflic.ScanWizardResult.WizardSuccess:
+            _LOGGER.info('Found new button %s', address)
+        elif result != pyflic.ScanWizardResult.WizardFailedTimeout:
+            _LOGGER.warning(
+                'Failed to connect to button %s. Reason: %s', address, result)
     
-        def test_same_server(self):
-        from certbot_apache.obj import VirtualHost
-        no_name1 = VirtualHost(
-            'fp', 'vhp', set([self.addr1]), False, False, None)
-        no_name2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, None)
-        no_name3 = VirtualHost(
-            'fp', 'vhp', set([self.addr_default]),
-            False, False, None)
-        no_name4 = VirtualHost(
-            'fp', 'vhp', set([self.addr2, self.addr_default]),
-            False, False, None)
+                    name = None
+                for prop in device['properties']:
+                    if prop['name'] == 'userDeviceName':
+                        name = prop['value']
+                if not name:
+                    name = device.get('friendlyName', device['deviceID'])
     
-            # Check to make sure challenge config path is included in apache config
-        self.assertEqual(
-            len(self.sni.configurator.parser.find_dir(
-                'Include', self.sni.challenge_conf)), 1)
-        self.assertEqual(len(responses), 1)
-        self.assertEqual(responses[0], response)
+            try:
+            result = scanner.scan(hosts=' '.join(self.hosts),
+                                  arguments=options)
+        except PortScannerError:
+            return False
     
-    # Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#html_theme_options = {}
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        if not self.last_results:
+            return None
+        for client in self.last_results:
+            if client['mac'] == device:
+                return client['host']
+        return None
     
+        def see_vehicle(vehicle):
+        '''Handle the reporting of the vehicle position.'''
+        host_name = voc.vehicle_name(vehicle)
+        dev_id = 'volvo_{}'.format(slugify(host_name))
+        see(dev_id=dev_id,
+            host_name=host_name,
+            gps=(vehicle.position['latitude'],
+                 vehicle.position['longitude']),
+            icon='mdi:car')
     
-def memento(obj, deep=False):
-    state = deepcopy(obj.__dict__) if deep else copy(obj.__dict__)
+                        # Remove stuff to ruin paths
+                    filename = sanitize_filename(filename)
     
+        def _standby(call):
+        hdmi_network.standby()
     
-class DecimalViewer:
-    def update(self, subject):
-        print(u'DecimalViewer: Subject %s has data %d' % (subject.name, subject.data))
+        def render(self):
+        for graphic in self.graphics:
+            graphic.render()
     
-    ### OUTPUT ###
-# Scanning... Station is 1380 AM
-# Scanning... Station is 1510 AM
-# Switching to FM
-# Scanning... Station is 89.1 FM
-# Scanning... Station is 103.9 FM
-# Scanning... Station is 81.3 FM
-# Scanning... Station is 89.1 FM
-# Switching to AM
-# Scanning... Station is 1250 AM
-# Scanning... Station is 1380 AM
-
+    # Create a random animal
+def random_animal():
+    '''Let's be dynamic!'''
+    return random.choice([Dog, Cat])()
     
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-        def _send_diagnostics_failure_report(self):
-        return 'send diagnostics failure report'
-    
-    
-  def Poll( self, diagnostics_handler ):
-    '''This should be called regularly to check for new messages in this buffer.
-    Returns True if Poll should be called again in a while. Returns False when
-    the completer or server indicated that further polling should not be done
-    for the requested file.'''
-    
-      eq_( len( results ), len( expected_results ) )
-  for result, expected_result in zip( results, expected_results ):
-    assert_that( result, expected_result )
-
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-# This file provides an UnsafeThreadPoolExecutor, which operates exactly like
-# the upstream Python version of ThreadPoolExecutor with one exception: it
-# doesn't wait for worker threads to finish before shutting down the Python
-# interpreter.
-#
-# This is dangerous for many workloads, but fine for some (like when threads
-# only send network requests). The YCM workload is one of those workloads where
-# it's safe (the aforementioned network requests case).
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
