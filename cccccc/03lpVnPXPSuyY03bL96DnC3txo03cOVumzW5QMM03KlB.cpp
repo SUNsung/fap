@@ -1,205 +1,131 @@
 
         
         
-    {  LineNumber line;
-  ColNumber col;
+    {
+    {
+    {        for (;;) {
+          auto start = index.fetch_add(work_chunk);
+          auto const stop = std::min(start + work_chunk, inputs.size());
+          if (start >= stop) break;
+          for (auto i = start; i != stop; ++i) func(inputs[i]);
+        }
+      } catch (const std::exception& e) {
+        std::fprintf(stderr,
+          'worker thread exited with exception: %s\n', e.what());
+        failed = true;
+      }
+    }));
+  }
+    
+    void Assembler::rldicr(const Reg64& ra, const Reg64& rs, uint8_t sh,
+                       uint8_t mb, bool rc) {
+  EmitMDForm(30, rn(rs), rn(ra), sh, mb, 1, rc);
+}
+    
+    template<class T>
+void fillCollection(T* coll, const APCArray* ar) {
+  for (auto i = uint32_t{0}; i < ar->size(); ++i) {
+    coll->add(*ar->getValue(i)->toLocal().asTypedValue());
+  }
+}
+    
+    struct RequestTimeoutException : ResourceExceededException {
+  RequestTimeoutException(const std::string& msg, const Array& backtrace)
+    : ResourceExceededException(msg, backtrace)
+  {}
+  EXCEPTION_COMMON_IMPL(RequestTimeoutException);
 };
     
-      static void ParseHdfFile(const std::string &filename, Hdf &hdf);
+    inline const req::ptr<StreamContext>& ExecutionContext::getStreamContext() {
+  return m_streamContext;
+}
     
-        if (!semi) {
-      // only media type (type/subtype,data)
-      ssize_t media_len = comma - data;
-      meta_len -= media_len;
-      data += media_len;
-    } else if (slash && slash < semi) {
-      // media type + param (type/subtype;param,data)
-      ssize_t media_len = semi - data;
-      meta_len -= media_len;
-      data += media_len;
-    } else {
-      // no media type (;base64,data)
-      if (semi != data // ex. foo;base64,data
-          || meta_len != sizeof(';base64') - 1 // ex. ;something,data
-          || memcmp(data, ';base64',
-                    sizeof(';base64') - 1)) { // ex. ;base65,data
-          raise_warning('rfc2397: invalid meta data');
-          return nullptr;
-        }
+    struct FileStreamWrapper final : Stream::Wrapper {
+  static req::ptr<MemFile> openFromCache(const String& filename,
+                                         const String& mode);
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  int access(const String& path, int mode) override {
+    return ::access(File::TranslatePath(path).data(), mode);
+  }
+  int stat(const String& path, struct stat* buf) override {
+    return ::stat(File::TranslatePath(path).data(), buf);
+  }
+  int lstat(const String& path, struct stat* buf) override {
+    return ::lstat(File::TranslatePath(path).data(), buf);
+  }
+  int unlink(const String& path) override;
+  int rename(const String& oldname, const String& newname) override;
+  int mkdir(const String& path, int mode, int options) override;
+  int rmdir(const String& path, int /*options*/) override {
+    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
+    return ret;
+  }
+  bool isNormalFileStream() const override { return true; }
     }
     
-    #endif // HPHP_FILE_STREAM_WRAPPER_H
-
+    ///////////////////////////////////////////////////////////////////////////////
     
     #ifndef HPHP_GLOB_STREAM_WRAPPER_H
 #define HPHP_GLOB_STREAM_WRAPPER_H
     
-    bool OrbitCamera::initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
-{
-    if ( ActionInterval::initWithDuration(t) )
-    {
-        _radius = radius;
-        _deltaRadius = deltaRadius;
-        _angleZ = angleZ;
-        _deltaAngleZ = deltaAngleZ;
-        _angleX = angleX;
-        _deltaAngleX = deltaAngleX;
-    }
-    }
     
-    CatmullRomTo* CatmullRomTo::create(float dt, PointArray *points)
-{
-    CatmullRomTo *ret = new (std::nothrow) CatmullRomTo();
-    if (ret)
-    {
-        if (ret->initWithDuration(dt, points))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
-    }
-    }
-    
-        // Overrides
-    virtual void startWithTarget(Node *target) override;
-    virtual void updatePosition(const Vec2 &newPos) override;
-    virtual CardinalSplineBy *clone() const override;
-    virtual CardinalSplineBy* reverse() const override;
-    
-    bool ActionEase::initWithAction(ActionInterval *action)
-{
-    CCASSERT(action != nullptr, 'action couldn't be nullptr!');
-    if (action == nullptr)
-    {
-        return false;
-    }
-    }
-    
-    void CallFunc::update(float time)
-{
-    ActionInstant::update(time);
-    this->execute();
+    {///////////////////////////////////////////////////////////////////////////////
 }
-    
-        /** 
-     * initializes the action with a duration and a bezier configuration
-     * @param t in seconds
-     */
-    bool initWithDuration(float t, const ccBezierConfig& c);
-    
-    NS_CC_END
 
     
-    ActionTween* ActionTween::reverse() const
+      t8 = a[7].imag;
+  t6 = a[3].imag - t8;
+  t8 += a[3].imag;
+  a[3].imag = t8;
+  t1 = t3 - t6;
+  t3 += t6;
+    
+      // Returns true if the argument of the last Compare() call (or the baseline
+  // image, if Compare() was not called yet) meets the image acceptance
+  // criteria. The target_mul modifies the acceptance criteria used in this call
+  // the following way:
+  //    = 1.0 : the original acceptance criteria is used,
+  //    < 1.0 : a more strict acceptance criteria is used,
+  //    > 1.0 : a less strict acceptance criteria is used.
+  virtual bool DistanceOK(double target_mul) const = 0;
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    namespace guetzli {
+    }
+    
+    
+// these are the macro required by COLUMN_*
+#define LOAD_CST(dst, src) (dst) = (src)
+#define LOAD(dst, src) (dst) = (src)
+#define MULT(a, b)  (a) = (((a) * (b)) >> 16)
+#define ADD(a, b)   (a) = (a) + (b)
+#define SUB(a, b)   (a) = (a) - (b)
+#define LSHIFT(a, n) (a) = ((a) << (n))
+#define STORE16(a, b) (a) = (b)
+#define CORRECT_LSB(a) (a) += 1
+    
+    namespace guetzli {
+    }
+    
+      int ReadBits(int nbits) {
+    FillBitWindow();
+    uint64_t val = (val_ >> (bits_left_ - nbits)) & ((1ULL << nbits) - 1);
+    bits_left_ -= nbits;
+    return val;
+  }
+    
+    // Functions for reading a jpeg byte stream into a JPEGData object.
+    
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
 {
-    return ActionTween::create(_duration, _key, _to, _from);
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
 }
-    
-    AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
-{
-    auto ret = new (std::nothrow) AnimationFrame();
-    if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
-    {
-        ret->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(ret);
-    }
-    return ret;
-}
-    
-        
-    /** Gets the duration in seconds of the whole animation. It is the result of totalDelayUnits * delayPerUnit.
-     *
-     * @return Result of totalDelayUnits * delayPerUnit.
-     */
-    float getDuration() const;
-    
-    /** Gets the array of AnimationFrames.
-     * 
-     * @return The array of AnimationFrames.
-     */
-    const Vector<AnimationFrame*>& getFrames() const { return _frames; };
-    
-    /** Sets the array of AnimationFrames. 
-     *
-     * @param frames The array of AnimationFrames.
-     */
-    void setFrames(const Vector<AnimationFrame*>& frames)
-    {
-        _frames = frames;
-    }
-    
-    /** Checks whether to restore the original frame when animation finishes. 
-     *
-     * @return Restore the original frame when animation finishes.
-     */
-    bool getRestoreOriginalFrame() const { return _restoreOriginalFrame; };
-    
-    /** Sets whether to restore the original frame when animation finishes. 
-     *
-     * @param restoreOriginalFrame Whether to restore the original frame when animation finishes.
-     */
-    void setRestoreOriginalFrame(bool restoreOriginalFrame) { _restoreOriginalFrame = restoreOriginalFrame; };
-    
-    /** Gets the times the animation is going to loop. 0 means animation is not animated. 1, animation is executed one time, ... 
-     *
-     * @return The times the animation is going to loop.
-     */
-    unsigned int getLoops() const { return _loops; };
-    
-    /** Sets the times the animation is going to loop. 0 means animation is not animated. 1, animation is executed one time, ... 
-     *
-     * @param loops The times the animation is going to loop.
-     */
-    void setLoops(unsigned int loops) { _loops = loops; };
-    
-    // overrides
-    virtual Animation *clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Animation();
-    virtual ~Animation(void);
-    
-    /** Initializes a Animation. */
-    bool init();
-    
-    /** Initializes a Animation with frames and a delay between frames.
-     * @since v0.99.5
-     */
-    bool initWithSpriteFrames(const Vector<SpriteFrame*>& arrayOfSpriteFrameNames, float delay = 0.0f, unsigned int loops = 1);
-    
-    /** Initializes a Animation with AnimationFrame.
-     * @since v2.0
-     */
-    bool initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops);
-    
-      static Data data_;
-  static Data data6_;
-    
-    void DHTReplaceNodeTask::startup() { sendMessage(); }
-    
-    class DHTReplaceNodeTask : public DHTAbstractTask {
-private:
-  std::shared_ptr<DHTBucket> bucket_;
-    }
-    
-    void DHTResponseMessage::fillMessage(Dict* msgDict)
-{
-  msgDict->put(R, getResponse());
-}
-    
-    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
-    
-      std::shared_ptr<DHTNode> localNode_;
-    
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
-    
-    #include 'DHTTaskQueue.h'
-#include 'DHTTaskExecutor.h'
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
