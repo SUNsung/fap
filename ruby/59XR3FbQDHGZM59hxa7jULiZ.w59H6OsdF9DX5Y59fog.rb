@@ -1,127 +1,127 @@
 
         
-                  super(object_name, method_name, template_object, options)
-        end
-    
-            ActiveSupport::Notifications.instrument('render_#{name}.action_view', options) do |payload|
-          yield payload
-        end
+              def meta_path
+        File.join path, META_FILENAME
       end
     
-            def username
-          username = attribute_value(:username)
+            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
+        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
     
-          def initialize(current_user, oauth)
-        @current_user = current_user
-        @oauth = oauth
-        @changed = false
-      end
+        def base_url
+      context[:base_url]
+    end
     
-          def valid_access_token?(scopes: [])
-        validate_access_token!(scopes: scopes)
+        def inheritable_copy
+      self.class.new @filters
+    end
     
-            return unless token
-    
-            def status
-          @project.pipelines
-            .where(sha: @sha)
-            .latest_status(@ref) || 'unknown'
-        end
-    
-          @user.resend_confirmation_instructions
-    
-              case msg_type
-          when Rex::Proto::Kerberos::Model::KRB_ERROR
-            res = Rex::Proto::Kerberos::Model::KrbError.decode(asn1)
-          when Rex::Proto::Kerberos::Model::AS_REP
-            res = Rex::Proto::Kerberos::Model::KdcResponse.decode(asn1)
-          when Rex::Proto::Kerberos::Model::TGS_REP
-            res = Rex::Proto::Kerberos::Model::KdcResponse.decode(asn1)
-          else
-            raise ::RuntimeError, 'Kerberos Client: Unknown response'
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
-          #
-          # @return [String] encoded principal
-          def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
-    
-              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
-    
-                int
-          end
-    
-        context 'and a comment after the last element' do
-      let(:b_comment) { ' # comment b' }
-    
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
-      end
-    
-            pairs.map(&:value).each do |value|
-          yield value
-        end
-    
-      SPREE_GEMS.each do |gem_name|
-    rm_f  '#{gem_name}/Gemfile.lock'
-    rm_rf '#{gem_name}/pkg'
-    rm_rf '#{gem_name}/spec/dummy'
+        def parse_as_fragment
+      Nokogiri::HTML.fragment @content, 'UTF-8'
+    end
   end
 end
+
     
-          def find_product(id)
-        @product = product_scope.friendly.distinct(false).find(id.to_s)
-      rescue ActiveRecord::RecordNotFound
-        @product = product_scope.find_by(id: id)
-        not_found unless @product
+            subclass.base_url = base_url
+        subclass.root_path = root_path
+        subclass.initial_paths = initial_paths.dup
+        subclass.options = options.deep_dup
+        subclass.html_filters = html_filters.inheritable_copy
+        subclass.text_filters = text_filters.inheritable_copy
+        subclass.stubs = stubs.dup
       end
     
-            def destroy
-          @line_item = find_line_item
-          Spree::Cart::RemoveLineItem.new.call(order: @order, line_item: @line_item)
+          def include_default_entry?
+        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
+      end
     
-            def void
-          perform_payment_action(:void_transaction)
-        end
+        def set_account
+      @account = Account.find(params[:account_id])
+      @user = @account.user
+    end
     
-              if @product_property.update_attributes(product_property_params)
-            respond_with(@product_property, status: 200, default_template: :show)
-          else
-            invalid_resource!(@product_property)
+        def resubscribe
+      authorize :instance, :resubscribe?
+      params.require(:by_domain)
+      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
+      redirect_to admin_instances_path
+    end
+    
+        def status_params
+      params.require(:status).permit(:sensitive)
+    end
+    
+        12.times do |i|
+      day     = i.weeks.ago.to_date
+      week_id = day.cweek
+      week    = Date.commercial(day.cwyear, week_id)
+    
+                encoded
           end
-        end
     
-            def ready
-          unless @shipment.ready?
-            if @shipment.can_ready?
-              @shipment.ready!
-            else
-              render 'spree/api/v1/shipments/cannot_ready_shipment', status: 422 and return
+                seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], AP_REQ, :APPLICATION)
+    
+                seq = OpenSSL::ASN1::Sequence.new(seqs)
+    
+              def self.attr_accessor(*vars)
+            @attributes ||= []
+            @attributes.concat vars
+            super(*vars)
+          end
+    
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+                seq_values.each do |val|
+              case val.tag
+              when 0
+                self.options = decode_options(val)
+              when 1
+                self.cname = decode_cname(val)
+              when 2
+                self.realm = decode_realm(val)
+              when 3
+                self.sname = decode_sname(val)
+              when 4
+                self.from = decode_from(val)
+              when 5
+                self.till = decode_till(val)
+              when 6
+                self.rtime = decode_rtime(val)
+              when 7
+                self.nonce = decode_nonce(val)
+              when 8
+                self.etype = decode_etype(val)
+              when 10
+                self.enc_auth_data = decode_enc_auth_data(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KdcRequestBody SEQUENCE'
+              end
             end
           end
-          respond_with(@shipment, default_template: :show)
-        end
     
-              count_on_hand = 0
-          if params[:stock_item].key?(:count_on_hand)
-            count_on_hand = params[:stock_item][:count_on_hand].to_i
-            params[:stock_item].delete(:count_on_hand)
-          end
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
+    
+      # fetch data
+  fields = {
+    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
+    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
+    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
+  }
