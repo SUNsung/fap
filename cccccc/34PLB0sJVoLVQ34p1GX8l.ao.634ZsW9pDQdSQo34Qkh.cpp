@@ -1,138 +1,189 @@
 
         
-        
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
+          // Convert output shapes.
+  output_tensor_shape_protos->resize(c.num_outputs());
+  CppShapeInferenceResult out;
+  for (int i = 0; i < c.num_outputs(); ++i) {
+    out.Clear();
+    ProtoFromShapeHandle(c.output(i), &c, out.mutable_shape());
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      // From constructor arguments
+  const OpDef& op_def_;
+  const ApiDef& api_def_;
+  const string function_name_;
+  const int num_outs_;
+    
+    Status ModelAnalyzer::GenerateReport(bool debug, bool assume_valid_feeds,
+                                     std::ostream& os) {
+  GraphProperties properties(item_);
+  TF_RETURN_IF_ERROR(properties.InferStatically(assume_valid_feeds));
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/lib/core/status.h'
+    
+     private:
+  PyRecordReader();
+    
+      ~ScopedActivateExecutorContext();
+    
+      // Logs information about the kernel driver version and userspace driver
+  // library version.
+  static void LogDriverVersionInformation();
+    
+      // Returns the maximum number of blocks (per multiprocessor) occupied by the
+  // specified kernel/CUfunction when launched with the specified parameters.
+  // http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__OCCUPANCY.html#group__CUDA__OCCUPANCY_1gcc6e1094d05cba2cee17fe33ddd04a98
+  static port::StatusOr<int> GetMaxOccupiedBlocksPerCore(
+      CudaContext* context, CUfunction kernel, int threads_per_block,
+      size_t dynamic_shared_memory_bytes);
+    
+      /// Profile the substitution map storage, for use with LLVM's FoldingSet.
+  void Profile(llvm::FoldingSetNodeID &id) const {
+    Profile(id, getGenericSignature(), getReplacementTypes(),
+            getConformances());
+  }
+    
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
+    }
+    
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  return new DefaultCache(CBs);
+}
+    
+      Begin -= needed;
+    
+    static const StringRef SupportedConditionalCompilationRuntimes[] = {
+  '_ObjC',
+  '_Native',
 };
     
-    static void secp256k1_sha256_finalize(secp256k1_sha256_t *hash, unsigned char *out32) {
-    static const unsigned char pad[64] = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    uint32_t sizedesc[2];
-    uint32_t out[8];
-    int i = 0;
-    sizedesc[0] = BE32(hash->bytes >> 29);
-    sizedesc[1] = BE32(hash->bytes << 3);
-    secp256k1_sha256_write(hash, pad, 1 + ((119 - (hash->bytes % 64)) % 64));
-    secp256k1_sha256_write(hash, (const unsigned char*)sizedesc, 8);
-    for (i = 0; i < 8; i++) {
-        out[i] = BE32(hash->s[i]);
-        hash->s[i] = 0;
+    /// Split the base name after the last preposition, if there is one.
+static bool splitBaseNameAfterLastPreposition(
+    StringRef &baseName,
+    StringRef &argName,
+    const OmissionTypeName &paramType) {
+  // Scan backwards for a preposition.
+  auto nameWords = camel_case::getWords(baseName);
+  auto nameWordRevIterBegin = nameWords.rbegin(),
+    nameWordRevIterEnd = nameWords.rend();
     }
-    memcpy(out32, (const unsigned char*)out, 32);
+    
+    uint64_t swift::unicode::getUTF16Length(StringRef Str) {
+  uint64_t Length;
+  // Transcode the string to UTF-16 to get its length.
+  SmallVector<llvm::UTF16, 128> buffer(Str.size() + 1); // +1 for ending nulls.
+  const llvm::UTF8 *fromPtr = (const llvm::UTF8 *) Str.data();
+  llvm::UTF16 *toPtr = &buffer[0];
+  llvm::ConversionResult Result =
+    ConvertUTF8toUTF16(&fromPtr, fromPtr + Str.size(),
+                       &toPtr, toPtr + Str.size(),
+                       llvm::strictConversion);
+  assert(Result == llvm::conversionOK &&
+         'UTF-8 encoded string cannot be converted into UTF-16 encoding');
+  (void)Result;
+    }
+    
+    template <typename T>
+struct GetTypeInfo<const T *, typename EnableIf<TypeInherits<Object, T>::value>::type> {
+	static const Variant::Type VARIANT_TYPE = Variant::OBJECT;
+	static inline PropertyInfo get_class_info() {
+		return PropertyInfo(StringName(T::get_class_static()));
+	}
+};
+    
+    #include 'collision_object_bullet.h'
+#include 'space_bullet.h'
+    
+    #include 'bullet_utilities.h'
+#include 'rid_bullet.h'
+    
+    #include 'joint_bullet.h'
+    
+    	jclass activityThread = env->FindClass('android/app/ActivityThread');
+	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
+	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
+	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
+	jobject context = env->CallObjectMethod(at, getApplication);
+    
+    
+    {	ClassDB::bind_method(D_METHOD('set_instance', 'instance'), &FuncRef::set_instance);
+	ClassDB::bind_method(D_METHOD('set_function', 'name'), &FuncRef::set_function);
 }
     
-        // Other valid inputs
-    CheckParseTorReplyMapping(
-        'Foo=Bar=Baz Spam=Eggs', {
-            {'Foo', 'Bar=Baz'},
-            {'Spam', 'Eggs'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar=Baz\'', {
-            {'Foo', 'Bar=Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar Baz\'', {
-            {'Foo', 'Bar Baz'},
-        });
+    Error FileAccessZip::_open(const String &p_path, int p_mode_flags) {
+    }
     
-    #endif // TINYFORMAT_H_INCLUDED
+        // Setup viewport, orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.
+    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(draw_data->DisplayPos.x, draw_data->DisplayPos.x + draw_data->DisplaySize.x, draw_data->DisplayPos.y + draw_data->DisplaySize.y, draw_data->DisplayPos.y, -1.0f, +1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    // Helper to scale the ClipRect field of each ImDrawCmd. Use if your final output buffer is at a different scale than ImGui expects, or if there is a difference between your window resolution and framebuffer resolution.
+void ImDrawData::ScaleClipRects(const ImVec2& scale)
+{
+    for (int i = 0; i < CmdListsCount; i++)
+    {
+        ImDrawList* cmd_list = CmdLists[i];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            ImDrawCmd* cmd = &cmd_list->CmdBuffer[cmd_i];
+            cmd->ClipRect = ImVec4(cmd->ClipRect.x * scale.x, cmd->ClipRect.y * scale.y, cmd->ClipRect.z * scale.x, cmd->ClipRect.w * scale.y);
+        }
+    }
+}
+    
+    
+    {        VkImageMemoryBarrier use_barrier[1] = {};
+        use_barrier[0].sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+        use_barrier[0].srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        use_barrier[0].dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+        use_barrier[0].oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+        use_barrier[0].newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        use_barrier[0].srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        use_barrier[0].dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+        use_barrier[0].image = g_FontImage;
+        use_barrier[0].subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        use_barrier[0].subresourceRange.levelCount = 1;
+        use_barrier[0].subresourceRange.layerCount = 1;
+        vkCmdPipelineBarrier(command_buffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, NULL, 0, NULL, 1, use_barrier);
+    }
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
 
     
-      for (auto& t : workers) t.join();
-  if (failed) throw std::runtime_error('parallel::map failed');
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    void Label::branchFar(Assembler& a,
-                  BranchConditions bc,
-                  LinkReg lr,
-                  ImmType immt,
-                  bool immMayChange) {
-  // Marking current address for patchAbsolute
-  addJump(&a);
-    }
-    
-    Object APCCollection::createObject() const {
-  if (m_arrayHandle->isTypedValue()) {
-    Variant local(m_arrayHandle->toLocal());
-    assertx(local.isArray());
-    return Object::attach(
-      collections::alloc(m_colType, local.getArrayData())
-    );
-  }
-    }
-    
-    static int get_tempfile_if_not_exists(int ini_fd, char ini_path[]) {
-  if (ini_fd == -1) {
-#ifdef _MSC_VER
-    // MSVC doesn't require the characters to be the last
-    // 6 in the string.
-    ini_fd = open(mktemp(ini_path), O_RDWR | O_EXCL);
-#else
-    ini_fd = mkstemps(ini_path, 4); // keep the .ini suffix
-#endif
-    if (ini_fd == -1) {
-      fprintf(stderr, 'Error: unable to open temporary file');
-      exit(EXIT_FAILURE);
-    }
-  }
-  return ini_fd;
-}
-    
-    struct Directory;
-    
-    #include 'hphp/runtime/base/file-util.h'
-#include 'hphp/runtime/base/stream-wrapper-registry.h'
-#include 'hphp/runtime/base/unit-cache.h'
-#include 'hphp/runtime/ext/std/ext_std_file.h'
-#include 'hphp/util/logger.h'
-    
-      while (*addpath) {
-    /* Parse each segment, find the closing '/'
-     */
-    const char *next = addpath;
-    while (*next && !isDirSeparator(*next)) {
-      ++next;
-    }
-    seglen = next - addpath;
-    }
-    
-    #define IM_VEC4_CLASS_EXTRA                                                 \
-        ImVec4(const MyVec4& f) { x = f.x; y = f.y; z = f.z; w = f.w; }     \
-        operator MyVec4() const { return MyVec4(x,y,z,w); }
-*/
-    
-    static unsigned int stb_matchlen(stb_uchar *m1, stb_uchar *m2, stb_uint maxlen)
-{
-    stb_uint i;
-    for (i=0; i < maxlen; ++i)
-        if (m1[i] != m2[i]) return i;
-    return i;
-}
-    
-        if (g_pFontSampler) { g_pFontSampler->Release(); g_pFontSampler = NULL; }
-    if (g_pFontTextureView) { g_pFontTextureView->Release(); g_pFontTextureView = NULL; ImGui::GetIO().Fonts->TexID = NULL; } // We copied g_pFontTextureView to io.Fonts->TexID so let's clear that as well.
-    if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-    if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
-    
-        static BOOST_FORCEINLINE storage_type load(storage_type const volatile& storage, memory_order) BOOST_NOEXCEPT
-    {
-#if defined(__clang__)
-        // Clang cannot allocate rax:rdx register pairs but it has sync intrinsics
-        storage_type value = storage_type();
-        return __sync_val_compare_and_swap(&storage, value, value);
-#elif defined(BOOST_ATOMIC_DETAIL_NO_ASM_RAX_RDX_PAIRS)
-        // GCC 4.4 can't allocate rax:rdx register pair either but it also doesn't support 128-bit __sync_val_compare_and_swap
-        storage_type value;
-    }
-    
-    #ifndef BOOST_ATOMIC_DETAIL_OPS_MSVC_ARM_HPP_INCLUDED_
-#define BOOST_ATOMIC_DETAIL_OPS_MSVC_ARM_HPP_INCLUDED_
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
