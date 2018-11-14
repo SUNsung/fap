@@ -1,350 +1,225 @@
 
         
-          // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13>
-struct Templates13 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates12<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Tail;
-};
-    
-    #endif  // GTEST_SAMPLES_PRIME_TABLES_H_
-
-    
-    #include <string.h>
-    
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
-    
-    #else
-    
-    #ifndef BOOST_REGEX_V4_MEM_BLOCK_CACHE_HPP
-#define BOOST_REGEX_V4_MEM_BLOCK_CACHE_HPP
-    
-    #endif  // BOOST_REGEX_V4_REGEX_SEARCH_HPP
-    
-    
-    {/*!
- * \brief define compatible keywords in g++
- *  Used to support g++-4.6 and g++4.7
- */
-#if DMLC_USE_CXX11 && defined(__GNUC__) && !defined(__clang_version__)
-#if __GNUC__ == 4 && __GNUC_MINOR__ < 8
-#define override
-#define final
-#endif
-#endif
-}  // namespace xgboost
-#endif  // XGBOOST_BASE_H_
-
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
-}
-}  // namespace data
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
+          /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
    */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
     
-        const size_t* begin = dmlc::BeginPtr(row_indices_);
-    const size_t* end = dmlc::BeginPtr(row_indices_) + row_indices_.size();
-    elem_of_each_node_.emplace_back(Elem(begin, end, 0));
+      /**
+   * Called by the parent Layer's SetUp to check that the number of bottom
+   * and top Blobs provided as input match the expected numbers specified by
+   * the {ExactNum,Min,Max}{Bottom,Top}Blobs() functions.
+   */
+  virtual void CheckBlobCounts(const vector<Blob<Dtype>*>& bottom,
+                               const vector<Blob<Dtype>*>& top) {
+    if (ExactNumBottomBlobs() >= 0) {
+      CHECK_EQ(ExactNumBottomBlobs(), bottom.size())
+          << type() << ' Layer takes ' << ExactNumBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (MinBottomBlobs() >= 0) {
+      CHECK_LE(MinBottomBlobs(), bottom.size())
+          << type() << ' Layer takes at least ' << MinBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (MaxBottomBlobs() >= 0) {
+      CHECK_GE(MaxBottomBlobs(), bottom.size())
+          << type() << ' Layer takes at most ' << MaxBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (ExactNumTopBlobs() >= 0) {
+      CHECK_EQ(ExactNumTopBlobs(), top.size())
+          << type() << ' Layer produces ' << ExactNumTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (MinTopBlobs() >= 0) {
+      CHECK_LE(MinTopBlobs(), top.size())
+          << type() << ' Layer produces at least ' << MinTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (MaxTopBlobs() >= 0) {
+      CHECK_GE(MaxTopBlobs(), top.size())
+          << type() << ' Layer produces at most ' << MaxTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (EqualNumBottomTopBlobs()) {
+      CHECK_EQ(bottom.size(), top.size())
+          << type() << ' Layer produces one top blob as output for each '
+          << 'bottom blob input.';
+    }
   }
-  // split rowset into two
-  inline void AddSplit(unsigned node_id,
-                       const std::vector<Split>& row_split_tloc,
-                       unsigned left_node_id,
-                       unsigned right_node_id) {
-    const Elem e = elem_of_each_node_[node_id];
-    const auto nthread = static_cast<bst_omp_uint>(row_split_tloc.size());
-    CHECK(e.begin != nullptr);
-    size_t* all_begin = dmlc::BeginPtr(row_indices_);
-    size_t* begin = all_begin + (e.begin - all_begin);
+    
+    
+    { protected:
+  TransformationParameter transform_param_;
+  shared_ptr<DataTransformer<Dtype> > data_transformer_;
+  bool output_labels_;
+};
+    
+      virtual inline const char* type() const { return 'Convolution'; }
     
     
     {
-    {}  // namespace data
-}  // namespace xgboost
-#endif  // XGBOOST_DATA_SPARSE_PAGE_WRITER_H_
-
-    
-    namespace xgboost {
-namespace gbm {
-/*! \brief model parameters */
-struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
-  /*! \brief number of trees */
-  int num_trees;
-  /*! \brief number of roots */
-  int num_roots;
-  /*! \brief number of features to be used by trees */
-  int num_feature;
-  /*! \brief pad this space, for backward compatibility reason.*/
-  int pad_32bit;
-  /*! \brief deprecated padding space. */
-  int64_t num_pbuffer_deprecated;
-  /*!
-   * \brief how many output group a single instance can produce
-   *  this affects the behavior of number of output we have:
-   *    suppose we have n instance and k group, output will be k * n
-   */
-  int num_output_group;
-  /*! \brief size of leaf vector needed in tree */
-  int size_leaf_vector;
-  /*! \brief reserved parameters */
-  int reserved[32];
-  /*! \brief constructor */
-  GBTreeModelParam() {
-    std::memset(this, 0, sizeof(GBTreeModelParam));
-    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
-                  '64/32 bit compatibility issue');
-  }
-  // declare parameters, only declare those that need to be set.
-  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
-    DMLC_DECLARE_FIELD(num_output_group)
-        .set_lower_bound(1)
-        .set_default(1)
-        .describe(
-            'Number of output groups to be predicted,'
-            ' used for multi-class classification.');
-    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
-        'Tree updater sequence.');
-    DMLC_DECLARE_FIELD(num_feature)
-        .set_lower_bound(0)
-        .describe('Number of features used for training and prediction.');
-    DMLC_DECLARE_FIELD(size_leaf_vector)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('Reserved option for vector tree.');
-  }
+    {  // Recursive copy function: this is similar to crop_copy() but loops over all
+  // but the last two dimensions to allow for ND cropping while still relying on
+  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
+  // alterantive implementation could rely on the kernel more by passing
+  // offsets, but this is problematic because of its variable length.
+  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
+  // could be achieved by not looping the application of the copy_kernel around
+  // these dimensions.
+  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
+                const vector<Blob<Dtype>*>& top,
+                const vector<int>& offsets,
+                vector<int> indices,
+                int cur_dim,
+                const Dtype* src_data,
+                Dtype* dest_data,
+                bool is_forward);
 };
-    }
-    }
+}  // namespace caffe
     
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    TreeUpdater* TreeUpdater::Create(const std::string& name) {
-  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
-  if (e == nullptr) {
-    LOG(FATAL) << 'Unknown tree updater ' << name;
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
-  return (e->body)();
+    
+      // Queue of writers.
+  std::deque<Writer*> writers_ GUARDED_BY(mutex_);
+  WriteBatch* tmp_batch_ GUARDED_BY(mutex_);
+    
+      DBTest() : option_config_(kDefault),
+             env_(new SpecialEnv(Env::Default())) {
+    filter_policy_ = NewBloomFilterPolicy(10);
+    dbname_ = test::TmpDir() + '/db_test';
+    DestroyDB(dbname_, Options());
+    db_ = nullptr;
+    Reopen();
+  }
+    
+    
+    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
 }
     
-     private:
-  // try to prune off current leaf
-  inline int TryPruneLeaf(RegTree &tree, int nid, int depth, int npruned) { // NOLINT(*)
-    if (tree[nid].IsRoot()) return npruned;
-    int pid = tree[nid].Parent();
-    RegTree::NodeStat &s = tree.Stat(pid);
-    ++s.leaf_child_cnt;
-    if (s.leaf_child_cnt >= 2 && param_.NeedPrune(s.loss_chg, depth - 1)) {
-      // need to be pruned
-      tree.ChangeToLeaf(pid, param_.learning_rate * s.base_weight);
-      // tail recursion
-      return this->TryPruneLeaf(tree, pid, depth - 1, npruned + 2);
-    } else {
-      return npruned;
+    #include <stdio.h>
+    
+    // Return the name of the lock file for the db named by
+// 'dbname'.  The result will be prefixed with 'dbname'.
+std::string LockFileName(const std::string& dbname);
+    
+    TEST(LogTest, ReadSecondStart) {
+  CheckInitialOffsetRecord(10007, 1);
+}
+    
+    #ifndef STORAGE_LEVELDB_DB_SNAPSHOT_H_
+#define STORAGE_LEVELDB_DB_SNAPSHOT_H_
+    
+    static void ImGui_ImplDX11_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
     }
-  }
-  /*! \brief do pruning of a tree */
-  inline void DoPrune(RegTree &tree) { // NOLINT(*)
-    int npruned = 0;
-    // initialize auxiliary statistics
-    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
-      tree.Stat(nid).leaf_child_cnt = 0;
+    
+    void ImGui_ImplFreeGLUT_NewFrame()
+{
+    // Setup time step
+    ImGuiIO& io = ImGui::GetIO();
+    int current_time = glutGet(GLUT_ELAPSED_TIME);
+    io.DeltaTime = (current_time - g_Time) / 1000.0f;
+    g_Time = current_time;
     }
-    for (int nid = 0; nid < tree.param.num_nodes; ++nid) {
-      if (tree[nid].IsLeaf()) {
-        npruned = this->TryPruneLeaf(tree, nid, tree.GetDepth(nid), npruned);
-      }
+    
+        glutMainLoop();
+    
+    		bool isBackward() const { return !orEqual && offset<=0; } // True if the resolution of the KeySelector depends only on keys less than key
+		bool isFirstGreaterOrEqual() const { return !orEqual && offset==1; }
+		bool isFirstGreaterThan() const { return orEqual && offset==1; }
+		bool isLastLessOrEqual() const { return orEqual && offset==0; }
+    
+    		virtual Future<Reference<DirectorySubspace>> open(Reference<Transaction> const& tr, Path const& path, Standalone<StringRef> const& layer = Standalone<StringRef>()) = 0;
+		virtual Future<Reference<DirectorySubspace>> createOrOpen(Reference<Transaction> const& tr, Path const& path, Standalone<StringRef> const& layer = Standalone<StringRef>()) = 0;
+    
+    
+    {		// FIXME: test that this uses the keyRange arena and doesn't create another one
+		keyRange.KeyRangeRef::operator=(KeyRangeRef(StringRef(begin.begin(), begin.size()), StringRef(end.begin(), end.size())));
+		return keyRange;
+	}
+    
+    	static size_t find_string_terminator(const Standalone<VectorRef<unsigned char> > data, size_t offset ) {
+		size_t i = offset;
+		while (i < data.size() - 1 && !(data[i] == '\x00' && data[i+1] != (uint8_t)'\xff')) {
+			i += (data[i] == '\x00' ? 2 : 1);
+		}
     }
-    if (!param_.silent) {
-      LOG(INFO) << 'tree pruning end, ' << tree.param.num_roots << ' roots, '
-                << tree.NumExtraNodes() << ' extra nodes, ' << npruned
-                << ' pruned nodes, max_depth=' << tree.MaxDepth();
+    
+    	private:
+		static const uint8_t NULL_CODE;
+		static const uint8_t BYTES_CODE;
+		static const uint8_t STRING_CODE;
+		static const uint8_t NESTED_CODE;
+		static const uint8_t INT_ZERO_CODE;
+		static const uint8_t POS_INT_END;
+		static const uint8_t NEG_INT_START;
+		static const uint8_t FLOAT_CODE;
+		static const uint8_t DOUBLE_CODE;
+		static const uint8_t FALSE_CODE;
+		static const uint8_t TRUE_CODE;
+		static const uint8_t UUID_CODE;
+    
+    
+    {		void logEvent(std::string id) const {
+			TraceEvent('TransactionTrace_GetError').detail('TransactionID', id).detail('ErrCode', errCode).detail('Key', printable(key));
+		}
+	};
+    
+    template<class S, class T>
+ThreadFuture<T> flatMapThreadFuture(ThreadFuture<S> source, std::function<ErrorOr<ThreadFuture<T>>(ErrorOr<S>)> mapValue) {
+	return ThreadFuture<T>(new FlatMapSingleAssignmentVar<S, T>(source, mapValue));
+}
+    
+    //          Copyright John W. Wilkinson 2007 - 2014
+// Distributed under the MIT License, see accompanying file LICENSE-OSS
+    
+    template <class Key, class Val, class Range, class Metric, class MetricFunc>
+void RangeMap<Key,Val,Range,Metric,MetricFunc>::insert( const Range& keys, const Val& value ) {
+	if(keys.begin == keys.end)
+		return;
     }
-  }
+    
+    	void setTotal( double total, double t = timer() ) { addDelta( total - this->total, t); }
+	void addDelta( double delta, double t = timer() ) {
+		update(t);
+		total += delta;
+	}
+	// smoothTotal() is a continuous (under)estimate of the sum of all addDeltas()
+	double smoothTotal( double t = timer() ) {
+		update(t);
+		return estimate;
+	}
+	// smoothRate() is d/dt[smoothTotal], and is NOT continuous
+	double smoothRate( double t = timer() ) {
+		update(t);
+		return (total-estimate) / eFoldingTime;
+	}
