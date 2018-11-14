@@ -1,119 +1,86 @@
 
         
-        
-    {  // Expand the box.
-  *left = std::max(*left - padding, 0);
-  *top = std::max(*top - padding, 0);
-  right = std::min(right + padding, rect_width_);
-  bottom = std::min(bottom + padding, rect_height_);
-  Box* box = boxCreate(*left, *top, right - *left, bottom - *top);
-  Pix* grey_pix = pixClipRectangle(original_img, box, nullptr);
-  boxDestroy(&box);
-  if (level == RIL_BLOCK || level == RIL_PARA) {
-    // Clip to the block polygon as well.
-    TBOX mask_box;
-    Pix* mask = it_->block()->block->render_mask(&mask_box);
-    // Copy the mask registered correctly into an image the size of grey_pix.
-    int mask_x = *left - mask_box.left();
-    int mask_y = *top - (pixGetHeight(original_img) - mask_box.top());
-    int width = pixGetWidth(grey_pix);
-    int height = pixGetHeight(grey_pix);
-    Pix* resized_mask = pixCreate(width, height, 1);
-    pixRasterop(resized_mask, std::max(0, -mask_x), std::max(0, -mask_y), width, height,
-                PIX_SRC, mask, std::max(0, mask_x), std::max(0, mask_y));
-    pixDestroy(&mask);
-    pixDilateBrick(resized_mask, resized_mask, 2 * padding + 1,
-                   2 * padding + 1);
-    pixInvert(resized_mask, resized_mask);
-    pixSetMasked(grey_pix, resized_mask, UINT32_MAX);
-    pixDestroy(&resized_mask);
-  }
-  return grey_pix;
-}
+        	STARTUPINFO si = { 0 };
     
-      /** Are we positioned at the same location as other? */
-  bool PositionedAtSameWord(const PAGE_RES_IT* other) const;
     
-     private:
-  // The unique ID of this VC object.
-  int my_id_;
-  // Whether the parameter was changed_ and thus needs to be rewritten.
-  bool changed_;
-  // The actual ParamType of this VC object.
-  ParamType param_type_;
+    {/**
+ * @brief Start a file carve of the given paths
+ *
+ * @return A status returning if the carves were started successfully
+ */
+Status carvePaths(const std::set<std::string>& paths);
+} // namespace osquery
+
     
-      Status update(const std::string& source, const ParserConfig& config) override;
-    
-    #include 'osquery/config/parsers/prometheus_targets.h'
-    
-        // Construct a config map, the typical output from `Config::genConfig`.
-    config_data_['awesome'] = content_;
-    Config::get().reset();
-    clearDecorations('awesome');
-    
-      ASSERT_TRUE(data.doc().HasMember('events'));
-  ASSERT_TRUE(data.doc()['events'].HasMember('environment_variables'));
-  ASSERT_TRUE(data.doc()['events']['environment_variables'].IsArray());
-  for (const auto& var :
-       data.doc()['events']['environment_variables'].GetArray()) {
-    std::string value = var.GetString();
-    EXPECT_TRUE(value == 'foo' || value == 'bar');
-  }
-    
-    namespace osquery {
+    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_run_interval) {
+  // Prevent loads from executing.
+  FLAGS_disable_decorators = true;
+  Config::get().update(config_data_);
     }
     
-    FLAG(bool,
-     disable_distributed,
-     true,
-     'Disable distributed queries (default true)');
+      // Generate content to update/add to the config.
+  std::string content;
+  auto s = readFile(kTestDataPath + 'test_parse_items.conf', content);
+  EXPECT_TRUE(s.ok());
+  std::map<std::string, std::string> config;
+  config['awesome'] = content;
     
-      SCRef GetSubscription(const std::string& path,
-                        uint32_t mask = IN_ALL_EVENTS) {
-    auto mc = createSubscriptionContext();
-    mc->path = path;
-    mc->mask = mask;
-    return mc;
-  }
     
-    class DHTBucket;
-class DHTPingReplyMessage;
-    
-    void DHTResponseMessage::fillMessage(Dict* msgDict)
-{
-  msgDict->put(R, getResponse());
+    {  c.reset();
 }
     
-      std::shared_ptr<DHTNode> localNode_;
-    
-    
-    {} // namespace aria2
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
+    TEST_F(ProcessTests, test_getpid) {
+  int pid = -1;
     }
-  }
-  return false;
+    
+      // Test operator lower bounds.
+  EXPECT_FALSE(cl2.matches(0));
+  EXPECT_FALSE(cl2.matches(1));
+    
+        Row r;
+    r['example_text'] = 'example';
+    r['example_integer'] = INTEGER(1);
+    
+    
+    {    a->autorelease();
+    return a;
 }
     
-    class DHTTokenTracker;
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
     
-    std::string DHTUnknownMessage::toString() const
+        /** Adds a frame with an image filename. Internally it will create a SpriteFrame and it will add it.
+     * The frame will be added with one 'delay unit'.
+     * Added to facilitate the migration from v0.8 to v0.9.
+     * @param filename The path of SpriteFrame.
+     */
+    void addSpriteFrameWithFile(const std::string& filename);
+    /**
+     * @deprecated. Use addSpriteFrameWithFile() instead.
+     @js NA
+     */
+    CC_DEPRECATED_ATTRIBUTE void addSpriteFrameWithFileName(const std::string& filename){ addSpriteFrameWithFile(filename);}
+    
+    Texture2D * AtlasNode::getTexture() const
 {
-  size_t sampleLength = 8;
-  if (length_ < sampleLength) {
-    sampleLength = length_;
-  }
-  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
-             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
-             util::toHex(data_, sampleLength).c_str());
+    return _textureAtlas->getTexture();
 }
     
-      void markBad(const std::string& hostname, const std::string& ipaddr,
-               uint16_t port);
+    /** @brief AtlasNode is a subclass of Node that implements the RGBAProtocol and TextureProtocol protocol.
+ * It knows how to render a TextureAtlas object.
+ * If you are going to render a TextureAtlas consider subclassing AtlasNode (or a subclass of AtlasNode).
+ * All features from Node are valid, plus the following features:
+ * - opacity and RGB colors.
+ */
+class CC_DLL AtlasNode : public Node, public TextureProtocol
+{    
+public:
+	/** creates a AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render.
+     *
+     * @param filename The path of Atlas file.
+     * @param tileWidth The width of the item.
+     * @param tileHeight The height of the item.
+     * @param itemsToRender The quantity of items to render.
+     */
+	static AtlasNode * create(const std::string& filename, int tileWidth, int tileHeight, int itemsToRender);
+    }
