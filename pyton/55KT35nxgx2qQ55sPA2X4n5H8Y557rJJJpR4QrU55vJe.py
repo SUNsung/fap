@@ -1,135 +1,76 @@
 
         
-            def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
-        try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
+        
+def main():
+    import os
+    import re
+    import shutil
+    import sys
+    dests = sys.argv[1:] or ['.']
+    filename = re.sub('\.pyc$', '.py', __file__)
+    
+            for x in iterate_spider_output(cb(response)):
+            if isinstance(x, (BaseItem, dict)):
+                items.append(x)
+            elif isinstance(x, Request):
+                requests.append(x)
+        return items, requests
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
+    
+        def download_request(self, request, spider):
+        parsed_url = urlparse_cached(request)
+        user = request.meta.get('ftp_user', self.default_user)
+        password = request.meta.get('ftp_password', self.default_password)
+        passive_mode = 1 if bool(request.meta.get('ftp_passive',
+                                                  self.passive_mode)) else 0
+        creator = ClientCreator(reactor, FTPClient, user, password,
+            passive=passive_mode)
+        return creator.connectTCP(parsed_url.hostname, parsed_url.port or 21).addCallback(self.gotClient,
+                                request, unquote(parsed_url.path))
     
     
-default_app_config = 'django.contrib.sitemaps.apps.SiteMapsConfig'
+def naughty_strings(filepath=FILEPATH):
+    '''Get the list of naughty_strings.
+    
+      '''
+  # self._section will move monotonically through this set. If it ever
+  # needs to move backwards, CheckNextIncludeOrder will raise an error.
+  _INITIAL_SECTION = 0
+  _MY_H_SECTION = 1
+  _C_SECTION = 2
+  _CPP_SECTION = 3
+  _OTHER_H_SECTION = 4
+    
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
+    
+            # Display results overlaid on an image
+        show_prediction_labels_on_image(os.path.join('knn_examples/test', image_file), predictions)
 
     
-        def __init__(self, *a, **kw):
-        super(QPSSpider, self).__init__(*a, **kw)
-        if self.qps is not None:
-            self.qps = float(self.qps)
-            self.download_delay = 1 / self.qps
-        elif self.download_delay is not None:
-            self.download_delay = float(self.download_delay)
+    for face_location in face_locations:
     
-            for spidername in args or spider_loader.list():
-            spidercls = spider_loader.load(spidername)
-            spidercls.start_requests = lambda s: conman.from_spider(s, result)
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
-    
-        name = 'scrapes'
-    
-    from scrapy import twisted_version
-    
-        def _build_response(self, result, request, protocol):
-        self.result = result
-        respcls = responsetypes.from_args(url=request.url)
-        protocol.close()
-        body = protocol.filename or protocol.body.read()
-        headers = {'local filename': protocol.filename or '', 'size': protocol.size}
-        return respcls(url=request.url, status=200, body=to_bytes(body), headers=headers)
-    
-        strings = []
-    with open(filepath, 'r') as f:
-    
-        def test_decode_good(self):
-        self.assertEqual('x', self.field.decode('x'))
-    
-    
-class Header(jose.Header):
-    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
-    '''
-    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
-    kid = jose.Field('kid', omitempty=True)
-    url = jose.Field('url', omitempty=True)
-    
-            self.jobj_to = {
-            'contact': contact,
-            'agreement': agreement,
-            'key': key,
-        }
-        self.jobj_from = self.jobj_to.copy()
-        self.jobj_from['key'] = key.to_json()
-    
-        def test_basic_ifdefine(self):
-        self.assertEqual(len(self.parser.find_dir('VAR_DIRECTIVE')), 2)
-        self.assertEqual(len(self.parser.find_dir('INVALID_VAR_DIRECTIVE')), 0)
-    
-    
-class SelectVhostMultiTest(unittest.TestCase):
-    '''Tests for certbot_apache.display_ops.select_vhost_multiple.'''
-    
-    import mock
-    
-        def test_repr(self):
-        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
-    
-            self.assertEqual(mock_setup_cert.call_count, 2)
-    
-    [1] http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
+        # Label the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
+        if not name:
             continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
-    else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
     
-        print('-' * 20)
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
     
-            print('Ordered results using pool.map() --- will block till complete:')
-        for x in pool.map(calculatestar, TASKS):
-            print('\t', x)
-        print()
+    from setuptools import setup
     
-    con = sqlite3.connect(':memory:')
-con.isolation_level = None
-cur = con.cursor()
-    
-    if os.path.exists(DB_FILE):
-    os.remove(DB_FILE)
+    # 载入样本图片（奥巴马和拜登）
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
