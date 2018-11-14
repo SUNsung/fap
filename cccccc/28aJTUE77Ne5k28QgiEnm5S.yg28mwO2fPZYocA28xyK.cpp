@@ -1,278 +1,254 @@
 
         
-        void ShowOpenDialog(const file_dialog::DialogSettings& settings,
-                    mate::Arguments* args) {
-  v8::Local<v8::Value> peek = args->PeekNext();
-  file_dialog::OpenDialogCallback callback;
-  if (mate::Converter<file_dialog::OpenDialogCallback>::FromV8(
-          args->isolate(), peek, &callback)) {
-    file_dialog::ShowOpenDialog(settings, callback);
-  } else {
-    std::vector<base::FilePath> paths;
-    if (file_dialog::ShowOpenDialog(settings, &paths))
-      args->Return(paths);
+        #if defined(X86_BUILD)
+#if defined(__GNUC__)
+#include <cpuid.h>
+#elif defined(_WIN32)
+#include <intrin.h>
+#endif
+#endif
+    
+    /** Returns the polygon outline of the current block. The returned Pta must
+ *  be ptaDestroy-ed after use. */
+Pta* PageIterator::BlockPolygon() const {
+  if (it_->block() == nullptr || it_->block()->block == nullptr)
+    return nullptr;  // Already at the end!
+  if (it_->block()->block->pdblk.poly_block() == nullptr)
+    return nullptr;  // No layout analysis used - no polygon.
+  ICOORDELT_IT it(it_->block()->block->pdblk.poly_block()->points());
+  Pta* pta = ptaCreate(it.length());
+  int num_pts = 0;
+  for (it.mark_cycle_pt(); !it.cycled_list(); it.forward(), ++num_pts) {
+    ICOORD* pt = it.data();
+    // Convert to top-down coords within the input image.
+    float x = static_cast<float>(pt->x()) / scale_ + rect_left_;
+    float y = rect_top_ + rect_height_ - static_cast<float>(pt->y()) / scale_;
+    ptaAddPt(pta, x, y);
   }
+  return pta;
 }
     
-    void DownloadItem::Resume() {
-  download_item_->Resume();
+    #define VARDIR        'configs/' /*parameters files */
+#define MAX_ITEMS_IN_SUBMENU 30
+    
+    
+/**********************************************************************
+ * split_and_recog_word
+ *
+ * Split the word into 2 smaller pieces at the largest gap.
+ * Recognize the pieces and stick the results back together.
+ **********************************************************************/
+void Tesseract::split_and_recog_word(WERD_RES *word) {
+  // Find the biggest blob gap in the chopped_word.
+  int bestgap = -INT32_MAX;
+  int split_index = 0;
+  for (int b = 1; b < word->chopped_word->NumBlobs(); ++b) {
+    TBOX prev_box = word->chopped_word->blobs[b - 1]->bounding_box();
+    TBOX blob_box = word->chopped_word->blobs[b]->bounding_box();
+    int gap = blob_box.left() - prev_box.right();
+    if (gap > bestgap) {
+      bestgap = gap;
+      split_index = b;
+    }
+  }
+  ASSERT_HOST(split_index > 0);
+    }
+    
+    TEST_P(DerivedTest, DoesBlah) {
+  // GetParam works just the same here as if you inherit from TestWithParam.
+  EXPECT_TRUE(foo.Blah(GetParam()));
 }
     
-    namespace atom {
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    
+      // Returns true if FilePath ends with a path separator, which indicates that
+  // it is intended to represent a directory. Returns false otherwise.
+  // This does NOT check that a directory (or file) actually exists.
+  bool IsDirectory() const;
+    
+    // Forward declarations of ValuesIn(), which is implemented in
+// include/gtest/gtest-param-test.h.
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end);
+    
+     private:
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
     }
     
-      const char* tmpdir = getenv('TMPDIR');
-  if (tmpdir == nullptr) {
-    tmpdir = '/tmp';
-  }
+    #include <string.h>
     
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
     
-    {} // namespace caffe2
-
-    
-          CAFFE_ENFORCE(dims.front() >= 0, 'Dimension ids must be non-negative.');
-      CAFFE_ENFORCE_GE(
-          in[0].dims_size() + dims.size(),
-          dims.back() + 1,
-          'Input needs at least ',
-          (1 + dims.back() - dims.size()),
-          ' dimensions given `dims`.');
-    
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-      FlexibleTopKOp(const OperatorDef& operator_def, Workspace* ws)
-      : Operator<Context>(operator_def, ws) {}
-    
-    Github Link:
-- https://github.com/pytorch/pytorch/blob/master/caffe2/operators/floor_op.cc
-    
-    
-    {  bool RunOnDevice() override {
-    for (Blob* output : OperatorBase::Outputs()) {
-      output->Reset();
-    }
-    return true;
+    class GetCol2ImGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Im2Col', '', std::vector<string>{GO(0)}, std::vector<string>{GI(0)});
   }
 };
+REGISTER_GRADIENT(Col2Im, GetCol2ImGradient);
     
-    template <>
-bool FullyConnectedOp<
-    CUDAContext,
-    TensorCoreEngine,
-    false /* don't transpose weight */>::RunOnDevice() {
-  return RunFullyConnectedOpOnCUDADevice(false /* float16_compute */, this);
+    #include <grpc/support/port_platform.h>
+    
+    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
+                             'Number of messages received per RPC', kCount);
+  return measure;
 }
     
-    class BSP_Tree;
-MAKE_TYPE_INFO(BSP_Tree, Variant::DICTIONARY)
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
     
-    
-    {		String name;
-		Map<String, Variant> fields;
-	};
-    
-    	struct sockaddr_storage their_addr;
-	size_t addr_size = _set_sockaddr(&their_addr, peer_host, peer_port, sock_type);
-    
-    	virtual bool is_connected_to_host() const;
-	virtual Status get_status() const;
-	virtual void disconnect_from_host();
-    
-    #ifdef PTHREAD_BSD_SET_NAME
-#include <pthread_np.h>
-#endif
-    
-    		if (!::ReplaceFileW(tmpfile, p_path.c_str(), NULL, 0, NULL, NULL)) {
-			DeleteFileW(tmpfile);
-			return FAILED;
-		}
-    
-    	Ref<StreamPeerTCPWinsock> conn = memnew(StreamPeerTCPWinsock);
-	IP_Address ip;
-	int port;
-	_set_ip_addr_port(ip, port, &their_addr);
-    
-      // Read until size drops significantly.
-  std::string limit_key = Key(n);
-  for (int read = 0; true; read++) {
-    ASSERT_LT(read, 100) << 'Taking too long to compact';
-    Iterator* iter = db_->NewIterator(ReadOptions());
-    for (iter->SeekToFirst();
-         iter->Valid() && iter->key().ToString() < limit_key;
-         iter->Next()) {
-      // Drop data
-    }
-    delete iter;
-    // Wait a little bit to allow any triggered compactions to complete.
-    Env::Default()->SleepForMicroseconds(1000000);
-    uint64_t size = Size(Key(0), Key(n));
-    fprintf(stderr, 'iter %3d => %7.3f MB [other %7.3f MB]\n',
-            read+1, size/1048576.0, Size(Key(n), Key(kCount))/1048576.0);
-    if (size <= initial_size/10) {
-      break;
-    }
+    // Force InitProtoReflectionServerBuilderPlugin() to be called at static
+// initialization time.
+struct StaticProtoReflectionPluginInitializer {
+  StaticProtoReflectionPluginInitializer() {
+    InitProtoReflectionServerBuilderPlugin();
   }
+} static_proto_reflection_plugin_initializer;
     
-    Status DBImpl::RecoverLogFile(uint64_t log_number, bool last_log,
-                              bool* save_manifest, VersionEdit* edit,
-                              SequenceNumber* max_sequence) {
-  struct LogReporter : public log::Reader::Reporter {
-    Env* env;
-    Logger* info_log;
-    const char* fname;
-    Status* status;  // null if options_.paranoid_checks==false
-    virtual void Corruption(size_t bytes, const Status& s) {
-      Log(info_log, '%s%s: dropping %d bytes; %s',
-          (this->status == nullptr ? '(ignoring error) ' : ''),
-          fname, static_cast<int>(bytes), s.ToString().c_str());
-      if (this->status != nullptr && this->status->ok()) *this->status = s;
-    }
-  };
+        // SGD optimization with momentum. 
+    class LearnerMomentumSGD : public LearnerBase
+    {
+    public:
+        LearnerMomentumSGD(const std::vector<Parameter>& parameters,
+                           const LearningRateSchedule& learningRateSchedule,
+                           const MomentumSchedule& momentumSchedule,
+                           bool unitGain,
+                           AdditionalLearningOptions additionalOptions,
+                           size_t smoothGradientFactor)
+                           : LearnerBase(parameters, learningRateSchedule, additionalOptions),
+                           m_momentumSchedule(momentumSchedule), 
+                           m_unitGain(unitGain)
+        {
+            AllocateSmoothedGradients(parameters, smoothGradientFactor, 2);
+        }
     }
     
-    void DBIter::FindNextUserEntry(bool skipping, std::string* skip) {
-  // Loop until we hit an acceptable entry to yield
-  assert(iter_->Valid());
-  assert(direction_ == kForward);
-  do {
-    ParsedInternalKey ikey;
-    if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
-      switch (ikey.type) {
-        case kTypeDeletion:
-          // Arrange to skip all upcoming entries for this key since
-          // they are hidden by this deletion.
-          SaveKey(ikey.user_key, skip);
-          skipping = true;
-          break;
-        case kTypeValue:
-          if (skipping &&
-              user_comparator_->Compare(ikey.user_key, *skip) <= 0) {
-            // Entry hidden
-          } else {
-            valid_ = true;
-            saved_key_.clear();
-            return;
-          }
-          break;
-      }
+        template <typename T> 
+    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
+    {
+        std::stringstream info;
+        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
+             << ', Dictionary version = ' << dictVersion;
+        return info.str();
     }
-    iter_->Next();
-  } while (iter_->Valid());
-  saved_key_.clear();
-  valid_ = false;
+    
+            static bool IsUDF(const Dictionary& dict);
+    
+    
+    {        auto numNonZeroValues = std::get<3>(Data()->SparseCSCDataBuffers<ElementType>());
+        auto numOfColsInMatrix = GetMatrixDimensions(Shape()).second + 1;
+        return std::tuple<size_t, size_t, size_t>(maxSequenceLen, numOfColsInMatrix, numNonZeroValues);
+    }
+    
+            if (m_valueInitializer->Contains(RandomSeedAttributeName)) {
+            auto& seed = m_valueInitializer->operator[](RandomSeedAttributeName);
+            if ((unsigned long)seed.Value<size_t>() == SentinelValueForAutoSelectRandomSeed)
+                seed.Value<size_t>() = Internal::GenerateRandomSeed();
+        }
+    
+    // ---------------------------------------------------------------------------
+// RandomOrdering -- class to help manage randomization of input data
+// ---------------------------------------------------------------------------
+    
+        void Start();
+    void Stop();
+    void Restart();
+    
+    void    ImGui_ImplVulkan_InvalidateFontUploadObjects()
+{
+    if (g_UploadBuffer)
+    {
+        vkDestroyBuffer(g_Device, g_UploadBuffer, g_Allocator);
+        g_UploadBuffer = VK_NULL_HANDLE;
+    }
+    if (g_UploadBufferMemory)
+    {
+        vkFreeMemory(g_Device, g_UploadBufferMemory, g_Allocator);
+        g_UploadBufferMemory = VK_NULL_HANDLE;
+    }
 }
     
-    TEST(DBTest, MinorCompactionsHappen) {
-  Options options = CurrentOptions();
-  options.write_buffer_size = 10000;
-  Reopen(&options);
-    }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    static std::string MakeFileName(const std::string& dbname, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return dbname + buf;
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+    
+    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
+    state.SetBytesProcessed(state.iterations() * file.tellg());
+}
+BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
+BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
+BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
+BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
+BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
+BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
+BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
+    
+    #include 'internal_macros.h'
+    
+    void State::StartKeepRunning() {
+  CHECK(!started_ && !finished_);
+  started_ = true;
+  manager_->StartStopBarrier();
+  if (!error_occurred_) ResumeTiming();
 }
     
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type);
+    // Information kept per benchmark we may want to run
+struct Benchmark::Instance {
+  std::string name;
+  Benchmark* benchmark;
+  ReportMode report_mode;
+  std::vector<int> arg;
+  TimeUnit time_unit;
+  int range_multiplier;
+  bool use_real_time;
+  bool use_manual_time;
+  BigO complexity;
+  BigOFunc* complexity_lambda;
+  UserCounters counters;
+  const std::vector<Statistics>* statistics;
+  bool last_benchmark_instance;
+  int repetitions;
+  double min_time;
+  size_t iterations;
+  int threads;  // Number of concurrent threads to us
+};
     
-      // Extend record types with the following special values
-  enum {
-    kEof = kMaxRecordType + 1,
-    // Returned whenever we find an invalid physical record.
-    // Currently there are three situations in which this happens:
-    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
-    // * The record is a 0-length record (No drop is reported)
-    // * The record is below constructor's initial_offset (No drop is reported)
-    kBadRecord = kMaxRecordType + 2
-  };
-    
-    int MemTable::KeyComparator::operator()(const char* aptr, const char* bptr)
-    const {
-  // Internal keys are encoded as length-prefixed strings.
-  Slice a = GetLengthPrefixedSlice(aptr);
-  Slice b = GetLengthPrefixedSlice(bptr);
-  return comparator.Compare(a, b);
+    void BenchmarkFamilies::ClearBenchmarks() {
+  MutexLock l(mutex_);
+  families_.clear();
+  families_.shrink_to_fit();
 }
     
-      std::vector<uint64_t> GetFiles(FileType t) {
-    std::vector<std::string> filenames;
-    ASSERT_OK(env_->GetChildren(dbname_, &filenames));
-    std::vector<uint64_t> result;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      uint64_t number;
-      FileType type;
-      if (ParseFileName(filenames[i], &number, &type) && type == t) {
-        result.push_back(number);
-      }
-    }
-    return result;
+    void Finish(UserCounters *l, double cpu_time, double num_threads) {
+  for (auto &c : *l) {
+    c.second.value = Finish(c.second, cpu_time, num_threads);
   }
-    
-    // _fi_sep determines the directory separator, either '\\' or '/'
-BOOST_REGEX_DECL extern const char* _fi_sep;
-    
-    #include <iterator>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-    
-    #ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
+}
     
     
-    
-    
-    {} // namespace boost
-    
-    
+    {}  // end namespace benchmark
 
     
-    namespace boost{
-    }
-    
-    template< bool Signed >
-struct operations< 8u, Signed > :
-    public msvc_arm_operations< typename make_storage_type< 8u, Signed >::type, operations< 8u, Signed > >
-{
-    typedef msvc_arm_operations< typename make_storage_type< 8u, Signed >::type, operations< 8u, Signed > > base_type;
-    typedef typename base_type::storage_type storage_type;
-    typedef typename make_storage_type< 8u, Signed >::aligned aligned_storage_type;
-    }
-    
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-namespace atomics {
-namespace detail {
-    }
-    }
-    }
-    
-    #if BOOST_ATOMIC_THREAD_FENCE > 0
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::thread_fence(order);
-}
-#else
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::thread_fence();
-}
-#endif
+    #include 'check.h'
