@@ -1,60 +1,94 @@
 
         
         
-def source_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'https://github.com/scrapy/scrapy/blob/master/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, text, refuri=ref, **options)
-    return [node], []
+def write_stream(stream, outfile, flush):
+    '''Write the output stream.'''
+    try:
+        # Writing bytes so we use the buffer interface (Python 3).
+        buf = outfile.buffer
+    except AttributeError:
+        buf = outfile
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
+        def convert(self, content_bytes):
+        raise NotImplementedError
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-c', dest='code',
-            help='evaluate the code in the shell, print the result and exit')
-        parser.add_option('--spider', dest='spider',
-            help='use this spider')
-        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
-            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
     
-class ScrapesContract(Contract):
-    ''' Contract to check presence of fields in scraped items
-        @scrapes page_name page_body
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+    
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+    
+def l1(l=0.01):
+    return L1L2(l1=l)
+    
+        # Returns
+        The total number of scalars composing the weights
     '''
+    return int(np.sum([K.count_params(p) for p in set(weights)]))
     
-    for face_location in face_locations:
+        # Arguments
+        model: Keras model instance.
+        f: Keras function returning a list of tensors.
+        ins: list of tensors to be fed to `f`.
+        batch_size: integer batch size.
+        verbose: verbosity mode.
+        steps: Total number of steps (batches of samples)
+            before declaring `predict_loop` finished.
+            Ignored with the default value of `None`.
     
-        :param file: image file name or file object to load
-    :param mode: format to convert the image to. Only 'RGB' (8-bit RGB, 3 channels) and 'L' (black and white) are supported.
-    :return: image contents as numpy array
-    '''
-    im = PIL.Image.open(file)
-    if mode:
-        im = im.convert(mode)
-    return np.array(im)
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
     
-    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
-# the picamera[array] module installed.
-# You can follow this installation instructions to get your RPi set up:
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
-    
-            self.assertEqual(len(detected_faces), 1)
-        self.assertAlmostEqual(detected_faces[0].rect.top(), 259, delta=25)
-        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 552, delta=25)
+        pil_image.show()
+
     
     
 @app.route('/', methods=['GET', 'POST'])
 def upload_image():
-    # 检测图片是否上传成功
+    # Check if a valid image file was uploaded
     if request.method == 'POST':
         if 'file' not in request.files:
             return redirect(request.url)
+    
+    
+def image_files_in_folder(folder):
+    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
+    
+            # If you had more than 2 faces, you could make this logic a lot prettier
+        # but I kept it simple for the demo
+        name = None
+        if match[0]:
+            name = 'Lin-Manuel Miranda'
+        elif match[1]:
+            name = 'Alex Lacamoire'
+    
+    # Get a reference to webcam #0 (the default one)
+video_capture = cv2.VideoCapture(0)
+    
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    frame = frame[:, :, ::-1]
+    
+    from setuptools import setup
