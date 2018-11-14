@@ -1,158 +1,130 @@
 
         
-          def self.class_s(name)
-    Formulary.class_s(name)
-  end
+        require 'active_support/core_ext/string/output_safety'
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
+              super(object_name, method_name, template_object, options)
+        end
     
-    require 'uri'
+    def slugify(header)
+  header.delete('#').strip.downcase.gsub(%r!\s+!, '-')
+end
     
-        # Stores requested URI to redirect the user after signing in. We can't use
-    # the scoped session provided by warden here, since the user is not
-    # authenticated yet, but we still need to store the URI based on scope, so
-    # different scopes would never use the same URI to redirect.
-    def store_location!
-      store_location_for(scope, attempted_path) if request.get? && !http_auth?
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
+    
+    Before do
+  FileUtils.rm_rf(Paths.test_dir) if Paths.test_dir.exist?
+  FileUtils.mkdir_p(Paths.test_dir) unless Paths.test_dir.directory?
+  Dir.chdir(Paths.test_dir)
+  @timezone_before_scenario = ENV['TZ']
+end
+    
+                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
+            Jekyll.logger.debug '', json_message
+            @websockets.each { |ws| ws.send(json_message) }
+          end
+        end
+    
+        def require_local_account!
+      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
     end
     
-        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
-      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
-    end
+    module Admin
+  class ConfirmationsController < BaseController
+    before_action :set_user
+    before_action :check_confirmation, only: [:resend]
     
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
+      #
+  # Gets cookies from the Set-Cookie header in a format to be used
+  # in the 'cookie' send_request field
   #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
-  end
-    
-        # mixin
-    # Sass::Callable
-    inherited_hash_reader :mixin
-    
-        # Same as `Kernel.puts`, but doesn't print anything if the `--quiet` option is set.
-    #
-    # @param args [Array] Passed on to `Kernel.puts`
-    def puts(*args)
-      return if @options[:for_engine][:quiet]
-      Kernel.puts(*args)
+  def get_cookies
+    cookies = ''
+    if (self.headers.include?('Set-Cookie'))
+      set_cookies = self.headers['Set-Cookie']
+      key_vals = set_cookies.scan(/\s?([^, ;]+?)=([^, ;]*?)[;,]/)
+      key_vals.each do |k, v|
+        # Dont downcase actual cookie name as may be case sensitive
+        name = k.downcase
+        next if name == 'path'
+        next if name == 'expires'
+        next if name == 'domain'
+        next if name == 'max-age'
+        cookies << '#{k}=#{v}; '
+      end
     end
     
-    module Sass
-  module Importers
-    # The default importer, used for any strings found in the load path.
-    # Simply loads Sass files from the filesystem using the default logic.
-    class Filesystem < Base
-      attr_accessor :root
+              # Encodes the start_time field
+          #
+          # @return [String]
+          def encode_start_time
+            [start_time].pack('N')
+          end
     
-          def has_header
-        @header = (@page.header || false) if @header.nil? && @page
-        !!@header
-      end
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_msg_type(input)
+            input.value[0].value.to_i
+          end
     
-          def has_path
-        !@path.nil?
-      end
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-        assert_no_match /Edit/, last_response.body, ''Edit' link not blocked in history template'
+        # A list of classes that will be extracted into mixins
+    # Only the top-level selectors of form .CLASS { ... } are extracted. CLASS must not be used in any other rule definition.
+    # This is a work-around for libsass @extend issues
+    CLASSES_TO_MIXINS = %w(
+      list-unstyled form-inline
+    )
     
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
-  end
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
     
-      test 'heavy use 1' do
-    post '/create', :content => '한글 text', :page => 'PG',
-         :format             => 'markdown', :message => 'def'
-    follow_redirect!
-    assert last_response.ok?
-    
-    desc 'Validate lib files and version file'
-task :validate do
-  libfiles = Dir['lib/*'] - ['lib/#{name}.rb', 'lib/#{name}']
-  unless libfiles.empty?
-    puts 'Directory `lib` should only contain a `#{name}.rb` file and `#{name}` dir.'
-    exit!
-  end
-  unless Dir['VERSION*'].empty?
-    puts 'A `VERSION` file at root level violates Gem best practices.'
-    exit!
-  end
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
 end
 
     
-      s.rdoc_options = ['--charset=UTF-8']
-  s.extra_rdoc_files = %w[README.md LICENSE]
-    
-    module Gollum
-  VERSION = '4.1.4'
-    
-      include_examples 'multiline literal brace layout' do
-    let(:open) { '[' }
-    let(:close) { ']' }
-  end
-    
-            expect(new_source).to eq(['#{prefix}#{open}#{a},',
-                                  '#{b}#{close}',
-                                  suffix].join($RS))
-      end
+        class Main < Clamp::Command
+      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
+      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
+      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
+      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
+      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
+      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
+      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
+      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
+      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
     end
   end
 end
-
     
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
-      end
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
     
-          # Checks whether the `if` node is a ternary operator.
-      #
-      # @return [Boolean] whether the `if` node is a ternary operator
-      def ternary?
-        loc.respond_to?(:question)
-      end
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
     
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
-      #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
-      end
-    
-          def insert_after(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
-        entries.insert(i+1, new_entry)
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
       end
