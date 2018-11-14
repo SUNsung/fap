@@ -1,476 +1,472 @@
 
         
-          virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
-    
-    
-    {  RenderView* render_view = RenderView::FromWebView(view);
-  return render_view;
-}
-    
-      focus_manager_ = NULL;
-  window_ = NULL;
-    
-      static void DoJob(AppWindowRegistry* registry, std::string id);
- protected:
-  ~NwAppCloseAllWindowsFunction() override {}
-    
-     protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-      int NwDesktopCaptureMonitor::GetPrimaryMonitorIndex() {
-  #ifdef _WIN32 
-    int count=0;
-    for (int i = 0;; ++i) {
-      DISPLAY_DEVICE device;
-      device.cb = sizeof(device);
-      BOOL ret = EnumDisplayDevices(NULL, i, &device, 0);
-      if(!ret)
-        break;
-      if (device.StateFlags & DISPLAY_DEVICE_ACTIVE){
-        if (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE){
-          return count;
-        }
-        count++;
-      }
-    }
-  #endif
-    return -1;
+        StringRef swift::platformString(PlatformKind platform) {
+  switch (platform) {
+  case PlatformKind::none:
+    return '*';
+#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
+  case PlatformKind::X:                                                        \
+    return #X;
+#include 'swift/AST/PlatformKinds.def'
   }
-    
-    /* MessageDefs: call these functions to get a ref to a msgdef. */
-const upb_msgdef *upbdefs_google_protobuf_DescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_DescriptorProto_ExtensionRange_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_DescriptorProto_ReservedRange_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_EnumDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_EnumOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_EnumValueDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_EnumValueOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_FieldDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_FieldOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_FileDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_FileDescriptorSet_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_FileOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_MessageOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_MethodDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_MethodOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_OneofDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_ServiceDescriptorProto_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_ServiceOptions_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_SourceCodeInfo_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_SourceCodeInfo_Location_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_UninterpretedOption_get(const void *owner);
-const upb_msgdef *upbdefs_google_protobuf_UninterpretedOption_NamePart_get(const void *owner);
-    
-    
-bool GetAnyFieldDescriptors(const Message& message,
-                            const FieldDescriptor** type_url_field,
-                            const FieldDescriptor** value_field) {
-    const Descriptor* descriptor = message.GetDescriptor();
-    if (descriptor->full_name() != kAnyFullTypeName) {
-      return false;
-    }
-    *type_url_field = descriptor->FindFieldByNumber(1);
-    *value_field = descriptor->FindFieldByNumber(2);
-    return (*type_url_field != NULL &&
-            (*type_url_field)->type() == FieldDescriptor::TYPE_STRING &&
-            *value_field != NULL &&
-            (*value_field)->type() == FieldDescriptor::TYPE_BYTES);
+  llvm_unreachable('bad PlatformKind');
 }
     
-    TEST(MovableMessageTest, MoveDifferentArenas) {
-  Arena arena1, arena2;
+    
+    {    return GenericTypeParamType::get(genericParam->getDepth(),
+                                     genericParam->getIndex(), ctx);
+  };
+  auto conformanceToSyntheticConformanceFn =
+      MakeAbstractConformanceForGenericType();
+    
+    
+    {  for (auto Entry : DCache.Entries) {
+    DCache.CBs.keyDestroyCB(Entry.first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry.second, nullptr);
+  }
+  DCache.Entries.clear();
+}
+    
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
+    
+      bool UnsupportedArch = false;
+    
+        case NameRole::BaseNameSelf:
+      switch (getPartOfSpeech(*nameWordRevIter)) {
+      case PartOfSpeech::Verb: {
+        // Splice together the parts before and after the matched
+        // type. For example, if we matched 'ViewController' in
+        // 'dismissViewControllerAnimated', stitch together
+        // 'dismissAnimated'.
+    }
     }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
+    class TrafficGraphWidget : public QWidget
+{
+    Q_OBJECT
+    }
     
+    /** Dialog showing transaction details. */
+class TransactionDescDialog : public QDialog
+{
+    Q_OBJECT
+    }
     
-    {
-    {
-    {
-    {}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    #endif // BITCOIN_REVERSELOCK_H
 
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
     
-    ImmutableExtensionLiteGenerator::ImmutableExtensionLiteGenerator(
-    const FieldDescriptor* descriptor, Context* context)
-  : descriptor_(descriptor), context_(context),
-    name_resolver_(context->GetNameResolver()) {
-  if (descriptor_->extension_scope() != NULL) {
-    scope_ = name_resolver_->GetImmutableClassName(
-        descriptor_->extension_scope());
-  } else {
-    scope_ = name_resolver_->GetImmutableClassName(descriptor_->file());
-  }
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+    static void secp256k1_ge_set_all_gej_var(secp256k1_ge *r, const secp256k1_gej *a, size_t len, const secp256k1_callback *cb) {
+    secp256k1_fe *az;
+    secp256k1_fe *azi;
+    size_t i;
+    size_t count = 0;
+    az = (secp256k1_fe *)checked_malloc(cb, sizeof(secp256k1_fe) * len);
+    for (i = 0; i < len; i++) {
+        if (!a[i].infinity) {
+            az[count++] = a[i].z;
+        }
+    }
+    }
+    
+    void test_bad_scalar(void) {
+    unsigned char s_zero[32] = { 0 };
+    unsigned char s_overflow[32] = {
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
+        0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b,
+        0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41
+    };
+    unsigned char s_rand[32] = { 0 };
+    unsigned char output[32];
+    secp256k1_scalar rand;
+    secp256k1_pubkey point;
+    }
+    
+    BOOST_FIXTURE_TEST_SUITE(bech32_tests, BasicTestingSetup)
+    
+    static CBlockIndex* CreateBlockIndexWithNbits(uint32_t nbits)
+{
+    CBlockIndex* block_index = new CBlockIndex();
+    block_index->nHeight = 46367;
+    block_index->nTime = 1269211443;
+    block_index->nBits = nbits;
+    return block_index;
 }
     
     #include <map>
 #include <string>
-#include <google/protobuf/compiler/objectivec/objectivec_field.h>
+#include <utility>
     
-    class FooTest : public ::testing::TestWithParam<const char*> {
-  // You can implement all the usual class fixture members here.
+    
+// Format the value by casting to type fmtT.  This default implementation
+// should never be called.
+template<typename T, typename fmtT, bool convertible = is_convertible<T, fmtT>::value>
+struct formatValueAsType
+{
+    static void invoke(std::ostream& /*out*/, const T& /*value*/) { assert(0); }
+};
+// Specialized version for types that can actually be converted to fmtT, as
+// indicated by the 'convertible' template parameter.
+template<typename T, typename fmtT>
+struct formatValueAsType<T,fmtT,true>
+{
+    static void invoke(std::ostream& out, const T& value)
+        { out << static_cast<fmtT>(value); }
 };
     
-    // Finally, you are free to instantiate the pattern with the types you
-// want.  If you put the above code in a header file, you can #include
-// it in multiple C++ source files and instantiate it multiple times.
-//
-// To distinguish different instances of the pattern, the first
-// argument to the INSTANTIATE_* macro is a prefix that will be added
-// to the actual test case name.  Remember to pick unique prefixes for
-// different instances.
-typedef testing::Types<char, int, unsigned int> MyTypes;
-INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, MyTypes);
+    double UniValue::get_real() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not a number as expected');
+    double retval;
+    if (!ParseDouble(getValStr(), &retval))
+        throw std::runtime_error('JSON double out of range');
+    return retval;
+}
     
-    // Copyright 2009 Google Inc.
-// All Rights Reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    // AssertyTypeEq<T1, T2>::type is defined iff T1 and T2 are the same
-// type.  This can be used as a compile-time assertion to ensure that
-// two types are equal.
-    
-    
-// Step 1. Include necessary header files such that the stuff your
-// test logic needs is declared.
-//
-// Don't forget gtest.h, which declares the testing framework.
-    
-      // Gets the 0-terminated C string this MyString object represents.
-  const char* c_string() const { return c_string_; }
-    
-    #ifndef HINGE_JOINT_BULLET_H
-#define HINGE_JOINT_BULLET_H
-    
-    class RigidBodyBullet;
-    
-    #ifdef __ANDROID__
-#include 'platform/android/thread_jandroid.h'
-#else
-#define JNIEnv void
-#define jobject void *
-#endif
-    
-            virtual Dictionary GetCheckpointState() const override;
-        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
-    
-        NDArrayViewPtr NDArrayView::DeepClone(const DeviceDescriptor& device, bool readOnly/* = false*/) const
-    {
-        NDArrayViewPtr newView = MakeSharedObject<NDArrayView>(this->GetDataType(), this->GetStorageFormat(), this->Shape(), device);
-        switch (m_dataType)
-        {
-        case DataType::Float:
-        {
-            auto newMatrix = newView->GetWritableMatrix<float>();
-            auto thisMatrix = GetMatrix<float>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Double:
-        {
-            auto newMatrix = newView->GetWritableMatrix<double>();
-            auto thisMatrix = GetMatrix<double>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Float16:
-        {
-            auto newMatrix = newView->GetWritableMatrix<half>();
-            auto thisMatrix = GetMatrix<half>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Int8:
-        {
-            auto newMatrix = newView->GetWritableMatrix<char>();
-            auto thisMatrix = GetMatrix<char>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        case DataType::Int16:
-        {
-            auto newMatrix = newView->GetWritableMatrix<short>();
-            auto thisMatrix = GetMatrix<short>();
-            newMatrix->AssignValuesOf(*thisMatrix);
-            break;
-        }
-        default:
-            LogicError('NDArrayView::DeepClone: Unsupported DataType %s', DataTypeName(m_dataType));
-            break;
-        }
-    }
-    
-        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
-    {
-        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
-        // GPU invocations for each MaskSection call.
-    }
-    
-            static bool IsUDF(const FunctionPtr& f);
-    
-        public:
-        template <typename ElementType>
-        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
-            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
-        {
-            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
-            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
-            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
-    }
-    
-            const auto& inputSampleLayout = Input(0)->GetSampleLayout();
-        const auto& inputDims = inputSampleLayout.GetDims();
-        SmallVector<size_t> dims;
-        if (m_offset > 0)
-        {
-            dims.append(inputDims.begin(), inputDims.begin() + m_offset);
-        }
-        dims.push_back(m_num_class);
-        if (m_offset != inputDims.size())
-        {
-            dims.append(inputDims.begin() + m_offset, inputDims.end());
-        }
-    
-      using DBImpl::Put;
-  virtual Status Put(const WriteOptions& /*options*/,
-                     ColumnFamilyHandle* /*column_family*/,
-                     const Slice& /*key*/, const Slice& /*value*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  using DBImpl::Merge;
-  virtual Status Merge(const WriteOptions& /*options*/,
-                       ColumnFamilyHandle* /*column_family*/,
-                       const Slice& /*key*/, const Slice& /*value*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  using DBImpl::Delete;
-  virtual Status Delete(const WriteOptions& /*options*/,
-                        ColumnFamilyHandle* /*column_family*/,
-                        const Slice& /*key*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  using DBImpl::SingleDelete;
-  virtual Status SingleDelete(const WriteOptions& /*options*/,
-                              ColumnFamilyHandle* /*column_family*/,
-                              const Slice& /*key*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  virtual Status Write(const WriteOptions& /*options*/,
-                       WriteBatch* /*updates*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  using DBImpl::CompactRange;
-  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
-                              ColumnFamilyHandle* /*column_family*/,
-                              const Slice* /*begin*/,
-                              const Slice* /*end*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-    
-      uint64_t sleep_debt = 0;
-  uint64_t time_since_last_refill = 0;
-  if (last_refill_time_ != 0) {
-    if (last_refill_time_ > time_now) {
-      sleep_debt = last_refill_time_ - time_now;
-    } else {
-      time_since_last_refill = time_now - last_refill_time_;
-      bytes_left_ +=
-          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
-                                kMicrosPerSecond * delayed_write_rate_);
-      if (time_since_last_refill >= kRefillInterval &&
-          bytes_left_ > num_bytes) {
-        // If refill interval already passed and we have enough bytes
-        // return without extra sleeping.
-        last_refill_time_ = time_now;
-        bytes_left_ -= num_bytes;
-        return 0;
-      }
-    }
-  }
-    
-    
-    {  // Means Close() will properly take care of truncate
-  // and it does not need any additional information
-  virtual Status Truncate(uint64_t /*size*/) override { return Status::OK(); }
-  virtual Status Close() override;
-  virtual Status Append(const Slice& data) override;
-  virtual Status Flush() override;
-  virtual Status Sync() override;
-  virtual Status Fsync() override;
-  virtual uint64_t GetFileSize() override;
-  virtual Status InvalidateCache(size_t offset, size_t length) override;
-#ifdef ROCKSDB_FALLOCATE_PRESENT
-  virtual Status Allocate(uint64_t offset, uint64_t len) override;
-#endif
-};
-    
-    class MyMerge : public rocksdb::MergeOperator {
- public:
-  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
-                           MergeOperationOutput* merge_out) const override {
-    merge_out->new_value.clear();
-    if (merge_in.existing_value != nullptr) {
-      merge_out->new_value.assign(merge_in.existing_value->data(),
-                                  merge_in.existing_value->size());
-    }
-    for (const rocksdb::Slice& m : merge_in.operand_list) {
-      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
-      // the compaction filter filters out bad values
-      assert(m.ToString() != 'bad');
-      merge_out->new_value.assign(m.data(), m.size());
-    }
-    return true;
-  }
-    }
-    
-      {
-    std::string string_val;
-    // If it cannot pin the value, it copies the value to its internal buffer.
-    // The intenral buffer could be set during construction.
-    PinnableSlice pinnable_val(&string_val);
-    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
-    assert(pinnable_val == 'value');
-    // If the value is not pinned, the internal buffer must have the value.
-    assert(pinnable_val.IsPinned() || string_val == 'value');
-  }
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    class FlushBlockBySizePolicyFactory : public FlushBlockPolicyFactory {
- public:
-  FlushBlockBySizePolicyFactory() {}
-    }
-    
-    void PrintDebug(ProcessStats* stats, std::string s);
-    
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
-    
-    
-    {}  // namespace guetzli
-    
-    
-    {  tmp0 = in[7 * stride];
-  tmp1 = kIDCTMatrix[ 7] * tmp0;
-  tmp2 = kIDCTMatrix[15] * tmp0;
-  tmp3 = kIDCTMatrix[23] * tmp0;
-  tmp4 = kIDCTMatrix[31] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
 }
     
     
-    {}  // namespace guetzli
+    {}  // namespace grpc
     
-    // Reads the Define Quantization Table (DQT) marker segment and fills in *jpg
-// with the parsed data.
-bool ProcessDQT(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  const size_t start_pos = *pos;
-  VERIFY_LEN(2);
-  size_t marker_len = ReadUint16(data, pos);
-  if (marker_len == 2) {
-    fprintf(stderr, 'DQT marker: no quantization table found\n');
-    jpg->error = JPEG_EMPTY_DQT;
-    return false;
+    // Force InitProtoReflectionServerBuilderPlugin() to be called at static
+// initialization time.
+struct StaticProtoReflectionPluginInitializer {
+  StaticProtoReflectionPluginInitializer() {
+    InitProtoReflectionServerBuilderPlugin();
   }
-  while (*pos < start_pos + marker_len && jpg->quant.size() < kMaxQuantTables) {
-    VERIFY_LEN(1);
-    int quant_table_index = ReadUint8(data, pos);
-    int quant_table_precision = quant_table_index >> 4;
-    quant_table_index &= 0xf;
-    VERIFY_INPUT(quant_table_index, 0, 3, QUANT_TBL_INDEX);
-    VERIFY_LEN((quant_table_precision ? 2 : 1) * kDCTBlockSize);
-    JPEGQuantTable table;
-    table.index = quant_table_index;
-    table.precision = quant_table_precision;
-    for (int i = 0; i < kDCTBlockSize; ++i) {
-      int quant_val = quant_table_precision ?
-          ReadUint16(data, pos) :
-          ReadUint8(data, pos);
-      VERIFY_INPUT(quant_val, 1, 65535, QUANT_VAL);
-      table.values[kJPEGNaturalOrder[i]] = quant_val;
+} static_proto_reflection_plugin_initializer;
+    
+    #include 'src/cpp/server/dynamic_thread_pool.h'
+    
+    
+    {        smoothedGradientMatrix->AdamUpdate(*gradientMatrix, *parameterMatrix, m_smoothedCount, learningRate,
+                                           momentum, varMomentum, (ElementType)m_epsilon, unitGainFactor, m_adamax);
     }
-    table.is_last = (*pos == start_pos + marker_len);
-    jpg->quant.push_back(table);
-  }
-  VERIFY_MARKER_END();
-  return true;
+    
+        void Trainer::SaveCheckpoint(const std::wstring& modelFilePath, Dictionary externalState)
+    {
+        auto learnersState = m_parameterLearners->CreateCheckpoint();
+    }
+    
+    
+    {            // TODO: this copying here is redundant, value should be moved from the dictionary to the variable.
+            // Also, the correct device should be used upfront when deserializing NDArrayView.
+            Variable var(shape, kind, dataType, value.DeepClone(device, value.IsReadOnly()), needsGradient, dynamicAxis, isSparse, name, uid);
+            if (var.IsParameter())
+                return Parameter(var);
+            else
+                return Constant(var);
+        }
+    
+    public:
+    CrossProcessMutex(const std::string& name)
+        : m_handle(NULL),
+          m_name('Global\\' + name)
+    {
+    }
+    
+        double ElapsedSeconds();
+    
+    // -----------------------------------------------------------------------
+// DiagTimesNode (vector representing the diagonal of a square matrix, data)
+// Deprecated because can be implemented with ElementTimes.
+// -----------------------------------------------------------------------
+    
+    
+    {    // FIXME: Using the AdditionalTransform is a complete hack.
+    // This should be done by multiplying the lookup-Matrix with the Node's MV matrix
+    // And then setting the result as the new MV matrix
+    // But that operation needs to be done after all the 'updates'.
+    // So the Director should emit an 'director_after_update' event.
+    // And this object should listen to it
+    _target->setAdditionalTransform(&mv);
 }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        /**
+    @brief Get the amplitude of the effect.
+    @return Return the amplitude of the effect.
+    */
+    float getAmplitude() const { return _amplitude; }
+    /**
+    @brief Set the amplitude to the effect.
+    @param amplitude The value of amplitude will be set.
+    */
+    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+    
+    ActionTween *ActionTween::clone() const
+{
+    return ActionTween::create(_duration, _key, _from, _to);
+}
+    
+    @since v0.99.5
+@js cc.animationCache
+*/
+class CC_DLL AnimationCache : public Ref
+{
+public:
+    /**
+     * @js ctor
+     */
+    AnimationCache();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    ~AnimationCache();
+    /** Returns the shared instance of the Animation cache 
+	 @js NA
+	*/
+    static AnimationCache* getInstance();
+    }
+    
+    
+    {    auto end = &verts[count];
+    for(auto i = verts; i != end; ++i)
+    {
+        // for every point, offset with the center point
+        float u = (i->vertices.x*_scaleFactor + rect.origin.x) / texWidth;
+        float v = (rect.origin.y+rect.size.height - i->vertices.y*_scaleFactor) / texHeight;
+        i->texCoords.u = u;
+        i->texCoords.v = v;
+    }
+}
+    
+    #include <errno.h>
+    
+    #include <glog/logging.h>
+    
+      /**
+   * Returns a double in [0, 1)
+   */
+  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
+  static double randDouble01(RNG&& rng) {
+    return std::generate_canonical<double, std::numeric_limits<double>::digits>(
+        rng);
+  }
+    
+    /**
+ * This class creates core-local caches for a given shared_ptr, to
+ * mitigate contention when acquiring/releasing it.
+ *
+ * All methods are threadsafe.  Hazard pointers are used to avoid
+ * use-after-free for concurrent reset() and get() operations.
+ *
+ * Concurrent reset()s are sequenced with respect to each other: the
+ * sharded shared_ptrs will always all be set to the same value.
+ * get()s will never see a newer pointer on one core, and an older
+ * pointer on another after a subsequent thread migration.
+ */
+template <class T, size_t kNumSlots = 64>
+class AtomicCoreCachedSharedPtr {
+ public:
+  explicit AtomicCoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
+    reset(p);
+  }
+    }
