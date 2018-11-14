@@ -1,108 +1,108 @@
 
         
-            def test_socks4a(self):
-        self.assertTrue(isinstance(self._get_ip('socks4a'), compat_str))
+        import io
+import optparse
     
-            def _find_spec(key):
-            m = re.search(
-                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
-            if not m:
-                raise ValueError('Cannot find %s in %s' % (key, testfile))
-            return json.loads(m.group(1))
+    lazy_extractors_filename = sys.argv[1]
+if os.path.exists(lazy_extractors_filename):
+    os.remove(lazy_extractors_filename)
     
-    import re
+    import os
+from os.path import dirname as dirn
+import sys
     
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-        styles = {
-        # No corresponding class for the following:
-        #Text:                     '', # class:  ''
-        Whitespace:                'underline #f8f8f8',      # class: 'w'
-        Error:                     '#a40000 border:#ef2929', # class: 'err'
-        Other:                     '#000000',                # class 'x'
-    }
+        # make url_for('index') == url_for('blog.index')
+    # in another app, you might define a separate main index here with
+    # app.route, while giving the blog blueprint a url_prefix, but for
+    # the tutorial the blog will be the main index
+    app.add_url_rule('/', endpoint='index')
     
-            # if the server thread fails to finish, the test suite will hang
-        # and get killed by the jenkins timeout.
-
+            if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+    
+    import pytest
+from flaskr import create_app
+from flaskr.db import get_db, init_db
     
     
-@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
-def test_system_ssl_py26():
-    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
-    blow up in this case.
+@implements_to_string
+class DebugFilesKeyError(KeyError, AssertionError):
+    '''Raised from request.files during debugging.  The idea is that it can
+    provide a better error message than just a generic KeyError/BadRequest.
     '''
-    assert info()['system_ssl'] == {'version': ''}
-    
-            close_server.set()
-
-    
-        pyopenssl_info = {
-        'version': None,
-        'openssl_version': '',
-    }
-    if OpenSSL:
-        pyopenssl_info = {
-            'version': OpenSSL.__version__,
-            'openssl_version': '%x' % OpenSSL.SSL.OPENSSL_VERSION_NUMBER,
-        }
-    cryptography_info = {
-        'version': getattr(cryptography, '__version__', ''),
-    }
-    idna_info = {
-        'version': getattr(idna, '__version__', ''),
-    }
-    
-            self.concurrent -= 1
-        return ''
-    
-        def extract_contracts(self, method):
-        contracts = []
-        for line in method.__doc__.split('\n'):
-            line = line.strip()
-    
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
     
     
-class UserAgentMiddleware(object):
-    '''This middleware allows spiders to override the user_agent'''
+def has_level_handler(logger):
+    '''Check if there is a handler in the logging chain that will handle the
+    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
+    '''
+    level = logger.getEffectiveLevel()
+    current = logger
     
-        def request_seen(self, request):
-        fp = self.request_fingerprint(request)
-        if fp in self.fingerprints:
-            return True
-        self.fingerprints.add(fp)
-        if self.file:
-            self.file.write(fp + os.linesep)
+            app = Flask(__name__)
+        app.session_interface = MySessionInterface()
     
-            total_count = 0
-        translated_count = 0
-        with open(fn) as f:
-            catalog = read_po(f)
-            for msg in catalog:
-                total_count += 1
-                if is_translated(msg):
-                    translated_count += 1
-        pct = translated_count / float(total_count) * 100
-        click.echo('% -7s % 2d%%' % (
-            locale,
-            pct,
-        ), err=True)
-        if pct >= MINIMUM and locale not in rv:
-            rv.append(locale)
-    with open(catalog_file, 'w') as f:
-        json.dump({
-            'supported_locales': sorted(rv)
-        }, f, indent=2)
-        f.write('\n')
+        def _get_source_fast(self, environment, template):
+        for srcobj, loader in self._iter_loaders(template):
+            try:
+                return loader.get_source(environment, template)
+            except TemplateNotFound:
+                continue
+        raise TemplateNotFound(template)
+    
+        @pytest.mark.parametrize(
+        'other, result', (
+            ({'AccePT': 'application/json'}, True),
+            ({}, False),
+            (None, False)
+        )
+    )
+    def test_instance_equality(self, other, result):
+        assert (self.case_insensitive_dict == other) is result
+    
+    import idna
+import urllib3
+import chardet
+    
+    This module provides the capabilities for the Requests hooks system.
+    
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
+        try:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
+    
+        def test_decode(self):
+        self.assertEqual('x', self.field.decode('x'))
+    
+    AUTOHSTS_STEPS = [60, 300, 900, 3600, 21600, 43200, 86400]
+'''AutoHSTS increase steps: 1min, 5min, 15min, 1h, 6h, 12h, 24h'''
+    
+        def verify_fnmatch(self, arg, hit=True):
+        '''Test if Include was correctly parsed.'''
+        from certbot_apache import parser
+        self.parser.add_dir(parser.get_aug_path(self.parser.loc['default']),
+                            'Include', [arg])
+        if hit:
+            self.assertTrue(self.parser.find_dir('FNMATCH_DIRECTIVE'))
+        else:
+            self.assertFalse(self.parser.find_dir('FNMATCH_DIRECTIVE'))
+    
+    import mock
+    
+            responses = self.sni.perform()
+        mock_setup_cert.assert_called_once_with(achall)
+    
+        DocumentRoot {document_root}
+</VirtualHost>
