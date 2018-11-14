@@ -1,268 +1,185 @@
 
         
-              # From https://github.com/orta/danger/blob/master/lib/danger/Dangerfile.rb
-      if content.tr!('“”‘’‛', %('''''))
-        UI.error('Your #{File.basename(path)} has had smart quotes sanitised. ' \
-                'To avoid issues in the future, you should not use ' \
-                'TextEdit for editing it. If you are not using TextEdit, ' \
-                'you should turn off smart quotes in your editor of choice.')
+        source 'https://rubygems.org'
+    
+      def failed_strategy
+    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
+  end
+    
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+    end
+  end
+end
+
+    
+        def translation_scope
+      'devise.unlocks'
+    end
+end
+
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
       end
     
-        context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
+        def request_one(url)
+      Response.new read_file(file_path_for(url)), URL.parse(url)
+    end
+    
+              node.before(%(<div class='pre-title'>#{node['title']}</div>)) if node['title']
+    
+        # Pulled from Rack::ShowExceptions in order to override TEMPLATE.
+    # If Rack provides another way to override, this could be removed
+    # in the future.
+    def pretty(env, exception)
+      req = Rack::Request.new(env)
+    
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
       end
     
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
     
-          context 'as string with wildcards' do
-        it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add *.txt', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '*.txt', shell_escape: false)
-          end').runner.execute(:test)
-        end
-      end
+      it_behaves_like 'any rack application'
     
-          describe '#configuration_available?' do
-        let(:param) { { use_bundle_exec: false } }
-        let(:version) { '' }
-        before do
-          allow(action).to receive(:slather_version).and_return(Gem::Version.create(version))
-        end
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
     
-        context 'external commands are failed' do
-      context 'with error_callback' do
-        it 'doesn't raise shell_error' do
-          allow(FastlaneCore::UI).to receive(:error)
-          called = false
-          expect_command('exit 1', exitstatus: 1)
-          Fastlane::Actions.sh('exit 1', error_callback: ->(_) { called = true })
-    
-    shellescape_testcases = [
-  # baseline
-  {
-    'it' => '(#1) on simple string',
-    'it_result' => {
-      'windows' => 'doesn't change it',
-      'other'   => 'doesn't change it'
-    },
-    'str' => 'normal_string_without_spaces',
-    'expect' => {
-      'windows' => 'normal_string_without_spaces',
-      'other'   => 'normal_string_without_spaces'
-    }
-  },
-  {
-    'it' => '(#2) on empty string',
-    'it_result' => {
-      'windows' => 'wraps it in double quotes',
-      'other'   => 'wraps it in single quotes'
-    },
-    'str' => '',
-    'expect' => {
-      'windows' => '''',
-      'other'   => '\'\''
-    }
-  },
-  # spaces
-  {
-    'it' => '(#3) on string with spaces',
-    'it_result' => {
-      'windows' => 'wraps it in double quotes',
-      'other'   => 'escapes spaces with <backslash>'
-    },
-    'str' => 'string with spaces',
-    'expect' => {
-      'windows' => ''string with spaces'',
-      'other'   => 'string\ with\ spaces'
-    }
-  },
-  # double quotes
-  {
-    'it' => '(#4) on simple string that is already wrapped in double quotes',
-    'it_result' => {
-      'windows' => 'doesn't touch it',
-      'other'   => 'escapes the double quotes with <backslash>'
-    },
-    'str' => ''normal_string_without_spaces'',
-    'expect' => {
-      'windows' => ''normal_string_without_spaces'',
-      'other'   => '\'normal_string_without_spaces\''
-    }
-  },
-  {
-    'it' => '(#5) on string with spaces that is already wrapped in double quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and duplicates existing double quotes',
-      'other'   => 'escapes the double quotes and spaces with <backslash>'
-    },
-    'str' => ''string with spaces already wrapped in double quotes'',
-    'expect' => {
-      'windows' => ''''string with spaces already wrapped in double quotes'''',
-      'other'   => '\'string\ with\ spaces\ already\ wrapped\ in\ double\ quotes\''
-    }
-  },
-  {
-    'it' => '(#6) on string with spaces and double quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and duplicates existing double quotes',
-      'other'   => 'escapes the double quotes and spaces with <backslash>'
-    },
-    'str' => 'string with spaces and 'double' quotes',
-    'expect' => {
-      'windows' => ''string with spaces and ''double'' quotes'',
-      'other'   => 'string\ with\ spaces\ and\ \'double\'\ quotes'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L64-L65
-  {
-    'it' => '(#7) on simple int',
-    'it_result' => {
-      'windows' => 'doesn't change it',
-      'other'   => 'doesn't change it'
-    },
-    'str' => 3,
-    'expect' => {
-      'windows' => '3',
-      'other'   => '3'
-    }
-  },
-  # single quotes
-  {
-    'it' => '(#8) on simple string that is already wrapped in single quotes',
-    'it_result' => {
-      'windows' => 'doesn't touch it',
-      'other'   => 'escapes the single quotes with <backslash>'
-    },
-    'str' => ''normal_string_without_spaces'',
-    'expect' => {
-      'windows' => ''normal_string_without_spaces'',
-      'other'   => '\\'normal_string_without_spaces\\''
-    }
-  },
-  {
-    'it' => '(#9) on string with spaces that is already wrapped in single quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the single quotes and spaces with <backslash>'
-    },
-    'str' => ''string with spaces already wrapped in single quotes'',
-    'expect' => {
-      'windows' => '\''string with spaces already wrapped in single quotes'\'',
-      'other'   => '\\'string\\ with\\ spaces\\ already\\ wrapped\\ in\\ single\\ quotes\\''
-    }
-  },
-  {
-    'it' => '(#10) string with spaces and single quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and leaves single quotes',
-      'other'   => 'escapes the single quotes and spaces with <backslash>'
-    },
-    'str' => 'string with spaces and 'single' quotes',
-    'expect' => {
-      'windows' => '\'string with spaces and 'single' quotes\'',
-      'other'   => 'string\ with\ spaces\ and\ \\\'single\\\'\ quotes'
-    }
-  },
-  {
-    'it' => '(#11) string with spaces and <backslash>',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and escapes the backslash with backslash',
-      'other'   => 'escapes the spaces and the backslash (which in results in quite a lot of them)'
-    },
-    'str' => 'string with spaces and \\ in it',
-    'expect' => {
-      'windows' => '\'string with spaces and \\ in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ \\\\\\ in\\ it'
-    }
-  },
-  {
-    'it' => '(#12) string with spaces and <slash>',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the spaces'
-    },
-    'str' => 'string with spaces and / in it',
-    'expect' => {
-      'windows' =>  '\'string with spaces and / in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ /\\ in\\ it'
-    }
-  },
-  {
-    'it' => '(#13) string with spaces and parens',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the spaces and parens'
-    },
-    'str' => 'string with spaces and (parens) in it',
-    'expect' => {
-      'windows' => '\'string with spaces and (parens) in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ \\(parens\\)\\ in\\ it'
-    }
-  },
-  {
-    'it' => '(#14) string with spaces, single quotes and parens',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the spaces, single quotes and parens'
-    },
-    'str' => 'string with spaces and 'quotes' (and parens) in it',
-    'expect' => {
-      'windows' => '\'string with spaces and 'quotes' (and parens) in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ \\'quotes\\'\\ \\(and\\ parens\\)\\ in\\ it'
-    }
+      trap('INT') {
+    [jekyllPid, compassPid].each { |pid| Process.kill(9, pid) rescue Errno::ESRCH }
+    exit 0
   }
-]
     
-      before_action :set_filters, only: :index
-  before_action :set_filter, only: [:edit, :update, :destroy]
+    run SinatraStaticServer
+
     
-      def set_account
-    @account = Account.find_local!(params[:account_username]) if params[:account_username]
-  end
-    
-        def resource_params
-      params.require(:account_moderation_note).permit(
-        :content,
-        :target_account_id
-      )
+        def get_cache_file_for(gist, file)
+      bad_chars = /[^a-zA-Z0-9\-_.]/
+      gist      = gist.gsub bad_chars, ''
+      file      = file.gsub bad_chars, ''
+      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
+      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
     end
     
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
+      class ImageTag < Liquid::Tag
+    @img = nil
     
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
-  end
+    module Jekyll
     
-    load './tasks/bower.rake'
-    
-          spec['version'] = Bootstrap::VERSION
-    
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
     end
+  end
+end
     
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
+      SPREE_GEMS.each do |gem_name|
+    rm_f  '#{gem_name}/Gemfile.lock'
+    rm_rf '#{gem_name}/pkg'
+    rm_rf '#{gem_name}/spec/dummy'
+  end
+end
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+              @line_item = Spree::Cart::AddItem.call(order: order,
+                                                 variant: variant,
+                                                 quantity: params[:line_item][:quantity],
+                                                 options: line_item_params[:options]).value
+          if @line_item.errors.empty?
+            respond_with(@line_item, status: 201, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+    
+            def update
+          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
+          if @option_type.update_attributes(option_type_params)
+            render :show
+          else
+            invalid_resource!(@option_type)
+          end
+        end
+    
+            # Takes besides the products attributes either an array of variants or
+        # an array of option types.
+        #
+        # By submitting an array of variants the option types will be created
+        # using the *name* key in options hash. e.g
+        #
+        #   product: {
+        #     ...
+        #     variants: {
+        #       price: 19.99,
+        #       sku: 'hey_you',
+        #       options: [
+        #         { name: 'size', value: 'small' },
+        #         { name: 'color', value: 'black' }
+        #       ]
+        #     }
+        #   }
+        #
+        # Or just pass in the option types hash:
+        #
+        #   product: {
+        #     ...
+        #     option_types: ['size', 'color']
+        #   }
+        #
+        # By passing the shipping category name you can fetch or create that
+        # shipping category on the fly. e.g.
+        #
+        #   product: {
+        #     ...
+        #     shipping_category: 'Free Shipping Items'
+        #   }
+        #
+        def new; end
+    
+              count_on_hand = 0
+          if params[:stock_item].key?(:count_on_hand)
+            count_on_hand = params[:stock_item][:count_on_hand].to_i
+          end
+    
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
