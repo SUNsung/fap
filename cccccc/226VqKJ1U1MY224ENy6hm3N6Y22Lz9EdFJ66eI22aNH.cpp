@@ -1,225 +1,129 @@
 
         
-        
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
-  }
+        # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
 };
+# endif  // !GTEST_OS_WINDOWS
     
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
+      // Since the basic IO manipulators are overloaded for both narrow
+  // and wide streams, we have to provide this specialized definition
+  // of operator <<, even though its body is the same as the
+  // templatized version above.  Without this definition, streaming
+  // endl or other basic IO manipulators to Message will confuse the
+  // compiler.
+  Message& operator <<(BasicNarrowIoManip val) {
+    *ss_ << val;
+    return *this;
+  }
     
-    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+    ]]
+    
+    // Type-parameterized tests are abstract test patterns parameterized
+// by a type.  Compared with typed tests, type-parameterized tests
+// allow you to define the test pattern without knowing what the type
+// parameters are.  The defined pattern can be instantiated with
+// different types any number of times, in any number of translation
+// units.
+//
+// If you are designing an interface or concept, you can define a
+// suite of type-parameterized tests to verify properties that any
+// valid implementation of the interface/concept should have.  Then,
+// each implementation can easily instantiate the test suite to verify
+// that it conforms to the requirements, without having to write
+// similar tests repeatedly.  Here's an example:
+    
+      // Returns a pathname for a file that does not currently exist. The pathname
+  // will be directory/base_name.extension or
+  // directory/base_name_<number>.extension if directory/base_name.extension
+  // already exists. The number will be incremented until a pathname is found
+  // that does not already exist.
+  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
+  // There could be a race condition if two or more processes are calling this
+  // function at the same time -- they could both pick the same filename.
+  static FilePath GenerateUniqueFileName(const FilePath& directory,
+                                         const FilePath& base_name,
+                                         const char* extension);
+    
+      // # of bits in a number.
+  static const size_t kBitCount = 8*sizeof(RawType);
+    
+    #ifdef __BORLANDC__
+// string.h is not guaranteed to provide strcpy on C++ Builder.
+# include <mem.h>
+#endif
+    
+    ]]
+    
+    
+    {
+    {    // Adds the leak checker to the end of the test event listener list,
+    // after the default text output printer and the default XML report
+    // generator.
+    //
+    // The order is important - it ensures that failures generated in the
+    // leak checker's OnTestEnd() method are processed by the text and XML
+    // printers *before* their OnTestEnd() methods are called, such that
+    // they are attributed to the right test. Remember that a listener
+    // receives an OnXyzStart event *after* listeners preceding it in the
+    // list received that event, and receives an OnXyzEnd event *before*
+    // listeners preceding it.
+    //
+    // We don't need to worry about deleting the new listener later, as
+    // Google Test will do it.
+    listeners.Append(new LeakChecker);
+  }
+  return RUN_ALL_TESTS();
+}
 
     
-    bool IsUserOnly(std::wstring opt)
-{
-	bool userOnly;
-    }
-    
-            std::unordered_map<Parameter, NDArrayViewPtr> m_smoothedGradientValues;
-    
-        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
-    {
-        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
-        // GPU invocations for each MaskSection call.
-    }
-    
-        void ProgressWriter::UpdateTraining(size_t samples, const ValuePtr& accumulatedLoss,
-                                        const ValuePtr& accumulatedMetric)
-    {
-        m_training->Update(samples, accumulatedLoss, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> aggregateLoss, std::pair<double, double> aggregateMetric)
-            {
-                OnWriteTrainingUpdate(samples, updates, aggregateLoss, aggregateMetric);
-            });
-        OnTrainingUpdateEnd();
-    }
-    
-        template <typename T> 
-    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
-    {
-        std::stringstream info;
-        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
-             << ', Dictionary version = ' << dictVersion;
-        return info.str();
-    }
-    
-        // now pass that to concurrent reader so we can read ahead
-    // m_DataReader = new ConcurrentReader<ElemType>(m_DataReader);
-    // NOW we can init
-    // TODO: merge with the code above, but we first need to get the nbrUttPerMinibatch initialized inside each reader
-    for (const auto& ioName : m_ioNames)
-    {
-        const ConfigRecordType& thisIO = hasMultipleReaders ? config(ioName) : config /*legacy*/;
-        m_dataReaders[ioName]->Init(thisIO);
-    }
-    
-    // -----------------------------------------------------------------------
-// DynamicAxisNode (/*no input*/)
-// This is a holder for MBLayout objects shared across inputs.
-// -----------------------------------------------------------------------
-template <class ElemType>
-class DynamicAxisNode : public ComputationNode<ElemType>, public NumInputs<0>
-{
-    typedef ComputationNode<ElemType> Base; UsingComputationNodeMembersBoilerplate;
-    static const std::wstring TypeName() { return L'DynamicAxis'; }
-public:
-    DynamicAxisNode(DEVICEID_TYPE deviceId, const wstring& name)
-        : Base(deviceId, name)
-    {
-        // BUGBUG: In BS, the node name is not known during node instantiation.
-        // This may require to pass the display name as a separate parameter.
-    }
-    }
-    
-        Size winSize = Director::getInstance()->getWinSize();
-    _fullScreenSize.set(winSize.width, winSize.height);
-    _halfScreenSize = _fullScreenSize * 0.5f;
-    _offsetX=xOffset;
-    _offsetY=yOffset;
-    _halfScreenSize.x += _offsetX;
-    _halfScreenSize.y += _offsetY;
-    
-    if (_boundarySet)
-    {
-        _leftBoundary = -((rect.origin.x+rect.size.width) - _fullScreenSize.x);
-        _rightBoundary = -rect.origin.x ;
-        _topBoundary = -rect.origin.y;
-        _bottomBoundary = -((rect.origin.y+rect.size.height) - _fullScreenSize.y);
-    }
-    
-    /** @class CatmullRomTo
- * An action that moves the target with a CatmullRom curve to a destination point.
- * A Catmull Rom is a Cardinal Spline with a tension of 0.5.
- * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
- * @ingroup Actions
- */
-class CC_DLL CatmullRomTo : public CardinalSplineTo
-{
-public:
-    }
-    
-    
-bool TargetedAction::initWithTarget(Node* target, FiniteTimeAction* action)
-{
-    if(ActionInterval::initWithDuration(action->getDuration()))
-    {
-        CC_SAFE_RETAIN(target);
-        _forcedTarget = target;
-        CC_SAFE_RETAIN(action);
-        _action = action;
-        return true;
-    }
-    return false;
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
 }
+
     
-    void ActionManager::addAction(Action *action, Node *target, bool paused)
-{
-    CCASSERT(action != nullptr, 'action can't be nullptr!');
-    CCASSERT(target != nullptr, 'target can't be nullptr!');
-    if(action == nullptr || target == nullptr)
-        return;
-    }
+      void SwitchBlock(int block_x, int block_y,
+                   int factor_x, int factor_y) override;
     
-    /**
-@brief FadeOutBLTiles action.
-@details Fades out the target node with many tiles from Top-Right to Bottom-Left.
- */
-class CC_DLL FadeOutBLTiles : public FadeOutTRTiles
-{
-public:
-    /** 
-    * @brief Create the action with the grid size and the duration.
-    * @param duration Specify the duration of the FadeOutBLTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @return If the creation success, return a pointer of FadeOutBLTiles action; otherwise, return nil.
-    */
-    static FadeOutBLTiles* create(float duration, const Size& gridSize);
-    }
+      // Returns true if the argument of the last Compare() call (or the baseline
+  // image, if Compare() was not called yet) meets the image acceptance
+  // criteria. The target_mul modifies the acceptance criteria used in this call
+  // the following way:
+  //    = 1.0 : the original acceptance criteria is used,
+  //    < 1.0 : a more strict acceptance criteria is used,
+  //    > 1.0 : a less strict acceptance criteria is used.
+  virtual bool DistanceOK(double target_mul) const = 0;
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
     
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
     
-    {    return s_sharedAnimationCache;
-}
+      png_read_png(png_ptr, info_ptr, png_transforms, nullptr);
     
-    AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
-{
-    AtlasNode * ret = new (std::nothrow) AtlasNode();
-    if (ret->initWithTileFile(tile, tileWidth, tileHeight, itemsToRender))
-    {
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
-}
+      tmp1 = kIDCTMatrix[0] * in[0];
+  out[0] = out[1] = out[2] = out[3] = out[4] = out[5] = out[6] = out[7] = tmp1;
     
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
-    
-    
-    {  size_t len;
-  std::unique_ptr<uint8_t[]> data;
-  size_t pos;
-  uint64_t put_buffer;
-  int put_bits;
-  bool overflow;
-};
-    
-    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
-  if (jpg.components.size() == 1 ||
-      (jpg.components.size() == 3 &&
-       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
-    OutputImage img(jpg.width, jpg.height);
-    img.CopyFromJpegData(jpg);
-    return img.ToSRGB();
+    #define EXPECT_MARKER() \
+  if (pos + 2 > len || data[pos] != 0xff) {                             \
+    fprintf(stderr, 'Marker byte (0xff) expected, found: %d '           \
+            'pos=%d len=%d\n',                                          \
+            (pos < len ? data[pos] : 0), static_cast<int>(pos),         \
+            static_cast<int>(len));                                     \
+    jpg->error = JPEG_MARKER_BYTE_NOT_FOUND;                            \
+    return false;                                                       \
   }
-  return std::vector<uint8_t>();
-}
-    
-    // Decodes the parsed jpeg coefficients into an RGB image.
-// There can be only either 1 or 3 image components, in either case, an RGB
-// output image will be generated.
-// Only YUV420 and YUV444 sampling factors are supported.
-// Vector will be empty if a decoding error occurred.
-std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
