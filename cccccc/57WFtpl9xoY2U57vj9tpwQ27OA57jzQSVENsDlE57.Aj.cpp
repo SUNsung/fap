@@ -1,412 +1,586 @@
 
         
-        // Sent by the renderer when the draggable regions are updated.
-IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
-                    std::vector<extensions::DraggableRegion> /* regions */)
-    
-    namespace {
-    }
+            QVariant value() const;
+    void setValue(const QVariant &value);
     
     
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-      int id() const { return id_; }
-  std::string extension_id_;
-  ObjectManager* object_manager() const { return object_manager_.get(); }
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-    }
-    
-       void ExecuteCommand(int command_id, int event_flags) override;
-    
-    NwObjCallObjectMethodFunction::~NwObjCallObjectMethodFunction() {
-}
-    
-    
-    
-    #if !defined(BOOST_NO_WREGEX) && defined(BOOST_REGEX_HAS_OTHER_WCHAR_T)
-#define BOOST_REGEX_CHAR_T unsigned short
-#ifdef BOOST_REGEX_US_INSTANTIATE
-#  define BOOST_REGEX_INSTANTIATE
-#endif
-#include <boost/regex/v4/instances.hpp>
-#undef BOOST_REGEX_CHAR_T
-#ifdef BOOST_REGEX_INSTANTIATE
-#  undef BOOST_REGEX_INSTANTIATE
-#endif
-#endif
-    
-    void ActionCamera::setEye(const Vec3& eye)
-{
-    _eye = eye;
-    updateTransform();
-}
-    
-    
-    {    Vec3 _center;
-    Vec3 _eye;
-    Vec3 _up;
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
 };
     
-    //
-// EaseBezierAction
-//
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
-#define __ACTION_CCPAGETURN3D_ACTION_H__
-    
-        //
-    // Overrides
-    //
-    virtual ProgressFromTo* clone() const override;
-    virtual ProgressFromTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ProgressFromTo() {}
-    virtual ~ProgressFromTo() {}
-    
-    void ActionTween::update(float dt)
-{
-    dynamic_cast<ActionTweenDelegate*>(_target)->updateTweenAction(_to  - _delta * (1 - dt), _key);
+    namespace Ui {
+    class TransactionDescDialog;
 }
     
-    NS_CC_END
-
+    #ifndef BITCOIN_RPC_MINING_H
+#define BITCOIN_RPC_MINING_H
     
-        /** Width of each char. */
-    int    _itemWidth;
-    /** Height of each char. */
-    int    _itemHeight;
-    
-    Color3B    _colorUnmodified;
-    
-    TextureAtlas* _textureAtlas;
-    /** Protocol variables. */
-    bool _isOpacityModifyRGB;
-    BlendFunc _blendFunc;
-    
-      std::atomic<FlushReason> flush_reason_;
-    
-      using DBImpl::Put;
-  virtual Status Put(const WriteOptions& /*options*/,
-                     ColumnFamilyHandle* /*column_family*/,
-                     const Slice& /*key*/, const Slice& /*value*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::Merge;
-  virtual Status Merge(const WriteOptions& /*options*/,
-                       ColumnFamilyHandle* /*column_family*/,
-                       const Slice& /*key*/, const Slice& /*value*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::Delete;
-  virtual Status Delete(const WriteOptions& /*options*/,
-                        ColumnFamilyHandle* /*column_family*/,
-                        const Slice& /*key*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  virtual Status Write(const WriteOptions& /*options*/,
-                       WriteBatch* /*updates*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::CompactRange;
-  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
-                              ColumnFamilyHandle* /*column_family*/,
-                              const Slice* /*begin*/,
-                              const Slice* /*end*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-    
-    // Param variant of DBTestBase::ChangeCompactOptions
-class DBTestCompactionFilterWithCompactParam
-    : public DBTestCompactionFilter,
-      public ::testing::WithParamInterface<DBTestBase::OptionConfig> {
- public:
-  DBTestCompactionFilterWithCompactParam() : DBTestCompactionFilter() {
-    option_config_ = GetParam();
-    Destroy(last_options_);
-    auto options = CurrentOptions();
-    if (option_config_ == kDefault || option_config_ == kUniversalCompaction ||
-        option_config_ == kUniversalCompactionMultiLevel) {
-      options.create_if_missing = true;
+        while (outlen > 0) {
+        secp256k1_hmac_sha256_t hmac;
+        int now = outlen;
+        secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
+        secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
+        secp256k1_hmac_sha256_finalize(&hmac, rng->v);
+        if (now > 32) {
+            now = 32;
+        }
+        memcpy(out, rng->v, now);
+        out += now;
+        outlen -= now;
     }
-    if (option_config_ == kLevelSubcompactions ||
-        option_config_ == kUniversalSubcompactions) {
-      assert(options.max_subcompactions > 1);
-    }
-    TryReopen(options);
-  }
-};
     
     
-    {
-    {    if (data.ToString().find('foo567') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('v1.fetdq') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('bar123') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('v2.dfgkjdfghsd') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
-    if (data.ToString().find('dfgk') != std::string::npos) {
-      hits++; 
-      //std::cout << 'Hit in ' << filePath << '\n';
-    }
+    {    secp256k1_scalar_clear(&s);
+    return ret;
+}
+    
+      printer->Print(
+    '/// <summary>Holder for reflection information generated from $file_name$</summary>\n'
+    '$access_level$ static partial class $reflection_class_name$ {\n'
+    '\n',
+    'file_name', file_->name(),
+    'access_level', class_access_level(),
+    'reflection_class_name', reflectionClassname_);
+  printer->Indent();
+}
+    
+    const Options* SourceGeneratorBase::options() {
+  return this->options_;
+}
+    
+    void Context::InitializeFieldGeneratorInfo(const FileDescriptor* file) {
+  for (int i = 0; i < file->message_type_count(); ++i) {
+    InitializeFieldGeneratorInfoForMessage(file->message_type(i));
   }
-  if (encrypted_env_) {
-    ASSERT_EQ(hits, 0);
+}
+    
+    
+    {  WriteFieldDocComment(printer, descriptor_);
+  if (descriptor_->is_repeated()) {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newRepeatedGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $packed$,\n'
+        '      $singular_type$.class);\n');
   } else {
-    ASSERT_GE(hits, 4);
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newSingularGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $default$,\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $singular_type$.class);\n');
   }
+  printer->Annotate('name', descriptor_);
 }
     
-    class WriteCallback {
- public:
-  virtual ~WriteCallback() {}
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
+}
+    
+     public:
+  virtual void GenerateCFunctionDeclarations(io::Printer* printer) const;
+  virtual void GenerateCFunctionImplementations(io::Printer* printer) const;
+  virtual void DetermineForwardDeclarations(std::set<string>* fwd_decls) const;
+    
+      vars['default_name'] = GPBGenericValueFieldName(descriptor_);
+  if (descriptor_->is_repeated()) {
+    vars['default'] = 'nil';
+  } else {
+    vars['default'] = DefaultValue(descriptor_);
+  }
+  string type = GetCapitalizedType(descriptor_);
+  vars['extension_type'] = string('GPBDataType') + type;
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    enum class ImmType {
+              // Supports TOC? | Supports li64? | Fixed size?
+              // -------------------------------------------
+  AnyCompact, // Yes           | Yes            | No
+  AnyFixed,   // Yes           | Yes            | Yes (5 instr)
+  TocOnly,    // Yes           | No             | Yes (2 instr)
+};
+    
+    #include 'hphp/runtime/base/apc-object.h'
+#include 'hphp/runtime/base/apc-array.h'
+#include 'hphp/runtime/base/apc-stats.h'
+#include 'hphp/runtime/base/object-data.h'
+#include 'hphp/runtime/base/type-object.h'
+#include 'hphp/runtime/ext/apc/ext_apc.h'
+#include 'hphp/runtime/base/collections.h'
+#include 'hphp/runtime/ext/collections/ext_collections-map.h'
+#include 'hphp/runtime/ext/collections/ext_collections-set.h'
+#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
+#include 'hphp/runtime/base/data-walker.h'
+    
+    namespace HPHP {
+    }
+    
+      static void ParseConfigFile(const std::string &filename, IniSettingMap &ini,
+                              Hdf &hdf, const bool is_system = true);
+    
+    inline VarEnv* ExecutionContext::hasVarEnv(int frame) {
+  auto const fp = getFrameAtDepth(frame);
+  if (fp && (fp->func()->attrs() & AttrMayUseVV)) {
+    if (fp->hasVarEnv()) return fp->getVarEnv();
+  }
+  return nullptr;
+}
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+      path_str += strlen(prefix);
+  path_len -= strlen(prefix);
+    
+    ///////////////////////////////////////////////////////////////////////////////
+// virtual functions
+    
+        /*virtual*/ void LearnerNesterov::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
+                                             const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) /*override*/
+    {
+        switch (gradientValue->GetDataType())
+        {
+        case DataType::Float:
+            Update<float>(parameter, gradientValue, smoothedGradientValue, trainingSampleCount);
+            break;
+        case DataType::Double:
+            Update<double>(parameter, gradientValue, smoothedGradientValue, trainingSampleCount);
+            break;
+        case DataType::Float16:
+            UpdateHalf(parameter, gradientValue, smoothedGradientValue, trainingSampleCount);
+            break;
+        default:
+            NOT_IMPLEMENTED;
+        }
+    }
+    
+        protected:
+        // If a gradient is sparse, we skip updating columns with zero gradients. This means some 
+        // columns will receive their updates when their gradient is non-zero. The only exception
+        // is that once every s_SyncInterval updates we will make sure all columns are up to date. 
+        static const int s_SyncInterval;
+    
+        public:
+        CompositeMinibatchSource(const MinibatchSourceConfig& configuration);
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_fd != -1);
+        // removing file
+        unlink(m_fileName.c_str());
+        // Note: file is intentionally removed *before* releasing the lock
+        // to ensure that locked file isn't deleted by the non-owner of the lock
+        m_lock.l_type = F_UNLCK;
+        // Now removing the lock and closing the file descriptor
+        // waiting processes will be notified
+        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
+        if (rc == FCNTL_ERROR)
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
+        }
+        close(m_fd);
+        m_fd = -1;
     }
     
     
     {
-    {    // Increase the amount we map the next time, but capped at 1MB
-    if (map_size_ < (1 << 20)) {
-      map_size_ *= 2;
+    {            if (map.size() > RAND_MAX * (size_t) RAND_MAX)
+                RuntimeError('RandomOrdering: too large training set: need to change to different random generator!');
+            srand((unsigned int) seed);
+            size_t retries = 0;
+            foreach_index (t, map)
+            {
+                for (int tries = 0; tries < 5; tries++)
+                {
+                    // swap current pos with a random position
+                    // Random positions are limited to t+randomizationrange.
+                    // This ensures some locality suitable for paging with a sliding window.
+                    const size_t tbegin = max((size_t) t, randomizationrange / 2) - randomizationrange / 2; // range of window  --TODO: use bounds() function above
+                    const size_t tend = min(t + randomizationrange / 2, map.size());
+                    assert(tend >= tbegin);                  // (guard against potential numeric-wraparound bug)
+                    const size_t trand = rand(tbegin, tend); // random number within windows
+                    assert((size_t) t <= trand + randomizationrange / 2 && trand < (size_t) t + randomizationrange / 2);
+                    // if range condition is fulfilled then swap
+                    if (trand <= map[t] + randomizationrange / 2 && map[t] < trand + randomizationrange / 2 && (size_t) t <= map[trand] + randomizationrange / 2 && map[trand] < (size_t) t + randomizationrange / 2)
+                    {
+                        std::swap(map[t], map[trand]);
+                        break;
+                    }
+                    // but don't multi-swap stuff out of its range (for swapping positions that have been swapped before)
+                    // instead, try again with a different random number
+                    retries++;
+                }
+            }
+            fprintf(stderr, 'RandomOrdering: %lu retries for %lu elements (%.1f%%) to ensure window condition\n', (unsigned long) retries, (unsigned long) map.size(), 100.0 * retries / map.size());
+            // ensure the window condition
+            foreach_index (t, map)
+                assert((size_t) t <= map[t] + randomizationrange / 2 && map[t] < (size_t) t + randomizationrange / 2);
+#if 0 // and a live check since I don't trust myself here yet
+            foreach_index (t, map) if (!((size_t) t <= map[t] + randomizationrange/2 && map[t] < (size_t) t + randomizationrange/2))
+            {
+                fprintf (stderr, 'RandomOrdering: windowing condition violated %d -> %d\n', t, map[t]);
+                LogicError('RandomOrdering: windowing condition violated');
+            }
+#endif
+#if 0 // test whether it is indeed a unique complete sequence
+            auto map2 = map;
+            ::sort (map2.begin(), map2.end());
+            foreach_index (t, map2) assert (map2[t] == (size_t) t);
+#endif
+            fprintf(stderr, 'RandomOrdering: recached sequence for seed %d: %d, %d, ...\n', (int) seed, (int) map[0], (int) map[1]);
+            currentseed = seed;
+        }
+        return map; // caller can now access it through operator[]
     }
-  }
-  return Status::OK();
+    
+    // -----------------------------------------------------------------------
+// ConstantNode
+// -----------------------------------------------------------------------
+    
+       file_iterator();
+   file_iterator(const char* wild);
+   ~file_iterator();
+   file_iterator(const file_iterator&);
+   file_iterator& operator=(const file_iterator&);
+   const char* root()const { return _root; }
+   const char* path()const { return _path; }
+   const char* name()const { return ptr; }
+   _fi_find_data* data() { return &(ref->_data); }
+   void next();
+   file_iterator& operator++() { next(); return *this; }
+   file_iterator operator++(int);
+   const char* operator*() { return path(); }
+    
+    template <bool is_pointer_type>
+struct is_random_imp_selector
+{
+   template <class I>
+   struct rebind
+   {
+      typedef is_random_imp<I> type;
+   };
+};
+    
+    
+    
+    
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_word_boundary()
+{
+   bool b; // indcates whether next character is a word character
+   if(position != last)
+   {
+      // prev and this character must be opposites:
+      b = traits_inst.isctype(*position, m_word_mask);
+   }
+   else
+   {
+      b = (m_match_flags & match_not_eow) ? true : false;
+   }
+   if((position == backstop) && ((m_match_flags & match_prev_avail) == 0))
+   {
+      if(m_match_flags & match_not_bow)
+         b ^= true;
+      else
+         b ^= false;
+   }
+   else
+   {
+      --position;
+      b ^= traits_inst.isctype(*position, m_word_mask);
+      ++position;
+   }
+   if(b)
+   {
+      pstate = pstate->next.p;
+      return true;
+   }
+   return false; // no match if we get to here...
 }
     
-      // When flush happens, it determines whether to trigger compaction. If
-  // triggered_writes_stop is true, it will also set the retry flag of
-  // compaction-task to true.
-  void OnFlushCompleted(
-      DB* db, const FlushJobInfo& info) override {
-    CompactionTask* task = PickCompaction(db, info.cf_name);
-    if (task != nullptr) {
-      if (info.triggered_writes_stop) {
-        task->retry_on_fail = true;
+    
+    {   if(greedy)
+   {
+      if((rep->leading) && (count < rep->max))
+         restart = position;
+      // push backtrack info if available:
+      if(count - rep->min)
+         push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);
+      // jump to next state:
+      pstate = rep->alt.p;
+      return true;
+   }
+   else
+   {
+      // non-greedy, push state and return true if we can skip:
+      if(count < rep->max)
+         push_single_repeat(count, rep, position, saved_state_rep_char);
+      pstate = rep->alt.p;
+      return (position == last) ? (rep->can_be_null & mask_skip) : can_start(*position, rep->_map, mask_skip);
+   }
+#ifdef __BORLANDC__
+#pragma option pop
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+}
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_startmark()
+{
+   int index = static_cast<const re_brace*>(pstate)->index;
+   icase = static_cast<const re_brace*>(pstate)->icase;
+   bool r = true;
+   switch(index)
+   {
+   case 0:
+      pstate = pstate->next.p;
+      break;
+   case -1:
+   case -2:
+      {
+         // forward lookahead assert:
+         BidiIterator old_position(position);
+         const re_syntax_base* next_pstate = static_cast<const re_jump*>(pstate->next.p)->alt.p->next.p;
+         pstate = pstate->next.p->next.p;
+         r = match_all_states();
+         pstate = next_pstate;
+         position = old_position;
+         if((r && (index != -1)) || (!r && (index != -2)))
+            r = false;
+         else
+            r = true;
+         if(r && m_have_accept)
+            r = skip_until_paren(INT_MAX);
+         break;
       }
-      // Schedule compaction in a different thread.
-      ScheduleCompaction(task);
+   case -3:
+      {
+         // independent sub-expression:
+         bool old_independent = m_independent;
+         m_independent = true;
+         const re_syntax_base* next_pstate = static_cast<const re_jump*>(pstate->next.p)->alt.p->next.p;
+         pstate = pstate->next.p->next.p;
+         bool can_backtrack = m_can_backtrack;
+         r = match_all_states();
+         if(r)
+            m_can_backtrack = can_backtrack;
+         pstate = next_pstate;
+         m_independent = old_independent;
+#ifdef BOOST_REGEX_MATCH_EXTRA
+         if(r && (m_match_flags & match_extra))
+         {
+            //
+            // our captures have been stored in *m_presult
+            // we need to unpack them, and insert them
+            // back in the right order when we unwind the stack:
+            //
+            unsigned i;
+            match_results<BidiIterator, Allocator> tm(*m_presult);
+            for(i = 0; i < tm.size(); ++i)
+               (*m_presult)[i].get_captures().clear();
+            // match everything else:
+            r = match_all_states();
+            // now place the stored captures back:
+            for(i = 0; i < tm.size(); ++i)
+            {
+               typedef typename sub_match<BidiIterator>::capture_sequence_type seq;
+               seq& s1 = (*m_presult)[i].get_captures();
+               const seq& s2 = tm[i].captures();
+               s1.insert(
+                  s1.end(), 
+                  s2.begin(), 
+                  s2.end());
+            }
+         }
+#endif
+         if(r && m_have_accept)
+            r = skip_until_paren(INT_MAX);
+         break;
+      }
+   case -4:
+      {
+      // conditional expression:
+      const re_alt* alt = static_cast<const re_alt*>(pstate->next.p);
+      BOOST_ASSERT(alt->type == syntax_element_alt);
+      pstate = alt->next.p;
+      if(pstate->type == syntax_element_assert_backref)
+      {
+         if(!match_assert_backref())
+            pstate = alt->alt.p;
+         break;
+      }
+      else
+      {
+         // zero width assertion, have to match this recursively:
+         BOOST_ASSERT(pstate->type == syntax_element_startmark);
+         bool negated = static_cast<const re_brace*>(pstate)->index == -2;
+         BidiIterator saved_position = position;
+         const re_syntax_base* next_pstate = static_cast<const re_jump*>(pstate->next.p)->alt.p->next.p;
+         pstate = pstate->next.p->next.p;
+         bool res = match_all_states();
+         position = saved_position;
+         if(negated)
+            res = !res;
+         if(res)
+            pstate = next_pstate;
+         else
+            pstate = alt->alt.p;
+         break;
+      }
+      }
+   case -5:
+      {
+         // Reset start of $0, since we have a \K escape
+         backup_subex<BidiIterator> sub(*m_presult, 0);
+         m_presult->set_first(position, 0, true);
+         pstate = pstate->next.p;
+         r = match_all_states();
+         if(r == false)
+            sub.restore(*m_presult);
+         break;
+      }
+   default:
+   {
+      BOOST_ASSERT(index > 0);
+      if((m_match_flags & match_nosubs) == 0)
+      {
+         backup_subex<BidiIterator> sub(*m_presult, index);
+         m_presult->set_first(position, index);
+         pstate = pstate->next.p;
+         r = match_all_states();
+         if(r == false)
+            sub.restore(*m_presult);
+#ifdef BOOST_REGEX_MATCH_EXTRA
+         //
+         // we have a match, push the capture information onto the stack:
+         //
+         else if(sub.get().matched && (match_extra & m_match_flags))
+            ((*m_presult)[index]).get_captures().push_back(sub.get());
+#endif
+      }
+      else
+      {
+         pstate = pstate->next.p;
+      }
+      break;
+   }
+   }
+   return r;
+}
+    
+    template <class Base, class Match>
+struct format_functor1
+{
+   format_functor1(Base b) : func(b) {}
     }
-  }
     
-      db->Get(ReadOptions(), 'key2', &value);
-  assert(value == 'value');
+    #ifndef BOOST_REGEX_V4_REGEX_MERGE_HPP
+#define BOOST_REGEX_V4_REGEX_MERGE_HPP
     
-    // convert to alias_ref<T> from T
-template <typename T>
-struct Convert<alias_ref<T>> {
-  typedef JniType<T> jniType;
-  static alias_ref<jniType> fromJni(jniType t) {
-    return wrap_alias(t);
-  }
-  static jniType toJniRet(alias_ref<jniType> t) {
-    return t.get();
-  }
-  static jniType toCall(alias_ref<jniType> t) {
-    return t.get();
-  }
+    template<>
+struct padding3<4>
+{
+   enum{
+      padding_size = 4,
+      padding_mask = 3
+   };
 };
     
       /**
-   * The offset within the current function
+   * \fn  virtual void Predictor::PredictInstance( const SparsePage::Inst&
+   * inst, std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model,
+   * unsigned ntree_limit = 0, unsigned root_index = 0) = 0;
+   *
+   * \brief online prediction function, predict score for one instance at a time
+   * NOTE: use the batch prediction interface if possible, batch prediction is
+   * usually more efficient than online prediction This function is NOT
+   * threadsafe, make sure you only call from one thread.
+   *
+   * \param           inst        The instance to predict.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       The model to predict from
+   * \param           ntree_limit (Optional) The ntree limit.
+   * \param           root_index  (Optional) Zero-based index of the root.
    */
-  int functionOffset() const noexcept {
-    auto absoluteSymbol = static_cast<const char*>(functionAddress_);
-    auto absoluteabsoluteProgramCounter =
-        static_cast<const char*>(absoluteProgramCounter_);
-    return absoluteabsoluteProgramCounter - absoluteSymbol;
-  }
     
-    class YogaTest_HadOverflowTests : public Test {
-protected:
-  YogaTest_HadOverflowTests() {
-    config = YGConfigNew();
-    root = YGNodeNewWithConfig(config);
-    YGNodeStyleSetWidth(root, 200);
-    YGNodeStyleSetHeight(root, 100);
-    YGNodeStyleSetFlexDirection(root, YGFlexDirectionColumn);
-    YGNodeStyleSetFlexWrap(root, YGWrapNoWrap);
-  }
-    }
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX10 sample code but remove this dependency you can: 
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
     
-      YGFloatOptional operator+(const YGFloatOptional& op);
-  bool operator>(const YGFloatOptional& op) const;
-  bool operator<(const YGFloatOptional& op) const;
-  bool operator>=(const YGFloatOptional& op) const;
-  bool operator<=(const YGFloatOptional& op) const;
-  bool operator==(const YGFloatOptional& op) const;
-  bool operator!=(const YGFloatOptional& op) const;
-    
-      areNonFloatValuesEqual = areNonFloatValuesEqual &&
-      flexGrow.isUndefined() == style.flexGrow.isUndefined();
-  if (areNonFloatValuesEqual && !flexGrow.isUndefined()) {
-    areNonFloatValuesEqual = areNonFloatValuesEqual &&
-        flexGrow.getValue() == style.flexGrow.getValue();
-  }
-    
-    constexpr YGValue kYGValueUndefined = {0, YGUnitUndefined};
-    
-    struct Layout
-{
-    double left;
-    double right;
-    }
-    
-    
-    {    void toJS(nbind::cbOutput expose) const
+        if (install_callbacks)
     {
-        expose(width, height);
+        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
     }
-};
-
     
-    NBIND_CLASS(Value)
-{
-    construct<>();
-    construct<int, double>();
-}
+        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
+    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
+    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
+    io.KeyMap[ImGuiKey_Home] = VK_HOME;
+    io.KeyMap[ImGuiKey_End] = VK_END;
+    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
+    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
+    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = 'A';
+    io.KeyMap[ImGuiKey_C] = 'C';
+    io.KeyMap[ImGuiKey_V] = 'V';
+    io.KeyMap[ImGuiKey_X] = 'X';
+    io.KeyMap[ImGuiKey_Y] = 'Y';
+    io.KeyMap[ImGuiKey_Z] = 'Z';
     
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
-}
+    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
+IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
     
-    #include <antlr/config.hpp>
-#ifdef __MINGW32__
-#include <cstring>
-#endif
-#include <string>
-    
-    	/** Walk the tree looking for all exact subtree matches.  Return
-	 *  a vector of RefAST that lets the caller walk the list
-	 *  of subtree roots found herein.
-	 */
-	virtual ANTLR_USE_NAMESPACE(std)vector<RefAST> findAll(RefAST t) = 0;
-    
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/ASTNULLType.hpp#2 $
- */
-    
-    #endif //INC_ASTPair_hpp__
-
-    
-    	class AST;
-    
-    
-    {	CircularQueue(const CircularQueue&);
-	const CircularQueue& operator=(const CircularQueue&);
-};
-    
-    	/** get the line the token is at (starting at 1)
-	 * @see CharScanner::newline()
-	 * @see CharScanner::tab()
-	 */
-	virtual int getLine() const
-	{
-		return line;
-	}
-	/** gt the column the token is at (starting at 1)
-	 * @see CharScanner::newline()
-	 * @see CharScanner::tab()
-	 */
-	virtual int getColumn() const
-	{
-		return col;
-	}
-    
-    
-    {	IOException( ANTLR_USE_NAMESPACE(std)exception& e )
-		: ANTLRException(e.what())
-	{
-	}
-	IOException( const ANTLR_USE_NAMESPACE(std)string& mesg )
-		: ANTLRException(mesg)
-	{
-	}
-	virtual ~IOException() throw()
-	{
-	}
-};
-    
-    	/** Sync up deferred consumption */
-	void syncConsume();
-    
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/MismatchedCharException.hpp#2 $
- */
-    
-    
-    {private:
-	/// Token names array for formatting
-	const char* const* tokenNames;
-	/// Max number of tokens in tokenNames
-	const int numTokens;
-	/// Return token name for tokenType
-	ANTLR_USE_NAMESPACE(std)string tokenName(int tokenType) const;
-};
-    
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/NoViableAltForCharException.hpp#2 $
- */
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
