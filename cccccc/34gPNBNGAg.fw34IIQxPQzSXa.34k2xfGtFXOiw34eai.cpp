@@ -1,122 +1,187 @@
 
         
-        // This helper class can be used to mock out Google Test failure reporting
-// so that we can test Google Test or code that builds on Google Test.
+        #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
+#endif
+    
+    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
+                     string* full_type_name) {
+  size_t pos = type_url.find_last_of('/');
+  if (pos == string::npos || pos + 1 == type_url.size()) {
+    return false;
+  }
+  if (url_prefix) {
+    *url_prefix = type_url.substr(0, pos + 1);
+  }
+  *full_type_name = type_url.substr(pos + 1);
+  return true;
+}
+    
+    #include <sstream>
+    
+    int ImmutableExtensionLiteGenerator::GenerateRegistrationCode(
+    io::Printer* printer) {
+  printer->Print(
+    'registry.add($scope$.$name$);\n',
+    'scope', scope_,
+    'name', UnderscoresToCamelCase(descriptor_));
+  return 7;
+}
+    
+    void ImmutableMapFieldGenerator::
+GenerateEqualsCode(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'result = result && internalGet$capitalized_name$().equals(\n'
+      '    other.internalGet$capitalized_name$());\n');
+}
+    
+    
+    {  printer->Print(
+      variables_,
+      'int32_t $owning_message_class$_$capitalized_name$_RawValue($owning_message_class$ *message) {\n'
+      '  GPBDescriptor *descriptor = [$owning_message_class$ descriptor];\n'
+      '  GPBFieldDescriptor *field = [descriptor fieldWithNumber:$field_number_name$];\n'
+      '  return GPBGetMessageInt32Field(message, field);\n'
+      '}\n'
+      '\n'
+      'void Set$owning_message_class$_$capitalized_name$_RawValue($owning_message_class$ *message, int32_t value) {\n'
+      '  GPBDescriptor *descriptor = [$owning_message_class$ descriptor];\n'
+      '  GPBFieldDescriptor *field = [descriptor fieldWithNumber:$field_number_name$];\n'
+      '  GPBSetInt32IvarWithFieldInternal(message, field, value, descriptor.file.syntax);\n'
+      '}\n'
+      '\n');
+}
+    
+    class EnumFieldGenerator : public SingleFieldGenerator {
+  friend FieldGenerator* FieldGenerator::Make(const FieldDescriptor* field,
+                                              const Options& options);
+    }
+    
+    
+    {  printer->Print(vars,
+                 '{\n'
+                 '  .defaultValue.$default_name$ = $default$,\n'
+                 '  .singletonName = GPBStringifySymbol($root_class_and_method_name$),\n'
+                 '  .extendedClass = GPBStringifySymbol($extended_type$),\n'
+                 '  .messageOrGroupClassName = $type$,\n'
+                 '  .enumDescriptorFunc = $enum_desc_func_name$,\n'
+                 '  .fieldNumber = $number$,\n'
+                 '  .dataType = $extension_type$,\n'
+                 '  .options = $options$,\n'
+                 '},\n');
+}
+    
+    // Bool() allows generating tests with parameters in a set of (false, true).
 //
-// An object of this class appends a TestPartResult object to the
-// TestPartResultArray object given in the constructor whenever a Google Test
-// failure is reported. It can either intercept only failures that are
-// generated in the same thread that created this object or it can intercept
-// all generated failures. The scope of this mock object can be controlled with
-// the second argument to the two arguments constructor.
-class GTEST_API_ ScopedFakeTestPartResultReporter
-    : public TestPartResultReporterInterface {
+// Synopsis:
+// Bool()
+//   - returns a generator producing sequences with elements {false, true}.
+//
+// It is useful when testing code that depends on Boolean flags. Combinations
+// of multiple flags can be tested when several Bool()'s are combined using
+// Combine() function.
+//
+// In the following example all tests in the test case FlagDependentTest
+// will be instantiated twice with parameters false and true.
+//
+// class FlagDependentTest : public testing::TestWithParam<bool> {
+//   virtual void SetUp() {
+//     external_flag = GetParam();
+//   }
+// }
+// INSTANTIATE_TEST_CASE_P(BoolSequence, FlagDependentTest, Bool());
+//
+inline internal::ParamGenerator<bool> Bool() {
+  return Values(false, true);
+}
+    
+    // UniversalPrintArray(begin, len, os) prints an array of 'len'
+// elements, starting at address 'begin'.
+template <typename T>
+void UniversalPrintArray(const T* begin, size_t len, ::std::ostream* os) {
+  if (len == 0) {
+    *os << '{}';
+  } else {
+    *os << '{ ';
+    const size_t kThreshold = 18;
+    const size_t kChunkSize = 8;
+    // If the array has more than kThreshold elements, we'll have to
+    // omit some details by printing only the first and the last
+    // kChunkSize elements.
+    // TODO(wan@google.com): let the user control the threshold using a flag.
+    if (len <= kThreshold) {
+      PrintRawArrayTo(begin, len, os);
+    } else {
+      PrintRawArrayTo(begin, kChunkSize, os);
+      *os << ', ..., ';
+      PrintRawArrayTo(begin + len - kChunkSize, kChunkSize, os);
+    }
+    *os << ' }';
+  }
+}
+// This overload prints a (const) char array compactly.
+GTEST_API_ void UniversalPrintArray(
+    const char* begin, size_t len, ::std::ostream* os);
+    
+    // A helper class for implementing EXPECT_FATAL_FAILURE() and
+// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
+// TestPartResultArray contains exactly one failure that has the given
+// type and contains the given substring.  If that's not the case, a
+// non-fatal failure will be generated.
+class GTEST_API_ SingleFailureChecker {
  public:
-  // The two possible mocking modes of this object.
-  enum InterceptMode {
-    INTERCEPT_ONLY_CURRENT_THREAD,  // Intercepts only thread local failures.
-    INTERCEPT_ALL_THREADS           // Intercepts all failures.
-  };
-    }
-    
-    # define REGISTER_TYPED_TEST_CASE_P(CaseName, ...) \
-  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
-  typedef ::testing::internal::Templates<__VA_ARGS__>::type gtest_AllTests_; \
-  } \
-  static const char* const GTEST_REGISTERED_TEST_NAMES_(CaseName) = \
-      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).VerifyRegisteredTestNames(\
-          __FILE__, __LINE__, #__VA_ARGS__)
-    
-    // The following family of struct and struct templates are used to
-// represent template lists.  In particular, TemplatesN<T1, T2, ...,
-// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
-// for Templates0, every struct in the family has two member types:
-// Head for the selector of the first template in the list, and Tail
-// for the rest of the list.
-    
-    // Returns true iff n is a prime number.
-bool IsPrime(int n) {
-  // Trivial case 1: small numbers
-  if (n <= 1) return false;
-    }
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    // Godot TO Bullet
-extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
-extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
-extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
-extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
-extern void G_TO_B(Transform const &inVal, btTransform &outVal);
-    
-    public:
-	_FORCE_INLINE_ void set_self(const RID &p_self) { self = p_self; }
-	_FORCE_INLINE_ RID get_self() const { return self; }
-    
-    #include 'csg_gizmos.h'
-#include 'csg_shape.h'
-    
-    MemoryPool::Alloc *MemoryPool::allocs = NULL;
-MemoryPool::Alloc *MemoryPool::free_list = NULL;
-uint32_t MemoryPool::alloc_count = 0;
-uint32_t MemoryPool::allocs_used = 0;
-Mutex *MemoryPool::alloc_mutex = NULL;
-    
-    void FileAccessZip::close() {
+  // The constructor remembers the arguments.
+  SingleFailureChecker(const TestPartResultArray* results,
+                       TestPartResult::Type type,
+                       const string& substr);
+  ~SingleFailureChecker();
+ private:
+  const TestPartResultArray* const results_;
+  const TestPartResult::Type type_;
+  const string substr_;
     }
     
     
-    {	p_dst[0] = ret >> 8;
-	p_dst[1] = ret & 0xff;
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
 };
     
-      /*
-   * @brief a unique ID identifying the 'carve'
-   *
-   * This unique generated GUID is used to identify the carve session from
-   * other carves. It is also used by our backend service to derive a
-   * session key for exfiltration.
-   */
-  std::string carveGuid_;
+      // An enumeration of the three reasons that a test might be aborted.
+  enum AbortReason {
+    TEST_ENCOUNTERED_RETURN_STATEMENT,
+    TEST_THREW_EXCEPTION,
+    TEST_DID_NOT_DIE
+  };
     
-    namespace osquery {
-    }
+    typedef char IsNotContainer;
+template <class C>
+IsNotContainer IsContainerTest(long /* dummy */) { return '\0'; }
     
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
     
-    {    // Backup the current decorator status.
-    decorator_status_ = FLAGS_disable_decorators;
-    FLAGS_disable_decorators = true;
-  }
+    #if GTEST_HAS_TYPED_TEST || GTEST_HAS_TYPED_TEST_P
     
-    #include <osquery/config.h>
-#include <osquery/flags.h>
-#include <osquery/registry.h>
-    
-    
-    {/**
- * @brief Compute a hash digest from the contents of a buffer.
- *
- * @param hash_type The osquery-supported hash algorithm.
- * @param buffer A caller-controlled buffer (already allocated).
- * @param size The length of buffer in bytes.
- * @return A string (hex) representation of the hash digest.
- */
-std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
-} // namespace osquery
-
-    
-      EXPECT_FALSE(cl3.matches(1001));
-  EXPECT_TRUE(cl3.matches(1000));
-    
-      /// Mutex and lock around extensions access.
-  std::unique_lock<Mutex> lock_;
-    
-    /**
- * @brief Event details for INotifyEventPublisher events.
- */
-struct INotifyEventContext : public EventContext {
-  /// The inotify_event structure if the EventSubscriber want to interact.
-  std::unique_ptr<struct inotify_event> event{nullptr};
-    }
+    #include <string.h>
