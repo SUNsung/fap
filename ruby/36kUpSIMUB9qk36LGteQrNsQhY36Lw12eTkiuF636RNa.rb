@@ -1,212 +1,168 @@
 
         
-        def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
-    
-    require 'jekyll'
-require 'mercenary'
-    
-            def initialize(config)
-          @main_fallback_highlighter = config['highlighter'] || 'rouge'
-          @config = config['kramdown'] || {}
-          @highlighter = nil
-          setup
-        end
-    
-      def expand_reqs
-    formula.recursive_requirements do |dependent, req|
-      build = effective_build_options_for(dependent)
-      if (req.optional? || req.recommended?) && build.without?(req)
-        Requirement.prune
-      elsif req.build? && dependent != formula
-        Requirement.prune
-      elsif req.satisfied? && req.default_formula? && (dep = req.to_dependency).installed?
-        deps << dep
-        Requirement.prune
-      end
-    end
-  end
-    
-      def caveats
-    caveats = []
-    begin
-      build, f.build = f.build, Tab.for_formula(f)
-      s = f.caveats.to_s
-      caveats << s.chomp + '\n' if s.length > 0
-    ensure
-      f.build = build
-    end
-    caveats << keg_only_text
-    caveats << bash_completion_caveats
-    caveats << zsh_completion_caveats
-    caveats << fish_completion_caveats
-    caveats << plist_caveats
-    caveats << python_caveats
-    caveats << app_caveats
-    caveats << elisp_caveats
-    caveats.compact.join('\n')
-  end
-    
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
-    
-        @report = Hash.new { |h, k| h[k] = [] }
-    return @report unless updated?
-    
-            # Checks if the target machine is ready for communication. If this
-        # returns true, then all the other methods for communicating with
-        # the machine are expected to be functional.
+                # This contains all the provider plugins by name, and returns
+        # the provider class and options.
         #
-        # @return [Boolean]
-        def ready?
-          false
-        end
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :providers
     
-        # Set the manpage date to the existing one if we're checking for changes.
-    # This avoids the only change being e.g. a new date.
-    date = if args.fail_if_changed? &&
-              target.extname == '.1' && target.exist?
-      /'(\d{1,2})' '([A-Z][a-z]+) (\d{4})' '#{organisation}' '#{manual}'/ =~ target.read
-      Date.parse('#{Regexp.last_match(1)} #{Regexp.last_match(2)} #{Regexp.last_match(3)}')
-    else
-      Date.today
-    end
-    date = date.strftime('%Y-%m-%d')
-    
-          attr_reader :cache_location
-    
-          # This allows generic Altivec PPC bottles to be supported in some
-      # formulae, while also allowing specific bottles in others; e.g.,
-      # sometimes a formula has just :tiger_altivec, other times it has
-      # :tiger_g4, :tiger_g5, etc.
-      def find_altivec_tag(tag)
-        return unless tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
-    
-        false
-  end
-    
-      attr_accessor :caller_name
-  attr_accessor :caller_number
-  attr_accessor :dtmf
-    
-      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
-    head = [
-      0x06, 0x00, 0xff, 0x07,  # RMCP Header
-      0x06,                    # RMCP+ Authentication Type
-      PAYLOAD_RAKP1,           # Payload Type
-      0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00,
-    ].pack('C*')
-    
-            private
-    
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-    
-                elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 0, :CONTEXT_SPECIFIC) if options
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_cname], 1, :CONTEXT_SPECIFIC) if cname
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_realm], 2, :CONTEXT_SPECIFIC) if realm
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_sname], 3, :CONTEXT_SPECIFIC) if sname
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_from], 4, :CONTEXT_SPECIFIC) if from
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_till], 5, :CONTEXT_SPECIFIC) if till
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_rtime], 6, :CONTEXT_SPECIFIC) if rtime
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_nonce], 7, :CONTEXT_SPECIFIC) if nonce
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_etype], 8, :CONTEXT_SPECIFIC) if etype
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_enc_auth_data], 10, :CONTEXT_SPECIFIC) if enc_auth_data
-    
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+              # Set all of our instance variables on the new class
+          [self, other].each do |obj|
+            obj.instance_variables.each do |key|
+              # Ignore keys that start with a double underscore. This allows
+              # configuration classes to still hold around internal state
+              # that isn't propagated.
+              if !key.to_s.start_with?('@__')
+                # Don't set the value if it is the unset value, either.
+                value = obj.instance_variable_get(key)
+                result.instance_variable_set(key, value) if value != UNSET_VALUE
+              end
+            end
           end
     
-          positions = []
-      while (rule_start = s.scan_next(rule_start_re))
-        pos = s.pos
-        positions << (pos - rule_start.length..close_brace_pos(less, pos - 1))
+        odie 'Unknown command: #{cmd}' unless path
+    puts path
+  end
+end
+
+    
+      def process_bootstrap
+    log_status 'Convert Bootstrap LESS to Sass'
+    puts ' repo   : #@repo_url'
+    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
+    puts ' save to: #{@save_to.to_json}'
+    puts ' twbs cache: #{@cache_path}'
+    puts '-' * 60
+    
+    
+    # We need to keep a list of shared mixin names in order to convert the includes correctly
+    # Before doing any processing we read shared mixins from a file
+    # If a mixin is nested, it gets prefixed in the list (e.g. #gradient > .horizontal to 'gradient-horizontal')
+    def read_mixins(mixins_file, nested: {})
+      mixins = get_mixin_names(mixins_file, silent: true)
+      nested.each do |selector, prefix|
+        # we use replace_rules without replacing anything just to use the parsing algorithm
+        replace_rules(mixins_file, selector) { |rule|
+          mixins += get_mixin_names(unindent(unwrap_rule_block(rule)), silent: true).map { |name| '#{prefix}-#{name}' }
+          rule
+        }
       end
-      replace_substrings_at(less, positions, &block)
-      less
+      mixins.uniq!
+      mixins.sort!
+      log_file_info 'mixins: #{mixins * ', '}' unless mixins.empty?
+      mixins
     end
     
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
+        alias log puts
     
-          def line_class(line)
-        if line =~ /^@@/
-          'gc'
-        elsif line =~ /^\+/
-          'gi'
-        elsif line =~ /^\-/
-          'gd'
+        # get sha of the branch (= the latest commit)
+    def get_branch_sha
+      @branch_sha ||= begin
+        if @branch + '\n' == %x[git rev-parse #@branch]
+          @branch
         else
-          ''
+          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
+          log cmd
+          result = %x[#{cmd}]
+          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
+          result.split(/\s+/).first
         end
       end
+    end
     
-          def is_create_page
-        false
-      end
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
     
-          def header_content
-        has_header && @header.formatted_data
-      end
+      gem.add_development_dependency 'danger'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop', '0.48.1'
+end
+
     
-        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
-    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
-    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
-    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
-    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
+      def test_file_exists(path)
+    exists?('f', path)
+  end
     
-        # test `get %r{/(.+?)/([0-9a-f]{40})} do` in app.rb
-    get '/' + page_c.escaped_url_path + '/' + page_c.version.to_s
-    assert last_response.ok?
-    assert_match /create_msg/, last_response.body
-    
-      if wiki_options[:plantuml_url]
-    Gollum::Filter::PlantUML.configure do |config|
-      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-      config.url = wiki_options[:plantuml_url]
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
     end
   end
     
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
-      end
+        def version
+      ['--version', '-V',
+       'Display the program version.',
+       lambda do |_value|
+         puts 'Capistrano Version: #{Capistrano::VERSION} (Rake Version: #{Rake::VERSION})'
+         exit
+       end]
     end
     
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
+  end
+end
     
+        def get_cache_file_for(gist, file)
+      bad_chars = /[^a-zA-Z0-9\-_.]/
+      gist      = gist.gsub bad_chars, ''
+      file      = file.gsub bad_chars, ''
+      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
+      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
+    end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+          def product_scope
+        if @current_user_roles.include?('admin')
+          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
+    
+            def log_state_changes
+          if @order.previous_changes[:state]
+            @order.log_state_changes(
+              state_name: 'order',
+              old_state: @order.previous_changes[:state].first,
+              new_state: @order.previous_changes[:state].last
+            )
+          end
+        end
+    
+            def destroy
+          if @property
+            authorize! :destroy, @property
+            @property.destroy
+            respond_with(@property, status: 204)
+          else
+            invalid_resource!(@property)
+          end
+        end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def create
+          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
+          authorize! :read, @order
+          authorize! :create, Shipment
+          quantity = params[:quantity].to_i
+          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
