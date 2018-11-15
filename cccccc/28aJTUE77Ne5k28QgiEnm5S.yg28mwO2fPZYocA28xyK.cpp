@@ -1,254 +1,181 @@
 
         
-        #if defined(X86_BUILD)
-#if defined(__GNUC__)
-#include <cpuid.h>
-#elif defined(_WIN32)
-#include <intrin.h>
-#endif
-#endif
+          Allocated = new char[capacity];
+  End = Allocated + capacity;
+  Begin = End - oldSize;
+  std::memcpy(Begin, oldBegin, oldSize);
     
-    /** Returns the polygon outline of the current block. The returned Pta must
- *  be ptaDestroy-ed after use. */
-Pta* PageIterator::BlockPolygon() const {
-  if (it_->block() == nullptr || it_->block()->block == nullptr)
-    return nullptr;  // Already at the end!
-  if (it_->block()->block->pdblk.poly_block() == nullptr)
-    return nullptr;  // No layout analysis used - no polygon.
-  ICOORDELT_IT it(it_->block()->block->pdblk.poly_block()->points());
-  Pta* pta = ptaCreate(it.length());
-  int num_pts = 0;
-  for (it.mark_cycle_pt(); !it.cycled_list(); it.forward(), ++num_pts) {
-    ICOORD* pt = it.data();
-    // Convert to top-down coords within the input image.
-    float x = static_cast<float>(pt->x()) / scale_ + rect_left_;
-    float y = rect_top_ + rect_height_ - static_cast<float>(pt->y()) / scale_;
-    ptaAddPt(pta, x, y);
-  }
-  return pta;
-}
-    
-    #define VARDIR        'configs/' /*parameters files */
-#define MAX_ITEMS_IN_SUBMENU 30
-    
-    
-/**********************************************************************
- * split_and_recog_word
- *
- * Split the word into 2 smaller pieces at the largest gap.
- * Recognize the pieces and stick the results back together.
- **********************************************************************/
-void Tesseract::split_and_recog_word(WERD_RES *word) {
-  // Find the biggest blob gap in the chopped_word.
-  int bestgap = -INT32_MAX;
-  int split_index = 0;
-  for (int b = 1; b < word->chopped_word->NumBlobs(); ++b) {
-    TBOX prev_box = word->chopped_word->blobs[b - 1]->bounding_box();
-    TBOX blob_box = word->chopped_word->blobs[b]->bounding_box();
-    int gap = blob_box.left() - prev_box.right();
-    if (gap > bestgap) {
-      bestgap = gap;
-      split_index = b;
+      // If the result type matches the context, remove the context type from the
+  // prefix of the name.
+  bool resultTypeMatchesContext = returnsSelf || (resultType == contextType);
+  if (resultTypeMatchesContext) {
+    StringRef newBaseName = omitNeedlessWordsFromPrefix(baseName, contextType,
+                                                        scratch);
+    if (newBaseName != baseName) {
+      baseName = newBaseName;
+      anyChanges = true;
     }
   }
-  ASSERT_HOST(split_index > 0);
+    
+    namespace swift {
+namespace sys {
+void TaskProcessInformation::ResourceUsage::provideMapping(json::Output &out) {
+  out.mapRequired('utime', Utime);
+  out.mapRequired('stime', Stime);
+  out.mapRequired('maxrss', Maxrss);
+}
+    }
     }
     
-    TEST_P(DerivedTest, DoesBlah) {
-  // GetParam works just the same here as if you inherit from TestWithParam.
-  EXPECT_TRUE(foo.Blah(GetParam()));
+    // WIN32 doesn't natively support <uuid/uuid.h>. Instead, we use Win32 APIs.
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <objbase.h>
+#include <string>
+#else
+#include <uuid/uuid.h>
+#endif
+    
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
 }
     
-      // The c'tor sets this object as the test part result reporter used
-  // by Google Test.  The 'result' parameter specifies where to report the
-  // results. This reporter will only catch failures generated in the current
-  // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
     
-      // Returns true if FilePath ends with a path separator, which indicates that
-  // it is intended to represent a directory. Returns false otherwise.
-  // This does NOT check that a directory (or file) actually exists.
-  bool IsDirectory() const;
     
-    // Forward declarations of ValuesIn(), which is implemented in
-// include/gtest/gtest-param-test.h.
-template <typename ForwardIterator>
-internal::ParamGenerator<
-  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
-ValuesIn(ForwardIterator begin, ForwardIterator end);
-    
-     private:
-  void CalculatePrimesUpTo(int max) {
-    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
-    is_prime_[0] = is_prime_[1] = false;
-    }
-    
-    #include <string.h>
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    class GetCol2ImGradient : public GradientMakerBase {
+    {class GetHalfToFloatGradient : public GradientMakerBase {
   using GradientMakerBase::GradientMakerBase;
   vector<OperatorDef> GetGradientDefs() override {
     return SingleGradientDef(
-        'Im2Col', '', std::vector<string>{GO(0)}, std::vector<string>{GI(0)});
+        'FloatToHalf', '', vector<string>{GO(0)}, vector<string>{GI(0)});
   }
 };
-REGISTER_GRADIENT(Col2Im, GetCol2ImGradient);
-    
-    #include <grpc/support/port_platform.h>
-    
-    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
-                             'Number of messages received per RPC', kCount);
-  return measure;
-}
-    
-      void StartTransportStreamOpBatch(grpc_call_element* elem,
-                                   TransportStreamOpBatch* op) override;
-    
-    // Force InitProtoReflectionServerBuilderPlugin() to be called at static
-// initialization time.
-struct StaticProtoReflectionPluginInitializer {
-  StaticProtoReflectionPluginInitializer() {
-    InitProtoReflectionServerBuilderPlugin();
-  }
-} static_proto_reflection_plugin_initializer;
-    
-        // SGD optimization with momentum. 
-    class LearnerMomentumSGD : public LearnerBase
-    {
-    public:
-        LearnerMomentumSGD(const std::vector<Parameter>& parameters,
-                           const LearningRateSchedule& learningRateSchedule,
-                           const MomentumSchedule& momentumSchedule,
-                           bool unitGain,
-                           AdditionalLearningOptions additionalOptions,
-                           size_t smoothGradientFactor)
-                           : LearnerBase(parameters, learningRateSchedule, additionalOptions),
-                           m_momentumSchedule(momentumSchedule), 
-                           m_unitGain(unitGain)
-        {
-            AllocateSmoothedGradients(parameters, smoothGradientFactor, 2);
-        }
-    }
-    
-        template <typename T> 
-    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
-    {
-        std::stringstream info;
-        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
-             << ', Dictionary version = ' << dictVersion;
-        return info.str();
-    }
-    
-            static bool IsUDF(const Dictionary& dict);
-    
-    
-    {        auto numNonZeroValues = std::get<3>(Data()->SparseCSCDataBuffers<ElementType>());
-        auto numOfColsInMatrix = GetMatrixDimensions(Shape()).second + 1;
-        return std::tuple<size_t, size_t, size_t>(maxSequenceLen, numOfColsInMatrix, numNonZeroValues);
-    }
-    
-            if (m_valueInitializer->Contains(RandomSeedAttributeName)) {
-            auto& seed = m_valueInitializer->operator[](RandomSeedAttributeName);
-            if ((unsigned long)seed.Value<size_t>() == SentinelValueForAutoSelectRandomSeed)
-                seed.Value<size_t>() = Internal::GenerateRandomSeed();
-        }
-    
-    // ---------------------------------------------------------------------------
-// RandomOrdering -- class to help manage randomization of input data
-// ---------------------------------------------------------------------------
-    
-        void Start();
-    void Stop();
-    void Restart();
-    
-    void    ImGui_ImplVulkan_InvalidateFontUploadObjects()
-{
-    if (g_UploadBuffer)
-    {
-        vkDestroyBuffer(g_Device, g_UploadBuffer, g_Allocator);
-        g_UploadBuffer = VK_NULL_HANDLE;
-    }
-    if (g_UploadBufferMemory)
-    {
-        vkFreeMemory(g_Device, g_UploadBufferMemory, g_Allocator);
-        g_UploadBufferMemory = VK_NULL_HANDLE;
-    }
-}
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
-// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
-// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
-// confuse your GPU driver. 
-// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
-    
-    
-    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    state.SetBytesProcessed(state.iterations() * file.tellg());
-}
-BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
-BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
-BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
-BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
-BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
-BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
-BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
-    
-    #include 'internal_macros.h'
-    
-    void State::StartKeepRunning() {
-  CHECK(!started_ && !finished_);
-  started_ = true;
-  manager_->StartStopBarrier();
-  if (!error_occurred_) ResumeTiming();
-}
-    
-    // Information kept per benchmark we may want to run
-struct Benchmark::Instance {
-  std::string name;
-  Benchmark* benchmark;
-  ReportMode report_mode;
-  std::vector<int> arg;
-  TimeUnit time_unit;
-  int range_multiplier;
-  bool use_real_time;
-  bool use_manual_time;
-  BigO complexity;
-  BigOFunc* complexity_lambda;
-  UserCounters counters;
-  const std::vector<Statistics>* statistics;
-  bool last_benchmark_instance;
-  int repetitions;
-  double min_time;
-  size_t iterations;
-  int threads;  // Number of concurrent threads to us
-};
-    
-    void BenchmarkFamilies::ClearBenchmarks() {
-  MutexLock l(mutex_);
-  families_.clear();
-  families_.shrink_to_fit();
-}
-    
-    void Finish(UserCounters *l, double cpu_time, double num_threads) {
-  for (auto &c : *l) {
-    c.second.value = Finish(c.second, cpu_time, num_threads);
-  }
-}
-    
-    
-    {}  // end namespace benchmark
+REGISTER_GRADIENT(HalfToFloat, GetHalfToFloatGradient);
+NO_GRADIENT(Float16ConstantFill);
+} // namespace caffe2
 
     
-    #include 'check.h'
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
+    
+      const bool has_explicit_iteration_count = b.iterations != 0;
+  size_t iters = has_explicit_iteration_count ? b.iterations : 1;
+  std::unique_ptr<internal::ThreadManager> manager;
+  std::vector<std::thread> pool(b.threads - 1);
+  const int repeats =
+      b.repetitions != 0 ? b.repetitions : FLAGS_benchmark_repetitions;
+  const bool report_aggregates_only =
+      repeats != 1 &&
+      (b.report_mode == internal::RM_Unspecified
+           ? FLAGS_benchmark_report_aggregates_only
+           : b.report_mode == internal::RM_ReportAggregatesOnly);
+  for (int repetition_num = 0; repetition_num < repeats; repetition_num++) {
+    for (;;) {
+      // Try benchmark
+      VLOG(2) << 'Running ' << b.name << ' for ' << iters << '\n';
+    }
+    }
+    
+    #include <cstdarg>
+#include <iostream>
+#include <string>
+    
+      // If def_optional is true and there are more characters after the
+  // flag name, or if def_optional is false, there must be a '=' after
+  // the flag name.
+  if (flag_end[0] != '=') return nullptr;
+    
+    // Macros for defining flags.
+#define DEFINE_bool(name, default_val, doc) bool FLAG(name) = (default_val)
+#define DEFINE_int32(name, default_val, doc) int32_t FLAG(name) = (default_val)
+#define DEFINE_int64(name, default_val, doc) int64_t FLAG(name) = (default_val)
+#define DEFINE_double(name, default_val, doc) double FLAG(name) = (default_val)
+#define DEFINE_string(name, default_val, doc) \
+  std::string FLAG(name) = (default_val)
+    
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
+}
+    
+    namespace {
+std::vector<std::string> elements = {
+    'name',           'iterations',       'real_time',        'cpu_time',
+    'time_unit',      'bytes_per_second', 'items_per_second', 'label',
+    'error_occurred', 'error_message'};
+}  // namespace
+    
+    
+    {  ss << std::scientific << std::setprecision(max_fractional_digits10) << value;
+  return ss.str();
+}
+    
+    typedef std::basic_ostream<char>&(EndLType)(std::basic_ostream<char>&);
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
+    }
