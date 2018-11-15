@@ -1,169 +1,207 @@
 
         
-        CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
-  llvm::SmallString<32> NameBuf(Name);
-  cache_attributes_t Attrs = {
-    CACHE_ATTRIBUTES_VERSION_2,
-    CBs.keyHashCB,
-    CBs.keyIsEqualCB,
-    nullptr,
-    CBs.keyDestroyCB,
-    CBs.valueReleaseCB,
-    nullptr,
-    nullptr,
-    CBs.UserData,
-    CBs.valueRetainCB,
-  };
+        #include <set>
+#include <string>
+    
+    namespace api {
     }
     
-    #include 'swift/Basic/DiverseList.h'
-#include 'swift/Basic/DiverseStack.h'
-using namespace swift;
+     private:
+  display::Screen* screen_;
     
-      if (triple.getOS() == llvm::Triple::Darwin &&
-      triple.getVendor() == llvm::Triple::Apple) {
-    // Rewrite darwinX.Y triples to macosx10.X'.Y ones.
-    // It affects code generation on our platform.
-    llvm::SmallString<16> osxBuf;
-    llvm::raw_svector_ostream osx(osxBuf);
-    osx << llvm::Triple::getOSTypeName(llvm::Triple::MacOSX);
+    #include 'atom/browser/atom_quota_permission_context.h'
+    
+    OpSchema::Cost CostInferenceForFC(
+    const OperatorDef& def,
+    const vector<TensorShape>& in) {
+  CAFFE_ENFORCE_EQ(in.size(), 3, 'FC requires three inputs');
+  struct OpSchema::Cost c;
+  ArgumentHelper helper(def);
     }
     
-        // Special case: 'Index' in the name matches 'Int' or 'Integer' in the type.
-    if (matchNameWordToTypeWord(nameWord, 'Index') &&
-        (matchNameWordToTypeWord('Int', *typeWordRevIter) ||
-         matchNameWordToTypeWord('Integer', *typeWordRevIter))) {
-      matched();
-      ++nameWordRevIter;
-      ++typeWordRevIter;
-      continue;
-    }
+    ChannelCredentials::~ChannelCredentials() {}
     
+    AuthPropertyIterator::~AuthPropertyIterator() {}
     
-    {    if (Finished) {
-      std::string Output = 'Output placeholder\n';
-      std::string Errors =
-          P.second->SeparateErrors ? 'Error placeholder\n' : '';
-      if (Finished(P.first, 0, Output, Errors, TaskProcessInformation(Pid),
-                   P.second->Context) == TaskFinishedResponse::StopExecution)
-        SubtaskFailed = true;
-    }
+    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
+    const grpc::string& name) const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
   }
-    
-      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart,
-                     TargetStart + 1, llvm::lenientConversion);
-  if (TargetStart == &C) {
-    // The source string contains an ill-formed subsequence at the end.
-    return false;
+  grpc_auth_property_iterator iter =
+      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
+  const grpc_auth_property* property = nullptr;
+  std::vector<grpc::string_ref> values;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    values.push_back(grpc::string_ref(property->value, property->value_length));
   }
+  return values;
+}
+    
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
     
     
-    {  bool isTypedef() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
-  }
-  const clang::TypedefNameDecl *getTypedef() const {
-    assert(isTypedef());
-    return Decl.get<const clang::TypedefNameDecl *>();
-  }
+    {  void ThreadFunc();
+  static void ReapThreads(std::list<DynamicThread*>* tlist);
 };
     
-    //////////////////////////////////////////////////////////////////////
+    	static char (&test(B *))[1];
+	static char (&test(...))[2];
     
-    // Deserializing an array could give back a different ArrayKind than we need,
-// so we have to go with the slow case of calling a collection constructor.
-NEVER_INLINE
-Object createFromSerialized(CollectionType colType, APCHandle* handle) {
-  auto const col = Object::attach(collections::alloc(colType));
-  auto const arr = handle->toLocal();
-  switch (colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    static_cast<BaseVector*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    static_cast<BaseSet*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    static_cast<BaseMap*>(col.get())->init(arr);
-    break;
-  case CollectionType::Pair:
-    not_reached();
-    break;
-  }
-  return col;
+    // Godot TO Bullet
+extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void G_TO_B(Transform const &inVal, btTransform &outVal);
+    
+    public:
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
+    
+    #include 'register_types.h'
+    
+    FuncRef::FuncRef() {
+    }
+    
+    
+    {    _previousPosition = target->getPosition();
+    _accumulatedDiff.setZero();
 }
     
-      typedef std::pair<const char*, std::string> InfoEntry;
-  typedef std::vector<InfoEntry> InfoVec;
     
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
-    
-      if (!spath.empty() && !isDirSeparator(spath.back())) {
-    spath += getDirSeparator();
-  }
-  auto fullPath = root + spath;
-  if (fullPath.empty()) {
-    return;
-  }
-  if (!callback(spath, true)) {
-    return;
-  }
-    
-    bool OutputFile::truncate(int64_t /*size*/) {
-  raise_warning('cannot truncate a php://output stream');
-  return false;
+    {    return false;
 }
     
-      // Returns the combined score of the output image in the last Compare() call
-  // (or the baseline image, if Compare() was not called yet), based on output
-  // size and the similarity metric.
-  virtual double ScoreOutputSize(int size) const = 0;
+    /** 
+@brief Waves3D action.
+@details This action is used for take effect on the target node as 3D waves.
+        You can control the effect by these parameters:
+        duration, grid size, waves count, amplitude.
+*/
+class CC_DLL Waves3D : public Grid3DAction
+{
+public:
+    /**
+    @brief Create an action with duration, grid size, waves and amplitude.
+    @param duration Specify the duration of the Waves3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param waves Specify the waves count of the Waves3D action.
+    @param amplitude Specify the amplitude of the Waves3D action.
+    @return If the creation success, return a pointer of Waves3D action; otherwise, return nil.
+    */
+    static Waves3D* create(float duration, const Size& gridSize, unsigned int waves, float amplitude);
+    }
     
-    void PrintDebug(ProcessStats* stats, std::string s);
+        /** Creates the action with the callback
     
-      tmp0 = in[3 * stride];
-  tmp1 = kIDCTMatrix[ 3] * tmp0;
-  tmp2 = kIDCTMatrix[11] * tmp0;
-  tmp3 = kIDCTMatrix[19] * tmp0;
-  tmp4 = kIDCTMatrix[27] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
+    These ActionInterval actions have some interesting properties, like:
+- They can run normally (default)
+- They can run reversed with the reverse method
+- They can run with the time altered with the Accelerate, AccelDeccel and Speed actions.
     
-    // Returns non-zero if and only if x has a zero byte, i.e. one of
-// x & 0xff, x & 0xff00, ..., x & 0xff00000000000000 is zero.
-inline uint64_t HasZeroByte(uint64_t x) {
-  return (x - 0x0101010101010101ULL) & ~x & 0x8080808080808080ULL;
+    #include '2d/CCAction.h'
+#include 'base/CCVector.h'
+#include 'base/CCRef.h'
+    
+    void ShuffleTiles::startWithTarget(Node *target)
+{
+    TiledGrid3DAction::startWithTarget(target);
+    }
+    
+    CC_CONSTRUCTOR_ACCESS:
+    FadeOutUpTiles() {}
+    virtual ~FadeOutUpTiles() {}
+    
+        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
+    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
+    
+    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
+    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
+    
+    void PolygonInfo::releaseVertsAndIndices()
+{
+    if(_isVertsOwner)
+    {
+        if(nullptr != triangles.verts)
+        {
+            CC_SAFE_DELETE_ARRAY(triangles.verts);
+        }
+        
+        if(nullptr != triangles.indices)
+        {
+            CC_SAFE_DELETE_ARRAY(triangles.indices);
+        }
+    }
 }
     
-    bool JPEGData::Is420() const {
-  return (components.size() == 3 &&
-          max_h_samp_factor == 2 &&
-          max_v_samp_factor == 2 &&
-          components[0].h_samp_factor == 2 &&
-          components[0].v_samp_factor == 2 &&
-          components[1].h_samp_factor == 1 &&
-          components[1].v_samp_factor == 1 &&
-          components[2].h_samp_factor == 1 &&
-          components[2].v_samp_factor == 1);
+        // FIXME: this should be a property, not a public ivar
+    TrianglesCommand::Triangles triangles;
+    
+        // Create the vertex shader
+    {
+        static const char* vertexShader =
+            'cbuffer vertexBuffer : register(b0) \
+            {\
+            float4x4 ProjectionMatrix; \
+            };\
+            struct VS_INPUT\
+            {\
+            float2 pos : POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            PS_INPUT main(VS_INPUT input)\
+            {\
+            PS_INPUT output;\
+            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+            output.col = input.col;\
+            output.uv  = input.uv;\
+            return output;\
+            }';
+    }
+    
+    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
 }
     
-    #include 'guetzli/jpeg_data.h'
+    void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(io.Fonts->IsBuilt());     // Font atlas needs to be built, call renderer _NewFrame() function e.g. ImGui_ImplOpenGL3_NewFrame() 
+    }
     
-    // Functions for writing a JPEGData object into a jpeg byte stream.
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+        // Setup GLUT display function
+    // We will also call ImGui_ImplFreeGLUT_InstallFuncs() to get all the other functions installed for us, 
+    // otherwise it is possible to install our own functions and call the imgui_impl_freeglut.h functions ourselves.
+    glutDisplayFunc(glut_display_func);
