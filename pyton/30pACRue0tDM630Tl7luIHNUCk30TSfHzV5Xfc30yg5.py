@@ -1,202 +1,108 @@
 
         
-          dim = embeddings.shape[1]
+            time_ridge = np.empty(n_iter)
+    time_ols = np.empty(n_iter)
+    time_lasso = np.empty(n_iter)
+    
+        if args.plot is not None:
+        max_val = getattr(args, args.plot)
+        if args.plot in ('classes', 'samples'):
+            min_val = 2
+        else:
+            min_val = 0
+        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
+        if args.plot in ('classes', 'samples'):
+            steps = np.unique(np.round(steps).astype(int))
+        setattr(args, args.plot, steps)
+    
+        for i, NN in enumerate(Nrange):
+        print('N = %i (%i out of %i)' % (NN, i + 1, len(Nrange)))
+        X = get_data(NN, D, dataset)
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=min(NN, k),
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+        ###########################################################################
+    # Set custom reservoir based method
+    sampling_algorithm['custom-reservoir-sampling'] = \
+        lambda n_population, n_samples, random_state=None: \
+            sample_without_replacement(n_population,
+                                       n_samples,
+                                       method='reservoir_sampling',
+                                       random_state=random_state)
+    
+        mem_usage = memory_usage(run_vectorizer(Vectorizer, text, **params))
+    
+            text_filename = os.path.join(text_lang_folder,
+                                     '%s_%04d.txt' % (lang, i))
+        print('Writing %s' % text_filename)
+        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
+        i += 1
     
     
-class DiagonalGaussian(Gaussian):
-  '''Diagonal Gaussian with different constant mean and variances in each
-  dimension.
-  '''
+class AppidManager(object):
+    lock = threading.Lock()
     
     
-# If there are observed inputs, there are two ways to add that observed
-# input to the model.  The first is by treating as something to be
-# inferred, and thus encoding the observed input via the encoders, and then
-# input to the generator via the 'inferred inputs' channel.  Second, one
-# can input the input directly into the generator.  This has the downside
-# of making the generation process strictly dependent on knowing the
-# observed input for any generated trial.
-flags.DEFINE_boolean('inject_ext_input_to_gen',
-                     INJECT_EXT_INPUT_TO_GEN,
-                     'Should observed inputs be input to model via encoders, \
-                     or injected directly into generator?')
+def is_ok(ip=None):
+    if not ip:
+        return IPv4.is_ok() or IPv6.is_ok()
+    elif '.' in ip:
+        return IPv4.is_ok()
+    else:
+        return IPv6.is_ok()
     
-    from utils import write_datasets
-import matplotlib
-import matplotlib.pyplot as plt
-import scipy.signal
+            
+############################################################################
+#
+# character streams for use in lexers
+#   CharStream
+#   \- ANTLRStringStream
+#
+############################################################################
     
-        # make url_for('index') == url_for('blog.index')
-    # in another app, you might define a separate main index here with
-    # app.route, while giving the blog blueprint a url_prefix, but for
-    # the tutorial the blog will be the main index
-    app.add_url_rule('/', endpoint='index')
+            raise NotImplementedError
     
-    import click
-from flask import current_app, g
-from flask.cli import with_appcontext
+    def setType(self, ttype):
+        '''@brief Get the type of the token.
     
-        auth.login()
-    # current user can't modify other user's post
-    assert client.post('/1/update').status_code == 403
-    assert client.post('/1/delete').status_code == 403
-    # current user doesn't see edit link
-    assert b'href='/1/update'' not in client.get('/').data
-    
-            .. versionadded:: 0.11
-        '''
-        rv = {}
-        for k, v in iteritems(self):
-            if not k.startswith(namespace):
-                continue
-            if trim_namespace:
-                key = k[len(namespace):]
-            else:
-                key = k
-            if lowercase:
-                key = key.lower()
-            rv[key] = v
-        return rv
-    
-        return val.lower() not in ('0', 'false', 'no')
-    
-        def get_source(self, environment, template):
-        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
-            return self._get_source_explained(environment, template)
-        return self._get_source_fast(environment, template)
-    
-        def process_lhs(self, qn, connection):
-        if not isinstance(self.lhs.output_field, SearchVectorField):
-            self.lhs = SearchVector(self.lhs)
-        lhs, lhs_params = super().process_lhs(qn, connection)
-        return lhs, lhs_params
-    
-        def database_forwards(self, app_label, schema_editor, from_state, to_state):
-        if schema_editor.connection.vendor != 'postgresql':
-            return
-        schema_editor.execute('CREATE EXTENSION IF NOT EXISTS %s' % schema_editor.quote_name(self.name))
-        # Clear cached, stale oids.
-        get_hstore_oids.cache_clear()
-        get_citext_oids.cache_clear()
-        # Registering new type handlers cannot be done before the extension is
-        # installed, otherwise a subsequent data migration would use the same
-        # connection.
-        register_type_handlers(schema_editor.connection)
-    
-            full_path = request.get_full_path()
-        current_site = get_current_site(request)
-    
-        def __setitem__(self, key, value):
-        self._session[key] = value
-        self.modified = True
-    
-        def create(self):
-        # Because a cache can fail silently (e.g. memcache), we don't know if
-        # we are failing to create a new session because of a key collision or
-        # because the cache is missing. So we try for a (large) number of times
-        # and then raise an exception. That's the risk you shoulder if using
-        # cache backing.
-        for i in range(10000):
-            self._session_key = self._get_new_session_key()
-            try:
-                self.save(must_create=True)
-            except CreateError:
-                continue
-            self.modified = True
-            return
-        raise RuntimeError(
-            'Unable to create a new session key. '
-            'It is likely that the cache is unavailable.')
-    
-        def save(self, must_create=False):
-        '''
-        To save, get the session key as a securely signed string and then set
-        the modified flag so that the cookie is set on the client for the
-        current request.
-        '''
-        self._session_key = self._get_session_key()
-        self.modified = True
-    
-    
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
-    
-        sites = []  # all sections' sitemap URLs
-    for section, site in sitemaps.items():
-        # For each section label, add links of all pages of its sitemap
-        # (usually generated by the `sitemap` view).
-        if callable(site):
-            site = site()
-        protocol = req_protocol if site.protocol is None else site.protocol
-        sitemap_url = reverse(sitemap_url_name, kwargs={'section': section})
-        absolute_url = '%s://%s%s' % (protocol, req_site.domain, sitemap_url)
-        sites.append(absolute_url)
-        # Add links to all pages of the sitemap.
-        for page in range(2, site.paginator.num_pages + 1):
-            sites.append('%s?p=%s' % (absolute_url, page))
-    
-    PROJ_NAME = 'you-get'
-PACKAGE_NAME = 'you_get'
-    
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
-    
-    site_info = 'Douban.com'
-download = douban_download
-download_playlist = playlist_not_supported('douban')
-
-    
-        vids = matchall(content, iqiyi_embed_patterns)
-    for vid in vids:
-        found = True
-        iqiyi_download_by_vid((vid[1], vid[0]), title=title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    # This is a demo of blurring faces in video.
-    
-    
-if __name__ == '__main__':
-    # STEP 1: Train the KNN classifier and save it to disk
-    # Once the model is trained and saved, you can skip this step next time.
-    print('Training KNN classifier...')
-    classifier = train('knn_examples/train', model_save_path='trained_knn_model.clf', n_neighbors=2)
-    print('Training complete!')
-    
-    # Find all the faces in the image using the default HOG-based model.
-# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
-# See also: find_faces_in_picture_cnn.py
-face_locations = face_recognition.face_locations(image)
-    
-        if len(unknown_face_encodings) > 0:
-        face_found = True
-        # See if the first face in the uploaded image matches the known face of Obama
-        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
-        if match_results[0]:
-            is_obama = True
-    
-    while video_capture.isOpened():
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
-    
-        def test_raw_face_locations_32bit_image(self):
-        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', '32bit.png'))
-        detected_faces = api._raw_face_locations(img)
+        code_block_index = 0
+    last_header = ''
+    linenum = 0
+    with io.open(args.sourcefile, 'r') as read_filehandle:
+        with io.open(args.targetfile, 'w') as text_filehandle:
+            for line in read_filehandle:
+                linenum += 1
+                indent_depth = is_code(line)
+                if indent_depth:
+                    (line, linenum) = process_code(read_filehandle,
+                                                    text_filehandle,
+                                                    line, linenum,
+                                                    args.sourcefile, args.codedir,
+                                                    last_header, code_block_index,
+                                                    indent_depth)
+                    code_block_index += 1
+                # reach here either line was not code, or was code
+                # and we dealt with n code lines
+                if indent_depth < 4 or not is_code(line, indent_depth):
+                    # store header id for codeblock
+                    section_id = get_marker(line)
+                    if section_id is not None:
+                        code_block_index = 0
+                        last_header = section_id
+                    sline = stripped(line)
+                    text_filehandle.write(sline)
