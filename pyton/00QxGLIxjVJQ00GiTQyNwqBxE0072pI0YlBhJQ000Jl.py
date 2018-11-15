@@ -1,153 +1,187 @@
 
         
-            web_acls = list_web_acls(client, module)
-    name = module.params['name']
-    if name:
-        web_acls = [web_acl for web_acl in web_acls if
-                    web_acl['Name'] == name]
-        if not web_acls:
-            module.fail_json(msg='WAF named %s not found' % name)
-    module.exit_json(wafs=[get_web_acl(client, module, web_acl['WebACLId'])
-                           for web_acl in web_acls])
+                if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+        elif db.execute(
+            'SELECT id FROM user WHERE username = ?', (username,)
+        ).fetchone() is not None:
+            error = 'User {0} is already registered.'.format(username)
     
-        caller_reference = module.params.get('caller_reference')
-    distribution_id = module.params.get('distribution_id')
-    alias = module.params.get('alias')
-    target_paths = module.params.get('target_paths')
     
-        if state == 'present':
-        if origin_access_identity_id is not None and e_tag is not None:
-            result, changed = service_mgr.update_origin_access_identity(caller_reference, comment, origin_access_identity_id, e_tag)
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)
+
+    
+            .. versionadded:: 0.11
+        '''
+        mappings = []
+        if len(mapping) == 1:
+            if hasattr(mapping[0], 'items'):
+                mappings.append(mapping[0].items())
+            else:
+                mappings.append(mapping[0])
+        elif len(mapping) > 1:
+            raise TypeError(
+                'expected at most 1 positional argument, got %d' % len(mapping)
+            )
+        mappings.append(kwargs.items())
+        for mapping in mappings:
+            for (key, value) in mapping:
+                if key.isupper():
+                    self[key] = value
+        return True
+    
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
+    
+                self.tags[key] = tag
+    
+    
+def rev_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'http://hg.scrapy.org/scrapy/changeset/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'r' + text, refuri=ref, **options)
+    return [node], []
+
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.contracts import ContractsManager
+from scrapy.utils.misc import load_object
+from scrapy.utils.conf import build_component_list
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+        def _err(self, msg):
+        sys.stderr.write(msg + os.linesep)
+        self.exitcode = 1
+    
+        def run(self, args, opts):
+        if len(args) != 1 or not is_url(args[0]):
+            raise UsageError()
+        cb = lambda x: self._print_response(x, opts)
+        request = Request(args[0], callback=cb, dont_filter=True)
+        # by default, let the framework handle redirects,
+        # i.e. command handles all codes expect 3xx
+        if not opts.no_redirect:
+            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
         else:
-            result = service_mgr.create_origin_access_identity(caller_reference, comment)
-            changed = True
-    elif(state == 'absent' and origin_access_identity_id is not None and
-         e_tag is not None):
-        result = service_mgr.delete_origin_access_identity(origin_access_identity_id, e_tag)
-        changed = True
+            request.meta['handle_httpstatus_all'] = True
     
-            try:
-            response = self.client.delete_rule(Name=self.name)
-        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-            self.module.fail_json_aws(e, msg='Could not delete rule %s' % self.name)
-        self.changed = True
-        return response
+        def _build_response(self, result, request, protocol):
+        self.result = result
+        respcls = responsetypes.from_args(url=request.url)
+        protocol.close()
+        body = protocol.filename or protocol.body.read()
+        headers = {'local filename': protocol.filename or '', 'size': protocol.size}
+        return respcls(url=request.url, status=200, body=to_bytes(body), headers=headers)
     
-    import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
-    
-    RETURN = '''
-services:
-    description: When details is false, returns an array of service ARNs, otherwise an array of complex objects as described below.
-    returned: success
-    type: complex
-    contains:
-        clusterArn:
-            description: The Amazon Resource Name (ARN) of the of the cluster that hosts the service.
-            returned: always
-            type: string
-        desiredCount:
-            description: The desired number of instantiations of the task definition to keep running on the service.
-            returned: always
-            type: int
-        loadBalancers:
-            description: A list of load balancer objects
-            returned: always
-            type: complex
-            contains:
-                loadBalancerName:
-                    description: the name
-                    returned: always
-                    type: string
-                containerName:
-                    description: The name of the container to associate with the load balancer.
-                    returned: always
-                    type: string
-                containerPort:
-                    description: The port on the container to associate with the load balancer.
-                    returned: always
-                    type: int
-        pendingCount:
-            description: The number of tasks in the cluster that are in the PENDING state.
-            returned: always
-            type: int
-        runningCount:
-            description: The number of tasks in the cluster that are in the RUNNING state.
-            returned: always
-            type: int
-        serviceArn:
-            description: The Amazon Resource Name (ARN) that identifies the service. The ARN contains the arn:aws:ecs namespace, followed by the region of the service, the AWS account ID of the service owner, the service namespace, and then the service name. For example, arn:aws:ecs:region :012345678910 :service/my-service .
-            returned: always
-            type: string
-        serviceName:
-            description: A user-generated string used to identify the service
-            returned: always
-            type: string
-        status:
-            description: The valid values are ACTIVE, DRAINING, or INACTIVE.
-            returned: always
-            type: string
-        taskDefinition:
-            description: The ARN of a task definition to use for tasks in the service.
-            returned: always
-            type: string
-        deployments:
-            description: list of service deployments
-            returned: always
-            type: list of complex
-        events:
-            description: list of service events
-            returned: when events is true
-            type: list of complex
-'''  # NOQA
-    
-                # if region is not provided, then get default profile/session region
-            if not self.region:
-                self.region = self.resource_client['lambda'].meta.region_name
-    
-        def is_dir(self):
-        '''
-        Whether this path is a directory.
-        '''
-        try:
-            return S_ISDIR(self.stat().st_mode)
-        except OSError as e:
-            if e.errno not in _IGNORED_ERROS:
-                raise
-            # Path doesn't exist or is a broken symlink
-            # (see https://bitbucket.org/pitrou/pathlib/issue/12/)
-            return False
-        except ValueError:
-            # Non-encodable path
-            return False
+        # Test an invalid call (bpo-34126)
+    def test_unbound_method_invalid_args(self):
+        def f(p):
+            dict.get(print, 42)
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident)])
     
     
-class LocaleConfigurationTests(_LocaleHandlingTestCase):
-    # Test explicit external configuration via the process environment
+def isabs(s):
+    '''Return true if a path is absolute.
+    On the Mac, relative paths begin with a colon,
+    but as a special case, paths with no colons at all are also relative.
+    Anything else is absolute (the string up to the first colon is the
+    volume name).'''
     
-        def test_xdev(self):
-        # sys.flags.dev_mode
-        code = 'import sys; print(sys.flags.dev_mode)'
-        out = self.run_xdev('-c', code, xdev=False)
-        self.assertEqual(out, 'False')
-        out = self.run_xdev('-c', code)
-        self.assertEqual(out, 'True')
     
-    expected_virtualattribute_pattern3 = '''
-Help on class Class2 in module %s:
+# Split a path in root and extension.
+# The extension is everything starting at the last dot in the last
+# pathname component; the root is everything before that.
+# It is always true that root + ext == p.
     
-    import os
-import smtplib
-# For guessing MIME type based on file name extension
-import mimetypes
+        @unittest.skipIf(interpreter_requires_environment(),
+                     'Cannot run -I tests when PYTHON env vars are required.')
+    def test_isolatedmode(self):
+        self.verify_valid_flag('-I')
+        self.verify_valid_flag('-IEs')
+        rc, out, err = assert_python_ok('-I', '-c',
+            'from sys import flags as f; '
+            'print(f.no_user_site, f.ignore_environment, f.isolated)',
+            # dummyvar to prevent extraneous -E
+            dummyvar='')
+        self.assertEqual(out.strip(), b'1 1 1')
+        with support.temp_cwd() as tmpdir:
+            fake = os.path.join(tmpdir, 'uuid.py')
+            main = os.path.join(tmpdir, 'main.py')
+            with open(fake, 'w') as f:
+                f.write('raise RuntimeError('isolated mode test')\n')
+            with open(main, 'w') as f:
+                f.write('import uuid\n')
+                f.write('print('ok')\n')
+            self.assertRaises(subprocess.CalledProcessError,
+                              subprocess.check_output,
+                              [sys.executable, main], cwd=tmpdir,
+                              stderr=subprocess.DEVNULL)
+            out = subprocess.check_output([sys.executable, '-I', main],
+                                          cwd=tmpdir)
+            self.assertEqual(out.strip(), b'ok')
     
-    ans = input('View full message?')
-if ans.lower()[0] == 'n':
-    sys.exit()
     
-    def worker(input, output):
-    for func, args in iter(input.get, 'STOP'):
-        result = calculate(func, args)
-        output.put(result)
+class Migration(DataMigration):
+    def forwards(self, orm):
+        'Write your forwards methods here.'
+        db.commit_transaction()
+    
+        complete_apps = ['sentry']
+
+    
+            # Deleting model 'ReleaseHeadCommit'
+        db.delete_table('sentry_releaseheadcommit')
+    
+            # Adding field 'ReleaseFile.dist'
+        db.add_column(
+            'sentry_releasefile',
+            'dist',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Distribution'], null=True
+            ),
+            keep_default=False
+        )
+    
+    DEFAULT_TIMEOUT = 3
+    
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+    
+class SubArray:
+    
+    def compute_heterogeneity(data, k, centroids, cluster_assignment):
+    
+    heterogeneity = 0.0
+    for i in range(k):
+        
+        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
+        member_data_points = data[cluster_assignment==i, :]
+        
+        if member_data_points.shape[0] > 0: # check if i-th cluster is non-empty
+            # Compute distances from centroid to data points (RHS only)
+            distances = pairwise_distances(member_data_points, [centroids[i]], metric='euclidean')
+            squared_distances = distances**2
+            heterogeneity += np.sum(squared_distances)
+        
+    return heterogeneity
