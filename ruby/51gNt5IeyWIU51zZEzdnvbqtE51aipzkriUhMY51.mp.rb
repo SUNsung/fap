@@ -1,69 +1,112 @@
 
         
-              it 'Converts a string value for :commits_count' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(commits_count: '10')
-        end').runner.execute(:test)
-    
-          it 'works given the path to compile_commands.json' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
-            )
-          end').runner.execute(:test)
-    
-        str = str.dup
-    
-    (allow file-ioctl)
-(allow sysctl-read)
-(allow mach-lookup)
-(allow ipc-posix-shm)
-(allow process-fork)
-(allow system-socket)
-    
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
-    
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
-Gem.use_paths(LogStash::Environment.logstash_gem_home)
-    
-    module LogStash module PluginManager module PackFetchStrategy
-  class Repository
-    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
-    PACK_EXTENSION = 'zip'
-    
-        def valid_format?(local_file)
-      ::File.extname(local_file).downcase == PACK_EXTENSION
+          p.action do |args, _|
+    if args.empty?
+      Jekyll.logger.error 'A subcommand is required.'
+      puts p
+      abort
+    else
+      subcommand = args.first
+      unless p.has_command? subcommand
+        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
+          ' be found. You may need to install the jekyll-#{args.first} gem' \
+          ' or a related gem to be able to use this subcommand.'
+      end
     end
   end
-end end end
+end
 
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
+          #
     
-    @@ layout
-<html>
-  <head>
-    <title>Sinatra + Sidekiq</title>
-    <body>
-      <%= yield %>
-    </body>
-</html>
+            def initialize(config)
+          @main_fallback_highlighter = config['highlighter'] || 'rouge'
+          @config = config['kramdown'] || {}
+          @highlighter = nil
+          setup
+        end
     
-          def queue_name
-        queue.sub(/.*queue:/, '')
-      end
+              builds = scope_relevant.select('count(*)').to_sql
+          created = scope_relevant.created.select('count(*)').to_sql
+          success = scope_relevant.success.select('count(*)').to_sql
+          manual = scope_relevant.manual.select('count(*)').to_sql
+          pending = scope_relevant.pending.select('count(*)').to_sql
+          running = scope_relevant.running.select('count(*)').to_sql
+          skipped = scope_relevant.skipped.select('count(*)').to_sql
+          canceled = scope_relevant.canceled.select('count(*)').to_sql
+          warnings = scope_warnings.select('count(*) > 0').to_sql
     
-          def add(klass, *args)
-        remove(klass) if exists?(klass)
-        entries << Entry.new(klass, *args)
-      end
+            def importer_class
+          NoteImporter
+        end
     
-        def identity
-      @@identity ||= '#{hostname}:#{$$}:#{process_nonce}'
+            # attributes - A Hash containing the raw note details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+    
+        # This returns whether the guest is ready to work. If this returns
+    # `false`, then {#detect!} should be called in order to detect the
+    # guest OS.
+    #
+    # @return [Boolean]
+    def ready?
+      !!capability_host_chain
     end
+  end
+end
+
+    
+            @machine_locks.delete(id)
+      end
+    end
+    
+              # Default opts to a blank optionparser if none is given
+          opts ||= OptionParser.new
+    
+              providers
+        end
+    
+                    raise Errors::VMNoMatchError if machines.empty?
+              else
+                # String name, just look for a specific VM
+                @logger.debug('Finding machine that match name: #{name}')
+                machines << get_machine.call(name.to_sym)
+                raise Errors::VMNotFoundError, name: name if !machines[0]
+              end
+            end
+          else
+            # No name was given, so we return every VM in the order
+            # configured.
+            @logger.debug('Loading all machines...')
+            machines = @env.machine_names.map do |machine_name|
+              get_machine.call(machine_name)
+            end
+          end
+    
+            # This contains all the registered provider capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :provider_capabilities
+    
+            # This should return the state of the machine within this provider.
+        # The state must be an instance of {MachineState}. Please read the
+        # documentation of that class for more information.
+        #
+        # @return [MachineState]
+        def state
+          nil
+        end
+    
+      it 'no raises error on fixnum values' do
+    [1].each do |v|
+      lambda { v.taint }.should_not raise_error(RuntimeError)
+      v.tainted?.should == false
+    end
+  end
+end
+
+    
+          ENV[new_initial_revision_var] ||= ENV[old_initial_revision_var]
+      ENV[new_current_revision_var] ||= ENV[old_current_revision_var]
