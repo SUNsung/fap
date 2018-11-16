@@ -1,176 +1,129 @@
 
         
-              self.runner.add_lane(Lane.new(platform: self.current_platform,
-                                       block: block,
-                                 description: desc_collection,
-                                        name: lane_name,
-                                  is_private: false), true)
+                  Actions.sh('cd '#{clone_folder}' && git checkout #{checkout_param} '#{path}'')
     
-        def action_completed(completion_context: nil)
+          it 'adds clean_output param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            clean_output: true
+          )
+        end').runner.execute(:test)
+    
+          it 'Does not include merge commits in the list of commits' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(include_merges: false)
+        end').runner.execute(:test)
+    
+          it 'works with keychain-settings and name and password' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: 'testpassword',
+            timeout: 600,
+            lock_when_sleeps: true,
+            lock_after_timeout: true,
+          })
+        end').runner.execute(:test)
+    
+          it 'generates the correct git command with an array of paths and/or pathspecs' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+                expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                swiftlint
+              end').runner.execute(:test)
+            end.to raise_error(/SwiftLint finished with errors/)
+          end
+        end
+    
+        # An empty argument will be skipped, so return empty quotes.
+    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
+    return ''''.dup if str.empty?
+    
+    # test monkey patched method on both (simulated) OSes
+describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
     end
     
-        def rescue_file_error(e)
-      # We're also printing the new-lines, as otherwise the message is not very visible in-between the error and the stack trace
-      puts('')
-      FastlaneCore::UI.important('Error accessing file, this might be due to fastlane's directory handling')
-      FastlaneCore::UI.important('Check out https://docs.fastlane.tools/advanced/#directory-behavior for more details')
-      puts('')
-      raise e
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
+    
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
     end
     
-        context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
-      end
+        it 'outputs a structure containing name, description, the date, all agents & their links' do
+      data = exporter.as_json
+      expect(data[:name]).to eq(name)
+      expect(data[:description]).to eq(description)
+      expect(data[:source_url]).to eq(source_url)
+      expect(data[:guid]).to eq(guid)
+      expect(data[:schema_version]).to eq(1)
+      expect(data[:tag_fg_color]).to eq(tag_fg_color)
+      expect(data[:tag_bg_color]).to eq(tag_bg_color)
+      expect(data[:icon]).to eq(icon)
+      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
+      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
+      expect(data[:control_links]).to eq([])
+      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
+      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
     
-          def self.example_code
-        [
-          'add_git_tag # simple tag with default values',
-          'add_git_tag(
-            grouping: 'fastlane-builds',
-            prefix: 'v',
-            postfix: '-RC1',
-            build_number: 123
-          )',
-          '# Alternatively, you can specify your own tag. Note that if you do specify a tag, all other arguments are ignored.
-          add_git_tag(
-            tag: 'my_custom_tag'
-          )'
-        ]
-      end
+          expect(Utils.unindent('Hello\n  I am indented')).to eq('Hello\n  I am indented')
     
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD --no-merges'
-        expect(result).to eq(pseudocommand)
-      end
+      it 'truncates message to a reasonable length' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
+    log.message = 'a' * 11_000
+    log.save!
+    expect(log.message.length).to eq(10_000)
+  end
     
-              expect(UI).to have_received(:shell_error!).with('Exit status of command 'exit 1' was 1 instead of 0.\n')
+      it 'no raises a RuntimeError on symbols' do
+    v = :sym
+    lambda { v.taint }.should_not raise_error(RuntimeError)
+    v.tainted?.should == false
+  end
+    
+    describe 'Kernel.throw' do
+  it 'transfers control to the end of the active catch block waiting for symbol' do
+    catch(:blah) do
+      :value
+      throw :blah
+      fail('throw didn't transfer the control')
+    end.should be_nil
+  end
+    
+        desc 'Rebuilds integration fixtures'
+    task :rebuild_integration_fixtures do
+      unless system('which hg')
+        puts red('[!] Mercurial (`hg`) must be installed to rebuild the integration fixtures.')
+        exit 1
+      end
+      title 'Running Integration tests'
+      rm_rf 'tmp'
+      title 'Building all the fixtures'
+      sh('bundle exec bacon spec/integration.rb') {}
+      title 'Storing fixtures'
+      # Copy the files to the files produced by the specs to the after folders
+      FileList['tmp/*/transformed'].each do |source|
+        name = source.match(%r{^tmp/(.+)/transformed$})[1]
+        destination = 'spec/cocoapods-integration-specs/#{name}/after'
+        if File.exist?(destination)
+          rm_rf destination
+          mv source, destination
         end
       end
-    end
-    
-    module CrossplatformShellwords
-  # handle switching between implementations of shellescape
-  def shellescape(str)
-    if FastlaneCore::Helper.windows?
-      WindowsShellwords.shellescape(str)
-    else
-      # using `escape` instead of expected `shellescape` here
-      # which corresponds to Shellword's `String.shellescape` implementation
-      # https://github.com/ruby/ruby/blob/1cf2bb4b2085758112503e7da7414d1ef52d4f48/lib/shellwords.rb#L216
-      Shellwords.escape(str)
-    end
-  end
-  module_function :shellescape
-    
-              it 'prioritizes config file values after ENV' do
-            config_item = FastlaneCore::ConfigItem.new(key: :item, env_name: 'abc', default_value: 'val default')
-            config = FastlaneCore::Configuration.create([config_item], {})
-            config.config_file_options = { item: 'val config' }
-    
-        # undo folding, kinda ugly but works for now.
-    header.gsub!(/:\s*\r\n\s+/smni,': ')
-    
-    module Rex
-module Proto
-module IPMI
-class Utils
-    
-              sent = 0
-          case protocol
-          when 'tcp'
-            sent = send_request_tcp(req)
-          when 'udp'
-            sent = send_request_udp(req)
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
-    
-                components.each do |c|
-              encoded << [c.length].pack('N')
-              encoded << c
-            end
-    
-              # Encodes the auth_time field
-          #
-          # @return [String]
-          def encode_auth_time
-            [auth_time].pack('N')
-          end
-    
-              private
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self]
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode EncryptedData Name, invalid input'
-            end
-    
-              # @!attribute key
-          #   @return [Integer] The type of encryption key
-          attr_accessor :type
-          # @!attribute value
-          #   @return [String] the key itself
-          attr_accessor :value
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
-    
-          var = var[1..-1]
-      parsed_from = parse_script(from_expr, :offset => line.offset + line.text.index(from_expr))
-      parsed_to = parse_script(to_expr, :offset => line.offset + line.text.index(to_expr))
-      Tree::ForNode.new(var, parsed_from, parsed_to, to_name == 'to')
-    end
-    
-        # Returns whether this is the global environment.
-    #
-    # @return [Boolean]
-    def global?
-      @parent.nil?
-    end
-    
-        # Modify the top Sass backtrace entries
-    # (that is, the most deeply nested ones)
-    # to have the given attributes.
-    #
-    # Specifically, this goes through the backtrace entries
-    # from most deeply nested to least,
-    # setting the given attributes for each entry.
-    # If an entry already has one of the given attributes set,
-    # the pre-existing attribute takes precedence
-    # and is not used for less deeply-nested entries
-    # (even if they don't have that attribute set).
-    #
-    # @param attrs [{Symbol => Object}] The information to add to the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def modify_backtrace(attrs)
-      attrs = attrs.reject {|_k, v| v.nil?}
-      # Move backwards through the backtrace
-      (0...sass_backtrace.size).to_a.reverse_each do |i|
-        entry = sass_backtrace[i]
-        sass_backtrace[i] = attrs.merge(entry)
-        attrs.reject! {|k, _v| entry.include?(k)}
-        break if attrs.empty?
-      end
-    end
