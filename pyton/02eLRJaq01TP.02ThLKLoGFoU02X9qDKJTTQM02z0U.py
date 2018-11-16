@@ -1,184 +1,120 @@
 
         
-          # Print a classification report
-  print('%s classification report:' % set_name)
-  print(metrics.classification_report(labels, pred, target_names=classes))
+                if not username:
+            error = 'Username is required.'
+        elif not password:
+            error = 'Password is required.'
+        elif db.execute(
+            'SELECT id FROM user WHERE username = ?', (username,)
+        ).fetchone() is not None:
+            error = 'User {0} is already registered.'.format(username)
     
-      def __mlp__(self):
-    '''Performs the MLP operations.
+        assert 'closed' in str(e)
     
-        # Note the use of the plural in all of these quantities.  This is intended
-    # to mark that even though a sample z_t from the posterior is thought of a
-    # single sample of a multidimensional gaussian, the prior is actually
-    # thought of as U AR(1) processes, where U is the dimension of the inferred
-    # input.
-    size_bx1 = tf.stack([batch_size, 1])
-    size__xu = [None, z_size]
-    # process variance, the variance at time t over all instantiations of AR(1)
-    # with these parameters.
-    log_evar_inits_1xu = tf.expand_dims(tf.log(noise_variances), 0)
-    self.logevars_1xu = logevars_1xu = \
-        tf.Variable(log_evar_inits_1xu, name=name+'/logevars', dtype=tf.float32,
-                    trainable=do_train_prior_ar_nvar)
-    self.logevars_bxu = logevars_bxu = tf.tile(logevars_1xu, size_bx1)
-    logevars_bxu.set_shape(size__xu) # tile loses shape
+        iterkeys = lambda d: d.iterkeys()
+    itervalues = lambda d: d.itervalues()
+    iteritems = lambda d: d.iteritems()
     
-      if ext_input_bxtxi is not None:
-    input_title += ' External Input'
-    plot_time_series(ext_input_bxtxi, n_to_plot=n_to_plot, color='b',
-                     scale=scale, title=col_title + input_title)
+        .. versionchanged:: 0.9
+        `category_filter` parameter added.
     
-      Args:
-    datasets: The dictionary of dataset structures.
-    npcs:  The number of pcs for each, basically like lfads factors.
-    nsamples (optional): Number of samples to take for each dataset.
-    ntime (optional): Number of time steps to take in each sample.
-    
-      Args:
-    values_t_bxn: The length T list of BxN numpy tensors.
-    
-      @property
-  def vocab(self):
-    return self._vocab
+    # You can now launch tensorboard with `tensorboard --logdir=./logs` on your
+# command line and then go to http://localhost:6006/#projector to view the
+# embeddings
 
     
-      Args:
-    raw_data: one of the raw data outputs from imdb_raw_data.
-    batch_size: int, the batch size.
-    num_steps: int, the number of unrolls.
-    
-      if not FLAGS.seq2seq_share_embedding:
-    variable_mapping = {
-        str(model_str) + '/embedding':
-            encoder_embedding,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-            encoder_lstm_w_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-            encoder_lstm_b_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-            encoder_lstm_w_1,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-            encoder_lstm_b_1
-    }
-  else:
-    variable_mapping = {
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel':
-            encoder_lstm_w_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias':
-            encoder_lstm_b_0,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel':
-            encoder_lstm_w_1,
-        str(model_str) + '/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias':
-            encoder_lstm_b_1
-    }
-  return variable_mapping
-    
-            # attn_fun
-        scores = _attn_add_fun(score_v, keys, query)
-      elif attention_option == 'luong':
-        # reshape query: [batch_size, 1, num_units]
-        query = tf.reshape(query, [-1, 1, num_units])
-    
-        def validate_invalidation_batch(self, invalidation_batch, caller_reference):
-        try:
-            if caller_reference is not None:
-                valid_caller_reference = caller_reference
-            else:
-                valid_caller_reference = datetime.datetime.now().isoformat()
-            valid_invalidation_batch = {
-                'paths': self.create_aws_list(invalidation_batch),
-                'caller_reference': valid_caller_reference
-            }
-            return valid_invalidation_batch
-        except (ClientError, BotoCoreError) as e:
-            self.module.fail_json_aws(e, msg='Error validating invalidation batch.')
+        x_train = np.empty((num_train_samples, 3, 32, 32), dtype='uint8')
+    y_train = np.empty((num_train_samples,), dtype='uint8')
     
     
-def wait_until_table_active(module, table, wait_timeout):
-    max_wait_time = time.time() + wait_timeout
-    while (max_wait_time > time.time()) and (table.describe()['Table']['TableStatus'] != 'ACTIVE'):
-        time.sleep(5)
-    if max_wait_time <= time.time():
-        # waiting took too long
-        module.fail_json(msg='timed out waiting for table to exist')
+def deserialize(config, custom_objects=None):
+    return deserialize_keras_object(config,
+                                    module_objects=globals(),
+                                    custom_objects=custom_objects,
+                                    printable_module_name='regularizer')
     
-    - name: Gather facts about a filtered list of customer gateways, based on tags
-  ec2_customer_gateway_facts:
-    region: ap-southeast-2
-    filters:
-      'tag:Name': test-customer-gateway
-      'tag:AltName': test-customer-gateway-alt
-  register: cust_gw_facts
+        model = create_multi_input_model_from(*models)
+    model.compile(loss='categorical_crossentropy', optimizer='sgd')
+    assert len(model.losses) == 8
     
-        if isinstance:
-        try:
-            reservations = ec2.get_all_reservations(instance_ids=[device_id])
-        except boto.exception.EC2ResponseError as e:
-            module.fail_json(msg=str(e))
+        E.g. if your `batch_size` is 64 and you use `gpus=2`,
+    then we will divide the input into 2 sub-batches of 32 samples,
+    process each sub-batch on one GPU, then return the full
+    batch of 64 processed samples.
     
-        try:
-        key = ec2_client.import_key_pair(KeyName=name, PublicKeyMaterial=to_bytes(key_material))
-    except ClientError as err:
-        module.fail_json_aws(err, msg='error importing key')
-    return key
+        # And to the following:
+    model = Sequential()
+    model.add(Dense(32, batch_input_shape=(None, 500)))
+    
+        plt.imshow(toplot)
+    ax = fig.add_subplot(122)
+    plt.text(1, 3, 'Ground truth', fontsize=20)
+    
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
+    
+    _help = '''Usage: {} [OPTION]... [URL]...
+TODO
+'''.format(script_name)
+    
+    def youku_acfun_proxy(vid, sign, ref):
+    endpoint = 'http://player.acfun.cn/flash_data?vid={}&ct=85&ev=3&sign={}&time={}'
+    url = endpoint.format(vid, sign, str(int(time.time() * 1000)))
+    json_data = json.loads(get_content(url, headers=dict(referer=ref)))['data']
+    enc_text = base64.b64decode(json_data)
+    dec_text = rc4(b'8bdc7e1a', enc_text).decode('utf8')
+    youku_json = json.loads(dec_text)
+    
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
+    
+            if self.tree.find('result').text != '1':
+            log.wtf('API result says failed!')
+            raise 
     
     
-import traceback
-from ansible.module_utils.ec2 import (get_aws_connection_info, ec2_argument_spec, ec2_connect, camel_dict_to_snake_dict, get_ec2_security_group_ids_from_names,
-                                      boto3_conn, snake_dict_to_camel_dict, HAS_BOTO3)
-from ansible.module_utils._text import to_text
-from ansible.module_utils.basic import AnsibleModule
+def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % name) or os.path.exists('%s_privkey.txt' % name):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \n'
+              'Use a different name or delete these files and re-run this program.' %
+              (name, name))
+        sys.exit()
     
-        region, ec2_url, aws_connect_params = get_aws_connection_info(module, True)
+        def hash_function(self, key):
+        return key % self.size_table
     
-        By default this will get the strings from the blns.txt file
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
     
-        def test_decode_bad(self):
-        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
+    Usage:
+  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
+  
+  2. create initial_centroids,
+        initial_centroids = get_initial_centroids(
+            X, 
+            k, 
+            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
+            )
     
     
-def _guess_loader(filename, loader_pem, loader_der):
-    _, ext = os.path.splitext(filename)
-    if ext.lower() == '.pem':
-        return loader_pem
-    elif ext.lower() == '.der':
-        return loader_der
-    else:  # pragma: no cover
-        raise ValueError('Loader could not be recognized based on extension')
-    
-        :ivar aug: Augeas object
-    :type aug: :class:`augeas.Augeas`
-    
-        def test_filter_args_num(self):
-        '''Note: This may also fail do to Include conf-enabled/ syntax.'''
-        matches = self.parser.find_dir('TestArgsDirective')
-    
-            self.vhost1b = VirtualHost(
-            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
-    
-        def _get_addrs(self, achall):
-        '''Return the Apache addresses needed for TLS-SNI-01.'''
-        # TODO: Checkout _default_ rules.
-        addrs = set()
-        default_addr = obj.Addr(('*', str(
-            self.configurator.config.tls_sni_01_port)))
-    
-    # Send the message via local SMTP server.
-with smtplib.SMTP('localhost') as s:
-    s.send_message(msg)
-
-    
-    def test():
-    manager = MyManager()
-    manager.start()
-    
-                if buffer.lstrip().upper().startswith('SELECT'):
-                print(cur.fetchall())
-        except sqlite3.Error as e:
-            print('An error occurred:', e.args[0])
-        buffer = ''
-    
-        headers=extension,extension,...
-      The allowed header extensions that cpplint will consider to be header files
-      (by default, only files with extensions %s
-      will be assumed to be headers)
+'''
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
+* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a * b
+* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
+*
+* As far as the modulo is concerned,
+* the fact : (a+b) % c = ((a%c) + (b%c)) % c
+* Now apply RULE 1 OR 2, whichever is required.
+'''
