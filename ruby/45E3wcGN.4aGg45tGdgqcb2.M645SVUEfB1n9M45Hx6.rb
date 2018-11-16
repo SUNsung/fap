@@ -1,79 +1,77 @@
 
         
-        Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
-ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur.
-tristique. Ut nec magna augue. {{ author }} Quisque ut fringilla lacus
-Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
-aliquet. Sed ultrices placerat ultricies.
-LIQUID
+              #
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
-    
-    Given(%r!^I have the following (draft|page|post)s?(?: (in|under) '([^']+)')?:$!) do |status, direction, folder, table|
-  table.hashes.each do |input_hash|
-    title = slug(input_hash['title'])
-    ext = input_hash['type'] || 'markdown'
-    filename = '#{title}.#{ext}' if %w(draft page).include?(status)
-    before, after = location(folder, direction)
-    dest_folder = '_drafts' if status == 'draft'
-    dest_folder = '_posts'  if status == 'post'
-    dest_folder = '' if status == 'page'
-    
-    def run_rubygem(args)
-  run_in_shell('gem', *args.strip.split(' '))
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
+      end
+    end
+  end
 end
+
     
-      include SignatureVerification
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
+  end
+end
+
     
-        def set_user
-      @user = Account.find(params[:account_id]).user || raise(ActiveRecord::RecordNotFound)
+        def clean_path(path)
+      path = path.gsub %r{[!;:]}, '-'
+      path = path.gsub %r{\+}, '_plus_'
+      path
+    end
+  end
+end
+
+    
+        def as_json
+      @pages
     end
     
-        def paginated_instances
-      filtered_instances.page(params[:page])
-    end
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
     
-            render template: 'admin/reports/show'
+            subclass.base_url = base_url
+        subclass.root_path = root_path
+        subclass.initial_paths = initial_paths.dup
+        subclass.options = options.deep_dup
+        subclass.html_filters = html_filters.inheritable_copy
+        subclass.text_filters = text_filters.inheritable_copy
+        subclass.stubs = stubs.dup
+      end
+    
+        <div id='backtrace' class='condensed'>
+      <h3>BACKTRACE</h3>
+      <p><a href='#' id='expando'
+            onclick='toggleBacktrace(); return false'>(expand)</a></p>
+      <p id='nav'><strong>JUMP TO:</strong>
+         <% unless bad_request?(exception) %>
+            <a href='#get-info'>GET</a>
+            <a href='#post-info'>POST</a>
+         <% end %>
+         <a href='#cookie-info'>COOKIES</a>
+         <a href='#env-info'>ENV</a>
+      </p>
+      <div class='clear'></div>
+    
+          attr_reader :app, :options
+    
+          def session_key
+        @session_key ||= options[:session_key]
       end
     end
-    
-        describe '-' do
-      it 'left-justifies the result of conversion if width is specified' do
-        format('%-10b', 10).should == '1010      '
-        format('%-10B', 10).should == '1010      '
-        format('%-10d', 112).should == '112       '
-        format('%-10i', 112).should == '112       '
-        format('%-10o', 87).should == '127       '
-        format('%-10u', 112).should == '112       '
-        format('%-10x', 196).should == 'c4        '
-        format('%-10X', 196).should == 'C4        '
-    
-      it 'accepts and uses a seed of 0' do
-    srand(0)
-    srand.should == 0
   end
+end
+
     
-      it 'sets the tainted bit' do
-    o = Object.new
-    o.taint
-    o.tainted?.should == true
-  end
-    
-        lambda {
-      catch :blah do
-        throw :blah, :return_value, 2, 3, 4, 5
-      end
-    }.should raise_error(ArgumentError)
-  end
-    
-        $Kernel_trace_var_global = 'foo'
-    captured.should == 'foo'
-  end
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
+    end
