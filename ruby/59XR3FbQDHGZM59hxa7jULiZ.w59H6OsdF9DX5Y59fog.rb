@@ -1,127 +1,122 @@
 
         
-              def meta_path
-        File.join path, META_FILENAME
-      end
+            # The stdlib recorded in the install receipt is used during dependency
+    # compatibility checks, so we only care about the stdlib that libraries
+    # link against.
+    keg.detect_cxx_stdlibs(:skip_executables => true)
+  end
     
-            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
+      def merge(*args)
+    @settings.merge(*args)
+    self
+  end
     
-        def base_url
-      context[:base_url]
-    end
-    
-        def inheritable_copy
-      self.class.new @filters
-    end
-    
-        def parse_as_fragment
-      Nokogiri::HTML.fragment @content, 'UTF-8'
+        # Remove unresolved symlinks
+    symlinks.reverse_each do |s|
+      s.unlink unless s.resolved_path_exists?
     end
   end
-end
-
     
-            subclass.base_url = base_url
-        subclass.root_path = root_path
-        subclass.initial_paths = initial_paths.dup
-        subclass.options = options.deep_dup
-        subclass.html_filters = html_filters.inheritable_copy
-        subclass.text_filters = text_filters.inheritable_copy
-        subclass.stubs = stubs.dup
+    class PrettyListing
+  def initialize(path)
+    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
+      case pn.basename.to_s
+      when 'bin', 'sbin'
+        pn.find { |pnn| puts pnn unless pnn.directory? }
+      when 'lib'
+        print_dir pn do |pnn|
+          # dylibs have multiple symlinks and we don't care about them
+          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
+        end
+      else
+        if pn.directory?
+          if pn.symlink?
+            puts '#{pn} -> #{pn.readlink}'
+          else
+            print_dir pn
+          end
+        elsif Metafiles.list?(pn.basename.to_s)
+          puts pn
+        end
+      end
+    end
+  end
+    
+          return false if self.runner.lanes.fetch(nil, {}).fetch(key.to_sym, nil)
+      return true if self.runner.lanes[key.to_sym].kind_of?(Hash)
+    
+    module FastlaneCore
+  class AnalyticsSession
+    GA_TRACKING = 'UA-121171860-1'
+    
+        def rescue_connection_failed_error(e)
+      if e.message.include?('Connection reset by peer - SSL_connect')
+        handle_tls_error!(e)
+      else
+        handle_unknown_error!(e)
+      end
+    end
+    
+            message = '#{grouping}/test/#{specified_build_number} (fastlane)'
+        tag = '#{grouping}/test/#{specified_build_number}'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
       end
     
-          def include_default_entry?
-        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-cert-issuer \'Some issuer\' --exit-threshold \'2\' input/dir')
       end
     
-        def set_account
-      @account = Account.find(params[:account_id])
-      @user = @account.user
+          it 'Does not accept an invalid value for :merge_commit_filtering' do
+        values = Fastlane::Actions::GIT_MERGE_COMMIT_FILTERING_OPTIONS.map { |o| ''#{o}'' }.join(', ')
+        error_msg = 'Valid values for :merge_commit_filtering are #{values}'
+    
+          context 'when specify output_file options' do
+        it 'adds redirect file to command' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              output_file: '#{output_file}'
+            )
+          end').runner.execute(:test)
+    
+        # Determines the defined data type of this ConfigItem
+    def data_type
+      if @data_type.kind_of?(Symbol)
+        nil
+      elsif @data_type
+        @data_type
+      else
+        (@is_string ? String : nil)
+      end
     end
     
-        def resubscribe
-      authorize :instance, :resubscribe?
-      params.require(:by_domain)
-      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
-      redirect_to admin_instances_path
+            keychain = 'keychain with spaces.keychain'
+        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
+        require 'open3'
+    
+          # @param cache_location [String] see \{#cache\_location}
+      def initialize(cache_location)
+        @cache_location = cache_location
+      end
+    
+        # Create a {Sass::Selector::CommaSequence} containing only a single
+    # {Sass::Selector::Sequence} which in turn contains only a single
+    # {Sass::Selector::SimpleSequence}.
+    #
+    # @param subject [Boolean] Whether this is a subject selector
+    # @param sseqs [Array<Sass::Selector::Sequence, String>]
+    # @return [Sass::Selector::CommaSequence]
+    def make_sseq(subject, *sseqs)
+      make_seq(Sass::Selector::SimpleSequence.new(sseqs, subject))
     end
     
-        def status_params
-      params.require(:status).permit(:sensitive)
+        # Returns the standard exception backtrace,
+    # including the Sass backtrace.
+    #
+    # @return [Array<String>]
+    def backtrace
+      return nil if super.nil?
+      return super if sass_backtrace.all? {|h| h.empty?}
+      sass_backtrace.map do |h|
+        '#{h[:filename] || '(sass)'}:#{h[:line]}' +
+          (h[:mixin] ? ':in `#{h[:mixin]}'' : '')
+      end + super
     end
-    
-        12.times do |i|
-      day     = i.weeks.ago.to_date
-      week_id = day.cweek
-      week    = Date.commercial(day.cwyear, week_id)
-    
-                encoded
-          end
-    
-                seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], AP_REQ, :APPLICATION)
-    
-                seq = OpenSSL::ASN1::Sequence.new(seqs)
-    
-              def self.attr_accessor(*vars)
-            @attributes ||= []
-            @attributes.concat vars
-            super(*vars)
-          end
-    
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-                seq_values.each do |val|
-              case val.tag
-              when 0
-                self.options = decode_options(val)
-              when 1
-                self.cname = decode_cname(val)
-              when 2
-                self.realm = decode_realm(val)
-              when 3
-                self.sname = decode_sname(val)
-              when 4
-                self.from = decode_from(val)
-              when 5
-                self.till = decode_till(val)
-              when 6
-                self.rtime = decode_rtime(val)
-              when 7
-                self.nonce = decode_nonce(val)
-              when 8
-                self.etype = decode_etype(val)
-              when 10
-                self.enc_auth_data = decode_enc_auth_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequestBody SEQUENCE'
-              end
-            end
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
-            end
-    
-      # fetch data
-  fields = {
-    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
-    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
-    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
-  }
