@@ -1,150 +1,184 @@
 
         
-          def translation_scope
-    'devise.omniauth_callbacks'
-  end
-end
+        # TODO:
+# group :mongoid do
+#   gem 'mongoid', '~> 4.0.0'
+# end
 
     
-      def respond_to_on_destroy
-    # We actually need to hardcode this as Rails default responder doesn't
-    # support returning empty response on GET request
-    respond_to do |format|
-      format.all { head :no_content }
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
-    end
-  end
-end
-
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
-    end
-  end
-    
-          # Set up a param sanitizer to filter parameters using strong_parameters. See
-      # lib/devise/parameter_sanitizer.rb for more info. Override this
-      # method in your application controller to use your own parameter sanitizer.
-      def devise_parameter_sanitizer
-        @devise_parameter_sanitizer ||= Devise::ParameterSanitizer.new(resource_class, resource_name, params)
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
       end
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
     end
     
-              opts.parse!(argv)
-          return argv
-        rescue OptionParser::InvalidOption
-          raise Errors::CLIInvalidOptions, help: opts.help.chomp
+        if authenticated && resource = warden.user(resource_name)
+      flash[:alert] = I18n.t('devise.failure.already_authenticated')
+      redirect_to after_sign_in_path_for(resource)
+    end
+  end
+    
+          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
+      # based on the current mapping:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           user_subject: '...'
+      #
+      # If one does not exist, it fallbacks to ActionMailer default:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           subject: '...'
+      #
+      def subject_for(key)
+        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
+          default: [:subject, key.to_s.humanize])
+      end
+    end
+  end
+end
+
+    
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
         end
     
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
-    
-            def initialize
-          @logger = Log4r::Logger.new('vagrant::plugin::v1::manager')
-          @registered = []
-        end
-    
-                # If we have this machine in our index, load that.
-            entry = @env.machine_index.get(name.to_s)
-            if entry
-              @env.machine_index.release(entry)
-    
-            # This contains all the registered host capabilities.
+            # This returns all the config classes for the various providers.
         #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :host_capabilities
+        # @return [Hash]
+        def provider_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:provider])
+            end
+          end
+        end
     
+      # The global load paths for Sass files. This is meant for plugins and
+  # libraries to register the paths to their Sass stylesheets to that they may
+  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
+  # They are lower-precedence than any load paths passed in via the
+  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
+  #
+  # If the `SASS_PATH` environment variable is set,
+  # the initial value of `load_paths` will be initialized based on that.
+  # The variable should be a colon-separated list of path names
+  # (semicolon-separated on Windows).
+  #
+  # Note that files on the global load path are never compiled to CSS
+  # themselves, even if they aren't partials. They exist only to be imported.
+  #
+  # @example
+  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
+  # @return [Array<String, Pathname, Sass::Importers::Base>]
+  def self.load_paths
+    @load_paths ||= if ENV['SASS_PATH']
+                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
+                    else
+                      []
+                    end
+  end
     
-    def get_file(url)
-      uri = URI(url)
-      cache_path = './#@cache_path#{uri.path}#{uri.query.tr('?&=', '-') if uri.query}'
-      FileUtils.mkdir_p File.dirname(cache_path)
-      if File.exists?(cache_path)
-        log_http_get_file url, true
-        File.read(cache_path, mode: 'rb')
-      else
-        log_http_get_file url, false
-        content = open(url).read
-        File.open(cache_path, 'wb') { |f| f.write content }
-        content
-      end
+            last_simple_subject = rest.empty? && sseq.subject?
+        if current_rule.nil? || first_sseq(current_rule).members != firsts ||
+            !!first_sseq(current_rule).subject? != !!last_simple_subject
+          current_rule = Tree::RuleNode.new([])
+          current_rule.parsed_rules = make_sseq(last_simple_subject, *firsts)
+        end
+    
+      # A read-only wrapper for a lexical environment for SassScript.
+  class ReadOnlyEnvironment < BaseEnvironment
+    def initialize(parent = nil, options = nil)
+      super
+      @content_cached = nil
+    end
+    # The read-only environment of the caller of this environment's mixin or function.
+    #
+    # @see BaseEnvironment#caller
+    # @return {ReadOnlyEnvironment}
+    def caller
+      return @caller if @caller
+      env = super
+      @caller ||= env.is_a?(ReadOnlyEnvironment) ? env : ReadOnlyEnvironment.new(env, env.options)
     end
     
-      # Disable automatic flushing of the log to improve performance.
-  # config.autoflush_log = false
+          opts.on('-i', '--interactive',
+              'Run an interactive SassScript shell.') do
+        @options[:interactive] = true
+      end
     
-      gem 'cocoapods-dependencies', '~> 1.0.beta.1'
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
     
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
-  end
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
+    Then(/^the invalid (.+) release is ignored$/) do |filename|
+  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
+  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
+  expect(status).to be_success
 end
     
-        def self.reset!
-      @env = new
-    end
+    World(VagrantHelpers)
+
     
-          def echo?
-        (options || {}).fetch(:echo, true)
-      end
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
     end
   end
 end
 
     
-            value_to_evaluate = block || value
-    
-          # Keys that have been set, but which have never been fetched.
-      def unused_keys
-        keys - fetched_keys
+          def each
+        servers_by_key.values.each { |server| yield server }
       end
     
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
+          ::Bundler.settings[:path] = LogStash::Environment::BUNDLE_DIR
+      ::Bundler.settings[:gemfile] = LogStash::Environment::GEMFILE_PATH
+      ::Bundler.settings[:without] = options[:without].join(':')
+      ::Bundler.settings[:force] = options[:force]
     
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
+      private
+    
+    module LogStash module PluginManager module PackFetchStrategy
+  class Repository
+    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
+    PACK_EXTENSION = 'zip'
+    
+          it 'list the plugins with their versions' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
+        result.stdout.split('\n').each do |plugin|
+          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+        end
+      end
     end
-    
-          require 'bundler'
-      LogStash::Bundler.patch!
-    
-          IGNORE_GEMS_IN_PACK.each do |gem_name|
-        packet_gem.ignore(gem_name)
-      end
-    
-      def update_gems!
-    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
-    previous_gem_specs_map = find_latest_gem_specs
-    
-      # Make sure we dont build this gem from a non jruby
-  # environment.
-  if RUBY_PLATFORM == 'java'
-    gem.platform = 'java'
-  else
-    raise 'The logstash-core-api need to be build on jruby'
-  end
-end
-
-    
-          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
-      options = {:debug => ENV['LS_QA_DEBUG']}
