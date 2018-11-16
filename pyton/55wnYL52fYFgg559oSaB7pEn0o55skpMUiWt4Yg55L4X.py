@@ -1,81 +1,114 @@
 
         
-                # Insert the include statement to MANIFEST.in if not present
-        with open(manifest_path, 'a+') as manifest:
-            manifest.seek(0)
-            manifest_content = manifest.read()
-            if not 'include fastentrypoints.py' in manifest_content:
-                manifest.write(('\n' if manifest_content else '')
-                               + 'include fastentrypoints.py')
+        
+def win_service_start(service_name, real_main):
+    try:
+        cb = START_CALLBACK(
+            functools.partial(win_service_main, service_name, real_main))
+        dispatch_table = _ctypes_array(SERVICE_TABLE_ENTRY, [
+            SERVICE_TABLE_ENTRY(
+                service_name,
+                cb
+            ),
+            SERVICE_TABLE_ENTRY(None, ctypes.cast(None, START_CALLBACK))
+        ])
     
-    shells.shell = shells.Generic()
-    
-    
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
-    
-    You can install with Homebrew-Cask:
-  brew cask install osxfuse
+        entry = entry_template.replace('@TIMESTAMP@', timestamp)
+    entry = entry.replace('@VERSION@', v)
+    entries.append(entry)
     
     
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
+    
+    import io
+import optparse
+import os
+import sys
+    
+    import requests.auth
+    
+        def __iter__(self):
+        return iter(self._plugins)
+    
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+    
+def test_migrate_implicit_content_type():
+    config = MockEnvironment().config
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    
+    
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
 
     
-        strings = []
-    with open(filepath, 'r') as f:
+        # TODO: decoder should check that nonce is in the protected header
     
-    *Where can the pattern be used practically?
-The Factory Method can be seen in the popular web framework Django:
-http://django.wikispaces.asu.edu/*NEW*+Django+Design+Patterns For
-example, in a contact form of a web page, the subject and the message
-fields are created using the same form factory (CharField()), even
-though they have different implementations according to their
-purposes.
+    MANAGED_COMMENT = 'DO NOT REMOVE - Managed by Certbot'
+MANAGED_COMMENT_ID = MANAGED_COMMENT+', VirtualHost id: {0}'
+'''Managed by Certbot comments and the VirtualHost identification template'''
+
     
-            def wrapper(*args, **kwargs):
-            return attr(*args, **kwargs)
-        return wrapper
+        def test_include_single_quotes(self):
+        self.verify_fnmatch(''' + self.config_path + ''')
     
-            # and can also be undone at will
-        for cmd in reversed(command_stack):
-            cmd.undo()
-    finally:
-        os.unlink('foo.txt')
+        def setUp(self):
+        self.base_dir = '/example_path'
+        self.vhosts = util.get_vh_truth(
+            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
     
-        def update(self):
-        for msg in self.msg_queue:
-            for sub in self.subscribers.get(msg, []):
-                sub.run(msg)
-        self.msg_queue = []
+            self.sni.configurator.parser.find_dir(
+            'Include', self.sni.challenge_conf)
+        vh_match = self.sni.configurator.aug.match(
+            '/files' + self.sni.challenge_conf + '//VirtualHost')
     
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
-    
-        '''Base state. This is to share functionality'''
-    
-    
-# Actions
-def print_item(item):
-    print(item)
-    
-    
-class MidnightTimeProvider(object):
-    '''
-    Class implemented as hard-coded stub (in contrast to configurable stub).
-    '''
-    
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 2)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 100)
+            '''
+        ips = ' '.join(str(i) for i in ip_addrs)
+        document_root = os.path.join(
+            self.configurator.config.work_dir, 'tls_sni_01_page/')
+        # TODO: Python docs is not clear how multiline string literal
+        # newlines are parsed on different platforms. At least on
+        # Linux (Debian sid), when source file uses CRLF, Python still
+        # parses it as '\n'... c.f.:
+        # https://docs.python.org/2.7/reference/lexical_analysis.html
+        return self.VHOST_TEMPLATE.format(
+            vhost=ips,
+            server_name=achall.response(achall.account_key).z_domain.decode('ascii'),
+            ssl_options_conf_path=self.configurator.mod_ssl_conf,
+            cert_path=self.get_cert_path(achall),
+            key_path=self.get_key_path(achall),
+            document_root=document_root).replace('\n', os.linesep)
