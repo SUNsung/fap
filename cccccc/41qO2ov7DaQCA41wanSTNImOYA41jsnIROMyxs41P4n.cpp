@@ -1,238 +1,112 @@
 
         
-        
-    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    // FIXME: Not thread-safe! It should avoid deleting the value until
-    // 'releaseValue is called on it.
-    *Value_out = Entry->second;
-    return true;
-  }
-  return false;
-}
+          // Returns the number of TestPartResult objects in the array.
+  int size() const;
     
-    #ifndef DIRECTIONAL_PREPOSITION
-#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
-#endif
-    
-      if (*BufferPtr == '\n')
-    return 1;
-    
-    
-    {      ExecutingTasks.push(PidTaskPair(Pid, std::move(T)));
-    }
-    
-    StringRef swift::unicode::extractFirstExtendedGraphemeCluster(StringRef S) {
-  // Extended grapheme cluster segmentation algorithm as described in Unicode
-  // Standard Annex #29.
-  if (S.empty())
-    return StringRef();
-    }
-    
-    namespace {
-  // Quasi-lexicographic order: string length first, then string data.
-  // Since we don't care about the actual length, we can use this, which
-  // lets us ignore the string data a larger proportion of the time.
-  struct SortByLengthComparator {
-    bool operator()(StringRef lhs, StringRef rhs) const {
-      return (lhs.size() < rhs.size() ||
-              (lhs.size() == rhs.size() && lhs < rhs));
-    }
-  };
-} // end anonymous namespace
-    
-    extern 'C' {
-  PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-    PyObject *module = PyModule_Create(&_module);
-#else
-    PyObject *module = Py_InitModule3(
-        const_cast<char*>(kModuleName),
-        NULL,
-        const_cast<char*>(kModuleDocstring));
-#endif
-    if (module == NULL) {
-      return INITFUNC_ERRORVAL;
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-
-    
-    // A CodeGenerator that captures the FileDescriptor it's passed as a
-// FileDescriptorProto.
-class DescriptorCapturingGenerator : public CodeGenerator {
- public:
-  // Does not own file; file must outlive the Generator.
-  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
-      : file_(file) {}
-    }
-    
-    
-    {  for (int i = 0; i < parts.size(); i++) {
-    string::size_type equals_pos = parts[i].find_first_of('=');
-    std::pair<string, string> value;
-    if (equals_pos == string::npos) {
-      value.first = parts[i];
-      value.second = '';
-    } else {
-      value.first = parts[i].substr(0, equals_pos);
-      value.second = parts[i].substr(equals_pos + 1);
-    }
-    output->push_back(value);
-  }
-}
-    
-    
-    {  // Moving to a message on the arena should lead to a copy.
-  *message2_on_arena = std::move(message1);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(message1);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
-}
-    
-      // Oneofs
-  if (descriptor->oneof_decl_count() > 0) {
-      std::vector<std::string> oneofs;
-      for (int i = 0; i < descriptor->oneof_decl_count(); i++) {
-          oneofs.push_back(UnderscoresToCamelCase(descriptor->oneof_decl(i)->name(), true));
-      }
-      printer->Print('new[]{ \'$oneofs$\' }, ', 'oneofs', JoinStrings(oneofs, '\', \''));
-  }
-  else {
-      printer->Print('null, ');
+      void depart() {
+    if (link_.depart()) delete value_;
   }
     
-      char prev = '*';
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {
-    {
-    {
-    {
-    {  printer->Print(
-      '      return YES;\n'
-      '    default:\n'
-      '      return NO;\n'
-      '  }\n'
-      '}\n\n');
-}
-}  // namespace objectivec
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    
-    {
-    {
-    {
-    {void ExtensionGenerator::GenerateRegistrationSource(io::Printer* printer) {
-  printer->Print(
-      '[registry addExtension:$root_class_and_method_name$];\n',
-      'root_class_and_method_name', root_class_and_method_name_);
-}
-}  // namespace objectivec
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    class ExtensionGenerator {
- public:
-  ExtensionGenerator(const string& root_class_name,
-                     const FieldDescriptor* descriptor);
-  ~ExtensionGenerator();
-    }
-    
-    
-<details>
-    
-    ChannelCredentials::~ChannelCredentials() {}
-    
-      std::vector<grpc::string_ref> FindPropertyValues(
-      const grpc::string& name) const override;
-    
-    #include <grpc/grpc_security.h>
-#include 'src/core/lib/channel/channel_args.h'
-    
-    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
-    : reflection_service_(new grpc::ProtoServerReflection()) {}
-    
-    
-    { private:
-  std::istream &fin_;
+    {  T0 f0_;
+  T1 f1_;
+  T2 f2_;
 };
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+    // A unique type used as the default value for the arguments of class
+// template Types.  This allows us to simulate variadic templates
+// (e.g. Types<int>, Type<int, double>, and etc), which C++ doesn't
+// support directly.
+struct None {};
+    
+    // QueueNode is a node in a Queue, which consists of an element of
+// type E and a pointer to the next node.
+template <typename E>  // E is the element type
+class QueueNode {
+  friend class Queue<E>;
+    }
+    
+    namespace grpc {
+    }
+    
+    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
+                                                        grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  GPR_ASSERT(calld != nullptr);
+  if (error == GRPC_ERROR_NONE) {
+    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
+    FilterTrailingMetadata(calld->recv_trailing_metadata_,
+                           &calld->elapsed_time_);
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
+                   GRPC_ERROR_REF(error));
+}
+    
+    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
+                             'Number of messages received per RPC', kCount);
+  return measure;
+}
+    
+    grpc::string ProtoServerReflectionPlugin::name() {
+  return 'proto_server_reflection';
+}
+    
+      XGBOOST_DEVICE GradientPairInternal<T> operator-(
+      const GradientPairInternal<T> &rhs) const {
+    GradientPairInternal<T> g;
+    g.grad_ = grad_ - rhs.grad_;
+    g.hess_ = hess_ - rhs.hess_;
+    return g;
+  }
+    
+      /**
+   * \fn  virtual void Predictor::PredictInstance( const SparsePage::Inst&
+   * inst, std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model,
+   * unsigned ntree_limit = 0, unsigned root_index = 0) = 0;
+   *
+   * \brief online prediction function, predict score for one instance at a time
+   * NOTE: use the batch prediction interface if possible, batch prediction is
+   * usually more efficient than online prediction This function is NOT
+   * threadsafe, make sure you only call from one thread.
+   *
+   * \param           inst        The instance to predict.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       The model to predict from
+   * \param           ntree_limit (Optional) The ntree limit.
+   * \param           root_index  (Optional) Zero-based index of the root.
+   */
+    
+    
+    {
+    {
+    {      // Test write Symbol
+      std::vector<unsigned char> buffer2(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+      for (int i = 0; i < input.size(); i++) {
+        cbw.WriteSymbol(buffer2.data(), input[i], i);
+      }
+      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
+      std::vector<int> output2(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output2[i] = ci2[i];
+      }
+      ASSERT_TRUE(input == output2);
+    }
   }
 }
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
+    void Speed::stop()
+{
+    if (_innerAction)
+        _innerAction->stop();
     
-    
-    {// end of actions group
-/// @}
+    Action::stop();
+}
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -244,42 +118,236 @@ THE SOFTWARE.
 ****************************************************************************/
     
     
-    {
-    {
-    {            setVertex(Vec2(i, j), v);
-        }
-    }
+    {    delete action;
+    return nullptr;
 }
     
-    Sequence::~Sequence()
-{
-    CC_SAFE_RELEASE(_actions[0]);
-    CC_SAFE_RELEASE(_actions[1]);
+    
+    {    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
     
-    /** @class ScaleTo
- @brief Scales a Node object to a zoom factor by modifying it's scale attribute.
- @warning This action doesn't support 'reverse'.
- @warning The physics body contained in Node doesn't support this action.
- */
-class CC_DLL ScaleTo : public ActionInterval
+    /** @class Hide
+* @brief Hide the node.
+*/
+class CC_DLL Hide : public ActionInstant
 {
 public:
-    /** 
-     * Creates the action with the same scale factor for X and Y.
-     * @param duration Duration time, in seconds.
-     * @param s Scale factor of x and y.
-     * @return An autoreleased ScaleTo object.
+    /** Allocates and initializes the action.
+     *
+     * @return An autoreleased Hide object.
      */
-    static ScaleTo* create(float duration, float s);
+    static Hide * create();
     }
     
-    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
-
+    
+    /** Returns the numbers of actions that are running in a
+     *  certain target with a specific tag.
+     * Like getNumberOfRunningActionsInTarget Composable actions
+     * are counted as 1 action. Example:
+     * - If you are running 1 Sequence of 7 actions, it will return 1.
+     * - If you are running 7 Sequences of 2 actions, it will return 7.
+     *
+     * @param target    A certain target.
+     * @param tag       Tag that will be searched.
+     * @return  The numbers of actions that are running in a certain target
+     *          with a specific tag.
+     * @see getNumberOfRunningActionsInTarget
+     * @js NA
+     */
+    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionPageTurn3D.h'
+#include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
+    
+        /**
+    @brief Create an action with duration, grid size.
+    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
+    */
+    static PageTurn3D* create(float duration, const Size& gridSize);
+    
+        //
+    // Overrides
+    //
+    virtual ProgressTo* clone() const override;
+    virtual ProgressTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressTo() {}
+    virtual ~ProgressTo() {}
+    
+    void Animation::addSpriteFrameWithTexture(Texture2D *pobTexture, const Rect& rect)
+{
+    SpriteFrame *frame = SpriteFrame::createWithTexture(pobTexture, rect);
+    addSpriteFrame(frame);
+}
     
     
-    {        for(const auto &value : spritesheets) {
-            std::string path = FileUtils::getInstance()->fullPathFromRelativeFile(value.asString(),plist);
-            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
+    {            array.pushBack(animFrame);
         }
+    
+    void AtlasNode::calculateMaxItems()
+{
+    Size s = _textureAtlas->getTexture()->getContentSize();
+    
+    if (_ignoreContentScaleFactor)
+    {
+        s = _textureAtlas->getTexture()->getContentSizeInPixels();
     }
+    
+    _itemsPerColumn = (int)(s.height / _itemHeight);
+    _itemsPerRow = (int)(s.width / _itemWidth);
+}
+    
+    protected:
+    void calculateMaxItems();
+    void updateBlendFunc();
+    void updateOpacityModifyRGB();
+    
+        int getIndexFromPos(unsigned int x, unsigned int y) { return y*_width+x; }
+    cocos2d::Vec2 getPosFromIndex(unsigned int i) { return cocos2d::Vec2(static_cast<float>(i%_width), static_cast<float>(i/_width)); }
+    
+      std::shared_ptr<DHTNode> newNode_;
+    
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
+}
+    
+    void DHTRoutingTable::getClosestKNodes(
+    std::vector<std::shared_ptr<DHTNode>>& nodes,
+    const unsigned char* key) const
+{
+  dht::findClosestKNodes(nodes, root_.get(), key);
+}
+    
+      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
+  {
+    return nodes_;
+  }
+    
+    void DHTRoutingTableSerializer::serialize(const std::string& filename)
+{
+  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
+  std::string filenameTemp = filename;
+  filenameTemp += '__temp';
+  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
+    }
+    
+    #include 'LogFactory.h'
+#include 'Logger.h'
+#include 'util.h'
+#include 'DHTNode.h'
+#include 'DHTConnectionImpl.h'
+#include 'DHTRoutingTable.h'
+#include 'DHTMessageFactoryImpl.h'
+#include 'DHTMessageTracker.h'
+#include 'DHTMessageDispatcherImpl.h'
+#include 'DHTMessageReceiver.h'
+#include 'DHTTaskQueueImpl.h'
+#include 'DHTTaskFactoryImpl.h'
+#include 'DHTPeerAnnounceStorage.h'
+#include 'DHTTokenTracker.h'
+#include 'DHTInteractionCommand.h'
+#include 'DHTTokenUpdateCommand.h'
+#include 'DHTBucketRefreshCommand.h'
+#include 'DHTPeerAnnounceCommand.h'
+#include 'DHTEntryPointNameResolveCommand.h'
+#include 'DHTAutoSaveCommand.h'
+#include 'DHTTask.h'
+#include 'DHTRoutingTableDeserializer.h'
+#include 'DHTRegistry.h'
+#include 'DHTBucketRefreshTask.h'
+#include 'DHTMessageCallback.h'
+#include 'DHTMessageTrackerEntry.h'
+#include 'DHTMessageEntry.h'
+#include 'UDPTrackerClient.h'
+#include 'BtRegistry.h'
+#include 'prefs.h'
+#include 'Option.h'
+#include 'SocketCore.h'
+#include 'DlAbortEx.h'
+#include 'RecoverableException.h'
+#include 'a2functional.h'
+#include 'DownloadEngine.h'
+#include 'fmt.h'
+    
+    #include <vector>
+#include <memory>
+    
+    DHTTaskExecutor::~DHTTaskExecutor() = default;
+    
+    bool IsZero(double n);
+    
+    // The CHECK macro returns a std::ostream object that can have extra information
+// written to it.
+#ifndef NDEBUG
+#define CHECK(b)                                                             \
+  (b ? ::benchmark::internal::GetNullLogInstance()                           \
+     : ::benchmark::internal::CheckHandler(#b, __FILE__, __func__, __LINE__) \
+           .GetLog())
+#else
+#define CHECK(b) ::benchmark::internal::GetNullLogInstance()
+#endif
+    
+    #include <cerrno>
+#include <cstdlib>
+#include <ctime>
+    
+    template <typename ValueType>
+class ForEach {
+ public:
+  template <typename InputIterator>
+  ForEach(InputIterator begin, InputIterator end)
+      : func_([begin, end](FunctionRef<void(ValueType)> f) {
+          for (auto it = begin; it != end; ++it) {
+            f(*it);
+          }
+        }) {}
+    }
+    
+        ~KeepAlive() {
+      reset();
+    }
+    
+    #include <string>
+    
+      explicit Options(
+      Format format_ = Format::ZLIB,
+      int windowSize_ = 15,
+      int memLevel_ = 8,
+      int strategy_ = Z_DEFAULT_STRATEGY)
+      : format(format_),
+        windowSize(windowSize_),
+        memLevel(memLevel_),
+        strategy(strategy_) {}
