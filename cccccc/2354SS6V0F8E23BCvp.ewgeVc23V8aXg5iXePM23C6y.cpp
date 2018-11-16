@@ -1,292 +1,375 @@
-bool UvTaskRunner::PostNonNestableDelayedTask(const base::Location& from_here,
-                                              base::OnceClosure task,
-                                              base::TimeDelta delay) {
-  return PostDelayedTask(from_here, std::move(task), delay);
-}
-    
-    namespace atom {
+
+        
+        void CostAnalyzer::PrintAnalysis(std::ostream& os, bool per_node_report,
+                                 bool verbose) const {
+  os << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time measured in ns (serialized): ' << std::right
+     << std::setw(20) << total_time_measured_serialized_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time measured in ns (actual): ' << std::right << std::setw(20)
+     << total_time_measured_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time analytical in ns (upper bound): ' << std::right
+     << std::setw(20) << total_time_analytical_upper_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time analytical in ns (lower bound): ' << std::right
+     << std::setw(20) << total_time_analytical_lower_ << std::endl;
+  double efficiency_upper = static_cast<double>(total_time_analytical_upper_) /
+                            static_cast<double>(total_time_measured_);
+  os << std::left << std::setw(50)
+     << 'Overall efficiency (analytical upper/actual): ' << std::right
+     << std::setw(20) << efficiency_upper << std::endl;
+  double efficiency_lower = static_cast<double>(total_time_analytical_lower_) /
+                            static_cast<double>(total_time_measured_);
+  os << std::left << std::setw(50)
+     << 'Overall efficiency (analytical lower/actual): ' << std::right
+     << std::setw(20) << efficiency_lower << std::endl;
+  os << std::endl;
     }
     
+    Status TF_TensorToPyArray(Safe_TF_TensorPtr tensor, PyObject** out_ndarray);
     
-    {}  // namespace atom
+    PyExceptionRegistry* PyExceptionRegistry::singleton_ = nullptr;
     
-    #include 'atom/browser/api/atom_api_browser_window.h'
-#include 'atom/browser/browser.h'
-#include 'atom/common/native_mate_converters/gfx_converter.h'
-#include 'base/bind.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-#include 'ui/display/display.h'
-#include 'ui/display/screen.h'
-#include 'ui/gfx/geometry/point.h'
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
     
-    // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+      // Returns true if all stream tasks have completed at time of the call. Note
+  // the potential for races around this call (if another thread adds work to
+  // the stream immediately after this returns).
+  static bool IsStreamIdle(CudaContext* context, CUstream stream);
     
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
+    #endif
+
     
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/nw_shell.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'ui/gfx/point.h'
-#include 'vector'
-#include 'gtk/gtk.h'
+      /**
+   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
+   * These Bind()s should be used for ini settings. Specifically, they
+   * should be used when the bound setting is needed before the main ini
+   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
+   * value in an ini setting if it is set otherwise it will use the defValue.
+   */
+  static void Bind(bool& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const bool defValue = false,
+                   const bool prepend_hhvm = true);
+  static void Bind(const char*& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char *defValue = nullptr,
+                   const bool prepend_hhvm = true);
+  static void Bind(std::string& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const std::string defValue = '',
+                   const bool prepend_hhvm = true);
+  static void Bind(char& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char defValue = 0, const bool prepend_hhvm = true);
+  static void Bind(unsigned char& loc,const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const unsigned char defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(double& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const double defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name,
+                   HackStrictOption def);
+  static void
+  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<std::string>& defValue = std::vector<std::string>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::unordered_map<std::string, int>& loc,
+       const IniSettingMap& ini, const Hdf& config,
+       const std::string& name = '',
+       const std::unordered_map<std::string, int>& defValue =
+         std::unordered_map<std::string, int>{},
+       const bool prepend_hhvm = true);
+  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMap& defValue = ConfigMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMapC& defValue = ConfigMapC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSet& defValue = ConfigSet(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSetC& defValue = ConfigSetC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigIMap& defValue = ConfigIMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
+                   const Hdf& config, const std::string& name = '',
+                   const ConfigFlatSet& defValue = ConfigFlatSet(),
+                   const bool prepend_hhvm = true);
     
-    ExtensionFunction::ResponseAction
-NwAppQuitFunction::Run() {
-  ExtensionService* service =
-    ExtensionSystem::Get(browser_context())->extension_service();
-  base::MessageLoop::current()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&ExtensionService::TerminateExtension,
-                   service->AsWeakPtr(),
-                   extension_id()));
-  return RespondNow(NoArguments());
-}
-    
-    #define MAKE_TEMPLATE_TYPE_INFO(m_template, m_type, m_var_type) \
-	template <>                                                 \
-	struct GetTypeInfo<m_template<m_type> > {                   \
-		static const Variant::Type VARIANT_TYPE = m_var_type;   \
-		static inline PropertyInfo get_class_info() {           \
-			return PropertyInfo(VARIANT_TYPE, String());        \
-		}                                                       \
-	};                                                          \
-	template <>                                                 \
-	struct GetTypeInfo<const m_template<m_type> &> {            \
-		static const Variant::Type VARIANT_TYPE = m_var_type;   \
-		static inline PropertyInfo get_class_info() {           \
-			return PropertyInfo(VARIANT_TYPE, String());        \
-		}                                                       \
-	};
-    
-    // Bullet to Godot
-extern void B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void INVERT_B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void INVERT_B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void B_TO_G(btTransform const &inVal, Transform &outVal);
-    
-    	virtual void setup(btTypedConstraint *p_constraint);
-	virtual void set_space(SpaceBullet *p_space);
-	virtual void destroy_internal_constraint();
-    
-    /**
-	@author AndreaCatania
-*/
-    
-    	/// This data is used to store the new world position for kinematic body
-	btTransform bodyKinematicWorldTransf;
-	/// This data is used to store last world position
-	btTransform bodyCurrentWorldTransform;
-    
-    	void set_param(PhysicsServer::HingeJointParam p_param, real_t p_value);
-	real_t get_param(PhysicsServer::HingeJointParam p_param) const;
-    
-    	void set_param(PhysicsServer::PinJointParam p_param, real_t p_value);
-	real_t get_param(PhysicsServer::PinJointParam p_param) const;
-    
-    	ClassDB::register_virtual_class<CSGShape>();
-	ClassDB::register_virtual_class<CSGPrimitive>();
-	ClassDB::register_class<CSGMesh>();
-	ClassDB::register_class<CSGSphere>();
-	ClassDB::register_class<CSGBox>();
-	ClassDB::register_class<CSGCylinder>();
-	ClassDB::register_class<CSGTorus>();
-	ClassDB::register_class<CSGPolygon>();
-	ClassDB::register_class<CSGCombiner>();
-    
-    #include 'modules/gdnative/gdnative.h'
-    
-    void UnregisterShellMenu(std::wstring opt, wchar_t* keyBaseName)
-{
-	HKEY root = GetRootKey(opt);
-	HKEY cmderKey;
-	FAIL_ON_ERROR(RegCreateKeyEx(root, keyBaseName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &cmderKey, NULL));
-	FAIL_ON_ERROR(RegDeleteTree(cmderKey, NULL));
-	RegDeleteKeyEx(root, keyBaseName, KEY_ALL_ACCESS, NULL);
-	RegCloseKey(cmderKey);
-	RegCloseKey(root);
-}
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Follow);
-};
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(BezierTo);
-};
-    
-            if (! _currentTarget->paused)
-        {
-            // The 'actions' MutableArray may change while inside this loop.
-            for (_currentTarget->actionIndex = 0; _currentTarget->actionIndex < _currentTarget->actions->num;
-                _currentTarget->actionIndex++)
-            {
-                _currentTarget->currentAction = static_cast<Action*>(_currentTarget->actions->arr[_currentTarget->actionIndex]);
-                if (_currentTarget->currentAction == nullptr)
-                {
-                    continue;
-                }
-    }
-    }
-    
-    GridBase* PageTurn3D::getGrid()
-{
-    auto result = Grid3D::create(_gridSize, _gridNodeTarget->getGridRect());
-    if (result)
-    {
-        result->setNeedDepthTestForBlit(true);
-    }
-    
-    return result;
-}
-    
-            Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
-*/
-class CC_DLL ActionTweenDelegate
-{
-public:
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~ActionTweenDelegate() {}
-    }
-    
-    // Same as FFT8, but all inputs are real.
-// TODO(szabadka): Since this does not need to be in-place, maybe there is a
-// faster FFT than this one, which is derived from DJB's in-place complex FFT.
-void RealFFT8(const double* in, Complex* out) {
-  double t1, t2, t3, t5, t6, t7, t8;
-  t8 = in[6];
-  t5 = in[2] - t8;
-  t8 += in[2];
-  out[2].real = t8;
-  out[6].imag = -t5;
-  out[4].imag = t5;
-  t8 = in[4];
-  t3 = in[0] - t8;
-  t8 += in[0];
-  out[0].real = t8;
-  out[4].real = t3;
-  out[6].real = t3;
-  t7 = in[5];
-  t3 = in[1] - t7;
-  t7 += in[1];
-  out[1].real = t7;
-  t8 = in[7];
-  t5 = in[3] - t8;
-  t8 += in[3];
-  out[3].real = t8;
-  t2 = -t5;
-  t6 = t3 - t5;
-  t8 = kSqrtHalf;
-  t6 *= t8;
-  out[5].real = out[4].real - t6;
-  t1 = t3 + t5;
-  t1 *= t8;
-  out[5].imag = out[4].imag - t1;
-  t6 += out[4].real;
-  out[4].real = t6;
-  t1 += out[4].imag;
-  out[4].imag = t1;
-  t5 = t2 - t3;
-  t5 *= t8;
-  out[7].imag = out[6].imag - t5;
-  t2 += t3;
-  t2 *= t8;
-  out[7].real = out[6].real - t2;
-  t2 += out[6].real;
-  out[6].real = t2;
-  t5 += out[6].imag;
-  out[6].imag = t5;
-  t5 = out[2].real;
-  t1 = out[0].real - t5;
-  t7 = out[3].real;
-  t5 += out[0].real;
-  t3 = out[1].real - t7;
-  t7 += out[1].real;
-  t8 = t5 + t7;
-  out[0].real = t8;
-  t5 -= t7;
-  out[1].real = t5;
-  out[2].imag = t3;
-  out[3].imag = -t3;
-  out[3].real = t1;
-  out[2].real = t1;
-  out[0].imag = 0;
-  out[1].imag = 0;
-    }
-    
-        size_t i = 0;      // Points to the next leaf node.
-    size_t j = n + 1;  // Points to the next non-leaf node.
-    for (size_t k = n - 1; k != 0; --k) {
-      size_t left, right;
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        left = i;
-        ++i;
-      } else {
-        left = j;
-        ++j;
-      }
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        right = i;
-        ++i;
-      } else {
-        right = j;
-        ++j;
-      }
-    }
-    
-    
-    {    if (memstream.eof()) png_error(png_ptr, 'unexpected end of data');
-    if (memstream.fail()) png_error(png_ptr, 'read from memory error');
-  });
-    
-      tmp0 = in[2 * stride];
-  tmp1 = kIDCTMatrix[ 2] * tmp0;
-  tmp2 = kIDCTMatrix[10] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] -= tmp2;
-  out[3] -= tmp1;
-  out[4] -= tmp1;
-  out[5] -= tmp2;
-  out[6] += tmp2;
-  out[7] += tmp1;
-    
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg) {
-  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
-      rgb.size() != 3 * w * h) {
-    return false;
+      const char* data = filename.data();
+  int data_len = filename.length();
+  bool base64 = false;
+  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
+    return nullptr;
   }
-  InitJPEGDataForYUV444(w, h, jpg);
-  AddApp0Data(jpg);
+  data += sizeof('data:') - 1;
+  data_len -= sizeof('data:') - 1;
+    
+          std::string line = argv[cnt+1];
+      std::string section = 'php';
+      int pos_period = line.find_first_of('.');
+      int pos_equals = line.find_first_of('=');
+    
+    bool OutputFile::rewind() {
+  raise_warning('cannot rewind a php://output stream');
+  return false;
+}
+    
+    
+    {    return CatmullRomBy::create(_duration, reverse);
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionGrid3D.h'
+#include 'base/CCDirector.h'
+    
+    __CCCallFuncND * __CCCallFuncND::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) __CCCallFuncND();
+    
+    if( _selectorTarget)
+    {
+        a->initWithTarget(_selectorTarget, _callFuncND, _data);
     }
     
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo);
-void BuildACHistograms(const JPEGData& jpg, JpegHistogram* histo);
-size_t JpegHeaderSize(const JPEGData& jpg, bool strip_metadata);
-size_t EstimateJpegDataSize(const int num_components,
-                            const std::vector<JpegHistogram>& histograms);
+    a->autorelease();
+    return a;
+}
+    
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(Spawn);
+};
+    
+    
+    {    return 0;
+}
+    
+        if (action && action->initWithDuration(duration, gridSize))
+    {
+        action->autorelease();
+        return action;
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionTiledGrid.h'
+#include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
+#include 'base/CCDirector.h'
+#include 'base/ccMacros.h'
+    
+    /**
+@brief SplitRows action.
+@details Split the target node in many rows.
+        Then move out some rows from left, move out the other rows from right.
+*/
+class CC_DLL SplitRows : public TiledGrid3DAction
+{
+public :
+    /** 
+     * @brief Create the action with the number of rows and the duration.
+     * @param duration Specify the duration of the SplitRows action. It's a value in seconds.
+     * @param rows Specify the rows count should be split.
+     * @return If the creation success, return a pointer of SplitRows action; otherwise, return nil.
+     */
+    static SplitRows* create(float duration, unsigned int rows);
+    }
+    
+        for (int n = 0; n < 50; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+            D3D12_STATIC_SAMPLER_DESC staticSampler = {};
+        staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+        staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        staticSampler.MipLODBias = 0.f;
+        staticSampler.MaxAnisotropy = 0;
+        staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+        staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+        staticSampler.MinLOD = 0.f;
+        staticSampler.MaxLOD = 0.f;
+        staticSampler.ShaderRegister = 0;
+        staticSampler.RegisterSpace = 0;
+        staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    
+    
+    {    // Restore modified state
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glPopAttrib();
+    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
+    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
+    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+}
+    
+        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
+    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
+    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
+    io.KeyMap[ImGuiKey_Home] = VK_HOME;
+    io.KeyMap[ImGuiKey_End] = VK_END;
+    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
+    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
+    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = 'A';
+    io.KeyMap[ImGuiKey_C] = 'C';
+    io.KeyMap[ImGuiKey_V] = 'V';
+    io.KeyMap[ImGuiKey_X] = 'X';
+    io.KeyMap[ImGuiKey_Y] = 'Y';
+    io.KeyMap[ImGuiKey_Z] = 'Z';
+    
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    void BENCHFUN(insertFront)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
+  });
+}
+    
+    template <class String>
+String Uri::toString() const {
+  String str;
+  if (hasAuthority_) {
+    toAppend(scheme_, '://', &str);
+    if (!password_.empty()) {
+      toAppend(username_, ':', password_, '@', &str);
+    } else if (!username_.empty()) {
+      toAppend(username_, '@', &str);
+    }
+    toAppend(host_, &str);
+    if (port_ != 0) {
+      toAppend(':', port_, &str);
+    }
+  } else {
+    toAppend(scheme_, ':', &str);
+  }
+  toAppend(path_, &str);
+  if (!query_.empty()) {
+    toAppend('?', query_, &str);
+  }
+  if (!fragment_.empty()) {
+    toAppend('#', fragment_, &str);
+  }
+  return str;
+}
+    
+    
+    {  bool initialized_{false};
+  folly::Function<folly::Function<void(double)>()> initialize_;
+  folly::Function<void(double)> increment_;
+};
+    
+        PackedPtr newptr;
+    newptr.init(newval, count);
