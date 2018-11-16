@@ -1,241 +1,390 @@
 
         
-        // Multiply-included file, no traditional include guard.
-#include <string>
-    
-    
-    {} // namespace nwapi
-    
-    namespace nw {
+        namespace {
     }
     
-    namespace nw {
-    }
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
-    }
+    {}  // namespace api
     
-      inline Dtype data_at(const int n, const int c, const int h,
-      const int w) const {
-    return cpu_data()[offset(n, c, h, w)];
+    template <>
+struct Converter<base::trace_event::TraceConfig> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     base::trace_event::TraceConfig* out) {
+    Dictionary options;
+    if (!ConvertFromV8(isolate, val, &options))
+      return false;
+    std::string category_filter, trace_options;
+    if (!options.Get('categoryFilter', &category_filter) ||
+        !options.Get('traceOptions', &trace_options))
+      return false;
+    *out = base::trace_event::TraceConfig(category_filter, trace_options);
+    return true;
   }
-    
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-    
-    {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
 };
-}  // namespace caffe
     
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+    
+    {  return mate::CreateHandle(isolate, new PowerMonitor(isolate)).ToV8();
+}
+    
+    #endif  // ATOM_BROWSER_API_ATOM_API_TRAY_H_
+
+    
+      // Make the convinient methods visible:
+  // https://isocpp.org/wiki/faq/templates#nondependent-name-lookup-members
+  v8::Isolate* isolate() const { return Wrappable<T>::isolate(); }
+  v8::Local<v8::Object> GetWrapper() const {
+    return Wrappable<T>::GetWrapper();
+  }
+    
+    // Godot TO Bullet
+extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void G_TO_B(Transform const &inVal, btTransform &outVal);
+    
+    ConstraintBullet::ConstraintBullet() :
+		space(NULL),
+		constraint(NULL),
+		disabled_collisions_between_bodies(true) {}
+    
+    #ifndef JOINT_BULLET_H
+#define JOINT_BULLET_H
+    
+    	ClassDB::register_virtual_class<CSGShape>();
+	ClassDB::register_virtual_class<CSGPrimitive>();
+	ClassDB::register_class<CSGMesh>();
+	ClassDB::register_class<CSGSphere>();
+	ClassDB::register_class<CSGBox>();
+	ClassDB::register_class<CSGCylinder>();
+	ClassDB::register_class<CSGTorus>();
+	ClassDB::register_class<CSGPolygon>();
+	ClassDB::register_class<CSGCombiner>();
+    
+    template<>
+void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<double>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_cpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
+}
+    
+    template <typename Dtype>
+class LayerRegistry {
  public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
+  static ::caffe::Layer<Dtype> * CreateLayer(const ::caffe::LayerParameter& param) {
+    ::caffe::shared_ptr< ::caffe::Layer<Dtype> > ptr =
+      ::caffe::LayerRegistry<Dtype>::CreateLayer(param);
+    // avoid caffe::layer destructor, which deletes the weights layer owns
+    new ::caffe::shared_ptr< ::caffe::Layer<Dtype> >(ptr);
+    return ptr.get();
+  }
+};
+    
+        CHECK_EQ(in_data.size(), param_.num_data);
+    CHECK_EQ(out_data.size(), param_.num_out);
+    
+    template<>
+Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeOp<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeOp<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    
+    namespace mxnet {
+namespace engine {
+/*!
+ * \brief ThreadedEngine using global thread pool across all devices.
+ * The policy of this Engine:
+ *  - Execute Async operation immediately if pushed from Pusher.
+ *  - Use a common thread pool for normal operations on all devices.
+ *  - Use special thread pool for copy operations.
+ */
+class ThreadedEnginePooled : public ThreadedEngine {
+ public:
+  ThreadedEnginePooled() {
+    this->Start();
+  }
+    }
+    }
     }
     
-    #include <grpcpp/impl/codegen/core_codegen.h>
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
     
-    AuthPropertyIterator SecureAuthContext::begin() const {
-  if (ctx_) {
-    grpc_auth_property_iterator iter =
-        grpc_auth_context_property_iterator(ctx_);
-    const grpc_auth_property* property =
-        grpc_auth_property_iterator_next(&iter);
-    return AuthPropertyIterator(property, &iter);
+    /*!
+ * \brief tblob batch
+ *
+ * data are stored in tblob before going into NDArray
+ */
+struct TBlobBatch {
+ public:
+  /*! \brief unique id for instance, can be NULL, sometimes is useful */
+  unsigned *inst_index;
+  /*! \brief number of instance */
+  mshadow::index_t batch_size;
+  /*! \brief number of padding elements in this batch,
+       this is used to indicate the last elements in the batch are only padded up to match the batch, and should be discarded */
+  mshadow::index_t num_batch_padd;
+  /*! \brief content of dense data */
+  std::vector<TBlob> data;
+  /*! \brief extra data to be fed to the network */
+  std::string extra_data;
+  /*! \brief constructor */
+  TBlobBatch(void) {
+    inst_index = NULL;
+    batch_size = 0; num_batch_padd = 0;
+  }
+  /*! \brief destructor */
+  ~TBlobBatch() {
+    delete[] inst_index;
+  }
+};  // struct TBlobBatch
+    
+    #include <mxnet/io.h>
+#include <mxnet/base.h>
+#include <dmlc/logging.h>
+#include <mshadow/tensor.h>
+#include <utility>
+#include <vector>
+#include <string>
+#include './inst_vector.h'
+#include './image_iter_common.h'
+    
+    When `num_parts` and `part_index` are provided, the data is split into `num_parts` partitions,
+and the iterator only reads the `part_index`-th partition. However, the partitions are not
+guaranteed to be even.
+    
+      // Fill database
+  for (int i = 0; i < kCount; i++) {
+    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
+  }
+  ASSERT_OK(dbi->TEST_CompactMemTable());
+    
+      MemTable* mem = mem_;
+  MemTable* imm = imm_;
+  Version* current = versions_->current();
+  mem->Ref();
+  if (imm != nullptr) imm->Ref();
+  current->Ref();
+    
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
+  }
+  user_policy_->CreateFilter(keys, n, dst);
+}
+    
+    // Attempt to parse an internal key from 'internal_key'.  On success,
+// stores the parsed data in '*result', and returns true.
+//
+// On error, returns false, leaves '*result' in an undefined state.
+bool ParseInternalKey(const Slice& internal_key, ParsedInternalKey* result);
+    
+    // Called on every log record (each one of which is a WriteBatch)
+// found in a kDescriptorFile.
+static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  VersionEdit edit;
+  Status s = edit.DecodeFrom(record);
+  if (!s.ok()) {
+    r += s.ToString();
+    r.push_back('\n');
   } else {
-    return end();
+    r += edit.DebugString();
   }
+  dst->Append(r);
 }
     
-    #include 'absl/strings/string_view.h'
-#include 'absl/time/time.h'
-#include 'src/cpp/ext/filters/census/channel_filter.h'
-#include 'src/cpp/ext/filters/census/context.h'
-    
-    #include <grpc/support/port_platform.h>
-    
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
-    
-    
-    {    size_t pos = kVersionIdSize;
-    while (pos < buf.size()) {
-      size_t bytes_read =
-          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
-      if (bytes_read == 0) {
-        break;
-      } else {
-        pos += bytes_read;
-      }
-    }
-    return pos;
-  }
-    
-    const ViewDescriptor& ServerServerLatencyMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/server/server_latency/minute')
-          .set_measure(kRpcServerServerLatencyMeasureName)
-          .set_aggregation(MillisDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
-}
-    
-      SrcLoc(SrcPos start, SrcPos past)
-    : start(start)
-    , past(past)
-  {}
-    
-          X_form_t x_formater {{
-                            rc,
-                            xop,
-                            static_cast<uint32_t>(rb),
-                            static_cast<uint32_t>(ra),
-                            static_cast<uint32_t>(rt),
-                            op
-                          }};
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    inline APCLocalArray::APCLocalArray(const APCArray* source)
-  : ArrayData(kApcKind)
-  , m_arr(source)
-{
-  m_size = m_arr->size();
-  source->reference();
-  tl_heap->addApcArray(this);
-  memset(localCache(), static_cast<data_type_t>(KindOfUninit),
-         m_size * sizeof(TypedValue));
-  assertx(hasExactlyOneRef());
-}
-    
-    static HackStrictOption GetHackStrictOption(const IniSettingMap& ini,
-                                            const Hdf& config,
-                                            const std::string& name /* = '' */,
-                                            HackStrictOption def
-                                           ) {
-  auto val = Config::GetString(ini, config, name);
-  if (val.empty()) {
-    return def;
-  }
-  if (val == 'warn') {
-    return HackStrictOption::WARN;
-  }
-  bool ret;
-  ini_on_update(val, ret);
-  return ret ? HackStrictOption::ON : HackStrictOption::OFF;
-}
-    
-    public:
-  static void Add(InfoVec& out, const char* name, const std::string& value);
-  static void AddServerStats(InfoVec& out, const char* name,
-                             const char* statsName = nullptr);
-    
-    
-    {    if (follow && valid)
-    {
-        follow->autorelease();
-        return follow;
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
     }
     
-    delete follow;
-    return nullptr;
+      // Return type, or one of the preceding special values
+  unsigned int ReadPhysicalRecord(Slice* result);
     
-}
-Follow* Follow::clone() const
-{
-    // no copy constructor
-    return Follow::createWithOffset(_followedNode, _offsetX,_offsetY,_worldRect);
+        // Copy data.
+    Iterator* iter = NewTableIterator(t.meta);
+    int counter = 0;
+    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+      builder->Add(iter->key(), iter->value());
+      counter++;
+    }
+    delete iter;
     
-}
-    
-        if (action && action->initWithDuration(duration, gridSize, numberOfJumps, amplitude))
-    {
-        action->autorelease();
-        return action;
+    Status LoggerConfigParserPlugin::update(const std::string& /* source */,
+                                        const ParserConfig& config) {
+  rj::Document& doc = data_.doc();
     }
     
-    NS_CC_BEGIN
+    namespace osquery {
+    }
     
-    void BENCHFUN(insertFront)(int iters, int initialSize) {
-  BenchmarkSuspender braces;
-  auto const obj = randomObject<VECTOR::value_type>();
-  VECTOR v(initialSize, obj);
-  braces.dismissing([&]() {
-    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
-  });
+    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_run_load_top_level) {
+  // Re-enable the decorators, then update the config.
+  // The 'load' decorator set should run every time the config is updated.
+  FLAGS_disable_decorators = false;
+  // enable top level decorations for the test
+  FLAGS_decorations_top_level = true;
+  Config::get().update(config_data_);
+    }
+    
+    TEST_F(QueryTests, test_query_name_updated) {
+  // Try to retrieve results from a query that has not executed.
+  QueryDataSet previous_qd;
+  auto query = getOsqueryScheduledQuery();
+  auto cf = Query('will_update_query', query);
+  EXPECT_TRUE(cf.isNewQuery());
+  EXPECT_TRUE(cf.isNewQuery());
+    }
+    
+      // Test operator upper bounds.
+  EXPECT_FALSE(cl2.matches(1000));
+  EXPECT_FALSE(cl2.matches(1001));
+    
+    TEST_F(EventsTests, test_fire_event) {
+  auto pub = std::make_shared<BasicEventPublisher>();
+  pub->setName('BasicPublisher');
+  auto status = EventFactory::registerEventPublisher(pub);
+  ASSERT_TRUE(status.ok());
+    }
+    
+      do {
+    if (es->ntstatus == ntstatus) {
+      break;
+    }
+    es++;
+  } while ((uint32_t)es->ntstatus != 0xffffffff);
+    
+    TEST_F(FakeCanClientTest, SendMessage) {
+  std::vector<CanFrame> frames;
+  frames.resize(FRAME_LEN);
+  for (int32_t i = 0; i < FRAME_LEN; ++i) {
+    frames[i].id = 1 & 0x3FF;
+    frames[i].len = 8;
+    frames[i].data[7] = 1 % 256;
+    for (int32_t j = 0; j < 7; ++j) {
+      frames[i].data[j] = j;
+    }
+  }
+    }
+    
+      int32_t ret = bcan_recv(_dev_handler, _recv_frames, *frame_num);
+  // don't log timeout
+  if (ret == RX_TIMEOUT) {
+    *frame_num = 0;
+    return ErrorCode::OK;
+  }
+  if (ret < 0) {
+    int ret_rece_error = bcan_get_status(_dev_handler);
+    AERROR << 'receive message failed, error code:' << ret
+           << 'receive error:' << ret_rece_error;
+    return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
+  }
+  *frame_num = ret;
+    
+      // CanFrame can_frame[1];
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+    
+    #include <net/if.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+    
+    template <typename SensorType>
+ErrorCode MessageManager<SensorType>::GetSensorData(
+    SensorType *const sensor_data) {
+  if (sensor_data == nullptr) {
+    AERROR << 'Failed to get sensor_data due to nullptr.';
+    return ErrorCode::CANBUS_ERROR;
+  }
+  std::lock_guard<std::mutex> lock(sensor_data_mutex_);
+  sensor_data->CopyFrom(sensor_data_);
+  return ErrorCode::OK;
 }
     
-    #define FOLLY_SDT_SEMAPHORE(provider, name)                                    \
-  folly_sdt_semaphore_##provider##_##name
+    template <typename SensorType>
+template <typename T>
+T ProtocolData<SensorType>::BoundedValue(T lower, T upper, T val) {
+  if (lower > upper) {
+    return val;
+  }
+  if (val < lower) {
+    return lower;
+  }
+  if (val > upper) {
+    return upper;
+  }
+  return val;
+}
     
-    namespace folly {
-    }
+    void Byte::set_value_high_4_bits(const uint8_t value) {
+  set_value(value, 4, 4);
+}
     
       /**
-   * Returns a secure double in [min, max), if min == max, returns 0.
+   * @brief Transform an integer with the size of 4 bytes to its hexadecimal
+   *        represented by a string.
+   * @param value The target integer to transform.
+   * @return Hexadecimal representing the target integer.
    */
-  static double secureRandDouble(double min, double max) {
-    SecureRNG<uint64_t> srng;
-    return randDouble(min, max, srng);
-  }
+  static std::string byte_to_hex(const uint32_t value);
     
-      bool compare_exchange_weak(
-      SharedPtr& expected,
-      const SharedPtr& n,
-      std::memory_order mo = std::memory_order_seq_cst) noexcept {
-    return compare_exchange_weak(
-        expected, n, mo, detail::default_failure_memory_order(mo));
-  }
-  bool compare_exchange_weak(
-      SharedPtr& expected,
-      const SharedPtr& n,
-      std::memory_order success,
-      std::memory_order failure) /* noexcept */ {
-    auto newptr = get_newptr(n);
-    PackedPtr oldptr, expectedptr;
-    }
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+}
+    
+      /**
+  * @brief module stop function
+  */
+  void Stop() override;
