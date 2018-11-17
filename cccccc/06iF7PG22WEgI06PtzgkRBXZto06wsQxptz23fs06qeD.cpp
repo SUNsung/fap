@@ -1,85 +1,103 @@
 
         
-          // NotificationDelegate:
-  void NotificationAction(int index) override;
-  void NotificationClick() override;
-  void NotificationReplied(const std::string& reply) override;
-  void NotificationDisplayed() override;
-  void NotificationDestroyed() override;
-  void NotificationClosed() override;
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
+    #include 'content/nw/src/api/base/base.h'
     
-    {
-    {    if (SemanticNode.is<Expr *>()) {
-      SemanticNode.get<Expr *>()->dump(llvm::errs());
-    } else if (SemanticNode.is<Decl *>()) {
-      SemanticNode.get<Decl *>()->dump(llvm::errs());
-    } else if (SemanticNode.is<Expr *>()) {
-      SemanticNode.get<Expr *>()->dump(llvm::errs());
-    } else {
-      llvm_unreachable('ASTNode has pointer to unknown thing!');
-    }
-    llvm::errs() << '\n=====================================================\n';
-  }
-}
-
-    
-    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
-    }
-    
-      bool IsFirstLine = true;
-    
-      if (auto ptr = type->getAs<clang::PointerType>()) {
-    auto pointee = ptr->getPointeeType();
-    }
-    
-      // Quit the whole app.
-  static void Quit(content::RenderProcessHost* rph = NULL);
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
+    base::StringPiece GetStringResource(int resource_id) {
+  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
 }
     
-    #include 'ui/base/models/simple_menu_model.h'
+    #include 'content/nw/src/api/menuitem/menuitem.h'
     
-    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
-  content::WebContents* web_contents =
-    content::WebContents::FromRenderFrameHost(rfh);
-  if (!web_contents) {
-    LOG(ERROR) << 'Menu: couldn't find WebContents';
-    return NULL;
-  }
-  return web_contents->GetFullscreenRenderWidgetHostView()
-             ? web_contents->GetFullscreenRenderWidgetHostView()
-                   ->GetNativeView()
-             : web_contents->GetNativeView();
-}
-    
-    void MenuItem::SetLabel(const std::string& label) {
-  label_ = label;
-  gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item_), label.c_str());
-}
-    
-      focus_manager_ = NULL;
-  menu_ = NULL;
-    
-    #include <vector>
+      ui::KeyboardCode keyval = ui::VKEY_UNKNOWN;
     
      protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
+  ~NwAppGetArgvSyncFunction() override;
     
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
+    
+    enum GARBAGE_LEVEL
+{
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
+};
+    
+    class TESS_API PageIterator {
+ public:
+  /**
+   * page_res and tesseract come directly from the BaseAPI.
+   * The rectangle parameters are copied indirectly from the Thresholder,
+   * via the BaseAPI. They represent the coordinates of some rectangle in an
+   * original image (in top-left-origin coordinates) and therefore the top-left
+   * needs to be added to any output boxes in order to specify coordinates
+   * in the original image. See TessBaseAPI::SetRectangle.
+   * The scale and scaled_yres are in case the Thresholder scaled the image
+   * rectangle prior to thresholding. Any coordinates in tesseract's image
+   * must be divided by scale before adding (rect_left, rect_top).
+   * The scaled_yres indicates the effective resolution of the binary image
+   * that tesseract has been given by the Thresholder.
+   * After the constructor, Begin has already been called.
+   */
+  PageIterator(PAGE_RES* page_res, Tesseract* tesseract,
+               int scale, int scaled_yres,
+               int rect_left, int rect_top,
+               int rect_width, int rect_height);
+  virtual ~PageIterator();
+    }
+    
+    template <typename T> class GenericVector;
+    
+    
+  fp = fopen (filename, 'wb');  // can we write to it?
+  if (fp == nullptr) {
+    sv_window_->AddMessage(
+        'Can't write to file '
+        '%s'
+        '',
+        filename);
+    return;
+  }
+    
+    // A rather hackish helper structure which can take any kind of parameter input
+// (defined by ParamType) and do a couple of common operations on them, like
+// comparisond or getting its value. It is used in the context of the
+// ParamsEditor as a bridge from the internal tesseract parameters to the
+// ones displayed by the ScrollView server.
+class ParamContent : public ELIST_LINK {
+ public:
+  // Compare two VC objects by their name.
+  static int Compare(const void* v1, const void* v2);
+    }
+    
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
+  }
+    
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
     }
