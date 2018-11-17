@@ -1,130 +1,145 @@
 
         
-        require 'active_support/core_ext/string/output_safety'
-    
-              super(object_name, method_name, template_object, options)
-        end
-    
-    def slugify(header)
-  header.delete('#').strip.downcase.gsub(%r!\s+!, '-')
-end
-    
-    # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
-    
-    Before do
-  FileUtils.rm_rf(Paths.test_dir) if Paths.test_dir.exist?
-  FileUtils.mkdir_p(Paths.test_dir) unless Paths.test_dir.directory?
-  Dir.chdir(Paths.test_dir)
-  @timezone_before_scenario = ENV['TZ']
-end
-    
-                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
-            Jekyll.logger.debug '', json_message
-            @websockets.each { |ws| ws.send(json_message) }
-          end
-        end
-    
-        def require_local_account!
-      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
+            # Is executed if an error occurred during fastlane execution
+    def error(&block)
+      @runner.set_error(@current_platform, block)
     end
     
-    module Admin
-  class ConfirmationsController < BaseController
-    before_action :set_user
-    before_action :check_confirmation, only: [:resend]
+          command_return = ActionCommandReturn.new(
+        return_value: action_return,
+        return_value_type: action_class_ref.return_type,
+        closure_argument_value: closure_argument_value
+      )
+      return command_return
+    end
     
-      #
-  # Gets cookies from the Set-Cookie header in a format to be used
-  # in the 'cookie' send_request field
-  #
-  def get_cookies
-    cookies = ''
-    if (self.headers.include?('Set-Cookie'))
-      set_cookies = self.headers['Set-Cookie']
-      key_vals = set_cookies.scan(/\s?([^, ;]+?)=([^, ;]*?)[;,]/)
-      key_vals.each do |k, v|
-        # Dont downcase actual cookie name as may be case sensitive
-        name = k.downcase
-        next if name == 'path'
-        next if name == 'expires'
-        next if name == 'domain'
-        next if name == 'max-age'
-        cookies << '#{k}=#{v}; '
+            show_github_issues(error_info) if should_show_github_issues
+    
+          def self.details
+        list = <<-LIST.markdown_list
+          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
+          `lane` is the name of the current fastlane lane
+          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
+          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
+          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
+        LIST
+    
+            message = 'builds/test/#{build_number}#{postfix} (fastlane)'
+        tag = 'builds/test/#{build_number}#{postfix}'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
       end
+    
+          it 'adds include param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            include: 'path/to/include'
+          )
+        end').runner.execute(:test)
+    
+            expect(result.size).to eq(4)
+        expect(result[0]).to eq('security create-keychain -p testpassword ~/Library/Keychains/test.keychain')
+    
+          it 'works given the path to compile_commands.json' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
+            )
+          end').runner.execute(:test)
+    
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+              # Handle the case that argv was empty or didn't contain any subcommand
+          main_args = argv.dup if main_args.nil?
+    
+              # Register a new config class only if a name was given.
+          if name != UNSET_VALUE
+            data[:config].register(name.to_sym, &block)
+    
+            # A default to_s implementation.
+        def to_s
+          self.class.to_s
+        end
+    
+                [block.call, parent]
+          end
+          nil
+        end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
+        end
+    
+      def process_bootstrap
+    log_status 'Convert Bootstrap LESS to Sass'
+    puts ' repo   : #@repo_url'
+    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
+    puts ' save to: #{@save_to.to_json}'
+    puts ' twbs cache: #{@cache_path}'
+    puts '-' * 60
+    
+        def log_processed(name)
+      puts green '    #{name}'
     end
     
-              # Encodes the start_time field
-          #
-          # @return [String]
-          def encode_start_time
-            [start_time].pack('N')
-          end
-    
-              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_msg_type(input)
-            input.value[0].value.to_i
-          end
-    
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-        # A list of classes that will be extracted into mixins
-    # Only the top-level selectors of form .CLASS { ... } are extracted. CLASS must not be used in any other rule definition.
-    # This is a work-around for libsass @extend issues
-    CLASSES_TO_MIXINS = %w(
-      list-unstyled form-inline
-    )
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
+    Given(/config stage file has line '(.*?)'/) do |line|
+  TestApp.append_to_deploy_file(line)
 end
+    
+    World(RemoteCommandHelpers)
 
     
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
+      def vagrant_cli_command(command)
+    puts '[vagrant] #{command}'
+    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
+      Open3.capture3('#{VAGRANT_BIN} #{command}')
     end
-  end
-end
     
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
+            @response = (gets || '').chomp
       end
+    
+    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
+    
+                import_params = if @current_user_roles.include?('admin')
+                              params[:order].present? ? params[:order].permit! : {}
+                            else
+                              order_params
+                            end
+    
+            def index
+          authorize! :admin, ReturnAuthorization
+          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
+                                   ransack(params[:q]).result.
+                                   page(params[:page]).per(params[:per_page])
+          respond_with(@return_authorizations)
+        end
