@@ -1,72 +1,72 @@
 
         
-        /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
+        // If true, then AVX has been detected.
+bool SIMDDetect::avx_available_;
+bool SIMDDetect::avx2_available_;
+bool SIMDDetect::avx512F_available_;
+bool SIMDDetect::avx512BW_available_;
+// If true, then SSe4.1 has been detected.
+bool SIMDDetect::sse_available_;
     
-      // The HHIRLICM runtime option is all capitals, so separation
-  // cannot be determined. Special case it.
-  boost::replace_first(out, 'hhirlicm', 'hhir_licm');
-  // The HHVM ini option becomes the standard PHP option.
-  boost::replace_first(out,
-                       'hhvm.server.upload.max_file_uploads',
-                       'max_file_uploads');
-  // Make sure IPv6 or IPv4 are handled correctly
-  boost::replace_first(out, '_i_pv', '_ipv');
-  boost::replace_first(out, '.i_pv', '.ipv');
-  // urls are special too. Let's not have 'ur_ls'
-  boost::replace_first(out, '_ur_ls', '_urls');
-  boost::replace_first(out, '.ur_ls', '.urls');
-  // No use of Eval in our ini strings
-  boost::replace_first(out, '.eval.', '.');
-  boost::replace_first(out, '.my_sql.', '.mysql.');
-  boost::replace_first(out, '.enable_hip_hop_syntax', '.force_hh');
+      // Check if part from seed2 label: with low math density and left indented. We
+  // are using two checks:
+  // 1. If its left is aligned with any coordinates in indented_texts_left,
+  // which we assume have been sorted.
+  // 2. If its foreground density is over foreground_density_th.
+  bool CheckForSeed2(
+      const GenericVector<int>& indented_texts_left,
+      const float foreground_density_th,
+      ColPartition* part);
+    
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
+    
+    #include 'blamer.h'
+#include 'errcode.h'
+#include 'ratngs.h'
+#include 'reject.h'
+#include 'tesseractclass.h'
+#include 'werd.h'
+    
+        std::unique_ptr<DHTMessageReceiver> messageReceiver;
+    
+      std::shared_ptr<DHTNode> localNode_;
     
     
-    {  auto entry = m_it.second();
-  assertx(entry.isString());
-  return HHVM_FN(dirname)(entry.toString());
-}
+    {} // namespace aria2
+
     
-      char** newargv_array = (char**)alloca(sizeof(char*) * (newargv.size() + 1));
-  for (unsigned i = 0; i < newargv.size(); i++) {
-    // printf('%s\n', newargv[i].data());
-    newargv_array[i] = (char *)newargv[i].data();
-  }
-  // NULL-terminate the argument array.
-  newargv_array[newargv.size()] = nullptr;
+        taskFactory->setLocalNode(localNode);
+    taskFactory->setRoutingTable(routingTable.get());
+    taskFactory->setMessageDispatcher(dispatcher.get());
+    taskFactory->setMessageFactory(factory.get());
+    taskFactory->setTaskQueue(taskQueue.get());
+    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
     
-    /**
- * Helper functions for use with FileUtil::isValidPath
- */
-bool checkPathAndWarn(const String& path,
-                      const char* func_name,
-                      int param_pos);
-void checkPathAndError(const String& path,
-                       const char* func_name,
-                       int param_pos);
     
-    Status DistributedPlugin::call(const PluginRequest& request,
-                               PluginResponse& response) {
-  if (request.count('action') == 0) {
-    return Status(1, 'Distributed plugins require an action in PluginRequest');
-  }
-    }
+    {  virtual bool finished() = 0;
+};
     
-    class AuditTests : public testing::Test {
- protected:
-  void SetUp() override {
-    Row().swap(row_);
-  }
-    }
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
     
-    class INotifyTests : public testing::Test {
- protected:
-  void SetUp() override {
-    // INotify will use data from the config and config parsers.
-    Registry::get().registry('config_parser')->setUp();
-    }
-    }
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
+    
+    DNSCache::DNSCache(const DNSCache& c) = default;
