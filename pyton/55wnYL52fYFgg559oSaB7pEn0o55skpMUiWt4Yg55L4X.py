@@ -1,114 +1,178 @@
 
         
-        
-def win_service_start(service_name, real_main):
-    try:
-        cb = START_CALLBACK(
-            functools.partial(win_service_main, service_name, real_main))
-        dispatch_table = _ctypes_array(SERVICE_TABLE_ENTRY, [
-            SERVICE_TABLE_ENTRY(
-                service_name,
-                cb
-            ),
-            SERVICE_TABLE_ENTRY(None, ctypes.cast(None, START_CALLBACK))
-        ])
+          # Split the data, inputs, labels and times into train vs. validation.
+  rates_train, rates_valid = \
+      split_list_by_inds(rates, train_inds, valid_inds)
+  noisy_data_train, noisy_data_valid = \
+      split_list_by_inds(noisy_data, train_inds, valid_inds)
+  input_train, inputs_valid = \
+      split_list_by_inds(inputs, train_inds, valid_inds)
+  condition_labels_train, condition_labels_valid = \
+      split_list_by_inds(condition_labels, train_inds, valid_inds)
+  input_times_train, input_times_valid = \
+      split_list_by_inds(input_times, train_inds, valid_inds)
     
-        entry = entry_template.replace('@TIMESTAMP@', timestamp)
-    entry = entry.replace('@VERSION@', v)
-    entries.append(entry)
+    model = IntegrationToBoundModel(N)
+inputs_ph_t = [tf.placeholder(tf.float32,
+                              shape=[None, 1]) for _ in range(ntimesteps)]
+state = tf.zeros([batch_size, N])
+saver = tf.train.Saver()
+    
+    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
+            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N
+nreplications = FLAGS.nreplications
+E = nreplications * C
+train_percentage = FLAGS.train_percentage
+ntimesteps = int(T / FLAGS.dt)
+    
+      Returns:
+    log_sum_exp of the arguments.
+  '''
+  m = tf.reduce_max(x_k)
+  x1_k = x_k - m
+  u_k = tf.exp(x1_k)
+  z = tf.reduce_sum(u_k)
+  return tf.log(z) + m
+    
+      Returns:
+    patches: A 2D matrix,
+      each entry is a matrix of shape (batch_size, num_timesteps).
+  '''
+  preprocessed = [['<S>']+sentence+['</S>'] for sentence in sentences]
+  max_len = max([len(sent) for sent in preprocessed])
+    
+              eval_feed = {model.inputs: x, model.targets: y, model.present: p}
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+def wasserstein_generator_loss(gen_logits, gen_labels, dis_values,
+                               is_real_input):
+  '''Computes the masked-loss for G.  This will be a blend of cross-entropy
+  loss where the true label is known and GAN loss where the true label is
+  missing.
     
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
+      # Extract properties of the indices.
+  num_batches = len(indices)
+  shape = list(indices.shape)
+  shape.append(vocab_size)
+    
+    
+class GitHubReleaser(object):
+    _API_URL = 'https://api.github.com/repos/rg3/youtube-dl/releases'
+    _UPLOADS_URL = 'https://uploads.github.com/repos/rg3/youtube-dl/releases/%s/assets?name=%s'
+    _NETRC_MACHINE = 'github.com'
+    
+        for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
     
     import io
-import optparse
-import os
 import sys
+import re
     
-    import requests.auth
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-        def __iter__(self):
-        return iter(self._plugins)
+                        if not split_option[-1].startswith('-'):  # metavar
+                        option = ' '.join(split_option[:-1] + ['*%s*' % split_option[-1]])
     
+    setup(
+    name='youtube_dl',
+    version=__version__,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    url='https://github.com/rg3/youtube-dl',
+    author='Ricardo Garcia',
+    author_email='ytdl@yt-dl.org',
+    maintainer='Sergey M.',
+    maintainer_email='dstftw@gmail.com',
+    license='Unlicense',
+    packages=[
+        'youtube_dl',
+        'youtube_dl.extractor', 'youtube_dl.downloader',
+        'youtube_dl.postprocessor'],
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+        def test_encrypt(self):
+        msg = b'message'
+        key = list(range(16))
+        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
+        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
+        self.assertEqual(decrypted, msg)
     
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
     
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
+class TestCompat(unittest.TestCase):
+    def test_compat_getenv(self):
+        test_str = 'тест'
+        compat_setenv('YOUTUBE_DL_COMPAT_GETENV', test_str)
+        self.assertEqual(compat_getenv('YOUTUBE_DL_COMPAT_GETENV'), test_str)
     
-        # TODO: decoder should check that nonce is in the protected header
+    '''
+requests.hooks
+~~~~~~~~~~~~~~
     
-    MANAGED_COMMENT = 'DO NOT REMOVE - Managed by Certbot'
-MANAGED_COMMENT_ID = MANAGED_COMMENT+', VirtualHost id: {0}'
-'''Managed by Certbot comments and the VirtualHost identification template'''
-
+        def run_tests(self):
+        import pytest
     
-        def test_include_single_quotes(self):
-        self.verify_fnmatch(''' + self.config_path + ''')
+            with server as address:
+            sock = socket.socket()
+            sock.connect(address)
+            time.sleep(1.5)
+            sock.sendall(b'hehehe, not received')
+            sock.close()
     
-        def setUp(self):
-        self.base_dir = '/example_path'
-        self.vhosts = util.get_vh_truth(
-            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
     
-            self.sni.configurator.parser.find_dir(
-            'Include', self.sni.challenge_conf)
-        vh_match = self.sni.configurator.aug.match(
-            '/files' + self.sni.challenge_conf + '//VirtualHost')
+@pytest.mark.parametrize(
+    'cookiejar', (
+        compat.cookielib.CookieJar(),
+        RequestsCookieJar()
+    ))
+def test_add_dict_to_cookiejar(cookiejar):
+    '''Ensure add_dict_to_cookiejar works for
+    non-RequestsCookieJar CookieJars
+    '''
+    cookiedict = {'test': 'cookies',
+                  'good': 'cookies'}
+    cj = add_dict_to_cookiejar(cookiejar, cookiedict)
+    cookies = {cookie.name: cookie.value for cookie in cj}
+    assert cookiedict == cookies
     
-            '''
-        ips = ' '.join(str(i) for i in ip_addrs)
-        document_root = os.path.join(
-            self.configurator.config.work_dir, 'tls_sni_01_page/')
-        # TODO: Python docs is not clear how multiline string literal
-        # newlines are parsed on different platforms. At least on
-        # Linux (Debian sid), when source file uses CRLF, Python still
-        # parses it as '\n'... c.f.:
-        # https://docs.python.org/2.7/reference/lexical_analysis.html
-        return self.VHOST_TEMPLATE.format(
-            vhost=ips,
-            server_name=achall.response(achall.account_key).z_domain.decode('ascii'),
-            ssl_options_conf_path=self.configurator.mod_ssl_conf,
-            cert_path=self.get_cert_path(achall),
-            key_path=self.get_key_path(achall),
-            document_root=document_root).replace('\n', os.linesep)
+            if auth:
+            if isinstance(auth, tuple) and len(auth) == 2:
+                # special-case basic HTTP auth
+                auth = HTTPBasicAuth(*auth)
+    
+    # The name of an image file (relative to this directory) to place at the top
+# of the sidebar.
+#html_logo = None
+    
+            dupe_releases = orm.Release.objects.values_list('version', 'organization_id')\
+                                           .annotate(vcount=models.Count('id'))\
+                                           .filter(vcount__gt=1)
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        'Write your forwards methods here.'
+        db.commit_transaction()
+    
+            # Adding unique constraint on 'Distribution', fields ['release', 'name']
+        db.create_unique('sentry_distribution', ['release_id', 'name'])
