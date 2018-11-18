@@ -1,174 +1,125 @@
 
         
-          context 'displaying the correct information' do
-    before(:each) do
-      visit new_agent_path
-    end
+            A binary installer is available:
+      https://www.haskell.org/platform/mac.html
+    EOS
+  when 'mysqldump-secure' then <<-EOS.undent
+    The creator of mysqldump-secure tried to game our popularity metrics.
+    EOS
+  when 'ngrok' then <<-EOS.undent
+    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
     
-      it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+      # True if a {Formula} is being built in 32-bit/x86 mode.
+  # This is needed for some use-cases though we prefer to build Universal
+  # when a 32-bit version is needed.
+  def build_32_bit?
+    include?('32-bit') && option_defined?('32-bit')
   end
     
-      describe '#omniauth_provider_icon' do
-    it 'returns a correct icon tag for Twitter' do
-      icon = omniauth_provider_icon(:twitter)
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-twitter')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
+        return if Language::Python.reads_brewed_pth_files?('python')
     
-        before do
-      stub(Agents::DotFoo).valid_type?('Agents::DotFoo') { true }
-      stub(Agents::DotBar).valid_type?('Agents::DotBar') { true }
-    end
-    
-        @agent1 = Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
-      a.user = users(:bob)
-      a.save!
-    }
-    @agent2 = Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
-      a.user = users(:bob)
-      a.save!
-    }
+        dump_formula_report :A, 'New Formulae'
+    dump_formula_report :M, 'Updated Formulae'
+    dump_formula_report :R, 'Renamed Formulae'
+    dump_formula_report :D, 'Deleted Formulae'
   end
     
-      describe 'migrating a hash' do
-    it 'should convert every attribute' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'})).to eq(
-                                  {'a' => '$.data', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should work with leading_dollarsign_is_jsonpath' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'}, leading_dollarsign_is_jsonpath: true)).to eq(
-                                  {'a' => '{{data}}', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should use the corresponding *_path attributes when using merge_path_attributes'do
-      expect(LiquidMigrator.convert_hash({'a' => 'default', 'a_path' => '$.data'}, {leading_dollarsign_is_jsonpath: true, merge_path_attributes: true})).to eq(
-                                  {'a' => '{{data}}'}
-      )
-    end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_hash({'b' => 'This is <$.complex[2]>'}) }.
-        to raise_error('JSONPath '$.complex[2]' is too complex, please check your migration.')
-    end
-  end
-    
-        it 'returns the last access time for the provided file when passed ?A' do
-      Kernel.test(?A, @tmp_file).should == @tmp_file.atime
-    end
-    
-      it 'hooks assignments to a global variable' do
-    captured = nil
-    
-    # skip over blogs that aren't found
-unavailable = []
-fast_forwards = [
-  'Baidu Research',
-  'Booking.com',
-  'Fynd',
-  'Graphcool',
-  'LinkedIn',
-  'Medallia',
-  'OmniTI',
-  'Paperless Post',
-  'Pluralsight',
-  'Prolific Interactive',
-  'Quora',
-  'Robert Elder Software',
-  'Simple',
-  'SlideShare',
-  'SourceClear',
-  'Viget',
-  'Zalando',
-  'Zapier',
-  'Zynga',
-  'Dave Beazley',
-  'Edan Kwan',
-  'Grzegorz Gajos',
-  'Joe Armstrong',
-  'Kai Hendry',
-  'LiveOverflow'
-]
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-        # Outputs a list of categories as comma-separated <a> links. This is used
-    # to output the category list for each post on a category page.
-    #
-    #  +categories+ is the list of categories to format.
-    #
-    # Returns string
-    #
-    def category_links(categories)
-      categories.sort.map { |c| category_link c }.join(', ')
-    end
-    
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
-    
-    Monitoring = Thread.new do
-  watchdog('monitor thread') do
-    while true
-      sleep 1
-      qsize, retries = Sidekiq.redis do |conn|
-        conn.pipelined do
-          conn.llen 'queue:default'
-          conn.zcard 'retry'
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
         end
-      end.map(&:to_i)
-      total = qsize + retries
-      #GC.start
-      Sidekiq.logger.error('RSS: #{Process.rss} Pending: #{total}')
-      if total == 0
-        Sidekiq.logger.error('Done')
-        exit(0)
-      end
-    end
+    
+            # Mounts a shared folder via NFS. This assumes that the exports
+        # via the host are already done.
+        def mount_nfs(ip, folders)
+          raise BaseError, _key: :unsupported_nfs
+        end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
+    
+        private
+    
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
   end
 end
+
     
-        execute 'ensure-sidekiq-is-setup-with-monit' do 
-      command %Q{ 
-        monit reload 
-      } 
+        # extracts rule immediately after it's parent, and adjust the selector
+    # .x { textarea& { ... }}
+    # to:
+    # .x { ... }
+    # textarea.x { ... }
+    def extract_nested_rule(file, selector, new_selector = nil)
+      matches = []
+      # first find the rules, and remove them
+      file    = replace_rules(file, '\s*#{selector}', comments: true) { |rule, pos, css|
+        new_sel = new_selector || '#{get_selector(rule).gsub(/&/, selector_for_pos(css, pos.begin))}'
+        matches << [rule, pos, new_sel]
+        indent '// [converter] extracted #{get_selector(rule)} to #{new_sel}'.tr('\n', ' ').squeeze(' '), indent_width(rule)
+      }
+      raise 'extract_nested_rule: no such selector: #{selector}' if matches.empty?
+      # replace rule selector with new_selector
+      matches.each do |m|
+        m[0].sub! /(#{COMMENT_RE}*)^(\s*).*?(\s*){/m, '\\1\\2#{m[2]}\\3{'
+        log_transform selector, m[2]
+      end
+      replace_substrings_at file,
+                            matches.map { |_, pos| close_brace_pos(file, pos.begin, 1) + 1 },
+                            matches.map { |rule, _| '\n\n' + unindent(rule) }
     end
+    }
+    }
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+        def get_paths_by_type(dir, file_re, recursive = true)
+      get_file_paths(dir, recursive).select { |path| path =~ file_re }
+    end
+    
+    abstract_target 'Abstract Target' do
+    use_modular_headers!
     
           private
     
-          item['class'] = item['class'].to_s
-      item['queue'] = item['queue'].to_s
-      item['jid'] ||= SecureRandom.hex(12)
-      item['created_at'] ||= Time.now.to_f
-      item
-    end
-    
-        module ActionMailer
-      def sidekiq_delay(options={})
-        Proxy.new(DelayedMailer, self, options)
+          if payload
+        raw_push([payload])
+        payload['jid']
       end
-      def sidekiq_delay_for(interval, options={})
-        Proxy.new(DelayedMailer, self, options.merge('at' => Time.now.to_f + interval.to_f))
-      end
-      def sidekiq_delay_until(timestamp, options={})
-        Proxy.new(DelayedMailer, self, options.merge('at' => timestamp.to_f))
-      end
-      alias_method :delay, :sidekiq_delay
-      alias_method :delay_for, :sidekiq_delay_for
-      alias_method :delay_until, :sidekiq_delay_until
     end
