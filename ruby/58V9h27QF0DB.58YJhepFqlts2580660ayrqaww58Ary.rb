@@ -1,155 +1,98 @@
 
         
-        require 'benchmark/ips'
-require 'pathutil'
+          p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-    STDOUT.sync = true
+          # Fetches data from the GitHub API and yields a Page object for every page
+      # of data, without loading all of them into memory.
+      #
+      # method - The Octokit method to use for getting the data.
+      # args - Arguments to pass to the Octokit method.
+      #
+      # rubocop: disable GitlabSecurity/PublicSend
+      def each_page(method, *args, &block)
+        return to_enum(__method__, method, *args) unless block_given?
     
-          def feature_element_timing_key(feature_element)
-        '\'#{feature_element.name}\' (#{feature_element.location})'
-      end
-    
-    def run_jekyll(args)
-  args = args.strip.split(' ') # Shellwords?
-  process = run_in_shell('ruby', Paths.jekyll_bin.to_s, *args, '--trace')
-  process.exitstatus.zero?
-end
-    
-                  EM.start_server(
-                opts['host'],
-                opts['livereload_port'],
-                HttpAwareConnection,
-                opts
-              ) do |ws|
-                handle_websockets_event(ws)
-              end
-    
-            def setup
-          @config['syntax_highlighter'] ||= highlighter
-          @config['syntax_highlighter_opts'] ||= {}
-          @config['coderay'] ||= {} # XXX: Legacy.
-          modernize_coderay_config
-          make_accessible
+            def importer_class
+          IssueAndLabelLinksImporter
         end
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
+              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
+        end
+    
+          # Returns the identifier to use for cache keys.
+      #
+      # For issues and pull requests this will be 'Issue' or 'MergeRequest'
+      # respectively. For diff notes this will return 'MergeRequest', for
+      # regular notes it will either return 'Issue' or 'MergeRequest' depending
+      # on what type of object the note belongs to.
+      def cache_key_type
+        if object.respond_to?(:issuable_type)
+          object.issuable_type
+        elsif object.respond_to?(:noteable_type)
+          object.noteable_type
+        else
+          raise(
+            TypeError,
+            'Instances of #{object.class} are not supported'
+          )
+        end
+      end
+    
+    platforms :ruby do
+  gem 'sqlite3'
+end
+    
+        if successfully_sent?(resource)
+      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
+    else
+      respond_with(resource)
     end
   end
-end
-
     
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
-      end
-    
-            staff.topic_id = post.topic.id
-        unless staff.save
-          puts staff.errors.full_messages
-          puts 'Failed to set the Staff category description topic!'
-        end
-    
-        describe 'with block' do
-      it 'returns a nav link with menu' do
-        stub(self).current_page?('/things') { false }
-        stub(self).current_page?('/things/stuff') { false }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
-      end
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
-    end
-    
-      it 'ignores invalid values' do
-    location2 = Location.new(
-      lat: 2,
-      lng: 3,
-      radius: -1,
-      speed: -1,
-      course: -1)
-    expect(location2.radius).to be_nil
-    expect(location2.speed).to be_nil
-    expect(location2.course).to be_nil
+      config.middleware.use Warden::Manager do |config|
+    Devise.warden_config = config
   end
     
-        def stylesheets_path
-      File.join assets_path, 'stylesheets'
-    end
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-    Given /^I am signed in( on the mobile website)?$/ do |mobile|
-  automatic_login
-  confirm_login mobile
-end
-    
-    module UserCukeHelpers
-    
-          it 'doesn't post' do
-        expect(alice).not_to receive(:like!)
-        post :create, params: like_hash
-        expect(response.code).to eq('422')
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
       end
-    end
     
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
+                bypass_sign_in(user)
+          DEPRECATION
+          warden.session_serializer.store(resource, scope)
+        elsif warden.user(scope) == resource && !options.delete(:force)
+          # Do nothing. User already signed in and we are not forcing it.
+          true
+        else
+          warden.set_user(resource, options.merge!(scope: scope))
         end
-      rescue Errno::EACCES
-        # pass
       end
     
-            current_rule
+          def stored_location_key_for(resource_or_scope)
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        '#{scope}_return_to'
       end
-      root.children.compact!
-      root.children.uniq!
     
-          it 'autocorrects closing brace on same line from last element' do
-        new_source = autocorrect_source(construct(true, false))
+      it 'accepts a negative seed' do
+    srand(-17)
+    srand.should == -17
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `case` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `case` nodes within RuboCop.
-    class CaseNode < Node
-      include ConditionalNode
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
+    end
+  end
