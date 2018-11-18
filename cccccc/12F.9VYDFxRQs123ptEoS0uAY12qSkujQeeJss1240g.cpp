@@ -1,200 +1,206 @@
 
         
-        template <>
-template <typename T>
-bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
-  EnforceOnCPU<T>(Input(0));
-  return true;
-}
+          static void Call(content::Shell* shell,
+                   const std::string& method,
+                   const base::ListValue& arguments,
+                   base::ListValue* result,
+                   DispatcherHost* dispatcher_host);
     
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    ```
-    
-    			if (szArgList[i + 1] != NULL && szArgList[i + 1][0] != '/')
-			{
-				cmderOptions.cmderCfgRoot = szArgList[i + 1];
-				i++;
-			}
-		}
-		else if (_wcsicmp(L'/start', szArgList[i]) == 0)
-		{
-			int len = wcslen(szArgList[i + 1]);
-			if (wcscmp(&szArgList[i + 1][len - 1], L'\'') == 0)
-			{
-				szArgList[i + 1][len - 1] = '\0';
-			}
-    
-    
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
 }
     
     
-    {
-    {
-    {  // base margin
-  bst_float base_margin;
-  // model parameter
-  GBTreeModelParam param;
-  /*! \brief vector of trees stored in the model */
-  std::vector<std::unique_ptr<RegTree> > trees;
-  /*! \brief for the update process, a place to keep the initial trees */
-  std::vector<std::unique_ptr<RegTree> > trees_to_update;
-  /*! \brief some information indicator of the tree, reserved */
-  std::vector<int> tree_info;
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
+}
+    
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
+}
+    
+    
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+    }
+    
+    void MenuItem::Destroy() {
+  gtk_widget_destroy(menu_item_);
+  g_object_unref(G_OBJECT(menu_item_));
+}
+    
+      // implement nw.Screen.startMonitor()
+  class NwScreenStartMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStartMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsCollision(body0, body1);
+}
+    
+    	ClassDB::register_virtual_class<CSGShape>();
+	ClassDB::register_virtual_class<CSGPrimitive>();
+	ClassDB::register_class<CSGMesh>();
+	ClassDB::register_class<CSGSphere>();
+	ClassDB::register_class<CSGBox>();
+	ClassDB::register_class<CSGCylinder>();
+	ClassDB::register_class<CSGTorus>();
+	ClassDB::register_class<CSGPolygon>();
+	ClassDB::register_class<CSGCombiner>();
+    
+    #include 'modules/gdnative/gdnative.h'
+    
+    
+    {	ERR_FAIL();
 };
-}  // namespace gbm
-}  // namespace xgboost
-
     
-    namespace xgboost {
-namespace obj {
+    	} else if (p_string.get_slice_count('.') == 4) {
+		// IPv4 (mapped to IPv6 internally)
+		field16[5] = 0xffff;
+		_parse_ipv4(p_string, 0, &field8[12]);
+		valid = true;
+    
+    class PCKPacker : public Reference {
     }
+    
+    #ifdef _MSC_VER
+#pragma warning(disable:4503)  // disable warning: decorated name length exceeded.
+#endif
+    
+    DMLC_REGISTER_PARAMETER(CaffeDataParam);
+    
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+}
+    
+      # Contents of libsvm file ``label.t``
+  1.0
+  -2.0 0:0.125
+  -3.0 2:1.2
+  4 1:1.0 2:-1.2
+    
+            ValidateType<T>(dict, typeValue, currentVersion);
+    
+        Constant Constant::CloneAs(DataType dataType) const
+    {
+        if (dataType != DataType::Double)
+            InvalidArgument('Constant::Clone: Cannot clone Constant '%S' with DataType '%s' to DataType '%s'.', AsString().c_str(), DataTypeName(GetDataType()), DataTypeName(dataType));
     }
     
-      virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats) const;
+        std::string m_name; // lock name
+    HANDLE m_handle;
     
-      std::vector<int> range_;
-    
-    // Source project : https://github.com/ismaelJimenez/cpp.leastsq
-// Adapted to be used with google benchmark
-    
-      for (auto& c : result.counters) {
-    const std::size_t cNameLen = std::max(std::string::size_type(10),
-                                          c.first.length());
-    auto const& s = HumanReadableNumber(c.second.value, 1000);
-    if (output_options_ & OO_Tabular) {
-      if (c.second.flags & Counter::kIsRate) {
-        printer(Out, COLOR_DEFAULT, ' %*s/s', cNameLen - 2, s.c_str());
-      } else {
-        printer(Out, COLOR_DEFAULT, ' %*s', cNameLen, s.c_str());
-      }
-    } else {
-      const char* unit = (c.second.flags & Counter::kIsRate) ? '/s' : '';
-      printer(Out, COLOR_DEFAULT, ' %s=%s%s', c.first.c_str(), s.c_str(),
-              unit);
+        // return the randomized feature bounds for a time range
+    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
+    {
+        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
+        size_t tend = min(te + randomizationrange / 2, map.size());
+        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
     }
-  }
     
-    namespace {
-std::exception const* get_std_exception_(std::exception_ptr eptr) noexcept {
-  try {
-    std::rethrow_exception(eptr);
-  } catch (const std::exception& ex) {
-    return &ex;
-  } catch (...) {
+        void Start();
+    void Stop();
+    void Restart();
+    
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        Base::Validate(isFinalValidationPass);
+        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    }
+    
+    Speed* Speed::create(ActionInterval* action, float speed)
+{
+    Speed *ret = new (std::nothrow) Speed();
+    if (ret && ret->initWithAction(action, speed))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
     return nullptr;
-  }
-}
-} // namespace
-    
-    template <class UIntType, UIntType a, UIntType c, UIntType m>
-struct StateSize<std::linear_congruential_engine<UIntType, a, c, m>> {
-  // From the standard [rand.eng.lcong], this is ceil(log2(m) / 32) + 3,
-  // which is the same as ceil(ceil(log2(m) / 32) + 3, and
-  // ceil(log2(m)) <= std::numeric_limits<UIntType>::digits
-  using type = std::integral_constant<
-      size_t,
-      (std::numeric_limits<UIntType>::digits + 31) / 32 + 3>;
-};
-    
-    inline UriTuple as_tuple(const folly::Uri& k) {
-  return UriTuple(
-      k.scheme(),
-      k.username(),
-      k.password(),
-      k.host(),
-      k.port(),
-      k.path(),
-      k.query(),
-      k.fragment());
 }
     
-    namespace folly {
+        //
+    // convert 'absolutes' to 'diffs'
+    //
+    Vec2 p = copyConfig->getControlPointAtIndex(0);
+    for (ssize_t i = 1; i < copyConfig->count(); ++i)
+    {
+        Vec2 current = copyConfig->getControlPointAtIndex(i);
+        Vec2 diff = current - p;
+        copyConfig->replaceControlPoint(diff, i);
     }
     
-      ~atomic_shared_ptr() {
-    store(SharedPtr(nullptr));
-  }
-  void operator=(SharedPtr desired) /* noexcept */ {
-    store(std::move(desired));
-  }
-  void operator=(const atomic_shared_ptr<T>&) = delete;
+        /** Creates an action with a Cardinal Spline array of points and tension.
+     * @param dt In seconds.
+     * @param points An PointArray.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * In js: var create(var dt,var table).
+     * In lua: local create(local dt, local table).
+     * @endcode
+     */
+    static CatmullRomTo* create(float dt, PointArray* points);
     
-    /// Returns the best real CacheLocality information available
-static CacheLocality getSystemLocalityInfo() {
-  if (kIsLinux) {
-    try {
-      return CacheLocality::readFromSysfs();
-    } catch (...) {
-      // keep trying
+    // implementation of FlipX3D
+    
+    For example, you can simulate a Ping Pong effect running the action normally and
+then running it again in Reverse mode.
+    
+        if (element)
+    {
+        auto limit = element->actions->num;
+        for (int i = 0; i < limit;)
+        {
+            Action *action = static_cast<Action*>(element->actions->arr[i]);
     }
-  }
     }
     
-    ErrorCode FakeCanClient::Receive(std::vector<CanFrame> *const frames,
-                                 int32_t *const frame_num) {
-  if (frame_num == nullptr || frames == nullptr) {
-    AERROR << 'frames or frame_num pointer is null';
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-  frames->resize(*frame_num);
-  const int MOCK_LEN = 8;
-  for (size_t i = 0; i < frames->size(); ++i) {
-    for (int j = 0; j < MOCK_LEN; ++j) {
-      (*frames)[i].data[j] = j;
-    }
-    (*frames)[i].id = i;
-    (*frames)[i].len = MOCK_LEN;
-    ADEBUG << (*frames)[i].CanFrameString() << 'frame_num[' << i << ']';
-  }
-  usleep(USLEEP_INTERVAL);
-  ++recv_counter_;
-  return ErrorCode::OK;
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    
+    {    return false;
 }
     
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    // Canbus gflags
-DEFINE_double(sensor_freq, 100,
-              'Sensor feedback timer frequency -- 0 means event trigger.');
+    // implementation AtlasNode
