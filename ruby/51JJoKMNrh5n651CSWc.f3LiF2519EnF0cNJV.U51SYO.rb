@@ -1,205 +1,155 @@
 
         
-        def bottle_resolve_formula_names(bottle_file)
-  receipt_file_path = bottle_receipt_path bottle_file
-  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
-  name = receipt_file_path.split('/').first
-  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
-    
-        keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+            Category.transaction do
+      lounge.group_names = ['trust_level_3']
+      unless lounge.save
+        puts lounge.errors.full_messages
+        raise 'Failed to set permissions on trust level 3 lounge category!'
       end
-      f.puts s
+    
+    require 'warden'
+require 'devise/mapping'
+require 'devise/models'
+require 'devise/modules'
+require 'devise/rails'
+
+    
+          # Sign in a user that already was authenticated. This helper is useful for logging
+      # users in after sign up. All options given to sign_in is passed forward
+      # to the set_user method in warden.
+      # If you are using a custom warden strategy and the timeoutable module, you have to
+      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
+      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
+      #
+      # Examples:
+      #
+      #   sign_in :user, @user                      # sign_in(scope, resource)
+      #   sign_in @user                             # sign_in(resource)
+      #   sign_in @user, event: :authentication     # sign_in(resource, options)
+      #   sign_in @user, store: false               # sign_in(resource, options)
+      #
+      def sign_in(resource_or_scope, *args)
+        options  = args.extract_options!
+        scope    = Devise::Mapping.find_scope!(resource_or_scope)
+        resource = args.last || resource_or_scope
+    
+        unless env['devise.skip_trackable']
+      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
     end
   end
 end
 
     
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
+          def is_create_page
+        false
       end
-    end
     
-        if ARGV.named.empty?
-      slow_checks = %w[
-        check_for_broken_symlinks
-        check_missing_deps
-        check_for_outdated_homebrew
-        check_for_linked_keg_only_brews
-      ]
-      methods = (checks.all.sort - slow_checks) + slow_checks
-    else
-      methods = ARGV.named
-    end
+    context 'Precious::Helpers' do
+  include Precious::Helpers
     
-        dirs.each do |d|
-      files = []
-      d.find { |pn| files << pn unless pn.directory? }
-      print_remaining_files files, d
-    end
-    
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-    gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
-    
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-    
-      protected
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-    require 'uri'
-    
-        def scope_class
-      @scope_class ||= Devise.mappings[scope].to
-    end
-    
-            # This returns all registered host classes.
-        #
-        # @return [Hash]
-        def hosts
-          hosts = {}
-    
-            # Defines an additionally available host implementation with
-        # the given key.
-        #
-        # @param [String] name Name of the host.
-        # @param [String] parent Name of the parent host (if any)
-        def self.host(name, parent=nil, &block)
-          components.hosts.register(name.to_sym) do
-            parent = parent.to_sym if parent
-    
-      def create
-    @filter = current_account.custom_filters.build(resource_params)
-    
-        def require_local_account!
-      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
-    end
-    
-        def create
-      authorize :email_domain_block, :create?
-    
-          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
-    
-      def pod_prefix
-    File.expand_path('../..', pod_bin)
+      teardown do
+    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end
     
-    # The project root directory
-$root = ::File.dirname(__FILE__)
+    opts = OptionParser.new do |opts|
+  # define program name (although this defaults to the name of the file, just in case...)
+  opts.program_name = 'gollum'
     
-        # Outputs a list of categories as comma-separated <a> links. This is used
-    # to output the category list for each post on a category page.
-    #
-    #  +categories+ is the list of categories to format.
-    #
-    # Returns string
-    #
-    def category_links(categories)
-      categories.sort.map { |c| category_link c }.join(', ')
+  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
+  opts.banner = '
+  Gollum is a multi-format Wiki Engine/API/Frontend.
+    
+  Usage:
+      gollum [options] [git-repo]
+    
+  Arguments:
+      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
+  
+  Notes:
+      Paths for all options are relative to <git-repo> unless absolute.
+      This message is only a basic description. For more information, please visit:
+          https://github.com/gollum/gollum
+  
+  OPTIONS'
+  
+  # define gollum options  
+  opts.separator ''
+  opts.separator '  Major:'
+  
+  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
+    options[:bind] = host
+  end
+  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
+    begin
+      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
+      options[:port] = Integer(port)
+    rescue ArgumentError
+      puts 'Error: '#{port}' is not a valid port number.'
+      exit 1
     end
+  end
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
+    options[:config] = file
+  end
+  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
+    wiki_options[:ref] = ref
+  end
+  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
+    wiki_options[:repo_is_bare] = true
+  end
+  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
+    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
+      
+    # first trim a leading slash, if any
+    base_path.sub!(/^\/+/, '')
     
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
+      s.rdoc_options = ['--charset=UTF-8']
+  s.extra_rdoc_files = %w[README.md LICENSE]
     
-        def get_gist_from_web(gist, file)
-      gist_url = get_gist_url_for(gist, file)
-      data     = get_web_content(gist_url)
     
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
+    
+    require_relative '../lib/bootstrap/environment'
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+        def self.package(plugins_args, target)
+      OfflinePluginPackager.new(plugins_args, target).execute
     end
-    
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+  end
+end end
 
     
-            def scope
-          if params[:product_id]
-            Spree::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Spree::Variant.find(params[:variant_id])
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
+    
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
           end
-        end
+    
+            expect(new_source).to eq(construct(true, false))
       end
     end
   end
 end
 
     
-            def perform_payment_action(action, *args)
-          authorize! action, Payment
-          @payment.send('#{action}!', *args)
-          respond_with(@payment, default_template: :show)
-        end
-    
-            def set_up_shipping_category
-          if shipping_category = params[:product].delete(:shipping_category)
-            id = ShippingCategory.find_or_create_by(name: shipping_category).id
-            params[:product][:shipping_category_id] = id
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            def scope
-          includes = { variant: [{ option_values: :option_type }, :product] }
-          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
-        end
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
+        context 'and a comment after the last element' do
+      let(:b_comment) { ' # comment b' }
