@@ -1,375 +1,219 @@
 
         
-        void CostAnalyzer::PrintAnalysis(std::ostream& os, bool per_node_report,
-                                 bool verbose) const {
-  os << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time measured in ns (serialized): ' << std::right
-     << std::setw(20) << total_time_measured_serialized_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time measured in ns (actual): ' << std::right << std::setw(20)
-     << total_time_measured_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time analytical in ns (upper bound): ' << std::right
-     << std::setw(20) << total_time_analytical_upper_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time analytical in ns (lower bound): ' << std::right
-     << std::setw(20) << total_time_analytical_lower_ << std::endl;
-  double efficiency_upper = static_cast<double>(total_time_analytical_upper_) /
-                            static_cast<double>(total_time_measured_);
-  os << std::left << std::setw(50)
-     << 'Overall efficiency (analytical upper/actual): ' << std::right
-     << std::setw(20) << efficiency_upper << std::endl;
-  double efficiency_lower = static_cast<double>(total_time_analytical_lower_) /
-                            static_cast<double>(total_time_measured_);
-  os << std::left << std::setw(50)
-     << 'Overall efficiency (analytical lower/actual): ' << std::right
-     << std::setw(20) << efficiency_lower << std::endl;
-  os << std::endl;
-    }
+          static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
     
-    Status TF_TensorToPyArray(Safe_TF_TensorPtr tensor, PyObject** out_ndarray);
-    
-    PyExceptionRegistry* PyExceptionRegistry::singleton_ = nullptr;
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-    
-      // Returns true if all stream tasks have completed at time of the call. Note
-  // the potential for races around this call (if another thread adds work to
-  // the stream immediately after this returns).
-  static bool IsStreamIdle(CudaContext* context, CUstream stream);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #endif
+    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
 
     
-      /**
-   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
-   * These Bind()s should be used for ini settings. Specifically, they
-   * should be used when the bound setting is needed before the main ini
-   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
-   * value in an ini setting if it is set otherwise it will use the defValue.
-   */
-  static void Bind(bool& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const bool defValue = false,
-                   const bool prepend_hhvm = true);
-  static void Bind(const char*& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char *defValue = nullptr,
-                   const bool prepend_hhvm = true);
-  static void Bind(std::string& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const std::string defValue = '',
-                   const bool prepend_hhvm = true);
-  static void Bind(char& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char defValue = 0, const bool prepend_hhvm = true);
-  static void Bind(unsigned char& loc,const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const unsigned char defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(double& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const double defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name,
-                   HackStrictOption def);
-  static void
-  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<std::string>& defValue = std::vector<std::string>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::unordered_map<std::string, int>& loc,
-       const IniSettingMap& ini, const Hdf& config,
-       const std::string& name = '',
-       const std::unordered_map<std::string, int>& defValue =
-         std::unordered_map<std::string, int>{},
-       const bool prepend_hhvm = true);
-  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMap& defValue = ConfigMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMapC& defValue = ConfigMapC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSet& defValue = ConfigSet(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSetC& defValue = ConfigSetC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigIMap& defValue = ConfigIMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
-                   const Hdf& config, const std::string& name = '',
-                   const ConfigFlatSet& defValue = ConfigFlatSet(),
-                   const bool prepend_hhvm = true);
+      scoped_ptr<base::Value> value_args(
+      converter->FromV8Value(args, isolate->GetCurrentContext()));
+  if (!value_args.get() ||
+      !value_args->IsType(base::Value::TYPE_LIST))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'args' passed to CallObjectMethod')));
     
-      const char* data = filename.data();
-  int data_len = filename.length();
-  bool base64 = false;
-  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
-    return nullptr;
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
+    
+    
+    {}  // namespace nwapi
+
+    
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
+    
+    
+    {
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
+    }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
   }
-  data += sizeof('data:') - 1;
-  data_len -= sizeof('data:') - 1;
+}
     
-          std::string line = argv[cnt+1];
-      std::string section = 'php';
-      int pos_period = line.find_first_of('.');
-      int pos_equals = line.find_first_of('=');
+    void Menu::Popup(int x, int y, content::RenderFrameHost* rfh) {
+  // Rebuild();
+    }
     
-    bool OutputFile::rewind() {
-  raise_warning('cannot rewind a php://output stream');
+    namespace nw {
+    }
+    
+      option.GetString('type', &type_);
+  option.GetString('label', &label_);
+  option.GetString('tooltip', &tooltip_);
+  option.GetBoolean('checked', &is_checked_);
+  option.GetBoolean('enabled', &is_enabled_);
+    
+    class NwAppGetArgvSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppGetArgvSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+        std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceAdded::Create(
+      src.id.ToString(),
+      base::UTF16ToUTF8(src.name),
+      index,
+      type,
+      src.id.type == content::DesktopMediaID::TYPE_SCREEN && GetPrimaryMonitorIndex() == index);
+    
+    		// MessageBox(NULL, szArgList[i], L'Arglist contents', MB_OK);
+		if (_wcsicmp(L'/c', szArgList[i]) == 0)
+		{
+			TCHAR userProfile[MAX_PATH];
+			const DWORD ret = GetEnvironmentVariable(L'USERPROFILE', userProfile, MAX_PATH);
+    }
+    
+    
+    {  RepairDB();
+  Reopen();
+  std::string v;
+  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
+  ASSERT_EQ('hello', v);
+}
+    
+      // Return the user key
+  Slice user_key() const { return Slice(kstart_, end_ - kstart_ - 8); }
+    
+      kFullType = 1,
+    
+    
+    {
+    {
+    {      default: {
+        char buf[40];
+        snprintf(buf, sizeof(buf), 'unknown record type %u', record_type);
+        ReportCorruption(
+            (fragment.size() + (in_fragmented_record ? scratch->size() : 0)),
+            buf);
+        in_fragmented_record = false;
+        scratch->clear();
+        break;
+      }
+    }
+  }
   return false;
 }
     
     
-    {    return CatmullRomBy::create(_duration, reverse);
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionGrid3D.h'
-#include 'base/CCDirector.h'
-    
-    __CCCallFuncND * __CCCallFuncND::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) __CCCallFuncND();
-    
-    if( _selectorTarget)
     {
-        a->initWithTarget(_selectorTarget, _callFuncND, _data);
+    {    // Read all records from expected_record_offset through the last one.
+    ASSERT_LT(expected_record_offset, num_initial_offset_records_);
+    for (; expected_record_offset < num_initial_offset_records_;
+         ++expected_record_offset) {
+      Slice record;
+      std::string scratch;
+      ASSERT_TRUE(offset_reader->ReadRecord(&record, &scratch));
+      ASSERT_EQ(initial_offset_record_sizes_[expected_record_offset],
+                record.size());
+      ASSERT_EQ(initial_offset_last_record_offsets_[expected_record_offset],
+                offset_reader->LastRecordOffset());
+      ASSERT_EQ((char)('a' + expected_record_offset), record.data()[0]);
     }
-    
-    a->autorelease();
-    return a;
-}
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Spawn);
+    delete offset_reader;
+  }
 };
     
+      virtual bool Valid() const { return iter_.Valid(); }
+  virtual void Seek(const Slice& k) { iter_.Seek(EncodeKey(&tmp_, k)); }
+  virtual void SeekToFirst() { iter_.SeekToFirst(); }
+  virtual void SeekToLast() { iter_.SeekToLast(); }
+  virtual void Next() { iter_.Next(); }
+  virtual void Prev() { iter_.Prev(); }
+  virtual Slice key() const { return GetLengthPrefixedSlice(iter_.key()); }
+  virtual Slice value() const {
+    Slice key_slice = GetLengthPrefixedSlice(iter_.key());
+    return GetLengthPrefixedSlice(key_slice.data() + key_slice.size());
+  }
     
-    {    return 0;
+      bool empty() const { return head_.next_ == &head_; }
+  SnapshotImpl* oldest() const { assert(!empty()); return head_.next_; }
+  SnapshotImpl* newest() const { assert(!empty()); return head_.prev_; }
+    
+    class DHTMessageCallback;
+    
+    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
+{
+  getBucketFor(node)->dropNode(node);
 }
-    
-        if (action && action->initWithDuration(duration, gridSize))
-    {
-        action->autorelease();
-        return action;
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionTiledGrid.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
-#include 'base/CCDirector.h'
-#include 'base/ccMacros.h'
-    
-    /**
-@brief SplitRows action.
-@details Split the target node in many rows.
-        Then move out some rows from left, move out the other rows from right.
+/*
+  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
+  {
+  getBucketFor(node)->moveToHead(node);
+  }
 */
-class CC_DLL SplitRows : public TiledGrid3DAction
+void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
 {
-public :
-    /** 
-     * @brief Create the action with the number of rows and the duration.
-     * @param duration Specify the duration of the SplitRows action. It's a value in seconds.
-     * @param rows Specify the rows count should be split.
-     * @return If the creation success, return a pointer of SplitRows action; otherwise, return nil.
-     */
-    static SplitRows* create(float duration, unsigned int rows);
-    }
+  getBucketFor(node)->moveToTail(node);
+}
     
-        for (int n = 0; n < 50; n++)
+    
     {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
-    }
-    
-            D3D12_STATIC_SAMPLER_DESC staticSampler = {};
-        staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-        staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-        staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-        staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-        staticSampler.MipLODBias = 0.f;
-        staticSampler.MaxAnisotropy = 0;
-        staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-        staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-        staticSampler.MinLOD = 0.f;
-        staticSampler.MaxLOD = 0.f;
-        staticSampler.ShaderRegister = 0;
-        staticSampler.RegisterSpace = 0;
-        staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-    
-    
-    {    // Restore modified state
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+    {    nodes.push_back(node);
+  }
+  localNode_ = localNode;
+  nodes_ = nodes;
+  A2_LOG_INFO('DHT routing table was loaded successfully');
 }
     
-        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
-    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
-    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
-    io.KeyMap[ImGuiKey_Home] = VK_HOME;
-    io.KeyMap[ImGuiKey_End] = VK_END;
-    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
-    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
-    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = 'A';
-    io.KeyMap[ImGuiKey_C] = 'C';
-    io.KeyMap[ImGuiKey_V] = 'V';
-    io.KeyMap[ImGuiKey_X] = 'X';
-    io.KeyMap[ImGuiKey_Y] = 'Y';
-    io.KeyMap[ImGuiKey_Z] = 'Z';
+    DHTRoutingTableSerializer::~DHTRoutingTableSerializer() = default;
     
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    {} // namespace aria2
     
-    void BENCHFUN(insertFront)(int iters, int initialSize) {
-  BenchmarkSuspender braces;
-  auto const obj = randomObject<VECTOR::value_type>();
-  VECTOR v(initialSize, obj);
-  braces.dismissing([&]() {
-    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
-  });
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                                   int numRetry)
+{
+  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
 }
     
-    template <class String>
-String Uri::toString() const {
-  String str;
-  if (hasAuthority_) {
-    toAppend(scheme_, '://', &str);
-    if (!password_.empty()) {
-      toAppend(username_, ':', password_, '@', &str);
-    } else if (!username_.empty()) {
-      toAppend(username_, '@', &str);
+    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
+    
+    class DHTUnknownMessage : public DHTMessage {
+private:
+  unsigned char* data_;
+  size_t length_;
+  std::string ipaddr_;
+  uint16_t port_;
     }
-    toAppend(host_, &str);
-    if (port_ != 0) {
-      toAppend(':', port_, &str);
-    }
-  } else {
-    toAppend(scheme_, ':', &str);
-  }
-  toAppend(path_, &str);
-  if (!query_.empty()) {
-    toAppend('?', query_, &str);
-  }
-  if (!fragment_.empty()) {
-    toAppend('#', fragment_, &str);
-  }
-  return str;
-}
-    
-    
-    {  bool initialized_{false};
-  folly::Function<folly::Function<void(double)>()> initialize_;
-  folly::Function<void(double)> increment_;
-};
-    
-        PackedPtr newptr;
-    newptr.init(newval, count);
