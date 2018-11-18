@@ -1,99 +1,158 @@
 
         
-        Badge.seed do |b|
-  b.id = Badge::Anniversary
-  b.name = 'Anniversary'
-  b.default_icon = 'fa-clock-o'
-  b.badge_type_id = BadgeType::Silver
-  b.default_badge_grouping_id = BadgeGrouping::Community
-  b.query = nil
-  b.trigger = Badge::Trigger::None
-  b.auto_revoke = false
-  b.system = true
-  b.multiple_grant = true
-end
+                      yield item, value, text, default_html_options.merge(additional_html_options)
+            end.join.html_safe
+          end
     
-          if lounge.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('vip_category_description'),
-          title: I18n.t('category.topic_prefix', category: lounge.name),
-          category: lounge.name,
-          archetype: Archetype.default,
-          skip_validations: true
-        )
-        post = creator.create
+              content_is_options = content_or_options.is_a?(Hash)
+          if content_is_options
+            options.merge! content_or_options
+            @content = nil
+          else
+            @content = content_or_options
+          end
     
-          def find_sessionless_user
-        find_user_from_access_token || find_user_from_feed_token
-      rescue Gitlab::Auth::AuthenticationError
-        nil
-      end
-    
-          def link_url
-        raise NotImplementedError
-      end
+            # If no layout is supplied, look for a template named the return
+        # value of this method.
+        #
+        # ==== Returns
+        # * <tt>String</tt> - A template name
+        def _implied_layout_name
+          controller_path
+        end
     end
+    
+    describe 'Kernel.srand' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:srand)
   end
+    
+      it 'calls #to_path on second argument when passed ?e and a filename' do
+    p = mock('path')
+    p.should_receive(:to_path).and_return @file
+    Kernel.test(?e, p)
+  end
+    
+      it 'is a private method' do
+    Kernel.should have_private_instance_method(:warn)
+  end
+    
+        if GitHub.api_credentials_type == :none
+      puts <<~EOS
+        You can create a new personal access token:
+          #{GitHub::ALL_SCOPES_URL}
+        #{Utils::Shell.set_variable_in_profile('HOMEBREW_GITHUB_API_TOKEN', 'your_token_here')}
+    
+      def prepend(*paths)
+    @paths = parse(*paths, *@paths)
+    self
+  end
+    
+      prepend Compat
 end
 
     
-    Then (/^I should see the 'getting started' contents$/) do
-  confirm_getting_started_contents
-end
-
-    
-    require Rails.root.join('spec', 'helper_methods')
-require Rails.root.join('spec', 'support', 'inlined_jobs')
-require Rails.root.join('spec', 'support', 'user_methods')
-include HelperMethods
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
+    desc 'LESS to stdin -> Sass to stdout'
+task :less_to_scss, :branch do |t, args|
+  require './tasks/converter'
+  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
 end
     
-        it 'returns a 404 for a post not visible to the user' do
-      sign_in eve
-      expect {
-        get :index, params: {post_id: @message.id}
-      }.to raise_error(ActiveRecord::RecordNotFound)
+        def compass?
+      defined?(::Compass::Frameworks)
     end
     
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
+        def byte_to_str_pos(pos)
+      @s.string.byteslice(0, pos).length
+    end
+    
+        def get_paths_by_type(dir, file_re, recursive = true)
+      get_file_paths(dir, recursive).select { |path| path =~ file_re }
+    end
+    
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
+end
+    
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
+    
+          alias default_reaction deny
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
       end
     
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
     
-    {      # Checks whether the `hash` literal is delimited by curly braces.
+          # Checks whether this node body is a void context.
       #
-      # @return [Boolean] whether the `hash` literal is enclosed in braces
-      def braces?
-        loc.end && loc.end.is?('}')
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
+    
+          # Returns the operator for the `kwsplat` as a string.
+      #
+      # @return [String] the double splat operator
+      def operator
+        DOUBLE_SPLAT
+      end
+    
+    # Quiet some warnings we see when running in warning mode:
+# RUBYOPT=-w bundle exec sidekiq
+$TESTING = false
+    
+        worker_count.times do |count|
+      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
+        owner node[:owner_name]
+        group node[:owner_name]
+        mode 0644
+        source 'sidekiq.yml.erb'
+        variables({
+          :require => '/data/#{app}/current'
+        })
       end
     end
-  end
-end
-
     
-          # A shorthand for getting the last argument of the node.
-      # Equivalent to `arguments.last`.
+          # Resque compatibility helpers.  Note all helpers
+      # should go through Worker#client_push.
       #
-      # @return [Node, nil] the last argument of the node,
-      #                     or `nil` if there are no arguments
-      def last_argument
-        arguments[-1]
+      # Example usage:
+      #   Sidekiq::Client.enqueue(MyWorker, 'foo', 1, :bat => 'bar')
+      #
+      # Messages are enqueued to the 'default' queue.
+      #
+      def enqueue(klass, *args)
+        klass.client_push('class' => klass, 'args' => args)
       end
     
-                return if after_update_attributes
+    
+    # By leaving this as a class method, it can be pluggable and used by the Manager actor. Making it
+    # an instance method will make it async to the Fetcher actor
+    def self.bulk_requeue(inprogress, options)
+      return if inprogress.empty?
+    
+          def __set_test_mode(mode)
+        if block_given?
+          current_mode = self.__test_mode
+          begin
+            self.__test_mode = mode
+            yield
+          ensure
+            self.__test_mode = current_mode
+          end
+        else
+          self.__test_mode = mode
+        end
+      end
+    
+          def disable(*opts)
+        opts.each {|key| set(key, false) }
+      end
