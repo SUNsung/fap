@@ -1,104 +1,156 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
-    
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
-  end
-    
-            if msg = blacklisted?(query)
-          if count > 0
-            puts
-            puts 'If you meant #{query.inspect} precisely:'
-            puts
+                  lfs_objects.each do |object|
+            yield object
           end
-          puts msg
-        elsif count == 0
-          puts 'No formula found for #{query.inspect}.'
-          begin
-            GitHub.print_pull_requests_matching(query)
-          rescue GitHub::Error => e
-            SEARCH_ERROR_QUEUE << e
-          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
         end
       end
     end
-    
-      private
-    
-        Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
-      end
-    
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
-end
-puts '==================================================='
-
-    
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
-      end
-    end
-    [$? && $?.exitstatus == 0, cmd_with_env]
-  end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
-  else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
-  end
-end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
-    end
   end
 end
 
     
-      def save_file(path, content, mode='w')
-    dir = File.dirname(path)
-    FileUtils.mkdir_p(dir) unless File.directory?(dir)
-    File.open(path, mode) { |file| file.write(content) }
+    module Gitlab
+  module GithubImport
+    # IssuableFinder can be used for caching and retrieving database IDs for
+    # issuable objects such as issues and pull requests. By caching these IDs we
+    # remove the need for running a lot of database queries when importing
+    # GitHub projects.
+    class IssuableFinder
+      attr_reader :project, :object
+    
+            def truncated_title
+          title.truncate(255)
+        end
+    
+        # If a procedure was passed, mount the resource with it.
+    if (opts['Proc'])
+      mount(name, Handler::Proc, false, opts['Proc'], opts['VirtualDirectory'])
+    else
+      raise ArgumentError, 'You must specify a procedure.'
+    end
   end
     
-        def initialize(*args)
-      @s = StringScanner.new(*args)
-    end
     
-        alias log puts
+end
+end
+end
+
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
+            end
+    
+    <style type='text/css' media='screen'>
+  *                   {margin: 0; padding: 0; border: 0; outline: 0;}
+  div.clear           {clear: both;}
+  body                {background: #EEEEEE; margin: 0; padding: 0;
+                       font-family: 'Lucida Grande', 'Lucida Sans Unicode',
+                       'Garuda';}
+  code                {font-family: 'Lucida Console', monospace;
+                       font-size: 12px;}
+  li                  {height: 18px;}
+  ul                  {list-style: none; margin: 0; padding: 0;}
+  ol:hover            {cursor: pointer;}
+  ol li               {white-space: pre;}
+  #explanation        {font-size: 12px; color: #666666;
+                       margin: 20px 0 0 100px;}
+/* WRAP */
+  #wrap               {width: 1000px; background: #FFFFFF; margin: 0 auto;
+                       padding: 30px 50px 20px 50px;
+                       border-left: 1px solid #DDDDDD;
+                       border-right: 1px solid #DDDDDD;}
+/* HEADER */
+  #header             {margin: 0 auto 25px auto;}
+  #header img         {float: left;}
+  #header #summary    {float: left; margin: 12px 0 0 20px; width:660px;
+                       font-family: 'Lucida Grande', 'Lucida Sans Unicode';}
+  h1                  {margin: 0; font-size: 36px; color: #981919;}
+  h2                  {margin: 0; font-size: 22px; color: #333333;}
+  #header ul          {margin: 0; font-size: 12px; color: #666666;}
+  #header ul li strong{color: #444444;}
+  #header ul li       {display: inline; padding: 0 10px;}
+  #header ul li.first {padding-left: 0;}
+  #header ul li.last  {border: 0; padding-right: 0;}
+/* BODY */
+  #backtrace,
+  #get,
+  #post,
+  #cookies,
+  #rack               {width: 980px; margin: 0 auto 10px auto;}
+  p#nav               {float: right; font-size: 14px;}
+/* BACKTRACE */
+  a#expando           {float: left; padding-left: 5px; color: #666666;
+                      font-size: 14px; text-decoration: none; cursor: pointer;}
+  a#expando:hover     {text-decoration: underline;}
+  h3                  {float: left; width: 100px; margin-bottom: 10px;
+                       color: #981919; font-size: 14px; font-weight: bold;}
+  #nav a              {color: #666666; text-decoration: none; padding: 0 5px;}
+  #backtrace li.frame-info {background: #f7f7f7; padding-left: 10px;
+                           font-size: 12px; color: #333333;}
+  #backtrace ul       {list-style-position: outside; border: 1px solid #E9E9E9;
+                       border-bottom: 0;}
+  #backtrace ol       {width: 920px; margin-left: 50px;
+                       font: 10px 'Lucida Console', monospace; color: #666666;}
+  #backtrace ol li    {border: 0; border-left: 1px solid #E9E9E9;
+                       padding: 2px 0;}
+  #backtrace ol code  {font-size: 10px; color: #555555; padding-left: 5px;}
+  #backtrace-ul li    {border-bottom: 1px solid #E9E9E9; height: auto;
+                       padding: 3px 0;}
+  #backtrace-ul .code {padding: 6px 0 4px 0;}
+  #backtrace.condensed .system,
+  #backtrace.condensed .framework {display:none;}
+/* REQUEST DATA */
+  p.no-data           {padding-top: 2px; font-size: 12px; color: #666666;}
+  table.req           {width: 980px; text-align: left; font-size: 12px;
+                       color: #666666; padding: 0; border-spacing: 0;
+                       border: 1px solid #EEEEEE; border-bottom: 0;
+                       border-left: 0;
+                       clear:both}
+  table.req tr th     {padding: 2px 10px; font-weight: bold;
+                       background: #F7F7F7; border-bottom: 1px solid #EEEEEE;
+                       border-left: 1px solid #EEEEEE;}
+  table.req tr td     {padding: 2px 20px 2px 10px;
+                       border-bottom: 1px solid #EEEEEE;
+                       border-left: 1px solid #EEEEEE;}
+/* HIDE PRE/POST CODE AT START */
+  .pre-context,
+  .post-context       {display: none;}
+    
+      task :all => [:readmes, :index]
+end
+    
+          def masked_token?(token)
+        token.length == TOKEN_LENGTH * 2
+      end
+    
+        # Creates an instance of CategoryIndex for each category page, renders it, and
+    # writes the output to a file.
+    #
+    #  +category_dir+ is the String path to the category folder.
+    #  +category+     is the category currently being processed.
+    def write_category_index(category_dir, category)
+      index = CategoryIndex.new(self, self.source, category_dir, category)
+      index.render(self.layouts, site_payload)
+      index.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << index
+    
+    module Jekyll
+    
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
