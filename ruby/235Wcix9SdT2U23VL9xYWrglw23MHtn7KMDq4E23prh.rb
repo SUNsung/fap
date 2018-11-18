@@ -1,24 +1,7 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
-      #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
-      #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
-    
-            def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
-        end
+                    DateTimeSelector.new(datetime, options, html_options)
+          end
     
               def initialize(template_object, object_name, method_name, object, tag_value)
             @template_object = template_object
@@ -28,78 +11,139 @@
             @tag_value = tag_value
           end
     
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
-
+            private
     
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
+            conditions.each { |k, v| conditions[k] = Array(v).map(&:to_s) }
+        self._layout_conditions = conditions
     
-    When /^I (?:sign|log) in as '([^']*)'( on the mobile website)?$/ do |email, mobile|
-  @me = User.find_by_email(email)
-  @me.password ||= 'password'
-  automatic_login
-  confirm_login mobile
-end
+          def extract_details(options) # :doc:
+        @lookup_context.registered_details.each_with_object({}) do |key, details|
+          value = options[key]
     
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
+          def raise_or_wait_for_rate_limit
+        rate_limit_counter.increment
+    
+    module Gitlab
+  module GithubImport
+    # IssuableFinder can be used for caching and retrieving database IDs for
+    # issuable objects such as issues and pull requests. By caching these IDs we
+    # remove the need for running a lot of database queries when importing
+    # GitHub projects.
+    class IssuableFinder
+      attr_reader :project, :object
+    
+          # The name of the method to call to retrieve the data to import.
+      def collection_method
+        raise NotImplementedError
+      end
+    
+        # The path used after sending reset password instructions
+    def after_sending_reset_password_instructions_path_for(resource_name)
+      new_session_path(resource_name) if is_navigational_format?
     end
-  end
+    
+    # All Devise controllers are inherited from here.
+class DeviseController < Devise.parent_controller.constantize
+  include Devise::Controllers::ScopedViews
+    
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
+      end
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+      #
+  # Initializes an HTTP packet header class that inherits from a Hash base
+  # class.
+  #
+  def initialize
+    self.dcase_hash = {}
+    
+          if chall.nil?
+        dprint('REGAUTH: No challenge data received')
+        return
+      end
+    
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
+    
+              # Decodes the auth_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_auth_time(input)
+            input.value[0].value
+          end
+    
+              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
+            elems << etype_asn1
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 1
+                self.pvno = decode_asn1_pvno(val)
+              when 2
+                self.msg_type = decode_asn1_msg_type(val)
+              when 3
+                self.pa_data  = decode_asn1_pa_data(val)
+              when 4
+                self.req_body = decode_asn1_req_body(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
+              end
+            end
+          end
+    
+              # Decodes the etype field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Integer>]
+          def decode_etype(input)
+            encs = []
+            input.value[0].value.each do |enc|
+              encs << enc.value.to_i
+            end
+            encs
+          end
