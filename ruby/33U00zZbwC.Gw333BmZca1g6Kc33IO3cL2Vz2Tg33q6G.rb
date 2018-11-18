@@ -1,115 +1,157 @@
 
         
-                array.flatten.map! { |i| ERB::Util.unwrapped_html_escape(i) }.join(sep).html_safe
-      end
-    
-              def add_default_name_and_id(options)
-            index = name_and_id_index(options)
-            options['name'] = options.fetch('name') { tag_name(options['multiple'], index) }
-    
-                content ||= Translator
-              .new(object, @object_name, method_and_value, scope: 'helpers.label')
-              .translate
-            content ||= @method_name.humanize
-    
-            ActiveSupport::Notifications.instrument('render_#{name}.action_view', options) do |payload|
-          yield payload
-        end
-      end
-    
-        context 'destroy' do
-      let!(:notification) { Fabricate(:notification) }
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
-    
-    When /^I post a status with the text '([^\']*)'$/ do |text|
-  @me.post(:status_message, :text => text, :public => true, :to => 'all')
+        def local_require
+  require 'json'
+  JSON.pretty_generate(DATA)
 end
     
-    # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
-# order to ease the transition to Capybara we set the default here. If you'd
-# prefer to use XPath just remove this line and adjust any selectors in your
-# steps to use the XPath syntax.
-Capybara.default_selector = :css
+    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
+COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
     
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
-    end
-  end
-end
-
-    
-        it 'lets a user destroy their like' do
-      current_user = controller.send(:current_user)
-      expect(current_user).to receive(:retract).with(@like)
-    
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
-
-    
-        # Initializes a new CategoryIndex.
-    #
-    #  +base+         is the String path to the <source>.
-    #  +category_dir+ is the String path between <source> and the category folder.
-    #  +category+     is the category currently being processed.
-    def initialize(site, base, category_dir, category)
-      @site = site
-      @base = base
-      @dir  = category_dir
-      @name = 'index.html'
-      self.process(@name)
-      # Read the YAML data from the layout page.
-      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
-      self.data['category']    = category
-      # Set the title for this page.
-      title_prefix             = site.config['category_title_prefix'] || 'Category: '
-      self.data['title']       = '#{title_prefix}#{category}'
-      # Set the meta-description for this page.
-      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
-      self.data['description'] = '#{meta_description_prefix}#{category}'
-    end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+            def make_accessible(hash = @config)
+          hash.keys.each do |key|
+            hash[key.to_sym] = hash[key]
+            make_accessible(hash[key]) if hash[key].is_a?(Hash)
           end
         end
-      end
-      rtn
+    
+        def deprecation_message(message)
+      Jekyll.logger.warn 'Deprecation:', message
     end
+    
+    def bottle_native_regex
+  /(\.#{bottle_tag}\.bottle\.(\d+\.)?tar\.gz)$/o
+end
+    
+      def initialize(formula, options)
+    @formula = formula
+    @formula.build = BuildOptions.new(options, formula.options)
+    
+    class BuildEnvironment
+  def initialize(*settings)
+    @settings = Set.new(*settings)
   end
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+            if file_is_stale || ARGV.switch?('s') && !f.installed? || bottle_file_outdated?(f, file)
+          cleanup_path(file) { file.unlink }
+        end
+      end
     end
+    
+      def find_internal_commands(directory)
+    directory.children.reduce([]) do |cmds, f|
+      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
+      cmds
+    end
+  end
+end
+
+    
+    gem 'rails-controller-testing'
+    
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
+    
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
+    
+          # Stores the provided location to redirect the user after signing in.
+      # Useful in combination with the `stored_location_for` helper.
+      #
+      # Example:
+      #
+      #   store_location_for(:user, dashboard_path)
+      #   redirect_to user_facebook_omniauth_authorize_path
+      #
+      def store_location_for(resource_or_scope, location)
+        session_key = stored_location_key_for(resource_or_scope)
+        
+        path = extract_path_from_location(location)
+        session[session_key] = path if path
+      end
+    
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+          def mailer_from(mapping)
+        mailer_sender(mapping, :from)
+      end
+    
+    require 'rake/testtask'
+    
+    $stderr.puts <<DEPRECATION
+WARNING: Ruby Sass's Git repository is moving, and the old repository will be
+deled on 26 March 2019! Please update your Git URLs to point to the new
+repository at https://github.com/sass/ruby-sass.
+    
+          # @param cache_location [String] see \{#cache\_location}
+      def initialize(cache_location)
+        @cache_location = cache_location
+      end
+    
+      # An environment that can write to in-scope global variables, but doesn't
+  # create new variables in the global scope. Useful for top-level control
+  # directives.
+  class SemiGlobalEnvironment < Environment
+    def try_set_var(name, value)
+      @vars ||= {}
+      if @vars.include?(name)
+        @vars[name] = value
+        true
+      elsif @parent
+        @parent.try_set_var(name, value)
+      else
+        false
+      end
+    end
+  end
+end
+
+    
+        def load_compass
+      begin
+        require 'compass'
+      rescue LoadError
+        require 'rubygems'
+        begin
+          require 'compass'
+        rescue LoadError
+          puts 'ERROR: Cannot load compass.'
+          exit 1
+        end
+      end
+      Compass.add_project_configuration
+      Compass.configuration.project_path ||= Dir.pwd
+      @options[:for_engine][:load_paths] ||= []
+      @options[:for_engine][:load_paths] += Compass.configuration.sass_load_paths
+    end
+    
+          # If this importer is based on files on the local filesystem This method
+      # should return true if the file, when changed, should trigger a
+      # recompile.
+      #
+      # It is acceptable for non-sass files to be watched and trigger a recompile.
+      #
+      # @param filename [String] The absolute filename for a file that has changed.
+      # @return [Boolean] When the file changed should cause a recompile.
+      def watched_file?(filename)
+        false
+      end
+    end
+  end
+end
+
+    
+          # @see Base#watched_file?
+      def watched_file?(filename)
+        # Check against the root with symlinks resolved, since Listen
+        # returns fully-resolved paths.
+        filename =~ /\.s[ac]ss$/ && filename.start_with?(@real_root + File::SEPARATOR)
+      end
