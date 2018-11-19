@@ -14,166 +14,151 @@
       def safe_join(array, sep = $,)
         sep = ERB::Util.unwrapped_html_escape(sep)
     
-              def hidden_field
-            hidden_name = @html_options[:name] || hidden_field_name
-            @template_object.hidden_field_tag(hidden_name, '', id: nil)
+              if options['multiple']
+            add_default_name_and_id_for_value(@checked_value, options)
+            options.delete('multiple')
+          else
+            add_default_name_and_id(options)
           end
     
             private
     
-            class << self
-          def field_type
-            @field_type ||= name.split('::').last.sub('Field', '').downcase
+              content_is_options = content_or_options.is_a?(Hash)
+          if content_is_options
+            options.merge! content_or_options
+            @content = nil
+          else
+            @content = content_or_options
           end
-        end
     
-        initializer 'action_view.form_with_generates_remote_forms' do |app|
-      ActiveSupport.on_load(:action_view) do
-        form_with_generates_remote_forms = app.config.action_view.delete(:form_with_generates_remote_forms)
-        ActionView::Helpers::FormHelper.form_with_generates_remote_forms = form_with_generates_remote_forms
+                if only = conditions[:only]
+              only.include?(action_name)
+            elsif except = conditions[:except]
+              !except.include?(action_name)
+            else
+              true
+            end
+          end
+      end
+    
+          def instrument(name, **options) # :doc:
+        options[:identifier] ||= (@template && @template.identifier) || @path
+    
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-cert-signer \'Some signer\' --exit-threshold \'2\' input/dir')
+      end
+    
+          it 'generates the correct git command with a shell-escaped message' do
+        message = 'message with 'quotes' (and parens)'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: './fastlane/README.md', message: \'#{message}\')
+        end').runner.execute(:test)
+        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
       end
     end
-    
-        To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
-    
-    module BuildEnvironmentDSL
-  def env(*settings)
-    @env ||= BuildEnvironment.new
-    @env.merge(settings)
   end
 end
+
     
-          GitHub.open 'https://api.github.com/repos/#{user}/homebrew-#{repo}/git/trees/HEAD?recursive=1' do |json|
-        json['tree'].each do |object|
-          next unless object['type'] == 'blob'
-    
-        updated_taps = []
-    Tap.each do |tap|
-      next unless tap.git?
-      begin
-        reporter = Reporter.new(tap)
-      rescue Reporter::ReporterRevisionUnsetError => e
-        onoe e if ARGV.homebrew_developer?
-        next
-      end
-      if reporter.updated?
-        updated_taps << tap.name
-        hub.add(reporter)
-      end
-    end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
-    end
-    
-    describe AgentsExporter do
-  describe '#as_json' do
-    let(:name) { 'My set of Agents' }
-    let(:description) { 'These Agents work together nicely!' }
-    let(:guid) { 'some-guid' }
-    let(:tag_fg_color) { '#ffffff' }
-    let(:tag_bg_color) { '#000000' }
-    let(:icon) { 'Camera' }
-    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
-    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
-    let(:exporter) { AgentsExporter.new(
-      agents: agent_list, name: name, description: description,
-      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color, icon: icon) }
-    
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent).sort_by(&:id)).to eq([@agent1, @agent2])
-    end
-    
-          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
-    end
-    
-          new_name = name
-      new_path = path
-      new_remote = default_remote
-    
-    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
-  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
-  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
-    
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
-    
-    
-  # Jekyll hook - the generate method is called by jekyll, and generates all of the category pages.
-  class GenerateCategories < Generator
-    safe true
-    priority :low
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+          # Verify that value is the type that we're expecting, if we are expecting a type
+      if data_type == Fastlane::Boolean
+        ensure_boolean_type_passes_validation(value)
       else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+        ensure_generic_type_passes_validation(value)
+      end
+    
+              expect(c.valid?('a string')).to eq(true)
+        end
+      end
+    
+            def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        end
       end
     end
   end
 end
+
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+          # Returns `true` if we're still allowed to perform API calls.
+      def requests_remaining?
+        remaining_requests > RATE_LIMIT_THRESHOLD
+      end
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
+    
+    module Gitlab
+  module GithubImport
+    module ParallelScheduling
+      attr_reader :project, :client, :page_counter, :already_imported_cache_key
+    
+            # attributes - A Hash containing the raw lfs_object details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
         end
-    
-      # Improved version of Liquid's truncate:
-  # - Doesn't cut in the middle of a word.
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncate(input, length)
-    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
-      $1.strip + ' &hellip;'
-    else
-      input
+      end
     end
   end
+end
+
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+      it 'raises a TypeError when passed a String' do
+    lambda { srand('7') }.should raise_error(TypeError)
+  end
+end
+    
+    describe 'Kernel#taint' do
+  it 'returns self' do
+    o = Object.new
+    o.taint.should equal(o)
+  end
+    
+      it 'transfers control to the innermost catch block waiting for the same sympol' do
+    one = two = three = 0
+    catch :duplicate do
+      catch :duplicate do
+        catch :duplicate do
+          one = 1
+          throw :duplicate
+        end
+        two = 2
+        throw :duplicate
+      end
+      three = 3
+      throw :duplicate
     end
+    [one, two, three].should == [1, 2, 3]
+  end
+    
+      after :each do
+    Object.send :remove_method, :boom
+  end
+    
+    lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'capistrano/version'
+    
+    Given(/^a test app without any configuration$/) do
+  TestApp.create_test_app
+end
+    
+        def add_cmdline_filter(type, values)
+      cmdline_filters << Filter.new(type, values)
+    end
+    
+          def response
+        return @response if defined? @response
