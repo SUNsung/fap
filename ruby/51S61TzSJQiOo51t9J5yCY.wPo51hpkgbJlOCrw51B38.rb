@@ -1,173 +1,112 @@
 
         
-        describe 'Dry running an Agent', js: true do
-  let(:agent)   { agents(:bob_website_agent) }
-  let(:formatting_agent) { agents(:bob_formatting_agent) }
-  let(:user)    { users(:bob) }
-  let(:emitter) { agents(:bob_weather_agent) }
-    
-      it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
-    end
-    
-            it 'should add an error when no service is selected' do
-          expect(services_scenario_import.import).to eq(false)
-          expect(services_scenario_import.errors[:base].length).to eq(1)
+                if value.present?
+          # We refresh the expiration time so frequently used keys stick
+          # around, removing the need for querying the database as much as
+          # possible.
+          #
+          # A key may be empty when we looked up a GitHub user (for example) but
+          # did not find a matching GitLab user. In that case we _don't_ want to
+          # refresh the TTL so we automatically pick up the right data when said
+          # user were to register themselves on the GitLab instance.
+          Redis::Cache.with { |redis| redis.expire(key, timeout) }
         end
-      end
     
-      describe 'migrating the 'make_message' format' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
-      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
-      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
+            # attributes - A Hash containing the raw note details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+    
+            # Builds a lfs_object
+        def self.from_api_response(lfs_object)
+          new({ oid: lfs_object[0], download_link: lfs_object[1] })
+        end
+    
+                target 'Static' do
+                use_frameworks!(false)
+            end
+            target 'Dynamic' do
+                use_frameworks!(true)
+            end
+        end
     end
-  end
-    
-        it 'always succeeds in sorting even if it finds pairs of incomparable objects' do
-      time = Time.now
-      tuples = [
-        [2,   'a', time - 1],  # 0
-        [1,   'b', nil],       # 1
-        [1,   'b', time],      # 2
-        ['2', nil, time],      # 3
-        [1,   nil, time],      # 4
-        [nil, 'a', time + 1],  # 5
-        [2,   'a', time],      # 6
-      ]
-      orders = [true, false, true]
-      expected = tuples.values_at(3, 6, 0, 4, 2, 1, 5)
-    
-    describe ConvertWebsiteAgentTemplateForMerge do
-  let :old_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
-    }
-  end
-    
-        def as_json
-      { name: name, path: path, type: type }
-    end
-  end
 end
-
     
-        def queue(request)
-      request.on_complete(&method(:handle_response))
-      super
+          ::Bundler.settings[:path] = Environment::BUNDLE_DIR
+      ::Bundler.settings[:without] = options[:without].join(':')
+      # in the context of Bundler.setup it looks like this is useless here because Gemfile path can only be specified using
+      # the ENV, see https://github.com/bundler/bundler/blob/v1.8.3/lib/bundler/shared_helpers.rb#L103
+      ::Bundler.settings[:gemfile] = Environment::GEMFILE_PATH
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+        def self.find_by_name_with_wildcards(pattern)
+      re = transform_pattern_into_re(pattern)
+      ::Gem::Specification.find_all.select do |specification|
+        specification.name =~ re
+      end
     end
     
-        def file_path_for(url)
-      File.join self.class.dir, url.remove(base_url.to_s)
-    end
-    
-            css('.l-sub-section', '.alert', '.banner').each do |node|
-          node.name = 'blockquote'
-        end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
         else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
         end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+    
+      private
+    
+        context 'without a username / password' do
+      let(:scheme) { 'myscheme' }
+      let(:user) { nil }
+      let(:password) { nil }
+      let(:hostname) { 'myhostname' }
+      let(:path) { '/my/path' }
+      let(:uri_str) { '#{scheme}://#{hostname}#{path}' }
+      let(:uri_hidden) { '#{scheme}://#{hostname}#{path}' }
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
       end
     
-        false
-  end
-    
-        cmd_paths = PATH.new(ENV['PATH']).append(Tap.cmd_directories) unless path
-    path ||= which('brew-#{cmd}', cmd_paths)
-    path ||= which('brew-#{cmd}.rb', cmd_paths)
-    
-          spec['version'] = Bootstrap::VERSION
-    
-        def initialize(*args)
-      @s = StringScanner.new(*args)
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
     
-        # Converts &-
-    def convert_less_ampersand(less)
-      regx = /^\.badge\s*\{[\s\/\w\(\)]+(&{1}-{1})\w.*?^}$/m
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
-  end
-end
-
-    
-    When /^I toggle nsfw posts$/ do
-  find('.toggle_nsfw_state', match: :first).click
-end
-    
-      # Indicates an user error. This is defined in cocoapods-core.
-  #
-  class Informative < PlainInformative
-    def message
-      '[!] #{super}'.red
-    end
-  end
-    
-          def unmasked_token?(token)
-        token.length == TOKEN_LENGTH
-      end
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
+            def authorize
+          perform_payment_action(:authorize)
         end
-        bad_cookies.empty?
-      end
+    
+            def destroy
+          authorize! :destroy, taxonomy
+          taxonomy.destroy
+          respond_with(taxonomy, status: 204)
+        end
