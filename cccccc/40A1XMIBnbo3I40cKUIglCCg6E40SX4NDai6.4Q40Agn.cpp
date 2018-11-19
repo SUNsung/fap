@@ -1,242 +1,230 @@
 
         
-          std::vector<string> output;
-  string input_tensors_needed_out;
-  tensorflow::Status status = RunCppShapeInferenceImpl(
-      graph_def_version, serialized_node_def, input_serialized_shapes,
-      input_constant_tensor_values_v, input_constant_tensor_as_shape_values,
-      &output, &input_tensors_needed_out);
+        // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
     
-    {  total_time_measured_serialized_ = 0;
-  total_time_analytical_upper_ = 0;
-  total_time_analytical_lower_ = 0;
-  for (const auto& op : ops_) {
-    total_time_measured_serialized_ += op.time;
-    total_time_analytical_upper_ += op.time_upper;
-    total_time_analytical_lower_ += op.time_lower;
-  }
+    {  base::ListValue result;
+  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method_Sync(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get()),
+      &result));
+  return converter->ToV8Value(&result, isolate->GetCurrentContext());
 }
     
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    #include 'tensorflow/core/framework/numeric_types.h'
-#include 'tensorflow/core/lib/strings/strcat.h'
-#include 'tensorflow/core/platform/logging.h'
-#include 'tensorflow/python/lib/core/numpy.h'
-#include 'tensorflow/python/lib/core/safe_ptr.h'
-    
-    // Creates a tensor in 'ret' from the input Ndarray.
-Status NdarrayToTensor(PyObject* obj, Tensor* ret);
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    namespace cuda {
-    }
-    
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
-    
-    void AutoUpdater::OnError(const std::string& message,
-                          const int code,
-                          const std::string& domain) {
-  v8::Locker locker(isolate());
-  v8::HandleScope handle_scope(isolate());
-  auto error = v8::Exception::Error(mate::StringToV8(isolate(), message));
-  auto errorObject =
-      error->ToObject(isolate()->GetCurrentContext()).ToLocalChecked();
-    }
-    
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/auto_updater.h'
-#include 'atom/browser/window_list_observer.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
-    
-    scoped_refptr<TracingController::TraceDataEndpoint> GetTraceDataEndpoint(
-    const base::FilePath& path,
-    const CompletionCallback& callback) {
-  base::FilePath result_file_path = path;
-  if (result_file_path.empty() && !base::CreateTemporaryFile(&result_file_path))
-    LOG(ERROR) << 'Creating temporary file failed';
-    }
-    
-    
-    {}  // namespace api
-    
-    
-    {}  // namespace api
-    
-    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
- public:
-  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
-                                  mate::Arguments* args);
-    }
-    
-    #include 'components/download/public/common/download_item.h'
-#include 'content/public/browser/download_manager.h'
-#include 'content/public/browser/save_page_type.h'
-#include 'v8/include/v8.h'
-    
-    AtomQuotaPermissionContext::AtomQuotaPermissionContext() {}
-    
-    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-    
-    namespace caffe2 {
-std::vector<TensorShape> FCShapeInference(
-    const OperatorDef& def,
-    const vector<TensorShape>& in,
-    bool pretransposed_weight) {
-  vector<TensorShape> out(1);
-  ArgumentHelper helper(def);
-    }
-    }
-    
-        for (int inputIdx = 0; inputIdx < def_.input_size() / 2; ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * 2 + 1));
-      output_blob_names.push_back(GI(inputIdx * 2));
-    }
-    input_blob_names.push_back(GO(2));
-    
-    <summary> <b>Example</b> </summary>
-    
-    
-    {  bool RunOnDevice() override;
-};
-    
-    #include 'caffe2/utils/math.h'
-    
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
-    
-    
-    {          return out;
-        });
-OPERATOR_SCHEMA(Float16ConstantFill)
-    .NumInputs(0)
-    .NumOutputs(1)
-    .TensorInferenceFunction(Float16FillerTensorInference)
-    .Arg('value', 'The value for the elements of the output tensor.')
-    .Arg('shape', 'The shape of the output tensor.')
-    .Output(
-        0,
-        'output',
-        'Output tensor of constant values specified by 'value'');
-    
-    class GetIm2ColGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'Col2Im',
-        '',
-        std::vector<string>{GO(0), I(0)},
-        std::vector<string>{GI(0)});
-  }
-};
-REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
-    
-    
-    {    state.SetBytesProcessed(state.iterations() * str.size());
+    namespace content {
+class RenderView;
 }
-BENCHMARK_CAPTURE(ParseString, jeopardy,      'data/jeopardy/jeopardy.json');
-BENCHMARK_CAPTURE(ParseString, canada,        'data/nativejson-benchmark/canada.json');
-BENCHMARK_CAPTURE(ParseString, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
-BENCHMARK_CAPTURE(ParseString, twitter,       'data/nativejson-benchmark/twitter.json');
-BENCHMARK_CAPTURE(ParseString, floats,        'data/numbers/floats.json');
-BENCHMARK_CAPTURE(ParseString, signed_ints,   'data/numbers/signed_ints.json');
-BENCHMARK_CAPTURE(ParseString, unsigned_ints, 'data/numbers/unsigned_ints.json');
     
-    #ifndef BENCHMARK_HAS_CXX11
-#define BENCHMARK_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&);                         \
-  TypeName& operator=(const TypeName&)
-#else
-#define BENCHMARK_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&) = delete;                \
-  TypeName& operator=(const TypeName&) = delete
+    void Clipboard::Clear() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
+}
+    
+    
+    {}
+    
+    // Popup menus may get squished if they open up too close to the bottom of the
+// screen. This function takes the size of the screen, the size of the menu,
+// an optional widget, the Y position of the mouse click, and adjusts the popup
+// menu's Y position to make it fit if it's possible to do so.
+// Returns the new Y position of the popup menu.
+int CalculateMenuYPosition(const GdkRectangle* screen_rect,
+                           const GtkRequisition* menu_req,
+                           GtkWidget* widget, const int y) {
+  CHECK(screen_rect);
+  CHECK(menu_req);
+  // If the menu would run off the bottom of the screen, and there is enough
+  // screen space upwards to accommodate the menu, then pop upwards. If there
+  // is a widget, then also move the anchor point to the top of the widget
+  // rather than the bottom.
+  const int screen_top = screen_rect->y;
+  const int screen_bottom = screen_rect->y + screen_rect->height;
+  const int menu_bottom = y + menu_req->height;
+  int alternate_y = y - menu_req->height;
+  if (widget) {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    alternate_y -= allocation.height;
+  }
+  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
+    return alternate_y;
+  return y;
+}
+    
+    void MenuItem::Create(const base::DictionaryValue& option) {
+  std::string type;
+  option.GetString('type', &type);
+  submenu_ = NULL;
+  gtk_accel_group = NULL;
+    }
+    
+    #if defined(OS_WIN) || defined(OS_LINUX)
+bool MenuItem::AcceleratorPressed(const ui::Accelerator& accelerator) {
+#if defined(OS_WIN)
+  if (meta_down_flag_) {
+    if ((::GetKeyState(VK_APPS) & 0x8000) != 0x8000) {
+      return true;
+    }
+  }
 #endif
+  OnClick();
+  return true;
+}
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
+};
+    
+    bool NwObjDestroyFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  int id = 0;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+    }
+    
+    IntSimdMatrixAVX2::IntSimdMatrixAVX2() {
+#ifdef __AVX2__
+  num_outputs_per_register_ = kNumOutputsPerRegister;
+  max_output_registers_ = kMaxOutputRegisters;
+  num_inputs_per_register_ = kNumInputsPerRegister;
+  num_inputs_per_group_ = kNumInputsPerGroup;
+  num_input_groups_ = kNumInputGroups;
+  partial_funcs_ = {PartialMatrixDotVector64, PartialMatrixDotVector32,
+                    PartialMatrixDotVector16, PartialMatrixDotVector8};
+#endif  // __AVX2__
+}
+    
+    #ifdef __SSE4_1__
+// Computes part of matrix.vector v = Wu. Computes 1 result.
+static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
+                                    const int8_t* u, int num_in, int num_out,
+                                    double* v) {
+  int total = IntDotProductSSE(u, wi, num_in);
+  // Add in the bias and correct for integer values.
+  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
+}
+#endif  // __SSE4_1__
+    
+    #endif
+
+    
+     protected:
+  // ----------------------------------------------------------------------
+  // Utility functions that may be useful components for other thresholders.
+    
+    #pragma once
+    
+    
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        }
+    }
+    
+            std::wstring AsString() const;
+        std::shared_ptr<VariableFields> Clone() const;
+        FunctionPtr Owner() const;
+    
+        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
+    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
+    size_t currentseed;             // seed for current sequence
+    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
+                                    // special values (randomizeDisable)
+    void Invalidate()
+    {
+        currentseed = (size_t) -1;
+    }
+    
+        EditDistanceErrorNode(const ScriptableObjects::IConfigRecordPtr configp)
+        : EditDistanceErrorNode(configp->Get(L'deviceId'), L'<placeholder>', configp->Get(L'subPen'), configp->Get(L'delPen'), configp->Get(L'insPen'), configp->Get(L'squashInputs'), {})
+    {
+        AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
+        m_tokensToIgnore = ScriptableObjects::ConfigArray::FlattenedVectorFrom<size_t>(configp->Get(L'tokensToIgnore'));
+    }
+    
+    // -----------------------------------------------------------------------
+// EnvironmentInput (propertyName) -- read out environment properties
+// Such as whether we are currently training or evaluating, which can affect
+// behavior, such as seq-2-seq decoding.
+// -----------------------------------------------------------------------
+    
+    
+    {        ImGui::Render();
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp
+// https://github.com/ocornut/imgui
+    
+        ALLEGRO_MOUSE_STATE mouse;
+    if (keys.display == g_Display)
+    {
+        al_get_mouse_state(&mouse);
+        io.MousePos = ImVec2((float)mouse.x, (float)mouse.y);
+    }
+    else
+    {
+        io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    }
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support (for Win32 this is actually part of core imgui)
+//  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
+//  [X] Platform: Keyboard arrays indexed using VK_* Virtual Key Codes, e.g. ImGui::IsKeyPressed(VK_SPACE).
+// Missing features:
+//  [ ] Platform: Gamepad support (best leaving it to user application to fill io.NavInputs[] with gamepad inputs from their source of choice).
+    
+    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
+//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
+//#define IMGUI_DISABLE_DEMO_WINDOWS
+    
+        VkPipelineColorBlendStateCreateInfo blend_info = {};
+    blend_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    blend_info.attachmentCount = 1;
+    blend_info.pAttachments = color_attachment;
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
     
     namespace benchmark {
 namespace internal {
-// The arraysize(arr) macro returns the # of elements in an array arr.
-// The expression is a compile-time constant, and therefore can be
-// used in defining new arrays, for example.  If you use arraysize on
-// a pointer by mistake, you will get a compile-time error.
-//
     }
     }
     
+      // Accumulators.
+  std::vector<int> n;
+  std::vector<double> real_time;
+  std::vector<double> cpu_time;
     
-    {
-    {    if (b.use_manual_time) {
-      report.real_accumulated_time = results.manual_time_used;
-    } else {
-      report.real_accumulated_time = results.real_time_used;
-    }
-    report.cpu_accumulated_time = results.cpu_time_used;
-    report.bytes_per_second = bytes_per_second;
-    report.items_per_second = items_per_second;
-    report.complexity_n = results.complexity_n;
-    report.complexity = b.complexity;
-    report.complexity_lambda = b.complexity_lambda;
-    report.statistics = b.statistics;
-    report.counters = results.counters;
-    internal::Finish(&report.counters, seconds, b.threads);
-  }
-  return report;
-}
-    
-    
-    {  fflush(stdout);
-  // Restores the text color.
-  SetConsoleTextAttribute(stdout_handle, old_color_attrs);
-#else
-  const char* color_code = GetPlatformColorCode(color);
-  if (color_code) out << FormatString('\033[0;3%sm', color_code);
-  out << FormatString(fmt, args) << '\033[m';
+    #ifdef BENCHMARK_OS_EMSCRIPTEN
+#include <emscripten.h>
 #endif
-}
     
-    
-    {  printer(Out, COLOR_DEFAULT, '\n');
-}
-    
-    double BenchmarkReporter::Run::GetAdjustedCPUTime() const {
-  double new_time = cpu_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
-    
-        static BOOST_FORCEINLINE void fence_before_store(memory_order order) BOOST_NOEXCEPT
-    {
-        BOOST_ATOMIC_DETAIL_COMPILER_BARRIER();
-    }
-    
-    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
-    _mm_pause();
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-    __asm__ __volatile__('pause;');
+    // Prefer C regex libraries when compiling w/o exceptions so that we can
+// correctly report errors.
+#if defined(BENCHMARK_HAS_NO_EXCEPTIONS) && defined(HAVE_STD_REGEX) && \
+    (defined(HAVE_GNU_POSIX_REGEX) || defined(HAVE_POSIX_REGEX))
+#undef HAVE_STD_REGEX
 #endif
+    
+    inline UriTuple as_tuple(const folly::Uri& k) {
+  return UriTuple(
+      k.scheme(),
+      k.username(),
+      k.password(),
+      k.host(),
+      k.port(),
+      k.path(),
+      k.query(),
+      k.fragment());
 }
