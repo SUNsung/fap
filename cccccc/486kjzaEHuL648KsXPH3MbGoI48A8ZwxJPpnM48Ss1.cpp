@@ -1,250 +1,225 @@
 
         
-        // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-        GetRenderProcessHosts(rphs);
-    for (it = rphs.begin(); it != rphs.end(); it++) {
-      RenderProcessHost* rph = *it;
-      DCHECK(rph != NULL);
-    }
-    
-      // Try to close all windows (then will cause whole app to quit).
-  static void CloseAllWindows(bool force = false, bool quit = false);
-    
-    
-    {}  // namespace remote
-    
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
-    }
-    }
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    NwAppGetArgvSyncFunction::~NwAppGetArgvSyncFunction() {
-}
-    
-    
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
-};
-    
-    // Helper template function for comparing floating-points.
-//
-// Template parameter:
-//
-//   RawType: the raw floating-point type (either float or double)
-//
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-template <typename RawType>
-AssertionResult CmpHelperFloatingPointEQ(const char* expected_expression,
-                                         const char* actual_expression,
-                                         RawType expected,
-                                         RawType actual) {
-  const FloatingPoint<RawType> lhs(expected), rhs(actual);
-    }
-    
-    // Helper function for implementing {EXPECT|ASSERT}_PRED4.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4>
-AssertionResult AssertPred4Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4) {
-  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
-    }
-    
-    #include <limits.h>
-#include 'sample1.h'
-#include 'gtest/gtest.h'
-    
-      ////////////////////////////////////////////////////////////
-  //
-  // C'tors
-    
-    DEFINE_int32(threads, 16, 'Number of concurrent threads to run.');
-DEFINE_int64(cache_size, 8 * KB * KB,
-             'Number of bytes to use as a cache of uncompressed data.');
-DEFINE_int32(num_shard_bits, 4, 'shard_bits.');
-    
-      // Cannot be called while another thread is calling Seek().
-  // REQUIRES: use this function of DBImpl::column_family_memtables_ should be
-  //           under a DB mutex OR from a write thread
-  virtual ColumnFamilyData* current() override { return current_; }
-    
-    class TimeSetEnv : public EnvWrapper {
- public:
-  explicit TimeSetEnv() : EnvWrapper(nullptr) {}
-  uint64_t now_micros_ = 6666;
-  virtual uint64_t NowNanos() override { return now_micros_ * std::milli::den; }
-};
-    
-    #include 'rocksdb/env.h'
-#include 'util/testharness.h'
-    
-      // Read a key OUTSIDE this transaction. Does not affect txn.
-  s = txn_db->Get(read_options, 'abc', &value);
-    
-      /**
-   * @brief Constructor
-   */
-  CanFrame() : id(0), len(0), timestamp{0} {
-    std::memset(data, 0, sizeof(data));
-  }
-    
-    struct TestCanParam {
-  CANCardParameter conf;
-  bool is_first_agent = false;
-  int32_t recv_cnt = 0;
-  int32_t recv_err_cnt = 0;
-  int32_t send_cnt = 0;
-  int32_t send_err_cnt = 0;
-  int32_t send_lost_cnt = 0;
-  int32_t send_time = 0;
-  int32_t recv_time = 0;
-  CanClient *can_client = nullptr;
-    }
-    
-    void EsdCanClient::Stop() {
-  if (is_started_) {
-    is_started_ = false;
-    int32_t ret = canClose(dev_handler_);
-    if (ret != NTCAN_SUCCESS) {
-      AERROR << 'close error code:' << ret << ', ' << GetErrorString(ret);
-    } else {
-      AINFO << 'close esd can ok. port:' << port_;
-    }
-  }
-}
-    
-      /**
-   * @brief Get the error string.
-   * @param status The status to get the error string.
-   */
-  std::string GetErrorString(const int32_t status) override;
-    
-      /**
-   * @brief Destructor
-   */
-  virtual ~FakeCanClient() = default;
-    
-      int32_t ret = bcan_recv(_dev_handler, _recv_frames, *frame_num);
-  // don't log timeout
-  if (ret == RX_TIMEOUT) {
-    *frame_num = 0;
-    return ErrorCode::OK;
-  }
-  if (ret < 0) {
-    int ret_rece_error = bcan_get_status(_dev_handler);
-    AERROR << 'receive message failed, error code:' << ret
-           << 'receive error:' << ret_rece_error;
-    return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
-  }
-  *frame_num = ret;
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
 
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
+    // An example Op.
     
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
     
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
-#define MODULES_DRIVERS_CANBUS_CAN_COMM_PROTOCOL_DATA_H_
+    {}  // namespace tensorflow
+
     
-    TEST(ByteTest, SetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace tensorflow {
+namespace swig {
+    }
+    }
+    
+    #include 'tensorflow/stream_executor/cuda/cuda_activation.h'
+    
+      // Gets a specific integer-valued property about the given device.
+  //
+  // http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__DEVICE.html#group__CUDA__DEVICE_1g9c3e1414f0ad901d3278a4d6645fc266
+  static port::StatusOr<int> GetDeviceAttribute(CUdevice_attribute attribute,
+                                                CUdevice device);
+    
+       const_reference get_last_closed_paren()const
+   {
+      if(m_is_singular)
+         raise_logic_error();
+      return m_last_closed_paren == 0 ? m_null : (*this)[m_last_closed_paren];
+   }
+    
+    private:
+   // final result structure to be filled in:
+   match_results<BidiIterator, Allocator>& m_result;
+   // temporary result for POSIX matches:
+   scoped_ptr<match_results<BidiIterator, Allocator> > m_temp_match;
+   // pointer to actual result structure to fill in:
+   match_results<BidiIterator, Allocator>* m_presult;
+   // start of sequence being searched:
+   BidiIterator base;
+   // end of sequence being searched:
+   BidiIterator last; 
+   // current character being examined:
+   BidiIterator position;
+   // where to restart next search after failed match attempt:
+   BidiIterator restart;
+   // where the current search started from, acts as base for $` during grep:
+   BidiIterator search_base;
+   // how far we can go back when matching lookbehind:
+   BidiIterator backstop;
+   // the expression being examined:
+   const basic_regex<char_type, traits>& re;
+   // the expression's traits class:
+   const ::boost::regex_traits_wrapper<traits>& traits_inst;
+   // the next state in the machine being matched:
+   const re_syntax_base* pstate;
+   // matching flags in use:
+   match_flag_type m_match_flags;
+   // how many states we have examined so far:
+   std::ptrdiff_t state_count;
+   // max number of states to examine before giving up:
+   std::ptrdiff_t max_state_count;
+   // whether we should ignore case or not:
+   bool icase;
+   // set to true when (position == last), indicates that we may have a partial match:
+   bool m_has_partial_match;
+   // set to true whenever we get a match:
+   bool m_has_found_match;
+   // set to true whenever we're inside an independent sub-expression:
+   bool m_independent;
+   // the current repeat being examined:
+   repeater_count<BidiIterator>* next_count;
+   // the first repeat being examined (top of linked list):
+   repeater_count<BidiIterator> rep_obj;
+   // the mask to pass when matching word boundaries:
+   typename traits::char_class_type m_word_mask;
+   // the bitmask to use when determining whether a match_any matches a newline or not:
+   unsigned char match_any_mask;
+   // recursion information:
+   std::vector<recursion_info<results_type> > recursion_stack;
+#ifdef BOOST_REGEX_RECURSIVE
+   // Set to false by a (*COMMIT):
+   bool m_can_backtrack;
+   bool m_have_accept;
+   bool m_have_then;
+#endif
+#ifdef BOOST_REGEX_NON_RECURSIVE
+   //
+   // additional members for non-recursive version:
+   //
+   typedef bool (self_type::*unwind_proc_type)(bool);
+    
+    #endif
+    
+    template <class T>
+class concrete_protected_call
+   : public abstract_protected_call
+{
+public:
+   typedef bool (T::*proc_type)();
+   concrete_protected_call(T* o, proc_type p)
+      : obj(o), proc(p) {}
+private:
+   virtual bool call()const;
+   T* obj;
+   proc_type proc;
+};
+    
+    template <class traits, class charT, class Formatter>
+std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
+                         const basic_regex<charT, traits>& e, 
+                         Formatter fmt,
+                         match_flag_type flags = match_default)
+{
+   std::basic_string<charT> result;
+   BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<charT> > i(result);
+   regex_replace(i, s.begin(), s.end(), e, fmt, flags);
+   return result;
 }
     
-    const int32_t CAN_FRAME_SIZE = 8;
-const int32_t MAX_CAN_SEND_FRAME_LEN = 1;
-const int32_t MAX_CAN_RECV_FRAME_LEN = 10;
+      void onReceived(const DHTPingReplyMessage* message);
     
-    // method implementations
+    bool DHTRoutingTable::addNode(const std::shared_ptr<DHTNode>& node)
+{
+  return addNode(node, false);
+}
+    
+    class DHTNode;
+class DHTRoutingTable;
+class DHTMessageDispatcher;
+class DHTMessageFactory;
+class DHTTaskQueue;
+class DHTAbstractTask;
+    
+    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
+    
+      ~DHTTokenTracker();
+    
+    class DHTTokenUpdateCommand : public TimeBasedCommand {
+private:
+  DHTTokenTracker* tokenTracker_;
+    }
+    
+    std::string DHTUnknownMessage::toString() const
+{
+  size_t sampleLength = 8;
+  if (length_ < sampleLength) {
+    sampleLength = length_;
+  }
+  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
+             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
+             util::toHex(data_, sampleLength).c_str());
+}
+    
+      // do nothing; we don't use this message as outgoing message.
+  virtual bool send() CXX11_OVERRIDE;
+    
+    DNSCache::AddrEntry::AddrEntry(const AddrEntry& c) = default;
+    
+    // Return the epilogue of generated mock file.
+grpc::string GetMockEpilogue(grpc_generator::File *file,
+                             const Parameters &params);
+    
+      // Instead, we're going to access it immediately, as if we just recieved this.
+    
+      // parse schema first, so we can use it to parse the data after
+  flatbuffers::Parser parser;
+  const char *include_directories[] = { 'samples', nullptr };
+  ok = parser.Parse(schemafile.c_str(), include_directories) &&
+       parser.Parse(jsonfile.c_str(), include_directories);
+  assert(ok);
+    
+    #include <stdio.h>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include 'flatbuffers/hash.h'
+    
+    #include <grpc++/impl/codegen/async_stream.h>
+#include <grpc++/impl/codegen/async_unary_call.h>
+#include <grpc++/impl/codegen/channel_interface.h>
+#include <grpc++/impl/codegen/client_unary_call.h>
+#include <grpc++/impl/codegen/method_handler_impl.h>
+#include <grpc++/impl/codegen/rpc_service_method.h>
+#include <grpc++/impl/codegen/service_type.h>
+#include <grpc++/impl/codegen/sync_stream.h>
+namespace MyGame {
+namespace Example {
+    }
+    }
+    
+    #include <grpc++/impl/codegen/async_stream.h>
+#include <grpc++/impl/codegen/async_unary_call.h>
+#include <grpc++/impl/codegen/method_handler_impl.h>
+#include <grpc++/impl/codegen/proto_utils.h>
+#include <grpc++/impl/codegen/rpc_method.h>
+#include <grpc++/impl/codegen/service_type.h>
+#include <grpc++/impl/codegen/status.h>
+#include <grpc++/impl/codegen/stub_options.h>
+#include <grpc++/impl/codegen/sync_stream.h>
+    
+    struct Parameters {
+  //Defines the custom parameter types for methods
+  //eg: flatbuffers uses flatbuffers.Builder as input for the client and output for the server
+  grpc::string custom_method_io_type;
+    }
+    
+      template <class T> bool operator==(const unique_ptr<T>& x, intptr_t y) {
+    return reinterpret_cast<intptr_t>(x.get()) == y;
+  }
+#endif  // !FLATBUFFERS_CPP98_STL
