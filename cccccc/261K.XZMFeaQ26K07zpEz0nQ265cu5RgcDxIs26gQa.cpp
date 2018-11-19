@@ -1,119 +1,171 @@
 
         
-        #undef cv_hal_resize
-#define cv_hal_resize TEGRA_RESIZE
-//warpAffine/warpPerspective disabled due to rounding accuracy issue
-//#undef cv_hal_warpAffine
-//#define cv_hal_warpAffine TEGRA_WARPAFFINE
-//#undef cv_hal_warpPerspective
-//#define cv_hal_warpPerspective TEGRA_WARPPERSPECTIVE
-    
-        /*
-        Convert YUV420i image to BGRX
-    */
-    void yuv420i2bgrx(const Size2D &size,
-                      const u8 *  yBase, ptrdiff_t  yStride,
-                      const u8 * uvBase, ptrdiff_t uvStride,
-                      u8 * dstBase, ptrdiff_t dstStride);
-    
-    SPLIT4ALPHA(u,8)
-    
-    #define COMBINE64(sgn,n) void combine##n(const Size2D &_size                                                \
-                                               FILL_LINES##n(FARG, sgn##64),                                \
-                                               sgn##64 * dstBase, ptrdiff_t dstStride)                      \
-{                                                                                                           \
-    internal::assertSupportedConfiguration();                                                               \
-    Size2D size(_size);                                                                                     \
-    if (CONTSRC##n                                                                                          \
-        dstStride == (ptrdiff_t)(size.width))                                                               \
-    {                                                                                                       \
-        size.width *= size.height;                                                                          \
-        size.height = 1;                                                                                    \
-    }                                                                                                       \
-    typedef internal::VecTraits<sgn##64, n>::vec64 vec64;                                                   \
-                                                                                                            \
-    for (size_t i = 0u; i < size.height; ++i)                                                               \
-    {                                                                                                       \
-        FILL_LINES##n(VROW, sgn##64)                                                                        \
-        sgn##64 * dst = internal::getRowPtr(dstBase, dstStride, i);                                         \
-        size_t sj = 0u, dj = 0u;                                                                            \
-                                                                                                            \
-        for (; sj < size.width; ++sj, dj += n)                                                              \
-        {                                                                                                   \
-            vec64 v_dst;                                                                                    \
-            FILL_LINES##n(VLD1, sgn##64)                                                                    \
-            vst##n##_##sgn##64(dst + dj, v_dst);                                                            \
-            /*FILL_LINES##n(SLD, sgn##64)*/                                                                 \
-        }                                                                                                   \
-    }                                                                                                       \
-}
-    
-    template <typename T>
-inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
-{
-    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
-    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
-}
-    
-                s32 val = 0;
-            for (s32 _y = 0; _y < 3; ++_y)
-                val += prevx[_y] * kernelBase[(2 - _y) * 3 + 2] +
-                       currx[_y] * kernelBase[(2 - _y) * 3 + 1] +
-                       nextx[_y] * kernelBase[(2 - _y) * 3 + 0];
-    
-                for( ; i <= lim; i += 4 )
-            {
-                internal::prefetch(src0 + i);
-                internal::prefetch(src1 + i);
-                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
-            }
-    
-    u8 cornerScore(const u8* ptr, const ptrdiff_t pixel[])
-{
-    const s32 K = 8, N = 16 + K + 1;
-    s32 k, v = ptr[0];
-    s16 d[(N + 7) & ~7];
-    for( k = 0; k < N; k++ )
-        d[k] = (s16)(v - ptr[pixel[k]]);
+            for (int n = 0; n < 50; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
     }
     
-        minLocCapacity <<= 1;
-    maxLocCapacity <<= 1;
+            D3D12_TEXTURE_COPY_LOCATION srcLocation = {};
+        srcLocation.pResource = uploadBuffer;
+        srcLocation.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+        srcLocation.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        srcLocation.PlacedFootprint.Footprint.Width = width;
+        srcLocation.PlacedFootprint.Footprint.Height = height;
+        srcLocation.PlacedFootprint.Footprint.Depth = 1;
+        srcLocation.PlacedFootprint.Footprint.RowPitch = uploadPitch;
     
-        u32 step_base = 16 / sizeof(T), step_tail = 8 / sizeof(T);
-    size_t roiw_base = size.width >= (step_base - 1) ? size.width - step_base + 1 : 0;
-    size_t roiw_tail = size.width >= (step_tail - 1) ? size.width - step_tail + 1 : 0;
     
-    // calculate reciprocal value
+    {        // [Internals]
+        FontInfo        Info;               // Font descriptor of the current font.
+        unsigned int    UserFlags;          // = ImFontConfig::RasterizerFlags
+        FT_Library      FreetypeLibrary;
+        FT_Face         FreetypeFace;
+        FT_Int32        FreetypeLoadFlags;
+    };
     
-    #if !defined(__SSE4_1__)
-// This code can't compile with '-msse4.1', so use dummy stubs.
+    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
+}
     
-    #include <cstdint>      // for int32_t
     
-      // Factory makes and returns an IntSimdMatrix (sub)class of the best
-  // available type for the current architecture.
-  static IntSimdMatrix* GetFastestMultiplier();
-    
-    #include <cstdint>  // for int16_t
-    
-      /**
-   * Returns the type of the current block. See apitypes.h for
-   * PolyBlockType.
-   */
-  PolyBlockType BlockType() const;
-    
-    bool read_unlv_file(                    //print list of sides
-                     STRING name,        //basename of file
-                     int32_t xsize,        //image size
-                     int32_t ysize,        //image size
-                     BLOCK_LIST *blocks  //output list
-                    ) {
-  FILE *pdfp;                    //file pointer
-  BLOCK *block;                  //current block
-  int x;                         //current top-down coords
-  int y;
-  int width;                     //of current block
-  int height;
-  BLOCK_IT block_it = blocks;    //block iterator
+    {    ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
+    if (imgui_cursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
+    {
+        // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
+        ::SetCursor(NULL);
     }
+    else
+    {
+        // Show OS mouse cursor
+        LPTSTR win32_cursor = IDC_ARROW;
+        switch (imgui_cursor)
+        {
+        case ImGuiMouseCursor_Arrow:        win32_cursor = IDC_ARROW; break;
+        case ImGuiMouseCursor_TextInput:    win32_cursor = IDC_IBEAM; break;
+        case ImGuiMouseCursor_ResizeAll:    win32_cursor = IDC_SIZEALL; break;
+        case ImGuiMouseCursor_ResizeEW:     win32_cursor = IDC_SIZEWE; break;
+        case ImGuiMouseCursor_ResizeNS:     win32_cursor = IDC_SIZENS; break;
+        case ImGuiMouseCursor_ResizeNESW:   win32_cursor = IDC_SIZENESW; break;
+        case ImGuiMouseCursor_ResizeNWSE:   win32_cursor = IDC_SIZENWSE; break;
+        case ImGuiMouseCursor_Hand:         win32_cursor = IDC_HAND; break;
+        }
+        ::SetCursor(::LoadCursor(NULL, win32_cursor));
+    }
+    return true;
+}
+    
+    // Demo helper function to select among default colors. See ShowStyleEditor() for more advanced options.
+// Here we use the simplified Combo() api that packs items into a single literal string. Useful for quick combo boxes where the choices are known locally.
+bool ImGui::ShowStyleSelector(const char* label)
+{
+    static int style_idx = -1;
+    if (ImGui::Combo(label, &style_idx, 'Classic\0Dark\0Light\0'))
+    {
+        switch (style_idx)
+        {
+        case 0: ImGui::StyleColorsClassic(); break;
+        case 1: ImGui::StyleColorsDark(); break;
+        case 2: ImGui::StyleColorsLight(); break;
+        }
+        return true;
+    }
+    return false;
+}
+    
+        // Create Swapchain
+    {
+        VkSwapchainCreateInfoKHR info = {};
+        info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        info.surface = wd->Surface;
+		info.minImageCount = min_image_count;
+        info.imageFormat = wd->SurfaceFormat.format;
+        info.imageColorSpace = wd->SurfaceFormat.colorSpace;
+        info.imageArrayLayers = 1;
+        info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;           // Assume that graphics family == present family
+        info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+        info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        info.presentMode = wd->PresentMode;
+        info.clipped = VK_TRUE;
+        info.oldSwapchain = old_swapchain;
+        VkSurfaceCapabilitiesKHR cap;
+        err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device, wd->Surface, &cap);
+        check_vk_result(err);
+        if (info.minImageCount < cap.minImageCount)
+			info.minImageCount = cap.minImageCount;
+		else if (cap.maxImageCount != 0 && info.minImageCount > cap.maxImageCount)
+			info.minImageCount = cap.maxImageCount;
+    }
+    
+    #pragma once
+    
+    // Set default OpenGL loader to be gl3w
+#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
+#define IMGUI_IMPL_OPENGL_LOADER_GL3W
+#endif
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace atomics
+} // namespace mars_boost
+    
+    #pragma once
+    
+    	Subspace Subspace::subspace(Tuple const& tuple) const {
+		return Subspace(tuple, rawPrefix);
+	}
+    
+    #include 'flow/flow.h'
+#include 'bindings/flow/fdb_flow.h'
+#include 'Tuple.h'
+    
+    		Tuple& append(Tuple const& tuple);
+		Tuple& append(StringRef const& str, bool utf8=false);
+		Tuple& append(int32_t);
+		Tuple& append(int64_t);
+		Tuple& append(bool);
+		Tuple& append(float);
+		Tuple& append(double);
+		Tuple& append(Uuid);
+		Tuple& appendNested(Tuple const&);
+		Tuple& appendNull();
+    
+    
+    {
+    {
+    {			TraceEvent('TransactionTrace_CommitError').detail('TransactionID', id).detail('ErrCode', errCode);
+		}
+	};
+}
+    
+    		if( populationSize <= sampleSize ) {
+			samples.push_back( sample );
+		} else if( g_random->random01() < ( (double)sampleSize / populationSize ) ) {
+			samples[ g_random->randomInt( 0, sampleSize ) ] = sample;
+		}
