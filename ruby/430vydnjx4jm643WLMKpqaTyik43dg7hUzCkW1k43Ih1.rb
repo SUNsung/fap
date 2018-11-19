@@ -1,38 +1,49 @@
 
         
-            def empty?
-      @entries.empty?
+          describe 'faulty key' do
+    before :all do
+      @base_method = @method
     end
     
-        def add(path, content)
-      @pages[path] = content
-    end
+    describe 'Kernel#system' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:system)
+  end
     
-        def initialize(content)
-      @content = content
-      @html = document? ? parse_as_document : parse_as_fragment
-    end
-    
-        def relative_path_from(url)
-      self.class.parse(url).relative_path_to(self)
+      it 'no raises error on fixnum values' do
+    [1].each do |v|
+      lambda { v.taint }.should_not raise_error(RuntimeError)
+      v.tainted?.should == false
     end
   end
 end
 
     
-      gem.required_ruby_version = '>= 2.0'
-  gem.add_dependency 'airbrussh', '>= 1.0.0'
-  gem.add_dependency 'i18n'
-  gem.add_dependency 'rake', '>= 10.0.0'
-  gem.add_dependency 'sshkit', '>= 1.9.0'
+    LogStash::Bundler.setup!
     
-    Given(/^the configuration is in a custom location$/) do
-  TestApp.move_configuration_to_custom_location('app')
-end
+        def validate_plugins!
+      @plugins_to_package.each do |plugin_name|
+        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
+          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
+        end
+      end
+    end
     
-      def test_file_exists(path)
-    exists?('f', path)
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+    
+        desc 'Generate a valid ssh-config'
+    task :ssh_config do
+      require 'json'
+      # Loop until the Vagrant box finishes SSH bootstrap
+      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
+          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
+      end
+      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
+      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
+    end
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
   end
-    
-            # Skip validation behavior if no validators are registered for this key
-        return super unless validators.key?(key)
