@@ -1,259 +1,597 @@
-uint32_t swap_endian(uint32_t val) {
-    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
-    return (val << 16) | (val >> 16);
+
+        
+        #include <QIcon>
+#include <QPixmap>
+#include <QString>
+    
+    #ifndef BITCOIN_QT_TRAFFICGRAPHWIDGET_H
+#define BITCOIN_QT_TRAFFICGRAPHWIDGET_H
+    
+    private:
+    reverse_lock(reverse_lock const&);
+    reverse_lock& operator=(reverse_lock const&);
+    
+    
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
     
-/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
-template <typename Dtype>
-class ConstantFiller : public Filler<Dtype> {
+    {        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, y, sizeof(y));
+        secp256k1_sha256_write(&sha, x, sizeof(x));
+        secp256k1_sha256_finalize(&sha, result);
+        ret = 1;
+    }
+    
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
+    }
+    
+        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
+    // takes a key=value pair followed by an OptArguments, making this valid.
+    // Because an OptArguments contains no semantic data, there is no point in
+    // parsing it.
+    CheckParseTorReplyMapping(
+        'SOME=args,here MORE optional=arguments  here', {
+            {'SOME', 'args,here'},
+        });
+    
+        BOOST_CHECK(obj.exists('age'));
+    BOOST_CHECK(obj.exists('first'));
+    BOOST_CHECK(obj.exists('last'));
+    BOOST_CHECK(obj.exists('distance'));
+    BOOST_CHECK(obj.exists('time'));
+    BOOST_CHECK(obj.exists('calories'));
+    BOOST_CHECK(obj.exists('temperature'));
+    BOOST_CHECK(obj.exists('moon'));
+    BOOST_CHECK(obj.exists('spoon'));
+    BOOST_CHECK(obj.exists('cat1'));
+    BOOST_CHECK(obj.exists('cat2'));
+    
+    // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+        base::win::ShortcutProperties props;
+    base::string16 appID;
+    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
+      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
+    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
+    props.set_app_id(appID);
+    
+      static void Call(content::Shell* shell,
+                   const std::string& method,
+                   const base::ListValue& arguments,
+                   base::ListValue* result,
+                   DispatcherHost* dispatcher_host);
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    #include 'content/nw/src/api/bindings_common.h'
+    
+    namespace nwapi {
+    }
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    #include 'base/logging.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+    
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+        bool enabled;
+    if (option.GetBoolean('enabled', &enabled))
+      SetEnabled(enabled);
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
  public:
-  explicit ConstantFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    const int count = blob->count();
-    const Dtype value = this->filler_param_.value();
-    CHECK(count);
-    for (int i = 0; i < count; ++i) {
-      data[i] = value;
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
 };
     
-      /**
-   * Caffe's thread local state will be initialized using the current
-   * thread values, e.g. device id, solver index etc. The random seed
-   * is initialized using caffe_rng_rand.
-   */
-  void StartInternalThread();
+    using namespace extensions::nwapi::nw__screen;
+using namespace content;
     
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
+            //horizontal convolution (2 lines from previous iteration)
+        if (i > 0)
+        {
+            f32* dstb = internal::getRowPtr(dstBase, dstStride, i-1);
+            x = 0;
+            for (; x <= colsn - 4; x += 4)
+            {
+                internal::prefetch(laneA + x + cn);
+                internal::prefetch(laneB + x + cn);
+box3x3f32_horiz:
+                float32x4_t lane0a = vld1q_f32(laneA + x - cn);
+                float32x4_t lane2a = vld1q_f32(laneA + x + cn);
+                float32x4_t lane1a = vld1q_f32(laneA + x);
     }
-    return layer_types_str;
+    }
+    
+        for (size_t i = 0u; i < size.height; ++i)
+    {
+        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t sj = 0u, dj = 0u;
+    }
+    
+    s32 countNonZero(const Size2D &_size,
+                 const f64 * srcBase, ptrdiff_t srcStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw8 = size.width & ~7u;
+    size_t roiw4 = size.width & ~3u;
+    size_t roiw2 = size.width & ~1u;
+    uint64x2_t vmask1 = vdupq_n_u64(0x7fFFffFFffFFffFFULL); //will treat denormals as non-zero
+    uint32x4_t vc0 = vmovq_n_u32(0);
+    }
+    
+            while(i + 16 <= size.width)
+        {
+            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
+    }
+    
+                    uint8x16_t c0 = vmovq_n_u8(0);
+                uint8x16_t c1 = vmovq_n_u8(0);
+                uint8x16_t max0 = vmovq_n_u8(0);
+                uint8x16_t max1 = vmovq_n_u8(0);
+                for( k = 0; k < N; k++ )
+                {
+                    int8x16_t x = vreinterpretq_s8_u8(veorq_u8(vld1q_u8(ptr + pixel[k]), delta));
+                    m0 = vcgtq_s8(x, v2);
+                    m1 = vcgtq_s8(v1, x);
+    }
+    
+      /// @brief Deprecated legacy shape accessor num: use shape(0) instead.
+  inline int num() const { return LegacyShape(0); }
+  /// @brief Deprecated legacy shape accessor channels: use shape(1) instead.
+  inline int channels() const { return LegacyShape(1); }
+  /// @brief Deprecated legacy shape accessor height: use shape(2) instead.
+  inline int height() const { return LegacyShape(2); }
+  /// @brief Deprecated legacy shape accessor width: use shape(3) instead.
+  inline int width() const { return LegacyShape(3); }
+  inline int LegacyShape(int index) const {
+    CHECK_LE(num_axes(), 4)
+        << 'Cannot use legacy accessors on Blobs with > 4 axes.';
+    CHECK_LT(index, 4);
+    CHECK_GE(index, -4);
+    if (index >= num_axes() || index < -num_axes()) {
+      // Axis is out of range, but still in [0, 3] (or [-4, -1] for reverse
+      // indexing) -- this special case simulates the one-padding used to fill
+      // extraneous axes of legacy blobs.
+      return 1;
+    }
+    return shape(index);
   }
-};
     
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/sigmoid_layer.hpp'
-    
-      // Computes matrix.vector v = Wu.
-  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
-  // u is imagined to have an extra element at the end with value 1, to
-  // implement the bias, but it doesn't actually have it.
-  // Computes the base C++ implementation, if there are no partial_funcs_.
-  // NOTE: The size of the input vector (u) must be padded using
-  // RoundInputs above.
-  // The input will be over-read to the extent of the padding. There are no
-  // alignment requirements.
-  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                       const GenericVector<double>& scales, const int8_t* u,
-                       double* v) const;
-    
-    // Computes one set of 4x8 products of inputs and weights, adding to result.
-// Horizontally adds 4 adjacent results, making 8x32-bit results.
-// rep_input is assumed to be an 8x replicated set of 4x8-bit signed integers.
-// Note that wi must previously have been re-organized with blocks of 4x8
-// weights in contiguous memory.
-// ones is a register of 16x16-bit values all equal to 1.
-// Note: wi is incremented by the amount of data read.
-// weights and reps are scratch registers.
-// This function must be inlined with references in order for the compiler to
-// correctly use the registers declared in the caller.
-inline void MultiplyGroup(const __m256i& rep_input, const __m256i& ones,
-                          const int8_t*& wi, __m256i& weights, __m256i& reps,
-                          __m256i& result) {
-  // Load a 4x8 block of weights.
-  weights = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(wi));
-  wi += kNumInputsPerRegister;
-  // Normalize the signs on rep_input, weights, so weights is always +ve.
-  reps = _mm256_sign_epi8(rep_input, weights);
-  weights = _mm256_sign_epi8(weights, weights);
-  // Multiply 32x8-bit reps by 32x8-bit weights to make 16x16-bit results,
-  // with adjacent pairs added.
-  weights = _mm256_maddubs_epi16(weights, reps);
-  // Multiply 16x16-bit result by 16x16-bit ones to make 8x32-bit results,
-  // with  adjacent pairs added. What we really want is a horizontal add of
-  // 16+16=32 bit result, but there is no such instruction, so multiply by
-  // 16-bit ones instead. It is probably faster than all the sign-extending,
-  // permuting and adding that would otherwise be required.
-  weights = _mm256_madd_epi16(weights, ones);
-  result = _mm256_add_epi32(result, weights);
+    // Forward and backward wrappers. You should implement the cpu and
+// gpu specific implementations instead, and should not change these
+// functions.
+template <typename Dtype>
+inline Dtype Layer<Dtype>::Forward(const vector<Blob<Dtype>*>& bottom,
+    const vector<Blob<Dtype>*>& top) {
+  Dtype loss = 0;
+  Reshape(bottom, top);
+  switch (Caffe::mode()) {
+  case Caffe::CPU:
+    Forward_cpu(bottom, top);
+    for (int top_id = 0; top_id < top.size(); ++top_id) {
+      if (!this->loss(top_id)) { continue; }
+      const int count = top[top_id]->count();
+      const Dtype* data = top[top_id]->cpu_data();
+      const Dtype* loss_weights = top[top_id]->cpu_diff();
+      loss += caffe_cpu_dot(count, data, loss_weights);
+    }
+    break;
+  case Caffe::GPU:
+    Forward_gpu(bottom, top);
+#ifndef CPU_ONLY
+    for (int top_id = 0; top_id < top.size(); ++top_id) {
+      if (!this->loss(top_id)) { continue; }
+      const int count = top[top_id]->count();
+      const Dtype* data = top[top_id]->gpu_data();
+      const Dtype* loss_weights = top[top_id]->gpu_diff();
+      Dtype blob_loss = 0;
+      caffe_gpu_dot(count, data, loss_weights, &blob_loss);
+      loss += blob_loss;
+    }
+#endif
+    break;
+  default:
+    LOG(FATAL) << 'Unknown caffe mode.';
+  }
+  return loss;
 }
     
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
-        }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
-    
-    ConstraintBullet::ConstraintBullet() :
-		space(NULL),
-		constraint(NULL),
-		disabled_collisions_between_bodies(true) {}
-    
-    class RigidBodyBullet;
-class SpaceBullet;
-class btTypedConstraint;
-    
-    class JointBullet : public ConstraintBullet {
-    }
-    
-    
-    {	memdelete(resource_loader_dds);
-}
+    #endif  // CAFFE_BATCHREINDEX_LAYER_HPP_
 
     
-    	resource_loader_pkm = memnew(ResourceFormatPKM);
-	ResourceLoader::add_resource_format_loader(resource_loader_pkm);
-    
-    	if (!valid)
-		return '';
-    
-        template <>
-    int16_t NDArrayView::AsScalar<int16_t>() const
-    {
-        return _AsScalar<int16_t, short>();
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
     }
     
-        private:
-        bool ShouldWriteUpdate(size_t update) const
-        {
-            if (m_frequency == 0)
-            {
-                // Geometric schedule - write at every 2^(i) steps, with i = 1, 2, 3, ...
-                return ((update + 1) & update) == 0;
-            }
-    }
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    
-    {    // Version history:
-    // 0 -- a version number before the versioning was introduced for the trainer's checkpoints.
-    // 1 -- initial version: added a key-value pair for the checkpoint version info, added
-    //      distributed state key to save all local state collected from distributed workers.
-    static const size_t trainerCheckpointVersion = 1;
+    void DHTReplaceNodeTask::onTimeout(const std::shared_ptr<DHTNode>& node)
+{
+  ++numRetry_;
+  if (numRetry_ >= MAX_RETRY) {
+    A2_LOG_INFO(fmt('ReplaceNode: Ping failed %d times. Replace %s with %s.',
+                    numRetry_, node->toString().c_str(),
+                    newNode_->toString().c_str()));
+    node->markBad();
+    bucket_->addNode(newNode_);
+    setFinished(true);
+  }
+  else {
+    A2_LOG_INFO(fmt('ReplaceNode: Ping reply timeout from %s. Try once more.',
+                    node->toString().c_str()));
+    sendMessage();
+  }
 }
     
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
+    #include <cstring>
     
-    #pragma once
+      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
+  {
+    return nodes_;
+  }
     
-    
-    {        return clonedVariable;
+    namespace aria2 {
     }
     
-        bool hasMultipleReaders = config.Exists(L'readers');
-    // In case when deserializers are specified, use the new logic to compose them.
-    bool hasDeserializers = config.Exists(L'deserializers');
-    if (hasMultipleReaders)
-    {
-        vector<wstring> ioNames = config(L'readers', ConfigRecordType::Array(stringargvector()));
-        // newer code that explicitly place multiple streams for inputs
-        for (const auto& ioName : ioNames) // inputNames should map to node names
-        {
-            const ConfigRecordType& thisIO = config(ioName);
-            wstring readerType = thisIO(L'readerType', L'Cntk.Deserializers.TextFormat');
-    }
-    }
+    #include 'common.h'
     
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Start();
-        }
+    DHTTaskExecutor::~DHTTaskExecutor() = default;
+    
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+      ~DHTTokenTracker();
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
+    
+    namespace aria2 {
     }
     
-        virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange& fr) override
-    {
-        auto sliceInputGrad  = InputRef(0).GradientFor(fr);
-        auto sliceOutputGrad =           GradientFor(fr);
+    static void ParseString(benchmark::State& state, const char* filename)
+{
+    std::ifstream f(filename);
+    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
     }
     
-    protected:
-    void CalculateAxisOffset()
-    {
-        if (m_offset < 0)
-        {
-            const auto& inputSampleLayout = Input(0)->GetSampleLayout();
-            const auto& inputDims = inputSampleLayout.GetDims();
-            size_t len = inputDims.size();
-            m_offset = m_axis < 0 ? (len + 1 + m_axis) % (len + 1) : m_axis % (len + 1);
-        }
-    }
+      // Set the number of bytes processed by the current benchmark
+  // execution.  This routine is typically called once at the end of a
+  // throughput oriented benchmark.  If this routine is called with a
+  // value > 0, the report is printed in MB/sec instead of nanoseconds
+  // per iteration.
+  //
+  // REQUIRES: a benchmark has exited its benchmarking loop.
+  BENCHMARK_ALWAYS_INLINE
+  void SetBytesProcessed(size_t bytes) { bytes_processed_ = bytes; }
     
-      /**
-   * \fn  virtual void Predictor::UpdatePredictionCache( const gbm::GBTreeModel
-   * &model, std::vector<std::unique_ptr<TreeUpdater> >* updaters, int
-   * num_new_trees) = 0;
-   *
-   * \brief Update the internal prediction cache using newly added trees. Will
-   * use the tree updater to do this if possible. Should be called as a part of
-   * the tree boosting process to facilitate the look up of predictions
-   * at a later time.
-   *
-   * \param           model         The model.
-   * \param [in,out]  updaters      The updater sequence for gradient boosting.
-   * \param           num_new_trees Number of new trees.
-   */
     
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
+    {  results.push_back(big_o);
+  results.push_back(rms);
+  return results;
+}
     
-    // logistic loss for binary classification task
-struct LogisticClassification : public LogisticRegression {
-  static const char* DefaultEvalMetric() { return 'error'; }
-};
+      if (result.report_big_o) {
+    std::string big_o = GetBigOString(result.complexity);
+    printer(Out, COLOR_YELLOW, '%10.2f %s %10.2f %s ', real_time, big_o.c_str(),
+            cpu_time, big_o.c_str());
+  } else if (result.report_rms) {
+    printer(Out, COLOR_YELLOW, '%10.0f %% %10.0f %% ', real_time * 100,
+            cpu_time * 100);
+  } else {
+    const char* timeLabel = GetTimeUnitString(result.time_unit);
+    printer(Out, COLOR_YELLOW, '%10.0f %s %10.0f %s ', real_time, timeLabel,
+            cpu_time, timeLabel);
+  }
