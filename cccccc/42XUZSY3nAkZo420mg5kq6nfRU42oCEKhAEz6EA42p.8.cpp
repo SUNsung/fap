@@ -1,419 +1,326 @@
 
         
-        class AtomContentClient : public brightray::ContentClient {
- public:
-  AtomContentClient();
-  ~AtomContentClient() override;
+        Status ModelAnalyzer::GenerateReport(bool debug, bool assume_valid_feeds,
+                                     std::ostream& os) {
+  GraphProperties properties(item_);
+  TF_RETURN_IF_ERROR(properties.InferStatically(assume_valid_feeds));
     }
     
-     private:
-  ~UvTaskRunner() override;
-  static void OnTimeout(uv_timer_t* timer);
-  static void OnClose(uv_handle_t* handle);
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/platform/mutex.h'
+#include 'tensorflow/python/lib/core/bfloat16.h'
+#include 'tensorflow/python/lib/core/ndarray_tensor_bridge.h'
     
-    void BrowserWindow::UpdateDraggableRegions(
-    content::RenderFrameHost* rfh,
-    const std::vector<DraggableRegion>& regions) {
-  if (window_->has_frame())
-    return;
-  static_cast<NativeWindowViews*>(window_.get())
-      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
-}
+    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
+// ImportNumpy function to populate it.
+#define TF_IMPORT_NUMPY
     
-      // Override download::DownloadItem::Observer methods
-  void OnDownloadUpdated(download::DownloadItem* download) override;
-  void OnDownloadDestroyed(download::DownloadItem* download) override;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
-
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    class Net : public mate::EventEmitter<Net> {
- public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
+    
+    {  uint64 offset_;
+  RandomAccessFile* file_;    // Owned
+  io::RecordReader* reader_;  // Owned
+  string record_;
+  TF_DISALLOW_COPY_AND_ASSIGN(PyRecordReader);
+};
+    
+    namespace tensorflow {
+namespace swig {
+    }
     }
     
-    namespace api {
-    }
+    // This file contains APIs that assume a StreamExecutor is backed by CUDA.
+// It reaches into the CUDA implementation to activate an underlying CUDA
+// context.
+//
+// Having this file separate from cuda_gpu_executor.h means that dependent
+// code does not also have to depend on cuda.h.
     
-    namespace api {
-    }
+      // Given a device ordinal, returns a device handle into the device outparam,
+  // which must not be null.
+  //
+  // N.B. these device handles do not have a corresponding destroy function in
+  // the CUDA driver API.
+  static port::Status GetDevice(int device_ordinal, CUdevice *device);
     
-    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
- public:
-  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
-                                  mate::Arguments* args);
-    }
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
     
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n) {
-  int max_offset = n - 2;
-  int offset = 0;
-  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
-  // v, and multiplying them together in parallel.
-  __m128d sum = _mm_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 2;
-    // Aligned load is reputedly faster but requires 16 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
-      // Use aligned load.
-      sum = _mm_load_pd(u);
-      __m128d floats2 = _mm_load_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_load_pd(u + offset);
-        floats2 = _mm_load_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
+      static const APCCollection* fromHandle(const APCHandle* handle) {
+    assertx(handle->checkInvariants());
+    assertx(handle->kind() == APCKind::SharedCollection);
+    static_assert(offsetof(APCCollection, m_handle) == 0, '');
+    return reinterpret_cast<const APCCollection*>(handle);
+  }
+    
+      if (need_file) {
+    char tmp[] = '/tmp/php-wrap-XXXXXX';
+    int tmp_fd = mkstemp(tmp);
+    if (tmp_fd == -1) {
+      fprintf(stderr, 'Error: unable to open temporary file');
+      exit(EXIT_FAILURE);
+    }
+    if (program == nullptr) {
+      // If the program wasn't specified on the command-line, ala' -r,
+      // is no command-line parameter, read the PHP file from stdin.
+      std::string line;
+      while (std::getline(std::cin, line)) {
+        write(tmp_fd, line.c_str(), line.length());
+        write(tmp_fd, '\n', 1);
       }
     } else {
-      // Use unaligned load.
-      sum = _mm_loadu_pd(u);
-      __m128d floats2 = _mm_loadu_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_loadu_pd(u + offset);
-        floats2 = _mm_loadu_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
+      // -r omits the braces
+      write(tmp_fd, '<?\n', 3);
+      write(tmp_fd, program, strlen(program));
+    }
+    close(tmp_fd);
+    }
+    
+    template<class Fn> void ExecutionContext::sweepDynPropTable(Fn fn) {
+  for (auto i = dynPropTable.begin(); i != dynPropTable.end();) {
+    if (fn(i->first)) {
+      i = dynPropTable.erase(i);
+    } else {
+      ++i;
     }
   }
-  // Add the 2 sums in sum horizontally.
-  sum = _mm_hadd_pd(sum, sum);
-  // Extract the low result.
-  double result = _mm_cvtsd_f64(sum);
-  // Add on any left-over products.
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
 }
     
-    // Constructor.
-// Tests the architecture in a system-dependent way to detect AVX, SSE and
-// any other available SIMD equipment.
-// __GNUC__ is also defined by compilers that include GNU extensions such as
-// clang.
-SIMDDetect::SIMDDetect() {
-#if defined(X86_BUILD)
-#if defined(__GNUC__)
-  unsigned int eax, ebx, ecx, edx;
-  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
-    // Note that these tests all use hex because the older compilers don't have
-    // the newer flags.
-    sse_available_ = (ecx & 0x00080000) != 0;
-    avx_available_ = (ecx & 0x10000000) != 0;
-    if (avx_available_) {
-      // There is supposed to be a __get_cpuid_count function, but this is all
-      // there is in my cpuid.h. It is a macro for an asm statement and cannot
-      // be used inside an if.
-      __cpuid_count(7, 0, eax, ebx, ecx, edx);
-      avx2_available_ = (ebx & 0x00000020) != 0;
-      avx512F_available_ = (ebx & 0x00010000) != 0;
-      avx512BW_available_ = (ebx & 0x40000000) != 0;
-    }
-  }
-#elif defined(_WIN32)
-  int cpuInfo[4];
-  __cpuid(cpuInfo, 0);
-  if (cpuInfo[0] >= 1) {
-    __cpuid(cpuInfo, 1);
-    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
-    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
-  }
-#else
-#error 'I don't know how to test for SIMD with this compiler'
-#endif
-#endif  // X86_BUILD
+    const StaticString s_slash('/');
+    
+    
+    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
+  // the stack frame will be wrong
+  ActRec* ar = g_context->getStackFrame();
+  const char* fn = (ar != nullptr)
+    ? ar->func()->name()->data()
+    : 'OPTIMIZED_BUILTIN';
+  raise_warning('%s(%s): failed to open stream: '
+                'wrapper does not support stream open',
+                fn, filename.data());
+  return nullptr;
 }
+    
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
+    
+            NDShape shape = sectionShape.AppendShape(NDShape(m_maskShape.Rank() - sectionShape.Rank(), NDShape::InferredDimension));
+    
+        void Trainer::Save(const std::wstring& modelFilePath, const std::vector<DictionaryValue>& learnerState, const Dictionary& externalState, const Dictionary& distributedState)
+    {
+        std::wstring tempModelFile = modelFilePath + L'.tmp';
+        Dictionary state;
+        state[versionPropertyName] = trainerCheckpointVersion;
+        state[learnersPropertyName] = learnerState;
+        state[externalStatePropertyName] = externalState;
+        state[distributedStatePropertyName] = distributedState;
+    }
+    
+    namespace CNTK
+{
+    class UDFUtils
+    {
+    public:
+    }
+    }
+    
+            ValuePtr DeepClone(bool readOnly) const override
+        {
+            if (m_isPacked)
+            {
+                std::shared_ptr<Microsoft::MSR::CNTK::MBLayout> packedLayoutCopy;
+                if (m_packedDataLayout)
+                {
+                    packedLayoutCopy = std::make_shared<Microsoft::MSR::CNTK::MBLayout>();
+                    packedLayoutCopy->CopyFrom(m_packedDataLayout);
+                }
+                return MakeSharedObject<PackedValue>(m_sampleShape, m_sampleDynamicAxes, m_packedData->DeepClone(readOnly), packedLayoutCopy, readOnly);
+            }
+            else
+                return Value::DeepClone(readOnly);
+        }
+    
+        void Variable::SetOwner(const std::weak_ptr<Function>& ownerFunction)
+    {
+        if (Kind() != VariableKind::Output)
+            LogicError('Variable '%S' SetOwner: Owner can only be set for Output Variables', AsString().c_str());
+    }
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+    public:
+    DeclareConstructorFromConfigWithNumInputs(DiagTimesNode);
+    DiagTimesNode(DEVICEID_TYPE deviceId, const wstring& name)
+        : Base(deviceId, name)
+    {
+    }
+    
+      /**
+   * \fn  static Predictor* Predictor::Create(std::string name);
+   *
+   * \brief Creates a new Predictor*.
+   *
+   */
+    
+    #include <cstdio>
+#include <cstring>
+#include <string>
+#include <istream>
+#include <fstream>
+    
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
+ */
+class SparsePageWriter {
+ public:
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
+    }
+    
+    /*!
+ * \brief Macro to register tree split evaluator.
+ *
+ * \code
+ * // example of registering a split evaluator
+ * XGBOOST_REGISTER_SPLIT_EVALUATOR(SplitEval, 'splitEval')
+ * .describe('Some split evaluator')
+ * .set_body([]() {
+ *     return new SplitEval();
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_SPLIT_EVALUATOR(UniqueID, Name) \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::tree::SplitEvaluatorReg& \
+  __make_ ## SplitEvaluatorReg ## _ ## UniqueID ## __ = \
+      ::dmlc::Registry< ::xgboost::tree::SplitEvaluatorReg>::Get()->__REGISTER__(Name)  //NOLINT
+    
+    #endif // D_DHT_REPLACE_NODE_TASK_H
 
     
-      // Count the number of values in sorted_vec that is close to val, used to
-  // check if a partition is aligned with text partitions.
-  int CountAlignment(
-      const GenericVector<int>& sorted_vec, const int val) const;
+    public:
+  DHTRoutingTableSerializer(int family);
     
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
-        }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
     
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-          // Wait threads to complete
-      while (!shared.AllDone()) {
-        shared.GetCondVar()->Wait();
-      }
-    
-      // REQUIRES: DB mutex held
-  // Build ColumnFamiliesOptions with immutable options and latest mutable
-  // options.
-  ColumnFamilyOptions GetLatestCFOptions() const;
-    
-    class DBEncryptionTest : public DBTestBase {
- public:
-  DBEncryptionTest() : DBTestBase('/db_encryption_test') {}
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
 };
     
-    
-    {  // Sleep just until `num_bytes` is allowed.
-  uint64_t sleep_amount =
-      static_cast<uint64_t>(num_bytes /
-                            static_cast<long double>(delayed_write_rate_) *
-                            kMicrosPerSecond) +
-      sleep_debt;
-  last_refill_time_ = time_now + sleep_amount;
-  return sleep_amount;
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
 }
     
-    #include <atomic>
-#include <memory>
-#include 'rocksdb/rate_limiter.h'
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
     
-    // Decrypt one or more (partial) blocks of data at the file offset.
-// Length of data is given in dataSize.
-Status BlockAccessCipherStream::Decrypt(uint64_t fileOffset, char *data, size_t dataSize) {
-  // Calculate block index
-  auto blockSize = BlockSize();
-  uint64_t blockIndex = fileOffset / blockSize;
-  size_t blockOffset = fileOffset % blockSize;
-  unique_ptr<char[]> blockBuffer;
+    // Represents one component of a jpeg file.
+struct JPEGComponent {
+  JPEGComponent() : id(0),
+                    h_samp_factor(1),
+                    v_samp_factor(1),
+                    quant_idx(0),
+                    width_in_blocks(0),
+                    height_in_blocks(0) {}
     }
     
-      virtual Status GetFileModificationTime(const std::string& fname,
-                                         uint64_t* time) override;
-    
-      std::string scratch;
-  scratch.resize(kGood.size() + kCorrupted.size() + 16);
-  Slice result;
-  unique_ptr<RandomAccessFile> rand_file;
-  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-    int main() {
-  DB* db;
-  Options options;
-  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
-  options.IncreaseParallelism();
-  options.OptimizeLevelStyleCompaction();
-  // create the DB if it's not already present
-  options.create_if_missing = true;
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
-    
-    void DHTReplaceNodeTask::onTimeout(const std::shared_ptr<DHTNode>& node)
-{
-  ++numRetry_;
-  if (numRetry_ >= MAX_RETRY) {
-    A2_LOG_INFO(fmt('ReplaceNode: Ping failed %d times. Replace %s with %s.',
-                    numRetry_, node->toString().c_str(),
-                    newNode_->toString().c_str()));
-    node->markBad();
-    bucket_->addNode(newNode_);
-    setFinished(true);
   }
-  else {
-    A2_LOG_INFO(fmt('ReplaceNode: Ping reply timeout from %s. Try once more.',
-                    node->toString().c_str()));
-    sendMessage();
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
   }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
 }
     
-    std::string DHTResponseMessage::toString() const
-{
-  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
-             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
-             getRemoteNode()->getIPAddress().c_str(),
-             getRemoteNode()->getPort(),
-             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
-             util::torrentPercentEncode(getVersion()).c_str(),
-             toStringOptional().c_str());
-}
+    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
+#define GUETZLI_JPEG_DATA_DECODER_H_
     
-    void DHTRoutingTable::showBuckets() const
-{
-  /*
-    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
-    buckets_.begin(); itr != buckets_.end(); ++itr) {
-    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
-    << 'nodes = ' << (*itr)->countNode() << endl;
-    }
-  */
-}
-    
-      char zero[18];
-  memset(zero, 0, sizeof(zero));
-    
-      ~DHTSetup();
-    
-    void DHTTaskFactoryImpl::setTaskQueue(DHTTaskQueue* taskQueue)
-{
-  taskQueue_ = taskQueue;
-}
-    
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
-    
-    std::string DHTUnknownMessage::toString() const
-{
-  size_t sampleLength = 8;
-  if (length_ < sampleLength) {
-    sampleLength = length_;
+    void BuildHuffmanCodeTable(const int* counts, const int* values,
+                           HuffmanCodeTable* table) {
+  int huffcode[256];
+  int huffsize[256];
+  int p = 0;
+  for (int l = 1; l <= kJpegHuffmanMaxBitLength; ++l) {
+    int i = counts[l];
+    while (i--) huffsize[p++] = l;
   }
-  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
-             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
-             util::toHex(data_, sampleLength).c_str());
-}
-    
-    
-    {  static const std::string UNKNOWN;
-};
-    
-    TEST(Expected, CoroutineSuccess) {
-  auto r0 = []() -> Expected<int, Err> {
-    auto x = co_await f1();
-    EXPECT_EQ(7, x);
-    auto y = co_await f2(x);
-    EXPECT_EQ(2.0 * 7, y);
-    auto z = co_await f3(x, y);
-    EXPECT_EQ(int(2.0 * 7 + 7), *z);
-    co_return* z;
-  }();
-  EXPECT_TRUE(r0.hasValue());
-  EXPECT_EQ(21, *r0);
-}
-    
-    /// Returns a keep-alive token which guarantees that Executor will keep
-/// processing tasks until the token is released (if supported by Executor).
-/// KeepAlive always contains a valid pointer to an Executor.
-template <typename ExecutorT>
-Executor::KeepAlive<ExecutorT> getKeepAliveToken(ExecutorT* executor) {
-  static_assert(
-      std::is_base_of<Executor, ExecutorT>::value,
-      'getKeepAliveToken only works for folly::Executor implementations.');
-  return Executor::getKeepAliveToken(executor);
-}
-    
-    namespace detail {
     }
-    
-    using UriTuple = std::tuple<
-    const std::string&,
-    const std::string&,
-    const std::string&,
-    const std::string&,
-    uint16_t,
-    const std::string&,
-    const std::string&,
-    const std::string&>;
-    
-    #include <folly/DefaultKeepAliveExecutor.h>
-    
-      // Test converions to floating point durations
-  ts.tv_sec = 1;
-  ts.tv_nsec = 500000000;
-  EXPECT_EQ(1.5, to<duration<double>>(ts).count());
-  ts.tv_sec = -1;
-  ts.tv_nsec = 500000000;
-  EXPECT_EQ(-0.5, to<duration<double>>(ts).count());
-  ts.tv_sec = -1;
-  ts.tv_nsec = -500000000;
-  EXPECT_EQ(-1.5, to<duration<double>>(ts).count());
-  ts.tv_sec = 1;
-  ts.tv_nsec = 500000000;
-  auto doubleNanos = to<duration<double, std::nano>>(ts);
-  EXPECT_EQ(1500000000, doubleNanos.count());
-  ts.tv_sec = 90;
-  ts.tv_nsec = 0;
-  auto doubleMinutes = to<duration<double, std::ratio<60>>>(ts);
-  EXPECT_EQ(1.5, doubleMinutes.count());
-    
-    /**
- * Get a codec with the given options and compression level.
- *
- * If the windowSize is 15 and the format is Format::ZLIB or Format::GZIP, then
- * the type of the codec will be CodecType::ZLIB or CodecType::GZIP
- * respectively. Otherwise, the type will be CodecType::USER_DEFINED.
- *
- * Automatic uncompression is not supported with USER_DEFINED codecs.
- *
- * Levels supported: 0 = no compression, 1 = fast, ..., 9 = best; default = 6
- */
-std::unique_ptr<Codec> getCodec(
-    Options options = Options(),
-    int level = COMPRESSION_LEVEL_DEFAULT);
-std::unique_ptr<StreamCodec> getStreamCodec(
-    Options options = Options(),
-    int level = COMPRESSION_LEVEL_DEFAULT);
-    
-     private:
-  // Matches packed_sync_pointer.  Must be > max number of local
-  // counts.  This is the max number of threads that can access this
-  // atomic_shared_ptr at once before we start blocking.
-  static constexpr unsigned EXTERNAL_OFFSET{0x2000};
-  // Bit signifying aliased constructor
-  static constexpr unsigned ALIASED_PTR{0x4000};
-    
-      template <class, size_t>
-  friend class CoreCachedWeakPtr;
