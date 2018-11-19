@@ -1,296 +1,359 @@
 
         
-        void absDiff(const Size2D &size,
-             const s8 *src0Base, ptrdiff_t src0Stride,
-             const s8 *src1Base, ptrdiff_t src1Stride,
-             s8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiffSigned<s8>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+        /* This macro must be used in C++98 for calls from inside a template.  But we
+ * define this variant in all cases; code that wants to be compatible with both
+ * C++98 and C++11 should always use this macro when calling from a template. */
+#define UpbMakeHandlerT(f) upb::MatchFunc(f).template GetFunc<f>()
+    
+    #include <sstream>
+    
+    const FieldGeneratorInfo* Context::GetFieldGeneratorInfo(
+    const FieldDescriptor* field) const {
+  const FieldGeneratorInfo* result =
+      FindOrNull(field_generator_info_map_, field);
+  if (result == NULL) {
+    GOOGLE_LOG(FATAL) << 'Can not find FieldGeneratorInfo for field: '
+               << field->full_name();
+  }
+  return result;
 }
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8 * src0 = internal::getRowPtr(src0Base, src0Stride, i);
-        const s16 * src1 = internal::getRowPtr(src1Base, src1Stride, i);
-        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        v_dst = vorrq_u8(v_src0, v_src1);
-    }
-    
-            NormCanny<L2gradient>(size.width*cn, _dx, _dy, _norm);
-    
-    #define SPLIT_QUAD(sgn, bits, n) { \
-                                     internal::prefetch(src + sj); \
-                                     vec128 v_src = vld##n##q_##sgn##bits(src + sj); \
-                                     FILL_LINES##n(VST1Q, sgn##bits) \
-                                 }
-    
-    template <typename Op>
-void vcompare(Size2D size,
-              const typename Op::type * src0Base, ptrdiff_t src0Stride,
-              const typename Op::type * src1Base, ptrdiff_t src1Stride,
-              u8 * dstBase, ptrdiff_t dstStride, const Op & op)
-{
-    typedef typename Op::type type;
-    typedef typename internal::VecTraits<type>::vec128 vec128;
-    typedef typename internal::VecTraits<type>::unsign::vec128 uvec128;
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, u16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                             \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                             \n\t'
-            'vcvt.f32.s32 q4, q2                                    \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vmul.f32 q6, q4, q0                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vadd.f32 q8, q6, q1                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vcvt.s32.f32 q10, q8                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vqmovun.s32 d24, q10                                   \n\t'
-            'vqmovun.s32 d25, q11                                   \n\t'
-            'vst1.16 {d24-d25}, [%[dst]]                            \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25'
-        );
-    }
-})
-#else
-CVTS_FUNC(s32, u16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
-        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
-        vst1q_u16(_dst + i, vcombine_u16(vRes1, vRes2));
-    }
-})
-#endif
-    
-    s32 countNonZero(const Size2D &_size,
-                 const u16 * srcBase, ptrdiff_t srcStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    size_t roiw8 = size.width & ~7u;
-    s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
-    {
-        const u16* src = internal::getRowPtr( srcBase,  srcStride, k);
-        size_t i = 0;
-    }
-    }
-    
-    
-    {
-    {
-    {                    for( k = 0; k < N; k++ )
-                    {
-                        s32 x = ptr[pixel[k]];
-                        if(x > vt)
-                        {
-                            if( ++count > K )
-                            {
-                                cornerpos[ncorners++] = j;
-                                if(nonmax_suppression)
-                                    curr[j] = cornerScore(ptr, pixel);
-                                break;
-                            }
-                        }
-                        else
-                            count = 0;
-                    }
-                }
-            }
-        }
-    
-    
-    {            if (mask)
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-    
-    namespace CAROTENE_NS {
-    }
-    
-    
-    {
-    {OPERATOR_SCHEMA(ExtendTensor)
-    .NumInputs(2)
-    .NumOutputs(1)
-    .EnforceInplace({{0, 0}})
-    .SetDoc(R'DOC(
-Extend input 0 if necessary based on max element in input 1.
-Input 0 must be the same as output, that is, it is required to be in-place.
-Input 0 may have to be re-allocated in order for accommodate to the new size.
-Currently, an exponential growth ratio is used in order to ensure amortized
-constant time complexity.
-All except the outer-most dimension must be the same between input 0 and 1.
-)DOC')
-    .Input(0, 'tensor', 'The tensor to be extended.')
-    .Input(
-        1,
-        'new_indices',
-        'The size of tensor will be extended based on max element in '
-        'new_indices.')
-    .Output(
-        0,
-        'extended_tensor',
-        'Same as input 0, representing the mutated tensor.');
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  }
 }
+    
+    void ImmutableMapFieldGenerator::
+GenerateBuilderClearCode(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'internalGetMutable$capitalized_name$().clear();\n');
+}
+    
+    void SharedCodeGenerator::Generate(GeneratorContext* context,
+                                   std::vector<string>* file_list,
+                                   std::vector<string>* annotation_file_list) {
+  string java_package = FileJavaPackage(file_);
+  string package_dir = JavaPackageToDir(java_package);
+    }
+    
+    #include <google/protobuf/compiler/objectivec/objectivec_enum_field.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/wire_format.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    inline bool operator < (const directory_iterator&, const directory_iterator&)
+{
+   return false;
+}
+    
+    namespace BOOST_REGEX_DETAIL_NS{
+template BOOST_REGEX_DECL void perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::construct_init(
+      const basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >& e, match_flag_type f);
+template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::match();
+template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::find();
 } // namespace
-
     
     
-    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
-  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
-  y_shape.resize(canonical_axis + 1);
-  y_shape[canonical_axis] = N;
-  out[0] = CreateTensorShape(y_shape, in[0].data_type());
-  return out;
-}
+    {}
     
-    //for variant
-template <>
-struct GetTypeInfo<Variant> {
-	static const Variant::Type VARIANT_TYPE = Variant::NIL;
-	static inline PropertyInfo get_class_info() {
-		return PropertyInfo(Variant::NIL, String(), PROPERTY_HINT_NONE, String(), PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_NIL_IS_VARIANT);
-	}
-};
-    
-    	Set<StringName> used_name_defines;
-	Set<StringName> used_flag_pointers;
-	Set<StringName> used_rmode_defines;
-	Set<StringName> internal_functions;
-    
-    #include 'os/semaphore.h'
-    
-    struct DirAccessWindowsPrivate;
-    
-    	static DWORD WINAPI thread_callback(LPVOID userdata);
-    
-    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
-
-    
-    
-    {  DMLC_DECLARE_PARAMETER(CaffeDataParam) {
-    DMLC_DECLARE_FIELD(prototxt).set_default('layer{}')
-      .describe('Caffe's layer parameter');
-    DMLC_DECLARE_FIELD(flat).set_default(false)
-      .describe('Augmentation Param: Whether to flat the data into 1D.');
-    DMLC_DECLARE_FIELD(num_examples).set_lower_bound(1).set_default(10000)
-      .describe('Number of examples in the epoch.');
-  }
-};
-    
-      /*brief Set up caffeop to infer output shape*/
-  bool InferShape(std::vector<TShape> *in_shape,
-                  std::vector<TShape> *out_shape,
-                  std::vector<TShape> *aux_shape) const override {
-    using namespace mshadow;
-    using ::caffe::Blob;
-    using std::vector;
-    if (caffeOp_ == NULL)
-      caffeOp_ = caffe::LayerRegistry<float>::CreateLayer(param_.prototxt);
-    }
-    
-    DMLC_REGISTER_PARAMETER(CaffeOpParam);
-    
-      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    const auto& inode = idx[nid];
-    if (inode.source->op() != ewise_plus_op) continue;
-    int sid = storage_id[idx.entry_id(inode.inputs[0])];
-    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
-    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
-    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
-    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
-    if (ref_count[eid_rhs] != 1) continue;
-    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
-    // TODO(haibin) support inplace addto for Dynamic Storage
-    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
-    CHECK_NE(storage_id[eid_rhs], sid);
-    storage_id[eid_rhs] = sid;
-    addto_entry[eid_rhs] = 1;
-    storage_inplace_index[eid_rhs] = -1;
-    skip_plus_node[nid] = 1;
-  }
-    
-            if (extent.size() > rank)
-            InvalidArgument('NDArrayView::SliceView: Dimensionality (%d) of the specified slice extent exceeds the rank (%d) of this NDArrayView.', (int)extent.size(), (int)rank);
-    
-                if ((oldOutputRank != SentinelValueForInferParamInitRank) && (oldOutputRank != outputRank))
-                InvalidArgument('Output rank of a non-uniform random initialier cannot be overridden if it has been already specified!');
-    
-    
-template <class ConfigRecordType>
-void DataReader::InitFromConfig(const ConfigRecordType& /*config*/)
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_then()
 {
-    RuntimeError('Init shouldn't be called, use constructor');
-    // not implemented, calls the underlying class instead
+   pstate = pstate->next.p;
+   if(match_all_states())
+      return true;
+   m_can_backtrack = false;
+   m_have_then = true;
+   return false;
 }
     
     
-    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    #endif // BOOST_NO_WREGEX
+    
+        // Create the pixel shader
+    {
+        static const char* pixelShader =
+            'struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            sampler sampler0;\
+            Texture2D texture0;\
+            \
+            float4 main(PS_INPUT input) : SV_Target\
+            {\
+            float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
+            return out_col; \
+            }';
+    }
+    
+        // Setup display size (every frame to accommodate for window resizing)
+    int w = IwGxGetScreenWidth(), h = IwGxGetScreenHeight();
+    io.DisplaySize = ImVec2((float)w, (float)h);
+     // For retina display or other situations where window coordinates are different from framebuffer coordinates. User storage only, presently not used by ImGui.
+    io.DisplayFramebufferScale = g_scale;
+    
+    // Functions
+bool    ImGui_ImplWin32_Init(void* hwnd)
+{
+    if (!::QueryPerformanceFrequency((LARGE_INTEGER *)&g_TicksPerSecond))
+        return false;
+    if (!::QueryPerformanceCounter((LARGE_INTEGER *)&g_Time))
+        return false;
+    }
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
+}
+
+    
+        // Upload to Buffer:
+    {
+        char* map = NULL;
+        err = vkMapMemory(g_Device, g_UploadBufferMemory, 0, upload_size, 0, (void**)(&map));
+        check_vk_result(err);
+        memcpy(map, pixels, upload_size);
+        VkMappedMemoryRange range[1] = {};
+        range[0].sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+        range[0].memory = g_UploadBufferMemory;
+        range[0].size = upload_size;
+        err = vkFlushMappedMemoryRanges(g_Device, 1, range);
+        check_vk_result(err);
+        vkUnmapMemory(g_Device, g_UploadBufferMemory);
+    }
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
+IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
+    
+        float scroll_max = ImMax(1.0f, win_size_contents_v - win_size_avail_v);
+    float scroll_ratio = ImSaturate(scroll_v / scroll_max);
+    float grab_v_norm = scroll_ratio * (scrollbar_size_v - grab_h_pixels) / scrollbar_size_v;
+    if (held && grab_h_norm < 1.0f)
+    {
+        float scrollbar_pos_v = horizontal ? bb.Min.x : bb.Min.y;
+        float mouse_pos_v = horizontal ? g.IO.MousePos.x : g.IO.MousePos.y;
+        float* click_delta_to_grab_center_v = horizontal ? &g.ScrollbarClickDeltaToGrabCenter.x : &g.ScrollbarClickDeltaToGrabCenter.y;
+    }
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+      bool Started() const {
+    return start_;
+  }
+    
+      using DBImpl::Put;
+  virtual Status Put(const WriteOptions& /*options*/,
+                     ColumnFamilyHandle* /*column_family*/,
+                     const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Merge;
+  virtual Status Merge(const WriteOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/,
+                       const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Delete;
+  virtual Status Delete(const WriteOptions& /*options*/,
+                        ColumnFamilyHandle* /*column_family*/,
+                        const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status Write(const WriteOptions& /*options*/,
+                       WriteBatch* /*updates*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice* /*begin*/,
+                              const Slice* /*end*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+    
+    #include <cstdio>
+#include <string>
+    
+      // Do some reads and writes to key 'y'
+  // Since the snapshot was advanced, the write done outside of the
+  // transaction does not conflict.
+  s = txn->GetForUpdate(read_options, 'y', &value);
+  txn->Put('y', 'y');
+    
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
+  }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
+}
+    
+    void DHTRoutingTable::showBuckets() const
+{
+  /*
+    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
+    buckets_.begin(); itr != buckets_.end(); ++itr) {
+    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
+    << 'nodes = ' << (*itr)->countNode() << endl;
+    }
+  */
+}
+    
+      void setTaskQueue(DHTTaskQueue* taskQueue);
+    
+    class DownloadEngine;
+class Command;
+    
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
+    }
+  }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
+}
+    
+    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
+{
+  immediateTaskQueue_.addTask(task);
+}
+    
+    #endif // D_DHT_TASK_QUEUE_IMPL_H
+
+    
+      ~DHTTokenTracker();
+    
+      // do nothing; we don't use this message as outgoing message.
+  virtual bool send() CXX11_OVERRIDE;
+    
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
 };
     
-        // request matrices needed to do node function value evaluation
-    virtual void RequestMatricesBeforeForwardProp(MatrixPool& matrixPool)
-    {
-        Base::RequestMatricesBeforeForwardProp(matrixPool);
-        RequestMatrixFromPool(m_urlGain0, matrixPool);
-        RequestMatrixFromPool(m_urlGain1, matrixPool);
-        RequestMatrixFromPool(m_urlDiscount0, matrixPool);
-        RequestMatrixFromPool(m_urlDiscount1, matrixPool);
+    ///////////////////////////////////////////////////////////////////////////////
+// Constants (15bit precision) and C macros for IDCT vertical pass
+    
+    #include 'guetzli/gamma_correct.h'
+    
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
+    
+      void JumpToByteBoundary() {
+    while (put_bits <= 56) {
+      int c = (put_buffer >> 56) & 0xff;
+      EmitByte(c);
+      put_buffer <<= 8;
+      put_bits += 8;
     }
+    if (put_bits < 64) {
+      int padmask = 0xff >> (64 - put_bits);
+      int c = ((put_buffer >> 56) & ~padmask) | padmask;
+      EmitByte(c);
+    }
+    put_buffer = 0;
+    put_bits = 64;
+  }
+    
+    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg) {
+  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
+      rgb.size() != 3 * w * h) {
+    return false;
+  }
+  InitJPEGDataForYUV444(w, h, jpg);
+  AddApp0Data(jpg);
+    }
+    
+      // Compute DHT and SOS marker data sizes and start emitting DHT marker.
+  int num_histo = num_dc_histo + num_ac_histo;
+  histograms.resize(num_histo);
+  int total_count = 0;
+  for (size_t i = 0; i < histograms.size(); ++i) {
+    total_count += histograms[i].NumSymbols();
+  }
+  const size_t dht_marker_len =
+      2 + num_histo * (kJpegHuffmanMaxBitLength + 1) + total_count;
+  const size_t sos_marker_len = 6 + 2 * ncomps;
+  std::vector<uint8_t> data(dht_marker_len + sos_marker_len + 4);
+  size_t pos = 0;
+  data[pos++] = 0xff;
+  data[pos++] = 0xc4;
+  data[pos++] = static_cast<uint8_t>(dht_marker_len >> 8);
+  data[pos++] = dht_marker_len & 0xff;
