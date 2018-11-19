@@ -1,233 +1,175 @@
 
         
-          /// The number of conformance requirements, cached to avoid constantly
-  /// recomputing it on conformance-buffer access.
-  const unsigned numConformanceRequirements : 31;
-    
-    void ClusteredBitVector::appendReserved(size_t numBits,
-                llvm::function_ref<ChunkType(size_t numBitsWanted)> generator) {
-  assert(LengthInBits + numBits <= getCapacityInBits());
-  assert(numBits > 0);
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
+  const base::CommandLine::StringType dashdash(2, '-');
+  bool block_args = false;
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i] == dashdash)
+      break;
+    if (block_args) {
+      return false;
+    } else if (IsUrlArg(argv[i])) {
+      block_args = true;
     }
-    
-    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
-  llvm::SmallString<32> NameBuf(Name);
-  cache_attributes_t Attrs = {
-    CACHE_ATTRIBUTES_VERSION_2,
-    CBs.keyHashCB,
-    CBs.keyIsEqualCB,
-    nullptr,
-    CBs.keyDestroyCB,
-    CBs.valueReleaseCB,
-    nullptr,
-    nullptr,
-    CBs.UserData,
-    CBs.valueRetainCB,
-  };
-    }
-    
-    bool LangOptions::
-checkPlatformCondition(PlatformConditionKind Kind, StringRef Value) const {
-  // Check a special case that 'macOS' is an alias of 'OSX'.
-  if (Kind == PlatformConditionKind::OS && Value == 'macOS')
-    return checkPlatformCondition(Kind, 'OSX');
-    }
-    
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-    llvm::raw_ostream &swift::operator<<(llvm::raw_ostream &os, UUID uuid) {
-  llvm::SmallString<UUID::StringBufferSize> buf;
-  uuid.toString(buf);
-  os << buf;
-  return os;
-}
-
-    
-    /// Classify a potential CF typedef.
-CFPointeeInfo
-CFPointeeInfo::classifyTypedef(const clang::TypedefNameDecl *typedefDecl) {
-  clang::QualType type = typedefDecl->getUnderlyingType();
-    }
-    
-    #endif // BITCOIN_QT_PLATFORMSTYLE_H
-    
-    class SignVerifyMessageDialog : public QDialog
-{
-    Q_OBJECT
-    }
-    
-    
-    {    /* cleanup */
-    secp256k1_context_destroy(none);
-    secp256k1_context_destroy(sign);
-    secp256k1_context_destroy(vrfy);
-    secp256k1_context_destroy(both);
+  }
+  return true;
 }
     
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
+    void AutoUpdater::OnUpdateDownloaded(const std::string& release_notes,
+                                     const std::string& release_name,
+                                     const base::Time& release_date,
+                                     const std::string& url) {
+  Emit('update-downloaded', release_notes, release_name, release_date, url,
+       // Keep compatibility with old APIs.
+       base::Bind(&AutoUpdater::QuitAndInstall, base::Unretained(this)));
 }
     
-    #include <rpc/blockchain.h>
-#include <test/test_bitcoin.h>
-    
-    #define TINYFORMAT_PASSARGS_TAIL_1
-#define TINYFORMAT_PASSARGS_TAIL_2 , v2
-#define TINYFORMAT_PASSARGS_TAIL_3 , v2, v3
-#define TINYFORMAT_PASSARGS_TAIL_4 , v2, v3, v4
-#define TINYFORMAT_PASSARGS_TAIL_5 , v2, v3, v4, v5
-#define TINYFORMAT_PASSARGS_TAIL_6 , v2, v3, v4, v5, v6
-#define TINYFORMAT_PASSARGS_TAIL_7 , v2, v3, v4, v5, v6, v7
-#define TINYFORMAT_PASSARGS_TAIL_8 , v2, v3, v4, v5, v6, v7, v8
-#define TINYFORMAT_PASSARGS_TAIL_9 , v2, v3, v4, v5, v6, v7, v8, v9
-#define TINYFORMAT_PASSARGS_TAIL_10 , v2, v3, v4, v5, v6, v7, v8, v9, v10
-#define TINYFORMAT_PASSARGS_TAIL_11 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11
-#define TINYFORMAT_PASSARGS_TAIL_12 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12
-#define TINYFORMAT_PASSARGS_TAIL_13 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13
-#define TINYFORMAT_PASSARGS_TAIL_14 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14
-#define TINYFORMAT_PASSARGS_TAIL_15 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15
-#define TINYFORMAT_PASSARGS_TAIL_16 , v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16
-    
-    
-    {} // namespace bech32
-    
-        // Create the vertex shader
-    {
-        static const char* vertexShader =
-            'cbuffer vertexBuffer : register(b0) \
-            {\
-            float4x4 ProjectionMatrix; \
-            };\
-            struct VS_INPUT\
-            {\
-            float2 pos : POSITION;\
-            float4 col : COLOR0;\
-            float2 uv  : TEXCOORD0;\
-            };\
-            \
-            struct PS_INPUT\
-            {\
-            float4 pos : SV_POSITION;\
-            float4 col : COLOR0;\
-            float2 uv  : TEXCOORD0;\
-            };\
-            \
-            PS_INPUT main(VS_INPUT input)\
-            {\
-            PS_INPUT output;\
-            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
-            output.col = input.col;\
-            output.uv  = input.uv;\
-            return output;\
-            }';
+    namespace atom {
     }
     
-    void ImGui_ImplOpenGL2_DestroyFontsTexture()
-{
-    if (g_FontTexture)
-    {
-        ImGuiIO& io = ImGui::GetIO();
-        glDeleteTextures(1, &g_FontTexture);
-        io.Fonts->TexID = 0;
-        g_FontTexture = 0;
+      // TrayIconObserver:
+  void OnClicked(const gfx::Rect& bounds,
+                 const gfx::Point& location,
+                 int modifiers) override;
+  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
+  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
+  void OnBalloonShow() override;
+  void OnBalloonClicked() override;
+  void OnBalloonClosed() override;
+  void OnDrop() override;
+  void OnDropFiles(const std::vector<std::string>& files) override;
+  void OnDropText(const std::string& text) override;
+  void OnDragEntered() override;
+  void OnDragExited() override;
+  void OnDragEnded() override;
+  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
+  void OnMouseExited(const gfx::Point& location, int modifiers) override;
+  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
+    
+    class WebRequest : public mate::TrackableObject<WebRequest> {
+ public:
+  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
+                                         AtomBrowserContext* browser_context);
     }
+    
+    
+    {}  // namespace
+    
+      // this.emit(name, event, args...);
+  template <typename... Args>
+  bool EmitCustomEvent(const base::StringPiece& name,
+                       v8::Local<v8::Object> event,
+                       const Args&... args) {
+    return EmitWithEvent(
+        name, internal::CreateCustomEvent(isolate(), GetWrapper(), event),
+        args...);
+  }
+    
+    bool SavePageHandler::Handle(const base::FilePath& full_path,
+                             const content::SavePageType& save_type) {
+  auto* download_manager = content::BrowserContext::GetDownloadManager(
+      web_contents_->GetBrowserContext());
+  download_manager->AddObserver(this);
+  // Chromium will create a 'foo_files' directory under the directory of saving
+  // page 'foo.html' for holding other resource files of 'foo.html'.
+  base::FilePath saved_main_directory_path = full_path.DirName().Append(
+      full_path.RemoveExtension().BaseName().value() +
+      FILE_PATH_LITERAL('_files'));
+  bool result =
+      web_contents_->SavePage(full_path, saved_main_directory_path, save_type);
+  download_manager->RemoveObserver(this);
+  // If initialization fails which means fail to create |DownloadItem|, we need
+  // to delete the |SavePageHandler| instance to avoid memory-leak.
+  if (!result)
+    delete this;
+  return result;
 }
     
-        // Render characters, setup ImFont and glyphs for runtime
-    for (int input_i = 0; input_i < atlas->ConfigData.Size; input_i++)
-    {
-        ImFontConfig& cfg = atlas->ConfigData[input_i];
-        FreeTypeFont& font_face = fonts[input_i];
-        ImFont* dst_font = cfg.DstFont;
-        if (cfg.MergeMode)
-            dst_font->BuildLookupTable();
-    }
-    
-    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
-{
-    //printf('key_up_func %d\n', key);
-    ImGuiIO& io = ImGui::GetIO();
-    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
-        io.KeysDown[key + 256] = false;
-    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
-    (void)x; (void)y; // Unused
+    namespace api {
+class WebContents;
 }
     
     
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
+    {	return userOnly;
 }
-
     
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                       bot_.begin(),
+                                       in_data.begin(),
+                                       param_.num_data);
+    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                       top_.begin(),
+                                       out_data.begin(),
+                                       param_.num_out);
+    CaffeOpSetup();
+    // Init caffe's weight pointer
+    if (!init_w_) {
+      init_w_ = true;
+      caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                         wei_.begin(),
+                                         in_data.begin() + param_.num_data,
+                                         param_.num_weight);
+      caffe::SetOpBlobs(caffeOp_, wei_);
+    }
+    if (ctx.is_train)
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
+    else
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
+    caffeOp_->Forward(bot_, top_);
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+      /*
+   * @brief a variable to keep track of the temp fs used in carving
+   *
+   * This variable represents the location in which we store all of our carved
+   * files. When a carve has completed all of the desired files, as well
+   * as the tar archive should reside in this directory
+   */
+  boost::filesystem::path carveDir_;
     
-        static BOOST_FORCEINLINE storage_type fetch_add(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        switch (order)
-        {
-        case memory_order_relaxed:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64_RELAXED(&storage, v));
-            break;
-        case memory_order_consume:
-        case memory_order_acquire:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64_ACQUIRE(&storage, v));
-            break;
-        case memory_order_release:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64_RELEASE(&storage, v));
-            break;
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-        default:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64(&storage, v));
-            break;
-        }
-        return v;
+    std::vector<std::string> PrometheusMetricsConfigParserPlugin::keys() const {
+  return {kPrometheusParserRootKey};
+}
+    
+    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
+  Config c;
+  auto s = c.update(getTestConfigMap());
+  EXPECT_TRUE(s.ok());
+    }
+    
+    
+    {  expected = {'select pid from processes where name = 'foobar';'};
+  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
+  EXPECT_EQ(fpack.getDiscoveryQueries(), expected);
+}
+    
+     private:
+  /// The hashing algorithm which is used to compute the hash
+  HashType algorithm_;
+    
+    TEST_F(QueryTests, test_is_query_name_in_database) {
+  auto query = getOsqueryScheduledQuery();
+  auto cf = Query('foobar', query);
+  auto encoded_qd = getSerializedQueryDataJSON();
+  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
+  EXPECT_TRUE(status.ok());
+  // Now test that the query name exists.
+  EXPECT_TRUE(cf.isQueryNameInDatabase());
+}
+    
+      auto constraint = Constraint(EQUALS);
+  constraint.expr = 'some';
+    
+    void Initializer::platformSetup() {
+  // Initialize the COM libraries utilized by Windows WMI calls.
+  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
+  if (ret != S_OK) {
+    ::CoUninitialize();
+  }
+}
+    
+    TEST_F(EventsTests, test_fire_event) {
+  auto pub = std::make_shared<BasicEventPublisher>();
+  pub->setName('BasicPublisher');
+  auto status = EventFactory::registerEventPublisher(pub);
+  ASSERT_TRUE(status.ok());
     }
