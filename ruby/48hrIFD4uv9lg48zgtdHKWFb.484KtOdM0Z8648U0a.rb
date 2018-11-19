@@ -1,48 +1,45 @@
 
         
-        def remove_head_from_history(markdown)
-  index = markdown =~ %r!^##\s+\d+\.\d+\.\d+!
-  markdown[index..-1]
-end
+                  # Default opts to a blank optionparser if none is given
+          opts ||= OptionParser.new
     
-                  EM.start_server(
-                opts['host'],
-                opts['livereload_port'],
-                HttpAwareConnection,
-                opts
-              ) do |ws|
-                handle_websockets_event(ws)
-              end
-    
-        # Returns the specified or detected guest type name.
-    #
-    # @return [Symbol]
-    def name
-      capability_host_chain[0][0]
-    end
-    
-            protected
-    
-            # Executes a command and returns true if the command succeeded,
-        # and false otherwise. By default, this executes as a normal user,
-        # and it is up to the communicator implementation if they expose an
-        # option for running tests as an administrator.
+            # This method is automatically called when the system is available (when
+        # Vagrant can successfully SSH into the machine) to give the system a chance
+        # to determine the distro and return a distro-specific system.
         #
-        # @see #execute
-        def test(command, opts=nil)
+        # If this method returns nil, then this instance is assumed to be
+        # the most specific guest implementation.
+        def distro_dispatch
         end
-      end
-    end
-  end
-end
-
     
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a CLI command.
-      class Command
-        include Util::SafePuts
+            # This returns all registered providers.
+        #
+        # @return [Hash]
+        def providers
+          providers = {}
     
-              nil
+            # This returns all the registered commands.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        def commands
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.commands)
+            end
+          end
+        end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
         end
