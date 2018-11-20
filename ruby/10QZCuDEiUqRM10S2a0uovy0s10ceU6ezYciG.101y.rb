@@ -1,158 +1,85 @@
 
         
-            A binary installer is available:
-      https://www.haskell.org/platform/mac.html
-    EOS
-  when 'mysqldump-secure' then <<-EOS.undent
-    The creator of mysqldump-secure tried to game our popularity metrics.
-    EOS
-  when 'ngrok' then <<-EOS.undent
-    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
+        module Capistrano
+  class Configuration
+    # Decorates a Variables object to additionally perform an optional set of
+    # user-supplied validation rules. Each rule for a given key is invoked
+    # immediately whenever `set` is called with a value for that key.
+    #
+    # If `set` is called with a callable value or a block, validation is not
+    # performed immediately. Instead, the validation rules are invoked the first
+    # time `fetch` is used to access the value.
+    #
+    # A rule is simply a block that accepts two arguments: key and value. It is
+    # up to the rule to raise an exception when it deems the value is invalid
+    # (or just print a warning).
+    #
+    # Rules can be registered using the DSL like this:
+    #
+    #   validate(:my_key) do |key, value|
+    #     # rule goes here
+    #   end
+    #
+    class ValidatedVariables < SimpleDelegator
+      include Capistrano::ProcHelpers
     
-      def dump_build_env(env, f = $stdout)
-    keys = build_env_keys(env)
-    keys -= %w[CC CXX OBJC OBJCXX] if env['CC'] == env['HOMEBREW_CC']
-    
-      def xcode
-    if instance_variable_defined?(:@xcode)
-      @xcode
-    elsif MacOS::Xcode.installed?
-      @xcode = MacOS::Xcode.version
-      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
-      @xcode
-    end
+      it 'ignores single-line arrays' do
+    expect_no_offenses('[a, b, c]')
   end
     
-      def self.all
-    opoo 'Formula.all is deprecated, use Formula.map instead'
-    map
+      include_examples 'multiline literal brace layout method argument' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) { ['[', '1', ']'] }
   end
     
-      def failure_message
-    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
-    error   = exception.error_reason if exception.respond_to?(:error_reason)
-    error ||= exception.error        if exception.respond_to?(:error)
-    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
-    error.to_s.humanize if error
-  end
+        context 'and a comment after the last element' do
+      let(:b_comment) { ' # comment b' }
     
-        # The path used after sending unlock password instructions
-    def after_sending_unlock_instructions_path_for(resource)
-      new_session_path(resource) if is_navigational_format?
-    end
+          # Calls the given block for each `value` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_value
+        return pairs.map(&:value).to_enum unless block_given?
     
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-      def index
-    render plain: 'Home'
-  end
-end
-    
-    module Devise
-  module Controllers
-    # Provide sign in and sign out functionality.
-    # Included by default in all controllers.
-    module SignInOut
-      # Return true if the given scope is signed in session. If no scope given, return
-      # true if any scope is signed in. This will run authentication hooks, which may
-      # cause exceptions to be thrown from this method; if you simply want to check
-      # if a scope has already previously been authenticated without running
-      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
-      def signed_in?(scope=nil)
-        [scope || Devise.mappings.keys].flatten.any? do |_scope|
-          warden.authenticate?(scope: _scope)
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
         end
-      end
     
-        def_delegators :@s, :scan_until, :skip_until, :string
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
-task :clean do
-  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
-end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-    Liquid::Template.register_tag('gist', Jekyll::GistTag)
-Liquid::Template.register_tag('gistnocache', Jekyll::GistTagNoCache)
-
-    
-      class ImageTag < Liquid::Tag
-    @img = nil
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
+            def next
+          authorize! :update, @order, order_token
+          @order.next!
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        rescue StateMachines::InvalidTransition
+          respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
         end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
+    
+            def show
+          @option_value = scope.find(params[:id])
+          respond_with(@option_value)
+        end
+    
+            def scope
+          includes = { variant: [{ option_values: :option_type }, :product] }
+          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
+        end
+    
+            def destroy
+          authorize! :destroy, stock_location
+          stock_location.destroy
+          respond_with(stock_location, status: 204)
+        end
+    
+            def update
+          authorize! :update, @store
+          if @store.update_attributes(store_params)
+            respond_with(@store, status: 200, default_template: :show)
+          else
+            invalid_resource!(@store)
           end
         end
-      end
-    end
-  end
-end
-    
-          def has_footer
-        @footer = (@page.footer || false) if @footer.nil? && @page
-        !!@footer
-      end
-    
-          def page_dir
-        @page_dir
-      end
-    
-        @wiki.write_page(page, :markdown, text,
-                     { :name => 'user1', :email => 'user1' });
-    
-        # Test page_header_from_content(@content)
-    actual = @view.title
-    assert_equal '1 & 2', actual
-  end
