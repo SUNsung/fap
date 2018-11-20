@@ -1,215 +1,175 @@
 
         
-        # This sets a value, above which, the gradients will be clipped.  This hp
-# is extremely useful to avoid an infrequent, but highly pathological
-# problem whereby the gradient is so large that it destroys the
-# optimziation by setting parameters too large, leading to a vicious cycle
-# that ends in NaNs.  If it's too large, it's useless, if it's too small,
-# it essentially becomes the learning rate.  It's pretty insensitive, though.
-flags.DEFINE_float('max_grad_norm', MAX_GRAD_NORM,
-                   'Max norm of gradient before clipping.')
+            def __init__(self, debuglevel=0):
+        self._init_github_account()
+        https_handler = make_HTTPS_handler({}, debuglevel=debuglevel)
+        self._opener = compat_urllib_request.build_opener(https_handler)
     
-    
-def generate_data(rnn, T, E, x0s=None, P_sxn=None, input_magnitude=0.0,
-                  input_times=None):
-  ''' Generates data from an randomly initialized RNN.
-  Args:
-    rnn: the rnn
-    T: Time in seconds to run (divided by rnn['dt'] to get steps, rounded down.
-    E: total number of examples
-    S: number of samples (subsampling N)
-  Returns:
-    A list of length E of NxT tensors of the network being run.
-  '''
-  N = rnn['N']
-  def run_rnn(rnn, x0, ntime_steps, input_time=None):
-    rs = np.zeros([N,ntime_steps])
-    x_tm1 = x0
-    r_tm1 = np.tanh(x0)
-    tau = rnn['tau']
-    dt = rnn['dt']
-    alpha = (1.0-dt/tau)
-    W = dt/tau*rnn['W']*rnn['g']
-    Bin = dt/tau*rnn['Bin']
-    Bin2 = dt/tau*rnn['Bin2']
-    b = dt/tau*rnn['b']
-    
-      Args:
-    x: input The tensor to tranformation.
-    out_size: The integer size of non-batch output dimension.
-    do_bias (optional): Add a learnable bias vector to the operation.
-    alpha (optional): A multiplicative scaling for the weight initialization
-      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
-    identity_if_possible (optional): just return identity,
-      if x.shape[1] == out_size.
-    normalized (optional): Option to divide out by the norms of the rows of W.
-    name (optional): The name prefix to add to variables.
-    collections (optional): List of additional collections. (Placed in
-      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
-    
-    
-if __name__ == '__main__':
-  tf.app.run(main)
-
-    
-    
-def _substitution_mask(sent1, sent2):
-  '''Binary mask identifying substituted part in two sentences.
-    
-    '''IMDB data loader and helpers.'''
-    
-      # Generating more data on train set.
-  if FLAGS.sample_mode == SAMPLE_TRAIN:
-    data_set = train_data
-  elif FLAGS.sample_mode == SAMPLE_VALIDATION:
-    data_set = valid_data
-  else:
-    raise NotImplementedError
-    
-      Args:
-    real_values: Value given by the Wasserstein Discriminator to real data.
-    fake_values: Value given by the Wasserstein Discriminator to fake data.
-    
-    FLAGS = tf.app.flags.FLAGS
-    
-        elif FLAGS.discriminator_model == 'cnn':
-      dis_variable_maps = variable_mapping.cnn()
-      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
-      init_savers['dis_init_saver'] = dis_init_saver
-    
-    
-@pytest.fixture
-def auth(client):
-    return AuthActions(client)
-
-    
-    
-def get_template_attribute(template_name, attribute):
-    '''Loads a macro (or variable) a template exports.  This can be used to
-    invoke a macro from within Python code.  If you for example have a
-    template named :file:`_cider.html` with the following contents:
-    
-    
-class TagMarkup(JSONTag):
-    '''Serialize anything matching the :class:`~flask.Markup` API by
-    having a ``__html__`` method to the result of that method. Always
-    deserializes to an instance of :class:`~flask.Markup`.'''
-    
-        If you configure your own :class:`logging.StreamHandler`, you may want to
-    use this for the stream. If you are using file or dict configuration and
-    can't import this directly, you can refer to it as
-    ``ext://flask.logging.wsgi_errors_stream``.
-    '''
-    return request.environ['wsgi.errors'] if request else sys.stderr
-    
-    
-# Are two filenames really pointing to the same file?
-def samefile(f1, f2):
-    '''Test whether two pathnames reference the same actual file'''
-    s1 = os.stat(f1)
-    s2 = os.stat(f2)
-    return samestat(s1, s2)
-    
-    
-def read_text(package: Package,
-              resource: Resource,
-              encoding: str = 'utf-8',
-              errors: str = 'strict') -> str:
-    '''Return the decoded string of the resource.
-    
-            The child is run in isolated mode if the current interpreter supports
-        that.
-        '''
-        result, py_cmd = run_python_until_end(
-            '-X', 'utf8=0', '-c', cls.CHILD_PROCESS_SCRIPT,
-            **env_vars
-        )
-        if not result.rc == 0:
-            result.fail(py_cmd)
-        # All subprocess outputs in this test case should be pure ASCII
-        adjusted_output = cls._handle_output_variations(result.out)
-        stdout_lines = adjusted_output.decode('ascii').splitlines()
-        child_encoding_details = dict(cls(*stdout_lines)._asdict())
-        stderr_lines = result.err.decode('ascii').rstrip().splitlines()
-        return child_encoding_details, stderr_lines
-    
-        def get_filesystem_encoding(self, isolated, env):
-        code = ('import codecs, locale, sys; '
-                'print(sys.getfilesystemencoding(), '
-                'sys.getfilesystemencodeerrors())')
-        args = (sys.executable, '-c', code)
-        env = dict(env)
-        if not isolated:
-            env['PYTHONCOERCECLOCALE'] = '0'
-            env['PYTHONUTF8'] = '0'
-        proc = subprocess.run(args, text=True, env=env,
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)
-        if proc.returncode:
-            raise Exception(f'failed to get the locale encoding: '
-                            f'stdout={proc.stdout!r} stderr={proc.stderr!r}')
-        out = proc.stdout.rstrip()
-        return out.split()
-    
-        def testSeekBackwardsFromEnd(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            bz2f.seek(-150, 2)
-            self.assertEqual(bz2f.read(), self.TEXT[len(self.TEXT)-150:])
-    
-    # Import the email modules we'll need
-from email import policy
-from email.parser import BytesParser
-    
-            print('Ordered results using pool.imap():')
-        for x in imap_it:
-            print('\t', x)
-        print()
-    
-    
-def CheckParenthesisSpacing(filename, clean_lines, linenum, error):
-  '''Checks for horizontal spacing around parentheses.
-    
-        #Required strings to create intermediate HTML files
-    header = '<html><head><link rel=stylesheet type=text/css href=' + colorscheme + '.css></head><body>\n'
-    footer = '</body></html>'
-    title_content = '<h1 class=titlemain>tldr pages</h1><h4 class=titlesub>Simplified and community driven man pages</h4></body></html>'
-    
-    
-# -- Options for HTML output ----------------------------------------------
-    
-                if item.get(CONF_DISPLAY_URL) is not None:
-                if isinstance(item.get(CONF_DISPLAY_URL),
-                              template.Template):
-                    output[ATTR_REDIRECTION_URL] = \
-                        item[CONF_DISPLAY_URL].async_render()
-                else:
-                    output[ATTR_REDIRECTION_URL] = item.get(CONF_DISPLAY_URL)
-    
-            _LOGGER.info('Loading data from Swisscom Internet Box')
-        data = self.get_swisscom_data()
-        if not data:
-            return False
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = {}
-    
-    _LOGGER = logging.getLogger(__name__)
-    
-    
-@Throttle(MIN_TIME_BETWEEN_UPDATES)
-def send_data(name, msg):
-    '''Send the collected data to Dweet.io.'''
-    import dweepy
     try:
-        dweepy.dweet_for(name, msg)
-    except dweepy.DweepyError:
-        _LOGGER.error('Error saving data to Dweet.io: %s', msg)
-
+    input = raw_input
+except NameError:
+    pass
     
-        class EventHandler(PatternMatchingEventHandler):
-        '''Class for handling Watcher events.'''
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
+    
+    
+def filter_options(readme):
+    ret = ''
+    in_options = False
+    for line in readme.split('\n'):
+        if line.startswith('# '):
+            if line[2:].startswith('OPTIONS'):
+                in_options = True
+            else:
+                in_options = False
+    
+        with open(ZSH_COMPLETION_TEMPLATE) as f:
+        template = f.read()
+    
+        def test_decrypt_text(self):
+        password = intlist_to_bytes(self.key).decode('utf-8')
+        encrypted = base64.b64encode(
+            intlist_to_bytes(self.iv[:8]) +
+            b'\x17\x15\x93\xab\x8d\x80V\xcdV\xe0\t\xcdo\xc2\xa5\xd8ksM\r\xe27N\xae'
+        ).decode('utf-8')
+        decrypted = (aes_decrypt_text(encrypted, password, 16))
+        self.assertEqual(decrypted, self.secret_msg)
+    
+        def load(self):
+        '''
+        Load the data from the key itself instead of fetching from some
+        external data store. Opposite of _get_session_key(), raise BadSignature
+        if signature fails.
+        '''
+        try:
+            return signing.loads(
+                self.session_key,
+                serializer=self.serializer,
+                # This doesn't handle non-default expiry dates, see #19201
+                max_age=settings.SESSION_COOKIE_AGE,
+                salt='django.contrib.sessions.backends.signed_cookies',
+            )
+        except Exception:
+            # BadSignature, ValueError, or unpickling exceptions. If any of
+            # these happen, reset the session.
+            self.create()
+        return {}
+    
+        def __str__(self):
+        return self.session_key
+    
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
+    
+    def normpath(path):
+    '''Normalize path, eliminating double slashes, etc.'''
+    path = os.fspath(path)
+    if isinstance(path, bytes):
+        sep = b'/'
+        empty = b''
+        dot = b'.'
+        dotdot = b'..'
+    else:
+        sep = '/'
+        empty = ''
+        dot = '.'
+        dotdot = '..'
+    if path == empty:
+        return dot
+    initial_slashes = path.startswith(sep)
+    # POSIX allows one or two initial slashes, but treats three or more
+    # as single slash.
+    if (initial_slashes and
+        path.startswith(sep*2) and not path.startswith(sep*3)):
+        initial_slashes = 2
+    comps = path.split(sep)
+    new_comps = []
+    for comp in comps:
+        if comp in (empty, dot):
+            continue
+        if (comp != dotdot or (not initial_slashes and not new_comps) or
+             (new_comps and new_comps[-1] == dotdot)):
+            new_comps.append(comp)
+        elif new_comps:
+            new_comps.pop()
+    comps = new_comps
+    path = sep.join(comps)
+    if initial_slashes:
+        path = sep*initial_slashes + path
+    return path or dot
+    
+        def test_normpath_issue5827(self):
+        # Make sure normpath preserves unicode
+        for path in ('', '.', '/', '\\', '///foo/.//bar//'):
+            self.assertIsInstance(self.pathmodule.normpath(path), str)
+    
+        def test_mkdir_no_parents_file(self):
+        p = self.cls(BASE, 'fileA')
+        self.assertTrue(p.exists())
+        # An exception is raised when the last path component is an existing
+        # regular file, regardless of whether exist_ok is true or not.
+        with self.assertRaises(FileExistsError) as cm:
+            p.mkdir()
+        self.assertEqual(cm.exception.errno, errno.EEXIST)
+        with self.assertRaises(FileExistsError) as cm:
+            p.mkdir(exist_ok=True)
+        self.assertEqual(cm.exception.errno, errno.EEXIST)
+    
+        def _check_child_encoding_details(self,
+                                      env_vars,
+                                      expected_fs_encoding,
+                                      expected_stream_encoding,
+                                      expected_warnings,
+                                      coercion_expected):
+        '''Check the C locale handling for the given process environment
+    
+        # Initialize and populate our database.
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
+    tasks = (
+        'give food to fish',
+        'prepare group meeting',
+        'fight with a zebra',
+        )
+    for task in tasks:
+        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
+    
+        with open(args.msgfile, 'rb') as fp:
+        msg = email.message_from_binary_file(fp, policy=default)
+    
+    document = '''\
+<slideshow>
+<title>Demo slideshow</title>
+<slide><title>Slide title</title>
+<point>This is a demo</point>
+<point>Of a program for processing slides</point>
+</slide>
+    
+        # Submit tasks
+    for task in TASKS1:
+        task_queue.put(task)
+    
+        publicKey, privateKey = generateKey(keySize)
+    print('\nWriting public key to file %s_pubkey.txt...' % name)
+    with open('%s_pubkey.txt' % name, 'w') as fo:
+        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
+    
+        def __hash_function_2(self, value, data):
+    
+        def __init__(self, size_table, charge_factor=None, lim_charge=None):
+        self.size_table = size_table
+        self.values = [None] * self.size_table
+        self.lim_charge = 0.75 if lim_charge is None else lim_charge
+        self.charge_factor = 1 if charge_factor is None else charge_factor
+        self.__aux_list = []
+        self._keys = {}
+    
+        for i in range(1, n+1):
+        dp[i][0] = True
