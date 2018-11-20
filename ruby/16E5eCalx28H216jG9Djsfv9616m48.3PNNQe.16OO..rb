@@ -1,121 +1,194 @@
 
         
-        def linkify_prs(markdown)
-  markdown.gsub(%r!(?<\!&)#(\d+)!) do |word|
-    '[#{word}]({{ site.repository }}/issues/#{word.delete('#')})'
+                  def label(label_html_options = {}, &block)
+            html_options = @input_html_options.slice(:index, :namespace).merge(label_html_options)
+            html_options[:for] ||= @input_html_options[:id] if @input_html_options[:id]
+    
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class CollectionRadioButtons < Base # :nodoc:
+        include CollectionHelpers
+    
+              def field_type
+            self.class.field_type
+          end
+      end
+    end
   end
 end
+
     
-    def local_require
-  require 'json'
-  JSON.pretty_generate(DATA)
-end
-    
-    # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
-    
-    #
-    
-              RUBY
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
         end
     
-            def initialize(entry, provider)
-          Rails.logger.debug { 'Instantiating #{self.class.name} with LDIF:\n#{entry.to_ldif}' }
-          @entry = entry
-          @provider = provider
-        end
+        def to_a
+      @filters.dup
+    end
     
-        if resource.errors.empty?
-      resource.unlock_access! if unlockable?(resource)
-      if Devise.sign_in_after_reset_password
-        flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
-        set_flash_message!(:notice, flash_message)
-        sign_in(resource_name, resource)
+        attr_accessor :name, :type, :path
+    
+        def initialize
+      @pages = {}
+    end
+    
+        def document?
+      @content =~ DOCUMENT_RGX
+    end
+    
+        def request_one(url)
+      Response.new read_file(file_path_for(url)), URL.parse(url)
+    end
+    
+        def origin
+      if scheme && host
+        origin = '#{scheme}://#{host}'
+        origin.downcase!
+        origin << ':#{port}' if port
+        origin
       else
-        set_flash_message!(:notice, :updated_not_active)
+        nil
       end
-      respond_with resource, location: after_resetting_password_path_for(resource)
-    else
-      set_minimum_password_length
-      respond_with resource
     end
+    
+            css('.filetree').each do |node|
+          node.content = node.css('.file').map(&:inner_html).join('\n')
+          node.name = 'pre'
+          node.remove_attribute('class')
+        end
+    
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
+      end
+    
+      describe 'float formats' do
+    it 'converts argument into Float' do
+      obj = mock('float')
+      obj.should_receive(:to_f).and_return(9.6)
+      format('%f', obj).should == '9.600000'
+    end
+    
+    describe 'Kernel#taint' do
+  it 'returns self' do
+    o = Object.new
+    o.taint.should equal(o)
   end
     
-      # Check if there is no signed in user before doing the sign out.
+      #
+  # Parses a header from a string.
   #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
+  # XXX - Putting : in a header value breaks this badly
+  def from_s(header)
+    reset
     
-      # Returns a signed in resource from session (if one exists)
-  def signed_in_resource
-    warden.authenticate(scope: resource_name)
+    
+  def self.create_rakp_hmac_sha1_salt(con_sid, bmc_sid, con_rid, bmc_rid, bmc_gid, auth_level, username)
+    con_sid +
+    bmc_sid +
+    con_rid +
+    bmc_rid +
+    bmc_gid +
+    [ auth_level ].pack('C') +
+    [ username.length ].pack('C') +
+    username
   end
     
-    require 'rails'
-require 'active_support/core_ext/numeric/time'
-require 'active_support/dependencies'
-require 'orm_adapter'
-require 'set'
-require 'securerandom'
-require 'responders'
+            # UDP isn't supported
+        #
+        # @raise [NotImplementedError]
+        def send_request_udp(req)
+          raise ::NotImplementedError, 'Kerberos Client: UDP unsupported'
+        end
     
-          def expire_data_after_sign_in!
-        # session.keys will return an empty array if the session is not yet loaded.
-        # This is a bug in both Rack and Rails.
-        # A call to #empty? forces the session to be loaded.
-        session.empty?
-        session.keys.grep(/^devise\./).each { |k| session.delete(k) }
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos AuthorizationData data
+        # definition.
+        class AuthorizationData < Element
+          # @!attribute elements
+          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
+          #   @option [Integer] :type
+          #   @option [String] :data
+          attr_accessor :elements
+    
+                self
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+                decode_asn1(asn1)
+          end
+    
+      class VagrantSSHCommandError < RuntimeError; end
+    
+        require 'capistrano/scm/#{scm_name}'
+    install_plugin #{built_in_scm_plugin_class_name}
+    
+          ServerKey = Struct.new(:hostname, :port)
+    
+    LogStash::Bundler.setup!
+    
+                try += 1
+            $stderr.puts('Error #{e.class}, retrying #{try}/#{options[:max_tries]}')
+            $stderr.puts(e.message)
+            sleep(0.5)
+          end
+        end
+      end
+      raise exception if exception
+    
+    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
+# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
+# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
+# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
+if $0 == __FILE__
+  LogStash::Bundler.setup!({:without => [:build, :development]})
+  require_relative 'patches/jar_dependencies'
+    
+      def update_gems!
+    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
+    previous_gem_specs_map = find_latest_gem_specs
+    
+          after do
+        ENV.delete('FunString')
+        ENV.delete('FunBool')
+        ENV.delete('SERVER_LS_TEST_ADDRESS')
       end
     
-    When /^I submit the password reset form$/ do
-  submit_password_reset_form
-end
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
     
-      people.each do |person|
-    contacts << Contact.new(:person_id => person.id, :user_id => @me.id, :sharing => true, :receiving => true)
-  end
-  Contact.import(contacts)
-  contacts = @me.contacts.limit(n.to_i)
+      # for now
+  worker_count = 1
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
+    $redis = Redis.new
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-    
-        it 'returns an array of likes for a post' do
-      bob.like!(@message)
-      get :index, params: {post_id: @message.id}
-      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@message.likes.map(&:id))
-    end
-    
-                platform = target.platform_name
-            case platform
-            when :osx
-              execute_command 'xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build'
-            when :ios
-              test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
-    
-    end
+        EXPIRY = 60 * 60 * 24
