@@ -1,95 +1,83 @@
 
         
-                case array.length
-        when 0
-          ''.html_safe
-        when 1
-          ERB::Util.html_escape(array[0])
-        when 2
-          safe_join([array[0], array[1]], options[:two_words_connector])
-        else
-          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
-        end
-      end
-    end
+          it 'no errors without a user' do
+    expect(-> { GivenDailyLike.increment_for(nil) }).not_to raise_error
+    expect(-> { GivenDailyLike.decrement_for(nil) }).not_to raise_error
   end
-end
-
     
-            private
+        # Add permissions and a description to the Staff category.
     
-    require 'action_view/helpers/tags/placeholderable'
-    
-    module ActionView #:nodoc:
-  # = Action View PathSet
-  #
-  # This class is used to store and access paths in Action View. A number of
-  # operations are defined so that you can search among the paths in this
-  # set and also perform operations on other +PathSet+ objects.
-  #
-  # A +LookupContext+ will use a +PathSet+ to store the paths in its context.
-  class PathSet #:nodoc:
-    include Enumerable
-    
-        private
-    
-      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
-  # see https://github.com/Homebrew/homebrew-cask/pull/8887
-  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
-    
-        # @return [String] jruby, ruby, rbx, ...
-    def ruby_engine
-      RUBY_ENGINE
-    end
-    
-    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
-  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
-  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
+                    raise Errors::VMNoMatchError if vms.empty?
+              else
+                # String name, just look for a specific VM
+                vms << @env.vms[name.to_sym]
+                raise Errors::VMNotFoundError, name: name if !vms[0]
+              end
+            end
+          else
+            vms = @env.vms_ordered
           end
     
-    desc 'Generates a dummy app for testing for every Spree engine'
-task :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rake test_app'
-    end
+              # Return the registry
+          data[:command]
+        end
+    
+            # Initialize the provider to represent the given machine.
+        #
+        # @param [Vagrant::Machine] machine The machine that this provider
+        #   is responsible for.
+        def initialize(machine)
+        end
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
-end
     
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
-          else
-            invalid_resource!(@address)
-          end
-        end
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def capture
-          perform_payment_action(:capture)
-        end
-    
-            def show
-          respond_with(stock_location)
-        end
-    
-            def index
-          authorize! :read, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
-        end
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
+    end
