@@ -1,312 +1,160 @@
 
         
-          LFADS generates a number of outputs for each examples, and these are all
-  saved.  They are:
-    The mean and variance of the prior of g0.
-    The mean and variance of approximate posterior of g0.
-    The control inputs (if enabled)
-    The initial conditions, g0, for all examples.
-    The generator states for all time.
-    The factors for all time.
-    The rates for all time.
+        
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
     
-      # Add necessary end of sentence token.
-  if tokenized[-1] not in ['.', '!', '?']:
-    tokenized += ['.']
-  return tokenized
+    print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
     
-        # Unstack to lists.
-    rewards_list = tf.unstack(rewards_half, axis=1)
-    log_probs_list = tf.unstack(log_probs_half, axis=1)
-    reward_missing = 1. - tf.cast(reward_present_half, tf.float32)
-    reward_missing_list = tf.unstack(reward_missing, axis=1)
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
     
-      # *Total* number of n-grams produced by the generator.
-  total_ngrams_produced = 0
-    
-          Args:
-        query: A Tensor of shape [batch_size, num_units].
-        keys: A Tensor of shape [batch_size, attention_length, num_units].
-        values: A Tensor of shape [batch_size, attention_length, num_units].
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
     
     
-HandlerEx = ctypes.WINFUNCTYPE(
-    ctypes.c_int,     # return
-    ctypes.c_int,     # dwControl
-    ctypes.c_int,     # dwEventType
-    ctypes.c_void_p,  # lpEventData,
-    ctypes.c_void_p,  # lpContext,
-)
-    
-        def create_release(self, tag_name, name=None, body='', draft=False, prerelease=False):
-        data = {
-            'tag_name': tag_name,
-            'target_commitish': 'master',
-            'name': name,
-            'body': body,
-            'draft': draft,
-            'prerelease': prerelease,
-        }
-        req = sanitized_Request(self._API_URL, json.dumps(data).encode('utf-8'))
-        return self._call(req)
-    
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
-    
-    README_FILE = 'README.md'
-helptext = sys.stdin.read()
-    
-    
-# Import youtube_dl
-ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
-sys.path.insert(0, ROOT_DIR)
-import youtube_dl
-    
-                        # Pandoc's definition_lists. See http://pandoc.org/README.html
-                    # for more information.
-                    ret += '\n%s\n:   %s\n' % (option, description)
-                    continue
-            ret += line.lstrip() + '\n'
-        else:
-            ret += line + '\n'
-    
-        template = template.replace('{{fileopts}}', '|'.join(fileopts))
-    template = template.replace('{{diropts}}', '|'.join(diropts))
-    template = template.replace('{{flags}}', ' '.join(flags))
-    
-        def finalize_options(self):
-        pass
-    
-        def test_format_not_available(self):
-        formats = [
-            {'format_id': 'regular', 'ext': 'mp4', 'height': 360, 'url': TEST_URL},
-            {'format_id': 'video', 'ext': 'mp4', 'height': 720, 'acodec': 'none', 'url': TEST_URL},
-        ]
-        info_dict = _make_result(formats)
-    
-        def test_youtube_channel_matching(self):
-        assertChannel = lambda url: self.assertMatch(url, ['youtube:channel'])
-        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM')
-        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM?feature=gb_ch_rec')
-        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM/videos')
-    
-    
-@pytest.fixture
-def set_shell(monkeypatch):
-    def _set(cls):
-        shell = cls()
-        monkeypatch.setattr('thefuck.shells.shell', shell)
-        return shell
-    
-        proc.sendline(u'ehco test')
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
-    
-            return self.__dict__.get(key, None)
-    
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
+if __name__ == '__main__':
+    main()
 
     
+    # Get the version from youtube_dl/version.py without importing the package
+exec(compile(open('youtube_dl/version.py').read(),
+             'youtube_dl/version.py', 'exec'))
     
-class TestCaseInsensitiveDict:
+            info_dict = _make_result(list(formats_order), extractor='youtube')
+        ydl = YDL({'format': '(bestvideo[ext=mp4],bestvideo[ext=webm])+bestaudio'})
+        yie = YoutubeIE(ydl)
+        yie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(info_dict)
+        downloaded_ids = [info['format_id'] for info in ydl.downloaded_info_dicts]
+        self.assertEqual(downloaded_ids, ['137+141', '248+141'])
     
-            # ensure server thread doesn't get stuck waiting for connections
-        self._close_server_sock_ignore_errors()
-        self.join()
-        return False # allow exceptions to propagate
-
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-    class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
+    VERSION = '3.27'
+    
+        proc.sendline(u'git h')
+    assert proc.expect([TIMEOUT, u'git: 'h' is not a git command.'])
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
+    
+    
+def test_get_new_command():
+    new_command = get_new_command(Command('apt list --upgradable', match_output))
+    assert new_command == 'apt upgrade'
+    
+    query                                    | scan
+update-item                              | update-table
+    
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
     '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-            return {attr: getattr(self, attr, None) for attr in self.__attrs__}
-    
-    # The name of an image file (relative to this directory) to place at the top of
-# the title page.
-#latex_logo = None
-    
-        inputs = Input(shape=input_shape)
-    x = resnet_layer(inputs=inputs)
-    # Instantiate the stack of residual units
-    for stack in range(3):
-        for res_block in range(num_res_blocks):
-            strides = 1
-            if stack > 0 and res_block == 0:  # first layer but not first stack
-                strides = 2  # downsample
-            y = resnet_layer(inputs=x,
-                             num_filters=num_filters,
-                             strides=strides)
-            y = resnet_layer(inputs=y,
-                             num_filters=num_filters,
-                             activation=None)
-            if stack > 0 and res_block == 0:  # first layer but not first stack
-                # linear projection residual shortcut connection to match
-                # changed dims
-                x = resnet_layer(inputs=x,
-                                 num_filters=num_filters,
-                                 kernel_size=1,
-                                 strides=strides,
-                                 activation=None,
-                                 batch_normalization=False)
-            x = keras.layers.add([x, y])
-            x = Activation('relu')(x)
-        num_filters *= 2
-    
-    # input image dimensions
-img_rows, img_cols = 28, 28
-    
-        def __call__(self, x):
-        return 0.
-    
-        # Arguments
-        model: Keras model instance.
-        f: Keras function returning a list of tensors.
-        ins: list of tensors to be fed to `f`.
-        batch_size: integer batch size.
-        verbose: verbosity mode.
-        steps: Total number of steps (batches of samples)
-            before declaring `predict_loop` finished.
-            Ignored with the default value of `None`.
-    
-    seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
-                   padding='same', return_sequences=True))
-seq.add(BatchNormalization())
-    
-        for node in doctree.traverse(is_setting_index):
-        targetnode = get_setting_target(node)
-        assert isinstance(targetnode, nodes.target), 'Next node is not a target'
-    
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
-    
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-        def short_desc(self):
-        return 'Run a spider'
-    
-    
-class Command(ScrapyCommand):
-    
-    
-class ScrapesContract(Contract):
-    ''' Contract to check presence of fields in scraped items
-        @scrapes page_name page_body
-    '''
-    
-        def download_request(self, request, spider):
-        scheme = urlparse_cached(request).scheme
-        handler = self._get_handler(scheme)
-        if not handler:
-            raise NotSupported('Unsupported URL scheme '%s': %s' %
-                               (scheme, self._notconfigured[scheme]))
-        return handler.download_request(request, spider)
-    
-        def appid_exist(self, appids):
-        for appid in appids.split('|'):
-            if appid == '':
-                continue
-            if appid in self.config.GAE_APPIDS:
-                return True
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
         return False
-    
-        @staticmethod
-    def create_ca():
-        key = OpenSSL.crypto.PKey()
-        key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
-        ca = OpenSSL.crypto.X509()
-        ca.set_version(2)
-        ca.set_serial_number(0)
-        subj = ca.get_subject()
-        subj.countryName = 'CN'
-        subj.stateOrProvinceName = 'Internet'
-        subj.localityName = 'Cernet'
-        subj.organizationName = CertUtil.ca_vendor
-        # Log generated time.
-        subj.organizationalUnitName = '%s Root - %d' % (CertUtil.ca_vendor, int(time.time()))
-        subj.commonName = '%s XX-Net' % CertUtil.ca_vendor
-        ca.gmtime_adj_notBefore(- 3600 * 24)
-        ca.gmtime_adj_notAfter(CertUtil.ca_validity - 3600 * 24)
-        ca.set_issuer(subj)
-        ca.set_subject(subj)
-        ca.set_pubkey(key)
-        ca.add_extensions([
-            OpenSSL.crypto.X509Extension(
-                'basicConstraints', False, 'CA:TRUE', subject=ca, issuer=ca)
-            ])
-        ca.sign(key, CertUtil.ca_digest)
-        #xlog.debug('CA key:%s', key)
-        xlog.info('create CA')
-        return key, ca
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
-data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
-if not os.path.isdir(data_path):
-    data_path = current_path
-    
-    
 
     
-            self.decisionNumber = decisionNumber
-        self.eot = eot
-        self.eof = eof
-        self.min = min
-        self.max = max
-        self.accept = accept
-        self.special = special
-        self.transition = transition
+    The other HTTP methods are supported - see `requests.api`. Full documentation
+is at <http://python-requests.org>.
+    
+            realm = self._thread_local.chal['realm']
+        nonce = self._thread_local.chal['nonce']
+        qop = self._thread_local.chal.get('qop')
+        algorithm = self._thread_local.chal.get('algorithm')
+        opaque = self._thread_local.chal.get('opaque')
+        hash_utf8 = None
+    
+    # ---------
+# Specifics
+# ---------
     
     
-    def match(self, input, ttype, follow):
-        '''
-        Match current input symbol against ttype.  Attempt
-        single token insertion or deletion error recovery.  If
-        that fails, throw MismatchedTokenException.
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
+    
+    def line_length(filename):
+    return sum(1 for line in open(filename))
+    
+    # If true, the current module name will be prepended to all description
+# unit titles (such as .. function::).
+#add_module_names = True
+    
+    * This implementation uses a weighted vote, such that the votes of closer-neighbors are weighted more heavily.
+    
+        :param faces: List of face encodings to compare
+    :param face_to_compare: A face encoding to compare against
+    :return: A numpy ndarray with the distance for each face in the same order as the 'faces' array
+    '''
+    if len(face_encodings) == 0:
+        return np.empty((0))
     
     
-    def setText(self, text):
-        '''
-        Override the text for this token.  getText() will return this text
-        rather than pulling from the buffer.  Note that this does not mean
-        that start/stop indexes are not valid.  It means that that input
-        was converted to a new string in the token object.
-	'''
-        self._text = text
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
     
-        sepIndex = p.rfind(sep)
-    if altsep:
-        altsepIndex = p.rfind(altsep)
-        sepIndex = max(sepIndex, altsepIndex)
+    # Initialize some variables
+face_locations = []
+face_encodings = []
     
-        if AVAILABLE_TARGETS:
-        # Coercion is expected to use the first available target locale
-        CLI_COERCION_TARGET = AVAILABLE_TARGETS[0]
-        CLI_COERCION_WARNING = CLI_COERCION_WARNING_FMT.format(CLI_COERCION_TARGET)
+            face_encoding_a1 = api.face_encodings(img_a1)[0]
+        face_encoding_a2 = api.face_encodings(img_a2)[0]
+        face_encoding_a3 = api.face_encodings(img_a3)[0]
+        face_encoding_b1 = api.face_encodings(img_b1)[0]
     
-    def handleSlides(slides):
-    for slide in slides:
-        handleSlide(slide)
+    requirements = [
+    'face_recognition_models>=0.3.0',
+    'Click>=6.0',
+    'dlib>=19.7',
+    'numpy',
+    'Pillow'
+]
