@@ -1,366 +1,311 @@
 
         
-        #endif // BITCOIN_QT_OPENURIDIALOG_H
-
-    
-    private:
-    Ui::SignVerifyMessageDialog *ui;
-    WalletModel *model;
-    const PlatformStyle *platformStyle;
-    
-    #ifndef BITCOIN_RPC_MINING_H
-#define BITCOIN_RPC_MINING_H
-    
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
-    }
-    
-    static void secp256k1_ge_set_gej_var(secp256k1_ge *r, secp256k1_gej *a) {
-    secp256k1_fe z2, z3;
-    r->infinity = a->infinity;
-    if (a->infinity) {
-        return;
-    }
-    secp256k1_fe_inv_var(&a->z, &a->z);
-    secp256k1_fe_sqr(&z2, &a->z);
-    secp256k1_fe_mul(&z3, &a->z, &z2);
-    secp256k1_fe_mul(&a->x, &a->x, &z2);
-    secp256k1_fe_mul(&a->y, &a->y, &z3);
-    secp256k1_fe_set_int(&a->z, 1);
-    r->x = a->x;
-    r->y = a->y;
+        void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary dict(isolate, exports);
+  dict.Set('autoUpdater', AutoUpdater::Create(isolate));
+  dict.Set('AutoUpdater', AutoUpdater::GetConstructor(isolate)->GetFunction());
 }
     
+    #include <string>
     
-    {        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, y, sizeof(y));
-        secp256k1_sha256_write(&sha, x, sizeof(x));
-        secp256k1_sha256_finalize(&sha, result);
-        ret = 1;
+    
+    {}  // namespace api
+    
+    namespace mate {
     }
     
+      LRESULT CALLBACK WndProc(HWND hwnd,
+                           UINT message,
+                           WPARAM wparam,
+                           LPARAM lparam);
     
-    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
-    ret &= !overflow;
-    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
-    ret &= !overflow;
-    if (ret) {
-        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
-    } else {
-        memset(sig, 0, sizeof(*sig));
-    }
-    return ret;
-}
+    #ifndef ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
+#define ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
     
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
-    }
-}
-    
-    BOOST_FIXTURE_TEST_SUITE(blockchain_tests, BasicTestingSetup)
-    
-        // Escapes
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\ Baz\'', {
-            {'Foo', 'Bar Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\Baz\'', {
-            {'Foo', 'BarBaz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\@Baz\'', {
-            {'Foo', 'Bar@Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
-            {'Foo', 'Bar\'Baz'},
-            {'Spam', '\'Eggs\''},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\\\Baz\'', {
-            {'Foo', 'Bar\\Baz'},
-        });
-    
-        BOOST_CHECK_EQUAL(obj['age'].getValStr(), '100');
-    BOOST_CHECK_EQUAL(obj['first'].getValStr(), 'John');
-    BOOST_CHECK_EQUAL(obj['last'].getValStr(), 'Smith');
-    BOOST_CHECK_EQUAL(obj['distance'].getValStr(), '25');
-    BOOST_CHECK_EQUAL(obj['time'].getValStr(), '3600');
-    BOOST_CHECK_EQUAL(obj['calories'].getValStr(), '12');
-    BOOST_CHECK_EQUAL(obj['temperature'].getValStr(), '90.012');
-    BOOST_CHECK_EQUAL(obj['moon'].getValStr(), '1');
-    BOOST_CHECK_EQUAL(obj['spoon'].getValStr(), '');
-    BOOST_CHECK_EQUAL(obj['cat1'].getValStr(), '9000');
-    BOOST_CHECK_EQUAL(obj['cat2'].getValStr(), '12345');
-    
-    #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
-#else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
+    // static
+void Screen::BuildPrototype(v8::Isolate* isolate,
+                            v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'Screen'));
+  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
+      .SetMethod('getCursorScreenPoint', &Screen::GetCursorScreenPoint)
+      .SetMethod('getPrimaryDisplay', &Screen::GetPrimaryDisplay)
+      .SetMethod('getAllDisplays', &Screen::GetAllDisplays)
+      .SetMethod('getDisplayNearestPoint', &Screen::GetDisplayNearestPoint)
+#if defined(OS_WIN)
+      .SetMethod('screenToDipPoint', &display::win::ScreenWin::ScreenToDIPPoint)
+      .SetMethod('dipToScreenPoint', &display::win::ScreenWin::DIPToScreenPoint)
+      .SetMethod('screenToDipRect', &ScreenToDIPRect)
+      .SetMethod('dipToScreenRect', &DIPToScreenRect)
 #endif
-    
-    // This is initialized with a default, stub implementation.
-// If python-google.protobuf.cc is loaded, the function pointer is overridden
-// with a full implementation.
-const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
-    GetCProtoInsidePyProtoStub;
-Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
-    MutableCProtoInsidePyProtoStub;
-    
-    TEST(MovableMessageTest, SelfMoveAssignment) {
-  // The `self` reference is necessary to defeat -Wself-move.
-  protobuf_unittest::TestAllTypes message, &self = message;
-  TestUtil::SetAllFields(&message);
-  message = std::move(self);
-  TestUtil::ExpectAllFieldsSet(message);
+      .SetMethod('getDisplayMatching', &Screen::GetDisplayMatching);
 }
     
-    void ImmutableExtensionLiteGenerator::Generate(io::Printer* printer) {
-  std::map<string, string> vars;
-  const bool kUseImmutableNames = true;
-  InitTemplateVars(descriptor_, scope_, kUseImmutableNames, name_resolver_,
-                   &vars);
-  printer->Print(vars,
-      'public static final int $constant_name$ = $number$;\n');
-    }
-    
     
     {
-    {
-    {
-    {
-}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    {    // We really should be dead by now.  For whatever reason, we're not. Exit
+    // immediately, with the exit status set to the signal number with bit 8
+    // set.  On the systems that we care about, this exit status is what is
+    // normally used to indicate an exit by this signal's default handler.
+    // This mechanism isn't a de jure standard, but even in the worst case, it
+    // should at least result in an immediate exit.
+    RAW_LOG(WARNING, 'Still here, exiting really ungracefully.');
+    _exit(signal | (1 << 7));
+  }
+  ExitPosted();
+}
+    
+      // content::JavaScriptDialogManager implementations.
+  void RunJavaScriptDialog(content::WebContents* web_contents,
+                           content::RenderFrameHost* rfh,
+                           content::JavaScriptDialogType dialog_type,
+                           const base::string16& message_text,
+                           const base::string16& default_prompt_text,
+                           DialogClosedCallback callback,
+                           bool* did_suppress_message) override;
+  void RunBeforeUnloadDialog(content::WebContents* web_contents,
+                             content::RenderFrameHost* rfh,
+                             bool is_reload,
+                             DialogClosedCallback callback) override;
+  void CancelDialogs(content::WebContents* web_contents,
+                     bool reset_state) override;
+    
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
+}
+    
+        /** Colorize an icon (given filename) with the text color */
+    QIcon TextColorIcon(const QString& filename) const;
+    
+    namespace Ui {
+    class TransactionDescDialog;
+}
+    
+    #endif
 
     
-    void EnumFieldGenerator::DetermineForwardDeclarations(
-    std::set<string>* fwd_decls) const {
-  SingleFieldGenerator::DetermineForwardDeclarations(fwd_decls);
-  // If it is an enum defined in a different file, then we'll need a forward
-  // declaration for it.  When it is in our file, all the enums are output
-  // before the message, so it will be declared before it is needed.
-  if (descriptor_->file() != descriptor_->enum_type()->file()) {
-    // Enum name is already in 'storage_type'.
-    const string& name = variable('storage_type');
-    fwd_decls->insert('GPB_ENUM_FWD_DECLARE(' + name + ')');
-  }
+    static void secp256k1_rfc6979_hmac_sha256_generate(secp256k1_rfc6979_hmac_sha256_t *rng, unsigned char *out, size_t outlen) {
+    /* RFC6979 3.2.h. */
+    static const unsigned char zero[1] = {0x00};
+    if (rng->retry) {
+        secp256k1_hmac_sha256_t hmac;
+        secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
+        secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
+        secp256k1_hmac_sha256_write(&hmac, zero, 1);
+        secp256k1_hmac_sha256_finalize(&hmac, rng->k);
+        secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
+        secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
+        secp256k1_hmac_sha256_finalize(&hmac, rng->v);
+    }
+    }
+    
+        BOOST_CHECK(v.setBool(true));
+    BOOST_CHECK_EQUAL(v.isBool(), true);
+    BOOST_CHECK_EQUAL(v.isTrue(), true);
+    BOOST_CHECK_EQUAL(v.isFalse(), false);
+    BOOST_CHECK_EQUAL(v.getBool(), true);
+    
+    // Bech32 is a string encoding format used in newer address types.
+// The output consists of a human-readable part (alphanumeric), a
+// separator character (1), and a base32 data section, the last
+// 6 characters of which are a checksum.
+//
+// For more information, see BIP 173.
+    
+    #include <grpcpp/impl/grpc_library.h>
+#include <grpcpp/security/credentials.h>
+    
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
 }
     
-      vars['default_name'] = GPBGenericValueFieldName(descriptor_);
-  if (descriptor_->is_repeated()) {
-    vars['default'] = 'nil';
-  } else {
-    vars['default'] = DefaultValue(descriptor_);
-  }
-  string type = GetCapitalizedType(descriptor_);
-  vars['extension_type'] = string('GPBDataType') + type;
+    #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
     
-      static CreatorRegistry& Registry() {
-    static CreatorRegistry* g_registry_ = new CreatorRegistry();
-    return *g_registry_;
-  }
+    namespace grpc {
+    }
+    
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
+    
+     private:
+  class DynamicThread {
+   public:
+    DynamicThread(DynamicThreadPool* pool);
+    ~DynamicThread();
+    }
     
      protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  char GetChar() override {
+    return fin_.get();
+  }
+  /*! \brief to be implemented by child, check if end of stream */
+  bool IsEnd() override {
+    return fin_.eof();
+  }
     
-      int label_axis_, outer_num_, inner_num_;
+    #include <dmlc/omp.h>
+#include <xgboost/logging.h>
+#include <algorithm>
+#include '../common/math.h'
     
-    #include <vector>
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
     
-    #endif  // CAFFE_CONV_LAYER_HPP_
+    namespace rabit {
+namespace utils {
+extern 'C' {
+  void (*Printf)(const char *fmt, ...) = Rprintf;
+  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
+  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
+  void (*Error)(const char *fmt, ...) = error;
+}
+}
+}
+    
+    void DHTRoutingTable::setTaskQueue(DHTTaskQueue* taskQueue)
+{
+  taskQueue_ = taskQueue;
+}
+    
+      ~DHTRoutingTable();
+    
+      std::vector<std::shared_ptr<DHTNode>> nodes;
+  // nodes
+  const int compactlen = bittorrent::getCompactLength(family_);
+  for (size_t i = 0; i < numNodes; ++i) {
+    // 1byte compact peer info length
+    uint8_t peerInfoLen;
+    READ_CHECK(fp, &peerInfoLen, sizeof(peerInfoLen));
+    if (peerInfoLen != compactlen) {
+      // skip this entry
+      readBytes(fp, buf, buf.size(), 7 + 48);
+      continue;
+    }
+    // 7bytes reserved
+    readBytes(fp, buf, buf.size(), 7);
+    // compactlen bytes compact peer info
+    readBytes(fp, buf, buf.size(), compactlen);
+    if (memcmp(zero, buf, compactlen) == 0) {
+      // skip this entry
+      readBytes(fp, buf, buf.size(), 48 - compactlen);
+      continue;
+    }
+    std::pair<std::string, uint16_t> peer =
+        bittorrent::unpackcompact(buf, family_);
+    if (peer.first.empty()) {
+      // skip this entry
+      readBytes(fp, buf, buf.size(), 48 - compactlen);
+      continue;
+    }
+    // 24-compactlen bytes reserved
+    readBytes(fp, buf, buf.size(), 24 - compactlen);
+    // node ID
+    readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
+    }
+    
+      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
+  {
+    return nodes_;
+  }
+    
+      std::vector<std::shared_ptr<DHTNode>> nodes_;
+    
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
+    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
+    const std::shared_ptr<PeerStorage>& peerStorage)
+{
+  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
+  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
+  task->setPeerStorage(peerStorage);
+  setCommonProperty(task);
+  return task;
+}
+    
+    DHTTaskQueueImpl::DHTTaskQueueImpl()
+    : periodicTaskQueue1_(NUM_CONCURRENT_TASK),
+      periodicTaskQueue2_(NUM_CONCURRENT_TASK),
+      immediateTaskQueue_(NUM_CONCURRENT_TASK)
+{
+}
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+        std::vector<AddrEntry>::iterator find(const std::string& addr);
+    
+    #endif  // BENCHMARK_ARRAYSIZE_H_
 
     
-    
-    {}  // namespace caffe
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-    namespace tesseract {
-double DotProductSSE(const double* u, const double* v, int n) {
-  fprintf(stderr, 'DotProductSSE can't be used on Android\n');
-  abort();
-}
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
-  fprintf(stderr, 'IntDotProductSSE can't be used on Android\n');
-  abort();
-}
-}  // namespace tesseract
-    
-    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
-#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
-    
-    // Computes matrix.vector v = Wu.
-// u is of size W.dim2() - 1 and the output v is of size W.dim1().
-// u is imagined to have an extra element at the end with value 1, to
-// implement the bias, but it doesn't actually have it.
-void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                                    const GenericVector<double>& scales,
-                                    const int8_t* u, double* v) const {
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  if (partial_funcs_.empty()) {
-    // Base implementation.
-    for (int i = 0; i < num_out; ++i) {
-      const int8_t* wi = w[i];
-      int total = 0;
-      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
-      // Add in the bias and correct for integer values.
-      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
-    }
-  } else {
-    const int8_t* w_data = shaped_w_.data();
-    const double* scales_data = &scales[0];
-    // Each call to a partial_func_ produces group_size outputs, except the
-    // last one, which can produce less.
-    int group_size = num_outputs_per_register_ * max_output_registers_;
-    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-    int rounded_num_out = RoundOutputs(num_out);
-    int output = 0;
-    for (auto fn : partial_funcs_) {
-      // The amount of w_data consumed by each call to fn.
-      int w_step = (rounded_num_in + 1) * group_size;
-      // Run with this group size, until it would produce too much output, then
-      // switch to a smaller size.
-      for (; output + group_size <= rounded_num_out; output += group_size) {
-        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
-        w_data += w_step;
-        scales_data += group_size;
-        v += group_size;
-      }
-      group_size /= 2;
-    }
+    int Benchmark::ArgsCnt() const {
+  if (args_.empty()) {
+    if (arg_names_.empty()) return -1;
+    return static_cast<int>(arg_names_.size());
   }
+  return static_cast<int>(args_.front().size());
 }
     
-    // Constructor.
-// Tests the architecture in a system-dependent way to detect AVX, SSE and
-// any other available SIMD equipment.
-// __GNUC__ is also defined by compilers that include GNU extensions such as
-// clang.
-SIMDDetect::SIMDDetect() {
-#if defined(X86_BUILD)
-#if defined(__GNUC__)
-  unsigned int eax, ebx, ecx, edx;
-  if (__get_cpuid(1, &eax, &ebx, &ecx, &edx) != 0) {
-    // Note that these tests all use hex because the older compilers don't have
-    // the newer flags.
-    sse_available_ = (ecx & 0x00080000) != 0;
-    avx_available_ = (ecx & 0x10000000) != 0;
-    if (avx_available_) {
-      // There is supposed to be a __get_cpuid_count function, but this is all
-      // there is in my cpuid.h. It is a macro for an asm statement and cannot
-      // be used inside an if.
-      __cpuid_count(7, 0, eax, ebx, ecx, edx);
-      avx2_available_ = (ebx & 0x00000020) != 0;
-      avx512F_available_ = (ebx & 0x00010000) != 0;
-      avx512BW_available_ = (ebx & 0x40000000) != 0;
-    }
-  }
-#elif defined(_WIN32)
-  int cpuInfo[4];
-  __cpuid(cpuInfo, 0);
-  if (cpuInfo[0] >= 1) {
-    __cpuid(cpuInfo, 1);
-    sse_available_ = (cpuInfo[2] & 0x00080000) != 0;
-    avx_available_ = (cpuInfo[2] & 0x10000000) != 0;
-  }
-#else
-#error 'I don't know how to test for SIMD with this compiler'
-#endif
-#endif  // X86_BUILD
-}
+    #endif  // CHECK_H_
 
     
-      // Iterate over the blobs inside to_block, and set the blobs that we want to
-  // process to BSTT_NONE. (By default, they should be BSTT_SKIP). The function
-  // returns 0 upon success.
-  int LabelSpecialText(TO_BLOCK* to_block);
-    
-    int orientation_and_script_detection(STRING& filename,
-                                     OSResults*,
-                                     tesseract::Tesseract*);
-    
-      // go through the list again and this time create the menu structure.
-  vc_it.move_to_first();
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
-    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
+    namespace benchmark {
+enum LogColor {
+  COLOR_DEFAULT,
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_YELLOW,
+  COLOR_BLUE,
+  COLOR_MAGENTA,
+  COLOR_CYAN,
+  COLOR_WHITE
+};
     }
     
-    
-    {  // Create temporary file
-  auto fd = mkstemp(&tmp[0]);
-  if (fd == -1) {
-    throw std::system_error(errno, std::system_category());
-  }
-  close(fd);
-  return std::string(tmp.data(), tmp.size());
-}
-    
-    ```
+    namespace benchmark {
+    }
