@@ -1,144 +1,117 @@
 
         
-                      yield item, value, text, default_html_options.merge(additional_html_options)
-            end.join.html_safe
-          end
-    
-        # Render but returns a valid Rack body. If fibers are defined, we return
-    # a streaming body that renders the template piece by piece.
-    #
-    # Note that partials are not supported to be rendered with streaming,
-    # so in such cases, we just wrap them in an array.
-    def render_body(context, options)
-      if options.key?(:partial)
-        [render_partial(context, options)]
-      else
-        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
-      end
-    end
-    
-    #############################################################################
-#
-# Helper functions
-#
-#############################################################################
-    
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
-    
-      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
-    
-    Given(%r!^I wait (\d+) second(s?)$!) do |time, _|
-  sleep(time.to_f)
-end
-    
-          def print_worst_offenders
-        @io.puts
-        @io.puts 'Worst offenders:'
-        @timings.sort_by { |_f, t| -t }.take(10).each do |(f, t)|
-          @io.puts '  #{t}s for #{f}'
+                # Executes a command on the remote machine with administrative
+        # privileges. See {#execute} for documentation, as the API is the
+        # same.
+        #
+        # @see #execute
+        def sudo(command, opts=nil)
         end
-        @io.puts
-      end
     
-    # Helper method for Windows
-def dst_active?
-  config = Jekyll.configuration('quiet' => true)
-  ENV['TZ'] = config['timezone']
-  dst = Time.now.isdst
-    
-                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
-            Jekyll.logger.debug '', json_message
-            @websockets.each { |ws| ws.send(json_message) }
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
           end
         end
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
-  end
-end
-
-    
-      # @private
-  def unused_options
-    @options - @args
-  end
-    
-      def migrate_tap_migration
-    report[:D].each do |full_name|
-      name = full_name.split('/').last
-      next unless (dir = HOMEBREW_CELLAR/name).exist? # skip if formula is not installed.
-      next unless new_tap_name = tap.tap_migrations[name] # skip if formula is not in tap_migrations list.
-      tabs = dir.subdirs.map { |d| Tab.for_keg(Keg.new(d)) }
-      next unless tabs.first.tap == tap # skip if installed formula is not from this tap.
-      new_tap = Tap.fetch(new_tap_name)
-      new_tap.install unless new_tap.installed?
-      # update tap for each Tab
-      tabs.each { |tab| tab.tap = new_tap }
-      tabs.each(&:write)
-    end
-  end
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a configuration key defined for
-      # V2. Any configuration key plugins for V2 should inherit from this
-      # class.
-      class Config
-        # This constant represents an unset value. This is useful so it is
-        # possible to know the difference between a configuration value that
-        # was never set, and a value that is nil (explicitly). Best practice
-        # is to initialize all variables to this value, then the {#merge}
-        # method below will 'just work' in many cases.
-        UNSET_VALUE = Object.new
-    
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
+            # Registers additional synced folder implementations.
         #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
+        # @param [String] name Name of the implementation.
+        # @param [Integer] priority The priority of the implementation,
+        # higher (big) numbers are tried before lower (small) numbers.
+        def self.synced_folder(name, priority=10, &block)
+          components.synced_folders.register(name.to_sym) do
+            [block.call, priority]
+          end
+    
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
         end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
       end
     end
   end
 end
 
     
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
+        desc 'Commits the version to github repository'
+    task :commit_version do
+      sh <<-SH
+        sed -i 's/.*VERSION.*/  VERSION = '#{source_version}'/' lib/sinatra/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' sinatra-contrib/lib/sinatra/contrib/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' rack-protection/lib/rack/protection/version.rb
+      SH
+    
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+          def initialize(app, options = {})
+        @app, @options = app, default_options.merge(options)
+      end
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+      it 'denies post form requests with wrong authenticity_token field' do
+    post('/', {'authenticity_token' => bad_token}, 'rack.session' => session)
+    expect(last_response).not_to be_ok
+  end
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
 end
+
     
-        def sass_fn_exists(fn)
-      %Q{(#{fn}('') != unquote('#{fn}('')'))}
-    end
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
       end
+      super
     end
     
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
+    
+    
+    module Jekyll
+    
+    Liquid::Template.register_tag('video', Jekyll::VideoTag)
