@@ -1,95 +1,61 @@
 
         
-        import codecs
-import subprocess
+            :param id: id of post to get
+    :param check_author: require the current user to be the author
+    :return: the post with author information
+    :raise 404: if a post with the given id doesn't exist
+    :raise 403: if the current user isn't the author
+    '''
+    post = get_db().execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
     
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
+    # read in SQL for populating test data
+with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
+    _data_sql = f.read().decode('utf8')
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+def _dump_loader_info(loader):
+    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
+    for key, value in sorted(loader.__dict__.items()):
+        if key.startswith('_'):
+            continue
+        if isinstance(value, (tuple, list)):
+            if not all(isinstance(x, (str, text_type)) for x in value):
+                continue
+            yield '%s:' % key
+            for item in value:
+                yield '  - %s' % item
+            continue
+        elif not isinstance(value, (str, text_type, int, float, bool)):
+            continue
+        yield '%s: %r' % (key, value)
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+def loads(s, **kwargs):
+    '''Unserialize a JSON object from a string ``s`` by using the application's
+    configured decoder (:attr:`~flask.Flask.json_decoder`) if there is an
+    application on the stack.
+    '''
+    _load_arg_defaults(kwargs)
+    if isinstance(s, bytes):
+        encoding = kwargs.pop('encoding', None)
+        if encoding is None:
+            encoding = detect_encoding(s)
+        s = s.decode(encoding)
+    return _json.loads(s, **kwargs)
     
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
+        def __init__(self, *args, **kwargs):
+        super(FlaskClient, self).__init__(*args, **kwargs)
+        self.environ_base = {
+            'REMOTE_ADDR': '127.0.0.1',
+            'HTTP_USER_AGENT': 'werkzeug/' + werkzeug.__version__
+        }
     
-    
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
-    
-    from __future__ import print_function
-import os
-from os.path import lexists
-    
-        def __get__(self, obj, T):
-        def transaction(*args, **kwargs):
-            state = memento(obj)
-            try:
-                return self.method(obj, *args, **kwargs)
-            except Exception as e:
-                state()
-                raise e
-    
-        jim = Subscriber('jim', message_center)
-    jim.subscribe('cartoon')
-    jack = Subscriber('jack', message_center)
-    jack.subscribe('music')
-    gee = Subscriber('gee', message_center)
-    gee.subscribe('movie')
-    vani = Subscriber('vani', message_center)
-    vani.subscribe('movie')
-    vani.unsubscribe('movie')
-    
-        def __init__(self):
-        '''We have an AM state and an FM state'''
-        self.amstate = AmState(self)
-        self.fmstate = FmState(self)
-        self.state = self.amstate
-    
-    http://stackoverflow.com/questions/963965/how-is-this-strategy-pattern
- -written-in-python-the-sample-in-wikipedia
-In most of other languages Strategy pattern is implemented via creating some
-base strategy interface/abstract class and subclassing it with a number of
-concrete strategies (as we can see at
-http://en.wikipedia.org/wiki/Strategy_pattern), however Python supports
-higher-order functions and allows us to have only one class and inject
-functions into it's instances, as shown in this example.
-    
-        def find_all_path(self, start, end, path=None):
-        path = path or []
-        path.append(start)
-        if start == end:
-            return [path]
-        paths = []
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpaths = self.find_all_path(node, end, path[:])
-                paths.extend(newpaths)
-        return paths
+            # If the request method is HEAD and we don't have a handler for it
+        # retry with GET.
+        if meth is None and request.method == 'HEAD':
+            meth = getattr(self, 'get', None)
