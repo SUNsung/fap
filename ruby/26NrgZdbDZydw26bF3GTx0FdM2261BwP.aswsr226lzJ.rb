@@ -1,102 +1,78 @@
 
         
-                  def tag_name(multiple = false, index = nil)
-            # a little duplication to construct less strings
-            case
-            when @object_name.empty?
-              '#{sanitized_method_name}#{multiple ? '[]' : ''}'
-            when index
-              '#{@object_name}[#{index}][#{sanitized_method_name}]#{multiple ? '[]' : ''}'
-            else
-              '#{@object_name}[#{sanitized_method_name}]#{multiple ? '[]' : ''}'
-            end
-          end
-    
-    module ActionView #:nodoc:
-  # = Action View PathSet
-  #
-  # This class is used to store and access paths in Action View. A number of
-  # operations are defined so that you can search among the paths in this
-  # set and also perform operations on other +PathSet+ objects.
-  #
-  # A +LookupContext+ will use a +PathSet+ to store the paths in its context.
-  class PathSet #:nodoc:
-    include Enumerable
-    
-        initializer 'action_view.form_with_generates_remote_forms' do |app|
-      ActiveSupport.on_load(:action_view) do
-        form_with_generates_remote_forms = app.config.action_view.delete(:form_with_generates_remote_forms)
-        ActionView::Helpers::FormHelper.form_with_generates_remote_forms = form_with_generates_remote_forms
-      end
-    end
-    
-    module ActionView
-  # This is the main entry point for rendering. It basically delegates
-  # to other objects like TemplateRenderer and PartialRenderer which
-  # actually renders the template.
-  #
-  # The Renderer will parse the options from the +render+ or +render_body+
-  # method and render a partial or a template based on the options. The
-  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
-  # the setup and logic necessary to render a view and a new object is created
-  # each time +render+ is called.
-  class Renderer
-    attr_accessor :lookup_context
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
-    
-      def prev_page
-    account_outbox_url(@account, page: true, min_id: @statuses.first.id) unless @statuses.empty?
+          # True if a {Formula} is being built as a bottle (i.e. binary package).
+  def bottle?
+    include? 'build-bottle'
   end
     
-          log_action :confirm, @user
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
+end
+
     
-        def update
-      authorize @custom_emoji, :update?
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
     
-      private
-    
-          attr_reader :page, :name
-    
-          def string_to_code string
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-          def remove_page_extentions(page_path)
-        Gollum::Markup.formats.values.each do |format|
-          page_path = page_path.gsub(/\.#{format[:regexp]}$/, '')
-        end
-        return page_path
+          it 'updates an existing user' do
+        visit edit_admin_user_path(users(:bob))
+        check 'Admin'
+        click_on 'Update User'
+        expect(page).to have_text('User 'bob' was successfully updated.')
+        visit edit_admin_user_path(users(:bob))
+        expect(page).to have_checked_field('Admin')
       end
     
-    module Precious
-  module Views
-    class Layout < Mustache
-      include Rack::Utils
-      alias_method :h, :escape_html
+        it 'returns a FontAwesome icon element' do
+      icon = icon_tag('fa-copy')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('i.fa.fa-copy')).to be_a Nokogiri::XML::Element
+    end
     
-          def toc_content
-        @toc_content
-      end
-    
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
+          def check
+        create_event :payload => {}
       end
     end
     
-      class DuplicatePageError < Error
-    attr_accessor :dir
-    attr_accessor :existing_path
-    attr_accessor :attempted_path
+          Utils.sort_tuples!(tuples, orders)
+      expect(tuples).to eq expected
+    end
+    
+      # Used to hash the password. Please generate one with rails secret.
+  mattr_accessor :pepper
+  @@pepper = nil
+    
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      end
+    
+      it 'calls #to_path on second argument when passed ?e and a filename' do
+    p = mock('path')
+    p.should_receive(:to_path).and_return @file
+    Kernel.test(?e, p)
+  end
+    
+      it 'raises an ArgumentError if there is no catch block for the symbol' do
+    lambda { throw :blah }.should raise_error(ArgumentError)
+  end
+    
+        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
+      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
+    end
