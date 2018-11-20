@@ -1,57 +1,115 @@
 
         
-                    appid = random.choice(self.working_appid_list)
-            return str(appid)
-        else:
-            for _ in xrange(0, 10):
-                appid = self.public_appid.get()
-                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
-                    continue
-                else:
-                    return appid
-            return None
+            return out
     
-            # change the status,
-        # web_control /cert_import_status will return True, else return False
-        # launcher will wait ready to open browser and check update
-        # config.cert_import_ready = True
+    # FileModeWarnings go off per the default.
+warnings.simplefilter('default', FileModeWarning, append=True)
+
     
-        check_create_data_path()
+            cnonce = (hashlib.sha1(s).hexdigest()[:16])
+        if _algorithm == 'MD5-SESS':
+            HA1 = hash_utf8('%s:%s:%s' % (HA1, nonce, cnonce))
     
-    - CommonTokenStream: A basic and most commonly used TokenStream
-  implementation.
-- TokenRewriteStream: A modification of CommonTokenStream that allows the
-  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
-            Terence implemented packed table initializers, because Java has a
-        size restriction on .class files and the lookup tables can grow
-        pretty large. The generated JavaLexer.java of the Java.g example
-        would be about 15MB with uncompressed array initializers.
-    
-            # can't recover with single token deletion, try insertion
-        if self.mismatchIsMissingToken(input, follow):
-            inserted = self.getMissingSymbol(input, e, ttype, follow)
-            e = MissingTokenException(ttype, input, inserted)
+        if cookie_dict is not None:
+        names_from_jar = [cookie.name for cookie in cookiejar]
+        for name in cookie_dict:
+            if overwrite or (name not in names_from_jar):
+                cookiejar.set_cookie(create_cookie(name, cookie_dict[name]))
     
     
-class ANTLRInputStream(ANTLRStringStream):
-    '''
-    @brief CharStream that reads data from a file-like object.
+if __name__ == '__main__':
+    main()
+
     
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
     
-        def __init__(self, animal_factory=None):
-        '''pet_factory is our abstract factory.  We can set it at will.'''
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
     
-    In general, in Python this won't be necessary, but a second example showing
-this kind of arrangement is also included.
+            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
+            sock.sendall(b'send something')
+            time.sleep(2.5)
+            sock.sendall(b'still alive')
+            block_server.set()  # release server block
     
-    *References:
-http://stackoverflow.com/questions/1514120/python-implementation-of-the-object-pool-design-pattern
-https://sourcemaking.com/design_patterns/object_pool
+    import os
+import copy
+import filecmp
+from io import BytesIO
+import zipfile
+from collections import deque
     
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
+    
+    {    # Server Error.
+    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
+    501: ('not_implemented',),
+    502: ('bad_gateway',),
+    503: ('service_unavailable', 'unavailable'),
+    504: ('gateway_timeout',),
+    505: ('http_version_not_supported', 'http_version'),
+    506: ('variant_also_negotiates',),
+    507: ('insufficient_storage',),
+    509: ('bandwidth_limit_exceeded', 'bandwidth'),
+    510: ('not_extended',),
+    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
+}
+    
+        ca_certs = os.path.join(current_path, 'cacert.pem')
+    openssl_context = SSLContext(
+        logger, ca_certs=ca_certs,
+        cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
+                       '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
+    )
+    host_manager = HostManagerBase()
+    connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
+                                     debug=True)
+    check_ip = CheckIp(logger, config, connect_creator)
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    
+         
+    def getUnexpectedType(self):
+        '''Return the token type or char of the unexpected input element'''
+    
+    
+    def _getRuleInvocationStack(cls, module):
+        '''
+        A more general version of getRuleInvocationStack where you can
+        pass in, for example, a RecognitionException to get it's rule
+        stack trace.  This routine is shared with all recognizers, hence,
+        static.
+    
+            return buf.getvalue()
+
+    
+        def getTokenIndex(self):
+        return self.index
+    
+    def setTokenIndex(self, index):
+        self.index = index
+    
+    def generateLargePrime(keysize = 1024):
+    while True:
+        num = random.randrange(2 ** (keysize - 1), 2 ** (keysize))
+        if isPrime(num):
+            return num
+    
+                return self.dp[x][y]
+    
+    if __name__ == '__main__':
+	import sys
