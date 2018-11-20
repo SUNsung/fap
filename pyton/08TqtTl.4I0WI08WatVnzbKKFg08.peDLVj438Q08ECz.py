@@ -1,68 +1,60 @@
 
         
-        model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(128, activation='relu', name='features'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='softmax'))
+                if any([s_line.startswith(s) for s in ['* [', '- [']]):
+            if indent == last_indent:
+                blocks[-1].append(line)
+            else:
+                blocks.append([line])
+            last_indent = indent
+        else:
+            blocks.append([line])
+            last_indent = None
+    
+        def _get_session_from_db(self):
+        try:
+            return self.model.objects.get(
+                session_key=self.session_key,
+                expire_date__gt=timezone.now()
+            )
+        except (self.model.DoesNotExist, SuspiciousOperation) as e:
+            if isinstance(e, SuspiciousOperation):
+                logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
+                logger.warning(str(e))
+            self._session_key = None
     
     
-def convert_dense_weights_data_format(dense,
-                                      previous_feature_map_shape,
-                                      target_data_format='channels_first'):
-    '''Utility useful when changing a convnet's `data_format`.
+class Session(AbstractBaseSession):
+    '''
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
     
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
+    *What does this example do?
+The code shows a way to localize words in two languages: English and
+Greek. 'getLocalizer' is the factory method that constructs a
+localizer depending on the language chosen. The localizer object will
+be an instance from a different class according to the language
+localized. However, the main code does not have to worry about which
+localizer will be instantiated, since the method 'get' will be called
+in the same way independently of the language.
     
+    ### OUTPUT ###
+# Ellipse: 1
+# Ellipse: 2
+# Ellipse: 3
+# Ellipse: 4
+
     
-def test_regularization_shared_layer_in_different_models():
-    shared_dense = Dense(num_classes,
-                         kernel_regularizer=regularizers.l1(),
-                         activity_regularizer=regularizers.l1())
-    models = []
-    for _ in range(2):
-        input_tensor = Input(shape=(data_dim,))
-        unshared_dense = Dense(num_classes, kernel_regularizer=regularizers.l1())
-        out = unshared_dense(shared_dense(input_tensor))
-        models.append(Model(input_tensor, out))
+        # commands are just pushed into the command stack
+    command_stack.append(MoveFileCommand('foo.txt', 'bar.txt'))
+    command_stack.append(MoveFileCommand('bar.txt', 'baz.txt'))
     
-        When running a model loaded from file, the input tensors
-    `initial_state` and `constants` can be passed to `RNN.__call__` as part
-    of `inputs` instead of by the dedicated keyword arguments. This method
-    makes sure the arguments are separated and that `initial_state` and
-    `constants` are lists of tensors (or None).
+        def build_size(self):
+        self.size = 'Small'
     
-        def predict_proba(self, x, batch_size=32, verbose=0):
-        '''Generates class probability predictions for the input samples.
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
-    
-    def download_pdf(link, location, name):
-    try:
-        response = requests.get(link)
-        with open(os.path.join(location, name), 'wb') as f:
-        	f.write(response.content)
-        	f.close()
-    except HTTPError:
-        print('>>> Error 404: cannot be downloaded!\n') 
-        raise   
-    except socket.timeout:
-        print(' '.join(('can't download', link, 'due to connection timeout!')) )
-        raise
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
