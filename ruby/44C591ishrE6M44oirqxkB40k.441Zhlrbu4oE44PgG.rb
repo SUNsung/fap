@@ -1,230 +1,204 @@
 
         
-                  if options['multiple']
-            add_default_name_and_id_for_value(@checked_value, options)
-            options.delete('multiple')
-          else
-            add_default_name_and_id(options)
-          end
+                cmd = ['git tag']
     
-                  [:year, :month, :day, :hour, :min, :sec].each do |key|
-                default[key] ||= time.send(key)
-              end
+          it 'generates the correct git command with an array of paths' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
     
-              def initialize(template_object, object_name, method_name, object, tag_value)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @tag_value = tag_value
-          end
+              result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              strict: true,
+              executable: '#{CUSTOM_EXECUTABLE_NAME}'
+            )
+          end').runner.execute(:test)
     
-          def instrument(name, **options) # :doc:
-        options[:identifier] ||= (@template && @template.identifier) || @path
+            keychain = 'keychain with spaces.keychain'
+        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
+        require 'open3'
     
-        if superenv?
-      ENV.keg_only_deps = keg_only_deps
-      ENV.deps = formula_deps
-      ENV.x11 = reqs.any? { |rq| rq.is_a?(X11Requirement) }
-      ENV.setup_build_environment(formula)
-      post_superenv_hacks
-      reqs.each(&:modify_build_environment)
-      deps.each(&:modify_build_environment)
-    else
-      ENV.setup_build_environment(formula)
-      reqs.each(&:modify_build_environment)
-      deps.each(&:modify_build_environment)
+    shelljoin_testcases = [
+  {
+    'it' => '(#1) on array with entry with space',
+    'it_result' => {
+      'windows' => 'wraps this entry in double quotes',
+      'other'   => 'escapes the space in this entry'
+    },
+    'input' => ['a', 'b c', 'd'],
+    'expect' => {
+      'windows' => 'a 'b c' d',
+      'other'   => 'a b\ c d'
+    }
+  },
+  {
+    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
+    'it_result' => {
+      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
+      'other'   => 'escapes the double quotes and escapes the space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a '''b'' c' d',
+      'other'   => 'a \'b\'\ c d'
+    }
+  },
+  {
+    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
+    'it_result' => {
+      'windows' => 'no changes',
+      'other'   => 'escapes the single quotes and space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a \''b' c\' d',
+      'other'   => 'a \\'b\\'\\ c d'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
+  {
+    'it' => '(#4) on array with entry that is `$$`',
+    'it_result' => {
+      'windows' => 'the result includes the process id',
+      'other'   => 'the result includes the process id'
+    },
+    'input' => ['ps', '-p', $$],
+    'expect' => {
+      'windows' => 'ps -p #{$$}',
+      'other'   => 'ps -p #{$$}'
+    }
+  }
+]
     
-          # we readlink because this path probably doesn't exist since caveats
-      # occurs before the link step of installation
-      # Yosemite security measures mildly tighter rules:
-      # https://github.com/Homebrew/homebrew/issues/33815
-      if !plist_path.file? || !plist_path.symlink?
-        if f.plist_startup
-          s << 'To have launchd start #{f.full_name} at startup:'
-          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
-          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-          s << '  sudo chown root #{plist_link}'
-        else
-          s << 'To have launchd start #{f.full_name} at login:'
-          s << '  mkdir -p #{destination}' unless destination_path.directory?
-          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
-        end
-        s << 'Then to load #{f.full_name} now:'
-        if f.plist_startup
-          s << '  sudo launchctl load #{plist_link}'
-        else
-          s << '  launchctl load #{plist_link}'
-        end
-      # For startup plists, we cannot tell whether it's running on launchd,
-      # as it requires for `sudo launchctl list` to get real result.
-      elsif f.plist_startup
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  sudo launchctl unload #{plist_link}'
-        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-        s << '  sudo chown root #{plist_link}'
-        s << '  sudo launchctl load #{plist_link}'
-      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  launchctl unload #{plist_link}'
-        s << '  launchctl load #{plist_link}'
-      else
-        s << 'To load #{f.full_name}:'
-        s << '  launchctl load #{plist_link}'
-      end
+            # this command is also sent on macOS Sierra and we need to allow it or else the test will fail
+        allowed_command = 'security set-key-partition-list -S apple-tool:,apple: -k #{''.shellescape} #{Dir.home}/Library/Keychains/login.keychain &> /dev/null'
     
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
+        def assert_index(index)
+      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
+      raise 'No such filter to insert: #{index}' unless i
+      i
+    end
+  end
+end
+
     
-              workspace_path = 'Examples.xcworkspace'
-          workspace = Xcodeproj::Workspace.new_from_xcworkspace(workspace_path)
-          workspace.schemes.each do |scheme_name, project_path|
-            next if scheme_name == 'Pods'
-            next if project_path.end_with? 'Pods.xcodeproj'
-            puts '    Building scheme: #{scheme_name}'
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-          def unmasked_token?(token)
-        token.length == TOKEN_LENGTH
-      end
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
-      end
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+        def process_response(response)
+      data = {}
+      html, title = parse(response)
+      context = pipeline_context(response)
+      context[:html_title] = title
+      pipeline.call(html, context, data)
+      data
     end
     
-      it 'ignores implicit arrays' do
-    expect_no_offenses(<<-RUBY.strip_indent)
-      foo = a,
-      b
-    RUBY
+            css('pre.no-bg-with-indent').each do |node|
+          node.content = '  ' + node.content.gsub('\n', '\n  ')
+        end
+    
+          def other
+        css('#example', '.example', '#description_source', '#description_demo', '[id$='example']', 'hr').remove
+    
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
+end
+
+    
+      if config.log_to.include? 'file'
+    # Configure an appender that will write log events to a file.
+    if AppConfig.environment.logging.logrotate.enable?
+      # The file will be rolled on a daily basis, and the rolled files will be kept
+      # the configured number of days. Older files will be deleted. The default pattern
+      # layout is used when formatting log events into strings.
+      Logging.appenders.rolling_file('file',
+                                     filename:      config.paths['log'].first,
+                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
+                                     age:           'daily',
+                                     truncate:      false,
+                                     auto_flushing: true,
+                                     layout:        layout
+                                    )
+    else
+      # No file rolling, use logrotate to roll the logfile.
+      Logging.appenders.file('file',
+                             filename:      config.paths['log'].first,
+                             truncate:      false,
+                             auto_flushing: true,
+                             layout:        layout
+                            )
+    end
   end
     
-      context 'when arguments to a method' do
-    let(:prefix) { 'bar(' }
-    let(:suffix) { ')' }
-    let(:source) { construct(false, true) }
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
     
-    module RuboCop
-  module AST
-    # A node extension for `def` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `def` nodes within RuboCop.
-    class DefNode < Node
-      include ParameterizedNode
-      include MethodIdentifierPredicates
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
     
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
+    end
+  end
+    
+      class SendPrivate < Base
+    def perform(*_args)
+      # don't federate in cucumber
+    end
+  end
+    
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
+    end
+    
       end
     
-    class SinatraWorker
-  include Sidekiq::Worker
+          FactoryGirl.create(:notification, :recipient => alice)
+      note = FactoryGirl.create(:notification, :recipient => user2)
     
-        attr_accessor :redis_pool
-    
-      module Worker
-    ##
-    # The Sidekiq testing infrastructure overrides perform_async
-    # so that it does not actually touch the network.  Instead it
-    # stores the asynchronous jobs in a per-class array so that
-    # their presence/absence can be asserted by your tests.
-    #
-    # This is similar to ActionMailer's :test delivery_method and its
-    # ActionMailer::Base.deliveries array.
-    #
-    # Example:
-    #
-    #   require 'sidekiq/testing'
-    #
-    #   assert_equal 0, HardWorker.jobs.size
-    #   HardWorker.perform_async(:something)
-    #   assert_equal 1, HardWorker.jobs.size
-    #   assert_equal :something, HardWorker.jobs[0]['args'][0]
-    #
-    #   assert_equal 0, Sidekiq::Extensions::DelayedMailer.jobs.size
-    #   MyMailer.delay.send_welcome_email('foo@example.com')
-    #   assert_equal 1, Sidekiq::Extensions::DelayedMailer.jobs.size
-    #
-    # You can also clear and drain all workers' jobs:
-    #
-    #   assert_equal 0, Sidekiq::Extensions::DelayedMailer.jobs.size
-    #   assert_equal 0, Sidekiq::Extensions::DelayedModel.jobs.size
-    #
-    #   MyMailer.delay.send_welcome_email('foo@example.com')
-    #   MyModel.delay.do_something_hard
-    #
-    #   assert_equal 1, Sidekiq::Extensions::DelayedMailer.jobs.size
-    #   assert_equal 1, Sidekiq::Extensions::DelayedModel.jobs.size
-    #
-    #   Sidekiq::Worker.clear_all # or .drain_all
-    #
-    #   assert_equal 0, Sidekiq::Extensions::DelayedMailer.jobs.size
-    #   assert_equal 0, Sidekiq::Extensions::DelayedModel.jobs.size
-    #
-    # This can be useful to make sure jobs don't linger between tests:
-    #
-    #   RSpec.configure do |config|
-    #     config.before(:each) do
-    #       Sidekiq::Worker.clear_all
-    #     end
-    #   end
-    #
-    # or for acceptance testing, i.e. with cucumber:
-    #
-    #   AfterStep do
-    #     Sidekiq::Worker.drain_all
-    #   end
-    #
-    #   When I sign up as 'foo@example.com'
-    #   Then I should receive a welcome email to 'foo@example.com'
-    #
-    module ClassMethods
-    
-        def fire_event(event, options={})
-      reverse = options[:reverse]
-      reraise = options[:reraise]
+          it_behaves_like 'on a visible post'
+    end
