@@ -1,141 +1,215 @@
 
         
-        void BrowserWindow::UpdateDraggableRegions(
-    content::RenderFrameHost* rfh,
-    const std::vector<DraggableRegion>& regions) {
-  if (window_->has_frame())
-    return;
-  static_cast<NativeWindowViews*>(window_.get())
-      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
-}
+        #include <iomanip>
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/grappler/costs/graph_properties.h'
+#include 'tensorflow/core/grappler/grappler_item.h'
     
-    class PowerMonitor : public mate::TrackableObject<PowerMonitor>,
-                     public PowerObserver {
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    AuthPropertyIterator::AuthPropertyIterator()
+    : property_(nullptr), ctx_(nullptr), index_(0), name_(nullptr) {}
+    
+    class CensusChannelData : public ChannelData {
  public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
-    }
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
     
-      if (LangOpts.Target.isiOS()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::iOSApplicationExtension
-                : PlatformKind::iOS);
-  }
-    
-    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
-  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
-                                 const_cast<void*>(Key), Value_out);
-  return Ret == 0;
+    MeasureDouble RpcClientReceivedBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientReceivedBytesPerRpcMeasureName,
+      'Total bytes received across all response messages per RPC', kUnitBytes);
+  return measure;
 }
     
-      Begin -= needed;
+    #include <grpc/support/port_platform.h>
     
-    std::pair<bool, bool> LangOptions::setTarget(llvm::Triple triple) {
-  clearAllPlatformConditionValues();
-    }
-    
-        case NameRole::BaseNameSelf:
-      switch (getPartOfSpeech(*nameWordRevIter)) {
-      case PartOfSpeech::Verb: {
-        // Splice together the parts before and after the matched
-        // type. For example, if we matched 'ViewController' in
-        // 'dismissViewControllerAnimated', stitch together
-        // 'dismissAnimated'.
-    }
-    }
-    
-      static ProcessId Pid = 0;
-    
-    namespace {
-  // Quasi-lexicographic order: string length first, then string data.
-  // Since we don't care about the actual length, we can use this, which
-  // lets us ignore the string data a larger proportion of the time.
-  struct SortByLengthComparator {
-    bool operator()(StringRef lhs, StringRef rhs) const {
-      return (lhs.size() < rhs.size() ||
-              (lhs.size() == rhs.size() && lhs < rhs));
-    }
-  };
-} // end anonymous namespace
-    
-    
-    {    ctx.Diags.diagnose(loc, diag::clang_cannot_build_module,
-                       ctx.LangOpts.EnableObjCInterop,
-                       CurrentImport->getName());
-    return;
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
   }
     
-    /// The result of out inference system
-struct IAMResult {
-  // The name to import as
-  DeclName name = {};
+    Status ProtoServerReflection::GetAllExtensionNumbers(
+    ServerContext* context, const grpc::string& type,
+    ExtensionNumberResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
     }
     
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+    #include 'src/cpp/server/dynamic_thread_pool.h'
     
-    #include 'caffe2/operators/glu_op.h'
+      void Add(const std::function<void()>& callback) override;
     
-    #endif  // GUETZLI_COMPARATOR_H_
-
+    /*! \brief a single data instance */
+struct DataInst {
+  /*! \brief unique id for instance */
+  unsigned index;
+  /*! \brief content of data */
+  std::vector<TBlob> data;
+  /*! \brief extra data to be fed to the network */
+  std::string extra_data;
+};  // struct DataInst
     
-    #include 'guetzli/stats.h'
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.h
+ * \brief conversion between tensor and caffeBlob
+ * \author Haoran Wang
+*/
+#ifndef PLUGIN_CAFFE_CAFFE_BLOB_H_
+#define PLUGIN_CAFFE_CAFFE_BLOB_H_
     
-    // Entropy encoding (Huffman) utilities.
     
-    ///////////////////////////////////////////////////////////////////////////////
-// Cosine table: C(k) = cos(k.pi/16)/sqrt(2), k = 1..7 using 15 bits signed
-const coeff_t kTable04[7] = { 22725, 21407, 19266, 16384, 12873,  8867, 4520 };
-// rows #1 and #7 are pre-multiplied by 2.C(1) before the 2nd pass.
-// This multiply is merged in the table of constants used during 1st pass:
-const coeff_t kTable17[7] = { 31521, 29692, 26722, 22725, 17855, 12299, 6270 };
-// rows #2 and #6 are pre-multiplied by 2.C(2):
-const coeff_t kTable26[7] = { 29692, 27969, 25172, 21407, 16819, 11585, 5906 };
-// rows #3 and #5 are pre-multiplied by 2.C(3):
-const coeff_t kTable35[7] = { 26722, 25172, 22654, 19266, 15137, 10426, 5315 };
-    
-      guetzli::ProcessStats stats;
-    
-      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
-  void EmitByte(int byte) {
-    if (pos < len) {
-      data[pos++] = byte;
-    } else {
-      overflow = true;
-    }
-    if (byte == 0xff) {
-      EmitByte(0);
+    {
+    {      if (top_size > DATA) {
+        if (param_.flat) {
+          batch_data_ = TBlob(nullptr, mshadow::Shape2(batch_size_,
+                                                       channels_ * width_ * height_),
+                              cpu::kDevCPU, type_flag_);
+        } else {
+          batch_data_ = TBlob(nullptr, mxnet::TShape(top_[DATA]->shape().begin(),
+                                                     top_[DATA]->shape().end()),
+                              cpu::kDevCPU, type_flag_);
+        }
+      }
+      out_.data.clear();
+      if (top_size > LABEL) {
+          batch_label_ = TBlob(nullptr, mxnet::TShape(top_[LABEL]->shape().begin(),
+                                                      top_[LABEL]->shape().end()),
+                               cpu::kDevCPU, type_flag_);
+      }
+      out_.batch_size = batch_size_;
     }
   }
     
-    bool JPEGData::Is444() const {
-  return (components.size() == 3 &&
-          max_h_samp_factor == 1 &&
-          max_v_samp_factor == 1 &&
-          components[0].h_samp_factor == 1 &&
-          components[0].v_samp_factor == 1 &&
-          components[1].h_samp_factor == 1 &&
-          components[1].v_samp_factor == 1 &&
-          components[2].h_samp_factor == 1 &&
-          components[2].v_samp_factor == 1);
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
 }
     
-    static const int kDCTBlockSize = 64;
-static const int kMaxComponents = 4;
-static const int kMaxQuantTables = 4;
-static const int kMaxHuffmanTables = 4;
-static const int kJpegHuffmanMaxBitLength = 16;
-static const int kJpegHuffmanAlphabetSize = 256;
-static const int kJpegDCAlphabetSize = 12;
-static const int kMaxDHTMarkers = 512;
+    #include <dmlc/base.h>
+#include <dmlc/thread_group.h>
+#include <cstddef>
+#include <vector>
+#include <list>
+#include <thread>
+#include <utility>
+#include 'mxnet/base.h'
     
-    namespace guetzli {
+    
+    {  g.attrs['storage_id'] = std::make_shared<nnvm::any>(std::move(storage_id));
+  g.attrs['storage_inplace_index'] = std::make_shared<nnvm::any>(
+      std::move(storage_inplace_index));
+  g.attrs['addto_entry'] = std::make_shared<nnvm::any>(std::move(addto_entry));
+  g.attrs['skip_plus_node'] = std::make_shared<nnvm::any>(std::move(skip_plus_node));
+  return g;
+}
+    
+    #include <mxnet/io.h>
+#include <mxnet/base.h>
+#include <dmlc/logging.h>
+#include <mshadow/tensor.h>
+#include <utility>
+#include <vector>
+#include <string>
+#include './inst_vector.h'
+#include './image_iter_common.h'
+    
+    /*!
+ * \file iter_libsvm.cc
+ * \brief define a LibSVM Reader to read in arrays
+ */
+#include <mxnet/io.h>
+#include <dmlc/base.h>
+#include <dmlc/logging.h>
+#include <dmlc/parameter.h>
+#include <dmlc/data.h>
+#include './iter_sparse_prefetcher.h'
+#include './iter_sparse_batchloader.h'
+    
+    
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
     }
+  }
+    
+    namespace leveldb {
+    }
+    
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+    namespace log {
+    }
+    
+    template<typename Key, class Comparator>
+typename SkipList<Key,Comparator>::Node*
+SkipList<Key,Comparator>::NewNode(const Key& key, int height) {
+  char* mem = arena_->AllocateAligned(
+      sizeof(Node) + sizeof(port::AtomicPointer) * (height - 1));
+  return new (mem) Node(key);
+}
+    
+    
+    { private:
+  // Dummy head of doubly-linked list of snapshots
+  SnapshotImpl head_;
+};
+    
+      {
+    auto ka = getKeepAliveToken(exec);
+    EXPECT_TRUE(ka);
+    EXPECT_EQ(&exec, ka.get());
+    EXPECT_EQ(1, exec.refCount);
+    }
+    
+    #include <folly/Executor.h>
