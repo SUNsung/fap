@@ -1,31 +1,29 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
+        # write out the dataset
+write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
+print ('Saved to ', os.path.join(FLAGS.save_dir,
+                                 FLAGS.datafile_name + '_' + dataset_name))
+
     
-        # for convenience in actions
-    HIDDEN = HIDDEN_CHANNEL
+    rnn_a = generate_rnn(rnn_rngs[0], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
+                     FLAGS.max_firing_rate)
+rnn_b = generate_rnn(rnn_rngs[1], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
+                     FLAGS.max_firing_rate)
+rnns = [rnn_a, rnn_b]
     
-            total_count = 0
-        translated_count = 0
-        with open(fn) as f:
-            catalog = read_po(f)
-            for msg in catalog:
-                total_count += 1
-                if is_translated(msg):
-                    translated_count += 1
-        pct = translated_count / float(total_count) * 100
-        click.echo('% -7s % 2d%%' % (
-            locale,
-            pct,
-        ), err=True)
-        if pct >= MINIMUM and locale not in rv:
-            rv.append(locale)
-    with open(catalog_file, 'w') as f:
-        json.dump({
-            'supported_locales': sorted(rv)
-        }, f, indent=2)
-        f.write('\n')
+      def __init__(self, filename):
+    '''Initialize vocabulary.
+    
+        # TODO: decoder/encoder should accept cls? Otherwise, subclassing
+    # JSONObjectWithFields is tricky...
+    header_cls = Header
+    header = jose.Field(
+        'header', omitempty=True, default=header_cls(),
+        decoder=header_cls.from_json)
+    
+    
+def get_file_path(vhost_path):
+    '''Get file path from augeas_vhost_path.
+    
+    logger = logging.getLogger(__name__)
