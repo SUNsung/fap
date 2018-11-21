@@ -1,135 +1,191 @@
 
         
-            def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        try:
-            self.model.objects.get(session_key=session_key).delete()
-        except self.model.DoesNotExist:
-            pass
+            @value.setter
+    def value(self, new_value):
+        if 1 <= new_value <= 13:
+            self._value = new_value
+        else:
+            raise ValueError('Invalid card value: {}'.format(new_value))
     
-        def _get_session_key(self):
-        '''
-        Instead of generating a random string, generate a secure url-safe
-        base64-encoded string of data as our session key.
-        '''
-        return signing.dumps(
-            self._session, compress=True,
-            salt='django.contrib.sessions.backends.signed_cookies',
-            serializer=self.serializer,
+    
+class GroupChat(Chat):
+    
+    
+class DefaultCategories(Enum):
+    
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
+    
+    
+class HashTable(object):
+    
+    import datetime
+import io
+import json
+import textwrap
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+        def gen_ies_md(ies):
+        for ie in ies:
+            ie_md = '**{0}**'.format(ie.IE_NAME)
+            ie_desc = getattr(ie, 'IE_DESC', None)
+            if ie_desc is False:
+                continue
+            if ie_desc is not None:
+                ie_md += ': {0}'.format(ie.IE_DESC)
+            if not ie.working():
+                ie_md += ' (Currently broken)'
+            yield ie_md
+    
+        flags = [opt.get_opt_string() for opt in opts]
+    
+        def test_encrypt(self):
+        msg = b'message'
+        key = list(range(16))
+        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
+        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
+        self.assertEqual(decrypted, msg)
+    
+    
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
+    
+        def test_yahoo_https(self):
+        # https://github.com/rg3/youtube-dl/issues/2701
+        self.assertMatch(
+            'https://screen.yahoo.com/smartwatches-latest-wearable-gadgets-163745379-cbs.html',
+            ['Yahoo'])
+    
+    
+@pytest.mark.parametrize('script, output', [
+    ('apt', invalid_operation('saerch')),
+    ('apt-get', invalid_operation('isntall')),
+    ('apt-cache', invalid_operation('rumove'))])
+def test_match(script, output):
+    assert match(Command(script, output))
+    
+    
+no_suggestions = '''\
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+    
+    
+no_such_subcommand_old = '''No such subcommand
+    
+        def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
         )
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
+            return r
     
     
-def savepoint_rollback(sid, using=None):
-    '''
-    Roll back the most recent savepoint (if one exists). Do nothing if
-    savepoints are not supported.
-    '''
-    get_connection(using).savepoint_rollback(sid)
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-    client = boto3_conn(module, conn_type='client', resource='waf', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+            assert len(server.handler_results) == 0
     
-    try:
-    import botocore
-except ImportError:
-    pass  # handled by AnsibleAWSModule
+        Usage::
     
-    notes:
-  - does not support check mode
+        By default this will get the strings from the blns.txt file
     
-    EXAMPLES = '''
+            if 'quality' in stream:
+            print('      quality:       %s' % stream['quality'])
+    
+    site_info = 'baomihua.com'
+download = baomihua_download
+download_playlist = playlist_not_supported('baomihua')
+
+    
+            html = get_content(self.url)
     
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['stableinterface'],
-                    'supported_by': 'certified'}
-    
-            try:
-            connection.create_scaling_policy(sp)
-            policy = connection.get_all_policies(as_group=asg_name, policy_names=[sp_name])[0]
-            module.exit_json(changed=True, name=policy.name, arn=policy.policy_arn, as_name=policy.as_name, scaling_adjustment=policy.scaling_adjustment,
-                             cooldown=policy.cooldown, adjustment_type=policy.adjustment_type, min_adjustment_step=policy.min_adjustment_step)
-        except BotoServerError as e:
-            module.fail_json(msg=str(e))
-    else:
-        policy = scalingPolicies[0]
-        changed = False
-    
-        module = AnsibleAWSModule(
-        argument_spec=argument_spec,
-        supports_check_mode=True
-    )
-    
+def get_title_and_urls(json_data):
+    title = legitimize(re.sub('[\s*]', '_', json_data['title']))
+    video_info = json_data['file_versions']['html5']['video']
+    if 'high' not in video_info:
+        if 'med' not in video_info:
+            video_url = video_info['low']['url']
         else:
-        # Check that a name and type argument has been supplied if no vgw-id
-        if not module.params.get('name') or not module.params.get('type'):
-            module.fail_json(msg='A name and type is required when no vgw-id and a status of \'absent\' is suppled')
+            video_url = video_info['med']['url']
+    else:
+        video_url = video_info['high']['url']
+    audio_info = json_data['file_versions']['html5']['audio']
+    if 'high' not in audio_info:
+        if 'med' not in audio_info:
+            audio_url = audio_info['low']['url']
+        else:
+            audio_url = audio_info['med']['url']
+    else:
+        audio_url = audio_info['high']['url']
+    return title, video_url, audio_url
     
-            # Check exist site cert buffer with CA
-        certfiles = glob.glob(os.path.join(CertUtil.ca_certdir, '*.crt')) + glob.glob(os.path.join(CertUtil.ca_certdir, '.*.crt'))
-        if certfiles:
-            filename = random.choice(certfiles)
-            with open(filename, 'rb') as fp:
-                cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, fp.read())
-            remove_certs = False
-            if not CertUtil.verify_certificate(ca, cert):
-                remove_certs = True
-            if not remove_certs and CertUtil.cert_publickey:
-                context = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
-                try:
-                    context.use_certificate(cert)
-                    context.use_privatekey_file(CertUtil.cert_keyfile)
-                except OpenSSL.SSL.Error:
-                    remove_certs = True
-            if remove_certs:
-                xlog.info('clean old site certs in XX-Net cert dir')
-                any(os.remove(x) for x in certfiles)
+        vids = matchall(content, tudou_embed_patterns)
+    for vid in set(vids):
+        found = True
+        tudou_download_by_id(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
     
     
-class CheckIp(front_base.check_ip.CheckIp):
-    def check_response(self, response):
-        server_type = response.headers.get('Server', '')
-        self.logger.debug('status:%d', response.status)
-        self.logger.debug('Server type:%s', server_type)
+def fantasy_download_by_id_channelId(id = 0, channelId = 0, output_dir = '.', merge = True, info_only = False,
+                                     **kwargs):
+    api_url = 'http://www.fantasy.tv/tv/playDetails.action?' \
+              'myChannelId=1&id={id}&channelId={channelId}&t={t}'.format(id = id,
+                                                                         channelId = channelId,
+                                                                         t = str(random.random())
+                                                                         )
+    html = get_content(api_url)
+    html = json.loads(html)
     
-            self.a = a
-        self.b = b
-        
+    Loosely based on https://github.com/astropy/astropy/pull/347
+'''
     
-                try:
-                self.mTokens()
-                
-                if self._state.token is None:
-                    self.emit()
-                    
-                elif self._state.token == SKIP_TOKEN:
-                    continue
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.last_results = []
+        host = config[CONF_HOST]
+        self._url = 'http://{}/data/getConnectInfo.asp'.format(host)
+        self._loginurl = 'http://{}/goform/login'.format(host)
     
-    # The name of an image file (relative to this directory) to place at
-# the top of the title page.
-#latex_logo = None
     
-            # Find all people in the image using a trained classifier model
-        # Note: You can pass in either a classifier file name or a classifier model instance
-        predictions = predict(full_file_path, model_path='trained_knn_model.clf')
+def setup_scanner(hass, config: dict, see, discovery_info=None):
+    '''Set up the iCloud Scanner.'''
+    username = config.get(CONF_USERNAME)
+    password = config.get(CONF_PASSWORD)
+    account = config.get(CONF_ACCOUNTNAME, slugify(username.partition('@')[0]))
+    max_interval = config.get(CONF_MAX_INTERVAL)
+    gps_accuracy_threshold = config.get(CONF_GPS_ACCURACY_THRESHOLD)
     
-    # Find all the faces in the image using the default HOG-based model.
-# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
-# See also: find_faces_in_picture_cnn.py
-face_locations = face_recognition.face_locations(image)
+            self.hosts = config[CONF_HOSTS]
+        self.exclude = config[CONF_EXCLUDE]
+        minutes = config[CONF_HOME_INTERVAL]
+        self._options = config[CONF_OPTIONS]
+        self.home_interval = timedelta(minutes=minutes)
     
-    face_recognition_model = face_recognition_models.face_recognition_model_location()
-face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.last_results = {}
     
-    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
-# other example, but it includes some basic performance tweaks to make things run a lot faster:
-#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
-#   2. Only detect faces in every other frame of video.
+            def on_modified(self, event):
+            '''File modified.'''
+            self.process(event)
