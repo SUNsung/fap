@@ -1,121 +1,115 @@
 
         
-            def sort_fn(a, b)
-      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
-        a_split = a.split(SPLIT_INTS)
-        b_split = b.split(SPLIT_INTS)
+                private
     
-          @terminal_width = if !tty?
-        nil
-      elsif ENV['COLUMNS']
-        ENV['COLUMNS'].to_i
-      else
-        `stty size`.scan(/\d+/).last.to_i
+    module ActionView #:nodoc:
+  # = Action View PathSet
+  #
+  # This class is used to store and access paths in Action View. A number of
+  # operations are defined so that you can search among the paths in this
+  # set and also perform operations on other +PathSet+ objects.
+  #
+  # A +LookupContext+ will use a +PathSet+ to store the paths in its context.
+  class PathSet #:nodoc:
+    include Enumerable
+    
+        rake_tasks do |app|
+      unless app.config.api_only
+        load 'action_view/tasks/cache_digests.rake'
       end
-    rescue
-      @terminal_width = nil
     end
   end
 end
 
     
-          INDEX = Set.new
-    
-        def destroy
-      authorize @report_note, :destroy?
-      @report_note.destroy!
-      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
+        def cache_hits # :nodoc:
+      @cache_hits ||= {}
     end
-    
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
-  end
-    
-      def require_enabled_api!
-    head 404 unless Setting.activity_api_enabled
   end
 end
 
     
-        s = mock('seed')
-    s.should_receive(:to_int).and_return 0
-    srand(s)
-  end
+    UserOption.where(user_id: -1).update_all(
+  email_private_messages: false,
+  email_direct: false
+)
     
-      it 'has no effect on immediate values' do
-    [nil, true, false].each do |v|
-      v.taint
-      v.tainted?.should == false
-    end
-  end
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
+        end
     
-      it 'calls #to_path on second argument when passed ?f and a filename' do
-    p = mock('path')
-    p.should_receive(:to_path).and_return @file
-    Kernel.test(?f, p)
-  end
-    
-    script_binding = binding
-    
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
       end
-    end
-    [$? && $?.exitstatus == 0, cmd_with_env]
-  end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
-  else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
-  end
+    
+    Capybara.register_driver :javascript_test do |app|
+  Capybara::RackTest::Driver.new(app)
 end
     
-        def register_compass_extension
-      ::Compass::Frameworks.register(
-          'bootstrap',
-          :version               => Bootstrap::VERSION,
-          :path                  => gem_path,
-          :stylesheets_directory => stylesheets_path,
-          :templates_directory   => File.join(gem_path, 'templates')
-      )
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-          def perform(yml)
-        (target, method_name, args) = YAML.load(yml)
-        msg = target.public_send(method_name, *args)
-        # The email method can return nil, which causes ActionMailer to return
-        # an undeliverable empty message.
-        if msg
-          deliver(msg)
-        else
-          raise '#{target.name}##{method_name} returned an undeliverable mail object'
-        end
+          def send_keys(*args)
+        raise NotImplementedError
       end
     
-            begin
-          b = File.stat(fp.path)
-          next if orig_st.ino == b.ino && orig_st.dev == b.dev
-        rescue Errno::ENOENT
+      it 'should raise an error if there are multiple matches' do
+    el = @session.find(:css, '#child')
+    expect { el.ancestor('//div') }.to raise_error(Capybara::Ambiguous)
+    expect { el.ancestor('//div', text: 'Ancestor') }.to raise_error(Capybara::Ambiguous)
+  end
+    
+      action :raw do
+    title 'Send a raw RFC2882 message'
+    description 'This action allows you to send us a raw RFC2822 formatted message along with the recipients that it should be sent to. This is similar to sending a message through our SMTP service.'
+    param :mail_from, 'The address that should be logged as sending the message', :type => String, :required => true
+    param :rcpt_to, 'The addresses this message should be sent to', :type => Array, :required => true
+    param :data, 'A base64 encoded RFC2822 message to send', :type => String, :required => true
+    param :bounce, 'Is this message a bounce?', :type => :boolean
+    returns Hash
+    error 'UnauthenticatedFromAddress', 'The From address is not authorised to send mail from this server'
+    action do
+      # Decode the raw message
+      raw_message = Base64.decode64(params.data)
+    
+      private
+    
+      def create
+    @http_endpoint = @server.http_endpoints.build(safe_params)
+    if @http_endpoint.save
+      flash[:notice] = params[:return_notice] if params[:return_notice].present?
+      redirect_to_with_json [:return_to, [organization, @server, :http_endpoints]]
+    else
+      render_form_errors 'new', @http_endpoint
+    end
+  end
+    
+      def create
+    scope = @server ? @server.ip_pool_rules : organization.ip_pool_rules
+    @ip_pool_rule = scope.build(safe_params)
+    if @ip_pool_rule.save
+      redirect_to_with_json [organization, @server, :ip_pool_rules]
+    else
+      render_form_errors 'new', @ip_pool_rule
+    end
+  end
+    
+      def destroy
+    @ip_pool.destroy
+    redirect_to_with_json :ip_pools, :notice => 'IP pool has been removed successfully.'
+  rescue ActiveRecord::DeleteRestrictionError => e
+    redirect_to_with_json [:edit, @ip_pool], :alert => 'IP pool cannot be removed because it is still assigned to servers/rules.'
+  end
+    
+          address_endpoints = server.address_endpoints.order(:address).to_a
+      if address_endpoints.present?
+        s << '<optgroup label='Address Endpoints'>'
+        for endpoint in address_endpoints
+          value = '#{endpoint.class}##{endpoint.uuid}'
+          selected = value == selected_value ? 'selected='selected'' : ''
+          s << '<option value='#{value}' #{selected}>#{endpoint.address}</option>'
         end
+        s << '</optgroup>'
+      end
