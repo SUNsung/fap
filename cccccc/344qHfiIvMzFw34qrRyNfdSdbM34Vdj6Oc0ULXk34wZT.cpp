@@ -1,990 +1,735 @@
 
         
-            if (info.status == serialization::Status::Valid) {
-      assert(info.bytes != 0);
-      if (!info.name.empty()) {
-        StringRef moduleData = buf.substr(0, info.bytes);
-        std::unique_ptr<llvm::MemoryBuffer> bitstream(
-          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
+        Q_SIGNALS:
+    void valueChanged();
+    
+    #include <QDialog>
+    
+    namespace Ui {
+    class TransactionDescDialog;
+}
+    
+    #endif // BITCOIN_REVERSELOCK_H
+
+    
+    
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+        Round(a, b, c, d, e, f, g, h, 0x27b70a85, w0 += sigma1(w14) + w9 + sigma0(w1));
+    Round(h, a, b, c, d, e, f, g, 0x2e1b2138, w1 += sigma1(w15) + w10 + sigma0(w2));
+    Round(g, h, a, b, c, d, e, f, 0x4d2c6dfc, w2 += sigma1(w0) + w11 + sigma0(w3));
+    Round(f, g, h, a, b, c, d, e, 0x53380d13, w3 += sigma1(w1) + w12 + sigma0(w4));
+    Round(e, f, g, h, a, b, c, d, 0x650a7354, w4 += sigma1(w2) + w13 + sigma0(w5));
+    Round(d, e, f, g, h, a, b, c, 0x766a0abb, w5 += sigma1(w3) + w14 + sigma0(w6));
+    Round(c, d, e, f, g, h, a, b, 0x81c2c92e, w6 += sigma1(w4) + w15 + sigma0(w7));
+    Round(b, c, d, e, f, g, h, a, 0x92722c85, w7 += sigma1(w5) + w0 + sigma0(w8));
+    Round(a, b, c, d, e, f, g, h, 0xa2bfe8a1, w8 += sigma1(w6) + w1 + sigma0(w9));
+    Round(h, a, b, c, d, e, f, g, 0xa81a664b, w9 += sigma1(w7) + w2 + sigma0(w10));
+    Round(g, h, a, b, c, d, e, f, 0xc24b8b70, w10 += sigma1(w8) + w3 + sigma0(w11));
+    Round(f, g, h, a, b, c, d, e, 0xc76c51a3, w11 += sigma1(w9) + w4 + sigma0(w12));
+    Round(e, f, g, h, a, b, c, d, 0xd192e819, w12 += sigma1(w10) + w5 + sigma0(w13));
+    Round(d, e, f, g, h, a, b, c, 0xd6990624, w13 += sigma1(w11) + w6 + sigma0(w14));
+    Round(c, d, e, f, g, h, a, b, 0xf40e3585, w14 += sigma1(w12) + w7 + sigma0(w15));
+    Round(b, c, d, e, f, g, h, a, 0x106aa070, w15 += sigma1(w13) + w8 + sigma0(w0));
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
+}
+    
+    static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+    
+    bool AnyMetadata::InternalIs(const Descriptor* descriptor) const {
+  const string type_url = type_url_->GetNoArena();
+  string full_name;
+  if (!ParseAnyTypeUrl(type_url, &full_name)) {
+    return false;
+  }
+  return full_name == descriptor->full_name();
+}
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+    
+    
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_message.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+#include <google/protobuf/compiler/csharp/csharp_reflection_class.h>
+    
+    Context::~Context() {
+}
+    
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  }
+}
+    
+    void ImmutableMapFieldGenerator::
+GenerateBuilderMembers(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'private com.google.protobuf.MapField<\n'
+      '    $type_parameters$> $name$_;\n'
+      'private com.google.protobuf.MapField<$type_parameters$>\n'
+      'internalGet$capitalized_name$() {\n'
+      '  if ($name$_ == null) {\n'
+      '    return com.google.protobuf.MapField.emptyMapField(\n'
+      '        $map_field_parameter$);\n'
+      '  }\n'
+      '  return $name$_;\n'
+      '}\n'
+      'private com.google.protobuf.MapField<$type_parameters$>\n'
+      'internalGetMutable$capitalized_name$() {\n'
+      '  $on_changed$;\n'
+      '  if ($name$_ == null) {\n'
+      '    $name$_ = com.google.protobuf.MapField.newMapField(\n'
+      '        $map_field_parameter$);\n'
+      '  }\n'
+      '  if (!$name$_.isMutable()) {\n'
+      '    $name$_ = $name$_.copy();\n'
+      '  }\n'
+      '  return $name$_;\n'
+      '}\n');
+  GenerateMapGetters(printer);
+  printer->Print(
+      variables_,
+      '$deprecation$\n'
+      'public Builder ${$clear$capitalized_name$$}$() {\n'
+      '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+      '      .clear();\n'
+      '  return this;\n'
+      '}\n');
+  printer->Annotate('{', '}', descriptor_);
+  WriteFieldDocComment(printer, descriptor_);
+  printer->Print(
+      variables_,
+      '$deprecation$\n'
+      'public Builder ${$remove$capitalized_name$$}$(\n'
+      '    $key_type$ key) {\n'
+      '  $key_null_check$\n'
+      '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+      '      .remove(key);\n'
+      '  return this;\n'
+      '}\n');
+  printer->Annotate('{', '}', descriptor_);
+  if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
+    printer->Print(
+        variables_,
+        '/**\n'
+        ' * Use alternate mutation accessors instead.\n'
+        ' */\n'
+        '@java.lang.Deprecated\n'
+        'public java.util.Map<$boxed_key_type$, $value_enum_type$>\n'
+        '${$getMutable$capitalized_name$$}$() {\n'
+        '  return internalGetAdapted$capitalized_name$Map(\n'
+        '       internalGetMutable$capitalized_name$().getMutableMap());\n'
+        '}\n');
+    printer->Annotate('{', '}', descriptor_);
+    WriteFieldDocComment(printer, descriptor_);
+    printer->Print(variables_,
+                   '$deprecation$public Builder ${$put$capitalized_name$$}$(\n'
+                   '    $key_type$ key,\n'
+                   '    $value_enum_type$ value) {\n'
+                   '  $key_null_check$\n'
+                   '  $value_null_check$\n'
+                   '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+                   '      .put(key, $name$ValueConverter.doBackward(value));\n'
+                   '  return this;\n'
+                   '}\n');
+    printer->Annotate('{', '}', descriptor_);
+    WriteFieldDocComment(printer, descriptor_);
+    printer->Print(
+        variables_,
+        '$deprecation$public Builder ${$putAll$capitalized_name$$}$(\n'
+        '    java.util.Map<$boxed_key_type$, $value_enum_type$> values) {\n'
+        '  internalGetAdapted$capitalized_name$Map(\n'
+        '      internalGetMutable$capitalized_name$().getMutableMap())\n'
+        '          .putAll(values);\n'
+        '  return this;\n'
+        '}\n');
+    printer->Annotate('{', '}', descriptor_);
+    if (SupportUnknownEnumValue(descriptor_->file())) {
+      printer->Print(
+          variables_,
+          '/**\n'
+          ' * Use alternate mutation accessors instead.\n'
+          ' */\n'
+          '@java.lang.Deprecated\n'
+          'public java.util.Map<$boxed_key_type$, $boxed_value_type$>\n'
+          '${$getMutable$capitalized_name$Value$}$() {\n'
+          '  return internalGetMutable$capitalized_name$().getMutableMap();\n'
+          '}\n');
+      printer->Annotate('{', '}', descriptor_);
+      WriteFieldDocComment(printer, descriptor_);
+      printer->Print(
+          variables_,
+          '$deprecation$public Builder ${$put$capitalized_name$Value$}$(\n'
+          '    $key_type$ key,\n'
+          '    $value_type$ value) {\n'
+          '  $key_null_check$\n'
+          '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+          '      .put(key, value);\n'
+          '  return this;\n'
+          '}\n');
+      printer->Annotate('{', '}', descriptor_);
+      WriteFieldDocComment(printer, descriptor_);
+      printer->Print(
+          variables_,
+          '$deprecation$public Builder ${$putAll$capitalized_name$Value$}$(\n'
+          '    java.util.Map<$boxed_key_type$, $boxed_value_type$> values) {\n'
+          '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+          '      .putAll(values);\n'
+          '  return this;\n'
+          '}\n');
+      printer->Annotate('{', '}', descriptor_);
+    }
+  } else {
+    printer->Print(
+        variables_,
+        '/**\n'
+        ' * Use alternate mutation accessors instead.\n'
+        ' */\n'
+        '@java.lang.Deprecated\n'
+        'public java.util.Map<$type_parameters$>\n'
+        '${$getMutable$capitalized_name$$}$() {\n'
+        '  return internalGetMutable$capitalized_name$().getMutableMap();\n'
+        '}\n');
+    printer->Annotate('{', '}', descriptor_);
+    WriteFieldDocComment(printer, descriptor_);
+    printer->Print(
+        variables_,
+        '$deprecation$'
+        'public Builder ${$put$capitalized_name$$}$(\n'
+        '    $key_type$ key,\n'
+        '    $value_type$ value) {\n'
+        '  $key_null_check$\n'
+        '  $value_null_check$\n'
+        '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+        '      .put(key, value);\n'
+        '  return this;\n'
+        '}\n');
+    printer->Annotate('{', '}', descriptor_);
+    WriteFieldDocComment(printer, descriptor_);
+    printer->Print(
+        variables_,
+        '$deprecation$\n'
+        'public Builder ${$putAll$capitalized_name$$}$(\n'
+        '    java.util.Map<$type_parameters$> values) {\n'
+        '  internalGetMutable$capitalized_name$().getMutableMap()\n'
+        '      .putAll(values);\n'
+        '  return this;\n'
+        '}\n');
+    printer->Annotate('{', '}', descriptor_);
+  }
+}
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace objectivec {
+    }
+    }
     }
     }
     
-    VERB(abbreviate)
-VERB(accept)
-VERB(activate)
-VERB(add)
-VERB(adjust)
-VERB(admire)
-VERB(admit)
-VERB(advise)
-VERB(afford)
-VERB(agree)
-VERB(alert)
-VERB(allow)
-VERB(alter)
-VERB(amuse)
-VERB(analyse)
-VERB(analyze)
-VERB(animate)
-VERB(announce)
-VERB(annoy)
-VERB(answer)
-VERB(apologise)
-VERB(appear)
-VERB(append)
-VERB(applaud)
-VERB(apply)
-VERB(apportion)
-VERB(appreciate)
-VERB(approve)
-VERB(argue)
-VERB(arrange)
-VERB(arrest)
-VERB(arrive)
-VERB(ask)
-VERB(assign)
-VERB(attach)
-VERB(attack)
-VERB(attempt)
-VERB(attend)
-VERB(attract)
-VERB(avoid)
-VERB(awake)
-VERB(back)
-VERB(bake)
-VERB(balance)
-VERB(ban)
-VERB(bang)
-VERB(bare)
-VERB(bat)
-VERB(bathe)
-VERB(battle)
-VERB(be)
-VERB(beat)
-VERB(become)
-VERB(beg)
-VERB(begin)
-VERB(behave)
-VERB(belong)
-VERB(bend)
-VERB(bet)
-VERB(bid)
-VERB(bite)
-VERB(bleach)
-VERB(bless)
-VERB(blind)
-VERB(blink)
-VERB(blot)
-VERB(blow)
-VERB(blush)
-VERB(boast)
-VERB(boil)
-VERB(bolt)
-VERB(bomb)
-VERB(book)
-VERB(bore)
-VERB(borrow)
-VERB(bounce)
-VERB(bow)
-VERB(box)
-VERB(brake)
-VERB(branch)
-VERB(break)
-VERB(breathe)
-VERB(bring)
-VERB(broadcast)
-VERB(bruise)
-VERB(brush)
-VERB(bubble)
-VERB(build)
-VERB(bump)
-VERB(burn)
-VERB(bury)
-VERB(buy)
-VERB(buzz)
-VERB(calculate)
-VERB(call)
-VERB(camp)
-VERB(cancel)
-VERB(capture)
-VERB(care)
-VERB(carry)
-VERB(carve)
-VERB(cast)
-VERB(catch)
-VERB(cause)
-VERB(center)
-VERB(challenge)
-VERB(change)
-VERB(charge)
-VERB(chase)
-VERB(cheat)
-VERB(check)
-VERB(cheer)
-VERB(chew)
-VERB(choke)
-VERB(choose)
-VERB(chop)
-VERB(claim)
-VERB(clap)
-VERB(clean)
-VERB(clear)
-VERB(click)
-VERB(close)
-VERB(coach)
-VERB(coil)
-VERB(collect)
-VERB(collapse)
-VERB(colour)
-VERB(comb)
-VERB(come)
-VERB(command)
-VERB(commit)
-VERB(communicate)
-VERB(compare)
-VERB(compete)
-VERB(complain)
-VERB(complete)
-VERB(concentrate)
-VERB(concern)
-VERB(confess)
-VERB(confuse)
-VERB(connect)
-VERB(consider)
-VERB(consist)
-VERB(contain)
-VERB(contains)
-VERB(continue)
-VERB(convert)
-VERB(copy)
-VERB(correct)
-VERB(cough)
-VERB(cost)
-VERB(count)
-VERB(cover)
-VERB(crack)
-VERB(crash)
-VERB(crawl)
-VERB(cross)
-VERB(crush)
-VERB(cry)
-VERB(cure)
-VERB(curl)
-VERB(curve)
-VERB(customize)
-VERB(cut)
-VERB(cycle)
-VERB(dam)
-VERB(damage)
-VERB(dance)
-VERB(dare)
-VERB(decay)
-VERB(deceive)
-VERB(decide)
-VERB(decode)
-VERB(decorate)
-VERB(defer)
-VERB(define)
-VERB(delay)
-VERB(delete)
-VERB(delight)
-VERB(deliver)
-VERB(depend)
-VERB(describe)
-VERB(deselect)
-VERB(desert)
-VERB(deserve)
-VERB(destroy)
-VERB(detach)
-VERB(detect)
-VERB(develop)
-VERB(dig)
-VERB(dim)
-VERB(disagree)
-VERB(disappear)
-VERB(disapprove)
-VERB(disarm)
-VERB(discover)
-VERB(dislike)
-VERB(dismiss)
-VERB(display)
-VERB(divide)
-VERB(do)
-VERB(double)
-VERB(doubt)
-VERB(drag)
-VERB(drain)
-VERB(draw)
-VERB(dream)
-VERB(dress)
-VERB(drink)
-VERB(drip)
-VERB(drive)
-VERB(drop)
-VERB(drown)
-VERB(drum)
-VERB(dry)
-VERB(duplicate)
-VERB(dust)
-VERB(earn)
-VERB(eat)
-VERB(echo)
-VERB(edit)
-VERB(educate)
-VERB(embarrass)
-VERB(employ)
-VERB(empty)
-VERB(enable)
-VERB(encode)
-VERB(encourage)
-VERB(end)
-VERB(enjoy)
-VERB(enter)
-VERB(entertain)
-VERB(enumerate)
-VERB(enqueue)
-VERB(escape)
-VERB(examine)
-VERB(excite)
-VERB(excuse)
-VERB(execute)
-VERB(exercise)
-VERB(exist)
-VERB(expand)
-VERB(expect)
-VERB(explain)
-VERB(explode)
-VERB(export)
-VERB(extend)
-VERB(face)
-VERB(fade)
-VERB(fail)
-VERB(fancy)
-VERB(fasten)
-VERB(fax)
-VERB(fear)
-VERB(feel)
-VERB(fence)
-VERB(fetch)
-VERB(fight)
-VERB(fill)
-VERB(film)
-VERB(find)
-VERB(finish)
-VERB(fire)
-VERB(fit)
-VERB(fix)
-VERB(flap)
-VERB(flash)
-VERB(flatten)
-VERB(flip)
-VERB(float)
-VERB(flood)
-VERB(flow)
-VERB(flower)
-VERB(fly)
-VERB(focus)
-VERB(fold)
-VERB(follow)
-VERB(fool)
-VERB(force)
-VERB(forget)
-VERB(forgive)
-VERB(form)
-VERB(found)
-VERB(freeze)
-VERB(frighten)
-VERB(fry)
-VERB(gain)
-VERB(gather)
-VERB(gaze)
-VERB(generate)
-VERB(get)
-VERB(give)
-VERB(glow)
-VERB(glue)
-VERB(go)
-VERB(grab)
-VERB(grate)
-VERB(grease)
-VERB(greet)
-VERB(grin)
-VERB(grip)
-VERB(groan)
-VERB(grow)
-VERB(guarantee)
-VERB(guard)
-VERB(guess)
-VERB(guide)
-VERB(hammer)
-VERB(hand)
-VERB(handle)
-VERB(hang)
-VERB(happen)
-VERB(harass)
-VERB(harm)
-VERB(hate)
-VERB(haunt)
-VERB(head)
-VERB(heal)
-VERB(heap)
-VERB(hear)
-VERB(heat)
-VERB(help)
-VERB(hide)
-VERB(highlight)
-VERB(hit)
-VERB(hold)
-VERB(hook)
-VERB(hop)
-VERB(hope)
-VERB(hover)
-VERB(hug)
-VERB(hum)
-VERB(hunt)
-VERB(hurry)
-VERB(hurt)
-VERB(identify)
-VERB(ignore)
-VERB(imagine)
-VERB(import)
-VERB(impress)
-VERB(improve)
-VERB(include)
-VERB(increase)
-VERB(influence)
-VERB(inform)
-VERB(inject)
-VERB(injure)
-VERB(insert)
-VERB(instruct)
-VERB(intend)
-VERB(interest)
-VERB(interfere)
-VERB(interrupt)
-VERB(intersect)
-VERB(intersects)
-VERB(introduce)
-VERB(invent)
-VERB(invite)
-VERB(irritate)
-VERB(itch)
-VERB(jail)
-VERB(jam)
-VERB(jog)
-VERB(join)
-VERB(joke)
-VERB(judge)
-VERB(juggle)
-VERB(jump)
-VERB(keep)
-VERB(kick)
-VERB(kill)
-VERB(kiss)
-VERB(kneel)
-VERB(knit)
-VERB(knock)
-VERB(knot)
-VERB(know)
-VERB(label)
-VERB(land)
-VERB(last)
-VERB(laugh)
-VERB(launch)
-VERB(lay)
-VERB(lead)
-VERB(learn)
-VERB(leave)
-VERB(lend)
-VERB(let)
-VERB(level)
-VERB(license)
-VERB(lick)
-VERB(lie)
-VERB(lighten)
-VERB(like)
-VERB(listen)
-VERB(live)
-VERB(load)
-VERB(localize)
-VERB(lock)
-VERB(long)
-VERB(look)
-VERB(lose)
-VERB(love)
-VERB(maintain)
-VERB(make)
-VERB(man)
-VERB(manage)
-VERB(march)
-VERB(mark)
-VERB(marry)
-VERB(match)
-VERB(mate)
-VERB(matter)
-VERB(mean)
-VERB(measure)
-VERB(meddle)
-VERB(meet)
-VERB(melt)
-VERB(memorise)
-VERB(mend)
-VERB(merge)
-VERB(mess)
-VERB(milk)
-VERB(mine)
-VERB(miss)
-VERB(minus)
-VERB(mix)
-VERB(moan)
-VERB(moor)
-VERB(mourn)
-VERB(move)
-VERB(muddle)
-VERB(mug)
-VERB(multiply)
-VERB(murder)
-VERB(nail)
-VERB(nest)
-VERB(nod)
-VERB(normalize)
-VERB(note)
-VERB(notice)
-VERB(notify)
-VERB(number)
-VERB(obey)
-VERB(observe)
-VERB(obtain)
-VERB(occur)
-VERB(offend)
-VERB(offer)
-VERB(open)
-VERB(order)
-VERB(overflow)
-VERB(owe)
-VERB(own)
-VERB(pack)
-VERB(paddle)
-VERB(paint)
-VERB(park)
-VERB(part)
-VERB(pass)
-VERB(paste)
-VERB(pat)
-VERB(pause)
-VERB(pay)
-VERB(peck)
-VERB(pedal)
-VERB(peel)
-VERB(peep)
-VERB(perform)
-VERB(permit)
-VERB(phone)
-VERB(pick)
-VERB(pinch)
-VERB(pine)
-VERB(place)
-VERB(plan)
-VERB(plant)
-VERB(play)
-VERB(please)
-VERB(plug)
-VERB(poke)
-VERB(polish)
-VERB(pop)
-VERB(possess)
-VERB(post)
-VERB(pour)
-VERB(practice)
-VERB(practise)
-VERB(pray)
-VERB(preach)
-VERB(precede)
-VERB(prefer)
-VERB(preload)
-VERB(prepare)
-VERB(prepend)
-VERB(present)
-VERB(preserve)
-VERB(press)
-VERB(pretend)
-VERB(prevent)
-VERB(prick)
-VERB(print)
-VERB(produce)
-VERB(program)
-VERB(promise)
-VERB(protect)
-VERB(provide)
-VERB(pull)
-VERB(pump)
-VERB(punch)
-VERB(puncture)
-VERB(punish)
-VERB(push)
-VERB(put)
-VERB(question)
-VERB(queue)
-VERB(race)
-VERB(radiate)
-VERB(rain)
-VERB(raise)
-VERB(reach)
-VERB(read)
-VERB(realise)
-VERB(receive)
-VERB(recognise)
-VERB(record)
-VERB(reduce)
-VERB(reflect)
-VERB(refuse)
-VERB(register)
-VERB(regret)
-VERB(reign)
-VERB(reject)
-VERB(rejoice)
-VERB(relax)
-VERB(release)
-VERB(rely)
-VERB(remain)
-VERB(remember)
-VERB(remind)
-VERB(remove)
-VERB(repair)
-VERB(repeat)
-VERB(replace)
-VERB(reply)
-VERB(report)
-VERB(request)
-VERB(require)
-VERB(resize)
-VERB(rescue)
-VERB(resolve)
-VERB(retain)
-VERB(retire)
-VERB(return)
-VERB(reverse)
-VERB(review)
-VERB(rhyme)
-VERB(ride)
-VERB(ring)
-VERB(rinse)
-VERB(rise)
-VERB(risk)
-VERB(rob)
-VERB(rock)
-VERB(roll)
-VERB(rot)
-VERB(rub)
-VERB(ruin)
-VERB(rule)
-VERB(run)
-VERB(rush)
-VERB(sack)
-VERB(sail)
-VERB(satisfy)
-VERB(save)
-VERB(saw)
-VERB(say)
-VERB(scale)
-VERB(scare)
-VERB(scatter)
-VERB(scold)
-VERB(scorch)
-VERB(scrape)
-VERB(scratch)
-VERB(scream)
-VERB(screw)
-VERB(scribble)
-VERB(scroll)
-VERB(scrub)
-VERB(seal)
-VERB(search)
-VERB(see)
-VERB(select)
-VERB(sell)
-VERB(send)
-VERB(separate)
-VERB(serve)
-VERB(settle)
-VERB(shade)
-VERB(share)
-VERB(shave)
-VERB(shelter)
-VERB(shiver)
-VERB(shock)
-VERB(shop)
-VERB(show)
-VERB(shrug)
-VERB(shut)
-VERB(sigh)
-VERB(sign)
-VERB(signal)
-VERB(sin)
-VERB(sing)
-VERB(sip)
-VERB(sit)
-VERB(ski)
-VERB(skip)
-VERB(slap)
-VERB(sleep)
-VERB(slip)
-VERB(slow)
-VERB(smash)
-VERB(smell)
-VERB(smile)
-VERB(smoke)
-VERB(snatch)
-VERB(sneeze)
-VERB(sniff)
-VERB(snore)
-VERB(snow)
-VERB(soak)
-VERB(soothe)
-VERB(sound)
-VERB(spare)
-VERB(spark)
-VERB(sparkle)
-VERB(speak)
-VERB(spell)
-VERB(spend)
-VERB(spill)
-VERB(spoil)
-VERB(spot)
-VERB(spray)
-VERB(sprout)
-VERB(squash)
-VERB(squeak)
-VERB(squeal)
-VERB(squeeze)
-VERB(stain)
-VERB(stamp)
-VERB(stand)
-VERB(standardise)
-VERB(standardize)
-VERB(stare)
-VERB(start)
-VERB(stay)
-VERB(steer)
-VERB(step)
-VERB(stir)
-VERB(stitch)
-VERB(stop)
-VERB(store)
-VERB(strap)
-VERB(strengthen)
-VERB(stretch)
-VERB(strip)
-VERB(stroke)
-VERB(stuff)
-VERB(subtract)
-VERB(succeed)
-VERB(suck)
-VERB(suffer)
-VERB(suggest)
-VERB(suit)
-VERB(supply)
-VERB(support)
-VERB(suppose)
-VERB(suppress)
-VERB(surprise)
-VERB(surround)
-VERB(suspect)
-VERB(suspend)
-VERB(swim)
-VERB(switch)
-VERB(take)
-VERB(talk)
-VERB(tame)
-VERB(tap)
-VERB(taste)
-VERB(teach)
-VERB(tear)
-VERB(tease)
-VERB(telephone)
-VERB(tell)
-VERB(tempt)
-VERB(terrify)
-VERB(test)
-VERB(thank)
-VERB(thaw)
-VERB(think)
-VERB(throw)
-VERB(tick)
-VERB(tickle)
-VERB(tie)
-VERB(time)
-VERB(tip)
-VERB(tire)
-VERB(toggle)
-VERB(touch)
-VERB(tour)
-VERB(tow)
-VERB(trace)
-VERB(trade)
-VERB(train)
-VERB(translate)
-VERB(transform)
-VERB(transport)
-VERB(trap)
-VERB(travel)
-VERB(traverse)
-VERB(treat)
-VERB(tremble)
-VERB(trick)
-VERB(trip)
-VERB(trot)
-VERB(trouble)
-VERB(truncate)
-VERB(trust)
-VERB(try)
-VERB(tug)
-VERB(tumble)
-VERB(turn)
-VERB(twist)
-VERB(understand)
-VERB(undress)
-VERB(unfasten)
-VERB(union)
-VERB(unite)
-VERB(unload)
-VERB(unlock)
-VERB(unpack)
-VERB(untidy)
-VERB(up)
-VERB(update)
-VERB(use)
-VERB(validate)
-VERB(vanish)
-VERB(visit)
-VERB(wail)
-VERB(wait)
-VERB(wake)
-VERB(walk)
-VERB(wander)
-VERB(want)
-VERB(warm)
-VERB(warn)
-VERB(wash)
-VERB(waste)
-VERB(watch)
-VERB(water)
-VERB(wave)
-VERB(wear)
-VERB(weigh)
-VERB(welcome)
-VERB(whine)
-VERB(whip)
-VERB(whirl)
-VERB(whisper)
-VERB(whistle)
-VERB(win)
-VERB(wink)
-VERB(wipe)
-VERB(wish)
-VERB(wobble)
-VERB(wonder)
-VERB(work)
-VERB(worry)
-VERB(wrap)
-VERB(wreck)
-VERB(wrestle)
-VERB(wriggle)
-VERB(write)
-VERB(yawn)
-VERB(yell)
-VERB(zip)
-VERB(zoom)
+      uint8 expected_data[] = {
+      0x5,
+      // All as is (00 op)
+      0x1,  0x0A, 0x0,
+      // Underscore, upper + 9 (10 op)
+      0x3,  0xCA, 0x0,
+      //  Upper + 3 (10 op), underscore, upper + 5 (10 op)
+      0x2,  0x44, 0xC6, 0x0,
+      // All Upper for 4 (11 op), underscore, underscore, upper + 5 (10 op),
+      // underscore, lower + 0 (01 op)
+      0x4,  0x64, 0x80, 0xC5, 0xA1, 0x0,
+      // 2 byte key: as is + 3 (00 op), underscore, lower + 4 (01 op),
+      //   underscore, lower + 3 (01 op), underscore, lower + 1 (01 op),
+      //   underscore, lower + 30 (01 op), as is + 30 (00 op), as is + 13 (00
+      //   op),
+      //   underscore, as is + 3 (00 op)
+      0xE8, 0x07, 0x04, 0xA5, 0xA4, 0xA2, 0xBF, 0x1F, 0x0E, 0x84, 0x0,
+  };
+  string expected((const char*)expected_data, sizeof(expected_data));
     
-        if (node->Further || node->Right) {
-      IndentScope ms(this, (childKind == ChildKind::Right ||
-                            childKind == ChildKind::Further ||
-                            childKind == ChildKind::Root) ? '  ' : '| ');
-    }
-    
-      // If the word preceding the preposition extends the preposition, it
-  // will never be dropped.
-  if (std::next(nameWordRevIter) != nameWordRevIterEnd &&
-      priorWordExtendsPreposition(*std::next(nameWordRevIter), preposition)) {
-    ++nameWordRevIter;
-    preposition = StringRef((*nameWordRevIter).begin(),
-                            preposition.size() + (*nameWordRevIter).size());
+      CodeGeneratorRequest request;
+  if (!request.ParseFromFileDescriptor(STDIN_FILENO)) {
+    std::cerr << argv[0] << ': protoc sent unparseable request to plugin.'
+              << std::endl;
+    return 1;
   }
     
-    #define TEGRA_ADDWEIGHTED(src1, sz1, src2, sz2, dst, sz, w, h, scales) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    CAROTENE_NS::addWeighted(CAROTENE_NS::Size2D(w, h), \
-                             src1, sz1, \
-                             src2, sz2, \
-                             dst, sz, \
-                             ((double *)scales)[0], ((double *)scales)[1], ((double *)scales)[2]), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
+    // Array.
+template <typename ToPrint, size_t N, typename OtherOperand>
+class FormatForComparison<ToPrint[N], OtherOperand> {
+ public:
+  static ::std::string Format(const ToPrint* value) {
+    return FormatForComparison<const ToPrint*, OtherOperand>::Format(value);
+  }
+};
     
     
-    {        inline size_t total() const
-        {
-            return width * height;
-        }
-    };
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+  const T30 v30_;
+  const T31 v31_;
+  const T32 v32_;
+  const T33 v33_;
+  const T34 v34_;
+  const T35 v35_;
+  const T36 v36_;
+  const T37 v37_;
+  const T38 v38_;
+  const T39 v39_;
+  const T40 v40_;
+  const T41 v41_;
+  const T42 v42_;
+  const T43 v43_;
+  const T44 v44_;
+  const T45 v45_;
+  const T46 v46_;
+};
     
-    void absDiff(const Size2D &size,
-             const f32 * src0Base, ptrdiff_t src0Stride,
-             const f32 * src1Base, ptrdiff_t src1Stride,
-             f32 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<f32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
+    #include <string.h>
+#include <string>
+    
+    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_TYPE_UTIL_H_
+#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_TYPE_UTIL_H_
+    
+    // Step 3. Call RUN_ALL_TESTS() in main().
+//
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
+//
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
+//
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
+
+    
+    #ifndef GTEST_SAMPLES_SAMPLE2_H_
+#define GTEST_SAMPLES_SAMPLE2_H_
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    #include <string>
+#include <vector>
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+    const std::string doc = R'DOC(
+  Single-feature representation:
+  - scalar features:
+    <feature full name> T
+  - list features:
+    <feature full name>.lengths int32
+    <feature full name>.values T
+  - map features:
+    <feature full name>.lengths int32
+    <feature full name>.keys K
+    <feature full name>.values V
+    
+      FlexibleTopKGradientOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws) {}
+    
+    workspace.ResetWorkspace()
+    
+    
+    {
+    {} // namespace
+} // namespace caffe2
+
+    
+    namespace {
+float sigmoid(const float x) {
+  if (x >= 0) {
+    return 1. / (1. + exp(-x));
+  } else {
+    const float exp_x = exp(x);
+    return exp_x / (1 + exp_x);
+  }
+}
+} // namespace
+    
+       friend inline bool operator == (const directory_iterator& f1, const directory_iterator& f2)
+   {
+      return ((f1.ref->hf == _fi_invalid_handle) && (f2.ref->hf == _fi_invalid_handle));
+   }
+    
+    #ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
+    
+    class BOOST_REGEX_DECL abstract_protected_call
+{
+public:
+   bool BOOST_REGEX_CALL execute()const;
+   // this stops gcc-4 from complaining:
+   virtual ~abstract_protected_call(){}
+private:
+   virtual bool call()const = 0;
+};
+    
+    #ifndef BOOST_REGEX_FWD_HPP
+#include <boost/regex_fwd.hpp>
+#endif
+#ifndef BOOST_REGEX_TRAITS_HPP
+#include <boost/regex/regex_traits.hpp>
+#endif
+#ifndef BOOST_REGEX_RAW_BUFFER_HPP
+#include <boost/regex/v4/error_type.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_MATCH_FLAGS
+#include <boost/regex/v4/match_flags.hpp>
+#endif
+#ifndef BOOST_REGEX_RAW_BUFFER_HPP
+#include <boost/regex/v4/regex_raw_buffer.hpp>
+#endif
+#ifndef BOOST_RE_PAT_EXCEPT_HPP
+#include <boost/regex/pattern_except.hpp>
+#endif
+    
+    typedef regex_iterator<const char*> cregex_iterator;
+typedef regex_iterator<std::string::const_iterator> sregex_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_iterator<const wchar_t*> wcregex_iterator;
+typedef regex_iterator<std::wstring::const_iterator> wsregex_iterator;
+#endif
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    template <class OutputIterator, class BidirectionalIterator, class traits, class charT, class Formatter>
+OutputIterator regex_replace(OutputIterator out,
+                         BidirectionalIterator first,
+                         BidirectionalIterator last,
+                         const basic_regex<charT, traits>& e, 
+                         Formatter fmt, 
+                         match_flag_type flags = match_default)
+{
+   regex_iterator<BidirectionalIterator, charT, traits> i(first, last, e, flags);
+   regex_iterator<BidirectionalIterator, charT, traits> j;
+   if(i == j)
+   {
+      if(!(flags & regex_constants::format_no_copy))
+         out = BOOST_REGEX_DETAIL_NS::copy(first, last, out);
+   }
+   else
+   {
+      BidirectionalIterator last_m(first);
+      while(i != j)
+      {
+         if(!(flags & regex_constants::format_no_copy))
+            out = BOOST_REGEX_DETAIL_NS::copy(i->prefix().first, i->prefix().second, out); 
+         out = i->format(out, fmt, flags, e);
+         last_m = (*i)[0].second;
+         if(flags & regex_constants::format_first_only)
+            break;
+         ++i;
+      }
+      if(!(flags & regex_constants::format_no_copy))
+         out = BOOST_REGEX_DETAIL_NS::copy(last_m, last, out);
+   }
+   return out;
 }
     
-    bool isBlurU8Supported(const Size2D &size, s32 cn, BORDER_MODE border)
-{
-    return isSupportedConfiguration() &&
-           cn > 0 && cn <= 4 &&
-           size.width*cn >= 8 && size.height >= 2 &&
-           (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REFLECT101 ||
-            border == BORDER_MODE_REFLECT ||
-            border == BORDER_MODE_REPLICATE);
+    
+    {  EXPECT_EQ(0, exec.refCount);
 }
     
-    template <typename T>
-inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
-{
-    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
-    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
+    void BENCHFUN(pushBack)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.push_back(obj); }
+  });
 }
     
-    #ifdef CAROTENE_NEON
+      std::string arguments1;
+  ASSERT_TRUE(getTracepointArguments(
+      'folly', 'test_static_tracepoint_branch_1', 0, arguments1));
+  std::array<int, 1> expected1{{sizeof(uint32_t)}};
+  checkTracepointArguments(arguments1, expected1);
     
-    void FAST(const Size2D &size,
-          u8 *srcBase, ptrdiff_t srcStride,
-          KeypointStore *keypoints,
-          u8 threshold, bool nonmax_suppression)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    //keypoints.clear();
+    
+    {} // namespace folly
+
+    
+    namespace folly {
     }
     
-                    vSum_0_4 = vmlaq_u16(vSum_0_4, vSum_3_1, vc4u16);
-                vSum_1_5 = vmlaq_u16(vSum_1_5, vSum_4_2, vc4u16);
-                vSum_2_6 = vmlaq_u16(vSum_2_6, vSum_5_6, vc4u16);
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
     
-    template <class charT, class traits>
-void basic_regex_parser<charT, traits>::parse_set_literal(basic_char_set<charT, traits>& char_set)
-{
-   digraph<charT> start_range(get_next_set_literal(char_set));
-   if(m_end == m_position)
-   {
-      fail(regex_constants::error_brack, m_position - m_base);
-      return;
-   }
-   if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_dash)
-   {
-      // we have a range:
-      if(m_end == ++m_position)
-      {
-         fail(regex_constants::error_brack, m_position - m_base);
-         return;
-      }
-      if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_set)
-      {
-         digraph<charT> end_range = get_next_set_literal(char_set);
-         char_set.add_range(start_range, end_range);
-         if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_dash)
-         {
-            if(m_end == ++m_position)
-            {
-               fail(regex_constants::error_brack, m_position - m_base);
-               return;
-            }
-            if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_set)
-            {
-               // trailing - :
-               --m_position;
-               return;
-            }
-            fail(regex_constants::error_range, m_position - m_base);
-            return;
-         }
-         return;
-      }
-      --m_position;
-   }
-   char_set.add_single(start_range);
-}
+    enum class CompressionCounterKey {
+  BYTES_BEFORE_COMPRESSION = 0,
+  BYTES_AFTER_COMPRESSION = 1,
+  BYTES_BEFORE_DECOMPRESSION = 2,
+  BYTES_AFTER_DECOMPRESSION = 3,
+  COMPRESSIONS = 4,
+  DECOMPRESSIONS = 5,
+  COMPRESSION_MILLISECONDS = 6,
+  DECOMPRESSION_MILLISECONDS = 7,
+};
     
-    
-    {#ifdef __cplusplus
-} /* namespace regex_constants */
-/*
- * import names into boost for backwards compatiblity:
- */
-using regex_constants::match_flag_type;
-using regex_constants::match_default;
-using regex_constants::match_not_bol;
-using regex_constants::match_not_eol;
-using regex_constants::match_not_bob;
-using regex_constants::match_not_eob;
-using regex_constants::match_not_bow;
-using regex_constants::match_not_eow;
-using regex_constants::match_not_dot_newline;
-using regex_constants::match_not_dot_null;
-using regex_constants::match_prev_avail;
-/* using regex_constants::match_init; */
-using regex_constants::match_any;
-using regex_constants::match_not_null;
-using regex_constants::match_continuous;
-using regex_constants::match_partial;
-/*using regex_constants::match_stop; */
-using regex_constants::match_all;
-using regex_constants::match_perl;
-using regex_constants::match_posix;
-using regex_constants::match_nosubs;
-using regex_constants::match_extra;
-using regex_constants::match_single_line;
-/*using regex_constants::match_max; */
-using regex_constants::format_all;
-using regex_constants::format_sed;
-using regex_constants::format_perl;
-using regex_constants::format_default;
-using regex_constants::format_no_copy;
-using regex_constants::format_first_only;
-/*using regex_constants::format_is_if;*/
-    
-    template <class BidiIterator, class Allocator, class traits>
-void perl_matcher<BidiIterator, Allocator, traits>::push_recursion_pop()
-{
-   saved_state* pmp = static_cast<saved_state*>(m_backup_state);
-   --pmp;
-   if(pmp < m_stack_base)
-   {
-      extend_stack();
-      pmp = static_cast<saved_state*>(m_backup_state);
-      --pmp;
-   }
-   (void) new (pmp)saved_state(15);
-   m_backup_state = pmp;
-}
-    
-    #ifndef BOOST_REGEX_TRAITS_HPP_INCLUDED
-#define BOOST_REGEX_TRAITS_HPP_INCLUDED
-    
-    namespace atomics {
-    }
+      unsigned int get_local_count(const PackedPtr& p) const {
+    return p.extra() & ~ALIASED_PTR;
+  }
