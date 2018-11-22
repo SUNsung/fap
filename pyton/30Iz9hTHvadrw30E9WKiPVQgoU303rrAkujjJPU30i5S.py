@@ -1,193 +1,210 @@
 
         
-        from utils import write_datasets
-from synthetic_data_utils import add_alignment_projections, generate_data
-from synthetic_data_utils import generate_rnn, get_train_n_valid_inds
-from synthetic_data_utils import nparray_and_transpose
-from synthetic_data_utils import spikify_data, gaussify_data, split_list_by_inds
-import matplotlib
-import matplotlib.pyplot as plt
-import scipy.signal
-    
-      wname = (name + '/W') if name else '/W'
-    
-      for sequence in sequences:
-    indices = []
-    for embedding in sequence:
-      indices.append(np.argmax(embedding))
-    batch_of_indices.append(indices)
-  return batch_of_indices
+            # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
     
     
-def hash_function(input_tuple):
-  '''Hash function for a tuple.'''
-  return hash(input_tuple)
-    
-        def copy(self):
-        '''Creates a copy of this request context with the same request object.
-        This can be used to move a request context to a different greenlet.
-        Because the actual request object is the same this cannot be used to
-        move a request context to a different thread unless access to the
-        request object is locked.
-    
-    
-def explain_ignored_app_run():
-    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
-        warn(Warning('Silently ignoring app.run() because the '
-                     'application is run from the flask command line '
-                     'executable.  Consider putting app.run() behind an '
-                     'if __name__ == '__main__' guard to silence this '
-                     'warning.'), stacklevel=3)
+if __name__ == '__main__':
+    main()
 
     
-            if head[::2] == b'\x00\x00':
-            return 'utf-16-be'
+    for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
     
-                resp = app.response_class()
-            if not session_interface.is_null_session(sess):
-                session_interface.save_session(app, sess, resp)
-            headers = resp.get_wsgi_headers(c.request.environ)
-            self.cookie_jar.extract_wsgi(c.request.environ, headers)
+            f = match_filter_func('playlist_id = 42')
+        res = get_videos(f)
+        self.assertEqual(res, ['1'])
     
-    KEY_PREFIX = 'django.contrib.sessions.cached_db'
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-    from sklearn.cluster.k_means_ import KMeans, MiniBatchKMeans
+        def test_tumblr(self):
+        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430/orphan-black-dvd-extra-behind-the-scenes', ['Tumblr'])
+        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430', ['Tumblr'])
     
-            ax.set_xlabel('n_samples')
-        ax.set_ylabel('n_features')
-        ax.set_zlabel('Time (s)')
-        ax.set_zlim3d(0.0, max_time * 1.1)
-        ax.set_title(label)
-        # ax.legend()
-        i += 1
-    plt.show()
-
-    
-        # Plot results
-    i = 0
-    m = len(list_n_features)
-    plt.figure('scikit-learn SGD regression benchmark results',
-               figsize=(5 * 2, 4 * m))
-    for j in range(m):
-        plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 0]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 0]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 0]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 0]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('RMSE')
-        plt.title('Test error - %d features' % list_n_features[j])
-        i += 1
-    
-    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
-    
-        def start_requests(self):
-        url = self.benchurl
-        if self.latency is not None:
-            url += '?latency={0}'.format(self.latency)
-    
-    def _get_commands_from_entry_points(inproject, group='scrapy.commands'):
-    cmds = {}
-    for entry_point in pkg_resources.iter_entry_points(group):
-        obj = entry_point.load()
-        if inspect.isclass(obj):
-            cmds[entry_point.name] = obj()
-        else:
-            raise Exception('Invalid entry point %s' % entry_point.name)
-    return cmds
-    
-        def prepare_request(self, spider, request, opts):
-        def callback(response):
-            # memorize first request
-            if not self.first_response:
-                self.first_response = response
-    
-    site_info = 'AcFun.tv'
-download = acfun_download
-download_playlist = playlist_not_supported('acfun')
-
-    
-    site_info = 'CBS.com'
-download = cbs_download
-download_playlist = playlist_not_supported('cbs')
-
-    
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
+        def test_compat_urllib_parse_urlencode(self):
+        self.assertEqual(compat_urllib_parse_urlencode({'abc': 'def'}), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode({'abc': b'def'}), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode({b'abc': 'def'}), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode({b'abc': b'def'}), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode([('abc', 'def')]), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode([('abc', b'def')]), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode([(b'abc', 'def')]), 'abc=def')
+        self.assertEqual(compat_urllib_parse_urlencode([(b'abc', b'def')]), 'abc=def')
     
     
-site_info = 'fantasy.tv'
-download = fantasy_download
-download_playlist = playlist_not_supported('fantasy.tv')
-
+def load_data():
+    '''Loads CIFAR10 dataset.
     
-                if item.get(CONF_TEXT) is not None:
-                if isinstance(item.get(CONF_TEXT), template.Template):
-                    output[ATTR_MAIN_TEXT] = item[CONF_TEXT].async_render()
-                else:
-                    output[ATTR_MAIN_TEXT] = item.get(CONF_TEXT)
     
-            devices = {}
-        for lease in leases_result:
-            match = _LEASES_REGEX.search(lease.decode('utf-8'))
-            if match is not None:
-                devices[match.group('ip')] = {
-                    'ip': match.group('ip'),
-                    'mac': match.group('mac').upper(),
-                    'timevalid': int(match.group('timevalid'))
-                    }
-        return devices
-
-    
-            # If there's a home_id, we need a different API URL
-        if self.home_id is None:
-            self.tadoapiurl = 'https://my.tado.com/api/v2/me'
-        else:
-            self.tadoapiurl = 'https://my.tado.com/api/v2' \
-                              '/homes/{home_id}/mobileDevices'
-    
-        return scanner if scanner.success_init else None
-    
-        def see_vehicle(vehicle):
-        '''Handle the reporting of the vehicle position.'''
-        host_name = voc.vehicle_name(vehicle)
-        dev_id = 'volvo_{}'.format(slugify(host_name))
-        see(dev_id=dev_id,
-            host_name=host_name,
-            gps=(vehicle.position['latitude'],
-                 vehicle.position['longitude']),
-            icon='mdi:car')
-    
-        Adapted from Luci scanner.
+class Regularizer(object):
+    '''Regularizer base class.
     '''
     
-        @Throttle(MIN_TIME_BETWEEN_STORE_UPDATES)
-    def update_closest_store(self):
-        '''Update the shared closest store (if open).'''
-        from pizzapi.address import StoreException
-        try:
-            self.closest_store = self.address.closest_store()
-            return True
-        except StoreException:
-            self.closest_store = None
-            return False
     
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/emoncms_history/
-'''
-import logging
-from datetime import timedelta
+def create_model(kernel_regularizer=None, activity_regularizer=None):
+    model = Sequential()
+    model.add(Dense(num_classes,
+                    kernel_regularizer=kernel_regularizer,
+                    activity_regularizer=activity_regularizer,
+                    input_shape=(data_dim,)))
+    return model
     
+            # helper function
+        def get_tuple_shape(nb_channels):
+            result = list(state_shape)
+            if self.cell.data_format == 'channels_first':
+                result[1] = nb_channels
+            elif self.cell.data_format == 'channels_last':
+                result[3] = nb_channels
+            else:
+                raise KeyError
+            return tuple(result)
     
-class Watcher():
-    '''Class for starting Watchdog.'''
+        def _canonical_to_params(self, weights, biases):
+        import tensorflow as tf
+        weights = [tf.reshape(x, (-1,)) for x in weights]
+        biases = [tf.reshape(x, (-1,)) for x in biases]
+        return tf.concat(weights + biases, 0)
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
+
+    
+            return [item for item in self.events if item[2] not in disallowed]
+    
+            create_file(test_fn1)
+        func(test_fn1, test_fn2)
+        self.assertTrue(self.pathmodule.samestat(os.stat(test_fn1),
+                                                 os.stat(test_fn2)))
+        os.remove(test_fn2)
+    
+        def persistent_id(self, obj):
+        # Instead of pickling MemoRecord as a regular class instance, we emit a
+        # persistent ID.
+        if isinstance(obj, MemoRecord):
+            # Here, our persistent ID is simply a tuple, containing a tag and a
+            # key, which refers to a specific record in the database.
+            return ('MemoRecord', obj.key)
+        else:
+            # If obj does not have a persistent ID, return None. This means obj
+            # needs to be pickled as usual.
+            return None
+    
+    # Of course, there are lots of email messages that could break this simple
+# minded program, but it will handle the most common ones.
+
+    
+    # We categorize each error message we print.  Here are the categories.
+# We want an explicit list so we can list them all in cpplint --filter=.
+# If you add a new error message with a new category, add it to the list
+# here!  cpplint_unittest.py should tell you if you forget to do this.
+_ERROR_CATEGORIES = [
+    'build/class',
+    'build/c++11',
+    'build/c++14',
+    'build/c++tr1',
+    'build/deprecated',
+    'build/endif_comment',
+    'build/explicit_make_pair',
+    'build/forward_decl',
+    'build/header_guard',
+    'build/include',
+    'build/include_subdir',
+    'build/include_alpha',
+    'build/include_order',
+    'build/include_what_you_use',
+    'build/namespaces_literals',
+    'build/namespaces',
+    'build/printf_format',
+    'build/storage_class',
+    'legal/copyright',
+    'readability/alt_tokens',
+    'readability/braces',
+    'readability/casting',
+    'readability/check',
+    'readability/constructors',
+    'readability/fn_size',
+    'readability/inheritance',
+    'readability/multiline_comment',
+    'readability/multiline_string',
+    'readability/namespace',
+    'readability/nolint',
+    'readability/nul',
+    'readability/strings',
+    'readability/todo',
+    'readability/utf8',
+    'runtime/arrays',
+    'runtime/casting',
+    'runtime/explicit',
+    'runtime/int',
+    'runtime/init',
+    'runtime/invalid_increment',
+    'runtime/member_string_references',
+    'runtime/memset',
+    'runtime/indentation_namespace',
+    'runtime/operator',
+    'runtime/printf',
+    'runtime/printf_format',
+    'runtime/references',
+    'runtime/string',
+    'runtime/threadsafe_fn',
+    'runtime/vlog',
+    'whitespace/blank_line',
+    'whitespace/braces',
+    'whitespace/comma',
+    'whitespace/comments',
+    'whitespace/empty_conditional_body',
+    'whitespace/empty_if_body',
+    'whitespace/empty_loop_body',
+    'whitespace/end_of_line',
+    'whitespace/ending_newline',
+    'whitespace/forcolon',
+    'whitespace/indent',
+    'whitespace/line_length',
+    'whitespace/newline',
+    'whitespace/operators',
+    'whitespace/parens',
+    'whitespace/semicolon',
+    'whitespace/tab',
+    'whitespace/todo',
+    ]
+    
+    # This is a demo of blurring faces in video.
+    
+    Algorithm Description:
+The knn classifier is first trained on a set of labeled (known) faces and can then predict the person
+in an unknown image by finding the k most similar faces (images with closet face-features under eucledian distance)
+in its training set, and performing a majority vote (possibly weighted) on their label.
+    
+    app = Flask(__name__)
+    
+        face_names = []
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
+    
+        # Find all the faces and face enqcodings in the frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+        # Only process every other frame of video to save time
+    if process_this_frame:
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    
+                frame_number = frame_count - 128 + frame_number_in_batch
+            print('I found {} face(s) in frame #{}.'.format(number_of_faces_in_frame, frame_number))
+    
+            # empty python list
+        faces_to_compare = []
