@@ -1,183 +1,99 @@
 
         
-        void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
-  }
-}
+        
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
 
-    
-        llvm::errs() << '\n=====================================================\n';
-    SyntaxNode->dump(llvm::errs());
-    llvm::errs() << '\n\n---- Maps to semantic node: ----\n\n';
     
     
     {
-    {  explicit DefaultCache(CacheImpl::CallBacks CBs) : CBs(std::move(CBs)) { }
-};
-} // end anonymous namespace
-    
-    #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
+    {  c.reset();
+}
+}
 
     
-          if (node->Further) {
-        // Further indent, and include the line to the right child if
-        // there is one.
-        IndentScope is(this, node->Right ? '|   ' : '    ');
-        print(node->Further, ChildKind::Further);
-      }
-    
-      IsFirstLine = true;
-  for (auto &Line : Lines) {
-    if (!IsFirstLine) {
-      Line = Line.drop_front(WhitespaceToTrim);
+      // We use a restricted scope below to change the data structure from
+  // an array to a set. This lets us do deletes much more efficiently
+  std::vector<std::string> created_views;
+  std::set<std::string> erase_views;
+  {
+    std::vector<std::string> old_views_vec;
+    scanDatabaseKeys(kQueries, old_views_vec, kConfigViews);
+    for (const auto& view : old_views_vec) {
+      erase_views.insert(view.substr(kConfigViews.size()));
     }
-    IsFirstLine = false;
   }
     
-      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 1,
-                     llvm::lenientConversion);
-  if (TargetStart == C) {
-    // The source string contains an ill-formed subsequence at the end.
-    return S;
+    TEST_F(PacksTests, test_get_discovery_queries) {
+  std::vector<std::string> expected;
+    }
+    
+    /**
+ * @brief Compute multiple hashes from a files contents simultaneously.
+ *
+ * @param mask Bitmask specifying target osquery-supported algorithms.
+ * @param path Filesystem path (the hash target).
+ * @return A struct containing string (hex) representations
+ *         of the hash digests.
+ */
+MultiHashes hashMultiFromFile(int mask, const std::string& path);
+    
+    #include <osquery/system.h>
+    
+    Status deserializeDistributedQueryRequest(const rj::Value& obj,
+                                          DistributedQueryRequest& r) {
+  if (!obj.HasMember('query') || !obj.HasMember('id') ||
+      !obj['query'].IsString() || !obj['id'].IsString()) {
+    return Status(1, 'Malformed distributed query request');
   }
+    }
     
     
-    {
-    {      len1 = ::boost::BOOST_REGEX_DETAIL_NS::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
-      len2 = ::boost::BOOST_REGEX_DETAIL_NS::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
-      BOOST_ASSERT(len1 >= 0);
-      BOOST_ASSERT(len2 >= 0);
-      if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
-         break;
-      if((p1->matched == true) && (p2->matched == false))
-         return;
-   }
-   if(i == size())
-      return;
-   if(base2 < base1)
-      *this = m;
-   else if((len2 > len1) || ((p1->matched == false) && (p2->matched == true)) )
-      *this = m;
+    {  // Reorder to the correct output order.
+  // TODO(szabadka): Modify the above computation so that this is not needed.
+  Complex tmp = a[2];
+  a[2] = a[3];
+  a[3] = a[5];
+  a[5] = a[7];
+  a[7] = a[4];
+  a[4] = a[1];
+  a[1] = a[6];
+  a[6] = tmp;
 }
     
-    struct mem_block_cache
-{
-   // this member has to be statically initialsed:
-   mem_block_node* next;
-   unsigned cached_blocks;
-#ifdef BOOST_HAS_THREADS
-   boost::static_mutex mut;
-#endif
-    }
+    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
+void ComputeBlockIDCTDouble(double block[64]);
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::find_imp()
-{
-   static matcher_proc_type const s_find_vtable[7] = 
-   {
-      &perl_matcher<BidiIterator, Allocator, traits>::find_restart_any,
-      &perl_matcher<BidiIterator, Allocator, traits>::find_restart_word,
-      &perl_matcher<BidiIterator, Allocator, traits>::find_restart_line,
-      &perl_matcher<BidiIterator, Allocator, traits>::find_restart_buf,
-      &perl_matcher<BidiIterator, Allocator, traits>::match_prefix,
-      &perl_matcher<BidiIterator, Allocator, traits>::find_restart_lit,
-      &perl_matcher<BidiIterator, Allocator, traits>::find_restart_lit,
-   };
-    }
+    void ComputeBlockDCT(coeff_t* coeffs) {
+  ColumnDct(coeffs);
+  RowDct(coeffs + 0 * 8, kTable04);
+  RowDct(coeffs + 1 * 8, kTable17);
+  RowDct(coeffs + 2 * 8, kTable26);
+  RowDct(coeffs + 3 * 8, kTable35);
+  RowDct(coeffs + 4 * 8, kTable04);
+  RowDct(coeffs + 5 * 8, kTable35);
+  RowDct(coeffs + 6 * 8, kTable26);
+  RowDct(coeffs + 7 * 8, kTable17);
+}
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat()
-{
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable:4127)
-#endif
-#ifdef __BORLANDC__
-#pragma option push -w-8008 -w-8066 -w-8004
-#endif
-   const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   BOOST_ASSERT(1 == static_cast<const re_literal*>(rep->next.p)->length);
-   const char_type what = *reinterpret_cast<const char_type*>(static_cast<const re_literal*>(rep->next.p) + 1);
-   std::size_t count = 0;
-   //
-   // start by working out how much we can skip:
-   //
-   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
-   std::size_t desired = greedy ? rep->max : rep->min;
-   if(::boost::is_random_access_iterator<BidiIterator>::value)
-   {
-      BidiIterator end = position;
-      // Move end forward by 'desired', preferably without using distance or advance if we can
-      // as these can be slow for some iterator types.
-      std::size_t len = (desired == (std::numeric_limits<std::size_t>::max)()) ? 0u : ::boost::BOOST_REGEX_DETAIL_NS::distance(position, last);
-      if(desired >= len)
-         end = last;
-      else
-         std::advance(end, desired);
-      BidiIterator origin(position);
-      while((position != end) && (traits_inst.translate(*position, icase) == what))
-      {
-         ++position;
-      }
-      count = (unsigned)::boost::BOOST_REGEX_DETAIL_NS::distance(origin, position);
-   }
-   else
-   {
-      while((count < desired) && (position != last) && (traits_inst.translate(*position, icase) == what))
-      {
-         ++position;
-         ++count;
-      }
-   }
-    }
+    #include 'guetzli/jpeg_data.h'
     
-    class BOOST_REGEX_DECL abstract_protected_call
-{
-public:
-   bool BOOST_REGEX_CALL execute()const;
-   // this stops gcc-4 from complaining:
-   virtual ~abstract_protected_call(){}
-private:
-   virtual bool call()const = 0;
-};
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
     
-    struct unary_binary_ternary
-{
-    typedef unary_type (*unary_fun)(any_type);
-    typedef binary_type (*binary_fun)(any_type, any_type);
-    typedef ternary_type (*ternary_fun)(any_type, any_type, any_type);
-    operator unary_fun();
-    operator binary_fun();
-    operator ternary_fun();
-};
+      // Cluster AC histograms.
+  size_t num_ac_histo = ncomps;
+  int ac_histo_indexes[kMaxComponents];
+  ClusterHistograms(&histograms[num_dc_histo], &num_ac_histo, ac_histo_indexes,
+                    &depths[num_dc_histo * JpegHistogram::kSize]);
     
-       pimpl pdata;
-    
-    #endif  // BOOST_REGEX_V4_REGEX_REPLACE_HPP
-    
-    #include <cstdio>
-#include <cstring>
-#include <string>
-#include <istream>
-#include <fstream>
-    
-    #if DMLC_ENABLE_STD_THREAD
-#include <dmlc/concurrency.h>
-#include <thread>
-#endif
-    
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
+    namespace guetzli {
     }
