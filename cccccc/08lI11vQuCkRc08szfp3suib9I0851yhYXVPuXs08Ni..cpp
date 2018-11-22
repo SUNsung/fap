@@ -1,457 +1,472 @@
 
         
         
-    {}  // namespace tensorflow
-
-    
-    // Actually dereferences cached numpy arrays. REQUIRES being called while
-// holding the GIL.
-void ClearDecrefCache() {
-  std::vector<void*> cache_copy;
-  {
-    mutex_lock ml(*DelayedDecrefLock());
-    cache_copy.swap(*DecrefCache());
-  }
-  for (void* obj : cache_copy) {
-    Py_DECREF(reinterpret_cast<PyObject*>(obj));
-  }
-}
-    
-    void ImportNumpy() {
-  import_array1();
-}
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #ifndef ATOM_APP_COMMAND_LINE_ARGS_H_
-#define ATOM_APP_COMMAND_LINE_ARGS_H_
-    
-      uv_loop_t* loop_;
-    
-    #include 'atom/browser/browser.h'
-#include 'atom/browser/native_window.h'
-#include 'atom/browser/window_list.h'
-#include 'atom/common/api/event_emitter_caller.h'
-#include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/node_includes.h'
-#include 'base/time/time.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-    
-    namespace mate {
-    }
-    
-    namespace api {
-    }
-    
-    #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/net/atom_network_delegate.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
-    
-    namespace mate {
-    }
-    
-    namespace {
-    }
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
-};
-    
-    
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-    
-    {    QTimer *timer;
-    float fMax;
-    int nMins;
-    QQueue<float> vSamplesIn;
-    QQueue<float> vSamplesOut;
-    quint64 nLastBytesIn;
-    quint64 nLastBytesOut;
-    ClientModel *clientModel;
-};
-    
-    
-    {    /* RFC6979 3.2.f. */
-    secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
-    secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
-    secp256k1_hmac_sha256_write(&hmac, one, 1);
-    secp256k1_hmac_sha256_write(&hmac, key, keylen);
-    secp256k1_hmac_sha256_finalize(&hmac, rng->k);
-    secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
-    secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
-    secp256k1_hmac_sha256_finalize(&hmac, rng->v);
-    rng->retry = 0;
-}
-    
-    static void secp256k1_ecdsa_recoverable_signature_load(const secp256k1_context* ctx, secp256k1_scalar* r, secp256k1_scalar* s, int* recid, const secp256k1_ecdsa_recoverable_signature* sig) {
-    (void)ctx;
-    if (sizeof(secp256k1_scalar) == 32) {
-        /* When the secp256k1_scalar type is exactly 32 byte, use its
-         * representation inside secp256k1_ecdsa_signature, as conversion is very fast.
-         * Note that secp256k1_ecdsa_signature_save must use the same representation. */
-        memcpy(r, &sig->data[0], 32);
-        memcpy(s, &sig->data[32], 32);
-    } else {
-        secp256k1_scalar_set_b32(r, &sig->data[0], NULL);
-        secp256k1_scalar_set_b32(s, &sig->data[32], NULL);
-    }
-    *recid = sig->data[64];
-}
-    
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
-    }
-}
-    
-    // Test whether type T1 is convertible to type T2
-template <typename T1, typename T2>
-struct is_convertible
-{
-    private:
-        // two types of different size
-        struct fail { char dummy[2]; };
-        struct succeed { char dummy; };
-        // Try to convert a T1 to a T2 by plugging into tryConvert
-        static fail tryConvert(...);
-        static succeed tryConvert(const T2&);
-        static const T1& makeT1();
-    public:
-#       ifdef _MSC_VER
-        // Disable spurious loss of precision warnings in tryConvert(makeT1())
-#       pragma warning(push)
-#       pragma warning(disable:4244)
-#       pragma warning(disable:4267)
-#       endif
-        // Standard trick: the (...) version of tryConvert will be chosen from
-        // the overload set only if the version taking a T2 doesn't match.
-        // Then we compare the sizes of the return types to check which
-        // function matched.  Very neat, in a disgusting kind of way :)
-        static const bool value =
-            sizeof(tryConvert(makeT1())) == sizeof(succeed);
-#       ifdef _MSC_VER
-#       pragma warning(pop)
-#       endif
-};
-    
-      Status OpenCompactionOutputFile(CompactionState* compact);
-  Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
-  Status InstallCompactionResults(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-      // Successful parses
-  static struct {
-    const char* fname;
-    uint64_t number;
-    FileType type;
-  } cases[] = {
-    { '100.log',            100,   kLogFile },
-    { '0.log',              0,     kLogFile },
-    { '0.sst',              0,     kTableFile },
-    { '0.ldb',              0,     kTableFile },
-    { 'CURRENT',            0,     kCurrentFile },
-    { 'LOCK',               0,     kDBLockFile },
-    { 'MANIFEST-2',         2,     kDescriptorFile },
-    { 'MANIFEST-7',         7,     kDescriptorFile },
-    { 'LOG',                0,     kInfoLogFile },
-    { 'LOG.old',            0,     kInfoLogFile },
-    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
-  };
-  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
-    std::string f = cases[i].fname;
-    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
-    ASSERT_EQ(cases[i].type, type) << f;
-    ASSERT_EQ(cases[i].number, number) << f;
-  }
-    
-    template<>
-inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetGrad() const {
-  return grad_ * 1e-4f;
-}
-template<>
-inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetHess() const {
-  return hess_ * 1e-4f;
-}
-template<>
-inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetGrad(float g) {
-  grad_ = static_cast<int64_t>(std::round(g * 1e4));
-}
-template<>
-inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetHess(float h) {
-  hess_ = static_cast<int64_t>(std::round(h * 1e4));
-}
-    
-    /*!
- * \brief Macro to register tree updater.
- *
- * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
- * .describe('Column based tree maker.')
- * .set_body([]() {
- *     return new ColMaker<TStats>();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
-  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
-      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
    */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
   }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    #include <cstdio>
-#include <cstring>
-#include <string>
-#include <istream>
-#include <fstream>
-    
-    #endif  // XGBOOST_OBJECTIVE_REGRESSION_LOSS_H_
-
-    
-    // implements rabit error handling.
-extern 'C' {
-  void XGBoostAssert_R(int exp, const char *fmt, ...);
-  void XGBoostCheck_R(int exp, const char *fmt, ...);
-}
-    
-    // This will register a benchmark for a templatized function.  For example:
-//
-// template<int arg>
-// void BM_Foo(int iters);
-//
-// BENCHMARK_TEMPLATE(BM_Foo, 1);
-//
-// will register BM_Foo<1> as a benchmark.
-#define BENCHMARK_TEMPLATE1(n, a)                        \
-  BENCHMARK_PRIVATE_DECLARE(n) =                         \
-      (::benchmark::internal::RegisterBenchmarkInternal( \
-          new ::benchmark::internal::FunctionBenchmark(#n '<' #a '>', n<a>)))
-    
-    bool IsZero(double n) {
-  return std::abs(n) < std::numeric_limits<double>::epsilon();
-}
-    
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
-      return false;
-    }
-  }
-  return true;
-}
-    
-      // Field with embedded double-quote characters must be doubled and the field
-  // delimited with double-quotes.
-  std::string name = run.benchmark_name;
-  ReplaceAll(&name, '\'', '\'\'');
-  Out << ''' << name << '\',';
-  if (run.error_occurred) {
-    Out << std::string(elements.size() - 3, ',');
-    Out << 'true,';
-    std::string msg = run.error_message;
-    ReplaceAll(&msg, '\'', '\'\'');
-    Out << ''' << msg << '\'\n';
-    return;
-  }
-    
-      ~Regex();
-    
-    namespace benchmark {
-    }
-    
-    TEST(StaticTracepoint, TestPointer) {
-  pointerTestFunc();
-    }
-    
-    
-    {} // namespace folly
-
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
     
     /**
- * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
- * Returns true if the first n bytes are equal to prefix when interpreted as
- * a little endian T.
+ * @brief Provides base for data layers that feed blobs to the Net.
+ *
+ * TODO(dox): thorough documentation for Forward and proto params.
  */
-template <typename T>
-typename std::enable_if<std::is_unsigned<T>::value, bool>::type
-dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  T value;
-  Cursor cursor{data};
-  if (!cursor.tryReadLE(value)) {
-    return false;
+template <typename Dtype>
+class BaseDataLayer : public Layer<Dtype> {
+ public:
+  explicit BaseDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden except by the BasePrefetchingDataLayer.
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+  // Data layers have no bottoms, so reshaping is trivial.
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+    }
+    
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
   }
-  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
-  return prefix == (value & mask);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #endif  // CAFFE_CROP_LAYER_HPP_
+
+    
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
+        }
+      }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
+    }
+  }
 }
+    
+    // Extracts and converts 8x32-bit results from result, adding the bias from wi
+// and scaling by scales, before storing in *v. Note that wi, scales and v are
+// expected to contain 8 consecutive elements or num_out if less.
+inline void ExtractResults(__m256i& result, __m256i& shift_id,
+                           const int8_t*& wi, const double*& scales,
+                           int num_out, double*& v) {
+  for (int out = 0; out < num_out; ++out) {
+    int32_t res =
+#ifndef _MSC_VER
+        _mm256_extract_epi32(result, 0)
+#else
+        // Workaround MSVC's ICE
+        // _mm256_extract_epi32(X, Y) == ((int32_t*)&X)[Y]
+        ((int32_t*)&result)[0]
+#endif
+        ;
+    *v++ = (static_cast<double>(res) / INT8_MAX + *wi++) * *scales++;
+    // Rotate the results in int32_t units, so the next result is ready.
+    result = _mm256_permutevar8x32_epi32(result, shift_id);
+  }
+}
+    
+    // If true, then AVX has been detected.
+bool SIMDDetect::avx_available_;
+bool SIMDDetect::avx2_available_;
+bool SIMDDetect::avx512F_available_;
+bool SIMDDetect::avx512BW_available_;
+// If true, then SSe4.1 has been detected.
+bool SIMDDetect::sse_available_;
+    
+    
+    
+    template <class T>
+struct pointer_iterator_traits
+{
+   typedef std::ptrdiff_t difference_type;
+   typedef T value_type;
+   typedef T* pointer;
+   typedef T& reference;
+   typedef std::random_access_iterator_tag iterator_category;
+};
+template <class T>
+struct const_pointer_iterator_traits
+{
+   typedef std::ptrdiff_t difference_type;
+   typedef T value_type;
+   typedef const T* pointer;
+   typedef const T& reference;
+   typedef std::random_access_iterator_tag iterator_category;
+};
+    
+    
+    {} // namespace boost
+    
+    template <class BidiIterator>
+struct saved_position : public saved_state
+{
+   const re_syntax_base* pstate;
+   BidiIterator position;
+   saved_position(const re_syntax_base* ps, BidiIterator pos, int i) : saved_state(i), pstate(ps), position(pos){};
+};
+    
+    
+    {   if(next_count->get_count() < rep->min)
+   {
+      // we must take the repeat:
+      if(take_first)
+      {
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         return match_all_states();
+      }
+      return false;
+   }
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
+   if(greedy)
+   {
+      // try and take the repeat if we can:
+      if((next_count->get_count() < rep->max) && take_first)
+      {
+         // store position in case we fail:
+         BidiIterator pos = position;
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         if(match_all_states())
+            return true;
+         if(!m_can_backtrack)
+            return false;
+         // failed repeat, reset posistion and fall through for alternative:
+         position = pos;
+      }
+      if(take_second)
+      {
+         pstate = rep->alt.p;
+         return true;
+      }
+      return false; // can't take anything, fail...
+   }
+   else // non-greedy
+   {
+      // try and skip the repeat if we can:
+      if(take_second)
+      {
+         // store position in case we fail:
+         BidiIterator pos = position;
+         pstate = rep->alt.p;
+         if(match_all_states())
+            return true;
+         if(!m_can_backtrack)
+            return false;
+         // failed alternative, reset posistion and fall through for repeat:
+         position = pos;
+      }
+      if((next_count->get_count() < rep->max) && take_first)
+      {
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         return match_all_states();
+      }
+   }
+   return false;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+}
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    
+    
+    //
+// proc regex_match
+// returns true if the specified regular expression matches
+// the whole of the input.  Fills in what matched in m.
+//
+template <class BidiIterator, class Allocator, class charT, class traits>
+bool regex_match(BidiIterator first, BidiIterator last, 
+                 match_results<BidiIterator, Allocator>& m, 
+                 const basic_regex<charT, traits>& e, 
+                 match_flag_type flags = match_default)
+{
+   BOOST_REGEX_DETAIL_NS::perl_matcher<BidiIterator, Allocator, traits> matcher(first, last, m, e, flags, first);
+   return matcher.match();
+}
+template <class iterator, class charT, class traits>
+bool regex_match(iterator first, iterator last, 
+                 const basic_regex<charT, traits>& e, 
+                 match_flag_type flags = match_default)
+{
+   match_results<iterator> m;
+   return regex_match(first, last, m, e, flags | regex_constants::match_any);
+}
+//
+// query_match convenience interfaces:
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+//
+// this isn't really a partial specialisation, but template function
+// overloading - if the compiler doesn't support partial specialisation
+// then it really won't support this either:
+template <class charT, class Allocator, class traits>
+inline bool regex_match(const charT* str, 
+                        match_results<const charT*, Allocator>& m, 
+                        const basic_regex<charT, traits>& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + traits::length(str), m, e, flags);
+}
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_raw_buffer.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Raw character buffer for regex code.
+  *                Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+    
+    #endif
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+        // Bind shader and vertex buffers
+    unsigned int stride = sizeof(ImDrawVert);
+    unsigned int offset = 0;
+    D3D12_VERTEX_BUFFER_VIEW vbv;
+    memset(&vbv, 0, sizeof(D3D12_VERTEX_BUFFER_VIEW));
+    vbv.BufferLocation = g_pVB->GetGPUVirtualAddress() + offset;
+    vbv.SizeInBytes = g_VertexBufferSize * stride;
+    vbv.StrideInBytes = stride;
+    ctx->IASetVertexBuffers(0, 1, &vbv);
+    D3D12_INDEX_BUFFER_VIEW ibv;
+    memset(&ibv, 0, sizeof(D3D12_INDEX_BUFFER_VIEW));
+    ibv.BufferLocation = g_pIB->GetGPUVirtualAddress();
+    ibv.SizeInBytes = g_IndexBufferSize * sizeof(ImDrawIdx);
+    ibv.Format = sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+    ctx->IASetIndexBuffer(&ibv);
+    ctx->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    ctx->SetPipelineState(g_pPipelineState);
+    ctx->SetGraphicsRootSignature(g_pRootSignature);
+    ctx->SetGraphicsRoot32BitConstants(0, 16, &vertex_constant_buffer, 0);
+    
+        // TODO: Hide OS mouse cursor if ImGui is drawing it
+    // s3ePointerSetInt(S3E_POINTER_HIDE_CURSOR,(io.MouseDrawCursor ? 0 : 1));
+    
+    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
+{
+    //printf('key_up_func %d\n', key);
+    ImGuiIO& io = ImGui::GetIO();
+    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
+        io.KeysDown[key + 256] = false;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
+}
+    
+            ImGui::Text('PushItemWidth(-100)');
+        ImGui::SameLine(); ShowHelpMarker('Align to right edge minus 100');
+        ImGui::PushItemWidth(-100);
+        ImGui::DragFloat('float##4', &f);
+        ImGui::PopItemWidth();
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    
+    {    ImGuiContext& g = *GImGui;
+    const char* label_end = g.TempBuffer + ImFormatStringV(g.TempBuffer, IM_ARRAYSIZE(g.TempBuffer), fmt, args);
+    return TreeNodeBehavior(window->GetID(ptr_id), flags, g.TempBuffer, label_end);
+}
+    
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+    }
+    
+      /**
+   * @brief Send a single message.
+   * @param frames A single-element vector containing only one message.
+   * @return The status of the sending single message action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  virtual apollo::common::ErrorCode SendSingleFrame(
+      const std::vector<CanFrame> &frames) {
+    CHECK_EQ(frames.size(), 1)
+        << 'frames size not equal to 1, actual frame size :' << frames.size();
+    int32_t n = 1;
+    return Send(frames, &n);
+  }
+    
+      virtual void SetUp() {
+    send_time_ = 0;
+    recv_time_ = 0;
+    send_succ_count_ = 0;
+    recv_succ_count_ = 0;
+    send_err_count_ = 0;
+    recv_err_count_ = 0;
+    param_.set_brand(CANCardParameter::ESD_CAN);
+    param_.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    send_client_ = std::unique_ptr<FakeCanClient>(new FakeCanClient());
+    send_client_->Init(param_);
+    send_client_->Start();
+    recv_client_ = std::unique_ptr<FakeCanClient>(new FakeCanClient());
+    recv_client_->Init(param_);
+    recv_client_->Start();
+  }
+    
+      // open device
+  // guss net is the device minor number, if one card is 0,1
+  // if more than one card, when install driver u can specify the minior id
+  // int32_t ret = canOpen(net, pCtx->mode, txbufsize, rxbufsize, 0, 0,
+  // &dev_handler_);
+  if (port_ > MAX_CAN_PORT || port_ < 0) {
+    AERROR << 'can port number [' << port_ << '] is out of the range [0,'
+           << MAX_CAN_PORT << ']';
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+    
+    #include 'gtest/gtest.h'
+    
+    /**
+ * @file
+ * @brief The class of ProtocolData
+ */
+    
+      /**
+   * @brief Get a one-byte unsigned integer representing the consecutive bits
+   *        from a specified position (from lowest) by a certain length.
+   * @param start_pos The starting position (from lowest) of bits.
+   * @param length The length of the selected consecutive bits.
+   * @return The one-byte unsigned integer representing the selected bits.
+   */
+  uint8_t get_byte(const int32_t start_pos, const int32_t length) const;
+    
+    // data file
+DECLARE_string(sensor_conf_file);
