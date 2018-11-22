@@ -1,352 +1,641 @@
 
         
-          bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
+        	real_t get_hinge_angle();
     
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
+    #include 'constraint_bullet.h'
+#include 'servers/physics_server.h'
     
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
+    void unregister_etc_types() {
     }
     
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+    void MemoryPool::cleanup() {
+    }
+    
+    #include 'func_ref.h'
+    
+    
+    
+    namespace php {
+    }
+    
+    void Assembler::stdu(const Reg64& rt, MemoryRef m) {
+  assertx(Reg64(-1) == m.r.index);  // doesn't support base+index
+  EmitDSForm(62, rn(rt), rn(m.r.base), m.r.disp, 1);
+}
+    
+      //Extended/Synthetic PPC64 Instructions
+  void bctr() {
+    BranchParams bp(BranchConditions::Always);
+    bcctr(bp.bo(), bp.bi(), 0);
   }
-}
-    
-    void Menu::Insert(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.insert(begin+pos,menu_item);
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    menu_item->UpdateKeys(gtk_accel_group);
+  void li(const Reg64& rt, Immed imm) {
+    addi(rt, Reg64(0), imm);
   }
-  gtk_menu_shell_insert(GTK_MENU_SHELL(menu_), menu_item->menu_item_, pos);
-}
-    
-    void MenuItem::SetTooltip(const std::string& tooltip) {
-  is_modified_ = true;
-  tooltip_ = base::UTF8ToUTF16(tooltip);
-  if (menu_)
-    menu_->UpdateStates();
-}
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::DictionaryValue* options = nullptr;
-  int id = 0;
-  std::string type;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
-    }
-    
-    
-    {
-    {        for (; j < size.width; j++)
-            dst[j] = (u16)src0[j] + (u16)src1[j];
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-            u8* _map = map + mapstep*i + 1;
-        _map[-1] = _map[size.width] = 1;
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
-    {
-        v_dst = internal::vceq(v_src0, v_src1);
-    }
-    
-    inline void prefetch(const void *ptr, size_t offset = 32*10)
-{
-#if defined __GNUC__
-    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#elif defined _MSC_VER && defined CAROTENE_NEON
-    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#else
-    (void)ptr;
-    (void)offset;
-#endif
-}
-    
-                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[2]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[1]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[0]);
-    
-            if(i + 2 <= size.width)
-        {
-            float32x2_t vres = vmul_f32(vld1_f32(src0 + i), vld1_f32(src1 + i));
-            result += vget_lane_f32(vres, 0) + vget_lane_f32(vres, 1);
-            i += 2;
-        }
-    
-    
-    {
-    {        for (--jd; js < size.width; ++js, --jd)
-            dst[jd] = src[js];
-    }
-}
-    
-        std::vector<s16> _tmp;
-    s16 *tmp = 0;
-    if (borderType == BORDER_MODE_CONSTANT)
-    {
-        _tmp.assign(colsn + 4*cn, borderValue);
-        tmp = &_tmp[cn << 1];
-    }
+  void subi(const Reg64& rt, const Reg64& ra, Immed imm) {
+    addi(rt, ra, -imm);
+  }
+  void lis(const Reg64& rt, Immed imm) {
+    addis(rt, Reg64(0), imm);
+  }
+  void sub(const Reg64& rt, const Reg64& ra, const Reg64& rb, bool rc = 0) {
+    subf(rt, rb, ra, rc);
+  }
+  void subo(const Reg64& rt, const Reg64& ra, const Reg64& rb, bool rc = 0) {
+    subfo(rt, rb, ra, rc);
+  }
+  void cmpdi(const Reg64& ra, Immed imm) {
+    cmpi(0, 1, ra, imm);
+  }
+  void cmpwi(const Reg64& ra, Immed imm) {
+    //Extended cmpi 3,0,Rx,value
+    // TODO(CRField): if other CRs than 0 is used, please change this to 3
+    cmpi(0, 0, ra, imm);
+  }
+  void cmpd(const Reg64& ra, const Reg64& rb) {
+    cmp(0, 1, ra, rb);
+  }
+  void cmpw(const Reg64& ra, const Reg64& rb) {
+    //Extended cmp 3,0,Rx,Ry
+    // TODO(CRField): if other CRs than 0 is used, please change this to 3
+    cmp(0, 0, ra, rb);
+  }
+  void cmpldi(const Reg64& ra, Immed imm, CR CRnum = CR::CR0) {
+    cmpli(static_cast<uint16_t>(CRnum), 1, ra, imm);
+  }
+  void cmplwi(const Reg64& ra, Immed imm, CR CRnum = CR::CR0) {
+    //Extended cmpli 3,0,Rx,value
+    // TODO(CRField): if other CRs than 0 is used, please change this to 3
+    cmpli(static_cast<uint16_t>(CRnum), 0, ra, imm);
+  }
+  void cmpld(const Reg64& ra, const Reg64& rb, CR CRnum = CR::CR0) {
+    cmpl(static_cast<uint16_t>(CRnum), 1, ra, rb);
+  }
+  void cmplw(const Reg64& ra, const Reg64& rb, CR CRnum = CR::CR0) {
+    //Extended cmpl 3,0,Rx,Ry
+    // TODO(CRField): if other CRs than 0 is used, please change this to 3
+    cmpl(static_cast<uint16_t>(CRnum), 0, ra, rb);
+  }
+  void trap() {
+    tw(31, Reg64(0), Reg64(0));
+  }
+  void nop() {
+    ori(Reg64(0),Reg64(0),0);
+  }
+  void mr(const Reg64& rs, const Reg64& ra) {
+    or(rs, ra, ra);
+  }
+  void srwi(const Reg64& ra, const Reg64& rs, int8_t sh, bool rc = 0) {
+    rlwinm(ra, rs, 32-sh, sh, 31, rc);
+  }
+  void slwi(const Reg64& ra, const Reg64& rs, int8_t sh, bool rc = 0) {
+    /* non-existing mnemonic on ISA, but it's pratical to have it here */
+    rlwinm(ra, rs, sh, 0, 31-sh, rc);
+  }
+  void srdi(const Reg64& ra, const Reg64& rs, int8_t sh, bool rc = 0) {
+    rldicl(ra, rs, 64-sh, sh, rc);
+  }
+  void clrldi(const Reg64& ra, const Reg64& rs, int8_t mb, bool rc = 0) {
+    rldicl(ra, rs, 0, mb, rc);
+  }
+  void sldi(const Reg64& ra, const Reg64& rs, int8_t sh, bool rc = 0) {
+    rldicr(ra, rs, sh, 63-sh, rc);
+  }
+  void clrrdi(const Reg64& ra, const Reg64& rs, int8_t sh, bool rc = 0) {
+    rldicr(ra, rs, 0, 63-sh, rc);
+  }
+  void clrrwi(const Reg64& ra, const Reg64& rs, int8_t sh, bool rc = 0) {
+    rlwinm(ra, rs, 0, 0, 31-sh, rc);
+  }
+  void mtctr(const Reg64& rx) {
+    mtspr(SpecialReg::CTR, rx);
+  }
+  void mtlr(const Reg64& rx) {
+    mtspr(SpecialReg::LR, rx);
+  }
+  void mfctr(const Reg64& rx) {
+    mfspr(SpecialReg::CTR, rx);
+  }
+  void mflr(const Reg64& rx) {
+    mfspr(SpecialReg::LR, rx);
+  }
     
     /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
+ * Parts of the language can individually be made stricter, warning or
+ * erroring when there's dangerous/unintuive usage; for example,
+ * array_fill_keys() with non-int/string keys: Hack.Lang.StrictArrayFillKeys
  */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+enum class HackStrictOption {
+  OFF, // PHP5 behavior
+  WARN,
+  ON
+};
+    
+      if (comma != data) {
+    // we have meta
+    ssize_t meta_len = comma - data;
+    data_len -= meta_len;
+    char* semi = (char*)memchr(data, ';', meta_len);
+    char* slash = (char*)memchr(data, '/', meta_len);
     }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include <vector>
-    
-    #include 'caffe/layers/loss_layer.hpp'
-    
-    #include 'caffe/layers/deconv_layer.hpp'
-    
-    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
       /**
-   * \fn  virtual void Predictor::PredictInstance( const SparsePage::Inst&
-   * inst, std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model,
-   * unsigned ntree_limit = 0, unsigned root_index = 0) = 0;
-   *
-   * \brief online prediction function, predict score for one instance at a time
-   * NOTE: use the batch prediction interface if possible, batch prediction is
-   * usually more efficient than online prediction This function is NOT
-   * threadsafe, make sure you only call from one thread.
-   *
-   * \param           inst        The instance to predict.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       The model to predict from
-   * \param           ntree_limit (Optional) The ntree limit.
-   * \param           root_index  (Optional) Zero-based index of the root.
+   * Dump detailed information to return string.
    */
+  virtual String debuggerDump() {
+    return String();
+  }
+    
+        // skipping emacs leftovers
+    char last = ename[strlen(ename) - 1];
+    if (last == '~' || last == '#') {
+      continue;
+    }
+    
+    #include './ndarray.h'
     
     
-    {  /*!
-   * \brief Create a tree updater given name
-   * \param name Name of the tree updater.
+    {    int n_aux = this->ListAuxiliaryStates().size();
+    aux_type->clear();
+    for (int i = 0; i < n_aux; ++i ) aux_type->push_back(mshadow::default_type_flag);
+    return true;
+  }
+  /*!
+   * \brief Copy this OperatorProperty.
+   * \return a pointer to the copied OperatorProperty
    */
-  static TreeUpdater* Create(const std::string& name);
-};
+  virtual OperatorProperty* Copy() const = 0;
+  /*!
+   * \brief Create a Operator on specific context
+   */
+  virtual Operator* CreateOperator(Context ctx) const = 0;
+  /*!
+   * \brief Create a Operator on specific context and input shape/type
+   * \param ctx context of this operator
+   * \param in_shape shape of the input ndarrays
+   * \param in_type dtype of the input ndarrays
+   * \return the created operator
+   */
+  virtual Operator* CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+    std::vector<int> out_type, aux_type;
+    std::vector<TShape> out_shape, aux_shape;
+    out_type.resize(this->ListOutputs().size());
+    out_shape.resize(this->ListOutputs().size());
+    aux_type.resize(this->ListAuxiliaryStates().size());
+    aux_shape.resize(this->ListAuxiliaryStates().size());
+    CHECK(InferType(in_type, &out_type, &aux_type));
+    CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+    return CreateOperator(ctx);
+  }
+  /*!
+   * \brief return the type string of the Operator
+   *  subclasses override this function.
+   * \return The type string.
+   */
+  virtual std::string TypeString() const = 0;
+  //--------------------------------------------------------
+  // All the below functions are optional to override.
+  //--------------------------------------------------------
+  /*!
+   * \brief Declare additional resource required in forward pass.
+   *  These additional resources will be presented in OpContext.requested
+   *  in the same order of the returned Resource.
+   * \param in_shape The input shape to the operator, corresponds to shapes of in_data.
+   * \return Additional resource request
+   */
+  virtual std::vector<ResourceRequest> ForwardResource(
+      const std::vector<TShape> &in_shape) const {
+    return std::vector<ResourceRequest>();
+  }
+  /*!
+   * \brief Declare additional resource required in backward pass.
+   *  These additional resources will be presented in OpContext.requested
+   *  in the same order of the returned Resource.
+   * \param in_shape The input shape to the operator, corresponds to shapes of in_data.
+   * \return Additional resource request
+   */
+  virtual std::vector<ResourceRequest> BackwardResource(
+      const std::vector<TShape> &in_shape) const {
+    return std::vector<ResourceRequest>();
+  }
+  /*!
+   * \brief Declare the input requirement of Backward pass.
+   *
+   *  Only the returned list of variables will be used in Backward.
+   *  This function is used for memory optimization.
+   *  It is advised to override and only return what is actually needed.
+   *  If this function is not overriden, all the variables will be valid in Backward.
+   *
+   * \code
+   *  // The following code declares Backward need out_grad[0], in_data[0],in_data[1]
+   *  vector<int> BackwardInputs(const vector<int> &out_grad,
+   *                             const vector<int> &in_data,
+   *                             const vector<int> &out_data) const {
+   *    return {out_grad[0], in_data[0], in_data[1]};
+   *  }
+   * \endcode
+   * \param out_grad gradient of outputs in backward pass.
+   * \param in_data the input data in forward pass.
+   * \param out_data the output data in forward pass.
+   * \return an integer vector indicating the input requirments
+   * \sa BackwardInputs
+   */
+  virtual std::vector<int> DeclareBackwardDependency(
+      const std::vector<int> &out_grad,
+      const std::vector<int> &in_data,
+      const std::vector<int> &out_data) const {
+    // By default requires to see all the things.
+    // remember to override this function to get a better performance.
+    std::vector<int> ret = out_grad;
+    ret.insert(ret.end(), in_data.begin(), in_data.end());
+    ret.insert(ret.end(), out_data.begin(), out_data.end());
+    return ret;
+  }
+  /*!
+   * \brief Get possible forward inplace options.
+   *  This function enables optimization to reuse memory of inputs in output.
+   *  Only override when necessary, by default in-place is disabled.
+   *
+   *  The reason for void* type in the out_data is to distinguish the order
+   *  of mappings between the two, compiler will report error when
+   *  in_data and out_data's order in the pair get reversed.
+   *
+   * \code
+   *  // The following code says out_data[0] can share data with in_data[0]
+   *  vector<pair<int, void*> > ForwardInplaceOption(const vector<int> &in_data,
+   *                                                 const vector<void*> &out_data) const {
+   *    return {{in_data[0], out_data[0]}};
+   *  }
+   * \endcode
+   * \param in_data The input data in forward pass.
+   * \param out_data The output data in forward pass.
+   * \return list of pair of that maps input->output,
+   *   indicating possible in place operations.
+   */
+  virtual std::vector<std::pair<int, void*> > ForwardInplaceOption(
+      const std::vector<int> &in_data,
+      const std::vector<void*> &out_data) const {
+    return std::vector<std::pair<int, void*> >();
+  }
+  /*!
+   * \brief Get possible backward inplace options.
+   *  This function enables optimization to reuse memory of inputs in output.
+   *  Only override when necessary, by default in-place is disabled.
+   *
+   *  The reason for void* type in the in_grad is to distinguish the order
+   *  of mappings between the two, compiler will report error when
+   *  in_data and out_data's order in the pair get reversed.
+   *
+   * \code
+   *  // The following code says in_grad[0] can share data with in_data[0]
+   *  vector<pair<int,int> > BackwardInplaceOption(
+   *                 const std::vector<int> &out_grad,
+   *                 const std::vector<int> &in_data,
+   *                 const std::vector<int> &out_data,
+   *                 const std::vector<int> &in_grad) const {
+   *    return {in_data[0], in_grad[0]}};
+   *  }
+   * \endcode
+   * \param in_data The input data in forward pass.
+   * \param out_data The output data in forward pass.
+   * \param in_grad Gradient of inputs in backward pass.
+   * \param out_grad Gradient of outputs in backward pass.
+   * \return list of pair of that maps input->output,
+   *   indicating possible in place operations.
+   */
+  virtual std::vector<std::pair<int, void*> > BackwardInplaceOption(
+      const std::vector<int> &out_grad,
+      const std::vector<int> &in_data,
+      const std::vector<int> &out_data,
+      const std::vector<void*> &in_grad) const {
+    return std::vector<std::pair<int, void*> >();
+  }
+  /*!
+   * \brief Get Backward Input Dependency for generic types of data.
+   *  Normally T can be pointer of Symbol::DataEntry, or NDArray.
+   *  This function will select the result list of T according to DeclareBackwardDependency.
+   *
+   * \param in_data the input data in forward pass.
+   * \param out_data the output data in forward pass.
+   * \param out_grad gradient of outputs in backward pass.
+   * \tparam T the generic type parameter.
+   * \return vector of inputs the Backward Operation depends on.
+   * \sa DeclareBackwardDependency
+   */
+  template<typename T>
+  inline std::vector<T> BackwardInputs(const std::vector<T> &out_grad,
+                                       const std::vector<T> &in_data,
+                                       const std::vector<T> &out_data) const {
+    int counter = 0;
+    std::vector<int> out_grad_index(out_grad.size());
+    std::vector<int> in_data_index(in_data.size());
+    std::vector<int> out_data_index(out_data.size());
+    for (size_t i = 0; i < out_grad_index.size(); ++i) {
+      out_grad_index[i] = counter++;
+    }
+    for (size_t i = 0; i < in_data_index.size(); ++i) {
+      in_data_index[i] = counter++;
+    }
+    for (size_t i = 0; i < out_data_index.size(); ++i) {
+      out_data_index[i] = counter++;
+    }
+    std::vector<T> all_data;
+    all_data.insert(all_data.end(), out_grad.begin(), out_grad.end());
+    all_data.insert(all_data.end(), in_data.begin(), in_data.end());
+    all_data.insert(all_data.end(), out_data.begin(), out_data.end());
+    
+    #endif  // MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
+#endif  // MXNET_RTC_H_
+
+    
+    // Initialization funciton called by caffeOp & caffeLoss
+template<typename Dtype>
+void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    v->push_back(new ::caffe::Blob<Dtype>());
+}
+    
+        // Caffe seems to understand phase inside an 'include {}' block
+    if (!param_.prototxt.has_phase()) {
+      if (param_.prototxt.include().size()) {
+        if (param_.prototxt.include(0).has_phase()) {
+          param_.prototxt.set_phase(param_.prototxt.include(0).phase());
+        }
+      }
+    }
     
     
     {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
+    {    CHECK_EQ(net_param.layer_size(), 1) << 'Protoxt ' << value <<' is more than one layer';
+    default_value_ = caffe::LayerParameter(net_param.layer(0));
+    has_default_ = true;
+    // return self to allow chaining
+    return this->self();
+  }
+};
+    
+     private:
+  /*!
+   * \brief Wait for all started threads to signal that they're ready
+   */
+  void WaitForReady() {
+    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
+      ptr->wait();
+    }
+  }
+    
+    
+    {} // namespace osquery
+
+    
+    TEST_F(QueryTests, test_get_stored_query_names) {
+  auto query = getOsqueryScheduledQuery();
+  auto cf = Query('foobar', query);
+  auto encoded_qd = getSerializedQueryDataJSON();
+  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
+  EXPECT_TRUE(status.ok());
+    }
+    
+      /// Helper method to parse a subscription and add an equivalent monitor.
+  bool monitorSubscription(INotifySubscriptionContextRef& sc,
+                           bool add_watch = true);
+    
+        std::string content;
+    setDatabaseValue(kPersistentSettings, 'complex_example', '1');
+    if (getDatabaseValue(kPersistentSettings, 'complex_example', content)) {
+      r['database_test'] = content;
+    }
+    
+    const std::string DHTResponseMessage::R('r');
+    
+    
+    {} // namespace aria2
+
+    
+    std::pair<std::vector<std::unique_ptr<Command>>,
+          std::vector<std::unique_ptr<Command>>>
+DHTSetup::setup(DownloadEngine* e, int family)
+{
+  std::vector<std::unique_ptr<Command>> tempCommands;
+  std::vector<std::unique_ptr<Command>> tempRoutineCommands;
+  if ((family != AF_INET && family != AF_INET6) ||
+      (family == AF_INET && DHTRegistry::isInitialized()) ||
+      (family == AF_INET6 && DHTRegistry::isInitialized6())) {
+    return {};
+  }
+  try {
+    // load routing table and localnode id here
+    std::shared_ptr<DHTNode> localNode;
+    }
+    }
+    
+      virtual std::shared_ptr<DHTTask>
+  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                 int numRetry = 0) = 0;
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
+{
+  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
+  setCommonProperty(task);
+  return task;
+}
+    
+      void setTaskQueue(DHTTaskQueue* taskQueue);
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+    class DHTTokenTracker {
+private:
+  static const size_t SECRET_SIZE = 4;
+    }
+    
+      // always return false
+  virtual bool isReply() const CXX11_OVERRIDE;
+    
+    // Benchmark results on my dev server (20-core Intel Xeon E5-2660 v2 @ 2.20GHz)
+//
+// ============================================================================
+// folly/test/FormatBenchmark.cpp                  relative  time/iter  iters/s
+// ============================================================================
+// octal_snprintf                                              79.30ns   12.61M
+// octal_uintToOctal                               3452.19%     2.30ns  435.35M
+// ----------------------------------------------------------------------------
+// hex_snprintf                                                73.59ns   13.59M
+// hex_uintToHex                                   4507.53%     1.63ns  612.49M
+// ----------------------------------------------------------------------------
+// intAppend_snprintf                                         191.50us    5.22K
+// intAppend_to                                     552.46%    34.66us   28.85K
+// intAppend_format                                 215.76%    88.76us   11.27K
+// ----------------------------------------------------------------------------
+// bigFormat_snprintf                                         178.03us    5.62K
+// bigFormat_format                                  90.41%   196.91us    5.08K
+// ----------------------------------------------------------------------------
+// format_nested_strings                                      317.65us    3.15K
+// format_nested_fbstrings                           99.89%   318.01us    3.14K
+// format_nested_direct                             116.52%   272.62us    3.67K
+// ----------------------------------------------------------------------------
+// copy_short_string                                           28.33ns   35.30M
+// format_short_string_unsafe                        82.51%    34.33ns   29.13M
+// format_short_string_safe                          58.92%    48.08ns   20.80M
+// sformat_short_string_unsafe                       73.90%    38.33ns   26.09M
+// sformat_short_string_safe                         54.97%    51.53ns   19.41M
+// ----------------------------------------------------------------------------
+// copy_long_string                                            57.56ns   17.37M
+// format_long_string_unsafe                         68.79%    83.68ns   11.95M
+// format_long_string_safe                           69.44%    82.89ns   12.06M
+// sformat_long_string_unsafe                        65.58%    87.77ns   11.39M
+// sformat_long_string_safe                          68.14%    84.47ns   11.84M
+// ============================================================================
+    
+      FunctionRef<int(int, std::vector<int> const&)> variant6 = of;
+  EXPECT_EQ(100 + 6 * 20, variant6(20, {}));
+  EXPECT_EQ(100 + 6 * 20, variant6(20, {1, 2, 3}));
+  FunctionRef<int(int, std::vector<int> const&)> const cvariant6 = of;
+  EXPECT_EQ(100 + 6 * 20, cvariant6(20, {}));
+  EXPECT_EQ(100 + 6 * 20, cvariant6(20, {1, 2, 3}));
+    
+    template <class... Args>
+void checkUnixErrorExplicit(ssize_t ret, int savedErrno, Args&&... args) {
+  if (UNLIKELY(ret == -1)) {
+    throwSystemErrorExplicit(savedErrno, std::forward<Args>(args)...);
   }
 }
-}  // namespace data
-}  // namespace xgboost
+    
+    using UriTuple = std::tuple<
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    uint16_t,
+    const std::string&,
+    const std::string&,
+    const std::string&>;
+    
+      auto *can_client_factory = CanClientFactory::instance();
+  can_client_factory->RegisterCanClients();
+    
+    // Synchronous transmission of CAN messages
+ErrorCode EsdCanClient::Send(const std::vector<CanFrame> &frames,
+                             int32_t *const frame_num) {
+  CHECK_NOTNULL(frame_num);
+  CHECK_EQ(frames.size(), static_cast<size_t>(*frame_num));
+    }
+    
+    #include 'gtest/gtest.h'
     
     
-    { private:
-  /*! \brief number of allocated pages */
-  size_t num_free_buffer_;
-  /*! \brief clock_pointer */
-  size_t clock_ptr_;
-  /*! \brief writer threads */
-  std::vector<std::unique_ptr<std::thread> > workers_;
-  /*! \brief recycler queue */
-  dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > qrecycle_;
-  /*! \brief worker threads */
-  std::vector<dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > > qworkers_;
-};
-#endif  // DMLC_ENABLE_STD_THREAD
+    {  if (static_cast<size_t>(*frame_num) != frames.size()) {
+    AERROR << 'frame num is incorrect.';
+    return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
+  }
+  for (size_t i = 0; i < frames.size(); ++i) {
+    ADEBUG << 'send frame i:' << i;
+    ADEBUG << frames[i].CanFrameString();
+    frame_info_ << frames[i].CanFrameString();
+  }
+  ++send_counter_;
+  return ErrorCode::OK;
+}
     
-          CompressedIterator<int> ci(buffer.data(), alphabet_size);
-      std::vector<int> output(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output[i] = ci[i];
-      }
-    
-      // Constructor with custom CompactionProxy, used for tests.
-  CompactionIterator(InternalIterator* input, const Comparator* cmp,
-                     MergeHelper* merge_helper, SequenceNumber last_sequence,
-                     std::vector<SequenceNumber>* snapshots,
-                     SequenceNumber earliest_write_conflict_snapshot,
-                     const SnapshotChecker* snapshot_checker, Env* env,
-                     bool report_detailed_time, bool expect_valid_internal_key,
-                     RangeDelAggregator* range_del_agg,
-                     std::unique_ptr<CompactionProxy> compaction,
-                     const CompactionFilter* compaction_filter = nullptr,
-                     const std::atomic<bool>* shutting_down = nullptr,
-                     const SequenceNumber preserve_deletes_seqnum = 0);
-    
-      uint64_t sleep_debt = 0;
-  uint64_t time_since_last_refill = 0;
-  if (last_refill_time_ != 0) {
-    if (last_refill_time_ > time_now) {
-      sleep_debt = last_refill_time_ - time_now;
+    template <typename SensorType>
+void MessageManager<SensorType>::ResetSendMessages() {
+  for (auto &protocol_data : send_protocol_data_) {
+    if (protocol_data == nullptr) {
+      AERROR << 'Invalid protocol data.';
     } else {
-      time_since_last_refill = time_now - last_refill_time_;
-      bytes_left_ +=
-          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
-                                kMicrosPerSecond * delayed_write_rate_);
-      if (time_since_last_refill >= kRefillInterval &&
-          bytes_left_ > num_bytes) {
-        // If refill interval already passed and we have enough bytes
-        // return without extra sleeping.
-        last_refill_time_ = time_now;
-        bytes_left_ -= num_bytes;
-        return 0;
-      }
+      protocol_data->Reset();
     }
   }
-    
-      uint64_t delayed_write_rate() const { return delayed_write_rate_; }
-    
-    #include 'rocksdb/db.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/options.h'
-    
-    // This is an example interface of external-compaction algorithm.
-// Compaction algorithm can be implemented outside the core-RocksDB
-// code by using the pluggable compaction APIs that RocksDb provides.
-class Compactor : public EventListener {
- public:
-  // Picks and returns a compaction task given the specified DB
-  // and column family.  It is the caller's responsibility to
-  // destroy the returned CompactionTask.  Returns 'nullptr'
-  // if it cannot find a proper compaction task.
-  virtual CompactionTask* PickCompaction(
-      DB* db, const std::string& cf_name) = 0;
-    }
-    
-      // Time spent on sync file range.
-  uint64_t file_range_sync_nanos;
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
 }
     
-      // 2. enable reception of can frames.
-  int enable = 1;
-  ret = ::setsockopt(dev_handler_, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable,
-                     sizeof(enable));
-  if (ret < 0) {
-    AERROR << 'enable reception of can frame error code: ' << ret;
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+    /**
+ * @namespace apollo::drivers::canbus
+ * @brief apollo::drivers::canbus
+ */
+namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+    
+    {  if (data_trigger_running_) {
+    data_trigger_running_ = false;
+    if (thread_ != nullptr && thread_->joinable()) {
+      sensor_message_manager_->GetMutableCVar()->notify_all();
+      thread_->join();
+    }
+    thread_.reset();
   }
+  AINFO << 'Data trigger stopped [ok].';
+}
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    // Sensor gflags
+DECLARE_double(sensor_freq);
     
-    Byte::Byte(const Byte &value) : value_(value.value_) {}
+    // Fills in block[kBlockEdgeHalf..(kBlockHalf+kBlockEdgeHalf)], and leaves the
+// rest unmodified.
+void ButteraugliFFTSquared(double block[kBlockSize]) {
+  double global_mul = 0.000064;
+  Complex block_c[kBlockSize];
+  assert(kBlockEdge == 8);
+  for (int y = 0; y < kBlockEdge; ++y) {
+    RealFFT8(block + y * kBlockEdge, block_c + y * kBlockEdge);
+  }
+  TransposeBlock(block_c);
+  double r0[kBlockEdge];
+  double r1[kBlockEdge];
+  for (int x = 0; x < kBlockEdge; ++x) {
+    r0[x] = block_c[x].real;
+    r1[x] = block_c[kBlockHalf + x].real;
+  }
+  RealFFT8(r0, block_c);
+  RealFFT8(r1, block_c + kBlockHalf);
+  for (int y = 1; y < kBlockEdgeHalf; ++y) {
+    FFT8(block_c + y * kBlockEdge);
+  }
+  for (int i = kBlockEdgeHalf; i < kBlockHalf + kBlockEdgeHalf + 1; ++i) {
+    block[i] = abssq(block_c[i]);
+    block[i] *= global_mul;
+  }
+}
+    
+      // Returns an aggregate distance or similarity value between the baseline
+  // image and the image in the last Compare() call (or the baseline image, if
+  // Compare() was not called yet).
+  // The interpretation of this aggregate value depends on the comparator used.
+  virtual float distmap_aggregate() const = 0;
+    
+    #ifndef GUETZLI_ENTROPY_ENCODE_H_
+#define GUETZLI_ENTROPY_ENCODE_H_
+    
+    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
+// the parsed information.
+// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
+// Returns false if the data is not valid jpeg, or if it contains an unsupported
+// jpeg feature.
+bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg);
+// string variant
+bool ReadJpeg(const std::string& data, JpegReadMode mode,
+              JPEGData* jpg);
