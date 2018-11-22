@@ -1,221 +1,267 @@
 
         
-        ssl.add_argument(
-    '--cert-key',
-    default=None,
-    type=readable_file_arg,
-    help='''
-    The private key to use with SSL. Only needed if --cert is given and the
-    certificate file does not contain the private key.
+                  lowest_ev_cost = run_avg_lve
+          checkpoint_path = os.path.join(self.hps.lfads_save_dir,
+                                         self.hps.checkpoint_name + '_lve.ckpt')
+          self.lve_saver.save(session, checkpoint_path,
+                              global_step=self.train_step,
+                              latest_filename='checkpoint_lve')
     
-    try:
-    # https://urllib3.readthedocs.io/en/latest/security.html
-    # noinspection PyPackageRequirements
-    import urllib3
-    urllib3.disable_warnings()
-except (ImportError, AttributeError):
-    # In some rare cases, the user may have an old version of the requests
-    # or urllib3, and there is no method called 'disable_warnings.' In these
-    # cases, we don't need to call the method.
-    # They may get some noisy output but execution shouldn't die. Move on.
-    pass
+        states_t_bxn, outputs_t_bxn = sess.run([states_t, outputs_t],
+                                           feed_dict=feed_dict)
+    states_nxt = np.transpose(np.squeeze(np.asarray(states_t_bxn)))
+    outputs_t_bxn = np.squeeze(np.asarray(outputs_t_bxn))
+    r_sxt = np.dot(P_nxn, states_nxt)
     
-    from httpie.compat import is_windows
-from httpie.plugins import FormatterPlugin
-    
-            '''
-        r.headers['Authorization'] = type(self).make_header(
-            self.username, self.password).encode('latin1')
-        return r
-    
-    
-@mock.patch('httpie.input.AuthCredentials._getpass',
-            new=lambda self, prompt: 'password')
-def test_password_prompt(httpbin):
-    r = http('--auth', 'user',
-             'GET', httpbin.url + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        def test_binary_included_and_correct_when_suitable(self):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', self.url, env=env)
-        assert r == self.bindata
+      return datasets
 
     
+        if no_more_data and np.sum(weights) == 0:
+      # There is no more data and this is an empty batch. Done!
+      break
+    yield inputs, char_inputs, global_word_ids, targets, weights
     
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
     
-        def test_GET_with_data_auto_JSON_headers(self, httpbin):
-        # JSON headers should automatically be set also for GET with data.
-        r = http('POST', httpbin.url + '/post', 'a=b')
+def print_and_log(log, id_to_word, sequence_eval, max_num_to_print=5):
+  '''Helper function for printing and logging evaluated sequences.'''
+  indices_eval = convert_to_indices(sequence_eval)
+  indices_arr = np.asarray(indices_eval)
+  samples = convert_to_human_readable(id_to_word, indices_arr, max_num_to_print)
+    
+    
+def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
+  '''Create a train op for pretraining.'''
+  with tf.name_scope('pretrain_generator'):
+    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
+    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+                                                  FLAGS.grad_clipping)
+    gen_pretrain_op = optimizer.apply_gradients(
+        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    return gen_pretrain_op
+    
+        # Finalize headers.
+    headers = get_default_headers(args)
+    if base_headers:
+        headers.update(base_headers)
+    headers.update(args.headers)
+    headers = finalize_headers(headers)
+    
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
+    
+        try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME,
+        )
         assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == JSON_ACCEPT
-        assert r.json['headers']['Content-Type'] == 'application/json'
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+
     
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
+filenames = list(rst_filenames())
+assert filenames
+    
+        @pytest.mark.parametrize(
+        'orig_name, unique_on_attempt, expected',
+        [
+            # Simple
+            ('foo.bar', 0, 'foo.bar'),
+            ('foo.bar', 1, 'foo.bar-1'),
+            ('foo.bar', 10, 'foo.bar-10'),
+            # Trim
+            ('A' * 20, 0, 'A' * 10),
+            ('A' * 20, 1, 'A' * 8 + '-1'),
+            ('A' * 20, 10, 'A' * 7 + '-10'),
+            # Trim before ext
+            ('A' * 20 + '.txt', 0, 'A' * 6 + '.txt'),
+            ('A' * 20 + '.txt', 1, 'A' * 4 + '.txt-1'),
+            # Trim at the end
+            ('foo.' + 'A' * 20, 0, 'foo.' + 'A' * 6),
+            ('foo.' + 'A' * 20, 1, 'foo.' + 'A' * 4 + '-1'),
+            ('foo.' + 'A' * 20, 10, 'foo.' + 'A' * 3 + '-10'),
+        ]
     )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+    @mock.patch('httpie.downloads.get_filename_max_length')
+    def test_unique_filename(self, get_filename_max_length,
+                             orig_name, unique_on_attempt,
+                             expected):
     
     
-def get_setting_target(node):
-    # target nodes are placed next to the node in the doc tree
-    return node.parent[node.parent.index(node) + 1]
+def bench_isotonic_regression(Y):
+    '''
+    Runs a single iteration of isotonic regression on the input data,
+    and reports the total time taken (in seconds).
+    '''
+    gc.collect()
     
-            parser.add_option_group(group)
+        for ns in n_samples:
+        for nf in n_features:
+            it += 1
+            print('==================')
+            print('Iteration %s of %s' % (it, max(len(n_samples),
+                                          len(n_features))))
+            print('==================')
+            n_informative = nf // 10
+            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
+                                          n_informative=n_informative,
+                                          noise=0.1, coef=True)
     
-        def __enter__(self):
-        from scrapy.utils.test import get_testenv
-        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
-        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
-                                     env=get_testenv())
-        self.proc.stdout.readline()
+    import numpy as np
+from numpy import random as nr
     
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+            for k in sorted(results_dict.keys()):
+            all_times[k].append(results_dict[k]['time'])
+            all_errors[k].append(results_dict[k]['error'])
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+        op.add_option('--algorithm',
+                  dest='selected_algorithm',
+                  default=default_algorithms,
+                  type=str,
+                  help='Comma-separated list of transformer to benchmark. '
+                       'Default: %default. \nAvailable: %default')
+    
+    n_samples, n_features = 5000, 300
+X = np.random.randn(n_samples, n_features)
+inds = np.arange(n_samples)
+np.random.shuffle(inds)
+X[inds[int(n_features / 1.2):]] = 0  # sparsify input
+print('input data sparsity: %f' % sparsity_ratio(X))
+coef = 3 * np.random.randn(n_features)
+inds = np.arange(n_features)
+np.random.shuffle(inds)
+coef[inds[n_features // 2:]] = 0  # sparsify coef
+print('true coef sparsity: %f' % sparsity_ratio(coef))
+y = np.dot(X, coef)
+    
+    import numpy as np
+import pandas as pd
+from memory_profiler import memory_usage
+    
+        print('============================================')
+    print('Warning: this is going to take a looong time')
+    print('============================================')
+    
+    
+URL = ('http://www.cs.cornell.edu/people/pabo/'
+       'movie-review-data/review_polarity.tar.gz')
+    
+        def test_raise_reraise(self):
+        def f(p):
+            try: 1/0
+            except: raise
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident),
+                              ])
+    
+        def _iterate_directories(self, parent_path, is_dir, scandir):
+        yield parent_path
+        try:
+            entries = list(scandir(parent_path))
+            for entry in entries:
+                entry_is_dir = False
+                try:
+                    entry_is_dir = entry.is_dir()
+                except OSError as e:
+                    if e.errno not in _IGNORED_ERROS:
+                        raise
+                if entry_is_dir and not entry.is_symlink():
+                    path = parent_path._make_child_relpath(entry.name)
+                    for p in self._iterate_directories(path, is_dir, scandir):
+                        yield p
+        except PermissionError:
+            return
+    
+    # Split a pathname into a drive specification and the rest of the
+# path.  Useful on DOS/Windows/NT; on Unix, the drive is always empty.
+    
+        @unittest.skipUnless(hasattr(os, 'pipe'), 'requires os.pipe()')
+    def test_exists_fd(self):
+        r, w = os.pipe()
+        try:
+            self.assertTrue(self.pathmodule.exists(r))
+        finally:
+            os.close(r)
+            os.close(w)
+        self.assertFalse(self.pathmodule.exists(r))
+    
+    
+@contextmanager
+def path(package: Package, resource: Resource) -> Iterator[Path]:
+    '''A context manager providing a file path object to the resource.
+    
+    # We can extract the richest alternative in order to display it:
+richest = msg.get_body()
+partfiles = {}
+if richest['content-type'].maintype == 'text':
+    if richest['content-type'].subtype == 'plain':
+        for line in richest.get_content().splitlines():
+            print(line)
+        sys.exit()
+    elif richest['content-type'].subtype == 'html':
+        body = richest
+    else:
+        print('Don't know how to display {}'.format(richest.get_content_type()))
+        sys.exit()
+elif richest['content-type'].content_type == 'multipart/related':
+    body = richest.get_body(preferencelist=('html'))
+    for part in richest.iter_attachments():
+        fn = part.get_filename()
+        if fn:
+            extension = os.path.splitext(part.get_filename())[1]
         else:
-            request.meta['handle_httpstatus_all'] = True
+            extension = mimetypes.guess_extension(part.get_content_type())
+        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
+            f.write(part.get_content())
+            # again strip the <> to go from email form of cid to html form.
+            partfiles[part['content-id'][1:-1]] = f.name
+else:
+    print('Don't know how to display {}'.format(richest.get_content_type()))
+    sys.exit()
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    # The magic_html_parser has to rewrite the href='cid:....' attributes to
+    # point to the filenames in partfiles.  It also has to do a safety-sanitize
+    # of the html.  It could be written using html.parser.
+    f.write(magic_html_parser(body.get_content(), partfiles))
+webbrowser.open(f.name)
+os.remove(f.name)
+for fn in partfiles.values():
+    os.remove(fn)
     
-    from scrapy.utils.spider import iter_spider_classes
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.conf import arglist_to_dict
-from scrapy.utils.python import without_none_values
+    def revise_centroids(data, k, cluster_assignment):
+    new_centroids = []
+    for i in range(k):
+        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
+        member_data_points = data[cluster_assignment==i]
+        # Compute the mean of the data points. Fill in the blank (RHS only)
+        centroid = member_data_points.mean(axis=0)
+        new_centroids.append(centroid)
+    new_centroids = np.array(new_centroids)
     
-            spider_loader = self.crawler_process.spider_loader
+    return new_centroids
     
-    import logging
-from twisted.internet import defer
-import six
-from scrapy.exceptions import NotSupported, NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.misc import load_object
-from scrapy.utils.python import without_none_values
-from scrapy import signals
+    print('writing anagrams to file...')
+with open('anagrams.txt', 'w') as file:
+    file.write('all_anagrams = ')
+    file.write(pprint.pformat(all_anagrams))
     
-        CODE_MAPPING = {
-        '550': 404,
-        'default': 503,
-    }
-    
-        entry_points = {'console_scripts': proj_info['console_scripts']}
-)
-
-    
-            elif stream_id == []:
-            print('streams:             # Available quality and codecs')
-            # Print DASH streams
-            if self.dash_streams:
-                print('    [ DASH ] %s' % ('_' * 36))
-                itags = sorted(self.dash_streams,
-                               key=lambda i: -self.dash_streams[i]['size'])
-                for stream in itags:
-                    self.p_stream(stream)
-            # Print all other available streams
-            print('    [ DEFAULT ] %s' % ('_' * 33))
-            for stream in self.streams_sorted:
-                self.p_stream(stream['id'] if 'id' in stream else stream['itag'])
-    
-        #first call the main parasing API
-    info = json.loads(get_content('http://www.acfun.cn/video/getVideo.aspx?id=' + vid))
-    
-    __all__ = ['facebook_download']
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-        def gethomedir(self, username):
-        if 'HOME' in os.environ:
-            userhome = os.environ['HOME']
-        elif 'USERPROFILE' in os.environ:
-            userhome = os.environ['USERPROFILE']
-        elif 'HOMEPATH' in os.environ:
-            try:
-                drv = os.environ['HOMEDRIVE']
-            except KeyError:
-                drv = ''
-            userhome = drv + os.environ['HOMEPATH']
-        else:
-            raise RuntimeError('Can't determine home directory')
-    
-            self.assertEqual(posixpath.split(b'/foo/bar'), (b'/foo', b'bar'))
-        self.assertEqual(posixpath.split(b'/'), (b'/', b''))
-        self.assertEqual(posixpath.split(b'foo'), (b'', b'foo'))
-        self.assertEqual(posixpath.split(b'////foo'), (b'////', b'foo'))
-        self.assertEqual(posixpath.split(b'//foo//bar'), (b'//foo', b'bar'))
-    
-    
-def contents(package: Package) -> Iterable[str]:
-    '''Return an iterable of entries in 'package'.
-    
-    # Send the message via local SMTP server.
-with smtplib.SMTP('localhost') as s:
-    s.send_message(msg)
-
-    
-    # Import the email modules we'll need
-from email import policy
-from email.parser import BytesParser
-    
-            print('Ordered results using pool.apply_async():')
-        for r in results:
-            print('\t', r.get())
-        print()
-    
-        new_filter = DiagnosticFilter( spec )
-    self._cache[ cache_key ] = new_filter
-    return new_filter
-    
-    # The default options which are only relevant to the client, not the server and
-# thus are not part of default_options.json, but are required for a working
-# YouCompleteMe object.
-DEFAULT_CLIENT_OPTIONS = {
-  'g:ycm_server_python_interpreter': '',
-  'g:ycm_log_level': 'info',
-  'g:ycm_keep_logfiles': 0,
-  'g:ycm_extra_conf_vim_data': [],
-  'g:ycm_show_diagnostics_ui': 1,
-  'g:ycm_echo_current_diagnostic': 1,
-  'g:ycm_enable_diagnostic_signs': 1,
-  'g:ycm_enable_diagnostic_highlighting': 0,
-  'g:ycm_always_populate_location_list': 0,
-}
-    
-      eq_( len( results ), len( expected_results ) )
-  for result, expected_result in zip( results, expected_results ):
-    assert_that( result, expected_result )
-
-    
-    DIR_OF_THIS_SCRIPT = p.dirname( p.abspath( __file__ ) )
-DIR_OF_THIRD_PARTY = p.join( DIR_OF_THIS_SCRIPT, 'third_party' )
-DIR_OF_YCMD_THIRD_PARTY = p.join( DIR_OF_THIRD_PARTY, 'ycmd', 'third_party' )
+        return res
