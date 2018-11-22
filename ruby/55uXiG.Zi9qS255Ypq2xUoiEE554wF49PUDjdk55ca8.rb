@@ -1,158 +1,134 @@
 
         
-        DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
+                protected
     
-      s.name          = 'jekyll'
-  s.version       = Jekyll::VERSION
-  s.license       = 'MIT'
+            # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
+        end
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+            # Defines additional communicators to be available. Communicators
+        # should be returned by a block passed to this method. This is done
+        # to ensure that the class is lazy loaded, so if your class inherits
+        # from or uses any Vagrant internals specific to Vagrant 1.0, then
+        # the plugin can still be defined without breaking anything in future
+        # versions of Vagrant.
+        #
+        # @param [String] name Communicator name.
+        def self.communicator(name=UNSET_VALUE, &block)
+          data[:communicator] ||= Registry.new
     
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+              # Return the dummy object so that anything else works
+          ::Vagrant::Config::V2::DummyConfig.new
+        end
+    
+            # Sets a human-friendly description of the plugin.
+        #
+        # @param [String] value Description of the plugin.
+        # @return [String] Description of the plugin.
+        def self.description(value=UNSET_VALUE)
+          get_or_set(:description, value)
+        end
+    
+            # This should return an action callable for the given name.
+        #
+        # @param [Symbol] name Name of the action.
+        # @return [Object] A callable action sequence object, whether it
+        #   is a proc, object, etc.
+        def action(name)
+          nil
+        end
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+          def add_roles(roles)
+        Array(roles).each { |role| add_role(role) }
+        self
+      end
+      alias roles= add_roles
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+          def trusted_keys
+        @trusted_keys.dup
+      end
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
+    
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
     end
     
-              weather_agent = existing_scenario.agents.find_by(:guid => 'a-weather-agent')
-          trigger_agent = existing_scenario.agents.find_by(:guid => 'a-trigger-agent')
+        subject { plugin_class.new({ 'password' => 'secret' }) }
     
-      describe '#schedule_scheduler_agents' do
-    it 'registers active SchedulerAgents' do
-      @scheduler.schedule_scheduler_agents
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
     
-      it 'is droppable' do
-    {
-      '{{location.lat}}' => '2.0',
-      '{{location.latitude}}' => '2.0',
-      '{{location.lng}}' => '3.0',
-      '{{location.longitude}}' => '3.0',
-      '{{location.latlng}}' => '2.0,3.0',
-    }.each { |template, result|
-      expect(Liquid::Template.parse(template).render('location' => location.to_liquid)).to eq(result),
-        'expected #{template.inspect} to expand to #{result.inspect}'
-    }
+      include_examples 'multiline literal brace layout method argument' do
+    let(:open) { '[' }
+    let(:close) { ']' }
   end
-end
+    
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
+    
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def colon?
+        false
+      end
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
 
     
-      preflight do
-    processes = system_command '/bin/launchctl', args: ['list']
-    
-    namespace :bower do
-    
-        process_font_assets
-    process_stylesheet_assets
-    process_javascript_assets
-    store_version
-  end
-    
-          # generate variables template
-      save_file 'templates/project/_bootstrap-variables.sass',
-                '// Override Bootstrap variables here (defaults from bootstrap-sass v#{Bootstrap::VERSION}):\n\n' +
-                    File.read('#{save_to}/_variables.scss').lines[1..-1].join.gsub(/^(?=\$)/, '// ').gsub(/ !default;/, '')
-    end
-    
-      # Disable Rails's static asset server (Apache or nginx will already do this).
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-    
-    Before do |scenario|
-  Devise.mailer.deliveries = []
-  page.driver.headers = if scenario.source_tag_names.include? '@mobile'
-                          {'User-Agent' => 'Mozilla/5.0 (Mobile; rv:18.0) Gecko/18.0 Firefox/18.0'}
-                        else
-                          {}
-                        end
-    
-    RSpec::Matchers.define :have_path_in do |expected|
-  match do |actual|
-    await_condition { expected.include? actual.current_path }
-  end
-    
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
     end
   end
-    
-      # fill change password section on the user edit page
-  def fill_change_password_section(cur_pass, new_pass, confirm_pass)
-    fill_in 'user_current_password', :with => cur_pass
-    fill_in 'user_password', :with => new_pass
-    fill_in 'user_password_confirmation', :with => confirm_pass
-  end
-    
-    Then(/^the default stage files are created$/) do
-  staging = TestApp.test_app_path.join('config/deploy/staging.rb')
-  production = TestApp.test_app_path.join('config/deploy/production.rb')
-  expect(File.exist?(staging)).to be true
-  expect(File.exist?(production)).to be true
 end
-    
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
-    end
-  end
-    
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
