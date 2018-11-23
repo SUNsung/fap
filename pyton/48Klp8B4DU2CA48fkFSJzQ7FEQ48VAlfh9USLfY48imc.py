@@ -1,108 +1,126 @@
 
         
-          Args:
-    model: The currently trained path-based model.
-    session: The current TensorFlow session.
-    instances: The current set instances.
-    labels: The current set labels.
-    set_name: The current set name (train/validation/test).
-    classes: The class label names.
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
-        Args:
-      datasets: a dictionary of named data_dictionaries, see top of lfads.py
-      output_fname: a file name stem for the output files.
-      push_mean: if False (default), generates batch_size samples for each trial
-        and averages the results. if True, runs each trial once without noise,
-        pushing the posterior mean initial conditions and control inputs through
-        the trained model. False is used for posterior_sample_and_average, True
-        is used for posterior_push_mean.
-    '''
-    hps = self.hps
-    kind = hps.kind
+        with open(FISH_COMPLETION_TEMPLATE) as f:
+        template = f.read()
+    filled_template = template.replace('{{commands}}', '\n'.join(commands))
+    with open(FISH_COMPLETION_FILE, 'w') as f:
+        f.write(filled_template)
     
-      Returns:
-    log_sum_exp of the arguments.
-  '''
-  m = tf.reduce_max(x_k)
-  x1_k = x_k - m
-  u_k = tf.exp(x1_k)
-  z = tf.reduce_sum(u_k)
-  return tf.log(z) + m
-    
-      word_to_id = build_vocab(train_path)
-  train_data = _file_to_word_ids(train_path, word_to_id)
-  valid_data = _file_to_word_ids(valid_path, word_to_id)
-  test_data = _file_to_word_ids(test_path, word_to_id)
-  vocabulary = len(word_to_id)
-  return train_data, valid_data, test_data, vocabulary
-    
-      for n in xrange(num_batches):
-    indices_batch = indices[n]
-    new_arr_batch = new_arr[n]
-    
-      # Exponential Moving Average baseline.
-  elif FLAGS.baseline_method == 'ema':
-    # TODO(liamfedus): Recheck.
-    # Lists of rewards and Log probabilities of the actions taken only for
-    # missing tokens.
-    ema = tf.train.ExponentialMovingAverage(decay=hparams.baseline_decay)
-    maintain_averages_op = ema.apply(rewards_list)
-    
-      return attn
-    
-        argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            image_ids=dict(default=[], type='list', aliases=['image_id']),
-            filters=dict(default={}, type='dict'),
-            owners=dict(default=[], type='list', aliases=['owner']),
-            executable_users=dict(default=[], type='list', aliases=['executable_user']),
-            describe_image_attributes=dict(default=False, type='bool')
-        )
-    )
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
     
-def get_server_certs(iam, name=None):
-    '''Retrieve the attributes of a server certificate if it exists or all certs.
-    Args:
-        iam (botocore.client.IAM): The boto3 iam instance.
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-        module.exit_json(changed=True)
+    import io
+import optparse
     
-            print('Training %s ... ' % name, end='')
-        t0 = time()
-        clf.fit(X_train, y_train)
-        train_time[name] = time() - t0
-        t0 = time()
-        y_pred = clf.predict(X_test)
-        test_time[name] = time() - t0
-        accuracy[name] = accuracy_score(y_test, y_pred)
-        print('done')
+        def gen_ies_md(ies):
+        for ie in ies:
+            ie_md = '**{0}**'.format(ie.IE_NAME)
+            ie_desc = getattr(ie, 'IE_DESC', None)
+            if ie_desc is False:
+                continue
+            if ie_desc is not None:
+                ie_md += ': {0}'.format(ie.IE_DESC)
+            if not ie.working():
+                ie_md += ' (Currently broken)'
+            yield ie_md
     
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('==============================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('==============================')
-            print()
-            data = nr.randint(-50, 51, (n_samples, n_features))
+        outfile, = args
+    
+    import os
+from os.path import dirname as dirn
+import sys
+    
+    # The suffix of source filenames.
+source_suffix = '.rst'
+    
+            ydl = YoutubeDL(params, auto_init=False)
+        ydl.add_default_info_extractors()
+        finished_hook_called = set()
+    
+            print('Iteration %s of %s' % (i, n_iter))
+    
+        results = defaultdict(lambda: [])
     
                 gc.collect()
-            print('benchmarking scikit-learn randomized_svd: n_iter=0')
+            print('benchmarking orthogonal_mp (without Gram):', end='')
+            sys.stdout.flush()
             tstart = time()
-            randomized_svd(X, rank, n_iter=0)
-            results['scikit-learn randomized_svd (n_iter=0)'].append(
-                time() - tstart)
+            orthogonal_mp(X, y, precompute=False,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp[i_f, i_s] = delta
     
-    ROOT_URL = 'https://api.github.com/repos/scikit-learn/scikit-learn.github.io/contents/'  # noqa
-RAW_FMT = 'https://raw.githubusercontent.com/scikit-learn/scikit-learn.github.io/master/%s/documentation.html'  # noqa
-VERSION_RE = re.compile(r'\bVERSION:\s*'([^']+)'')
-NAMED_DIRS = ['dev', 'stable']
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeClassifier()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
+    
+    
+def _linkcode_resolve(domain, info, package, url_fmt, revision):
+    '''Determine a link to online source for a class/method/function
+    
+    import codecs
+    
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
+    
+        requires_project = False
+    crawler_process = None
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
+            help='also display twisted/python/platform info (useful for bug reports)')
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
+    
+    
+class ReceivedDataProtocol(Protocol):
+    def __init__(self, filename=None):
+        self.__filename = filename
+        self.body = open(filename, 'wb') if filename else BytesIO()
+        self.size = 0
