@@ -1,121 +1,83 @@
 
         
-        FORMATS = {
-    'sequences': lambda y: [list(np.flatnonzero(s)) for s in y],
-    'dense': lambda y: y,
-    'csr': lambda y: sp.csr_matrix(y),
-    'csc': lambda y: sp.csc_matrix(y),
-}
-    
-    from sklearn.cluster.k_means_ import KMeans, MiniBatchKMeans
-    
-            ax.set_xlabel('n_samples')
-        ax.set_ylabel('n_features')
-        ax.set_zlabel('Time (s)')
-        ax.set_zlim3d(0.0, max_time * 1.1)
-        ax.set_title(label)
-        # ax.legend()
-        i += 1
-    plt.show()
-
-    
-    
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
-    
-        ###########################################################################
-    # Set custom reservoir based method
-    sampling_algorithm['custom-pool'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='pool',
-                                       random_state=random_state)
-    
-    
-class settingslist_node(nodes.General, nodes.Element):
-    pass
-    
-    def _iter_command_classes(module_name):
-    # TODO: add `name` attribute to commands and and merge this function with
-    # scrapy.utils.spider.iter_spider_classes
-    for module in walk_modules(module_name):
-        for obj in vars(module).values():
-            if inspect.isclass(obj) and \
-                    issubclass(obj, ScrapyCommand) and \
-                    obj.__module__ == module.__name__ and \
-                    not obj == ScrapyCommand:
-                yield obj
-    
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
-        else:
-            request.meta['handle_httpstatus_all'] = True
-    
-        def update_vars(self, vars):
-        '''You can use this function to update the Scrapy objects that will be
-        available in the shell
+                (2016-01, shopping), 25
+        (2016-01, shopping), 100
+        (2016-01, gas), 50
         '''
-        pass
+        timestamp, category, amount = line.split('\t')
+        period = self. extract_year_month(timestamp)
+        if period == self.current_year_month():
+            yield (period, category), amount
+    
+        def reducer(self, key, values):
+        '''Sum values for each key.
+    
+        def remove_from_tail(self):
+        ...
+    
+        def __init__(self, url, contents, child_urls):
+        self.url = url
+        self.contents = contents
+        self.child_urls = child_urls
+        self.signature = self.create_signature()
     
     
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
-    
-    regr = acme.register()
-logging.info('Auto-accepting TOS: %s', regr.terms_of_service)
-acme.agree_to_tos(regr)
-logging.debug(regr)
-    
-        .. note:: This does not need to be accurate in order for the client to
-        run.  This simply keeps things clean if the user decides to revert
-        changes.
-    .. warning:: If all deps are not included, it may cause incorrect parsing
-        behavior, due to enable_mod's shortcut for updating the parser's
-        currently defined modules (`.ApacheParser.add_mod`)
-        This would only present a major problem in extremely atypical
-        configs that use ifmod for the missing deps.
-    
-        def _get_addrs(self, achall):
-        '''Return the Apache addresses needed for TLS-SNI-01.'''
-        # TODO: Checkout _default_ rules.
-        addrs = set()
-        default_addr = obj.Addr(('*', str(
-            self.configurator.config.tls_sni_01_port)))
-    
-        def do_something(self, something):
-        return 'Doing %s' % something
+class PostgresSimpleLookup(Lookup):
+    def as_sql(self, qn, connection):
+        lhs, lhs_params = self.process_lhs(qn, connection)
+        rhs, rhs_params = self.process_rhs(qn, connection)
+        params = lhs_params + rhs_params
+        return '%s %s %s' % (lhs, self.operator, rhs), params
     
     
-class ConcreteHandler2(Handler):
-    def _handle(self, request):
-        if 10 < request <= 20:
-            print('request {} handled in handler 2'.format(request))
-            return True
+class RedirectFallbackMiddleware(MiddlewareMixin):
+    # Defined as class-level attributes to be subclassing-friendly.
+    response_gone_class = HttpResponseGone
+    response_redirect_class = HttpResponsePermanentRedirect
     
-    In other programming languages, a more complex arrangement is sometimes
-necessary. In particular, you cannot have polymorphic behaviour in a constructor in C++ -
-see https://stackoverflow.com/questions/1453131/how-can-i-get-polymorphic-behavior-in-a-c-constructor
-- which means this Python technique will not work. The polymorphism
-required has to be provided by an external, already constructed
-instance of a different class.
+        @classmethod
+    def get_model_class(cls):
+        # Avoids a circular import and allows importing SessionStore when
+        # django.contrib.sessions is not in INSTALLED_APPS.
+        from django.contrib.sessions.models import Session
+        return Session
     
-    production code which is untestable:
+        def save(self, session_key, session_dict, expire_date):
+        s = self.model(session_key, self.encode(session_dict), expire_date)
+        if session_dict:
+            s.save()
+        else:
+            s.delete()  # Clear sessions with no data.
+        return s
     
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
     
-class Controller(object):
-    def __init__(self, blackboard):
-        self.blackboard = blackboard
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        # Loop through each face in this frame of video
+    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+        # See if the face is a match for the known face(s)
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    
+    # Get a reference to the Raspberry Pi camera.
+# If this fails, make sure you have a camera connected to the RPi and that you
+# enabled your camera in raspi-config and rebooted first.
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
+output = np.empty((240, 320, 3), dtype=np.uint8)
+    
+            # 0.6 is the default face distance match threshold. So we'll spot-check that the numbers returned
+        # are above or below that based on if they should match (since the exact numbers could vary).
+        self.assertEqual(type(distance_results), np.ndarray)
+        self.assertLessEqual(distance_results[0], 0.6)
+        self.assertLessEqual(distance_results[1], 0.6)
+        self.assertGreater(distance_results[2], 0.6)
