@@ -1,188 +1,157 @@
 
         
-                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
-        end
-    
-          # Creates a _layout method to be called by _default_layout .
-      #
-      # If a layout is not explicitly mentioned then look for a layout with the controller's name.
-      # if nothing is found then try same procedure to find super class's layout.
-      def _write_layout_method # :nodoc:
-        silence_redefinition_of_method(:_layout)
-    
-    def converted_history(markdown)
-  remove_head_from_history(
-    custom_release_header_anchors(
-      liquid_escape(
-        linkify(
-          normalize_bullets(markdown)
-        )
-      )
-    )
-  )
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-    module Jekyll
-  module Commands
-    class NewTheme < Jekyll::Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:'new-theme') do |c|
-            c.syntax 'new-theme NAME'
-            c.description 'Creates a new Jekyll theme scaffold'
-            c.option 'code_of_conduct', \
-                     '-c', '--code-of-conduct', \
-                     'Include a Code of Conduct. (defaults to false)'
-    
-            def start(opts)
-          @thread = Thread.new do
-            # Use epoll if the kernel supports it
-            EM.epoll
-            EM.run do
-              EM.error_handler { |e| log_error(e) }
-    
-            def convert(content)
-          document = Kramdown::Document.new(content, @config)
-          html_output = document.to_html
-          if @config['show_warnings']
-            document.warnings.each do |warning|
-              Jekyll.logger.warn 'Kramdown warning:', warning
-            end
-          end
-          html_output
-        end
-    
-        def arg_is_present?(args, deprecated_argument, message)
-      deprecation_message(message) if args.include?(deprecated_argument)
+              launch_event = builder.new_event(:launch)
+      post_thread = client.post_event(launch_event)
+      unless post_thread.nil?
+        @threads << post_thread
+      end
     end
     
-          build_number = 1337
+        attr_accessor :collector
     
-            expect(result[1]).to start_with('security set-keychain-settings')
-        expect(result[1]).to include('-t 600')
-        expect(result[1]).to include('-l')
-        expect(result[1]).to include('-u')
-        expect(result[1]).to include('~/Library/Keychains/test.keychain')
+          context 'when specify log_path' do
+        context 'when command is archive' do
+          let(:command) { 'archive' }
+          it '--log-path option is not present' do
+            expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                carthage(command: '#{command}', log_path: 'bla.log')
+              end').runner.execute(:test)
+            end.to raise_error('Log path option is available only for 'build', 'bootstrap', and 'update' command.')
+          end
+        end
+    
+          context 'as string with spaces in name' do
+        let(:path) { 'my file.txt' }
+    
+            allow(FastlaneCore::Helper).to receive(:backticks).with(allowed_command, print: FastlaneCore::Globals.verbose?)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_command, print: FastlaneCore::Globals.verbose?)
+    
+          def store_page?(page)
+        page[:entries].present?
       end
     
-          it 'works with certificate and password that contain spaces, special chars, or '\'' do
-        cert_name = '\' test \'.cer'
-        keychain = '\' test \'.keychain'
-        password = '\'test pa$$word\''
+        def type=(value)
+      @type = value.try :strip
+    end
     
-      #
-  # Constructage of the HTTP response with the supplied code, message, and
-  # protocol.
-  #
-  def initialize(code = 200, message = 'OK', proto = DefaultProtocol)
-    super()
+        def mime_type
+      headers['Content-Type'] || 'text/plain'
+    end
     
+        def additional_options
+      {}
+    end
     
-IAX_SUBTYPE_NEW     = 1
-IAX_SUBTYPE_PING    = 2
-IAX_SUBTYPE_PONG    = 3
-IAX_SUBTYPE_ANSWER  = 4
-IAX_SUBTYPE_ACK     = 4
-IAX_SUBTYPE_HANGUP  = 5
-IAX_SUBTYPE_REJECT  = 6
-IAX_SUBTYPE_ACCEPT  = 7
-IAX_SUBTYPE_AUTHREQ = 8
-IAX_SUBTYPE_AUTHREP = 9
-IAX_SUBTYPE_INVAL   = 10
-IAX_SUBTYPE_LAGRQ   = 11
-IAX_SUBTYPE_LAGRP   = 12
-IAX_SUBTYPE_REGREQ  = 13
-IAX_SUBTYPE_REGAUTH = 14
-IAX_SUBTYPE_REGACK  = 15
-IAX_SUBTYPE_REGREJ  = 16
-IAX_SUBTYPE_REGREL  = 17
-IAX_SUBTYPE_VNAK    = 18
+        def process_response?(response)
+      response.body.present?
+    end
     
+            if at_css('.api-type-label.module')
+          at_css('h1').content = subpath.remove('api/')
+        end
     
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
+        # See {CapabilityHost#capability}
+    def capability(*args)
+      super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
+    end
     
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
+              @registered.each do |plugin|
+            result.merge!(plugin.guest.to_hash)
           end
     
-              # Encodes the etype
-          #
-          # @return [OpenSSL::ASN1::Sequence]
-          def encode_etype
-            encoded_types = []
-            etype.each do |member|
-              bn = OpenSSL::BN.new(member.to_s)
-              int = OpenSSL::ASN1::Integer.new(bn)
-              encoded_types << int
-            end
+      it 'sets the return value of the catch block to nil by default' do
+    res = catch :blah do
+      throw :blah
+    end
+    res.should == nil
+  end
     
-              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'LastRequest encoding not supported'
-          end
-    
-          def gets
-        return unless $stdin.tty?
-    
-          def resolve
-        return if scm_name.nil?
-        set(:scm, :git) if using_default_scm?
-    
-          private
-    
-        it 'auto-corrects safe heredoc offenses' do
-      new_source = autocorrect_source(
-        construct(false, a, make_multi(safe_heredoc), true)
-      )
-    
-          # Checks whether the `if` node has at least one `elsif` branch. Returns
-      # true if this `if` node itself is an `elsif`.
-      #
-      # @return [Boolean] whether the `if` node has at least one `elsif` branch
-      def elsif_conditional?
-        else_branch && else_branch.if_type? && else_branch.elsif?
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
+        end
+      rescue Errno::EACCES
+        # pass
       end
+    
+        # Wraps the given string in terminal escapes
+    # causing it to have the given color.
+    # If terminal escapes aren't supported on this platform,
+    # just returns the string instead.
+    #
+    # @param color [Symbol] The name of the color to use.
+    #   Can be `:red`, `:green`, or `:yellow`.
+    # @param str [String] The string to wrap in the given color.
+    # @return [String] The wrapped string.
+    def color(color, str)
+      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
+    
+          def right_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, ri                   = *line.match(/\+(\d+)/)
+          @right_diff_line_number = ri.to_i
+          @current_line_number    = @right_diff_line_number
+          ret                     = '...'
+        elsif line[0] == ?-
+          ret = ' '
+        elsif line[0] == ?+
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        else
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        end
+        ret
+      end
+    end
+  end
+end
+
+    
+    
+  test 'create pages within sub-directories' do
+    post '/create', :content => 'big smelly creatures', :page => 'Orc',
+         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
+    get '/Mordor/Orc'
+    assert_match /big smelly creatures/, last_response.body
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+    desc 'Update version number and gemspec'
+task :bump do
+  puts 'Updated version to #{bump_version}'
+  # Execute does not invoke dependencies.
+  # Manually invoke gemspec then validate.
+  Rake::Task[:gemspec].execute
+  Rake::Task[:validate].execute
+end
+    
+      if cfg = options[:config]
+    # If the path begins with a '/' it will be considered an absolute path,
+    # otherwise it will be relative to the CWD
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
+    require cfg
+  end
