@@ -1,145 +1,172 @@
 
         
-                  relation.update_all(update)
-        end
+              def extract_details(options) # :doc:
+        @lookup_context.registered_details.each_with_object({}) do |key, details|
+          value = options[key]
+    
+            # Stub out calls related to the execution environment
+        client = double('ingester_client')
+        session = FastlaneCore::AnalyticsSession.new(analytics_ingester_client: client)
+        expect(client).to receive(:post_event).with({
+            client_id: p_hash,
+            category: 'fastlane Client Langauge - ruby',
+            action: :launch,
+            label: nil,
+            value: nil
+        })
+    
+          it 'sets the project directory to other' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          carthage(project_directory: 'other')
+        end').runner.execute(:test)
+    
+            expect(result[2]).to start_with('security set-keychain-settings')
+        expect(result[2]).to include('-t 300')
+        expect(result[2]).to_not(include('-l'))
+        expect(result[2]).to_not(include('-u'))
+        expect(result[2]).to include('~/Library/Keychains/test.keychain')
       end
+    
+          it 'handles no extension or extensions parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+          context 'when specify mode explicitly' do
+        it 'uses lint mode as default' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint
+          end').runner.execute(:test)
+    
+            it 'supports modifying the value after taken from the environment' do
+          c = FastlaneCore::ConfigItem.new(key: :test,
+                                      env_name: 'FL_TEST')
+          config = FastlaneCore::Configuration.create([c], {})
+          ENV['FL_TEST'] = '123value'
+          config.values[:test].gsub!('123', '456')
+          expect(config.values[:test]).to eq('456value')
+          ENV.delete('FL_TEST')
+        end
+    
+    # test monkey patched method on both (simulated) OSes
+describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
+  describe 'on Windows' do
+    before(:each) do
+      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+    end
+    
+          def store_page?(page)
+        page[:entries].present?
+      end
+    
+        def initialize
+      @pages = {}
+    end
+    
+        def url
+      @url ||= URL.parse request.base_url
+    end
+    
+        def format_path(path)
+      path.to_s.remove File.join(File.expand_path('.'), '')
+    end
+    
+        def origin
+      if scheme && host
+        origin = '#{scheme}://#{host}'
+        origin.downcase!
+        origin << ':#{port}' if port
+        origin
+      else
+        nil
+      end
+    end
+    
+              # If we asked for reversed ordering, then reverse it
+          vms.reverse! if options[:reverse]
+    
+              # Register a new provider class only if a name was given
+          data[:providers].register(name.to_sym, &block) if name != UNSET_VALUE
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+                    raise Errors::VMNoMatchError if machines.empty?
+              else
+                # String name, just look for a specific VM
+                @logger.debug('Finding machine that match name: #{name}')
+                machines << get_machine.call(name.to_sym)
+                raise Errors::VMNotFoundError, name: name if !machines[0]
+              end
+            end
+          else
+            # No name was given, so we return every VM in the order
+            # configured.
+            @logger.debug('Loading all machines...')
+            machines = @env.machine_names.map do |machine_name|
+              get_machine.call(machine_name)
+            end
+          end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
+    
+        # Description formatted to work well as page title when viewing gist
+    if f.core_formula?
+      descr = '#{f.name} on #{OS_VERSION} - Homebrew build logs'
+    else
+      descr = '#{f.name} (#{f.full_name}) on #{OS_VERSION} - Homebrew build logs'
+    end
+    url = create_gist(files, descr)
+    
+          def has_sidebar
+        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
+        !!@sidebar
+      end
+    
+          def has_path
+        !@path.nil?
+      end
+    
+        body = last_response.body
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
+    
+        def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
+      else
+        fail ArgumentError, 'emoji `#{name}' not found'
+      end
+    end
+    
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
   end
 end
-
-    
-        it 'allows to delete a user' do
-      visit admin_users_path
-      find(:css, 'a[href='/admin/users/#{users(:bob).id}']').click
-      expect(page).to have_text('User 'bob' was deleted.')
-      expect(page).to have_no_text('bob@example.com')
-    end
-    
-          expect(agent.control_targets).to eq([bob_weather_agent])
-    end
-    
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-    
-              expect(scenario_import.scenario.name).to eq(name)
-          expect(scenario_import.scenario.description).to eq(description)
-          expect(scenario_import.scenario.guid).to eq(guid)
-          expect(scenario_import.scenario.tag_fg_color).to eq(tag_fg_color)
-          expect(scenario_import.scenario.tag_bg_color).to eq(tag_bg_color)
-          expect(scenario_import.scenario.icon).to eq(icon)
-          expect(scenario_import.scenario.source_url).to eq(source_url)
-          expect(scenario_import.scenario.public).to be_falsey
-        end
-    
-          it 'loads only the workers specified in the :only option' do
-        agent_runner = AgentRunner.new(only: HuginnScheduler)
-        workers = agent_runner.send(:load_workers)
-        expect(workers.keys).to eq(['HuginnScheduler'])
-        agent_runner.stop
-      end
-    
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
-  end
-    
-      gem 'cocoapods-dependencies', '~> 1.0.beta.1'
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-    <style type='text/css' media='screen'>
-  *                   {margin: 0; padding: 0; border: 0; outline: 0;}
-  div.clear           {clear: both;}
-  body                {background: #EEEEEE; margin: 0; padding: 0;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode',
-                       'Garuda';}
-  code                {font-family: 'Lucida Console', monospace;
-                       font-size: 12px;}
-  li                  {height: 18px;}
-  ul                  {list-style: none; margin: 0; padding: 0;}
-  ol:hover            {cursor: pointer;}
-  ol li               {white-space: pre;}
-  #explanation        {font-size: 12px; color: #666666;
-                       margin: 20px 0 0 100px;}
-/* WRAP */
-  #wrap               {width: 1000px; background: #FFFFFF; margin: 0 auto;
-                       padding: 30px 50px 20px 50px;
-                       border-left: 1px solid #DDDDDD;
-                       border-right: 1px solid #DDDDDD;}
-/* HEADER */
-  #header             {margin: 0 auto 25px auto;}
-  #header img         {float: left;}
-  #header #summary    {float: left; margin: 12px 0 0 20px; width:660px;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode';}
-  h1                  {margin: 0; font-size: 36px; color: #981919;}
-  h2                  {margin: 0; font-size: 22px; color: #333333;}
-  #header ul          {margin: 0; font-size: 12px; color: #666666;}
-  #header ul li strong{color: #444444;}
-  #header ul li       {display: inline; padding: 0 10px;}
-  #header ul li.first {padding-left: 0;}
-  #header ul li.last  {border: 0; padding-right: 0;}
-/* BODY */
-  #backtrace,
-  #get,
-  #post,
-  #cookies,
-  #rack               {width: 980px; margin: 0 auto 10px auto;}
-  p#nav               {float: right; font-size: 14px;}
-/* BACKTRACE */
-  a#expando           {float: left; padding-left: 5px; color: #666666;
-                      font-size: 14px; text-decoration: none; cursor: pointer;}
-  a#expando:hover     {text-decoration: underline;}
-  h3                  {float: left; width: 100px; margin-bottom: 10px;
-                       color: #981919; font-size: 14px; font-weight: bold;}
-  #nav a              {color: #666666; text-decoration: none; padding: 0 5px;}
-  #backtrace li.frame-info {background: #f7f7f7; padding-left: 10px;
-                           font-size: 12px; color: #333333;}
-  #backtrace ul       {list-style-position: outside; border: 1px solid #E9E9E9;
-                       border-bottom: 0;}
-  #backtrace ol       {width: 920px; margin-left: 50px;
-                       font: 10px 'Lucida Console', monospace; color: #666666;}
-  #backtrace ol li    {border: 0; border-left: 1px solid #E9E9E9;
-                       padding: 2px 0;}
-  #backtrace ol code  {font-size: 10px; color: #555555; padding-left: 5px;}
-  #backtrace-ul li    {border-bottom: 1px solid #E9E9E9; height: auto;
-                       padding: 3px 0;}
-  #backtrace-ul .code {padding: 6px 0 4px 0;}
-  #backtrace.condensed .system,
-  #backtrace.condensed .framework {display:none;}
-/* REQUEST DATA */
-  p.no-data           {padding-top: 2px; font-size: 12px; color: #666666;}
-  table.req           {width: 980px; text-align: left; font-size: 12px;
-                       color: #666666; padding: 0; border-spacing: 0;
-                       border: 1px solid #EEEEEE; border-bottom: 0;
-                       border-left: 0;
-                       clear:both}
-  table.req tr th     {padding: 2px 10px; font-weight: bold;
-                       background: #F7F7F7; border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-  table.req tr td     {padding: 2px 20px 2px 10px;
-                       border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-/* HIDE PRE/POST CODE AT START */
-  .pre-context,
-  .post-context       {display: none;}
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
-        end
-    
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
-      end
