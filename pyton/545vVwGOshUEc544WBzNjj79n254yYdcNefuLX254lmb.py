@@ -1,125 +1,92 @@
 
         
-                :param name: the optional name of the filter, otherwise the
-                     function name will be used.
-        '''
-        def register_template(state):
-            state.app.jinja_env.filters[name or f.__name__] = f
-        self.record_once(register_template)
+        
+class PrivateChat(Chat):
     
-        .. versionchanged:: 0.10
-       This function's return value is now always safe for HTML usage, even
-       if outside of script tags or if used in XHTML.  This rule does not
-       hold true when using this function in HTML attributes that are double
-       quoted.  Always single quote attributes if you use the ``|tojson``
-       filter.  Alternatively use ``|tojson|forceescape``.
+        def override_category_budget(self, category, amount):
+        self.categories_to_budget_map[category] = amount
+
+    
+    
+class RemoveDuplicateUrls(MRJob):
+    
+        def move_to_front(self, node):
+        ...
+    
+    from sklearn.dummy import DummyClassifier
+    
+    
+def bench_isotonic_regression(Y):
     '''
-    rv = dumps(obj, **kwargs) \
-        .replace(u'<', u'\\u003c') \
-        .replace(u'>', u'\\u003e') \
-        .replace(u'&', u'\\u0026') \
-        .replace(u''', u'\\u0027')
-    if not _slash_escape:
-        rv = rv.replace('\\/', '/')
-    return rv
-    
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
-    
-        def __init__(self, *args, **kwargs):
-        super(FlaskClient, self).__init__(*args, **kwargs)
-        self.environ_base = {
-            'REMOTE_ADDR': '127.0.0.1',
-            'HTTP_USER_AGENT': 'werkzeug/' + werkzeug.__version__
-        }
-    
-    ##
-# imaginary tree navigation type; traverse 'get child' link
-DOWN = 2
-##
-#imaginary tree navigation type; finish with a child list
-UP = 3
-    
-        def __init__(self):
-        # Track the set of token types that can follow any rule invocation.
-        # Stack grows upwards.
-        self.following = []
-    
-            try:
-            isabs, = set(p[:1] == sep for p in paths)
-        except ValueError:
-            raise ValueError('Can't mix absolute and relative paths') from None
-    
-        If the resulting string contains path separators, an exception is raised.
+    Runs a single iteration of isotonic regression on the input data,
+    and reports the total time taken (in seconds).
     '''
-    parent, file_name = os.path.split(path)
-    if parent:
-        raise ValueError('{!r} must be only a file name'.format(path))
-    else:
-        return file_name
+    gc.collect()
     
-    # An imaginary module that would make this work and be safe.
-from imaginary import magic_html_parser
+                gc.collect()
+            print('benchmarking orthogonal_mp (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=True,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp_gram[i_f, i_s] = delta
     
-    def handlePoint(point):
-    print('<li>%s</li>' % getText(point.childNodes))
+        ###########################################################################
+    # Set transformer input
+    ###########################################################################
+    transformers = {}
     
-    # register get_operator_module(); make public functions accessible via proxy
-MyManager.register('operator', get_operator_module)
+    Typical output
+--------------
+    
+        mem_usage = memory_usage(run_vectorizer(Vectorizer, text, **params))
+    
+    from distutils.version import LooseVersion
+    
+        def prepare(self, **kwargs):
+    
+    __all__ = ['cbs_download']
+    
+    import json
+import re
+    
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
+    
+    __all__ = ['douban_download']
+    
+        vids = matchall(content, yinyuetai_embed_patterns)
+    for vid in vids:
+        found = True
+        yinyuetai_download_by_id(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
     
     
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
+def fantasy_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'fantasy.tv' not in url:
+        raise Exception('Wrong place!')
     
+        def test_path_islink(self):
+        self.assertPathEqual(self.path.islink)
     
-  def Poll( self, diagnostics_handler ):
-    '''This should be called regularly to check for new messages in this buffer.
-    Returns True if Poll should be called again in a while. Returns False when
-    the completer or server indicated that further polling should not be done
-    for the requested file.'''
+        The decoding-related arguments have the same semantics as those of
+    bytes.decode().
+    '''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    with open_text(package, resource, encoding, errors) as fp:
+        return fp.read()
     
-    
-class OmniCompletionRequest( CompletionRequest ):
-  def __init__( self, omni_completer, request_data ):
-    super( OmniCompletionRequest, self ).__init__( request_data )
-    self._omni_completer = omni_completer
-    
-    
-@patch( 'ycm.client.messages_request.PostVimMessage',
-        new_callable = ExtendedMock )
-def HandlePollResponse_MultipleMessagesAndDiagnostics_test( post_vim_message ):
-  diagnostics_handler = ExtendedMock()
-  messages = [
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
-    { 'message': 'On the first day of Christmas, my VimScript gave to me' },
-    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
-    { 'message': 'A test file in a Command-T' },
-    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
-    { 'message': 'On the second day of Christmas, my VimScript gave to me' },
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
-    { 'message': 'Two popup menus, and a test file in a Command-T' },
-  ]
-  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
-               equal_to( True ) )
-  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
-    call( 'foo', [ 'PLACEHOLDER1' ] ),
-    call( 'bar', [ 'PLACEHOLDER2' ] ),
-    call( 'baz', [ 'PLACEHOLDER3' ] ),
-    call( 'foo', [ 'PLACEHOLDER4' ] )
-  ] )
-    
-      return request
-    
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseInProgress() ):
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( False ) )
+    print('Enter your SQL commands to execute in sqlite3.')
+print('Enter a blank line to exit.')
