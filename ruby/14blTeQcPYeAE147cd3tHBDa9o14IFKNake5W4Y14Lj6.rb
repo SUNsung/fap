@@ -1,115 +1,73 @@
 
         
-          def plist_caveats
-    s = []
-    if f.plist || (keg && keg.plist_installed?)
-      destination = if f.plist_startup
-        '/Library/LaunchDaemons'
-      else
-        '~/Library/LaunchAgents'
-      end
+          # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
+  # see https://github.com/Homebrew/homebrew-cask/pull/8887
+  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
     
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
     end
-    
-        def self.cleanup_formula(formula)
-      formula.eligible_kegs_for_cleanup.each do |keg|
-        cleanup_path(keg) { keg.uninstall }
-      end
-    end
-    
-        print_remaining_files remaining_root_files, root, other
   end
     
-      # GET /resource/password/new
-  def new
-    self.resource = resource_class.new
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
   end
+end
+
     
-    class Devise::SessionsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create]
-  prepend_before_action :allow_params_authentication!, only: :create
-  prepend_before_action :verify_signed_out_user, only: :destroy
-  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
-    
-      # GET /resource/unlock?unlock_token=abcdef
-  def show
-    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
-    yield resource if block_given?
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-        proxy = Devise::Hooks::Proxy.new(warden)
-    
-    module Docs
-  class EntryIndex
-    attr_reader :entries, :types
-    
-        def root?
-      path == 'index'
-    end
-    
-            css('pre[language]').each do |node|
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip
-          node['data-language'] = 'html' if node.content.start_with?('<')
-          node.remove_attribute('language')
-          node.remove_attribute('format')
-        end
-    
-          doc.css('#filecontents').css('h1, h2, h3, h4, h5, h6').each do |h|
-        next if h.inner_text.empty?
-        h['id'] =
-          case h.inner_text
-          when 'Referencing Parent Selectors: &'; 'parent-selector'
-          when /^Comments:/; 'comments'
-          when 'Strings'; 'sass-script-strings'
-          when 'Division and /'; 'division-and-slash'
-          when /^Subtraction,/; 'subtraction'
-          when '& in SassScript'; 'parent-script'
-          when '@-Rules and Directives'; 'directives'
-          when '@extend-Only Selectors'; 'placeholders'
-          when '@extend-Only Selectors'; 'placeholders'
-          when '@each'; 'each-directive'
-          when 'Multiple Assignment'; 'each-multi-assign'
-          when 'Mixin Directives'; 'mixins'
-          when /^Defining a Mixin:/; 'defining_a_mixin'
-          when /^Including a Mixin:/; 'including_a_mixin'
-          when 'Arguments'; 'mixin-arguments'
-          when 'Passing Content Blocks to a Mixin'; 'mixin-content'
-          else
-            h.inner_text.downcase.gsub(/[^a-z _-]/, '').gsub(' ', '_')
-          end
+        context 'on my own post' do
+      before do
+        aspect_to_post = alice.aspects.where(:name => 'generic').first
+        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
       end
-    
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
-  end
     
     module Sass
   module CacheStores
@@ -120,39 +78,73 @@
       # @return [String]
       attr_accessor :cache_location
     
-        # Make rules use nesting so that
-    #
-    #     foo
-    #       color: green
-    #     foo bar
-    #       color: red
-    #     foo baz
-    #       color: blue
-    #
-    # becomes
-    #
-    #     foo
-    #       color: green
-    #       bar
-    #         color: red
-    #       baz
-    #         color: blue
-    #
-    # @param root [Tree::Node] The parent node
-    def nest_seqs(root)
-      current_rule = nil
-      root.children.map! do |child|
-        unless child.is_a?(Tree::RuleNode)
-          nest_seqs(child) if child.is_a?(Tree::DirectiveNode)
-          next child
-        end
+            <<END
+/*
+#{header.gsub('*/', '*\\/')}
     
-          output = input_path if @options[:in_place]
-      write_output(out, output)
-    rescue Sass::SyntaxError => e
-      raise e if @options[:trace]
-      file = ' of #{e.sass_filename}' if e.sass_filename
-      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
-    rescue LoadError => err
-      handle_load_error(err)
+          opts.on('-s', '--stdin', :NONE,
+              'Read input from standard input instead of an input file.',
+              'This is the default if no input file is specified. Requires --from.') do
+        @options[:input] = $stdin
+      end
+    
+        pod 'Alamofire', path: '../Alamofire Example/Alamofire'
+    
+        it 'auto-corrects safe heredoc offenses' do
+      new_source = autocorrect_source(
+        construct(false, a, make_multi(safe_heredoc), true)
+      )
+    
+          DOUBLE_SPLAT = '**'.freeze
+    
+          # Returns the delta between this element's delimiter and the argument's.
+      #
+      # @note Pairs with different delimiter styles return a delta of 0
+      #
+      # @return [Integer] the delta between the two delimiters
+      def delimiter_delta(other)
+        HashElementDelta.new(self, other).delimiter_delta
+      end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
     end
+  end
+end
+
+    
+        execute 'restart-sidekiq' do 
+      command %Q{ 
+        echo 'sleep 20 && monit -g #{app}_sidekiq restart all' | at now 
+      }
+    end
+  end 
+end
+
+    
+          def create_worker_file
+        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
+      end
+    
+    
+    
+          arr = Sidekiq.options[:lifecycle_events][event]
+      arr.reverse! if reverse
+      arr.each do |block|
+        begin
+          block.call
+        rescue => ex
+          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
+          raise ex if reraise
+        end
+      end
+      arr.clear
+    end
+  end
+end
