@@ -1,179 +1,226 @@
 
         
-        % for start_code_point, end_code_point, value in break_table.property_value_ranges:
-%   if start_code_point == 0:
-  if (C <= ${end_code_point})
-%   else:
-  if (C >= ${start_code_point} && C <= ${end_code_point})
-%   end
-    return GraphemeClusterBreakProperty::${value};
-% end
-    
-      static CFPointeeInfo forInvalid() {
-    CFPointeeInfo info;
-    info.IsValid = false;
-    return info;
-  }
-    
-      // Check if part from seed2 label: with low math density and left indented. We
-  // are using two checks:
-  // 1. If its left is aligned with any coordinates in indented_texts_left,
-  // which we assume have been sorted.
-  // 2. If its foreground density is over foreground_density_th.
-  bool CheckForSeed2(
-      const GenericVector<int>& indented_texts_left,
-      const float foreground_density_th,
-      ColPartition* part);
-    
-      /**
-   * Moves the iterator to the beginning of the text line.
-   * This class implements this functionality by moving it to the zero indexed
-   * blob of the first (leftmost) word of the row.
-   */
-  virtual void RestartRow();
-    
-    namespace grpc {
-    }
-    
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
-}
-    
-    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcServerServerLatency();
-::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
-    
-    #include 'absl/base/internal/endian.h'
-#include 'absl/strings/string_view.h'
-#include 'opencensus/trace/span_context.h'
-#include 'opencensus/trace/span_id.h'
-#include 'opencensus/trace/trace_id.h'
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    // This method must return a char* which is owned by the IniSettingMap
-// to avoid issues with the lifetime of the char*
-const char* Config::Get(const IniSettingMap &ini, const Hdf& config,
-                        const std::string& name /* = '' */,
-                        const char *defValue /* = nullptr */,
-                        const bool prepend_hhvm /* = true */) {
-  auto ini_name = IniName(name, prepend_hhvm);
-  Hdf hdf = name != '' ? config[name] : config;
-  auto value = ini_iterate(ini, ini_name);
-  if (value.isString()) {
-    // See generic Get##METHOD below for why we are doing this
-    // Note that value is a string, so value.toString() is not
-    // a temporary.
-    const char* ini_ret = value.toString().data();
-    const char* hdf_ret = hdf.configGet(ini_ret);
-    if (hdf_ret != ini_ret) {
-      ini_ret = hdf_ret;
-      IniSetting::SetSystem(ini_name, ini_ret);
-    }
-    return ini_ret;
-  }
-  return hdf.configGet(defValue);
-}
-    
-    
-    {  if (base64) {
-    decoded = string_base64_decode(data, data_len, true);
-    if (decoded.isNull()) {
-      raise_warning('unable to decode base64 data');
-      return nullptr;
-    }
-  } else {
-    decoded = url_decode(data, data_len);
-  }
-  return req::make<MemFile>(decoded.data(), decoded.size());
-}
-    
-    req::ptr<Directory> GlobStreamWrapper::opendir(const String& path) {
-  const char* prefix = 'glob://';
-  const char* path_str = path.data();
-  int path_len = path.length();
-    }
-    
-      /*
-   * @brief Helper function to POST a carve to the graph endpoint.
-   *
-   * Once all of the files have been carved and the tgz has been
-   * created, we POST the carved file to an endpoint specified by the
-   * carver_start_endpoint and carver_continue_endpoint
-   */
-  Status postCarve(const boost::filesystem::path& path);
-    
-    #include <string>
+        #include <cstdint>
 #include <vector>
+#include 'dotproductsse.h'
     
-    #include <gtest/gtest.h>
+    #include <cstdint>  // for int16_t
+    
+    int os_detect_blobs(const GenericVector<int>* allowed_scripts,
+                    BLOBNBOX_CLIST* blob_list,
+                    OSResults* osr,
+                    tesseract::Tesseract* tess);
+    
+      // go through the list again and this time create the menu structure.
+  vc_it.move_to_first();
+  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
+    ParamContent* vc = vc_it.data();
+    STRING tag;
+    STRING tag2;
+    STRING tag3;
+    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
+    }
     
     
-    {
-    {  c.reset();
-}
-}
-
-    
-    
-    {
-    {    int code = 0;
-    EXPECT_TRUE(getProcessExitCode(*process, code));
-    EXPECT_EQ(code, EXTENSION_SUCCESS_CODE);
+/**********************************************************************
+ * recog_word_recursive
+ *
+ * Convert the word to tess form and pass it to the tess segmenter.
+ * Convert the output back to editor form.
+ **********************************************************************/
+void Tesseract::recog_word_recursive(WERD_RES *word) {
+  int word_length = word->chopped_word->NumBlobs();  // no of blobs
+  if (word_length > MAX_UNDIVIDED_LENGTH) {
+    return split_and_recog_word(word);
   }
+  cc_recog(word);
+  word_length = word->rebuild_word->NumBlobs();  // No of blobs in output.
+    }
+    
+    	real_t get_hinge_angle();
+    
+    public:
+	JointBullet();
+	virtual ~JointBullet();
+    
+    #ifndef PIN_JOINT_BULLET_H
+#define PIN_JOINT_BULLET_H
+    
+    #include 'func_ref.h'
+    
+    #include 'core/reference.h'
+    
+    Shell::Shell() {
+    }
+    
+    /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
+ */
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
+    
+    
+    {
+    {   private:
+    friend class CudaModule;
+    /*!
+     * \brief constructor
+     * \param mod module of this kernel
+     * \param mangled_name mangled kernel name
+     * \param signature kernel argument signature
+     */
+    Kernel(const std::shared_ptr<Chunk>& mod,
+           const std::string& mangled_name,
+           const std::vector<ArgType>& signature);
+    /*! \brief mangled kernel name */
+    std::string mangled_name_;
+    /*! \brief kernel argument signature */
+    std::vector<ArgType> signature_;
+    /*! \brief module of this kernel */
+    std::shared_ptr<Chunk> mod_;
+    /*! \brief cached kernel function on each device */
+    std::unordered_map<int, CUfunction> func_;
+  };
+  /*!
+   * \brief CudaModule constructor
+   * \param source cuda source code.
+   * \param exports export symbols before mangling.
+   */
+  CudaModule(const char* source,
+             const std::vector<std::string>& options,
+             const std::vector<std::string>& exports)
+      : ptr_(std::make_shared<Chunk>(source, options, exports)) {}
+  /*!
+   * \brief Get cuda kernal from module by name
+   * \param name kernel name
+   * \param signature kernel signature
+   * \return shared pointer to cuda kernel
+   */
+  std::shared_ptr<Kernel> GetKernel(const std::string& name,
+                                    const std::vector<ArgType>& signature);
+};
+    
+    namespace mxnet {
+namespace op {
+namespace caffe {
+    }
+    }
+    }
+    
+    
+    {
+    {      if (top_size > DATA) {
+        if (param_.flat) {
+          batch_data_ = TBlob(nullptr, mshadow::Shape2(batch_size_,
+                                                       channels_ * width_ * height_),
+                              cpu::kDevCPU, type_flag_);
+        } else {
+          batch_data_ = TBlob(nullptr, mxnet::TShape(top_[DATA]->shape().begin(),
+                                                     top_[DATA]->shape().end()),
+                              cpu::kDevCPU, type_flag_);
+        }
+      }
+      out_.data.clear();
+      if (top_size > LABEL) {
+          batch_label_ = TBlob(nullptr, mxnet::TShape(top_[LABEL]->shape().begin(),
+                                                      top_[LABEL]->shape().end()),
+                               cpu::kDevCPU, type_flag_);
+      }
+      out_.batch_size = batch_size_;
+    }
+  }
+    
+        for (auto blob_ptr : bot_blobs)
+      delete blob_ptr;
+    for (auto blob_ptr : top_blobs)
+      delete blob_ptr;
+    
+    DMLC_REGISTER_PARAMETER(CaffeOpParam);
+    
+    /*!
+ * \file iter_libsvm.cc
+ * \brief define a LibSVM Reader to read in arrays
+ */
+#include <mxnet/io.h>
+#include <dmlc/base.h>
+#include <dmlc/logging.h>
+#include <dmlc/parameter.h>
+#include <dmlc/data.h>
+#include './iter_sparse_prefetcher.h'
+#include './iter_sparse_batchloader.h'
+    
+    
+    {
+    {}  // namespace common
+}  // namespace xgboost
+    
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+  } else {
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
+  }
+  R_API_END();
+  return R_NilValue;
 }
+    
+    namespace xgboost {
+ConsoleLogger::~ConsoleLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+TrackerLogger::~TrackerLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+}  // namespace xgboost
     
     /**
- * @brief The watchdog thread responsible for spawning/monitoring children.
- *
- * The WatcherRunner thread will spawn any autoloaded extensions or optional
- * osquery daemon worker processes. It will then poll for their performance
- * state and kill/respawn osquery child processes if they violate limits.
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
  */
-class WatcherRunner : public InternalRunnable {
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
  public:
-  /**
-   * @brief Construct a watcher thread.
-   *
-   * @param argc The osquery process argc.
-   * @param argv The osquery process argv.
-   * @param use_worker True if the process should spawn and monitor a worker.
-   */
-  explicit WatcherRunner(int argc, char** argv, bool use_worker)
-      : InternalRunnable('WatcherRunner'),
-        argc_(argc),
-        argv_(argv),
-        use_worker_(use_worker) {
-    (void)argc_;
-  }
+  std::vector<std::string> keys() const override;
     }
     
-      const auto& doc = parser->getData();
-  if (!doc.doc().HasMember('exclude_paths')) {
-    return;
-  }
-    
-    namespace osquery {
+    Status LoggerConfigParserPlugin::update(const std::string& /* source */,
+                                        const ParserConfig& config) {
+  rj::Document& doc = data_.doc();
     }
     
-      // May also register a similar (same EC, SC), but different publisher.
-  auto another_fake_pub = std::make_shared<AnotherFakeEventPublisher>();
-  status = EventFactory::registerEventPublisher(another_fake_pub);
-  EXPECT_TRUE(status.ok());
+      const auto& views = data_.doc()['views'];
     
-    #include <osquery/sdk.h>
-#include <osquery/system.h>
+      std::vector<std::string> pack_names;
+  c.packs(
+      ([&pack_names](const Pack& p) { pack_names.push_back(p.getName()); }));
+    
+    void Initializer::platformSetup() {
+  // Initialize the COM libraries utilized by Windows WMI calls.
+  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
+  if (ret != S_OK) {
+    ::CoUninitialize();
+  }
+}
+    
+    #include <osquery/config.h>
+#include <osquery/events.h>
+#include <osquery/registry_factory.h>
+#include <osquery/tables.h>
+    
+      QueryData generate(QueryContext& request) {
+    Row r;
+    }
