@@ -1,39 +1,73 @@
 
         
-              def invalid_api_key
-        render 'spree/api/errors/invalid_api_key', status: 401
+          before(:each) do
+    # This value needs to be set or our event fixtures will not match
+    allow(FastlaneCore::Helper).to receive(:ci?).and_return(false)
+    allow(FastlaneCore::Helper).to receive(:operating_system).and_return('macOS')
+  end
+    
+          it 'can be set to multiple the platforms' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              platform: 'iOS,Mac'
+            )
+          end').runner.execute(:test)
+    
+      def test_file_exists(path)
+    exists?('f', path)
+  end
+    
+          # Returns the branch of the `if` node that gets evaluated when its
+      # condition is falsey.
+      #
+      # @note This is normalized for `unless` nodes.
+      #
+      # @return [Node] the falsey branch node of the `if` node
+      # @return [nil] when there is no else branch
+      def else_branch
+        node_parts[2]
       end
     
-            def load_order(lock = false)
-          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
-          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
-          @order.state = params[:state] if params[:state]
-          state_callback(:before)
-        end
-    
-            def scope
-          if params[:product_id]
-            Spree::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Spree::Variant.find(params[:variant_id])
-          end
-        end
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
       end
     end
   end
 end
 
     
-            def stock_location_params
-          params.require(:stock_location).permit(permitted_stock_location_attributes)
-        end
+    Given /^I comment out lines that contain '([^']+)' in '([^']+)'$/ do |contains, glob|
+  cd('.') do
+    Dir.glob(glob).each do |file|
+      transform_file(file) do |content|
+        content.gsub(/^(.*?#{contains}.*?)$/) { |line| '# #{line}' }
       end
     end
   end
 end
-
     
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
+    When /^(?:|I )uncheck '([^']*)'$/ do |field|
+  uncheck(field)
+end
+    
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
+    
+        def blank_name?
+      @filepath.nil? || @filepath.empty?
+    end
+    
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+      else
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      end
+    end
