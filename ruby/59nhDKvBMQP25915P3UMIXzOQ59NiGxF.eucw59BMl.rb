@@ -1,155 +1,187 @@
 
         
-              def instrument(name, **options) # :doc:
-        options[:identifier] ||= (@template && @template.identifier) || @path
+        def envygeeks(url)
+  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
     
-            Check your system for potential problems. Doctor exits with a non-zero status
-        if any potential problems are found. Please note that these warnings are just
-        used to help the Homebrew maintainers with debugging if you file an issue. If
-        everything you use Homebrew for is working fine: please don't worry or file
-        an issue; just ignore this.
-      EOS
-      switch '--list-checks',
-        description: 'List all audit methods.'
-      switch '-D', '--audit-debug',
-        description: 'Enable debugging and profiling of audit methods.'
-      switch :verbose
-      switch :debug
-    end
-  end
+    def native_relative
+  DOC_PATH.sub('#{COL_PATH}/', '')
+end
     
-      class Satisfier
-    def initialize(options, &block)
-      case options
-      when Hash
-        @options = { build_env: true }
-        @options.merge!(options)
-      else
-        @satisfied = options
-      end
-      @proc = block
-    end
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
     
-          def tag
-        if MacOS.version >= :lion
-          MacOS.cat
-        elsif MacOS.version == :snow_leopard
-          Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
-        else
-          # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
-          if Hardware::CPU.type == :ppc
-            tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
-          else
-            tag = MacOS.cat
+            def convert(content)
+          document = Kramdown::Document.new(content, @config)
+          html_output = document.to_html
+          if @config['show_warnings']
+            document.warnings.each do |warning|
+              Jekyll.logger.warn 'Kramdown warning:', warning
+            end
           end
-          MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
+          html_output
         end
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
     end
     
-      def to_ary
-    @paths.dup.to_ary
-  end
-  alias to_a to_ary
+          it 'updates an existing user' do
+        visit edit_admin_user_path(users(:bob))
+        check 'Admin'
+        click_on 'Update User'
+        expect(page).to have_text('User 'bob' was successfully updated.')
+        visit edit_admin_user_path(users(:bob))
+        expect(page).to have_checked_field('Admin')
+      end
     
-    Then(/^I should not be able to sign up$/) do
-  confirm_not_signed_up
-end
-    
-      # fill out the fields on the sign_in page and press submit
-  def login_as(user, pass)
-    fill_in 'user_username', :with=>user
-    fill_in 'user_password', :with=>pass
-    click_button 'Sign in'
-  end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
     end
   end
-end
-
     
-          # Give each option an anchor.
-      doc.css('#filecontents li p strong code').each do |c|
-        c['id'] = c.inner_text.gsub(/:/, '') + '-option'
-      end
+        it 'respects an environment variable that specifies a path or URL to a different scenario' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
+    end
     
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
+          context '#run_workers' do
+        it 'runs all the workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
         end
-      rescue Errno::EACCES
-        # pass
+    
+      describe '#interpolate_jsonpaths' do
+    let(:payload) { { :there => { :world => 'WORLD' }, :works => 'should work' } }
+    
+      let :reverted_extract do
+    old_extract
+  end
+    
+    describe AgentLog do
+  describe 'validations' do
+    before do
+      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
+      expect(@log).to be_valid
+    end
+    
+        $?.should be_an_instance_of Process::Status
+    $?.success?.should == false
+    $?.exitstatus.should == 1
+  end
+    
+    describe 'Kernel#test' do
+  before :all do
+    @file = File.dirname(__FILE__) + '/fixtures/classes.rb'
+    @dir = File.dirname(__FILE__) + '/fixtures'
+  end
+    
+      it 'transfers control to the innermost catch block waiting for the same sympol' do
+    one = two = three = 0
+    catch :duplicate do
+      catch :duplicate do
+        catch :duplicate do
+          one = 1
+          throw :duplicate
+        end
+        two = 2
+        throw :duplicate
+      end
+      three = 3
+      throw :duplicate
+    end
+    [one, two, three].should == [1, 2, 3]
+  end
+    
+      it 'is a private method' do
+    Kernel.should have_private_instance_method(:trace_var)
+  end
+    
+            -> { w.f4('', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
+        -> { w.f4(nil, 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
       end
     
-              def set_global_#{name}(name, value)
-            global_env.set_#{name}(name, value)
-          end
-        RUBY
+    task :date_file do
+  File.open(scope('VERSION_DATE'), 'w') do |f|
+    f.puts Time.now.utc.strftime('%d %B %Y %T %Z')
+  end
+end
+    
+      # Compile a Sass or SCSS string to CSS.
+  # Defaults to SCSS.
+  #
+  # @param contents [String] The contents of the Sass file.
+  # @param options [{Symbol => Object}] An options hash;
+  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  def self.compile(contents, options = {})
+    options[:syntax] ||= :scss
+    Engine.new(contents, options).to_css
+  end
+    
+        # Parse all the selectors in the document and assign them to
+    # {Sass::Tree::RuleNode#parsed_rules}.
+    #
+    # @param root [Tree::Node] The parent node
+    def parse_selectors(root)
+      root.children.each do |child|
+        next parse_selectors(child) if child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode)
+        parser = Sass::SCSS::CssParser.new(child.rule.first, child.filename, nil, child.line)
+        child.parsed_rules = parser.parse_selector
       end
     end
     
-        class << self
-      # Returns an error report for an exception in CSS format.
-      #
-      # @param e [Exception]
-      # @param line_offset [Integer] The number of the first line of the Sass template.
-      # @return [String] The error report
-      # @raise [Exception] `e`, if the
-      #   {file:SASS_REFERENCE.md#full_exception-option `:full_exception`} option
-      #   is set to false.
-      def exception_to_css(e, line_offset = 1)
-        header = header_string(e, line_offset)
+            line_num = e.sass_line + 1 - line_offset
+        min = [line_num - 6, 0].max
+        section = e.sass_template.rstrip.split('\n')[min...line_num + 5]
+        return e.sass_backtrace_str if section.nil? || section.empty?
     
-      include_examples 'multiline literal brace layout trailing comma' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
+    # define charCodeAt on String
+class String
+  def charCodeAt(k)
+    # use scan, nil check, and unpack instead of ord for 1.8
+    # 1.9 can simply use self[k].ord
+    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
+    c = self.scan(/./mu)[k]
+    return nil if c.nil?
+    c.unpack('U')[0]
   end
 end
-
     
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
+          def has_sidebar
+        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
+        !!@sidebar
       end
     
-          # Returns an array of all the values in the `hash` literal.
-      #
-      # @return [Array<Node>] an array of values in the `hash` literal
-      def values
-        each_pair.map(&:value)
+          def css # custom css
+        @css
       end
     
-          # Custom destructuring method. This is used to normalize the branches
-      # for `if` and `unless` nodes, to aid comparisons and conversions.
-      #
-      # @return [Array<Node>] the different parts of the `if` statement
-      def node_parts
-        if unless?
-          condition, false_branch, true_branch = *self
-        else
-          condition, true_branch, false_branch = *self
-        end
+        follow_redirect!
+    assert_equal '/C', last_request.fullpath
+    assert last_response.ok?
     
-          def initialize
-        @entries = []
-        yield self if block_given?
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
       end
+    end
     
-        def fire_event(event, options={})
-      reverse = options[:reverse]
-      reraise = options[:reraise]
+    # internal
+require File.expand_path('../gollum/uri_encode_component', __FILE__)
