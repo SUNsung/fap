@@ -1,159 +1,266 @@
 
         
-          // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
+        // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    // static
-void GlobalShortcut::BuildPrototype(v8::Isolate* isolate,
-                                    v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'GlobalShortcut'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('register', &GlobalShortcut::Register)
-      .SetMethod('isRegistered', &GlobalShortcut::IsRegistered)
-      .SetMethod('unregister', &GlobalShortcut::Unregister)
-      .SetMethod('unregisterAll', &GlobalShortcut::UnregisterAll);
+    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
+#define CONTENT_NW_SRC_API_BASE_BASE_H_
+    
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
 }
     
-    #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/net/atom_network_delegate.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
     
-    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
+      option.GetString('type', &type_);
+  option.GetString('label', &label_);
+  option.GetString('tooltip', &tooltip_);
+  option.GetBoolean('checked', &is_checked_);
+  option.GetBoolean('enabled', &is_enabled_);
     
-    #include 'sample2.h'
+      nw::Package* package = nw::package();
+  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
+  base::CommandLine::StringVector args = command_line->GetArgs();
+  base::CommandLine::StringVector argv = command_line->original_argv();
     
-    VMTOC::~VMTOC() {
-  FTRACE(1, 'Number of values if 64bits stored in TOC: {}\n',
-    std::to_string(m_last_elem_pos));
+      NwScreenIsMonitorStartedFunction::NwScreenIsMonitorStartedFunction() {}
+    
+    #undef cv_hal_merge8u
+#define cv_hal_merge8u TEGRA_MERGE
+#undef cv_hal_merge16u
+#define cv_hal_merge16u TEGRA_MERGE
+#undef cv_hal_merge32s
+#define cv_hal_merge32s TEGRA_MERGE
+#undef cv_hal_merge64s
+#define cv_hal_merge64s(src, dst, len, cn) TEGRA_MERGE64S(CAROTENE_NS::s64, src, dst, len, cn)
+    
+                for( ; i <= lim; i += 4 )
+            {
+                internal::prefetch(src0 + i);
+                internal::prefetch(src1 + i);
+                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
+            }
+    
+    typedef void (* flipFunc)(const Size2D &size,
+                  const void * srcBase, ptrdiff_t srcStride,
+                  void * dstBase, ptrdiff_t dstStride,
+                  FLIP_MODE flipMode);
+    
+                int32x4_t ln04 = vaddq_s32(lane0, lane4);
+            int32x4_t ln13 = vaddq_s32(lane1, lane3);
+    
+    #include 'common.hpp'
+    
+    template <class charT, class traits>
+bool basic_regex_parser<charT, traits>::parse_extended()
+{
+   bool result = true;
+   switch(this->m_traits.syntax_type(*m_position))
+   {
+   case regex_constants::syntax_open_mark:
+      return parse_open_paren();
+   case regex_constants::syntax_close_mark:
+      return false;
+   case regex_constants::syntax_escape:
+      return parse_extended_escape();
+   case regex_constants::syntax_dot:
+      return parse_match_any();
+   case regex_constants::syntax_caret:
+      ++m_position;
+      this->append_state(
+         (this->flags() & regex_constants::no_mod_m ? syntax_element_buffer_start : syntax_element_start_line));
+      break;
+   case regex_constants::syntax_dollar:
+      ++m_position;
+      this->append_state(
+         (this->flags() & regex_constants::no_mod_m ? syntax_element_buffer_end : syntax_element_end_line));
+      break;
+   case regex_constants::syntax_star:
+      if(m_position == this->m_base)
+      {
+         fail(regex_constants::error_badrepeat, 0, 'The repeat operator \'*\' cannot start a regular expression.');
+         return false;
+      }
+      ++m_position;
+      return parse_repeat();
+   case regex_constants::syntax_question:
+      if(m_position == this->m_base)
+      {
+         fail(regex_constants::error_badrepeat, 0, 'The repeat operator \'?\' cannot start a regular expression.');
+         return false;
+      }
+      ++m_position;
+      return parse_repeat(0,1);
+   case regex_constants::syntax_plus:
+      if(m_position == this->m_base)
+      {
+         fail(regex_constants::error_badrepeat, 0, 'The repeat operator \'+\' cannot start a regular expression.');
+         return false;
+      }
+      ++m_position;
+      return parse_repeat(1);
+   case regex_constants::syntax_open_brace:
+      ++m_position;
+      return parse_repeat_range(false);
+   case regex_constants::syntax_close_brace:
+      if((this->flags() & regbase::no_perl_ex) == regbase::no_perl_ex)
+      {
+         fail(regex_constants::error_brace, this->m_position - this->m_base, 'Found a closing repetition operator } with no corresponding {.');
+         return false;
+      }
+      result = parse_literal();
+      break;
+   case regex_constants::syntax_or:
+      return parse_alt();
+   case regex_constants::syntax_open_set:
+      return parse_set();
+   case regex_constants::syntax_newline:
+      if(this->flags() & regbase::newline_alt)
+         return parse_alt();
+      else
+         return parse_literal();
+   case regex_constants::syntax_hash:
+      //
+      // If we have a mod_x flag set, then skip until
+      // we get to a newline character:
+      //
+      if((this->flags() 
+         & (regbase::no_perl_ex|regbase::mod_x))
+         == regbase::mod_x)
+      {
+         while((m_position != m_end) && !is_separator(*m_position++)){}
+         return true;
+      }
+      BOOST_FALLTHROUGH;
+   default:
+      result = parse_literal();
+      break;
+   }
+   return result;
 }
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     
-    
-    {      dword(a_formater.instruction);
+       mapfile_iterator& operator += (long off)
+   {
+      position(position() + off);
+      return *this;
+   }
+   mapfile_iterator& operator -= (long off)
+   {
+      position(position() - off);
+      return *this;
    }
     
-    void Config::ParseIniFile(const std::string &filename,
-                          const bool is_system /* = true */) {
-  IniSettingMap ini = IniSettingMap();
-  Config::ParseIniFile(filename, ini, false, is_system);
+    #if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+   && !defined(BOOST_REGEX_ICU_INSTANCES)\
+   && !defined(__SGI_STL_PORT)\
+   && !defined(_STLPORT_VERSION)
+// std:basic_string<>::const_iterator instances as well:
+template BOOST_REGEX_DECL void BOOST_REGEX_CALL 
+   match_results<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator>::maybe_assign(
+      const match_results<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator>& m);
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_match.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Iterator traits for selecting an iterator type as
+  *                an integral constant expression.
+  */
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_soft_buffer_end()
+{
+   if(m_match_flags & match_not_eob)
+      return false;
+   BidiIterator p(position);
+   while((p != last) && is_separator(traits_inst.translate(*p, icase)))++p;
+   if(p != last)
+      return false;
+   pstate = pstate->next.p;
+   return true;
 }
     
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
+       BOOST_ASSERT(rep->type == syntax_element_long_set_rep);
+   BOOST_ASSERT(rep->next.p != 0);
+   BOOST_ASSERT(rep->alt.p != 0);
+   BOOST_ASSERT(rep->next.p->type == syntax_element_long_set);
+   BOOST_ASSERT(count < rep->max);
     
-      /* Treat null as an empty path.
-   */
-  if (!addpath)
-    addpath = '';
+    #ifndef BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
+#define BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
     
-            virtual void ResetSmoothedGradients() override;
+    class BOOST_REGEX_DECL abstract_protected_call
+{
+public:
+   bool BOOST_REGEX_CALL execute()const;
+   // this stops gcc-4 from complaining:
+   virtual ~abstract_protected_call(){}
+private:
+   virtual bool call()const = 0;
+};
     
-        template <typename T> 
-    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
-    {
-        std::stringstream info;
-        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
-             << ', Dictionary version = ' << dictVersion;
-        return info.str();
-    }
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_fwd.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Forward declares boost::basic_regex<> and
+  *                associated typedefs.
+  */
     
-            ValuePtr Alias(bool /*readOnly = false*/) const override
-        {
-            LogicError('Value::Alias is currently unsupported for PackedValue objects.');
-        }
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     
-        // Releases the mutex
-    void Release()
-    {
-        assert(m_fd != -1);
-        // removing file
-        unlink(m_fileName.c_str());
-        // Note: file is intentionally removed *before* releasing the lock
-        // to ensure that locked file isn't deleted by the non-owner of the lock
-        m_lock.l_type = F_UNLCK;
-        // Now removing the lock and closing the file descriptor
-        // waiting processes will be notified
-        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
-        if (rc == FCNTL_ERROR)
-        {
-            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
-        }
-        close(m_fd);
-        m_fd = -1;
-    }
-    
-            const auto& inputSampleLayout = Input(0)->GetSampleLayout();
-        const auto& inputDims = inputSampleLayout.GetDims();
-        SmallVector<size_t> dims;
-        if (m_offset > 0)
-        {
-            dims.append(inputDims.begin(), inputDims.begin() + m_offset);
-        }
-        dims.push_back(m_num_class);
-        if (m_offset != inputDims.size())
-        {
-            dims.append(inputDims.begin() + m_offset, inputDims.end());
-        }
-    
-    /// Unlike checkChildProcessStatus, this will block until process exits.
-static bool getProcessExitCode(osquery::PlatformProcess& process,
-                               int& exitCode) {
-  if (!process.isValid()) {
-    return false;
-  }
-    }
-    
-      /**
-   * @brief Helper method to map a string action to `inotify` action mask bit.
-   *
-   * This helper method will set the `mask` value for this SubscriptionContext.
-   *
-   * @param action The string action, a value in kMaskAction%s.
-   */
-  void requireAction(const std::string& action) {
-    for (const auto& bit : kMaskActions) {
-      if (action == bit.second) {
-        mask = mask | bit.first;
+    template <class OutputIterator, class BidirectionalIterator, class traits, class charT, class Formatter>
+OutputIterator regex_replace(OutputIterator out,
+                         BidirectionalIterator first,
+                         BidirectionalIterator last,
+                         const basic_regex<charT, traits>& e, 
+                         Formatter fmt, 
+                         match_flag_type flags = match_default)
+{
+   regex_iterator<BidirectionalIterator, charT, traits> i(first, last, e, flags);
+   regex_iterator<BidirectionalIterator, charT, traits> j;
+   if(i == j)
+   {
+      if(!(flags & regex_constants::format_no_copy))
+         out = BOOST_REGEX_DETAIL_NS::copy(first, last, out);
+   }
+   else
+   {
+      BidirectionalIterator last_m(first);
+      while(i != j)
+      {
+         if(!(flags & regex_constants::format_no_copy))
+            out = BOOST_REGEX_DETAIL_NS::copy(i->prefix().first, i->prefix().second, out); 
+         out = i->format(out, fmt, flags, e);
+         last_m = (*i)[0].second;
+         if(flags & regex_constants::format_first_only)
+            break;
+         ++i;
       }
-    }
-  }
-    
-    int main(int argc, char* argv[]) {
-  osquery::Initializer runner(argc, argv, ToolType::EXTENSION);
-    }
+      if(!(flags & regex_constants::format_no_copy))
+         out = BOOST_REGEX_DETAIL_NS::copy(last_m, last, out);
+   }
+   return out;
+}
