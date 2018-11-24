@@ -1,79 +1,96 @@
 
         
-        Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
-ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur.
-tristique. Ut nec magna augue. {{ author }} Quisque ut fringilla lacus
-Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
-aliquet. Sed ultrices placerat ultricies.
-LIQUID
+          Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
     
-    group :development do
-  cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
-  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
-  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
-  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
-  cp_gem 'cocoapods-search',      'cocoapods-search'
-  cp_gem 'cocoapods-stats',       'cocoapods-stats'
-  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
-  cp_gem 'cocoapods-try',         'cocoapods-try'
-  cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'nanaimo',               'Nanaimo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
-    
-          def plugins_string
-        UI::ErrorReport.plugins_string
-      end
-    
-    module Spree
-  module Api
-    class BaseController < ActionController::Base
-      protect_from_forgery unless: -> { request.format.json? || request.format.xml? }
-    
-            def next
-          authorize! :update, @order, order_token
-          @order.next!
-          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
-        rescue StateMachines::InvalidTransition
-          respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
         end
-    
-            def payment_params
-          params.require(:payment).permit(permitted_payment_attributes)
-        end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-            def create
-          authorize! :create, Taxonomy
-          @taxonomy = Taxonomy.new(taxonomy_params)
-          if @taxonomy.save
-            respond_with(@taxonomy, status: 201, default_template: :show)
-          else
-            invalid_resource!(@taxonomy)
-          end
-        end
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
     
-      <form method='post' action='/msg'>
-    <input type='text' name='msg'>
-    <input type='submit' value='Add Message'>
-  </form>
+      describe '#pretty_jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('<\\/script>')
+    end
+  end
     
-          def process_job(job)
-        worker = new
-        worker.jid = job['jid']
-        worker.bid = job['bid'] if worker.respond_to?(:bid=)
-        Sidekiq::Testing.server_middleware.invoke(worker, job, job['queue']) do
-          execute_job(worker, job['args'])
+      def set_statuses
+    return unless page_requested?
+    
+        def create
+      authorize ReportNote, :create?
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
+  end
+    
+      def update
+    if subscription.verify(body, request.headers['HTTP_X_HUB_SIGNATURE'])
+      ProcessingWorker.perform_async(@account.id, body.force_encoding('UTF-8'))
+    end
+    
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
         end
+      rescue Errno::EACCES
+        # pass
       end
     
-        def self.inherited(child)
-      child.app_url = self.app_url
-      child.session_secret = self.session_secret
-      child.redis_pool = self.redis_pool
-      child.sessions = self.sessions
+          @options = options.merge(:_convert => true)
+      # Backwards compatibility
+      @options[:old] = true if @options[:alternate] == false
+      @template = template
+      @checked_encoding = false
     end
+    
+        # Modify the top Sass backtrace entries
+    # (that is, the most deeply nested ones)
+    # to have the given attributes.
+    #
+    # Specifically, this goes through the backtrace entries
+    # from most deeply nested to least,
+    # setting the given attributes for each entry.
+    # If an entry already has one of the given attributes set,
+    # the pre-existing attribute takes precedence
+    # and is not used for less deeply-nested entries
+    # (even if they don't have that attribute set).
+    #
+    # @param attrs [{Symbol => Object}] The information to add to the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def modify_backtrace(attrs)
+      attrs = attrs.reject {|_k, v| v.nil?}
+      # Move backwards through the backtrace
+      (0...sass_backtrace.size).to_a.reverse_each do |i|
+        entry = sass_backtrace[i]
+        sass_backtrace[i] = attrs.merge(entry)
+        attrs.reject! {|k, _v| entry.include?(k)}
+        break if attrs.empty?
+      end
+    end
+    
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
+      end
