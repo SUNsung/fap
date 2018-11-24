@@ -1,64 +1,11 @@
 
         
-                  Actions.sh('cd '#{clone_folder}' && git checkout #{checkout_param} '#{path}'')
-    
-          it 'adds clean_output param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            clean_output: true
-          )
-        end').runner.execute(:test)
-    
-          it 'Does not include merge commits in the list of commits' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(include_merges: false)
-        end').runner.execute(:test)
-    
-          it 'works with keychain-settings and name and password' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            name: 'test.keychain',
-            password: 'testpassword',
-            timeout: 600,
-            lock_when_sleeps: true,
-            lock_after_timeout: true,
-          })
-        end').runner.execute(:test)
-    
-          it 'generates the correct git command with an array of paths and/or pathspecs' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
-        end').runner.execute(:test)
-    
-                expect do
-              Fastlane::FastFile.new.parse('lane :test do
-                swiftlint
-              end').runner.execute(:test)
-            end.to raise_error(/SwiftLint finished with errors/)
-          end
-        end
-    
-        # An empty argument will be skipped, so return empty quotes.
-    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
-    return ''''.dup if str.empty?
-    
-    # test monkey patched method on both (simulated) OSes
-describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
-  describe 'on Windows' do
-    before(:each) do
-      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
+            it 'returns a label 'Missing Gems' if a given agent has dependencies missing' do
+      stub(@agent).dependencies_missing? { true }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'Missing Gems'
     end
-    
-              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.propagate_immediately = true
-            agent.disabled = true
-            agent.save!
-          },
     
       describe '#scenario_label' do
     it 'creates a scenario label with the scenario name' do
@@ -67,63 +14,167 @@ describe 'monkey patch of String.shellescape (via CrossplatformShellwords)' do
       )
     end
     
-        it 'outputs a structure containing name, description, the date, all agents & their links' do
-      data = exporter.as_json
-      expect(data[:name]).to eq(name)
-      expect(data[:description]).to eq(description)
-      expect(data[:source_url]).to eq(source_url)
-      expect(data[:guid]).to eq(guid)
-      expect(data[:schema_version]).to eq(1)
-      expect(data[:tag_fg_color]).to eq(tag_fg_color)
-      expect(data[:tag_bg_color]).to eq(tag_bg_color)
-      expect(data[:icon]).to eq(icon)
-      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
-      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
-      expect(data[:control_links]).to eq([])
-      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
-      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
-    
-          expect(Utils.unindent('Hello\n  I am indented')).to eq('Hello\n  I am indented')
-    
-      it 'truncates message to a reasonable length' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
-    log.message = 'a' * 11_000
-    log.save!
-    expect(log.message.length).to eq(10_000)
-  end
-    
-      it 'no raises a RuntimeError on symbols' do
-    v = :sym
-    lambda { v.taint }.should_not raise_error(RuntimeError)
-    v.tainted?.should == false
-  end
-    
-    describe 'Kernel.throw' do
-  it 'transfers control to the end of the active catch block waiting for symbol' do
-    catch(:blah) do
-      :value
-      throw :blah
-      fail('throw didn't transfer the control')
-    end.should be_nil
-  end
-    
-        desc 'Rebuilds integration fixtures'
-    task :rebuild_integration_fixtures do
-      unless system('which hg')
-        puts red('[!] Mercurial (`hg`) must be installed to rebuild the integration fixtures.')
-        exit 1
-      end
-      title 'Running Integration tests'
-      rm_rf 'tmp'
-      title 'Building all the fixtures'
-      sh('bundle exec bacon spec/integration.rb') {}
-      title 'Storing fixtures'
-      # Copy the files to the files produced by the specs to the after folders
-      FileList['tmp/*/transformed'].each do |source|
-        name = source.match(%r{^tmp/(.+)/transformed$})[1]
-        destination = 'spec/cocoapods-integration-specs/#{name}/after'
-        if File.exist?(destination)
-          rm_rf destination
-          mv source, destination
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
         end
       end
+    
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+    
+          @scheduler.schedule_scheduler_agents
+    
+        it 'cleans up old logs when there are more than log_length' do
+      stub(AgentLog).log_length { 4 }
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
+    end
+    
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+          flash[:notice] = I18n.t('admin.accounts.resend_confirmation.success')
+      redirect_to admin_accounts_path
+    end
+    
+        def index
+      authorize :custom_emoji, :index?
+      @custom_emojis = filtered_custom_emojis.eager_load(:local_counterpart).page(params[:page])
+    end
+    
+          @report_note = current_account.report_notes.new(resource_params)
+      @report = @report_note.report
+    
+      def hub_lease_seconds
+    params['hub.lease_seconds']
+  end
+    
+      def process_salmon
+    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
+  end
+end
+
+    
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
+    end
+  end
+    
+      private
+    
+    describe 'Kernel#system' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:system)
+  end
+    
+      it 'does not raise an error on a tainted, frozen object' do
+    o = Object.new.taint.freeze
+    o.taint.should equal(o)
+  end
+    
+    describe 'main#define_method' do
+  before :each do
+    @code = 'define_method(:boom) { :bam }'
+  end
+    
+        def register_lotus
+      Lotus::Assets.sources << assets_path
+    end
+    
+    class Converter
+  extend Forwardable
+  include Network
+  include LessConversion
+  include JsConversion
+  include FontsConversion
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
+    
+    
+    {    def replace_escaping(less)
+      less = less.gsub(/~'([^']+)'/, '\1').gsub(/~'([^']+)'/, '\1') # Get rid of ~'' escape
+      less.gsub!(/\$\{([^}]+)\}/, '$\1') # Get rid of @{} escape
+      less.gsub!(/'([^'\n]*)(\$[\w\-]+)([^'\n]*)'/, ''\1#{\2}\3'') # interpolate variable in string, e.g. url('$file-1x') => url('#{$file-1x}')
+      less.gsub(/(\W)e\(%\('?([^']*)'?\)\)/, '\1\2') # Get rid of e(%('')) escape
+    end
+    
+      # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
+    
+    # brew tap shopify/shopify
+# brew install toxiproxy
+# gem install toxiproxy
+#require 'toxiproxy'
+# simulate a non-localhost network for realer-world conditions.
+# adding 1ms of network latency has an ENORMOUS impact on benchmarks
+#Toxiproxy.populate([{
+    #'name': 'redis',
+    #'listen': '127.0.0.1:6380',
+    #'upstream': '127.0.0.1:6379'
+#}])
+    
+        worker_count.times do |count|
+      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
+        owner node[:owner_name]
+        group node[:owner_name]
+        mode 0644
+        source 'sidekiq.yml.erb'
+        variables({
+          :require => '/data/#{app}/current'
+        })
+      end
+    end
+    
+    module Sidekiq
+  module Extensions
+    ##
+    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
+    # delivery to Sidekiq.  Example:
+    #
+    #    UserMailer.delay.send_welcome_email(new_user)
+    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
+    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
+    class DelayedMailer
+      include Sidekiq::Worker
+    
+            begin
+          b = File.stat(fp.path)
+          next if orig_st.ino == b.ino && orig_st.dev == b.dev
+        rescue Errno::ENOENT
+        end
+    
+          def make_new
+        @klass.new(*@args)
+      end
+    end
+  end
+end
+
+    
+          s = sessions
+      return unless s
