@@ -1,198 +1,398 @@
 
         
-        // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel AVX intrinsics to access the SIMD instruction set.
-double DotProductAVX(const double* u, const double* v, int n) {
-  int max_offset = n - 4;
-  int offset = 0;
-  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
-  // v, and multiplying them together in parallel.
-  __m256d sum = _mm256_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 4;
-    // Aligned load is reputedly faster but requires 32 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
-      // Use aligned load.
-      __m256d floats1 = _mm256_load_pd(u);
-      __m256d floats2 = _mm256_load_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_load_pd(u + offset);
-        floats2 = _mm256_load_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    } else {
-      // Use unaligned load.
-      __m256d floats1 = _mm256_loadu_pd(u);
-      __m256d floats2 = _mm256_loadu_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_loadu_pd(u + offset);
-        floats2 = _mm256_loadu_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    void CostAnalyzer::PrintAnalysis(std::ostream& os, bool per_node_report,
+                                 bool verbose) const {
+  os << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time measured in ns (serialized): ' << std::right
+     << std::setw(20) << total_time_measured_serialized_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time measured in ns (actual): ' << std::right << std::setw(20)
+     << total_time_measured_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time analytical in ns (upper bound): ' << std::right
+     << std::setw(20) << total_time_analytical_upper_ << std::endl;
+  os << std::left << std::setw(50)
+     << 'Total time analytical in ns (lower bound): ' << std::right
+     << std::setw(20) << total_time_analytical_lower_ << std::endl;
+  double efficiency_upper = static_cast<double>(total_time_analytical_upper_) /
+                            static_cast<double>(total_time_measured_);
+  os << std::left << std::setw(50)
+     << 'Overall efficiency (analytical upper/actual): ' << std::right
+     << std::setw(20) << efficiency_upper << std::endl;
+  double efficiency_lower = static_cast<double>(total_time_analytical_lower_) /
+                            static_cast<double>(total_time_measured_);
+  os << std::left << std::setw(50)
+     << 'Overall efficiency (analytical lower/actual): ' << std::right
+     << std::setw(20) << efficiency_lower << std::endl;
+  os << std::endl;
     }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
   }
-  // Add the 4 product sums together horizontally. Not so easy as with sse, as
-  // there is no add across the upper/lower 128 bit boundary, so permute to
-  // move the upper 128 bits to lower in another register.
-  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
-  sum = _mm256_hadd_pd(sum, sum2);
-  sum = _mm256_hadd_pd(sum, sum);
-  double result;
-  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
-  // instruction, as that introduces a 70 cycle delay. All this casting is to
-  // fool the intrinsics into thinking we are extracting the bottom int64.
-  auto cast_sum = _mm256_castpd_si256(sum);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored '-Wstrict-aliasing'
-  *(reinterpret_cast<int64_t*>(&result)) =
-#if defined(_WIN32) || defined(__i386__)
-      // This is a very simple workaround that is activated
-      // for all platforms that do not have _mm256_extract_epi64.
-      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
-      ((uint64_t*)&cast_sum)[0]
-#else
-      _mm256_extract_epi64(cast_sum, 0)
-#endif
-      ;
-#pragma GCC diagnostic pop
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
 }
     
-    // Computes part of matrix.vector v = Wu. Computes N=32 results.
-// For details see PartialMatrixDotVector64 with N=32.
-static void PartialMatrixDotVector32(const int8_t* wi, const double* scales,
-                                     const int8_t* u, int num_in, int num_out,
-                                     double* v) {
-  // Register containing 16-bit ones for horizontal add with 16->32 bit
-  // conversion.
-  __m256i ones =
-      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
-  // Initialize all the results to 0.
-  __m256i result0 = _mm256_setzero_si256();
-  __m256i result1 = _mm256_setzero_si256();
-  __m256i result2 = _mm256_setzero_si256();
-  __m256i result3 = _mm256_setzero_si256();
-  // Iterate over the input (u), one registerful at a time.
-  for (int j = 0; j < num_in;) {
-    __m256i inputs =
-        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
-    // Inputs are processed in groups of kNumInputsPerGroup, replicated
-    // kNumInputGroups times.
-    for (int ig = 0; ig < kNumInputGroups && j < num_in;
-         ++ig, j += kNumInputsPerGroup) {
-      // Replicate the low 32 bits (4 inputs) 8 times.
-      __m256i rep_input =
-          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
-      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
-      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
-      __m256i weights, reps;
-      // Mul-add, with horizontal add of the 4 inputs to each of the results.
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result2);
-      MultiplyGroup(rep_input, ones, wi, weights, reps, result3);
-    }
+      // Close the underlying file and release its resources.
+  void Close();
+    
+    #endif  // TENSORFLOW_PYTHON_UTIL_KERNEL_REGISTRY_H_
+
+    
+    GeneratorContext::~GeneratorContext() {}
+    
+      auto* message2_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+    
+    void EnumGenerator::Generate(io::Printer* printer) {
+  WriteEnumDocComment(printer, descriptor_);
+  printer->Print('$access_level$ enum $name$ {\n',
+                 'access_level', class_access_level(),
+                 'name', descriptor_->name());
+  printer->Indent();
+  std::set<string> used_names;
+  std::set<int> used_number;
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+      WriteEnumValueDocComment(printer, descriptor_->value(i));
+      string original_name = descriptor_->value(i)->name();
+      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
+      // Make sure we don't get any duplicate names due to prefix removal.
+      while (!used_names.insert(name).second) {
+        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
+        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
+          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
+        name += '_';
+      }
+      int number = descriptor_->value(i)->number();
+      if (!used_number.insert(number).second) {
+          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      } else {
+          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      }
   }
-  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  ExtractResults(result1, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  ExtractResults(result2, shift_id, wi, scales, kNumOutputsPerRegister, v);
-  num_out -= kNumOutputsPerRegister * 3;
-  ExtractResults(result3, shift_id, wi, scales,
-                 std::min(kNumOutputsPerRegister, num_out), v);
+  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('\n');
 }
     
-      /**
-   * Returns information about the current paragraph, if available.
-   *
-   *   justification -
-   *     LEFT if ragged right, or fully justified and script is left-to-right.
-   *     RIGHT if ragged left, or fully justified and script is right-to-left.
-   *     unknown if it looks like source code or we have very few lines.
-   *   is_list_item -
-   *     true if we believe this is a member of an ordered or unordered list.
-   *   is_crown -
-   *     true if the first line of the paragraph is aligned with the other
-   *     lines of the paragraph even though subsequent paragraphs have first
-   *     line indents.  This typically indicates that this is the continuation
-   *     of a previous paragraph or that it is the very first paragraph in
-   *     the chapter.
-   *   first_line_indent -
-   *     For LEFT aligned paragraphs, the first text line of paragraphs of
-   *     this kind are indented this many pixels from the left edge of the
-   *     rest of the paragraph.
-   *     for RIGHT aligned paragraphs, the first text line of paragraphs of
-   *     this kind are indented this many pixels from the right edge of the
-   *     rest of the paragraph.
-   *     NOTE 1: This value may be negative.
-   *     NOTE 2: if *is_crown == true, the first line of this paragraph is
-   *             actually flush, and first_line_indent is set to the 'common'
-   *             first_line_indent for subsequent paragraphs in this block
-   *             of text.
-   */
-  void ParagraphInfo(tesseract::ParagraphJustification *justification,
-                     bool *is_list_item,
-                     bool *is_crown,
-                     int *first_line_indent) const;
+    void ExtensionGenerator::GenerateStaticVariablesInitialization(
+    io::Printer* printer) {
+  std::map<string, string> vars;
+  vars['root_class_and_method_name'] = root_class_and_method_name_;
+  vars['extended_type'] = ClassName(descriptor_->containing_type());
+  vars['number'] = SimpleItoa(descriptor_->number());
+    }
     
-      /// Threshold the source image as efficiently as possible to the output Pix.
-  /// Creates a Pix and sets pix to point to the resulting pointer.
-  /// Caller must use pixDestroy to free the created Pix.
-  /// Returns false on error.
-  virtual bool ThresholdToPix(PageSegMode pageseg_mode, Pix** pix);
+    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
+          &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    /**
- * @brief Parser plugin for logger configurations.
- */
-class LoggerConfigParserPlugin : public ConfigParserPlugin {
+    #if 0
+    
+    // Factory interface for death tests.  May be mocked out for testing.
+class DeathTestFactory {
  public:
-  std::vector<std::string> keys() const override {
-    return {kLoggerKey};
-  }
-    }
+  virtual ~DeathTestFactory() { }
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test) = 0;
+};
+    
+      // RemoveFileName returns the directory path with the filename removed.
+  // Example: FilePath('path/to/file').RemoveFileName() returns 'path/to/'.
+  // If the FilePath is 'a_file' or '/a_file', RemoveFileName returns
+  // FilePath('./') or, on Windows, FilePath('.\\'). If the filepath does
+  // not have a file, like 'just/a/dir/', it returns the FilePath unmodified.
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveFileName() const;
+    
+      // Returns the maximum representable finite floating-point number.
+  static RawType Max();
     
     
-    {  // This should work.
-  ASSERT_TRUE(doc.HasMember('custom_fake'));
-  EXPECT_TRUE(doc['custom_fake'].IsNumber());
-  EXPECT_EQ(1U, doc['custom_fake'].GetUint());
-  EXPECT_FALSE(Flag::getValue('custom_fake').empty());
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+  const T30 v30_;
+  const T31 v31_;
+  const T32 v32_;
+  const T33 v33_;
+  const T34 v34_;
+  const T35 v35_;
+  const T36 v36_;
+  const T37 v37_;
+  const T38 v38_;
+  const T39 v39_;
+  const T40 v40_;
+  const T41 v41_;
+  const T42 v42_;
+  const T43 v43_;
+};
+    
+    // The compiler used in Symbian has a bug that prevents us from declaring the
+// tuple template as a friend (it complains that tuple is redefined).  This
+// hack bypasses the bug by declaring the members that should otherwise be
+// private as public.
+// Sun Studio versions < 12 also have the above bug.
+#if defined(__SYMBIAN32__) || (defined(__SUNPRO_CC) && __SUNPRO_CC < 0x590)
+# define GTEST_DECLARE_TUPLE_AS_FRIEND_ public:
+#else
+# define GTEST_DECLARE_TUPLE_AS_FRIEND_ \
+    template <GTEST_10_TYPENAMES_(U)> friend class tuple; \
+   private:
+#endif
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22>
+struct Templates22 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates21<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22> Tail;
+};
+    
+    // Tests some trivial cases.
+TEST(IsPrimeTest, Trivial) {
+  EXPECT_FALSE(IsPrime(0));
+  EXPECT_FALSE(IsPrime(1));
+  EXPECT_TRUE(IsPrime(2));
+  EXPECT_TRUE(IsPrime(3));
 }
     
-      fpack.platform_ = '';
-  EXPECT_TRUE(fpack.checkPlatform());
+    
+    {  // Sets the 0-terminated C string this MyString object represents.
+  void Set(const char* c_string);
+};
     
     
-    {
-    {
-    {        SQL sql(query);
-        if (!sql.getStatus().ok()) {
-          return Status(1, 'Distributed discovery query has an SQL error');
+    {        auto maskMatrix = GetMatrix();
+        size_t rowOffset = offset[0];
+        size_t colOffset = offset[1];
+        size_t sliceRowLength = (shape[0] != NDShape::InferredDimension) ? shape[0] : (maskMatrix->GetNumRows() - rowOffset);
+        size_t sliceColLength = (shape[1] != NDShape::InferredDimension) ? shape[1] : (maskMatrix->GetNumCols() - colOffset);
+        if ((rowOffset == 0) && (sliceRowLength == maskMatrix->GetNumRows()))
+            maskMatrix->ColumnSlice(colOffset, sliceColLength).SetValue((char)maskKind);
+        else
+        {
+            // Since Matrix does not support strides in the row dimension, we will need to create separate slices for each column
+            for (size_t i = colOffset; i < (colOffset + sliceColLength); ++i)
+            {
+                auto column = maskMatrix->ColumnSlice(i, 1);
+                column.Reshape(1, maskMatrix->GetNumRows());
+                column.ColumnSlice(rowOffset, sliceRowLength).SetValue((char)maskKind);
+            }
         }
-        if (sql.rows().size() > 0) {
-          queries_to_run.insert(name);
-        }
-      }
     }
-  }
     
-        Row r;
-    r['example_text'] = 'example';
-    r['example_integer'] = INTEGER(1);
+            const NDShape& Shape() const override { return m_unpackedShape; }
+        DeviceDescriptor Device() const override { return m_isPacked ? m_packedData->Device() : Value::Device(); }
+        DataType GetDataType() const override { return m_isPacked ? m_packedData->GetDataType() : Value::GetDataType(); }
+        StorageFormat GetStorageFormat() const override { return m_isPacked? m_packedData->GetStorageFormat() : Value::GetStorageFormat(); }
+        bool IsReadOnly() const override { return m_isPacked ? m_packedData->IsReadOnly() : Value::IsReadOnly(); }
     
-    #define VLOG(x)                                                               \
-  (::benchmark::internal::GetLogInstanceForLevel(x) << '-- LOG(' << x << '):' \
-                                                                         ' ')
+            NDShape m_shape;
+        VariableKind m_varKind;
+        ::CNTK::DataType m_dataType;
+        std::weak_ptr<Function> m_ownerFunction;
+        std::unique_ptr<std::once_flag> m_initValueFlag;
+        NDArrayViewPtr m_value;
+        std::unique_ptr<ParameterInitializer> m_valueInitializer;
+        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
+        bool m_needsGradient;
+        std::wstring m_name;
+        std::vector<Axis> m_dynamicAxes;
+        bool m_isSparse;
+        std::wstring m_uid;
+        std::atomic<size_t> m_valueTimeStamp;
+        Variable m_blockFunctionVariableMapping;
+    
+    
+    
+    #endif
+    
+    //
+// error checking API:
+//
+BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex_constants::syntax_option_type ef, match_flag_type mf);
+//
+// function can_start:
+//
+template <class charT>
+inline bool can_start(charT c, const unsigned char* map, unsigned char mask)
+{
+   return ((c < static_cast<charT>(0)) ? true : ((c >= static_cast<charT>(1 << CHAR_BIT)) ? true : map[c] & mask));
+}
+inline bool can_start(char c, const unsigned char* map, unsigned char mask)
+{
+   return map[(unsigned char)c] & mask;
+}
+inline bool can_start(signed char c, const unsigned char* map, unsigned char mask)
+{
+   return map[(unsigned char)c] & mask;
+}
+inline bool can_start(unsigned char c, const unsigned char* map, unsigned char mask)
+{
+   return map[c] & mask;
+}
+inline bool can_start(unsigned short c, const unsigned char* map, unsigned char mask)
+{
+   return ((c >= (1 << CHAR_BIT)) ? true : map[c] & mask);
+}
+#if !defined(__hpux) && !defined(__WINSCW__)// WCHAR_MIN not usable in pp-directives.
+#if defined(WCHAR_MIN) && (WCHAR_MIN == 0) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+inline bool can_start(wchar_t c, const unsigned char* map, unsigned char mask)
+{
+   return ((c >= static_cast<wchar_t>(1u << CHAR_BIT)) ? true : map[c] & mask);
+}
+#endif
+#endif
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+inline bool can_start(unsigned int c, const unsigned char* map, unsigned char mask)
+{
+   return (((c >= static_cast<unsigned int>(1u << CHAR_BIT)) ? true : map[c] & mask));
+}
+#endif
+    
+    
+    {} // namespace boost
+#ifndef BOOST_REGEX_MATCH_HPP
+#include <boost/regex/v4/regex_match.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_SEARCH_HPP
+#include <boost/regex/v4/regex_search.hpp>
+#endif
+#ifndef BOOST_REGEX_ITERATOR_HPP
+#include <boost/regex/v4/regex_iterator.hpp>
+#endif
+#ifndef BOOST_REGEX_TOKEN_ITERATOR_HPP
+#include <boost/regex/v4/regex_token_iterator.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_GREP_HPP
+#include <boost/regex/v4/regex_grep.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_REPLACE_HPP
+#include <boost/regex/v4/regex_replace.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_REGEX_MERGE_HPP
+#include <boost/regex/v4/regex_merge.hpp>
+#endif
+#ifndef BOOST_REGEX_SPLIT_HPP
+#include <boost/regex/v4/regex_split.hpp>
+#endif
+    
+    typedef basic_regex<char, regex_traits<char> > regex;
+#ifndef BOOST_NO_WREGEX
+typedef basic_regex<wchar_t, regex_traits<wchar_t> > wregex;
+#endif
+    
+    template <class OutputIterator, class BidirectionalIterator, class traits, class charT, class Formatter>
+OutputIterator regex_replace(OutputIterator out,
+                         BidirectionalIterator first,
+                         BidirectionalIterator last,
+                         const basic_regex<charT, traits>& e, 
+                         Formatter fmt, 
+                         match_flag_type flags = match_default)
+{
+   regex_iterator<BidirectionalIterator, charT, traits> i(first, last, e, flags);
+   regex_iterator<BidirectionalIterator, charT, traits> j;
+   if(i == j)
+   {
+      if(!(flags & regex_constants::format_no_copy))
+         out = BOOST_REGEX_DETAIL_NS::copy(first, last, out);
+   }
+   else
+   {
+      BidirectionalIterator last_m(first);
+      while(i != j)
+      {
+         if(!(flags & regex_constants::format_no_copy))
+            out = BOOST_REGEX_DETAIL_NS::copy(i->prefix().first, i->prefix().second, out); 
+         out = i->format(out, fmt, flags, e);
+         last_m = (*i)[0].second;
+         if(flags & regex_constants::format_first_only)
+            break;
+         ++i;
+      }
+      if(!(flags & regex_constants::format_no_copy))
+         out = BOOST_REGEX_DETAIL_NS::copy(last_m, last, out);
+   }
+   return out;
+}
+    
+    template <class BidirectionalIterator,
+          class charT,
+          class traits>
+class regex_token_iterator_implementation 
+{
+   typedef basic_regex<charT, traits> regex_type;
+   typedef sub_match<BidirectionalIterator>      value_type;
+    }
