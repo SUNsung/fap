@@ -1,194 +1,93 @@
 
         
-            self.scores = self.output
-    self.predictions = tf.argmax(self.scores, axis=1)
-    
-      This function assumes the dataset_dict is a mapping ( string ->
-  to data_dict ).  It calls write_data for each data dictionary,
-  post-fixing the data filename with the key of the dataset.
-    
-    
-def build_vocab(filename):
-  data = _read_words(filename)
-    
-        if FLAGS.critic_update_dis_vars:
-      if FLAGS.discriminator_model == 'bidirectional_vd':
-        critic_vars = [
-            v for v in tf.trainable_variables()
-            if v.op.name.startswith('dis/rnn')
-        ]
-      elif FLAGS.discriminator_model == 'seq2seq_vd':
-        critic_vars = [
-            v for v in tf.trainable_variables()
-            if v.op.name.startswith('dis/decoder/rnn/multi_rnn_cell')
-        ]
-      critic_vars.extend(output_vars)
-    else:
-      critic_vars = output_vars
-    print('\nOptimizing Critic vars:')
-    for v in critic_vars:
-      print(v)
-    critic_grads = tf.gradients(critic_loss, critic_vars)
-    critic_grads_clipped, _ = tf.clip_by_global_norm(critic_grads,
-                                                     FLAGS.grad_clipping)
-    critic_train_op = critic_optimizer.apply_gradients(
-        zip(critic_grads_clipped, critic_vars), global_step=global_step)
-    return critic_train_op, critic_grads_clipped, critic_vars
+            return app
 
     
-        proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'echo test'])
-    assert proc.expect([TIMEOUT, u'test'])
+    
+@pytest.mark.parametrize('path', (
+    '/create',
+    '/1/update',
+))
+def test_create_update_validate(client, auth, path):
+    auth.login()
+    response = client.post(path, data={'title': '', 'body': ''})
+    assert b'Title is required.' in response.data
+    
+    import pytest
+from flaskr.db import get_db
+    
+        from inspect import getargspec
+    from cStringIO import StringIO
     
     
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
+def jsonify(*args, **kwargs):
+    '''This function wraps :func:`dumps` to add a few enhancements that make
+    life easier.  It turns the JSON output into a :class:`~flask.Response`
+    object with the :mimetype:`application/json` mimetype.  For convenience, it
+    also converts multiple arguments into an array or multiple keyword arguments
+    into a dict.  This means that both ``jsonify(1,2,3)`` and
+    ``jsonify([1,2,3])`` serialize to ``[1,2,3]``.
     
-        assert match(command)
+    Originally created for this issue:
+https://github.com/scrapy/scrapy/issues/606
     
+        cmd = cmds[cmdname]
+    parser.usage = 'scrapy %s %s' % (cmdname, cmd.syntax())
+    parser.description = cmd.long_desc()
+    settings.setdict(cmd.default_settings, priority='command')
+    cmd.settings = settings
+    cmd.add_options(parser)
+    opts, args = parser.parse_args(args=argv[1:])
+    _run_print_help(parser, cmd.process_options, args, opts)
     
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
-def test_match(script, output):
-    assert match(Command(script, output))
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
     
-    
-def test_match():
-    command = Command('brew install sshfs', output)
-    assert match(command)
-    
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
-    
-    REWRITE_HTTPS_ARGS_WITH_END = [
-    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,NE,R=permanent]']
-'''Apache version >= 2.3.9 rewrite rule arguments used for redirections to
-    https vhost'''
-    
-        def test_same_server(self):
-        from certbot_apache.obj import VirtualHost
-        no_name1 = VirtualHost(
-            'fp', 'vhp', set([self.addr1]), False, False, None)
-        no_name2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, None)
-        no_name3 = VirtualHost(
-            'fp', 'vhp', set([self.addr_default]),
-            False, False, None)
-        no_name4 = VirtualHost(
-            'fp', 'vhp', set([self.addr2, self.addr_default]),
-            False, False, None)
-    
-            vhs = []
-        for match in vh_match:
-            # pylint: disable=protected-access
-            vhs.append(self.sni.configurator._create_vhost(match))
-        self.assertEqual(len(vhs), 2)
-        for vhost in vhs:
-            self.assertEqual(vhost.addrs, set([obj.Addr.fromstring('*:443')]))
-            names = vhost.get_names()
-            self.assertTrue(names in z_domains)
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
-        db.delete_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
-    
-            for project in RangeQuerySetWrapperWithProgressBar(orm.Project.objects.all()):
-            orm.Environment.objects.filter(
-                project_id=project.id, organization_id__isnull=True
-            ).update(organization_id=project.organization_id)
-    
-            for renv in dupe_release_envs:
-            release_id = renv['release_id']
-            organization_id = renv['organization_id']
-            environment_id = renv['environment_id']
-            renvs = list(
-                orm.ReleaseEnvironment.objects.filter(
-                    release_id=release_id,
-                    organization_id=organization_id,
-                    environment_id=environment_id,
-                ).order_by('first_seen')
-            )
-            to_renv = renvs[0]
-            from_renvs = renvs[1:]
-            last_seen = max([re.last_seen for re in renvs])
-            orm.ReleaseEnvironment.objects.filter(
-                id=to_renv.id,
-            ).update(last_seen=last_seen)
-            orm.ReleaseEnvironment.objects.filter(
-                id__in=[re.id for re in from_renvs],
-            ).delete()
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
-        db.delete_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
+        def gotClient(self, client, request, filepath):
+        self.client = client
+        protocol = ReceivedDataProtocol(request.meta.get('ftp_local_filename'))
+        return client.retrieveFile(filepath, protocol)\
+                .addCallbacks(callback=self._build_response,
+                        callbackArgs=(request, protocol),
+                        errback=self._failed,
+                        errbackArgs=(request,))
     
     
-def make_handler(value):
-    return BitHandler(
-        keys=(
-            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
-            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
-            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
-        ),
-        value=value,
-    )
+def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)  # select large prime number.
+    e_1 = primitiveRoot(p)  # one primitive root on modulo p.
+    d = random.randrange(3, p)  # private_key -> have to be greater than 2 for safety.
+    e_2 = cryptoMath.findModInverse(pow(e_1, d, p), p)
+    
+    def rabinMiller(num):
+    s = num - 1
+    t = 0
+    
+            next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
+    
+    print('writing anagrams to file...')
+with open('anagrams.txt', 'w') as file:
+    file.write('all_anagrams = ')
+    file.write(pprint.pformat(all_anagrams))
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'CommitAuthor.external_id'
-        db.add_column(
-            'sentry_commitauthor',
-            'external_id',
-            self.gf('django.db.models.fields.CharField')(max_length=164, null=True),
-            keep_default=False
-        )
-    
-    FLASH_BRIEFINGS_API_ENDPOINT = '/api/alexa/flash_briefings/{briefing_id}'
-    
-        @property
-    def name(self):
-        '''Return the name of the event.'''
-        return self._name
-    
-    
-class ActiontecDeviceScanner(DeviceScanner):
-    '''This class queries an actiontec router for connected devices.'''
-    
-    
-def setup_scanner(hass, config, see, discovery_info=None):
-    '''Set up the demo tracker.'''
-    def offset():
-        '''Return random offset.'''
-        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-})
-    
-            # Test the router is accessible.
-        data = self.get_swisscom_data()
-        self.success_init = data is not None
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/device_tracker.tado/
 '''
-import logging
-from datetime import timedelta
-from collections import namedtuple
-    
-                    # Remove file if we started downloading but failed
-                if final_path and os.path.isfile(final_path):
-                    os.remove(final_path)
-    
-    import voluptuous as vol
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
+* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a * b
+* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
+*
+* As far as the modulo is concerned,
+* the fact : (a+b) % c = ((a%c) + (b%c)) % c
+* Now apply RULE 1 OR 2, whichever is required.
+'''
