@@ -1,132 +1,121 @@
 
         
-            def build_and_queue_request(url, options, &block)
-      request = Request.new(url, request_options.merge(options))
-      request.on_complete(&block) if block
-      queue(request)
-      request
+              https://pip.readthedocs.org/en/stable/installing/#install-pip
+    EOS
+  when 'pil' then <<-EOS.undent
+    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
+    EOS
+  when 'macruby' then <<-EOS.undent
+    MacRuby works better when you install their package:
+      http://www.macruby.org/
+    EOS
+  when /(lib)?lzma/
+    'lzma is now part of the xz formula.'
+  when 'xcode'
+    if MacOS.version >= :lion
+      <<-EOS.undent
+      Xcode can be installed from the App Store.
+      EOS
+    else
+      <<-EOS.undent
+      Xcode can be installed from https://developer.apple.com/xcode/downloads/
+      EOS
     end
+  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
+    Installing gtest system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
+    Installing gmock system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'sshpass' then <<-EOS.undent
+    We won't add sshpass because it makes it too easy for novice SSH users to
+    ruin SSH's security.
+    EOS
+  when 'gsutil' then <<-EOS.undent
+    Install gsutil with `pip install gsutil`
+    EOS
+  when 'clojure' then <<-EOS.undent
+    Clojure isn't really a program but a library managed as part of a
+    project and Leiningen is the user interface to that library.
     
-        def self.join(*args)
-      PARSER.join(*args)
-    end
-    
-            # Remove ng-* attributes
-        css('*').each do |node|
-          node.attributes.each_key do |attribute|
-            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
-          end
-        end
-    
-      def set_account
-    @account = Account.find_local!(params[:account_username])
-  end
-    
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
-end
-
-    
-        def resubscribe
-      authorize :instance, :resubscribe?
-      params.require(:by_domain)
-      Pubsubhubbub::SubscribeWorker.push_bulk(subscribeable_accounts.pluck(:id))
-      redirect_to admin_instances_path
-    end
-    
-            if params[:create_and_unresolve]
-          @report.unresolve!
-          log_action :reopen, @report
-        end
-    
-          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
-    
-        context 'float types' do
-      it 'controls the number of decimal places displayed in fraction part' do
-        format('%.10e', 109.52).should == '1.0952000000e+02'
-        format('%.10E', 109.52).should == '1.0952000000E+02'
-        format('%.10f', 10.952).should == '10.9520000000'
-        format('%.10a', 196).should == '0x1.8800000000p+7'
-        format('%.10A', 196).should == '0X1.8800000000P+7'
+        if f.keg_only?
+      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
+      unless Language::Python.in_sys_path?('python', keg_site_packages)
+        s = <<-EOS.undent
+          If you need Python to find bindings for this keg-only formula, run:
+            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
+        EOS
+        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
       end
+      return s
+    end
     
-      it 'creates a public method in script binding' do
-    eval @code, script_binding
-    Object.should have_method :boom
-  end
-    
-          def api_key
-        request.headers['X-Spree-Token'] || params[:token]
-      end
-      helper_method :api_key
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
+    class PrettyListing
+  def initialize(path)
+    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
+      case pn.basename.to_s
+      when 'bin', 'sbin'
+        pn.find { |pnn| puts pnn unless pnn.directory? }
+      when 'lib'
+        print_dir pn do |pnn|
+          # dylibs have multiple symlinks and we don't care about them
+          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
+        end
+      else
+        if pn.directory?
+          if pn.symlink?
+            puts '#{pn} -> #{pn.readlink}'
           else
-            raise CanCan::AccessDenied
+            print_dir pn
           end
-        end
-      end
-    end
-  end
-end
-
-    
-            def show
-          @image = Image.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@image)
-        end
-    
-            def inventory_unit_params
-          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        elsif Metafiles.list?(pn.basename.to_s)
+          puts pn
         end
       end
     end
   end
-end
-
     
-            def show
-          expires_in 15.minutes, public: true
-          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
-          headers['Surrogate-Key'] = 'product_id=1'
-          respond_with(@product)
-        end
+      find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
+        # replace CSS rule blocks matching rule_prefix with yield(rule_block, rule_pos)
+    # will also include immediately preceding comments in rule_block
+    #
+    # option :comments -- include immediately preceding comments in rule_block
+    #
+    # replace_rules('.a{ \n .b{} }', '.b') { |rule, pos| '>#{rule}<'  } #=> '.a{ \n >.b{}< }'
+    def replace_rules(less, selector = SELECTOR_RE, options = {}, &block)
+      options       = {prefix: true, comments: true}.merge(options || {})
+      less          = less.dup
+      s             = CharStringScanner.new(less)
+      rule_re       = if options[:prefix]
+                        /(?:#{selector}[#{SELECTOR_CHAR})=(\s]*?#{RULE_OPEN_BRACE_RE})/
+                      else
+                        /#{selector}[\s]*#{RULE_OPEN_BRACE_RE}/
+                      end
+      rule_start_re = if options[:comments]
+                        /(?:#{COMMENT_RE}*)^#{rule_re}/
+                      else
+                        /^#{rule_re}/
+                      end
     
-            private
     
-              @stock_item = scope.new(stock_item_params)
-          if @stock_item.save
-            @stock_item.adjust_count_on_hand(count_on_hand)
-            respond_with(@stock_item, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_item)
-          end
-        end
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
+    def get_file(url)
+      uri = URI(url)
+      cache_path = './#@cache_path#{uri.path}#{uri.query.tr('?&=', '-') if uri.query}'
+      FileUtils.mkdir_p File.dirname(cache_path)
+      if File.exists?(cache_path)
+        log_http_get_file url, true
+        File.read(cache_path, mode: 'rb')
+      else
+        log_http_get_file url, false
+        content = open(url).read
+        File.open(cache_path, 'wb') { |f| f.write content }
+        content
+      end
+    end
