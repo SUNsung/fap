@@ -1,238 +1,192 @@
 
         
-        Menu::~Menu() {
-  Destroy();
+        #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+
+    
+    namespace Ui {
+    class TransactionDescDialog;
 }
     
-    void Menu::Insert(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.insert(begin+pos,menu_item);
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    menu_item->UpdateKeys(gtk_accel_group);
+        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
+    // takes a key=value pair followed by an OptArguments, making this valid.
+    // Because an OptArguments contains no semantic data, there is no point in
+    // parsing it.
+    CheckParseTorReplyMapping(
+        'SOME=args,here MORE optional=arguments  here', {
+            {'SOME', 'args,here'},
+        });
+    
+    
+    {}  // namespace caffe
+    
+    template <typename Dtype>
+inline void Layer<Dtype>::Backward(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down,
+    const vector<Blob<Dtype>*>& bottom) {
+  switch (Caffe::mode()) {
+  case Caffe::CPU:
+    Backward_cpu(top, propagate_down, bottom);
+    break;
+  case Caffe::GPU:
+    Backward_gpu(top, propagate_down, bottom);
+    break;
+  default:
+    LOG(FATAL) << 'Unknown caffe mode.';
   }
-  gtk_menu_shell_insert(GTK_MENU_SHELL(menu_), menu_item->menu_item_, pos);
 }
     
-    void Menu::Append(MenuItem* menu_item) {
-  if (menu_item->submenu_)
-    menu_model_->AddSubMenu(menu_item->id(), menu_item->label_,
-                            menu_item->submenu_->menu_model_.get());
-  else if (menu_item->type_ == 'normal')
-    menu_model_->AddItem(menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'checkbox')
-    menu_model_->AddCheckItem(menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'separator')
-    menu_model_->AddSeparator(ui::NORMAL_SEPARATOR);
+      // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline int MaxTopBlobs() const { return 2; }
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      ui::KeyboardCode keyval = ui::VKEY_UNKNOWN;
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of SigmoidLayer.
+ */
+template <typename Dtype>
+class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
  public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  explicit CuDNNSigmoidLayer(const LayerParameter& param)
+      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSigmoidLayer();
+    }
     
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
+    #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+    #include 'blobbox.h'             // for BLOBNBOX (ptr only), BlobSpecialText...
+#include 'equationdetectbase.h'  // for EquationDetectBase
+#include 'genericvector.h'       // for GenericVector
+#include 'tesseractclass.h'      // for Tesseract
+#include 'unichar.h'             // for UNICHAR_ID
+    
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
+    
+      STRING paramfile;
+  paramfile = tess->datadir;
+  paramfile += VARDIR;             // parameters dir
+  paramfile += 'edited';           // actual name
+    
+      // Constructors for the various ParamTypes.
+  ParamContent() = default;
+  explicit ParamContent(tesseract::StringParam* it);
+  explicit ParamContent(tesseract::IntParam* it);
+  explicit ParamContent(tesseract::BoolParam* it);
+  explicit ParamContent(tesseract::DoubleParam* it);
+    
+      // Try to adjust the blamer bundle.
+  if (orig_bb != nullptr) {
+    // TODO(rays) Looks like a leak to me.
+    // orig_bb should take, rather than copy.
+    word->blamer_bundle = new BlamerBundle();
+    word2->blamer_bundle = new BlamerBundle();
+    orig_bb->SplitBundle(chopped->blobs.back()->bounding_box().right(),
+                         word2->chopped_word->blobs[0]->bounding_box().left(),
+                         wordrec_debug_blamer,
+                         word->blamer_bundle, word2->blamer_bundle);
+  }
+    
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
+  }
+    
+    
+    { protected:
+  int n_ = 0;
+  std::mutex m_;
+  std::condition_variable cv_;
 };
     
-    namespace extensions {
+      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
+  const int canonical_axis_w =
+      canonical_axis_index_(axis_w, in[1].dims().size());
+  const int N = pretransposed_weight
+      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
+      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+    
+    // FreeOp frees the content of the output blob. We allow it to take in input
+// blobs purely for the reason that it can 'wait' on the input blobs to be
+// produced by some of the earlier operators before a free is called.
+template <class Context>
+class FreeOp : public Operator<Context> {
+ public:
+  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
     }
     
-            if (policy == CONVERT_POLICY_SATURATE)
-        {
-            for (; j < roiw16; j += 16)
-            {
-                internal::prefetch(src0 + j);
-                internal::prefetch(src1 + j);
-                uint8x16_t v_src0 = vld1q_u8(src0 + j);
-                int16x8_t v_src00 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src0)));
-                int16x8_t v_src01 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src0)));
-                int16x8_t v_src10 = vld1q_s16(src1 + j), v_src11 = vld1q_s16(src1 + j + 8);
-                int16x8_t v_dst0 = vqaddq_s16(v_src00, v_src10);
-                int16x8_t v_dst1 = vqaddq_s16(v_src01, v_src11);
-                vst1q_s16(dst + j, v_dst0);
-                vst1q_s16(dst + j + 8, v_dst1);
-            }
-            for (; j < roiw8; j += 8)
-            {
-                int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src0 + j)));
-                int16x8_t v_src1 = vld1q_s16(src1 + j);
-                int16x8_t v_dst = vqaddq_s16(v_src0, v_src1);
-                vst1q_s16(dst + j, v_dst);
-            }
-    }
     
-    bool isBlur3x3Supported(const Size2D &size, BORDER_MODE border)
-{
-    return isSupportedConfiguration() && size.width >= 8 &&
-        (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REPLICATE);
-}
-    
-    #define MERGE_QUAD(sgn, bits, n) { \
-                                     FILL_LINES##n(PREF, sgn##bits) \
-                                     MERGE_ASM##n(sgn, bits) \
-                                 }
-    
-    #define IMPL_CMPOP(op, type)                              \
-void cmp##op(const Size2D &size,                          \
-             const type * src0Base, ptrdiff_t src0Stride, \
-             const type * src1Base, ptrdiff_t src1Stride, \
-                       u8 *dstBase, ptrdiff_t dstStride)  \
-{                                                         \
-    internal::assertSupportedConfiguration();             \
-    vcompare(size,                                        \
-             src0Base, src0Stride,                        \
-             src1Base, src1Stride,                        \
-             dstBase, dstStride,                          \
-             OpCmp##op<type>());                          \
-}
-    
-    /*!
- *  Aligns pointer by the certain number of bytes
- *
- *  This small inline function aligns the pointer by the certain number of bytes by shifting
- *  it forward by 0 or a positive offset.
- */
-template<typename T> inline T* alignPtr(T* ptr, size_t n=sizeof(T))
-{
-    return (T*)(((size_t)ptr + n-1) & -n);
-}
-    
-    void rshift(const Size2D &size,
-            const s16 * srcBase, ptrdiff_t srcStride,
-            u8 * dstBase, ptrdiff_t dstStride,
-            u32 shift, CONVERT_POLICY cpolicy)
-{
-    internal::assertSupportedConfiguration();
-    }
-    
-    template <>
-int32x4_t vshrq_s32<0>(int32x4_t value)
-{
-    return value;
-}
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-    REGISTER_CPU_OPERATOR(
-    SubGradient,
-    BinaryElementwiseGradientOp<
-        NumericTypes,
-        CPUContext,
-        SubFunctor<CPUContext>>);
-    
-    REGISTER_CPU_OPERATOR(
-    MergeSingleMapFeatureTensorsGradient,
-    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleMapFeatureTensorsGradient)
-    .SetDoc(
-        'Explode given multi-feature tensors with map features into '
-        'multiple single-feature tensor.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_presence', '.presence')
-    .Input(2, 'out_values_values_grad', '.values.values_grad')
-    .Output(0, 'in1_values_grad', '.values_grad');
-REGISTER_GRADIENT(
-    MergeSingleMapFeatureTensors,
-    GetMergeSingleMapFeatureTensorsGradient);
-    
-    #include <unordered_map>
-#include <vector>
-    
-    workspace.FeedBlob('X', (np.random.uniform(-10, 10, (5,5))).astype(np.float32))
-print('X before running op:', workspace.FetchBlob('X'))
-workspace.RunOperatorOnce(op)
-print('X after running op:', workspace.FetchBlob('X'))
-    
-    
-    {
-    {      // Record end time
-      uint64_t end_time = env->NowMicros();
-      double elapsed = static_cast<double>(end_time - start_time) * 1e-6;
-      uint32_t qps = static_cast<uint32_t>(
-          static_cast<double>(FLAGS_threads * FLAGS_ops_per_thread) / elapsed);
-      fprintf(stdout, 'Complete in %.3f s; QPS = %u\n', elapsed, qps);
-    }
-    return true;
+    {class GetHalfToFloatGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'FloatToHalf', '', vector<string>{GO(0)}, vector<string>{GI(0)});
   }
-    
-    namespace rocksdb {
-    }
-    
-      virtual Status EnableFileDeletions(bool /*force*/) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-  virtual Status GetLiveFiles(std::vector<std::string>&,
-                              uint64_t* /*manifest_file_size*/,
-                              bool /*flush_memtable*/ = true) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-    
-    Status MockEnv::GetTestDirectory(std::string* path) {
-  *path = '/test';
-  return Status::OK();
-}
-    
-          // Print the message
-      if (p < limit) {
-        va_list backup_ap;
-        va_copy(backup_ap, ap);
-        p += vsnprintf(p, limit - p, format, backup_ap);
-        va_end(backup_ap);
-      }
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
-    
-    
-    {}  // namespace guetzli
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
-    }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
-}
-    
-        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        base_type::fence_before_store(order);
-        BOOST_ATOMIC_DETAIL_ARM_STORE64(&storage, v);
-        base_type::fence_after_store(order);
-    }
+};
+REGISTER_GRADIENT(HalfToFloat, GetHalfToFloatGradient);
+NO_GRADIENT(Float16ConstantFill);
+} // namespace caffe2
