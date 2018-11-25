@@ -1,190 +1,173 @@
 
         
-        from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-        plt.figure('scikit-learn GLM benchmark results')
-    plt.xlabel('Dimensions')
-    plt.ylabel('Time (s)')
-    plt.plot(dimensions, time_ridge, color='r')
-    plt.plot(dimensions, time_ols, color='g')
-    plt.plot(dimensions, time_lasso, color='b')
-    
-        return results
-    
-    import numpy as np
-from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
-    
-    if __name__ == '__main__':
-    list_n_samples = np.linspace(100, 10000, 5).astype(np.int)
-    list_n_features = [10, 100, 1000]
-    n_test = 1000
-    max_iter = 1000
-    noise = 0.1
-    alpha = 0.01
-    sgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    elnet_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    ridge_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    asgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
-    for i, n_train in enumerate(list_n_samples):
-        for j, n_features in enumerate(list_n_features):
-            X, y, coef = make_regression(
-                n_samples=n_train + n_test, n_features=n_features,
-                noise=noise, coef=True)
-    
-    Line #      Hits         Time  Per Hit   % Time  Line Contents
-==============================================================
-    51                                           @profile
-    52                                           def benchmark_dense_predict():
-    53       301          640      2.1      0.1      for _ in range(300):
-    54       300       532339   1774.5     99.9          clf.predict(X_test)
+            assert proc.expect([TIMEOUT, u'usage'])
     
     
-print(':orphan:')
-print()
-heading = 'Available documentation for Scikit-learn'
-print(heading)
-print('=' * len(heading))
-print()
-print('Web-based documentation is available for versions listed below:')
-print()
+output = '''sshfs: OsxfuseRequirement unsatisfied!
     
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
+    no_such_subcommand = '''error: no such subcommand
     
-        if sys.platform == 'win32':
-        win32_lib = os.path.abspath( os.path.join(python_path, 'lib', 'win32'))
-        sys.path.append(win32_lib)
-    elif sys.platform.startswith('linux'):
-        linux_lib = os.path.abspath( os.path.join(python_path, 'lib', 'linux'))
-        sys.path.append(linux_lib)
-    elif sys.platform == 'darwin':
-        darwin_lib = os.path.abspath( os.path.join(python_path, 'lib', 'darwin'))
-        sys.path.append(darwin_lib)
-        extra_lib = '/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python'
-        sys.path.append(extra_lib)
-    
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
-    
-        def __init__(
-        self, grammarDecisionDescription, decisionNumber, stateNumber, input
-        ):
-        RecognitionException.__init__(self, input)
-    
-            if args:
-            if 'gui' in conf and conf['gui']:
-                # Enter GUI mode.
-                from .gui import gui_main
-                gui_main(*args, **conf)
-            else:
-                # Enter console mode.
-                from .console import console_main
-                console_main(*args, **conf)
-    
-    class VideoExtractor():
-    def __init__(self, *args):
-        self.url = None
-        self.title = None
-        self.vid = None
-        self.m3u8_url = None
-        self.streams = {}
-        self.streams_sorted = []
-        self.audiolang = None
-        self.password_protected = False
-        self.dash_streams = {}
-        self.caption_tracks = {}
-        self.out = False
-        self.ua = None
-        self.referer = None
-        self.danmuku = None
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-            assert vid
+    '''
     
     
-def embed_download(url, output_dir = '.', merge = True, info_only = False ,**kwargs):
-    content = get_content(url, headers=fake_headers)
-    found = False
-    title = match1(content, '<title>([^<>]+)</title>')
+def benchmark(estimator, data):
+    gc.collect()
+    print('Benching %s' % estimator)
+    t0 = time()
+    estimator.fit(data)
+    training_time = time() - t0
+    data_t = estimator.transform(data)
+    data_r = estimator.inverse_transform(data_t)
+    reconstruction_error = np.mean(np.abs(data - data_r))
+    return {'time': training_time, 'error': reconstruction_error}
+    
+        for i, DD in enumerate(Drange):
+        print('D = %i (%i out of %i)' % (DD, i + 1, len(Drange)))
+        X = get_data(N, DD, dataset)
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=k,
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
     
     
-site_info = 'fantasy.tv'
-download = fantasy_download
-download_playlist = playlist_not_supported('fantasy.tv')
+def compute_bench(samples_range, features_range):
+    
+    def plot(func):
+    random_state = check_random_state(0)
+    one_core = []
+    multi_core = []
+    sample_sizes = range(1000, 6000, 1000)
+    
+    
+def compute_bench(samples_range, features_range, n_iter=3, rank=50):
+    
+    ratio = scikits_time / scipy_time
+    
+    from time import time
+    
+    from scipy.sparse.csr import csr_matrix
+import numpy as np
+from sklearn.linear_model.stochastic_gradient import SGDRegressor
+from sklearn.metrics import r2_score
+    
+    
+df = pd.DataFrame(res).set_index(['analyzer', 'ngram_range', 'vectorizer'])
+    
+        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
+                                   'blob/{revision}/{package}/'
+                                   '{path}#L{lineno}')
+    '''
+    revision = _get_git_revision()
+    return partial(_linkcode_resolve, revision=revision, package=package,
+                   url_fmt=url_fmt)
 
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
     
-        if results.overwrite and os.path.exists(output_directory):
-        shutil.rmtree(output_directory)
-    
-            # The following code is provided here to aid in writing a correct migration
-        # Changing field 'ReleaseEnvironment.project_id'
-        db.alter_column(
-            'sentry_environmentrelease', 'project_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-        )
-    
-            for release_project in RangeQuerySetWrapperWithProgressBar(
-            orm.ReleaseProject.objects.all()
-        ):
-            orm.ReleaseProject.objects.filter(id=release_project.id).update(
-                new_groups=orm.Group.objects.filter(
-                    project_id=release_project.project_id,
-                    first_release_id=release_project.release_id,
-                ).count()
-            )
+class Resource(jose.Field):
+    '''Resource MITM field.'''
     
     
-def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)  # select large prime number.
-    e_1 = primitiveRoot(p)  # one primitive root on modulo p.
-    d = random.randrange(3, p)  # private_key -> have to be greater than 2 for safety.
-    e_2 = cryptoMath.findModInverse(pow(e_1, d, p), p)
+class Signature(jose.Signature):
+    '''ACME-specific Signature. Uses ACME-specific Header for customer fields.'''
+    __slots__ = jose.Signature._orig_slots  # pylint: disable=no-member
     
-        if num in lowPrimes:
-        return True
+            self.assertRaises(
+            jose.DeserializationError, nonce_field.decode, self.wrong_nonce)
+        self.assertEqual(b'foo', nonce_field.decode(self.good_nonce))
     
-            while self.values[new_key] is not None \
-                and self.values[new_key] != key:
-            i += 1
-            new_key = self.hash_function(key + i*i) if not \
-                self.balanced_factor() >= self.lim_charge else None
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'acme-python', u'acme-python Documentation',
+     [author], 1),
+    ('man/jws', 'jws', u'jws script documentation', [project], 1),
+]
     
-    try:
-	xrange		#Python 2
-except NameError:
-	xrange = range	#Python 3
     
-    Inputs:
-  - X , a 2D numpy array of features.
-  - k , number of clusters to create.
-  - initial_centroids , initial centroid values generated by utility function(mentioned in usage).
-  - maxiter , maximum number of iterations to process.
-  - heterogeneity , empty list that will be filled with hetrogeneity values if passed to kmeans func.
+DIRECTORY_URL = 'https://acme-staging.api.letsencrypt.org/directory'
+BITS = 2048  # minimum for Boulder
+DOMAIN = 'example1.com'  # example.com is ignored by Boulder
     
-            a += a
-        b >>= 1
+            self.assertRaises(
+            errors.PluginError, self.config.recovery_routine)
     
-    def loadDictionary():
-    path = os.path.split(os.path.realpath(__file__))
-    dictionaryFile = open(path[0] + '/Dictionary.txt')
-    englishWords = {}
-    for word in dictionaryFile.read().split('\n'):
-        englishWords[word] = None
-    dictionaryFile.close()
-    return englishWords
+        def test_perform2(self):
+        # Avoid load module
+        self.sni.configurator.parser.modules.add('ssl_module')
+        self.sni.configurator.parser.modules.add('socache_shmcb_module')
+        acme_responses = []
+        for achall in self.achalls:
+            self.sni.add_chall(achall)
+            acme_responses.append(achall.response(self.auth_key))
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-apache.tex', u'certbot-apache Documentation',
+     u'Certbot Project', 'manual'),
+]
+    
+            return link_list
+    
+    from ..common import *
+    
+    #----------------------------------------------------------------------
+def dilidili_parser_data_to_stream_types(typ ,vid ,hd2 ,sign, tmsign, ulk):
+    '''->list'''
+    another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    html = get_content(another_url, headers=headers)
+    
+    info = re.search(r'(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})', html).groups()
+    info = [i.strip('{}').split('->') for i in info]
+    info = {i[0]: i [1] for i in info}
+    
+    stream_types = []
+    for i in zip(info['deft'].split('|'), info['defa'].split('|')):
+        stream_types.append({'id': str(i[1][-1]), 'container': 'mp4', 'video_profile': i[0]})
+    return stream_types
+    }
+    }
+    }
+    }
+    }
+    
+    def facebook_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    
+        fc2video_download_by_upid(upid, output_dir, merge, info_only)
+    
+        for i in range(1, num_tests + 1):
+        logging.info('running test case %d', i)
+        url = options.url + '/runCase?case=%d&agent=%s' % (i, options.name)
+        test_ws = yield websocket_connect(url, None, compression_options={})
+        while True:
+            message = yield test_ws.read_message()
+            if message is None:
+                break
+            test_ws.write_message(message, binary=isinstance(message, bytes))
+    
+    # The following code is copied from
+# https://github.com/mongodb/mongo-python-driver/blob/master/setup.py
+# to support installing without the extension on platforms where
+# no compiler is available.
+from distutils.command.build_ext import build_ext
+    
+            if threading.active_count() > 1:
+            # libcurl/pycurl is not thread-safe by default.  When multiple threads
+            # are used, signals should be disabled.  This has the side effect
+            # of disabling DNS timeouts in some environments (when libcurl is
+            # not linked against ares), so we don't do it when there is only one
+            # thread.  Applications that use many short-lived threads may need
+            # to set NOSIGNAL manually in a prepare_curl_callback since
+            # there may not be any other threads running at the time we call
+            # threading.activeCount.
+            curl.setopt(pycurl.NOSIGNAL, 1)
+        if request.prepare_curl_callback is not None:
+            request.prepare_curl_callback(curl)
