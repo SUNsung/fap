@@ -1,85 +1,180 @@
 
         
-            def create(self):
+          Returns:
+    The word embeddings matrix
+  '''
+  embedding_file = os.path.join(word_embeddings_dir, word_embeddings_file)
+  vocab_file = os.path.join(
+      word_embeddings_dir, os.path.dirname(word_embeddings_file), 'vocab.txt')
+    
+          # self.path_embeddings is of shape
+      # [batch_size, max_path_per_instance, output_dim]
+      # We need to multiply it by path counts
+      # ([batch_size, max_path_per_instance]).
+      # Start by duplicating path_counts along the output_dim axis.
+      self.path_freq = tf.tile(tf.expand_dims(self.path_counts, -1),
+                               [1, 1, self.path_dim])
+    
+    data_train_truth, data_valid_truth = split_list_by_inds(truth_data_e,
+                                                        train_inds,
+                                                        valid_inds)
+data_train_spiking, data_valid_spiking = split_list_by_inds(spiking_data_e,
+                                                            train_inds,
+                                                            valid_inds)
+    
+      # Visualize this in the morning.
+  all_data_nxtc = np.zeros([nchannels_all, ntime * nconditions_all])
+  for name, dataset in datasets.items():
+    cidx_s = channel_idxs[name][0]
+    cidx_f = channel_idxs[name][1]
+    for cname in conditions_all[name]:
+      cidxs = np.argwhere(all_conditions_list == cname)
+      if cidxs.shape[0] > 0:
+        cidx = cidxs[0][0]
+        all_tidxs = np.arange(0, ntime+1) + cidx*ntime
+        all_data_nxtc[cidx_s:cidx_f, all_tidxs[0]:all_tidxs[-1]] = \
+            avg_data_all[name][cname].T
+    
+        tf.logging.info('Loaded %d words.', current_idx)
+    tf.logging.info('Finished loading')
+    return zip(ids, chars_ids, global_word_ids)
+    
+      This generates batch_size pointers into the raw IMDB data, and allows
+  minibatch iteration along these pointers.
+    
+    import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
+    
+        out = issue_template_tmpl % {'version': locals()['__version__']}
+    
+    
+from youtube_dl import YoutubeDL
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+        def test_cmdline_umlauts(self):
+        p = subprocess.Popen(
+            [sys.executable, 'youtube_dl/__main__.py', encodeArgument('ä'), '--version'],
+            cwd=rootDir, stdout=_DEV_NULL, stderr=subprocess.PIPE)
+        _, stderr = p.communicate()
+        self.assertFalse(stderr)
+    
+        def logout(self):
+        return self._client.get('/auth/logout')
+    
+        This function can return ``unicode`` strings or ascii-only bytestrings by
+    default which coerce into unicode strings automatically.  That behavior by
+    default is controlled by the ``JSON_AS_ASCII`` configuration variable
+    and can be overridden by the simplejson ``ensure_ascii`` parameter.
+    '''
+    _dump_arg_defaults(kwargs)
+    encoding = kwargs.pop('encoding', None)
+    rv = _json.dumps(obj, **kwargs)
+    if encoding is not None and isinstance(rv, text_type):
+        rv = rv.encode(encoding)
+    return rv
+    
+            # If the session is modified to be empty, remove the cookie.
+        # If the session is empty, return without setting the cookie.
+        if not session:
+            if session.modified:
+                response.delete_cookie(
+                    app.session_cookie_name,
+                    domain=domain,
+                    path=path
+                )
+    
+            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
+            if not converter and b'\0' in chunk:
+                converter = self.conversion.get_converter(self.mime)
+                if not converter:
+                    raise BinarySuppressedError()
+            body.extend(chunk)
+    
+        if 'win32' in str(sys.platform).lower():
+        # Terminal colors for Windows
+        install_requires.append('colorama>=0.2.4')
+    
+    
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
         '''
-        Create a new session instance. Guaranteed to create a new object with
-        a unique key and will have saved the result once (with empty data)
-        before the method returns.
-        '''
-        raise NotImplementedError('subclasses of SessionBase must provide a create() method')
     
-        def create(self):
-        # Because a cache can fail silently (e.g. memcache), we don't know if
-        # we are failing to create a new session because of a key collision or
-        # because the cache is missing. So we try for a (large) number of times
-        # and then raise an exception. That's the risk you shoulder if using
-        # cache backing.
-        for i in range(10000):
-            self._session_key = self._get_new_session_key()
-            try:
-                self.save(must_create=True)
-            except CreateError:
-                continue
-            self.modified = True
-            return
-        raise RuntimeError(
-            'Unable to create a new session key. '
-            'It is likely that the cache is unavailable.')
     
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
+# Are two filenames really pointing to the same file?
+def samefile(f1, f2):
+    '''Test whether two pathnames reference the same actual file'''
+    s1 = os.stat(f1)
+    s2 = os.stat(f2)
+    return samestat(s1, s2)
     
-            X = np.random.randn(n_samples, n_features)
-        Y = np.random.randn(n_samples)
+    # Import the email modules we'll need
+from email import policy
+from email.parser import BytesParser
     
-        if args.plot is not None:
-        max_val = getattr(args, args.plot)
-        if args.plot in ('classes', 'samples'):
-            min_val = 2
-        else:
-            min_val = 0
-        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
-        if args.plot in ('classes', 'samples'):
-            steps = np.unique(np.round(steps).astype(int))
-        setattr(args, args.plot, steps)
+            TASKS = [(mul, (i, 7)) for i in range(10)] + \
+                [(plus, (i, 8)) for i in range(10)]
     
-        import matplotlib.pyplot as plt
-    fig = plt.figure('scikit-learn OMP vs. LARS benchmark results')
-    for i, (label, timings) in enumerate(sorted(six.iteritems(results))):
-        ax = fig.add_subplot(1, 2, i+1)
-        vmax = max(1 - timings.min(), -1 + timings.max())
-        plt.matshow(timings, fignum=False, vmin=1 - vmax, vmax=1 + vmax)
-        ax.set_xticklabels([''] + [str(each) for each in samples_range])
-        ax.set_yticklabels([''] + [str(each) for each in features_range])
-        plt.xlabel('n_samples')
-        plt.ylabel('n_features')
-        plt.title(label)
+    def calculate(func, args):
+    result = func(*args)
+    return '%s says that %s%s = %s' % \
+        (current_process().name, func.__name__, args, result)
     
-                gc.collect()
-            print('benchmarking scikit-learn randomized_svd: n_iter=0')
-            tstart = time()
-            randomized_svd(X, rank, n_iter=0)
-            results['scikit-learn randomized_svd (n_iter=0)'].append(
-                time() - tstart)
+        def __getattr__(self, name):
+        attr = getattr(self.delegate, name)
+        
+        if not callable(attr):
+            return attr
     
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
+        @staticmethod
+    def _static_method_1():
+        print('executed method 1!')
     
-    # Split data in train set and test set
-n_samples = X.shape[0]
-X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
-X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
-print('test data sparsity: %f' % sparsity_ratio(X_test))
+        def rename(self, src, dest):
+        print(u'renaming %s to %s' % (src, dest))
+        os.rename(src, dest)
     
-    from docutils import nodes, utils
-from sphinx.util.nodes import split_explicit_title
     
-    for lang, page in pages.items():
+class State(object):
+    
+    import types
+    
+        def generic_visit(self, node, *args, **kwargs):
+        print('generic_visit ' + node.__class__.__name__)
+    
+    https://en.wikipedia.org/wiki/Lazy_evaluation
+    
+        def __init__(self):
+        self.time_provider = datetime.datetime
+    
+            path.append(start)
+        if start == end:
+            return path
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpath = self.find_path(node, end, path[:])
+                if newpath:
+                    return newpath
