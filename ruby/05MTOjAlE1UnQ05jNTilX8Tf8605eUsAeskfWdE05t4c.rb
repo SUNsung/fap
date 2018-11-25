@@ -1,30 +1,32 @@
 
         
-                def left_whole_line_range(loc_begin)
-          if range_by_whole_lines(loc_begin).source.strip == '{'
-            range_by_whole_lines(loc_begin, include_final_newline: true)
-          else
-            loc_begin
-          end
+            it 'opens the dry run modal even when clicking on the refresh icon' do
+      visit edit_agent_path(agent)
+      find('.agent-dry-run-button span.glyphicon').click
+      expect(page).to have_text('Event to send (Optional)')
+    end
+    
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
+  end
+    
+        # get sha of the branch (= the latest commit)
+    def get_branch_sha
+      @branch_sha ||= begin
+        if @branch + '\n' == %x[git rev-parse #@branch]
+          @branch
+        else
+          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
+          log cmd
+          result = %x[#{cmd}]
+          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
+          result.split(/\s+/).first
         end
-    }
-    
-    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
-    
-            def delimiter_delta
-          return 0 if first.same_line?(second)
-          return 0 if first.delimiter != second.delimiter
-    
-    module RuboCop
-  module AST
-    # Common functionality for nodes that are parameterized:
-    # `send`, `super`, `zsuper`, `def`, `defs`
-    module ParameterizedNode
-      # Checks whether this node's arguments are wrapped in parentheses.
-      #
-      # @return [Boolean] whether this node's arguments are
-      #                   wrapped in parentheses
-      def parenthesized?
-        loc.end && loc.end.is?(')')
       end
+    end
+    
+      # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
+    
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
