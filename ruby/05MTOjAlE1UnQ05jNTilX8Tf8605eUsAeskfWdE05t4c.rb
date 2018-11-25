@@ -1,32 +1,26 @@
 
         
-            it 'opens the dry run modal even when clicking on the refresh icon' do
-      visit edit_agent_path(agent)
-      find('.agent-dry-run-button span.glyphicon').click
-      expect(page).to have_text('Event to send (Optional)')
-    end
-    
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
+          def after_omniauth_failure_path_for(scope)
+    new_session_path(scope)
   end
     
-        # get sha of the branch (= the latest commit)
-    def get_branch_sha
-      @branch_sha ||= begin
-        if @branch + '\n' == %x[git rev-parse #@branch]
-          @branch
-        else
-          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
-          log cmd
-          result = %x[#{cmd}]
-          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
-          result.split(/\s+/).first
-        end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
+    
+          private
+    
+            @email = headers[:to]
+        headers
       end
+    
+        def default_used_route(options)
+      singularizer = lambda { |s| s.to_s.singularize.to_sym }
+    
+        def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
     end
-    
-      # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
