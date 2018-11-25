@@ -1,306 +1,194 @@
 
         
-                (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
+                Antirectifier allows to return all-positive outputs like ReLU,
+        without discarding any data.
+    
+    # save class labels to disk to color data points in TensorBoard accordingly
+with open(join(log_dir, 'metadata.tsv'), 'w') as f:
+    np.savetxt(f, y_test)
     
     
-class State(Enum):
-    unvisited = 0
-    visited = 1
+def deserialize(config, custom_objects=None):
+    return deserialize_keras_object(config,
+                                    module_objects=globals(),
+                                    custom_objects=custom_objects,
+                                    printable_module_name='regularizer')
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog CHANGELOG VERSION BUILDPATH')
-    options, args = parser.parse_args()
-    if len(args) != 3:
-        parser.error('Expected a version and a build directory')
+def test_fashion_mnist():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+        assert len(x_train) == len(y_train) == 60000
+        assert len(x_test) == len(y_test) == 10000
     
+        def get_config(self):
+        return {'mse_fraction': self.mse_fraction}
     
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
+        if transforms:
+        f = tf.contrib.image.compose_transforms(*transforms)
+        inputs = tf.contrib.image.transform(inputs, f, interpolation='BILINEAR')
+    return inputs
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+            if title is None:
+            self.title = '_'.join([i.text for i in self.tree.iterfind('video/videomarks/videomark/markdesc')])
+        else:
+            self.title = title
     
+    from .theplatform import theplatform_download_by_pid
     
-def get_base_name(base):
-    if base is InfoExtractor:
-        return 'LazyLoadExtractor'
-    elif base is SearchInfoExtractor:
-        return 'LazyLoadSearchExtractor'
-    else:
-        return base.__name__
+    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads Dailymotion videos by URL.
+    '''
     
-                for tc_num, tc in enumerate(test_cases):
-                tc_res_dict = res_dict['entries'][tc_num]
-                # First, check test cases' data against extracted data alone
-                expect_info_dict(self, tc_res_dict, tc.get('info_dict', {}))
-                # Now, check downloaded file consistency
-                tc_filename = get_tc_filename(tc)
-                if not test_case.get('params', {}).get('skip_download', False):
-                    self.assertTrue(os.path.exists(tc_filename), msg='Missing file ' + tc_filename)
-                    self.assertTrue(tc_filename in finished_hook_called)
-                    expected_minsize = tc.get('file_minsize', 10000)
-                    if expected_minsize is not None:
-                        if params.get('test'):
-                            expected_minsize = max(expected_minsize, 10000)
-                        got_fsize = os.path.getsize(tc_filename)
-                        assertGreaterEqual(
-                            self, got_fsize, expected_minsize,
-                            'Expected %s to be at least %s, but it\'s only %s ' %
-                            (tc_filename, format_bytes(expected_minsize),
-                                format_bytes(got_fsize)))
-                    if 'md5' in tc:
-                        md5_for_file = _file_md5(tc_filename)
-                        self.assertEqual(tc['md5'], md5_for_file)
-                # Finally, check test cases' data again but this time against
-                # extracted data from info JSON file written during processing
-                info_json_fn = os.path.splitext(tc_filename)[0] + '.info.json'
-                self.assertTrue(
-                    os.path.exists(info_json_fn),
-                    'Missing info file %s' % info_json_fn)
-                with io.open(info_json_fn, encoding='utf-8') as infof:
-                    info_dict = json.load(infof)
-                expect_info_dict(self, info_dict, tc.get('info_dict', {}))
+        sd_urls = list(set([
+        unicodize(str.replace(i, '\\/', '/'))
+        for i in re.findall(r'sd_src_no_ratelimit:'([^']*)'', html)
+    ]))
+    hd_urls = list(set([
+        unicodize(str.replace(i, '\\/', '/'))
+        for i in re.findall(r'hd_src_no_ratelimit:'([^']*)'', html)
+    ]))
+    urls = hd_urls if hd_urls else sd_urls
+    
+        @classmethod
+    def get_coeff(cls, magic_list):
+        magic_set = set(magic_list)
+        no_dup = []
+        for item in magic_list:
+            if item in magic_set:
+                magic_set.remove(item)
+                no_dup.append(item)
+        # really necessary?
+    
+        def test_root_common(self):
+        P = self.cls
+        sep = self.sep
+        self.assertEqual(P('').root, '')
+        self.assertEqual(P('a/b').root, '')
+        self.assertEqual(P('/').root, sep)
+        self.assertEqual(P('/a/b').root, sep)
+    
+        def test_relpath(self):
+        (real_getcwd, os.getcwd) = (os.getcwd, lambda: r'/home/user/bar')
+        try:
+            curdir = os.path.split(os.getcwd())[-1]
+            self.assertRaises(ValueError, posixpath.relpath, '')
+            self.assertEqual(posixpath.relpath('a'), 'a')
+            self.assertEqual(posixpath.relpath(posixpath.abspath('a')), 'a')
+            self.assertEqual(posixpath.relpath('a/b'), 'a/b')
+            self.assertEqual(posixpath.relpath('../a/b'), '../a/b')
+            self.assertEqual(posixpath.relpath('a', '../b'), '../'+curdir+'/a')
+            self.assertEqual(posixpath.relpath('a/b', '../c'),
+                             '../'+curdir+'/a/b')
+            self.assertEqual(posixpath.relpath('a', 'b/c'), '../../a')
+            self.assertEqual(posixpath.relpath('a', 'a'), '.')
+            self.assertEqual(posixpath.relpath('/foo/bar/bat', '/x/y/z'), '../../../foo/bar/bat')
+            self.assertEqual(posixpath.relpath('/foo/bar/bat', '/foo/bar'), 'bat')
+            self.assertEqual(posixpath.relpath('/foo/bar/bat', '/'), 'foo/bar/bat')
+            self.assertEqual(posixpath.relpath('/', '/foo/bar/bat'), '../../..')
+            self.assertEqual(posixpath.relpath('/foo/bar/bat', '/x'), '../foo/bar/bat')
+            self.assertEqual(posixpath.relpath('/x', '/foo/bar/bat'), '../../../x')
+            self.assertEqual(posixpath.relpath('/', '/'), '.')
+            self.assertEqual(posixpath.relpath('/a', '/a'), '.')
+            self.assertEqual(posixpath.relpath('/a/b', '/a/b'), '.')
         finally:
-            try_rm_tcs_files()
-            if is_playlist and res_dict is not None and res_dict.get('entries'):
-                # Remove all other files that may have been extracted if the
-                # extractor returns full results even with extract_flat
-                res_tcs = [{'info_dict': e} for e in res_dict['entries']]
-                try_rm_tcs_files(res_tcs)
+            os.getcwd = real_getcwd
     
-        @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    from . import abc as resources_abc
+from contextlib import contextmanager, suppress
+from importlib import import_module
+from importlib.abc import ResourceLoader
+from io import BytesIO, TextIOWrapper
+from pathlib import Path
+from types import ModuleType
+from typing import Iterable, Iterator, Optional, Set, Union   # noqa: F401
+from typing import cast
+from typing.io import BinaryIO, TextIO
+from zipimport import ZipImportError
     
-            url_prefix = self.options.get('url_prefix')
-        if url_prefix is None:
-            url_prefix = self.blueprint.url_prefix
-        #: The prefix that should be used for all URLs defined on the
-        #: blueprint.
-        self.url_prefix = url_prefix
+        # Load the records from the pickle data stream.
+    file.seek(0)
+    memos = DBUnpickler(file, conn).load()
     
-    import os
-import types
-import errno
+    from .const import (
+    ATTR_MAIN_TEXT, ATTR_REDIRECTION_URL, ATTR_STREAM_URL, ATTR_TITLE_TEXT,
+    ATTR_UID, ATTR_UPDATE_DATE, CONF_AUDIO, CONF_DISPLAY_URL, CONF_TEXT,
+    CONF_TITLE, CONF_UID, DATE_FORMAT)
     
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_PASSWORD): cv.string,
+    vol.Required(CONF_USERNAME): cv.string
+})
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-            # invalid instance-length
-        pytest.raises(ContentRangeError, parse, 'bytes 100-199/199', 100)
-    
-    from httpie import ExitStatus
-from httpie.core import main
-    
-    
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
+            if self.accountname in _CONFIGURING:
+            request_id = _CONFIGURING.pop(self.accountname)
+            configurator = self.hass.components.configurator
+            configurator.request_done(request_id)
     
     
-def benchmark_sparse_predict():
-    X_test_sparse = csr_matrix(X_test)
-    for _ in range(300):
-        clf.predict(X_test_sparse)
+def get_scanner(hass, config):
+    '''Validate the configuration and return a Linksys AP scanner.'''
+    try:
+        return LinksysSmartWifiDeviceScanner(config[DOMAIN])
+    except ConnectionError:
+        return None
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+    REQUIREMENTS = ['pyhiveapi==0.2.14']
     
     
-def _make_issue_node(issue_no, config, options=None):
-    options = options or {}
-    if issue_no not in ('-', '0'):
-        if config.issues_uri:
-            ref = config.issues_uri.format(issue=issue_no)
-        elif config.issues_github_path:
-            ref = 'https://github.com/{0}/issues/{1}'.format(
-                config.issues_github_path, issue_no
-            )
-        issue_text = '#{0}'.format(issue_no)
-        link = nodes.reference(text=issue_text, refuri=ref, **options)
-    else:
-        link = None
-    return link
+if __name__ == '__main__':
+    import doctest
     
-    FREEBSD_DARWIN_SERVER_ROOT = '/usr/local/etc/nginx'
-LINUX_SERVER_ROOT = '/etc/nginx'
+        # commands are just pushed into the command stack
+    command_stack.append(MoveFileCommand('foo.txt', 'bar.txt'))
+    command_stack.append(MoveFileCommand('bar.txt', 'baz.txt'))
     
-        :returns: file path and internal Augeas path
-    :rtype: `tuple` of `str`
     
-    ALL_SSL_OPTIONS_HASHES = [
-    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
-    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
-    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
-    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
-    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
-    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
-    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
-    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
-]
-'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
     
-    from certbot_apache.tests import util
     
-        pil_image.show()
+### OUTPUT ###
+# <NumObj: -1>
+# <NumObj: 0>
+# <NumObj: 1>
+# <NumObj: 2>
+# -- committed
+# <NumObj: 3>
+# <NumObj: 4>
+# <NumObj: 5>
+# -- rolled back
+# <NumObj: 2>
+# -- now doing stuff ...
+# -> doing stuff failed!
+# Traceback (most recent call last):
+# File 'memento.py', line 97, in <module>
+#     num_obj.do_stuff()
+#   File 'memento.py', line 52, in transaction
+#     raise e
+#   File 'memento.py', line 49, in transaction
+#     return self.method(obj, *args, **kwargs)
+#   File 'memento.py', line 70, in do_stuff
+#     self.increment()     # <- will fail and rollback
+#   File 'memento.py', line 65, in increment
+#     self.value += 1
+# TypeError: Can't convert 'int' object to str implicitly
+# <NumObj: 2>
 
     
-    for i, face_distance in enumerate(face_distances):
-    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
-    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
-    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
-    print()
-
+        def notify(self, modifier=None):
+        for observer in self._observers:
+            if modifier != observer:
+                observer.update(self)
     
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
-    
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
-
-    
-            print('I see someone named {}!'.format(name))
-
-    
-        doctest.testmod()
-
-    
-    
-class MoveFileCommand(object):
-    def __init__(self, src, dest):
-        self.src = src
-        self.dest = dest
-    
-        def restore():
-        obj.__dict__.clear()
-        obj.__dict__.update(state)
-    
-        @data.setter
-    def data(self, value):
-        self._data = value
-        self.notify()
-    
-        def notify(self, msg):
-        self.msg_queue.append(msg)
-    
-    ### OUTPUT ###
-# spam
-# ----------
-# eggs
-# ----------
-# apple
-# ----------
-# apple
-# ----------
-# eggs
-# ----------
-# spam
-# ----------
-# maps
-# ----------
-# sgge
-# ----------
-# elppa
-# ----------
-# elppa
-# ----------
-# sgge
-# ----------
-# maps
-# ----------
-# ['s', 'p', 'a', 'm']
-# ----------
-# ['e', 'g', 'g', 's']
-# ----------
-# ['a', 'p', 'p', 'l', 'e']
-# ----------
-# ['a', 'p', 'p', 'l', 'e']
-# ----------
-# ['e', 'g', 'g', 's']
-# ----------
-# ['s', 'p', 'a', 'm']
-# ----------
-# ['m', 'a', 'p', 's']
-# ----------
-# ['s', 'g', 'g', 'e']
-# ----------
-# ['e', 'l', 'p', 'p', 'a']
-# ----------
-# ['e', 'l', 'p', 'p', 'a']
-# ----------
-# ['s', 'g', 'g', 'e']
-# ----------
-# ['m', 'a', 'p', 's']
-# ----------
-
-    
-    *What does this example do?
-In this example queue.Queue is used to create the pool (wrapped in a
-custom ObjectPool object to use with the with statement), and it is
-populated with strings.
-As we can see, the first string object put in 'yam' is USED by the
-with statement. But because it is released back into the pool
-afterwards it is reused by the explicit call to sample_queue.get().
-Same thing happens with 'sam', when the ObjectPool created insided the
-function is deleted (by the GC) and the object is returned.
+        def toggle_amfm(self):
+        self.state.toggle_amfm()
