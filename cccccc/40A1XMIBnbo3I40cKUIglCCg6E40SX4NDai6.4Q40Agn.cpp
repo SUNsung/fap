@@ -1,230 +1,359 @@
 
         
-        // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    
-    {  base::ListValue result;
-  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method_Sync(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get()),
-      &result));
-  return converter->ToV8Value(&result, isolate->GetCurrentContext());
-}
-    
-    namespace content {
-class RenderView;
-}
-    
-    void Clipboard::Clear() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-}
-    
-    
-    {}
-    
-    // Popup menus may get squished if they open up too close to the bottom of the
-// screen. This function takes the size of the screen, the size of the menu,
-// an optional widget, the Y position of the mouse click, and adjusts the popup
-// menu's Y position to make it fit if it's possible to do so.
-// Returns the new Y position of the popup menu.
-int CalculateMenuYPosition(const GdkRectangle* screen_rect,
-                           const GtkRequisition* menu_req,
-                           GtkWidget* widget, const int y) {
-  CHECK(screen_rect);
-  CHECK(menu_req);
-  // If the menu would run off the bottom of the screen, and there is enough
-  // screen space upwards to accommodate the menu, then pop upwards. If there
-  // is a widget, then also move the anchor point to the top of the widget
-  // rather than the bottom.
-  const int screen_top = screen_rect->y;
-  const int screen_bottom = screen_rect->y + screen_rect->height;
-  const int menu_bottom = y + menu_req->height;
-  int alternate_y = y - menu_req->height;
-  if (widget) {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(widget, &allocation);
-    alternate_y -= allocation.height;
+        StringRef swift::platformString(PlatformKind platform) {
+  switch (platform) {
+  case PlatformKind::none:
+    return '*';
+#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
+  case PlatformKind::X:                                                        \
+    return #X;
+#include 'swift/AST/PlatformKinds.def'
   }
-  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
-    return alternate_y;
-  return y;
+  llvm_unreachable('bad PlatformKind');
 }
     
-    void MenuItem::Create(const base::DictionaryValue& option) {
-  std::string type;
-  option.GetString('type', &type);
-  submenu_ = NULL;
-  gtk_accel_group = NULL;
-    }
-    
-    #if defined(OS_WIN) || defined(OS_LINUX)
-bool MenuItem::AcceleratorPressed(const ui::Accelerator& accelerator) {
-#if defined(OS_WIN)
-  if (meta_down_flag_) {
-    if ((::GetKeyState(VK_APPS) & 0x8000) != 0x8000) {
-      return true;
-    }
-  }
-#endif
-  OnClick();
-  return true;
+    void CacheImpl::destroy() {
+  cache_destroy(static_cast<cache_t*>(Impl));
 }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
-};
-    
-    bool NwObjDestroyFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  int id = 0;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-    }
-    
-    IntSimdMatrixAVX2::IntSimdMatrixAVX2() {
-#ifdef __AVX2__
-  num_outputs_per_register_ = kNumOutputsPerRegister;
-  max_output_registers_ = kMaxOutputRegisters;
-  num_inputs_per_register_ = kNumInputsPerRegister;
-  num_inputs_per_group_ = kNumInputsPerGroup;
-  num_input_groups_ = kNumInputGroups;
-  partial_funcs_ = {PartialMatrixDotVector64, PartialMatrixDotVector32,
-                    PartialMatrixDotVector16, PartialMatrixDotVector8};
-#endif  // __AVX2__
-}
-    
-    #ifdef __SSE4_1__
-// Computes part of matrix.vector v = Wu. Computes 1 result.
-static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
-                                    const int8_t* u, int num_in, int num_out,
-                                    double* v) {
-  int total = IntDotProductSSE(u, wi, num_in);
-  // Add in the bias and correct for integer values.
-  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
-}
-#endif  // __SSE4_1__
-    
-    #endif
 
     
-     protected:
-  // ----------------------------------------------------------------------
-  // Utility functions that may be useful components for other thresholders.
-    
-    #pragma once
-    
-    
-    {        const auto& type = dict[typeKey].Value<std::wstring>();
-        if (type != typeValue) 
         {
-            const auto& version = GetVersion(dict);
-            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
-                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        }
+      Out << Indent;
+      if (childKind == ChildKind::Root) {
+        Out << '+- ';
+      } else if (childKind == ChildKind::Left) {
+        Out << '/- ';
+      } else if (childKind == ChildKind::Right) {
+        Out << '\\- ';
+      } else if (childKind == ChildKind::Further) {
+        Out << '\\-> ';
+      }
+      PrintNodeData(Out, node);
+      Out << '\n';
     }
     
-            std::wstring AsString() const;
-        std::shared_ptr<VariableFields> Clone() const;
-        FunctionPtr Owner() const;
-    
-        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
-    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
-    size_t currentseed;             // seed for current sequence
-    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
-                                    // special values (randomizeDisable)
-    void Invalidate()
-    {
-        currentseed = (size_t) -1;
+        // If this is a skippable suffix, skip it and keep looking.
+    if (nameWordRevIter == nameWordRevIterBegin) {
+      if (auto withoutSuffix = skipTypeSuffix(typeName.Name)) {
+        typeName.Name = *withoutSuffix;
+        typeWords = camel_case::getWords(typeName.Name);
+        typeWordRevIter = typeWords.rbegin();
+        typeWordRevIterEnd = typeWords.rend();
+        continue;
+      }
     }
     
-        EditDistanceErrorNode(const ScriptableObjects::IConfigRecordPtr configp)
-        : EditDistanceErrorNode(configp->Get(L'deviceId'), L'<placeholder>', configp->Get(L'subPen'), configp->Get(L'delPen'), configp->Get(L'insPen'), configp->Get(L'squashInputs'), {})
-    {
-        AttachInputsFromConfig(configp, this->GetExpectedNumInputs());
-        m_tokensToIgnore = ScriptableObjects::ConfigArray::FlattenedVectorFrom<size_t>(configp->Get(L'tokensToIgnore'));
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
+};
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
+    
+    #include <grpc/impl/codegen/grpc_types.h>
+#include <grpc/support/log.h>
+#include <grpcpp/grpcpp.h>
+#include <grpcpp/resource_quota.h>
+#include 'src/core/lib/channel/channel_args.h'
+#include 'src/core/lib/iomgr/exec_ctx.h'
+#include 'src/core/lib/iomgr/socket_mutator.h'
+    
+      CensusClientCallData()
+      : recv_trailing_metadata_(nullptr),
+        initial_on_done_recv_trailing_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        elapsed_time_(0),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&stats_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&tracing_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_trailing_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+    namespace grpc {
     }
     
-    // -----------------------------------------------------------------------
-// EnvironmentInput (propertyName) -- read out environment properties
-// Such as whether we are currently training or evaluating, which can affect
-// behavior, such as seq-2-seq decoding.
-// -----------------------------------------------------------------------
     
+    {}  // namespace
     
-    {        ImGui::Render();
-    }
+    /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
+ */
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp
-// https://github.com/ocornut/imgui
+    /*!
+ * \brief Shape inference function to get the correct shape given source shapes.
+ * \param lhs The shape of left operand.
+ * \param rhs The shape of right operand.
+ * \param env The Environment arguments.
+ * \return The inferred result shape.
+ */
+typedef TShape (*BinaryShapeFunction)(const TShape& lhs,
+                                      const TShape& rhs,
+                                      const EnvArguments& env);
+/*!
+ * \brief Gradient function that takes only output gradient and computes gradient wrt to input.
+ *  We support total gradient as a whole to make it easy to combine a few ops.
+ * \param out_grad the gradient wrt to output of the function.
+ * \param env The Environment arguments.
+ * \param lhs_grad The container to store result of lhs gradient.
+ * \param rhs_grad The container to store result of lhs gradient.
+ * \param req_lhs_grad The requirement to store the lhs_grad
+ * \param req_rhs_grad The requirement to store the rhs_grad
+ * \param ctx Runtime context to execute the function.
+ */
+typedef void (*BinaryGradFunctionT0)(const OutputGrad& out_grad,
+                                     const EnvArguments& env,
+                                     TBlob* lhs_grad,
+                                     TBlob* rhs_grad,
+                                     OpReqType req_lhs_grad,
+                                     OpReqType req_rhs_grad,
+                                     RunContext ctx);
+/*!
+ * \brief Gradient function that takes inputs of function anod computes gradient wrt to input.
+ * \param out_grad the gradient wrt to output of the function.
+ * \param lhs The left operand to the function.
+ * \param rhs The right operand to the function.
+ * \param env The Environment arguments.
+ * \param lhs_grad The container to store result of lhs gradient.
+ * \param rhs_grad The container to store result of lhs gradient.
+ * \param req_lhs_grad The requirement to store the lhs_grad
+ * \param req_rhs_grad The requirement to store the rhs_grad
+ * \param ctx Runtime context to execute the function.
+ */
+typedef void (*BinaryGradFunctionT1)(const OutputGrad& out_grad,
+                                     const Input0& lhs,
+                                     const Input1& rhs,
+                                     const EnvArguments& env,
+                                     TBlob* lhs_grad,
+                                     TBlob* rhs_grad,
+                                     OpReqType req_lhs_grad,
+                                     OpReqType req_rhs_grad,
+                                     RunContext ctx);
     
-        ALLEGRO_MOUSE_STATE mouse;
-    if (keys.display == g_Display)
-    {
-        al_get_mouse_state(&mouse);
-        io.MousePos = ImVec2((float)mouse.x, (float)mouse.y);
-    }
-    else
-    {
-        io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-    }
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support (for Win32 this is actually part of core imgui)
-//  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
-//  [X] Platform: Keyboard arrays indexed using VK_* Virtual Key Codes, e.g. ImGui::IsKeyPressed(VK_SPACE).
-// Missing features:
-//  [ ] Platform: Gamepad support (best leaving it to user application to fill io.NavInputs[] with gamepad inputs from their source of choice).
-    
-    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
-//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
-//#define IMGUI_DISABLE_DEMO_WINDOWS
-    
-        VkPipelineColorBlendStateCreateInfo blend_info = {};
-    blend_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    blend_info.attachmentCount = 1;
-    blend_info.pAttachments = color_attachment;
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
-    
-    namespace benchmark {
-namespace internal {
-    }
-    }
-    
-      // Accumulators.
-  std::vector<int> n;
-  std::vector<double> real_time;
-  std::vector<double> cpu_time;
-    
-    #ifdef BENCHMARK_OS_EMSCRIPTEN
-#include <emscripten.h>
-#endif
-    
-    // Prefer C regex libraries when compiling w/o exceptions so that we can
-// correctly report errors.
-#if defined(BENCHMARK_HAS_NO_EXCEPTIONS) && defined(HAVE_STD_REGEX) && \
-    (defined(HAVE_GNU_POSIX_REGEX) || defined(HAVE_POSIX_REGEX))
-#undef HAVE_STD_REGEX
-#endif
-    
-    inline UriTuple as_tuple(const folly::Uri& k) {
-  return UriTuple(
-      k.scheme(),
-      k.username(),
-      k.password(),
-      k.host(),
-      k.port(),
-      k.path(),
-      k.query(),
-      k.fragment());
+    TShape Vector2TShape(const std::vector<int> &vec_int) {
+  std::vector<mshadow::index_t> vec;
+  for (uint32_t i = 0; i < vec_int.size(); ++i)
+    vec.push_back(vec_int[i]);
+  // 0-dim represents scalar in caffe
+  if (vec_int.size() == 0)
+    vec.push_back(1);
+  return {vec.begin(), vec.end()};
 }
+    
+    
+    {  /*! \brief milliseconds spent in Next() */
+  std::atomic<uint64_t> next_time_;
+};  // class CaffeDataIterWrapper
+    
+    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
+.describe('Caffe loss layer')
+.add_arguments(CaffeLossParam::__FIELDS__());
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_op.cc
+ * \brief caffe operator
+ * \author Haoran Wang
+*/
+#include './caffe_op-inl.h'
+namespace mxnet {
+namespace op {
+    }
+    }
+    
+    /*!
+ * \brief Thread pool.
+ */
+class ThreadPool {
+ public:
+  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
+  struct SetReadyOnDestroy {
+    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
+      : event_(event) {
+    }
+    inline ~SetReadyOnDestroy() {
+      if (event_) {
+        event_->signal();
+      }
+    }
+    std::shared_ptr<dmlc::ManualEvent>  event_;
+  };
+    }
+    
+      ~ThreadedEnginePooled() noexcept(false) {
+    StopNoWait();
+  }
+    
+    Graph DetectInplaceAddTo(Graph g) {
+  nnvm::StorageVector storage_id =
+      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
+  std::vector<int> storage_inplace_index =
+      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
+  static const Op* ewise_plus_op = Op::Get('_grad_add');
+  auto& idx = g.indexed_graph();
+  // reference cont.
+  std::vector<int> ref_count(idx.num_node_entries(), 0);
+  std::vector<int> addto_entry(idx.num_node_entries(), 0);
+  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
+    }
+    
+    class TBlobContainer : public TBlob {
+ public:
+  TBlobContainer(void)
+    : TBlob(), tensor_container_(nullptr) {}
+  ~TBlobContainer() {
+    if (tensor_container_) {
+      release();
+    }
+  }
+  void resize(const TShape &shape, int type_flag) {
+    if (tensor_container_) {
+      CHECK_EQ(this->type_flag_, type_flag);
+      this->shape_ = shape;
+      resize();
+    } else {
+      this->type_flag_ = type_flag;
+      this->shape_ = shape;
+      create();
+    }
+  }
+    }
+    
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
+    
+    namespace {
+// For non-dense Range, intermediate values are powers of kRangeMultiplier.
+static const int kRangeMultiplier = 8;
+// The size of a benchmark family determines is the number of inputs to repeat
+// the benchmark on. If this is 'large' then warn the user during configuration.
+static const size_t kMaxFamilySize = 100;
+}  // end namespace
+    
+    
+    {    printed_header_ = true;
+  } else {
+    // check that all the current counters are saved in the name set
+    for (const auto& run : reports) {
+      for (const auto& cnt : run.counters) {
+        CHECK(user_counter_names_.find(cnt.first) != user_counter_names_.end())
+              << 'All counters must be present in each run. '
+              << 'Counter named \'' << cnt.first
+              << '\' was not in a run after being added to the header';
+      }
+    }
+  }
+    
+    #define RELEASE_SHARED(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(release_shared_capability(__VA_ARGS__))
+    
+    #include 'benchmark/benchmark.h'
+#include 'timers.h'
+    
+      /**
+   * @brief Destructor
+   */
+  virtual ~CanClient() = default;
+    
+      CanAgent agent_a(param_ptr_a.get());
+  CanAgent agent_b(param_ptr_b.get());
+  agent_a.AddOtherAgent(&agent_b);
+  agent_b.AddOtherAgent(&agent_a);
+  if (!agent_a.Start()) {
+    AERROR << 'Agent a start failed.';
+    return -1;
+  }
+  if (FLAGS_only_one_send) {
+    agent_b.is_receiving(true);
+    agent_b.is_sending_finish(true);
+  } else {
+    if (!agent_b.Start()) {
+      AERROR << 'Agent b start failed.';
+      return -1;
+    }
+  }
+    
+    TEST_F(FakeCanClientTest, SendMessage) {
+  std::vector<CanFrame> frames;
+  frames.resize(FRAME_LEN);
+  for (int32_t i = 0; i < FRAME_LEN; ++i) {
+    frames[i].id = 1 & 0x3FF;
+    frames[i].len = 8;
+    frames[i].data[7] = 1 % 256;
+    for (int32_t j = 0; j < 7; ++j) {
+      frames[i].data[j] = j;
+    }
+  }
+    }
+    
+      if (ret != ErrorCode::OK) {
+    AERROR << 'Open device error code: ' << ret
+           << ', channel id: ' << _card_port;
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+  AERROR << 'Open device succ code: ' << ret << ', channel id: ' << _card_port;
+    
+    // Synchronous transmission of CAN messages
+ErrorCode SocketCanClientRaw::Send(const std::vector<CanFrame> &frames,
+                                   int32_t *const frame_num) {
+  CHECK_NOTNULL(frame_num);
+  CHECK_EQ(frames.size(), static_cast<size_t>(*frame_num));
+    }
+    
+    TEST(SocketCanClientRawTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    }
+    
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
+    
+    class MockMessageManager
+    : public MessageManager<::apollo::canbus::ChassisDetail> {
+ public:
+  MockMessageManager() {
+    AddRecvProtocolData<MockProtocolData, true>();
+    AddSendProtocolData<MockProtocolData, true>();
+  }
+};
+    
+      /**
+   * @brief Reset the lower 4 bits as the lower 4 bits of a specified one-byte
+   *        unsigned integer.
+   * @param value The one-byte unsigned integer whose lower 4 bits are used to
+   *        set this Byte's lower 4 bits.
+   */
+  void set_value_low_4_bits(const uint8_t value);
+    
+    TEST(ByteTest, CopyConstructor) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  Byte another_value(value);
+  EXPECT_EQ(another_value.to_hex_string(), value.to_hex_string());
+  EXPECT_EQ(another_value.to_binary_string(), value.to_binary_string());
+}
+    
+    #endif  // MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+
+    
+    // System gflags
+DEFINE_string(sensor_node_name, '', 'Sensor node name.');
