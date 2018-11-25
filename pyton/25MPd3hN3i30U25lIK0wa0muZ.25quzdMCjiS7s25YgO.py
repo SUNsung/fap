@@ -1,158 +1,154 @@
 
         
-                # Insert the import statement to setup.py if not present
-        with open(setup_path, 'a+') as setup:
-            setup.seek(0)
-            setup_content = setup.read()
-            if not 'import fastentrypoints' in setup_content:
-                setup.seek(0)
-                setup.truncate()
-                setup.write('import fastentrypoints\n' + setup_content)
+        
+@functools.lru_cache()
+def get_citext_oids(connection_alias):
+    '''Return citext array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
+        return tuple(row[0] for row in cursor)
+    
+        def flush(self):
+        '''
+        Remove the current session data from the database and regenerate the
+        key.
+        '''
+        self.clear()
+        self.delete(self.session_key)
+        self._session_key = None
+
     
     
-def test_on_run_after_other_commands(usage_tracker_io, shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.get_history.return_value = ['fuck', 'ls']
-    _change_tracker(usage_tracker_io, 12)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
+class BaseSessionManager(models.Manager):
+    def encode(self, session_dict):
+        '''
+        Return the given session dictionary serialized and encoded as a string.
+        '''
+        session_store_class = self.model.get_session_store_class()
+        return session_store_class().encode(session_dict)
+    
+        # Output shape
+        2D tensor of shape (samples, 2*n)
+    
+        dirname = 'cifar-100-python'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
     
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_bashrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'bash')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+allobj = [losses.mean_squared_error,
+          losses.mean_absolute_error,
+          losses.mean_absolute_percentage_error,
+          losses.mean_squared_logarithmic_error,
+          losses.squared_hinge,
+          losses.hinge,
+          losses.categorical_crossentropy,
+          losses.binary_crossentropy,
+          losses.kullback_leibler_divergence,
+          losses.poisson,
+          losses.cosine_proximity,
+          losses.logcosh,
+          losses.categorical_hinge]
     
     
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
+def create_multi_input_model_from(layer1, layer2):
+    input_1 = Input(shape=(data_dim,))
+    input_2 = Input(shape=(data_dim,))
+    out1 = layer1(input_1)
+    out2 = layer2(input_2)
+    out = Average()([out1, out2])
+    model = Model([input_1, input_2], out)
+    model.add_loss(K.mean(out2))
+    model.add_loss(1)
+    model.add_loss(1)
+    return model
+    
+            if self.unit_forget_bias:
+            def bias_initializer(shape, *args, **kwargs):
+                return K.concatenate([
+                    self.bias_initializer((self.units * 5,), *args, **kwargs),
+                    initializers.Ones()((self.units,), *args, **kwargs),
+                    self.bias_initializer((self.units * 2,), *args, **kwargs),
+                ])
+        else:
+            bias_initializer = self.bias_initializer
+        self.bias = self.add_weight(shape=(self.units * 8,),
+                                    name='bias',
+                                    initializer=bias_initializer,
+                                    regularizer=self.bias_regularizer,
+                                    constraint=self.bias_constraint)
+    
+    seq.add(Conv3D(filters=1, kernel_size=(3, 3, 3),
+               activation='sigmoid',
+               padding='same', data_format='channels_last'))
+seq.compile(loss='binary_crossentropy', optimizer='adadelta')
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+y_train = np.array(y_train)
+y_test = np.array(y_test)
     
     
-def test_match():
-    assert match(Command('apt list --upgradable', match_output))
-    assert match(Command('sudo apt list --upgradable', match_output))
-    
-    
-def write_stream(stream, outfile, flush):
-    '''Write the output stream.'''
+def list_rules(client, module):
     try:
-        # Writing bytes so we use the buffer interface (Python 3).
-        buf = outfile.buffer
-    except AttributeError:
-        buf = outfile
+        return list_rules_with_backoff(client)
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Could not list WAF rules')
     
-        # Adapters
-    def get_transport_plugins(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, TransportPlugin)]
-
+            # Create optional stack outputs
+        all_facts = module.params.get('all_facts')
+        if all_facts or module.params.get('stack_resources'):
+            facts['stack_resource_list'] = service_mgr.list_stack_resources(stack_name)
+            facts['stack_resources'] = to_dict(facts.get('stack_resource_list'), 'LogicalResourceId', 'PhysicalResourceId')
+        if all_facts or module.params.get('stack_template'):
+            facts['stack_template'] = service_mgr.get_template(stack_name)
+        if all_facts or module.params.get('stack_policy'):
+            facts['stack_policy'] = service_mgr.get_stack_policy(stack_name)
+        if all_facts or module.params.get('stack_events'):
+            facts['stack_events'] = service_mgr.describe_stack_events(stack_name)
+    
+        if state == 'absent':
+        if not snapshot_id:
+            module.fail_json(msg='snapshot_id must be set when state is absent')
+        try:
+            ec2.delete_snapshot(snapshot_id)
+        except boto.exception.BotoServerError as e:
+            # exception is raised if snapshot does not exist
+            if e.error_code == 'InvalidSnapshot.NotFound':
+                module.exit_json(changed=False)
+            else:
+                module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
+    
+        :param registry_id: Optional string containing the registryId.
+    :return: kwargs dict with registryId, if given
+    '''
+    if not registry_id:
+        return dict()
+    else:
+        return dict(registryId=registry_id)
+    
+    EXAMPLES = '''
+- name: obtain all Elasticache facts
+  elasticache_facts:
     
     
-class PyTest(TestCommand):
-    # `$ python setup.py test' simply installs minimal requirements
-    # and runs the tests with no fancy stuff like parallel execution.
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = [
-            '--doctest-modules', '--verbose',
-            './httpie', './tests'
-        ]
-        self.test_suite = True
-    
-    
-def test_missing_auth(httpbin):
-    r = http(
-        '--auth-type=basic',
-        'GET',
-        httpbin + '/basic-auth/user/password',
-        error_exit_ok=True
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(dict(
+        state=dict(required=True, choices=['present', 'absent']),
+        name=dict(required=True),
+        description=dict(required=False),
+        subnets=dict(required=False, type='list'),
     )
-    assert HTTP_OK not in r
-    assert '--auth required' in r.stderr
-
+    )
+    module = AnsibleModule(argument_spec=argument_spec)
     
-        def test_binary_included_and_correct_when_suitable(self):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', self.url, env=env)
-        assert r == self.bindata
-
+        noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
+    sys.path.append(noarch_lib)
     
+    @section streams Streams
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
-    
-        with gzip.open(paths[0], 'rb') as lbpath:
-        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
-    
-        def get_config(self):
-        return {'mse_fraction': self.mse_fraction}
-    
-                    outs = fit_function(ins_batch)
-                outs = to_list(outs)
-                for l, o in zip(out_labels, outs):
-                    batch_logs[l] = o
-    
-        np.random.seed(args.seed)
-    
-        Returns
-    -------
-    array of floats shaped like (metrics, formats, samples, classes, density)
-        Time in seconds.
-    '''
-    metrics = np.atleast_1d(metrics)
-    samples = np.atleast_1d(samples)
-    classes = np.atleast_1d(classes)
-    density = np.atleast_1d(density)
-    formats = np.atleast_1d(formats)
-    out = np.zeros((len(metrics), len(formats), len(samples), len(classes),
-                    len(density)), dtype=float)
-    it = itertools.product(samples, classes, density)
-    for i, (s, c, d) in enumerate(it):
-        _, y_true = make_multilabel_classification(n_samples=s, n_features=1,
-                                                   n_classes=c, n_labels=d * c,
-                                                   random_state=42)
-        _, y_pred = make_multilabel_classification(n_samples=s, n_features=1,
-                                                   n_classes=c, n_labels=d * c,
-                                                   random_state=84)
-        for j, f in enumerate(formats):
-            f_true = f(y_true)
-            f_pred = f(y_pred)
-            for k, metric in enumerate(metrics):
-                t = timeit(partial(metric, f_true, f_pred), number=n_times)
-    
-                gc.collect()
-            print('benchmarking lars_path (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lars_path(X, y, Gram=None, max_iter=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            lars[i_f, i_s] = delta
-    
-        samples_range = np.linspace(2, 1000, 4).astype(np.int)
-    features_range = np.linspace(2, 1000, 4).astype(np.int)
-    results = compute_bench(samples_range, features_range)
-    
-        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
-                                   'blob/{revision}/{package}/'
-                                   '{path}#L{lineno}')
-    '''
-    revision = _get_git_revision()
-    return partial(_linkcode_resolve, revision=revision, package=package,
-                   url_fmt=url_fmt)
+    class Token(object):
+    '''@brief Abstract token baseclass.'''
