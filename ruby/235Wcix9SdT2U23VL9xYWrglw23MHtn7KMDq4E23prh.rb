@@ -1,149 +1,180 @@
 
         
-                    DateTimeSelector.new(datetime, options, html_options)
-          end
+        WITH_LIQUID = <<-LIQUID.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
+mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
     
-              def initialize(template_object, object_name, method_name, object, tag_value)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @tag_value = tag_value
-          end
-    
-            private
-    
-            conditions.each { |k, v| conditions[k] = Array(v).map(&:to_s) }
-        self._layout_conditions = conditions
-    
-          def extract_details(options) # :doc:
-        @lookup_context.registered_details.each_with_object({}) do |key, details|
-          value = options[key]
-    
-          def raise_or_wait_for_rate_limit
-        rate_limit_counter.increment
-    
-    module Gitlab
-  module GithubImport
-    # IssuableFinder can be used for caching and retrieving database IDs for
-    # issuable objects such as issues and pull requests. By caching these IDs we
-    # remove the need for running a lot of database queries when importing
-    # GitHub projects.
-    class IssuableFinder
-      attr_reader :project, :object
-    
-          # The name of the method to call to retrieve the data to import.
-      def collection_method
-        raise NotImplementedError
+          def after_feature_element(feature_element)
+        @timings[feature_element_timing_key(feature_element)] = Time.now - @timings[feature_element_timing_key(feature_element)]
+        @io.print ' (#{@timings[feature_element_timing_key(feature_element)]}s)'
       end
     
-        # The path used after sending reset password instructions
-    def after_sending_reset_password_instructions_path_for(resource_name)
-      new_session_path(resource_name) if is_navigational_format?
+                # stream_file_data would free us from keeping livereload.js in memory
+            # but JRuby blocks on that call and never returns
+            send_data(reload_body)
+            close_connection_after_writing
+          else
+            body = 'This port only serves livereload.js over HTTP.\n'
+            headers = [
+              'HTTP/1.1 400 Bad Request',
+              'Content-Type: text/plain',
+              'Content-Length: #{body.bytesize}',
+              '',
+              '',
+            ].join('\r\n')
+            send_data(headers)
+            send_data(body)
+            close_connection_after_writing
+          end
+        end
+        # rubocop:enable Metrics/MethodLength
+      end
     end
+  end
+end
+
     
-    # All Devise controllers are inherited from here.
-class DeviseController < Devise.parent_controller.constantize
-  include Devise::Controllers::ScopedViews
-    
-          # Sign in a user bypassing the warden callbacks and stores the user
-      # straight in session. This option is useful in cases the user is already
-      # signed in, but we want to refresh the credentials in session.
-      #
-      # Examples:
-      #
-      #   bypass_sign_in @user, scope: :user
-      #   bypass_sign_in @user
-      def bypass_sign_in(resource, scope: nil)
-        scope ||= Devise::Mapping.find_scope!(resource)
-        expire_data_after_sign_in!
-        warden.session_serializer.store(resource, scope)
-      end
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
+  end
+end
+
     
-      #
-  # Initializes an HTTP packet header class that inherits from a Hash base
-  # class.
-  #
-  def initialize
-    self.dcase_hash = {}
+        delegate :empty?, :blank?, to: :pages
     
-          if chall.nil?
-        dprint('REGAUTH: No challenge data received')
-        return
+    module Docs
+  class Subscriber < ActiveSupport::Subscriber
+    cattr_accessor :namespace
+    
+    # ECMA-262, section 15.1.3
+    def Encode(uri, unescape)
+      uriLength = uri.length;
+      # We are going to pass result to %StringFromCharCodeArray
+      # which does not expect any getters/setters installed
+      # on the incoming array.
+      result    = Array.new(uriLength);
+      index = 0;
+      k = -1;
+      while ((k+=1) < uriLength) do
+        cc1 = uri.charCodeAt(k);
+        next if cc1.nil?
+        if (self.send(unescape, cc1))
+          result[index] = cc1;
+          index += 1
+        else
+          if (cc1 >= 0xDC00 && cc1 <= 0xDFFF);
+            throw('URI malformed')
+          end
+          if (cc1 < 0xD800 || cc1 > 0xDBFF)
+            index = URIEncodeSingle(cc1, result, index);
+          else
+            k+=1;
+            if (k == uriLength);
+              throw('URI malformed')
+            end
+            cc2 = uri.charCodeAt(k);
+            if (cc2 < 0xDC00 || cc2 > 0xDFFF);
+              throw('URI malformed')
+            end
+            index = URIEncodePair(cc1, cc2, result, index);
+          end
+        end
+      end
+      # use .compact to get rid of nils from charCodeAt
+      # return %StringFromCharCodeArray(result);
+      # 'c' = 8 bit signed char
+      # http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-pack
+      return result.compact.pack 'c*'
+    end
+  end # class << self
+end # module
+
+    
+    # Silence locale validation warning
+require 'i18n'
+I18n.enforce_available_locales = false
+    
+        follow_redirect!
+    assert_equal '/create/foo/Home', last_request.fullpath
+    assert last_response.ok?
+  end
+    
+      test 'h1 title sanitizes correctly' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+      if wiki_options[:plantuml_url]
+    Gollum::Filter::PlantUML.configure do |config|
+      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
+      config.url = wiki_options[:plantuml_url]
+    end
+  end
+    
+      class Error < StandardError;
+  end
+    
+        context 'opening brace on separate line from first element' do
+      it 'allows closing brace on same line as last element' do
+        expect_no_offenses(construct(true, false))
       end
     
+        context 'but no comment after the last element' do
+      it 'autocorrects the closing brace' do
+        new_source = autocorrect_source(source)
+    
+          # Returns the iteration variable of the `for` loop.
       #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
+      # @return [Node] The iteration variable of the `for` loop
+      def variable
+        node_parts[0]
+      end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a principal, an asset (e.g., a
-        # workstation user or a network server) on a network.
-        class Element
+          # Checks whether this `hash` uses a mix of hash rocket and colon
+      # delimiters for its pairs.
+      #
+      # @return [Boolean] whether the `hash` uses mixed delimiters
+      def mixed_delimiters?
+        pairs.map(&:delimiter).uniq.size > 1
+      end
     
-              # Decodes the auth_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_auth_time(input)
-            input.value[0].value
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
           end
+        end
+      end
+    end
+  end
+end
+
     
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
-            elems << etype_asn1
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 1
-                self.pvno = decode_asn1_pvno(val)
-              when 2
-                self.msg_type = decode_asn1_msg_type(val)
-              when 3
-                self.pa_data  = decode_asn1_pa_data(val)
-              when 4
-                self.req_body = decode_asn1_req_body(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
-              end
+              inventory_unit.transaction do
+            if inventory_unit.update_attributes(inventory_unit_params)
+              fire
+              render :show, status: 200
+            else
+              invalid_resource!(inventory_unit)
             end
           end
+        end
     
-              # Decodes the etype field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Integer>]
-          def decode_etype(input)
-            encs = []
-            input.value[0].value.each do |enc|
-              encs << enc.value.to_i
-            end
-            encs
-          end
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
