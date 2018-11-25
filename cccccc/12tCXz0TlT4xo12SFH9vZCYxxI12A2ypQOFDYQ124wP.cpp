@@ -1,99 +1,173 @@
 
         
-        
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+        #include <string>
+    
+    #endif  // CAFFE_INTERNAL_THREAD_HPP_
 
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+    void ConstraintBullet::set_space(SpaceBullet *p_space) {
+	space = p_space;
+}
+    
+    #include 'core/rid.h'
+    
+    class RigidBodyBullet;
+    
+    MemoryPool::Alloc *MemoryPool::allocs = NULL;
+MemoryPool::Alloc *MemoryPool::free_list = NULL;
+uint32_t MemoryPool::alloc_count = 0;
+uint32_t MemoryPool::allocs_used = 0;
+Mutex *MemoryPool::alloc_mutex = NULL;
+    
+       static size_type length(const char_type* p) 
+   { 
+      return (std::strlen)(p); 
+   }
+    
+       mapfile_iterator() { node = 0; file = 0; offset = 0; }
+   mapfile_iterator(const mapfile* f, long arg_position)
+   {
+      file = f;
+      node = f->_first + arg_position / mapfile::buf_size;
+      offset = arg_position % mapfile::buf_size;
+      if(file)
+         file->lock(node);
+   }
+   mapfile_iterator(const mapfile_iterator& i)
+   {
+      file = i.file;
+      node = i.node;
+      offset = i.offset;
+      if(file)
+         file->lock(node);
+   }
+   ~mapfile_iterator()
+   {
+      if(file && node)
+         file->unlock(node);
+   }
+   mapfile_iterator& operator = (const mapfile_iterator& i);
+   char operator* ()const
+   {
+      BOOST_ASSERT(node >= file->_first);
+      BOOST_ASSERT(node < file->_last);
+      return file ? *(*node + sizeof(int) + offset) : char(0);
+   }
+   char operator[] (long off)const
+   {
+      mapfile_iterator tmp(*this);
+      tmp += off;
+      return *tmp;
+   }
+   mapfile_iterator& operator++ ();
+   mapfile_iterator operator++ (int);
+   mapfile_iterator& operator-- ();
+   mapfile_iterator operator-- (int);
     
     
     {
-    {  c.reset();
-}
-}
+   vector_type            m_subs;                      // subexpressions
+   BidiIterator   m_base;                              // where the search started from
+   sub_match<BidiIterator> m_null;                     // a null match
+   boost::shared_ptr<named_sub_type> m_named_subs;     // Shared copy of named subs in the regex object
+   int m_last_closed_paren;                            // Last ) to be seen - used for formatting
+   bool m_is_singular;                                 // True if our stored iterators are singular
+};
+    
+    namespace boost{
+namespace BOOST_REGEX_DETAIL_NS{
+    }
+    }
+    
+    #ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
+#define BOOST_REGEX_V4_PROTECTED_CALL_HPP
+    
+       void* BOOST_REGEX_CALL insert(size_type pos, size_type n);
+    
+    
 
     
-      // We use a restricted scope below to change the data structure from
-  // an array to a set. This lets us do deletes much more efficiently
-  std::vector<std::string> created_views;
-  std::set<std::string> erase_views;
-  {
-    std::vector<std::string> old_views_vec;
-    scanDatabaseKeys(kQueries, old_views_vec, kConfigViews);
-    for (const auto& view : old_views_vec) {
-      erase_views.insert(view.substr(kConfigViews.size()));
+    public:
+  static const Data& getData() { return data_; }
+    
+      Time getSerializedTime() const { return serializedTime_; }
+    
+        uint16_t port;
+    auto connection = make_unique<DHTConnectionImpl>(family);
+    {
+      port = e->getBtRegistry()->getUdpPort();
+      const std::string& addr = e->getOption()->get(
+          family == AF_INET ? PREF_DHT_LISTEN_ADDR : PREF_DHT_LISTEN_ADDR6);
+      // If UDP port is already used, use the same port
+      // number. Normally IPv4 port is available, then IPv6 port is
+      // (especially for port >= 1024). We don't loose much by doing
+      // this. We did the same thing in TCP socket. See BtSetup.cc.
+      bool rv;
+      if (port == 0) {
+        auto sgl =
+            util::parseIntSegments(e->getOption()->get(PREF_DHT_LISTEN_PORT));
+        sgl.normalize();
+        rv = connection->bind(port, addr, sgl);
+      }
+      else {
+        rv = connection->bind(port, addr);
+      }
+      if (!rv) {
+        throw DL_ABORT_EX('Error occurred while binding UDP port for DHT');
+      }
+      localNode->setPort(port);
     }
-  }
+    A2_LOG_DEBUG(fmt('Initialized local node ID=%s',
+                     util::toHex(localNode->getID(), DHT_ID_LENGTH).c_str()));
+    auto tracker = std::make_shared<DHTMessageTracker>();
+    auto routingTable = make_unique<DHTRoutingTable>(localNode);
+    auto factory = make_unique<DHTMessageFactoryImpl>(family);
+    auto dispatcher = make_unique<DHTMessageDispatcherImpl>(tracker);
+    auto receiver = make_unique<DHTMessageReceiver>(tracker);
+    auto taskQueue = make_unique<DHTTaskQueueImpl>();
+    auto taskFactory = make_unique<DHTTaskFactoryImpl>();
+    auto peerAnnounceStorage = make_unique<DHTPeerAnnounceStorage>();
+    auto tokenTracker = make_unique<DHTTokenTracker>();
+    // For now, UDPTrackerClient was enabled along with DHT
+    auto udpTrackerClient = std::make_shared<UDPTrackerClient>();
+    const auto messageTimeout =
+        e->getOption()->getAsInt(PREF_DHT_MESSAGE_TIMEOUT);
+    // wiring up
+    tracker->setRoutingTable(routingTable.get());
+    tracker->setMessageFactory(factory.get());
     
-    TEST_F(PacksTests, test_get_discovery_queries) {
-  std::vector<std::string> expected;
+    namespace aria2 {
     }
     
-    /**
- * @brief Compute multiple hashes from a files contents simultaneously.
- *
- * @param mask Bitmask specifying target osquery-supported algorithms.
- * @param path Filesystem path (the hash target).
- * @return A struct containing string (hex) representations
- *         of the hash digests.
- */
-MultiHashes hashMultiFromFile(int mask, const std::string& path);
-    
-    #include <osquery/system.h>
-    
-    Status deserializeDistributedQueryRequest(const rj::Value& obj,
-                                          DistributedQueryRequest& r) {
-  if (!obj.HasMember('query') || !obj.HasMember('id') ||
-      !obj['query'].IsString() || !obj['id'].IsString()) {
-    return Status(1, 'Malformed distributed query request');
-  }
-    }
-    
-    
-    {  // Reorder to the correct output order.
-  // TODO(szabadka): Modify the above computation so that this is not needed.
-  Complex tmp = a[2];
-  a[2] = a[3];
-  a[3] = a[5];
-  a[5] = a[7];
-  a[7] = a[4];
-  a[4] = a[1];
-  a[1] = a[6];
-  a[6] = tmp;
+    void DHTTaskFactoryImpl::setLocalNode(const std::shared_ptr<DHTNode>& localNode)
+{
+  localNode_ = localNode;
 }
     
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-    void ComputeBlockDCT(coeff_t* coeffs) {
-  ColumnDct(coeffs);
-  RowDct(coeffs + 0 * 8, kTable04);
-  RowDct(coeffs + 1 * 8, kTable17);
-  RowDct(coeffs + 2 * 8, kTable26);
-  RowDct(coeffs + 3 * 8, kTable35);
-  RowDct(coeffs + 4 * 8, kTable04);
-  RowDct(coeffs + 5 * 8, kTable35);
-  RowDct(coeffs + 6 * 8, kTable26);
-  RowDct(coeffs + 7 * 8, kTable17);
-}
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-      // Cluster AC histograms.
-  size_t num_ac_histo = ncomps;
-  int ac_histo_indexes[kMaxComponents];
-  ClusterHistograms(&histograms[num_dc_histo], &num_ac_histo, ac_histo_indexes,
-                    &depths[num_dc_histo * JpegHistogram::kSize]);
-    
-    namespace guetzli {
-    }
+    #endif // D_DHT_TASK_QUEUE_H
