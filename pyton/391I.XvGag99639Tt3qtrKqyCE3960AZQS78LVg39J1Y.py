@@ -1,135 +1,217 @@
 
         
-        # Prepare model model saving directory.
-save_dir = os.path.join(os.getcwd(), 'saved_models')
-model_name = 'cifar10_%s_model.{epoch:03d}.h5' % model_type
-if not os.path.isdir(save_dir):
-    os.makedirs(save_dir)
-filepath = os.path.join(save_dir, model_name)
+            def test_POST_no_data_no_auto_headers(self, httpbin):
+        # JSON headers shouldn't be automatically set for POST with no data.
+        r = http('POST', httpbin.url + '/post')
+        assert HTTP_OK in r
+        assert ''Accept': '*/*'' in r
+        assert ''Content-Type': 'application/json' not in r
     
-        def __call__(self, x):
-        return 0.
+    from utils import TESTS_ROOT
     
+        validation_mgr = CloudFrontInvalidationValidationManager(module)
+    service_mgr = CloudFrontInvalidationServiceManager(module)
     
-def test_preprocess_input():
-    # Test image batch with float and int image input
-    x = np.random.uniform(0, 255, (2, 10, 10, 3))
-    xint = x.astype('int32')
-    assert utils.preprocess_input(x).shape == x.shape
-    assert utils.preprocess_input(xint).shape == xint.shape
+        def ensure_absent(self):
+        '''Ensures the rule and targets are absent'''
+        rule_description = self.rule.describe()
+        if not rule_description:
+            # Rule doesn't exist so don't need to delete
+            return
+        self.rule.delete()
     
+        return matched_asgs
     
-def test_reuters():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = reuters.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        assert len(x_train) + len(x_test) == 11228
-        (x_train, y_train), (x_test, y_test) = reuters.load_data(maxlen=10)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = reuters.get_word_index()
-        assert isinstance(word_index, dict)
-    
-        # Arguments
-        x: Numpy array to normalize.
-        axis: axis along which to normalize.
-        order: Normalization order (e.g. 2 for L2 norm).
-    
-                    # Apply model on slice
-                # (creating a model replica on the target device).
-                outputs = model(inputs)
-                outputs = to_list(outputs)
-    
-    import matplotlib.pyplot as plt
+    # List all EIP addresses for several VMs.
+- ec2_eip_facts:
+    filters:
+       instance-id:
+         - i-123456789
+         - i-987654321
+  register: my_vms_eips
     
     
-def compute_bench(samples_range, features_range, n_iter=3, rank=50):
-    
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
-    
-    if __name__ == '__main__':
-    ###########################################################################
-    # Option parser
-    ###########################################################################
-    op = optparse.OptionParser()
-    op.add_option('--n-times',
-                  dest='n_times', default=5, type=int,
-                  help='Benchmark results are average over n_times experiments')
-    
-        # Plot results
-    i = 0
-    m = len(list_n_features)
-    plt.figure('scikit-learn SGD regression benchmark results',
-               figsize=(5 * 2, 4 * m))
-    for j in range(m):
-        plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 0]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 0]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 0]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 0]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('RMSE')
-        plt.title('Test error - %d features' % list_n_features[j])
-        i += 1
-    
-    # Gather data for each version directory, including symlinks
-dirs = {}
-symlinks = {}
-root_listing = json_urlread(ROOT_URL)
-for path_details in root_listing:
-    name = path_details['name']
-    if not (name[:1].isdigit() or name in NAMED_DIRS):
-        continue
-    if path_details['type'] == 'dir':
-        html = urlopen(RAW_FMT % name).read().decode('utf8')
-        version_num = VERSION_RE.search(html).group(1)
-        pdf_size = get_pdf_size(name)
-        dirs[name] = (version_num, pdf_size)
+DOCUMENTATION = '''
+---
+module: ec2_lc_find
+short_description: Find AWS Autoscaling Launch Configurations
+description:
+  - Returns list of matching Launch Configurations for a given name, along with other useful information
+  - Results can be sorted and sliced
+  - It depends on boto
+  - Based on the work by Tom Bamford (https://github.com/tombamford)
     
     
-def _make_issue_node(issue_no, config, options=None):
-    options = options or {}
-    if issue_no not in ('-', '0'):
-        if config.issues_uri:
-            ref = config.issues_uri.format(issue=issue_no)
-        elif config.issues_github_path:
-            ref = 'https://github.com/{0}/issues/{1}'.format(
-                config.issues_github_path, issue_no
-            )
-        issue_text = '#{0}'.format(issue_no)
-        link = nodes.reference(text=issue_text, refuri=ref, **options)
-    else:
-        link = None
-    return link
+def get_vpc(module, connection, vpc_id):
+    # wait for vpc to be available
+    try:
+        connection.get_waiter('vpc_available').wait(VpcIds=[vpc_id])
+    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+        module.fail_json_aws(e, msg='Unable to wait for VPC {0} to be available.'.format(vpc_id))
     
-            # Check cert keyfile exists
-        if hasattr(OpenSSL.crypto, 'load_publickey'):
-            if os.path.exists(CertUtil.cert_keyfile):
-                with open(CertUtil.cert_keyfile, 'rb') as fp:
-                    CertUtil.cert_publickey = OpenSSL.crypto.load_publickey(OpenSSL.crypto.FILETYPE_PEM, fp.read())
-            else:
-                CertUtil.generate_cert_keyfile()
+        def delete_repository(self, registry_id, name):
+        if not self.check_mode:
+            repo = self.ecr.delete_repository(
+                repositoryName=name, **build_kwargs(registry_id))
+            self.changed = True
+            return repo
         else:
-            CertUtil.cert_keyfile = None
+            repo = self.get_repository(registry_id, name)
+            if repo:
+                self.skipped = True
+                return repo
+            return None
     
-            if self.mismatchIsMissingToken(input, follow):
-            self.reportError(e)
-            # we don't know how to conjure up a token for sets yet
-            return self.getMissingSymbol(input, e, INVALID_TOKEN_TYPE, follow)
     
-            if stop is None:
-            stop = len(self.tokens) - 1
-        elif not isinstance(stop, int):
-            stop = stop.index
-        
-        if stop >= len(self.tokens):
-            stop = len(self.tokens) - 1
+def copy(module, connection, name, target, bucket):
+    ''' Copy an Elasticache backup. '''
+    try:
+        response = connection.copy_snapshot(SourceSnapshotName=name,
+                                            TargetSnapshotName=target,
+                                            TargetBucket=bucket)
+        changed = True
+    except botocore.exceptions.ClientError as e:
+        module.fail_json(msg='Unable to copy the snapshot.', exception=traceback.format_exc())
+    return response, changed
+    
+        state = module.params.get('state')
+    group_name = module.params.get('name').lower()
+    group_description = module.params.get('description')
+    group_subnets = module.params.get('subnets') or {}
+    
+    EXAMPLES = '''
+# Create a Redshift subnet group
+- local_action:
+    module: redshift_subnet_group
+    state: present
+    group_name: redshift-subnet
+    group_description: Redshift subnet
+    group_subnets:
+        - 'subnet-aaaaa'
+        - 'subnet-bbbbb'
+    
+            return True
+    
+        def close(self):
+        self.fd.close()
+    
+        def get(self):
+        n = random.randint(2, 3)
+        ws = []
+        for i in range(0, n):
+            w = self.slice.get()
+            ws.append(w)
+    
+    # tree.RewriteRuleElementStream
+# tree.RewriteRuleSubtreeStream
+# tree.RewriteRuleTokenStream
+# CharStream
+# DFA
+# TokenSource
+    
+            raise NotImplementedError
+    
+    
+        def test_relpath_bytes(self):
+        (real_getcwdb, os.getcwdb) = (os.getcwdb, lambda: br'/home/user/bar')
+        try:
+            curdir = os.path.split(os.getcwdb())[-1]
+            self.assertRaises(ValueError, posixpath.relpath, b'')
+            self.assertEqual(posixpath.relpath(b'a'), b'a')
+            self.assertEqual(posixpath.relpath(posixpath.abspath(b'a')), b'a')
+            self.assertEqual(posixpath.relpath(b'a/b'), b'a/b')
+            self.assertEqual(posixpath.relpath(b'../a/b'), b'../a/b')
+            self.assertEqual(posixpath.relpath(b'a', b'../b'),
+                             b'../'+curdir+b'/a')
+            self.assertEqual(posixpath.relpath(b'a/b', b'../c'),
+                             b'../'+curdir+b'/a/b')
+            self.assertEqual(posixpath.relpath(b'a', b'b/c'), b'../../a')
+            self.assertEqual(posixpath.relpath(b'a', b'a'), b'.')
+            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/x/y/z'), b'../../../foo/bar/bat')
+            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/foo/bar'), b'bat')
+            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/'), b'foo/bar/bat')
+            self.assertEqual(posixpath.relpath(b'/', b'/foo/bar/bat'), b'../../..')
+            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/x'), b'../foo/bar/bat')
+            self.assertEqual(posixpath.relpath(b'/x', b'/foo/bar/bat'), b'../../../x')
+            self.assertEqual(posixpath.relpath(b'/', b'/'), b'.')
+            self.assertEqual(posixpath.relpath(b'/a', b'/a'), b'.')
+            self.assertEqual(posixpath.relpath(b'/a/b', b'/a/b'), b'.')
+    
+        def test_bad_params(self):
+        # Test invalid parameter combinations.
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'wbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'xbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', encoding='utf-8')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', errors='ignore')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', newline='\n')
+    
+    def worker(input, output):
+    for func, args in iter(input.get, 'STOP'):
+        result = calculate(func, args)
+        output.put(result)
+    
+        '''catalog of multiple class methods that are executed depending on an init
+    
+    
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
+    
+    ### OUTPUT ###
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# HexViewer: Subject Data 1 has data 0xa
+# Setting Data 2 = 15
+# HexViewer: Subject Data 2 has data 0xf
+# DecimalViewer: Subject Data 2 has data 15
+# Setting Data 1 = 3
+# DecimalViewer: Subject Data 1 has data 3
+# HexViewer: Subject Data 1 has data 0x3
+# Setting Data 2 = 5
+# HexViewer: Subject Data 2 has data 0x5
+# DecimalViewer: Subject Data 2 has data 5
+# Detach HexViewer from data1 and data2.
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# Setting Data 2 = 15
+# DecimalViewer: Subject Data 2 has data 15
+
+    
+    ### OUTPUT ###
+# jim got cartoon
+# jack got music
+# gee got movie
+# jim got cartoon
+# jim got cartoon
+# gee got movie
+
+    
+        REGISTRY = {}
+    
+        strat0.execute()
+    strat1.execute()
+    strat2.execute()
+    
+        def __get__(self, obj, type_):
+        if obj is None:
+            return self
+        val = self.function(obj)
+        obj.__dict__[self.function.__name__] = val
+        return val
+    
+    
+class MidnightTimeProvider(object):
+    '''
+    Class implemented as hard-coded stub (in contrast to configurable stub).
+    '''
+    
+    
+class UnsupportedTransition(BaseException):
+    pass
