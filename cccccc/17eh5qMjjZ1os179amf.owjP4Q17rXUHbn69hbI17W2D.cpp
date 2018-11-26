@@ -1,334 +1,224 @@
 
         
-        namespace swig {
-namespace {
-    }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    void CostAnalyzer::PredictCosts(CostEstimator* cost_estimator,
-                                CostGraphDef* cost_graph, int64* total_time) {
-  TF_CHECK_OK(cost_estimator->Initialize(*item_));
-  Costs costs;
-  const Status status =
-      cost_estimator->PredictCosts(item_->graph, cost_graph, &costs);
-  *total_time = costs.execution_time.count();
-  if (!status.ok()) {
-    LOG(ERROR) << 'Could not estimate the cost for item ' << item_->id << ': '
-               << status.error_message();
-    return;
-  }
-}
-    
-      void Compute(OpKernelContext* context) override {
-    // Output a scalar string.
-    Tensor* output_tensor = nullptr;
-    OP_REQUIRES_OK(context,
-                   context->allocate_output(0, TensorShape(), &output_tensor));
-    auto output = output_tensor->scalar<string>();
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-    
-    
-    {  PyObject* np_array =
-      PyArray_SimpleNewFromData(dim_size, dims, type_num, data);
-  if (PyType_Ready(&TensorReleaserType) == -1) {
-    return errors::Unknown('Python type initialization failed.');
-  }
-  TensorReleaser* releaser = reinterpret_cast<TensorReleaser*>(
-      TensorReleaserType.tp_alloc(&TensorReleaserType, 0));
-  releaser->destructor = new std::function<void()>(std::move(destructor));
-  if (PyArray_SetBaseObject(reinterpret_cast<PyArrayObject*>(np_array),
-                            reinterpret_cast<PyObject*>(releaser)) == -1) {
-    Py_DECREF(releaser);
-    return errors::Unknown('Python array refused to use memory.');
-  }
-  *result = PyArray_Return(reinterpret_cast<PyArrayObject*>(np_array));
-  return Status::OK();
-}
-    
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    StreamExecutor *stream_exec)
-    : ScopedActivateExecutorContext(ExtractCudaExecutor(stream_exec)) {}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(UvTaskRunner);
-};
-    
-    void AutoUpdater::OnError(const std::string& message,
-                          const int code,
-                          const std::string& domain) {
-  v8::Locker locker(isolate());
-  v8::HandleScope handle_scope(isolate());
-  auto error = v8::Exception::Error(mate::StringToV8(isolate(), message));
-  auto errorObject =
-      error->ToObject(isolate()->GetCurrentContext()).ToLocalChecked();
-    }
-    
-    class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
-                    public auto_updater::Delegate,
-                    public WindowListObserver {
+        /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
  public:
-  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
-    }
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
     
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_content_tracing, Initialize)
-
+    #ifndef CPU_ONLY
+  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_gpu_bias(Dtype* output, const Dtype* bias);
+  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* col_output);
+  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
+      weights);
+  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+#endif
     
-    #include 'atom/common/node_includes.h'
-    
-    #if defined(OS_WIN)
-    
-    namespace gfx {
-class Point;
-class Rect;
-class Screen;
-}  // namespace gfx
-    
-    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
  public:
-  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
-                                  mate::Arguments* args);
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    class AtomBrowserContext;
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    {  AtomFrameHostMsg_Message_Sync::WriteReplyParams(message_, result);
-  bool success = sender_->Send(message_);
-  message_ = nullptr;
-  sender_ = nullptr;
-  return success;
-}
-    
-    namespace internal {
+    namespace caffe {
     }
     
-      // this.emit(name, new Event(), args...);
-  template <typename... Args>
-  bool Emit(const base::StringPiece& name, const Args&... args) {
-    return EmitWithSender(name, nullptr, nullptr, args...);
-  }
     
-    #include <string>
-    
-    #else  // !defined(__AVX__)
-// Implementation for avx capable archs.
-#include <immintrin.h>
-#include <cstdint>
-#include 'dotproductavx.h'
-    
-    IntSimdMatrixAVX2::IntSimdMatrixAVX2() {
-#ifdef __AVX2__
-  num_outputs_per_register_ = kNumOutputsPerRegister;
-  max_output_registers_ = kMaxOutputRegisters;
-  num_inputs_per_register_ = kNumInputsPerRegister;
-  num_inputs_per_group_ = kNumInputsPerGroup;
-  num_input_groups_ = kNumInputGroups;
-  partial_funcs_ = {PartialMatrixDotVector64, PartialMatrixDotVector32,
-                    PartialMatrixDotVector16, PartialMatrixDotVector8};
-#endif  // __AVX2__
-}
-    
-    enum GARBAGE_LEVEL
-{
-  G_NEVER_CRUNCH,
-  G_OK,
-  G_DODGY,
-  G_TERRIBLE
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
 };
+#endif
     
-      // Starting from the seed position, we search the part_grid_
-  // horizontally/vertically, find all parititions that can be
-  // merged with seed, remove them from part_grid_, and put them  into
-  // parts_to_merge.
-  void ExpandSeedHorizontal(const bool search_left,
-                            ColPartition* seed,
-                            GenericVector<ColPartition*>* parts_to_merge);
-  void ExpandSeedVertical(const bool search_bottom,
-                          ColPartition* seed,
-                          GenericVector<ColPartition*>* parts_to_merge);
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t bias_desc_;
+  cudnnFilterDescriptor_t filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
-    struct BlamerBundle;
-class C_BLOB_IT;
-class PAGE_RES;
-class PAGE_RES_IT;
-class WERD;
-struct Pix;
-struct Pta;
+      int size_, pre_pad_;
+  Dtype alpha_, beta_, k_;
     
-    namespace caffe2 {
-    }
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    Missing features (represented by empty ranges) filled with default_value.
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
+                    if (accumulatedMetric)
+                {
+                    m_metric.second = accumulatedMetric->AsScalar<double>();
+                }
     
-    
-    {          return out;
-        });
-OPERATOR_SCHEMA(Float16ConstantFill)
-    .NumInputs(0)
-    .NumOutputs(1)
-    .TensorInferenceFunction(Float16FillerTensorInference)
-    .Arg('value', 'The value for the elements of the output tensor.')
-    .Arg('shape', 'The shape of the output tensor.')
-    .Output(
-        0,
-        'output',
-        'Output tensor of constant values specified by 'value'');
-    
-            virtual Dictionary GetCheckpointState() const override;
-        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
-    
-    
-    {
-    {    private:
-        static bool IsNativeUDF(const Dictionary& dict);
-    };
-}
-
-    
-    
-    {        auto ownerFunctionPtr = m_ownerFunction.lock();
-        if (ownerFunctionPtr != nullptr)
-            return ownerFunctionPtr->shared_from_this();
-        else
-            return nullptr;
-    }
-    
-    // GetHmmData - Get the HMM definition for SE training
-// hmm - HMM definition
-// returns - true if succeed
-bool DataReader::GetHmmData(msra::asr::simplesenonehmm* hmm)
+    // Same as above but with additional information about required streams.
+void DataReader::StartDistributedMinibatchLoop(size_t mbSize, size_t epoch, size_t subsetNum, size_t numSubsets, const std::unordered_set<InputStreamDescription>& streamDescriptions, size_t requestedEpochSamples /* = requestDataSize*/)
 {
-    bool bRet = true;
     for (size_t i = 0; i < m_ioNames.size(); i++)
-        bRet &= m_dataReaders[m_ioNames[i]]->GetHmmData(hmm);
-    return bRet;
+    {
+        m_dataReaders[m_ioNames[i]]->StartDistributedMinibatchLoop(mbSize, epoch, subsetNum, numSubsets, streamDescriptions, requestedEpochSamples);
+    }
 }
     
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
+    // -----------------------------------------------------------------------
+// DynamicAxisNode (/*no input*/)
+// This is a holder for MBLayout objects shared across inputs.
+// -----------------------------------------------------------------------
+template <class ElemType>
+class DynamicAxisNode : public ComputationNode<ElemType>, public NumInputs<0>
+{
+    typedef ComputationNode<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'DynamicAxis'; }
+public:
+    DynamicAxisNode(DEVICEID_TYPE deviceId, const wstring& name)
+        : Base(deviceId, name)
+    {
+        // BUGBUG: In BS, the node name is not known during node instantiation.
+        // This may require to pass the display name as a separate parameter.
+    }
+    }
+    
+    #include 'internal_macros.h'
+#include 'log.h'
+    
+    namespace benchmark {
+namespace {
+#ifdef BENCHMARK_OS_WINDOWS
+typedef WORD PlatformColorCode;
 #else
-#include <execinfo.h>
-#include <cxxabi.h>
+typedef const char* PlatformColorCode;
 #endif
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        Matrix<ElemType> sliceInput1Value = Input(1)->ValueFor(fr);
-        Matrix<ElemType> sliceOutputValue = ValueFor(fr);
+    }
     }
     
-    #  ifdef BOOST_MSVC
-#     pragma warning(push)
-#     pragma warning(disable : 4251 4231)
-#     if BOOST_MSVC < 1600
-#     pragma warning(disable : 4660)
-#     endif
-#  endif
-    
-    template <class I>
-struct is_random_pointer_imp
-{
-   BOOST_STATIC_CONSTANT(bool, value = true);
-};
-    
-    #endif
-    
-    template <class BidiIterator, class Allocator, class traits>
-void perl_matcher<BidiIterator, Allocator, traits>::push_parenthesis_pop()
-{
-   saved_state* pmp = static_cast<saved_state*>(m_backup_state);
-   --pmp;
-   if(pmp < m_stack_base)
-   {
-      extend_stack();
-      pmp = static_cast<saved_state*>(m_backup_state);
-      --pmp;
-   }
-   (void) new (pmp)saved_state(16);
-   m_backup_state = pmp;
+    // Function to return an string for the calculated complexity
+std::string GetBigOString(BigO complexity) {
+  switch (complexity) {
+    case oN:
+      return 'N';
+    case oNSquared:
+      return 'N^2';
+    case oNCubed:
+      return 'N^3';
+    case oLogN:
+      return 'lgN';
+    case oNLogN:
+      return 'NlgN';
+    case o1:
+      return '(1)';
+    default:
+      return 'f(N)';
+  }
 }
     
-    #ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
+      // Do not print timeLabel on bigO and RMS report
+  if (run.report_big_o) {
+    Out << GetBigOString(run.complexity);
+  } else if (!run.report_rms) {
+    Out << GetTimeUnitString(run.time_unit);
+  }
+  Out << ',';
     
-    namespace boost{
-    }
-    
-        /// A structure that describe a glyph.
-    struct GlyphInfo 
-    {
-        float Width;		// Glyph's width in pixels.
-        float Height;		// Glyph's height in pixels.
-        float OffsetX;		// The distance from the origin ('pen position') to the left of the glyph.
-        float OffsetY;		// The distance from the origin to the top of the glyph. This is usually a value < 0.
-        float AdvanceX;		// The distance from the origin to the origin of the next glyph. This is usually a value > 0.
-    };
-    
-    
-    {    return true;
+    inline LogType& operator<<(LogType& log, EndLType* m) {
+  if (log.out_) {
+    *log.out_ << m;
+  }
+  return log;
 }
     
+      // State for barrier management
+  int phase_number_ = 0;
+  int entered_ = 0;  // Number of threads that have entered this barrier
     
-    {            // Add vertexes
-            for (int i = 0; i < points_count; i++)
-            {
-                _VtxWritePtr[0].pos = temp_points[i*4+0]; _VtxWritePtr[0].uv = uv; _VtxWritePtr[0].col = col_trans;
-                _VtxWritePtr[1].pos = temp_points[i*4+1]; _VtxWritePtr[1].uv = uv; _VtxWritePtr[1].col = col;
-                _VtxWritePtr[2].pos = temp_points[i*4+2]; _VtxWritePtr[2].uv = uv; _VtxWritePtr[2].col = col;
-                _VtxWritePtr[3].pos = temp_points[i*4+3]; _VtxWritePtr[3].uv = uv; _VtxWritePtr[3].col = col_trans;
-                _VtxWritePtr += 4;
-            }
-        }
-        _VtxCurrentIdx += (ImDrawIdx)vtx_count;
+    namespace benchmark {
     }
-    else
-    {
-        // Non Anti-aliased Stroke
-        const int idx_count = count*6;
-        const int vtx_count = count*4;      // FIXME-OPT: Not sharing edges
-        PrimReserve(idx_count, vtx_count);
+    
+    #include <cerrno>
+#include <cstdlib>
+#include <ctime>
