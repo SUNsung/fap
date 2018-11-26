@@ -1,76 +1,72 @@
 
         
-            # The stdlib recorded in the install receipt is used during dependency
-    # compatibility checks, so we only care about the stdlib that libraries
-    # link against.
-    keg.detect_cxx_stdlibs(:skip_executables => true)
-  end
-    
-        def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
-            end
-          rescue ThreadError # ignore empty queue error
-          end
-        end
+                @response = (gets || '').chomp
       end
-      workers.map(&:join)
-    end
     
-        @@remote_tap_formulae ||= Hash.new do |cache, key|
-      user, repo = key.split('/', 2)
-      tree = {}
+            print_deprecation_warnings_if_applicable
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
-  end
-  alias_method :python2, :python
-  alias_method :python3, :python
-end
-
+    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
+# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
+# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
+# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
+if $0 == __FILE__
+  LogStash::Bundler.setup!({:without => [:build, :development]})
+  require_relative 'patches/jar_dependencies'
     
-    desc 'Run all tests'
-task :test do
-  test_cases = [
-    {
-      'env'   => {'MATHN' => 'true'},
-      'tasks' => ['test:ruby', 'test:spec', :rubocop]
-    },
-    {
-      'env'   => {'MATHN' => 'false'},
-      'tasks' => ['test:ruby']
-    }
-  ]
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+      end
     
-        desc 'Run the unit specs'
-    task :unit => 'fixture_tarballs:unpack' do
-      sh unit_specs_command
-    end
-    
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
-    end
-    
-        # Checks that the podfile exists.
-    #
-    # @raise  If the podfile does not exists.
-    #
-    # @return [void]
-    #
-    def verify_podfile_exists!
-      unless config.podfile
-        raise Informative, 'No `Podfile' found in the project directory.'
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
       end
     end
     
-          private
+    # test/spec/mini 3
+# http://gist.github.com/25455
+# chris@ozmm.org
+# file:lib/test/spec/mini.rb
+def context(*args, &block)
+  return super unless (name = args.first) && block
+  require 'test/unit'
+  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
+    def self.test(name, &block)
+      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
+    end
+    
+      test 'creates korean page which contains korean content' do
+    post '/create', :content => '한글 text', :page => 'k',
+         :format             => 'markdown', :message => 'def'
+    follow_redirect!
+    assert last_response.ok?
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
+    end
+    
+    Given(/^I add a '(.*?)' processor in '(.*?)'$/) do |processor, directory|
+  filename = '#{directory}/#{processor}.rb'
+  cd('.') do
+    FileUtils.mkdir_p directory
+    File.open(filename, 'w') do |f|
+      f.write(<<-CLASS)
+        module Paperclip
+          class #{processor.capitalize} < Processor
+            def make
+              basename = File.basename(file.path, File.extname(file.path))
+              dst_format = options[:format] ? '.\#{options[:format]}' : ''
+    
+      def migration_file_name
+    '#{migration_name}.rb'
+  end
