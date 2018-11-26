@@ -1,79 +1,101 @@
 
         
-          def show
-    render json: collection_presenter,
-           serializer: ActivityPub::CollectionSerializer,
-           adapter: ActivityPub::Adapter,
-           content_type: 'application/activity+json',
-           skip_activities: true
-  end
-    
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
+          bottle_ext && bottle_url_ext && bottle_ext != bottle_url_ext
 end
-
     
-        private
-    
-        def create
-      authorize :status, :update?
-    
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
   end
     
       private
     
-      def update
-    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
     
-    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
-  class Photo < ApplicationRecord
-  end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
+    platforms :ruby do
+  gem 'sqlite3'
 end
     
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
+      def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+    
+      protected
+    
+    class DeviseCreateUsers < ActiveRecord::Migration
+  def change
+    create_table(:users) do |t|
+      t.string :email,              null: false
+      t.string :encrypted_password, null: true
+      t.timestamps null: false
+    end
+    
+          def remember_key(resource, scope)
+        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
+      end
     end
   end
 end
 
     
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
       end
+    
+        def self.find_by_path!(path, path_type=:fullpath)
+      Devise.mappings.each_value { |m| return m if path.include?(m.send(path_type)) }
+      raise 'Could not find a valid mapping for path #{path.inspect}'
     end
-    
-          before_action :set_content_type
-      before_action :load_user
-      before_action :authorize_for_order, if: proc { order_token.present? }
-      before_action :authenticate_user
-      before_action :load_user_roles
-    
-            private
-    
-        template '/engineyard/bin/sidekiq' do
-      owner 'root'
-      group 'root' 
-      mode 0755
-      source 'sidekiq.erb' 
-    end
-    
-          def push_bulk(items)
-        new.push_bulk(items)
-      end
