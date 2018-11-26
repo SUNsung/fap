@@ -1,196 +1,250 @@
 
         
-        // This flag controls the style of death tests.  Valid values are 'threadsafe',
-// meaning that the death test child process will re-execute the test binary
-// from the start, running only a single death test, or 'fast',
-// meaning that the child process will execute the test logic immediately
-// after forking.
-GTEST_DECLARE_string_(death_test_style);
+          // Same as above, but you can choose the interception scope of this object.
+  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+                                   TestPartResultArray* result);
     
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(ScopedFakeTestPartResultReporter);
-};
-    
-      // Returns true if pathname describes an absolute path.
-  bool IsAbsolutePath() const;
-    
-    
-    {  return result;
-}
-    
-    // We will track memory used by this class.
-class Water {
- public:
-  // Normal Water declarations go here.
-    }
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    template <typename E>  // E is the element type.
-class Queue {
- public:
-  // Creates an empty queue.
-  Queue() : head_(NULL), last_(NULL), size_(0) {}
-    }
-    
-    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsCollision(body0, body1);
-}
-    
-    
-    {		allocs[i].free_list = &allocs[i + 1];
-	}
-    
-    
-    {	ERR_FAIL_COND_V(!zfile, -1);
-	at_eof = unzeof(zfile);
-	if (at_eof)
-		return 0;
-	int read = unzReadCurrentFile(zfile, p_dst, p_length);
-	ERR_FAIL_COND_V(read < 0, read);
-	if (read < p_length)
-		at_eof = true;
-	return read;
-};
-    
-      // Returns the combined score of the output image in the last Compare() call
-  // (or the baseline image, if Compare() was not called yet), based on output
-  // size and the similarity metric.
-  virtual double ScoreOutputSize(int size) const = 0;
-    
-    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
-// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-static const double kDCTMatrix[64] = {
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
- -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
-  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
- -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
-  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
-  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
- -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
-  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
- -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
-  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
-  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
-};
-    
-    
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
-    }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
-  }
-}
-    
-    inline void ColumnDct(coeff_t* in) {
-  for (int i = 0; i < 8; ++i) {
-    int m0, m1, m2, m3, m4, m5, m6, m7;
-    COLUMN_DCT8(in + i);
-  }
-}
-    
-      std::unique_ptr<char[]> buf(new char[buffer_size]);
-  while (!feof(f)) {
-    size_t read_bytes = fread(buf.get(), sizeof(char), buffer_size, f);
-    if (ferror(f)) {
-      perror('fread');
-      exit(1);
-    }
-    result.append(buf.get(), read_bytes);
+    // Traps C++ exceptions escaping statement and reports them as test
+// failures. Note that trapping SEH exceptions is not implemented here.
+# if GTEST_HAS_EXCEPTIONS
+#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
+  try { \
+    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } catch (const ::std::exception& gtest_exception) { \
+    fprintf(\
+        stderr, \
+        '\n%s: Caught std::exception-derived exception escaping the ' \
+        'death test statement. Exception message: %s\n', \
+        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
+        gtest_exception.what()); \
+    fflush(stderr); \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  } catch (...) { \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
   }
     
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg);
+    // Creates a new TestInfo object and registers it with Google Test;
+// returns the created object.
+//
+// Arguments:
+//
+//   test_case_name:   name of the test case
+//   name:             name of the test
+//   type_param        the name of the test's type parameter, or NULL if
+//                     this is not a typed or a type-parameterized test.
+//   value_param       text representation of the test's value parameter,
+//                     or NULL if this is not a type-parameterized test.
+//   fixture_class_id: ID of the test fixture class
+//   set_up_tc:        pointer to the function that sets up the test case
+//   tear_down_tc:     pointer to the function that tears down the test case
+//   factory:          pointer to the factory that creates a test object.
+//                     The newly created TestInfo instance will assume
+//                     ownership of the factory object.
+GTEST_API_ TestInfo* MakeAndRegisterTestInfo(
+    const char* test_case_name,
+    const char* name,
+    const char* type_param,
+    const char* value_param,
+    TypeId fixture_class_id,
+    SetUpTestCaseFunc set_up_tc,
+    TearDownTestCaseFunc tear_down_tc,
+    TestFactoryBase* factory);
     
-    void AddApp0Data(JPEGData* jpg) {
-  const unsigned char kApp0Data[] = {
-      0xe0, 0x00, 0x10,              // APP0
-      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
-      0x01, 0x01,                    // v1.01
-      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
-      0x00, 0x00                     // thumbnail width/height
-  };
-  jpg->app_data.push_back(
-      std::string(reinterpret_cast<const char*>(kApp0Data),
-                                 sizeof(kApp0Data)));
-}
     
+    {    if (next_ == this) return true;
+    linked_ptr_internal const* p = next_;
+    while (p->next_ != this) p = p->next_;
+    p->next_ = next_;
+    return false;
+  }
     
-    {}  // namespace guetzli
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
     
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo) {
-  for (size_t i = 0; i < jpg.components.size(); ++i) {
-    const JPEGComponent& c = jpg.components[i];
-    JpegHistogram* dc_histogram = &histo[i];
-    coeff_t last_dc_coeff = 0;
-    for (int mcu_y = 0; mcu_y < jpg.MCU_rows; ++mcu_y) {
-      for (int mcu_x = 0; mcu_x < jpg.MCU_cols; ++mcu_x) {
-        for (int iy = 0; iy < c.v_samp_factor; ++iy) {
-          for (int ix = 0; ix < c.h_samp_factor; ++ix) {
-            int block_y = mcu_y * c.v_samp_factor + iy;
-            int block_x = mcu_x * c.h_samp_factor + ix;
-            int block_idx = block_y * c.width_in_blocks + block_x;
-            coeff_t dc_coeff = c.coeffs[block_idx << 6];
-            int diff = std::abs(dc_coeff - last_dc_coeff);
-            int nbits = Log2Floor(diff) + 1;
-            dc_histogram->Add(nbits);
-            last_dc_coeff = dc_coeff;
-          }
-        }
+      template <GTEST_7_TYPENAMES_(U)>
+  tuple& CopyFrom(const GTEST_7_TUPLE_(U)& t) {
+    f0_ = t.f0_;
+    f1_ = t.f1_;
+    f2_ = t.f2_;
+    f3_ = t.f3_;
+    f4_ = t.f4_;
+    f5_ = t.f5_;
+    f6_ = t.f6_;
+    return *this;
+  }
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+    // Tests factorial of negative numbers.
+TEST(FactorialTest, Negative) {
+  // This test is named 'Negative', and belongs to the 'FactorialTest'
+  // test case.
+  EXPECT_EQ(1, Factorial(-5));
+  EXPECT_EQ(1, Factorial(-1));
+  EXPECT_GT(Factorial(-10), 0);
+    }
+    
+    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
+#define STORAGE_LEVELDB_DB_BUILDER_H_
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_WRITER_H_
+#define STORAGE_LEVELDB_DB_LOG_WRITER_H_
+    
+        // Extract metadata by scanning through table.
+    int counter = 0;
+    Iterator* iter = NewTableIterator(t.meta);
+    bool empty = true;
+    ParsedInternalKey parsed;
+    t.max_sequence = 0;
+    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      if (!ParseInternalKey(key, &parsed)) {
+        Log(options_.info_log, 'Table #%llu: unparsable key %s',
+            (unsigned long long) t.meta.number,
+            EscapeString(key).c_str());
+        continue;
       }
     }
-  }
-}
     
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
-  }
- private:
-  JPEGOutputHook cb;
-  void* data;
-};
-    
-            if ((order & (memory_order_consume | memory_order_acquire)) != 0)
-            hardware_full_fence();
-    
-    #if BOOST_ATOMIC_THREAD_FENCE > 0
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::thread_fence(order);
-}
-#else
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::thread_fence();
-}
+    template class BOOST_REGEX_TEMPLATE_DECL match_results< const BOOST_REGEX_CHAR_T* >;
+#ifndef BOOST_NO_STD_ALLOCATOR
+template class BOOST_REGEX_TEMPLATE_DECL ::boost::BOOST_REGEX_DETAIL_NS::perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >;
 #endif
+#if !(defined(BOOST_DINKUMWARE_STDLIB) && (BOOST_DINKUMWARE_STDLIB <= 1))\
+   && !(defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION <= 800))\
+   && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))\
+   && !defined(BOOST_REGEX_ICU_INSTANCES)
+template class BOOST_REGEX_TEMPLATE_DECL match_results< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator >;
+#ifndef BOOST_NO_STD_ALLOCATOR
+template class BOOST_REGEX_TEMPLATE_DECL ::boost::BOOST_REGEX_DETAIL_NS::perl_matcher< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator, match_results< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator >::allocator_type, boost::regex_traits<BOOST_REGEX_CHAR_T > >;
+#endif
+#endif
+    
+    #if defined(__BORLANDC__)
+typedef unsigned long match_flag_type;
+#else
+typedef match_flags match_flag_type;
+    
+    
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_restart_continue()
+{
+   if(position == search_base)
+   {
+      pstate = pstate->next.p;
+      return true;
+   }
+   return false;
+}
+    
+       char_type a[2] = {'a', '\0', };
+   string_type sa(pt->transform(a, a+1));
+   if(sa == a)
+   {
+      *delim = 0;
+      return sort_C;
+   }
+   char_type A[2] = { 'A', '\0', };
+   string_type sA(pt->transform(A, A+1));
+   char_type c[2] = { ';', '\0', };
+   string_type sc(pt->transform(c, c+1));
+    
+    
+    
+    template <class charT, class Match, class Traits>
+struct format_functor_c_string
+{
+   format_functor_c_string(const charT* ps) : func(ps) {}
+    }
+    
+    struct empty_padding{};
+    
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar() = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd() = 0;
+    
+        if (row_indices_.empty()) {  // edge case: empty instance set
+      // assign arbitrary address here, to bypass nullptr check
+      // (nullptr usually indicates a nonexistent rowset, but we want to
+      //  indicate a valid rowset that happens to have zero length and occupies
+      //  the whole instance set)
+      // this is okay, as BuildHist will compute (end-begin) as the set size
+      const size_t* begin = reinterpret_cast<size_t*>(20);
+      const size_t* end = begin;
+      elem_of_each_node_.emplace_back(Elem(begin, end, 0));
+      return;
+    }
+    
+    
+    {
+    {}  // namespace data
+}  // namespace xgboost
+#endif  // XGBOOST_DATA_SPARSE_PAGE_WRITER_H_
+
+    
+      void Load(dmlc::Stream* fi) {
+    CHECK_EQ(fi->Read(&param, sizeof(param)), sizeof(param))
+        << 'GBTree: invalid model file';
+    trees.clear();
+    trees_to_update.clear();
+    for (int i = 0; i < param.num_trees; ++i) {
+      std::unique_ptr<RegTree> ptr(new RegTree());
+      ptr->Load(fi);
+      trees.push_back(std::move(ptr));
+    }
+    tree_info.resize(param.num_trees);
+    if (param.num_trees != 0) {
+      CHECK_EQ(
+          fi->Read(dmlc::BeginPtr(tree_info), sizeof(int) * param.num_trees),
+          sizeof(int) * param.num_trees);
+    }
+  }
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
+        {
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplAllegro5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                ImGui_ImplAllegro5_CreateDeviceObjects();
+            }
+        }
+    }
+    
+    // Copyright (C) 2015 by Giovanni Zito
+// This file is part of Dear ImGui
