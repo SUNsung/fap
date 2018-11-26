@@ -1,145 +1,396 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
-  const base::CommandLine::StringType dashdash(2, '-');
-  bool block_args = false;
-  for (int i = 0; i < argc; ++i) {
-    if (argv[i] == dashdash)
-      break;
-    if (block_args) {
-      return false;
-    } else if (IsUrlArg(argv[i])) {
-      block_args = true;
-    }
-  }
-  return true;
-}
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace api {
-    }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {}  // namespace atom
-    
-    #include 'atom/browser/api/atom_api_browser_window.h'
-    
-    // static
-void GlobalShortcut::BuildPrototype(v8::Isolate* isolate,
-                                    v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'GlobalShortcut'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('register', &GlobalShortcut::Register)
-      .SetMethod('isRegistered', &GlobalShortcut::IsRegistered)
-      .SetMethod('unregister', &GlobalShortcut::Unregister)
-      .SetMethod('unregisterAll', &GlobalShortcut::UnregisterAll);
-}
-    
-    namespace atom {
-    }
-    
-    using atom::api::Menu;
-    
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_net, Initialize)
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
 
     
-    namespace atom {
+    
+    {}  // namespace tensorflow
+
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    struct PyDecrefDeleter {
+  void operator()(PyObject* p) const { Py_DECREF(p); }
+};
+    
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
+    
+    #endif  // TENSORFLOW_PYTHON_UTIL_KERNEL_REGISTRY_H_
+
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+    static int secp256k1_ge_set_xo_var(secp256k1_ge *r, const secp256k1_fe *x, int odd) {
+    if (!secp256k1_ge_set_xquad(r, x)) {
+        return 0;
+    }
+    secp256k1_fe_normalize_var(&r->y);
+    if (secp256k1_fe_is_odd(&r->y) != odd) {
+        secp256k1_fe_negate(&r->y, &r->y, 1);
+    }
+    return 1;
     }
     
-    #endif
+    void test_ecdsa_recovery_end_to_end(void) {
+    unsigned char extra[32] = {0x00};
+    unsigned char privkey[32];
+    unsigned char message[32];
+    secp256k1_ecdsa_signature signature[5];
+    secp256k1_ecdsa_recoverable_signature rsignature[5];
+    unsigned char sig[74];
+    secp256k1_pubkey pubkey;
+    secp256k1_pubkey recpubkey;
+    int recid = 0;
+    }
     
-     private:
-  scoped_refptr<AtomBrowserContext> browser_context_;
+    #include <stdint.h>
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdexcept>
+#include <vector>
+#include <limits>
+#include <string>
     
-    #include <QDialog>
+        obj.clear();
+    BOOST_CHECK(obj.empty());
+    BOOST_CHECK_EQUAL(obj.size(), 0);
+    BOOST_CHECK_EQUAL(obj.getType(), UniValue::VNULL);
     
-    class TrafficGraphWidget : public QWidget
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
+  }
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
+  }
+  return identity;
+}
+    
+      std::vector<grpc::string_ref> FindPropertyValues(
+      const grpc::string& name) const override;
+    
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+      Status GetFileContainingExtension(
+      ServerContext* context,
+      const reflection::v1alpha::ExtensionRequest* request,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
+    }
+    
+    
+    {}  // namespace grpc
+    
+    #include <mutex>
+    
+        //
+    // Overrides
+    //
+    virtual FiniteTimeAction* reverse() const override
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
+    virtual FiniteTimeAction* clone() const override
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
+    
+    // implementation of FlipY3D
+    
+    Place * Place::clone() const
 {
-    Q_OBJECT
-    }
-    
-    static void secp256k1_gej_rescale(secp256k1_gej *r, const secp256k1_fe *s) {
-    /* Operations: 4 mul, 1 sqr */
-    secp256k1_fe zz;
-    VERIFY_CHECK(!secp256k1_fe_is_zero(s));
-    secp256k1_fe_sqr(&zz, s);
-    secp256k1_fe_mul(&r->x, &r->x, &zz);                /* r->x *= s^2 */
-    secp256k1_fe_mul(&r->y, &r->y, &zz);
-    secp256k1_fe_mul(&r->y, &r->y, s);                  /* r->y *= s^3 */
-    secp256k1_fe_mul(&r->z, &r->z, s);                  /* r->z *= s   */
+    // no copy constructor
+    return Place::create(_position);
 }
     
-    void test_ecdh_api(void) {
-    /* Setup context that just counts errors */
-    secp256k1_context *tctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
-    secp256k1_pubkey point;
-    unsigned char res[32];
-    unsigned char s_one[32] = { 0 };
-    int32_t ecount = 0;
-    s_one[31] = 1;
+    void ActionManager::resumeTargets(const Vector<Node*>& targetsToResume)
+{
+    for(const auto &node : targetsToResume)
+    {
+        this->resumeTarget(node);
     }
-    
-    #include <BulletDynamics/ConstraintSolver/btTypedConstraint.h>
-    
-    #include 'register_types.h'
-    
-    
-    {	ADD_SIGNAL(MethodInfo('peer_connected', PropertyInfo(Variant::INT, 'id')));
-	ADD_SIGNAL(MethodInfo('peer_disconnected', PropertyInfo(Variant::INT, 'id')));
-	ADD_SIGNAL(MethodInfo('server_disconnected'));
-	ADD_SIGNAL(MethodInfo('connection_succeeded'));
-	ADD_SIGNAL(MethodInfo('connection_failed'));
 }
     
-    In a multithreaded test, it is guaranteed that none of the threads will start
-until all have reached the loop start, and all will have finished before any
-thread exits the loop body. As such, any global setup or teardown you want to
-do can be wrapped in a check against the thread index:
+    NS_CC_BEGIN
     
-    void ConsoleReporter::PrintRunData(const Run& result) {
-  typedef void(PrinterFn)(std::ostream&, LogColor, const char*, ...);
-  auto& Out = GetOutputStream();
-  PrinterFn* printer = (output_options_ & OO_Color) ?
-                         (PrinterFn*)ColorPrintf : IgnoreColorPrint;
-  auto name_color =
-      (result.report_big_o || result.report_rms) ? COLOR_BLUE : COLOR_GREEN;
-  printer(Out, name_color, '%-*s ', name_field_width_,
-          result.benchmark_name.c_str());
+    bool ParseDoubleFlag(const char* str, const char* flag, double* value) {
+  // Gets the value of the flag as a string.
+  const char* const value_str = ParseFlagValue(str, flag, false);
     }
     
-    void Increment(UserCounters *l, UserCounters const& r) {
-  // add counters present in both or just in *l
-  for (auto &c : *l) {
-    auto it = r.find(c.first);
-    if (it != r.end()) {
-      c.second.value = c.second + it->second;
-    }
+      // Calculate least square fitting parameter
+  for (size_t i = 0; i < n.size(); ++i) {
+    double gn_i = fitting_curve(n[i]);
+    sigma_gn += gn_i;
+    sigma_gn_squared += gn_i * gn_i;
+    sigma_time += time[i];
+    sigma_time_gn += time[i] * gn_i;
   }
-  // add counters present in r, but not in *l
-  for (auto const &tc : r) {
-    auto it = l->find(tc.first);
-    if (it == l->end()) {
-      (*l)[tc.first] = tc.second;
-    }
-  }
-}
     
-    
-    {}  // end namespace benchmark
+    #endif  // BENCHMARK_CYCLECLOCK_H_
 
     
-      CPUInfo const& info = context.cpu_info;
-  out << indent << FormatKV('num_cpus', static_cast<int64_t>(info.num_cpus))
-      << ',\n';
-  out << indent
-      << FormatKV('mhz_per_cpu',
-                  RoundDouble(info.cycles_per_second / 1000000.0))
-      << ',\n';
-  out << indent << FormatKV('cpu_scaling_enabled', info.scaling_enabled)
-      << ',\n';
+    #define GUARDED_BY(x) THREAD_ANNOTATION_ATTRIBUTE__(guarded_by(x))
     
-    // Prefer C regex libraries when compiling w/o exceptions so that we can
-// correctly report errors.
-#if defined(BENCHMARK_HAS_NO_EXCEPTIONS) && defined(HAVE_STD_REGEX) && \
-    (defined(HAVE_GNU_POSIX_REGEX) || defined(HAVE_POSIX_REGEX))
-#undef HAVE_STD_REGEX
-#endif
+    #include 'benchmark/benchmark.h'
+#include 'timers.h'
