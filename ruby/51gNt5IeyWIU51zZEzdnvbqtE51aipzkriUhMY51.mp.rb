@@ -1,112 +1,124 @@
 
         
-          p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
+            group = Group.create!(name: 'bob')
+    group.add(moderator)
+    group.save
+    
+            def preload_commit_authors
+          # This also preloads the author of every commit. We're using 'lazy_author'
+          # here since 'author' immediately loads the data on the first call.
+          @pipeline.commit.try(:lazy_author)
+        end
+    
+            value
       end
-    end
-  end
-end
-
     
-          #
+          def parallel?
+        @parallel
+      end
     
-            def initialize(config)
-          @main_fallback_highlighter = config['highlighter'] || 'rouge'
-          @config = config['kramdown'] || {}
-          @highlighter = nil
-          setup
+            def id_for_already_imported_cache(issue)
+          issue.number
         end
     
-              builds = scope_relevant.select('count(*)').to_sql
-          created = scope_relevant.created.select('count(*)').to_sql
-          success = scope_relevant.success.select('count(*)').to_sql
-          manual = scope_relevant.manual.select('count(*)').to_sql
-          pending = scope_relevant.pending.select('count(*)').to_sql
-          running = scope_relevant.running.select('count(*)').to_sql
-          skipped = scope_relevant.skipped.select('count(*)').to_sql
-          canceled = scope_relevant.canceled.select('count(*)').to_sql
-          warnings = scope_warnings.select('count(*) > 0').to_sql
-    
-            def importer_class
-          NoteImporter
+            def representation_class
+          Representation::LfsObject
         end
     
-            # attributes - A Hash containing the raw note details. The keys of this
+    module Gitlab
+  module GithubImport
+    module Importer
+      class NotesImporter
+        include ParallelScheduling
+    
+            val.to_i if val.present?
+      end
+    
+              page.objects.each do |object|
+            next if already_imported?(object)
+    
+            attr_reader :attributes
+    
+            # attributes - A Hash containing the raw lfs_object details. The keys of this
         #              Hash must be Symbols.
         def initialize(attributes)
           @attributes = attributes
         end
-    
-        # This returns whether the guest is ready to work. If this returns
-    # `false`, then {#detect!} should be called in order to detect the
-    # guest OS.
-    #
-    # @return [Boolean]
-    def ready?
-      !!capability_host_chain
+      end
     end
   end
 end
 
     
-            @machine_locks.delete(id)
+      # Helper for use after calling send_*_instructions methods on a resource.
+  # If we are in paranoid mode, we always act as if the resource was valid
+  # and instructions were sent.
+  def successfully_sent?(resource)
+    notice = if Devise.paranoid
+      resource.errors.clear
+      :send_paranoid_instructions
+    elsif resource.errors.empty?
+      :send_instructions
+    end
+    
+            warden.logout
+        expire_data_after_sign_out!
+        warden.clear_strategies_cache!
+        warden.lock! if lock
+    
+      it 'sets the tainted bit' do
+    o = Object.new
+    o.taint
+    o.tainted?.should == true
+  end
+    
+      it 'returns the method name as symbol' do
+    eval(@code, TOPLEVEL_BINDING).should equal :boom
+  end
+end
+
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+        # #gradient > { @mixin horizontal ... }
+    # to:
+    # @mixin gradient-horizontal
+    def flatten_mixins(file, container, prefix)
+      log_transform container, prefix
+      replace_rules file, Regexp.escape(container) do |mixins_css|
+        unindent unwrap_rule_block(mixins_css).gsub(/@mixin\s*([\w-]+)/, '@mixin #{prefix}-\\1')
       end
     end
     
-              # Default opts to a blank optionparser if none is given
-          opts ||= OptionParser.new
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
     
-              providers
+            if explicit_plugins.any? { |spec| filename =~ /^#{spec.name}/ }
+          FileUtils.mv(gem_file, ::File.join(explicit_path, filename))
+        else
+          FileUtils.mv(gem_file, ::File.join(dependencies_path, filename))
         end
-    
-                    raise Errors::VMNoMatchError if machines.empty?
-              else
-                # String name, just look for a specific VM
-                @logger.debug('Finding machine that match name: #{name}')
-                machines << get_machine.call(name.to_sym)
-                raise Errors::VMNotFoundError, name: name if !machines[0]
-              end
-            end
-          else
-            # No name was given, so we return every VM in the order
-            # configured.
-            @logger.debug('Loading all machines...')
-            machines = @env.machine_names.map do |machine_name|
-              get_machine.call(machine_name)
-            end
-          end
-    
-            # This contains all the registered provider capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :provider_capabilities
-    
-            # This should return the state of the machine within this provider.
-        # The state must be an instance of {MachineState}. Please read the
-        # documentation of that class for more information.
-        #
-        # @return [MachineState]
-        def state
-          nil
-        end
-    
-      it 'no raises error on fixnum values' do
-    [1].each do |v|
-      lambda { v.taint }.should_not raise_error(RuntimeError)
-      v.tainted?.should == false
+      end
     end
-  end
-end
-
     
-          ENV[new_initial_revision_var] ||= ENV[old_initial_revision_var]
-      ENV[new_current_revision_var] ||= ENV[old_current_revision_var]
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          end
+        end
+      end
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      end
+    end
