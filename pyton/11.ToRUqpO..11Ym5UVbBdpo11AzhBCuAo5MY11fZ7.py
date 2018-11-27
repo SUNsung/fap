@@ -1,239 +1,103 @@
 
         
-                # Insert the import statement to setup.py if not present
-        with open(setup_path, 'a+') as setup:
-            setup.seek(0)
-            setup_content = setup.read()
-            if not 'import fastentrypoints' in setup_content:
-                setup.seek(0)
-                setup.truncate()
-                setup.write('import fastentrypoints\n' + setup_content)
+            elif not RESULT and ('info_dict' in test and 'age_limit' in test['info_dict'] and
+                         test['info_dict']['age_limit'] == 18):
+        print('\nPotential false negative: {0}'.format(test['name']))
+    
+        def _init_github_account(self):
+        try:
+            info = netrc.netrc().authenticators(self._NETRC_MACHINE)
+            if info is not None:
+                self._username = info[0]
+                self._password = info[2]
+                compat_print('Using GitHub credentials found in .netrc...')
+                return
+            else:
+                compat_print('No GitHub credentials found in .netrc')
+        except (IOError, netrc.NetrcParseError):
+            compat_print('Unable to parse .netrc')
+        self._username = compat_input(
+            'Type your GitHub username or email address and press [Return]: ')
+        self._password = compat_getpass(
+            'Type your GitHub password and press [Return]: ')
+    
+        for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
+    
+    secret_msg = b'Secret message goes here'
+    
+    import datetime
+import io
+import json
+import textwrap
     
     
-def test_when_already_configured(usage_tracker_io, shell_pid,
-                                 shell, shell_config, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    _change_tracker(usage_tracker_io, 12)
-    shell_config.read.return_value = 'eval $(thefuck --alias)'
-    main()
-    logs.already_configured.assert_called_once()
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
     
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
     
-            Did you mean `build`?
-'''
-    
-        '''
-    is_windows = is_windows
-    config_dir = DEFAULT_CONFIG_DIR
-    stdin = sys.stdin
-    stdin_isatty = stdin.isatty()
-    stdin_encoding = None
-    stdout = sys.stdout
-    stdout_isatty = stdout.isatty()
-    stdout_encoding = None
-    stderr = sys.stderr
-    stderr_isatty = stderr.isatty()
-    colors = 256
-    if not is_windows:
-        if curses:
-            try:
-                curses.setupterm()
-                colors = curses.tigetnum('colors')
-            except curses.error:
-                pass
-    else:
-        # noinspection PyUnresolvedReferences
-        import colorama.initialise
-        stdout = colorama.initialise.wrap_stream(
-            stdout, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        stderr = colorama.initialise.wrap_stream(
-            stderr, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        del colorama
+            result = get_ids({'playlist_items': '2-4'})
+        self.assertEqual(result, [2, 3, 4])
     
     
-class PyTest(TestCommand):
-    # `$ python setup.py test' simply installs minimal requirements
-    # and runs the tests with no fancy stuff like parallel execution.
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = [
-            '--doctest-modules', '--verbose',
-            './httpie', './tests'
-        ]
-        self.test_suite = True
+def _mkdir(d):
+    if not os.path.exists(d):
+        os.mkdir(d)
     
+                for tc_num, tc in enumerate(test_cases):
+                tc_res_dict = res_dict['entries'][tc_num]
+                # First, check test cases' data against extracted data alone
+                expect_info_dict(self, tc_res_dict, tc.get('info_dict', {}))
+                # Now, check downloaded file consistency
+                tc_filename = get_tc_filename(tc)
+                if not test_case.get('params', {}).get('skip_download', False):
+                    self.assertTrue(os.path.exists(tc_filename), msg='Missing file ' + tc_filename)
+                    self.assertTrue(tc_filename in finished_hook_called)
+                    expected_minsize = tc.get('file_minsize', 10000)
+                    if expected_minsize is not None:
+                        if params.get('test'):
+                            expected_minsize = max(expected_minsize, 10000)
+                        got_fsize = os.path.getsize(tc_filename)
+                        assertGreaterEqual(
+                            self, got_fsize, expected_minsize,
+                            'Expected %s to be at least %s, but it\'s only %s ' %
+                            (tc_filename, format_bytes(expected_minsize),
+                                format_bytes(got_fsize)))
+                    if 'md5' in tc:
+                        md5_for_file = _file_md5(tc_filename)
+                        self.assertEqual(tc['md5'], md5_for_file)
+                # Finally, check test cases' data again but this time against
+                # extracted data from info JSON file written during processing
+                info_json_fn = os.path.splitext(tc_filename)[0] + '.info.json'
+                self.assertTrue(
+                    os.path.exists(info_json_fn),
+                    'Missing info file %s' % info_json_fn)
+                with io.open(info_json_fn, encoding='utf-8') as infof:
+                    info_dict = json.load(infof)
+                expect_info_dict(self, info_dict, tc.get('info_dict', {}))
+        finally:
+            try_rm_tcs_files()
+            if is_playlist and res_dict is not None and res_dict.get('entries'):
+                # Remove all other files that may have been extracted if the
+                # extractor returns full results even with extract_flat
+                res_tcs = [{'info_dict': e} for e in res_dict['entries']]
+                try_rm_tcs_files(res_tcs)
     
-FILE_PATH_ARG = patharg(FILE_PATH)
-BIN_FILE_PATH_ARG = patharg(BIN_FILE_PATH)
-JSON_FILE_PATH_ARG = patharg(JSON_FILE_PATH)
-    
-    
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
-
-    
-        parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--estimators', nargs='+', required=True,
-                        choices=ESTIMATORS)
-    args = vars(parser.parse_args())
-    
-        time_ridge = np.empty(n_iter)
-    time_ols = np.empty(n_iter)
-    time_lasso = np.empty(n_iter)
-    
-        label = 'scikit-learn singular value decomposition benchmark results'
-    fig = plt.figure(label)
-    ax = fig.gca(projection='3d')
-    for c, (label, timings) in zip('rbg', sorted(six.iteritems(results))):
-        X, Y = np.meshgrid(samples_range, features_range)
-        Z = np.asarray(timings).reshape(samples_range.shape[0],
-                                        features_range.shape[0])
-        # plot the actual surface
-        ax.plot_surface(X, Y, Z, rstride=8, cstride=8, alpha=0.3,
-                        color=c)
-        # dummy point plot to stick the legend to since surface plot do not
-        # support legends (yet?)
-        ax.plot([1], [1], [1], color=c, label=label)
-    
-        ###########################################################################
-    # Set Python core input
-    sampling_algorithm['python-core-sample'] = \
-        lambda n_population, n_sample: \
-            random.sample(xrange(n_population), n_sample)
-    
-        xx = range(0, n * step, step)
-    plt.figure('scikit-learn tree benchmark results')
-    plt.subplot(211)
-    plt.title('Learning with varying number of samples')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    
-    
-proxy_server = None
-# launcher/module_init will check this value for start/stop finished
-ready = False
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    
-    ##
-# imaginary tree navigation type; traverse 'get child' link
-DOWN = 2
-##
-#imaginary tree navigation type; finish with a child list
-UP = 3
-    
-                if isinstance(self.input, TokenStream):
-                self.token = self.input.LT(1)
-                self.line = self.token.line
-                self.charPositionInLine = self.token.charPositionInLine
-    
-            ## What character index in the stream did the current token start at?
-        # Needed, for example, to get the text for current token.  Set at
-        # the start of nextToken.
-        self.tokenStartCharIndex = -1
-    
-            # You may have multiple, named streams of rewrite operations.
-        # I'm calling these things 'programs.'
-        #  Maps String (name) -> rewrite (List)
-        self.programs = {}
-        self.programs[self.DEFAULT_PROGRAM_NAME] = []
-        
- 	# Map String (program name) -> Integer index
-        self.lastRewriteTokenIndexes = {}
-        
-    
-            Lines are numbered 1..n
-        
-        Using setter/getter methods is deprecated. Use o.line instead.'''
-    
-    def _check_arg_types(funcname, *args):
-    hasstr = hasbytes = False
-    for s in args:
-        if isinstance(s, str):
-            hasstr = True
-        elif isinstance(s, bytes):
-            hasbytes = True
-        else:
-            raise TypeError('%s() argument must be str or bytes, not %r' %
-                            (funcname, s.__class__.__name__)) from None
-    if hasstr and hasbytes:
-        raise TypeError('Can't mix strings and bytes in path components') from None
-
-    
-        def test_different_flavours_unordered(self):
-        p = pathlib.PurePosixPath('a')
-        q = pathlib.PureWindowsPath('a')
-        with self.assertRaises(TypeError):
-            p < q
-        with self.assertRaises(TypeError):
-            p <= q
-        with self.assertRaises(TypeError):
-            p > q
-        with self.assertRaises(TypeError):
-            p >= q
-    
-    def test_main():
-    test.support.run_unittest(
-        LocaleConfigurationTests,
-        LocaleCoercionTests
-    )
-    test.support.reap_children()
-    
-        def test_io(self):
-        code = textwrap.dedent('''
-            import sys
-            filename = sys.argv[1]
-            with open(filename) as fp:
-                print(f'{fp.encoding}/{fp.errors}')
-        ''')
-        filename = __file__
-    
-        # Initialize and populate our database.
-    conn = sqlite3.connect(':memory:')
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
-    tasks = (
-        'give food to fish',
-        'prepare group meeting',
-        'fight with a zebra',
-        )
-    for task in tasks:
-        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
-    
-    def handleSlides(slides):
-    for slide in slides:
-        handleSlide(slide)
-    
-            results = [pool.apply_async(calculate, t) for t in TASKS]
-        imap_it = pool.imap(calculatestar, TASKS)
-        imap_unordered_it = pool.imap_unordered(calculatestar, TASKS)
-    
-    def mul(a, b):
-    time.sleep(0.5*random.random())
-    return a * b
+    from youtube_dl.utils import encodeArgument
