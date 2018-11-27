@@ -1,277 +1,360 @@
 
         
-        namespace tesseract {
-    }
+        
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
     
-      enum IndentType {
-    NO_INDENT,
-    LEFT_INDENT,
-    RIGHT_INDENT,
-    BOTH_INDENT,
-    INDENT_TYPE_COUNT
-  };
+    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
+#define CONTENT_NW_SRC_API_BASE_BASE_H_
     
-    struct OSResults {
-  OSResults() : unicharset(nullptr) {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < kMaxNumberOfScripts; ++j)
-        scripts_na[i][j] = 0;
-      orientations[i] = 0;
-    }
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
+  } else {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
   }
-  void update_best_orientation();
-  // Set the estimate of the orientation to the given id.
-  void set_best_orientation(int orientation_id);
-  // Update/Compute the best estimate of the script assuming the given
-  // orientation id.
-  void update_best_script(int orientation_id);
-  // Return the index of the script with the highest score for this orientation.
-  TESS_API int get_best_script(int orientation_id) const;
-  // Accumulate scores with given OSResults instance and update the best script.
-  void accumulate(const OSResults& osr);
-    }
-    
-      // Constructors for the various ParamTypes.
-  ParamContent() = default;
-  explicit ParamContent(tesseract::StringParam* it);
-  explicit ParamContent(tesseract::IntParam* it);
-  explicit ParamContent(tesseract::BoolParam* it);
-  explicit ParamContent(tesseract::DoubleParam* it);
-    
-    namespace tesseract {
-    }
-    
-    #include <grpcpp/impl/grpc_library.h>
-#include <grpcpp/security/credentials.h>
-    
-    grpc_slice CoreCodegen::grpc_slice_malloc(size_t length) {
-  return ::grpc_slice_malloc(length);
 }
     
-    #include <grpc/support/port_platform.h>
     
-    MeasureDouble RpcServerServerLatency() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcServerServerLatencyMeasureName,
-      'Time between first byte of request received to last byte of response '
-      'sent, or terminal error',
-      kUnitMilliseconds);
-  return measure;
+    {} // namespace
+    
+     protected:
+  ~NwClipboardReadAvailableTypesFunction() override;
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
+  return RespondNow(NoArguments());
 }
     
-    namespace grpc {
+    #endif
+    
+    void Canny3x3L2(const Size2D &size,
+                const u8 * srcBase, ptrdiff_t srcStride,
+                u8 * dstBase, ptrdiff_t dstStride,
+                f64 low_thresh, f64 high_thresh,
+                Margin borderMargin)
+{
+    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
+#ifdef CAROTENE_NEON
+    Canny3x3<true, false>(size, 1,
+                          srcBase, srcStride,
+                          dstBase, dstStride,
+                          NULL, 0,
+                          NULL, 0,
+                          low_thresh, high_thresh,
+                          borderMargin);
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)low_thresh;
+    (void)high_thresh;
+    (void)borderMargin;
+#endif
+}
+    
+    
+    {            v_src = vld2q_u8(src + sj + 32);
+            vst1q_u8(dst + dj + 16, v_src.val[coi]);
+        }
+#endif
+    
+        if (src0Stride == src1Stride && src0Stride == dstStride &&
+        src0Stride == (ptrdiff_t)(size.width * sizeof(type)))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin = 0, size_t endMargin = 0);
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVT_FUNC(u16, s16, 8,
+     register uint16x8_t v32767 asm ('q4') = vmovq_n_u16(0x7FFF);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.16 {d0-d1}, [%[src]]                              \n\t'
+             'vmin.u16 q1, q0, q4                                    \n\t'
+             'vst1.16 {d2-d3}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst] 'r' (_dst + i + 0),
+               'w' (v32767)
+             : 'd0','d1','d2','d3'
+         );
+     }
+})
+#else
+CVT_FUNC(u16, s16, 8,
+     uint16x8_t v32767 = vmovq_n_u16(0x7FFF);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         uint16x8_t vline_u16 = vld1q_u16(_src + i);
+         vline_u16 = vminq_u16(vline_u16, v32767);
+         vst1q_s16((_dst + i), vreinterpretq_s16_u16(vline_u16));
+     }
+})
+#endif
+    
+            result += (s[0] += s[1]);
+        if (s[0] < 0 || result < 0)//case of overflow ~ 8GB of non-zeros...
+        {
+            return 0x7fFFffFF;
+        }
+    
+                    uint8x16_t v0 = vld1q_u8(ptr);
+                int8x16_t v1 = vreinterpretq_s8_u8(veorq_u8(vqsubq_u8(v0, t), delta));
+                int8x16_t v2 = vreinterpretq_s8_u8(veorq_u8(vqaddq_u8(v0, t), delta));
+    
+        minLocCapacity <<= 1;
+    maxLocCapacity <<= 1;
+    
+                    uint8x8x4_t vRes;
+                vRes.val[0] = vrshrn_n_u16(vSum_0_4, 8);
+                vRes.val[1] = vrshrn_n_u16(vSum_1_5, 8);
+                vRes.val[2] = vrshrn_n_u16(vSum_2_6, 8);
+                vRes.val[3] = vrshrn_n_u16(vSum_3_7, 8);
+    
+    #if defined(__linux)
+static Slice TrimSpace(Slice s) {
+  size_t start = 0;
+  while (start < s.size() && isspace(s[start])) {
+    start++;
+  }
+  size_t limit = s.size();
+  while (limit > start && isspace(s[limit-1])) {
+    limit--;
+  }
+  return Slice(s.data() + start, limit - start);
+}
+#endif
+    
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    // Return a skewed potentially long string
+static std::string RandomSkewedString(int i, Random* rnd) {
+  return BigString(NumberString(i), rnd->Skewed(17));
+}
+    
+      Status Run() {
+    Status status = FindFiles();
+    if (status.ok()) {
+      ConvertLogFilesToTables();
+      ExtractMetaData();
+      status = WriteDescriptor();
+    }
+    if (status.ok()) {
+      unsigned long long bytes = 0;
+      for (size_t i = 0; i < tables_.size(); i++) {
+        bytes += tables_[i].meta.file_size;
+      }
+      Log(options_.info_log,
+          '**** Repaired leveldb %s; '
+          'recovered %d files; %llu bytes. '
+          'Some data may have been lost. '
+          '****',
+          dbname_.c_str(),
+          static_cast<int>(tables_.size()),
+          bytes);
+    }
+    return status;
+  }
+    
+    #include 'db/skiplist.h'
+#include <set>
+#include 'leveldb/env.h'
+#include 'port/port.h'
+#include 'port/thread_annotations.h'
+#include 'util/arena.h'
+#include 'util/hash.h'
+#include 'util/random.h'
+#include 'util/testharness.h'
+    
+      // Removes a SnapshotImpl from this list.
+  //
+  // The snapshot must have been created by calling New() on this list.
+  //
+  // The snapshot pointer should not be const, because its memory is
+  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
+  // which is in the API, and currently takes a const Snapshot.
+  void Delete(const SnapshotImpl* snapshot) {
+#if !defined(NDEBUG)
+    assert(snapshot->list_ == this);
+#endif  // !defined(NDEBUG)
+    snapshot->prev_->next_ = snapshot->next_;
+    snapshot->next_->prev_ = snapshot->prev_;
+    delete snapshot;
+  }
+    
+    
+    {        // L2 regularizer
+        if (m_additionalOptions.l2RegularizationWeight > 0)
+        {
+            // multiply by actualMBSize so that it's invariant to minibatch size since learning rate is per sample
+            const auto weight = m_additionalOptions.l2RegularizationWeight * (IsCompatibleMode() ? 1 : actualMBSize);
+            const auto& parameterMatrix = parameterValue->GetWritableMatrix<ElementType>();
+            Matrix<ElementType>::ScaleAndAdd(ElementType(weight), *parameterMatrix, *gradientMatrix);
+        }
+    }
+    
+            const std::unordered_map<StreamInformation, MinibatchData>& GetNextMinibatch(
+            size_t minibatchSizeInSamples,
+            size_t minibatchSizeInSequences,
+            size_t numberOfWorkers,
+            size_t workerRank,
+            const DeviceDescriptor& device = DeviceDescriptor::UseDefaultDevice()) override;
+    
+    #pragma once
+    
+        template <typename ValueType, typename DestType>
+    void Value::CopyVariableValueToImpl(const Variable& outputVariable, std::vector<std::vector<DestType>>& sequences)
+    {
+        // PackedValue should be automatically unpacked when accessing Data() and Mask().
+        NDShape inferredVarShape;
+        size_t numOfSequences;
+        size_t maxSequenceLen;
+        // Verify compatibility of 'this' value and outputVariable, get sequence and batch length, and get the inferred shape if the variable has a free dimension.
+        std::tie(maxSequenceLen, numOfSequences) = GetSequenceAndBatchLength(outputVariable, &inferredVarShape);
+    }
+    
+        NDArrayViewPtr Variable::Value() const
+    {
+        if (!IsConstant() && !IsParameter())
+            LogicError('Variable '%S' Value(): Only Variables of kind Parameter and Constant have a Value.', AsString().c_str());
     }
     
     
-    {}  // namespace grpc
-
+    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
+            {
+                if (m_shape.HasFreeDimension())
+                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
+            }
+        }
     
-    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
     
-    MAKE_TYPE_INFO(String, Variant::STRING)
-MAKE_TYPE_INFO(Vector2, Variant::VECTOR2)
-MAKE_TYPE_INFO(Rect2, Variant::RECT2)
-MAKE_TYPE_INFO(Vector3, Variant::VECTOR3)
-MAKE_TYPE_INFO(Transform2D, Variant::TRANSFORM2D)
-MAKE_TYPE_INFO(Plane, Variant::PLANE)
-MAKE_TYPE_INFO(Quat, Variant::QUAT)
-MAKE_TYPE_INFO(AABB, Variant::AABB)
-MAKE_TYPE_INFO(Basis, Variant::BASIS)
-MAKE_TYPE_INFO(Transform, Variant::TRANSFORM)
-MAKE_TYPE_INFO(Color, Variant::COLOR)
-MAKE_TYPE_INFO(NodePath, Variant::NODE_PATH)
-MAKE_TYPE_INFO(RID, Variant::_RID)
-MAKE_TYPE_INFO(Dictionary, Variant::DICTIONARY)
-MAKE_TYPE_INFO(Array, Variant::ARRAY)
-MAKE_TYPE_INFO(PoolByteArray, Variant::POOL_BYTE_ARRAY)
-MAKE_TYPE_INFO(PoolIntArray, Variant::POOL_INT_ARRAY)
-MAKE_TYPE_INFO(PoolRealArray, Variant::POOL_REAL_ARRAY)
-MAKE_TYPE_INFO(PoolStringArray, Variant::POOL_STRING_ARRAY)
-MAKE_TYPE_INFO(PoolVector2Array, Variant::POOL_VECTOR2_ARRAY)
-MAKE_TYPE_INFO(PoolVector3Array, Variant::POOL_VECTOR3_ARRAY)
-MAKE_TYPE_INFO(PoolColorArray, Variant::POOL_COLOR_ARRAY)
+        virtual void UpdateFunctionMBSize() override
+    {
+        UpdateCounts();
+    }
     
-    
-    {	int slices = ip.get_slice_count('.');
-	if (slices != 4) {
-		ERR_EXPLAIN('Invalid IP Address String: ' + ip);
-		ERR_FAIL();
-	}
-	for (int i = 0; i < 4; i++) {
-		p_ret[i] = ip.get_slicec('.', i).to_int();
-	}
-};
-    
-    	struct File {
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        ReadOutVariable(); // read out the value once, with the purpose of validating the variableName
+        Base::Validate(isFinalValidationPass);
+        // this node does not hold mini-batch data
+        m_pMBLayout = nullptr;
+        // for now, anything this node returns is a scalar
+        SetDims(TensorShape(1), false);
     }
     
     namespace osquery {
     }
     
-    #include <iostream>
-    
-      std::vector<std::string> pack_names;
-  c.packs(
-      ([&pack_names](const Pack& p) { pack_names.push_back(p.getName()); }));
-    
-    #pragma once
-    
-    std::shared_ptr<PlatformProcess> PlatformProcess::launchWorker(
-    const std::string& exec_path, int argc /* unused */, char** argv) {
-  auto worker_pid = ::fork();
-  if (worker_pid < 0) {
-    return std::shared_ptr<PlatformProcess>();
-  } else if (worker_pid == 0) {
-    setEnvVar('OSQUERY_WORKER', std::to_string(::getpid()).c_str());
-    ::execve(exec_path.c_str(), argv, ::environ);
-    }
+    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_run_load_top_level) {
+  // Re-enable the decorators, then update the config.
+  // The 'load' decorator set should run every time the config is updated.
+  FLAGS_disable_decorators = false;
+  // enable top level decorations for the test
+  FLAGS_decorations_top_level = true;
+  Config::get().update(config_data_);
     }
     
     
-    {
-    {    int code = 0;
-    EXPECT_TRUE(getProcessExitCode(*process, code));
-    EXPECT_EQ(code, EXTENSION_SUCCESS_CODE);
-  }
+    {  c.reset();
 }
     
+      Config c;
+  c.addPack('*', '', multi_pack.doc());
     
-    {Status deserializeDistributedQueryResultJSON(const std::string& json,
-                                             DistributedQueryResult& r) {
-  auto doc = JSON::newObject();
-  if (!doc.fromString(json) || !doc.doc().IsObject()) {
-    return Status(1, 'Error Parsing JSON');
-  }
-  return deserializeDistributedQueryResult(doc.doc(), r);
+    
+    {void alarm(int /* noop */) {
+  /* This function is a noop. */
 }
-}
+} // namespace osquery
 
     
-      /// Only add the subscription, if it not already part of subscription list.
-  Status addSubscription(const SubscriptionRef& subscription) override;
-    
-      std::shared_ptr<DHTNode> getNode(const unsigned char* id,
-                                   const std::string& ipaddr,
-                                   uint16_t port) const;
-    
-    class DHTRoutingTableDeserializer {
-private:
-  int family_;
+    TEST_F(INotifyTests, test_inotify_embedded_wildcards) {
+  // Assume event type is not registered.
+  event_pub_ = std::make_shared<INotifyEventPublisher>(true);
+  EventFactory::registerEventPublisher(event_pub_);
     }
     
-    void DHTRoutingTableSerializer::serialize(const std::string& filename)
-{
-  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
-  std::string filenameTemp = filename;
-  filenameTemp += '__temp';
-  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
   }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
     }
     
-    #include <vector>
-#include <memory>
-    
-    #include 'DHTTask.h'
-#include 'Logger.h'
-#include 'LogFactory.h'
-#include 'a2functional.h'
-#include 'fmt.h'
-    
-      virtual void
-  addPeriodicTask1(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
-    
-    double ButteraugliComparator::CompareBlock(const OutputImage& img,
-                                           int off_x, int off_y) const {
-  int block_x = block_x_ * factor_x_ + off_x;
-  int block_y = block_y_ * factor_y_ + off_y;
-  int xmin = 8 * block_x;
-  int ymin = 8 * block_y;
-  int block_ix = off_y * factor_x_ + off_x;
-  const std::vector<std::vector<float> >& rgb0 =
-      per_block_pregamma_[block_ix];
+    namespace benchmark {
+namespace internal {
+// The arraysize(arr) macro returns the # of elements in an array arr.
+// The expression is a compile-time constant, and therefore can be
+// used in defining new arrays, for example.  If you use arraysize on
+// a pointer by mistake, you will get a compile-time error.
+//
+    }
     }
     
+            if (family->use_manual_time_) {
+          instance.name += '/manual_time';
+        } else if (family->use_real_time_) {
+          instance.name += '/real_time';
+        }
     
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
-    }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
+      if (result.report_big_o) {
+    std::string big_o = GetBigOString(result.complexity);
+    printer(Out, COLOR_YELLOW, '%10.2f %s %10.2f %s ', real_time, big_o.c_str(),
+            cpu_time, big_o.c_str());
+  } else if (result.report_rms) {
+    printer(Out, COLOR_YELLOW, '%10.0f %% %10.0f %% ', real_time * 100,
+            cpu_time * 100);
+  } else {
+    const char* timeLabel = GetTimeUnitString(result.time_unit);
+    printer(Out, COLOR_YELLOW, '%10.0f %s %10.0f %s ', real_time, timeLabel,
+            cpu_time, timeLabel);
   }
+    
+    #include 'benchmark/benchmark.h'
+#include 'internal_macros.h'
+    
+    template <class Tp>
+LogType& operator<<(LogType& log, Tp const& value) {
+  if (log.out_) {
+    *log.out_ << value;
+  }
+  return log;
 }
-    
-    
-    {}  // namespace guetzli
-
-    
-    
-    {}  // namespace guetzli
-    
-      JpegHistogram() { Clear(); }
-  void Clear() {
-    memset(counts, 0, sizeof(counts));
-    counts[kSize - 1] = 1;
-  }
-  void Add(int symbol) {
-    counts[symbol] += 2;
-  }
-  void Add(int symbol, int weight) {
-    counts[symbol] += 2 * weight;
-  }
-  void AddHistogram(const JpegHistogram& other) {
-    for (int i = 0; i + 1 < kSize; ++i) {
-      counts[i] += other.counts[i];
-    }
-    counts[kSize - 1] = 1;
-  }
-  int NumSymbols() const {
-    int n = 0;
-    for (int i = 0; i + 1 < kSize; ++i) {
-      n += (counts[i] > 0 ? 1 : 0);
-    }
-    return n;
-  }
-    
-     protected:
-  explicit Benchmark(const char* name);
-  Benchmark(Benchmark const&);
-  void SetName(const char* name);
-    
-    // Class for managing registered benchmarks.  Note that each registered
-// benchmark identifies a family of related benchmarks to run.
-class BenchmarkFamilies {
- public:
-  static BenchmarkFamilies* GetInstance();
-    }
-    
-    // Return a vector containing the bigO and RMS information for the specified
-// list of reports. If 'reports.size() < 2' an empty vector is returned.
-std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports);
-    
-    class LogType {
-  friend LogType& GetNullLogInstance();
-  friend LogType& GetErrorLogInstance();
-    }
-    
-    
-    {    return false;
-  }
