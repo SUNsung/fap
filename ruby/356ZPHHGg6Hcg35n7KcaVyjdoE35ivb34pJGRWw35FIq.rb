@@ -1,72 +1,182 @@
 
         
-        end
+              dt = Date.today
+      freeze_time dt
+    
+        # The category for users with trust level 3 has been created.
+    # Add initial permissions and description. They can be changed later.
+    
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
+    
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+    end
+  end
+end
 
     
-    User.seed do |u|
-  u.id = -1
-  u.name = 'system'
-  u.username = 'system'
-  u.username_lower = 'system'
-  u.password = SecureRandom.hex
-  u.active = true
-  u.admin = true
-  u.moderator = true
-  u.approved = true
-  u.trust_level = TrustLevel[4]
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
+    end
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+            mock(Agent).async_receive(agents(:bob_rain_notifier_agent).id, anything).times(0)
+        mock(Agent).async_receive(agents(:jane_rain_notifier_agent).id, anything).times(1)
+    
+    Then(/^the repo is cloned$/) do
+  run_vagrant_command(test_dir_exists(TestApp.repo_path))
 end
     
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
+        else
+          servers_by_key[key] = new_host.with(properties)
         end
       end
     
-          def author
-        first = page.last_version
-        return DEFAULT_AUTHOR unless first
-        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
+          # Internal use only.
+      def peek(key, default=nil, &block)
+        value = fetch_for(key, default, &block)
+        while callable_without_parameters?(value)
+          value = (values[key] = value.call)
+        end
+        value
       end
     
-    #############################################################################
-#
-# Custom tasks (add your own tasks here)
-#
-#############################################################################
+    def source_version
+  @source_version ||= File.read(File.expand_path('../VERSION', __FILE__)).strip
+end
     
-          def must_specify_api_key
-        render 'spree/api/errors/must_specify_api_key', status: 401
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
+end
+    
+    task :gemspec => 'rack-protection.gemspec'
+task :default => :spec
+task :test    => :spec
+
+    
+          def initialize(app, options = {})
+        @app, @options = app, default_options.merge(options)
       end
     
-            def show
-          @option_type = Spree::OptionType.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@option_type)
-        end
+            reaction
+      end
     
-            def find_property
-          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
-        end
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
+    end
     
-              state = @states.last
-          respond_with(@states) if stale?(state)
+          def right_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, ri                   = *line.match(/\+(\d+)/)
+          @right_diff_line_number = ri.to_i
+          @current_line_number    = @right_diff_line_number
+          ret                     = '...'
+        elsif line[0] == ?-
+          ret = ' '
+        elsif line[0] == ?+
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        else
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
         end
+        ret
+      end
+    end
+  end
+end
+
+    
+          def next_link
+        label = 'Next &raquo;'
+        if @versions.size == Gollum::Page.per_page
+          link = '/history/#{@page.name}?page=#{@page_num+1}'
+          %(<a href='#{link}' hotkey='l'>#{label}</a>)
+        else
+          %(<span class='disabled'>#{label}</span>)
+        end
+      end
+    end
+  end
+end
+
+    
+          def mathjax_config
+        @mathjax_config
+      end
+    
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+  end
+    
+          it 'allows closing brace on same line as multi-line element' do
+        expect_no_offenses(construct(false, a, make_multi(multi), false))
+      end
+    
+          it 'detects closing brace on separate line from last element' do
+        inspect_source(source)
+    
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
+      end
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
+      end
+    
+          # Checks whether any argument of the node is a splat
+      # argument, i.e. `*splat`.
+      #
+      # @return [Boolean] whether the node is a splat argument
+      def splat_argument?
+        arguments? &&
+          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
+      end
+      alias rest_argument? splat_argument?
