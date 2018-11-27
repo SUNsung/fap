@@ -1,120 +1,87 @@
 
         
-              def version?
-        version.present?
-      end
+              # Initializes an entry.
+      #
+      # The parameter given should be nil if this is being created
+      # publicly.
+      def initialize(id=nil, raw=nil)
+        @extra_data = {}
     
-        def push(*names)
-      @filters.push *filter_const(names)
-    end
+              # Setup the options hash
+          options ||= {}
     
-          if base == dest
-        ''
-      elsif dest.start_with? File.join(base, '')
-        url.path[(path.length)..-1]
-      end
-    end
-    
-            if at_css('.api-type-label.module')
-          at_css('h1').content = subpath.remove('api/')
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
         end
     
-      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
-    @logger     = Logger.new
-    @repo       = repo
-    @branch     = branch || 'master'
-    @branch_sha = get_branch_sha
-    @cache_path = cache_path
-    @repo_url   = 'https://github.com/#@repo'
-    @save_to    = {
-        js:    'assets/javascripts/bootstrap',
-        scss:  'assets/stylesheets/bootstrap',
-        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+            # This method is automatically called when the system is available (when
+        # Vagrant can successfully SSH into the machine) to give the system a chance
+        # to determine the distro and return a distro-specific system.
+        #
+        # If this method returns nil, then this instance is assumed to be
+        # the most specific guest implementation.
+        def distro_dispatch
+        end
+    
+        # Register a key with a lazy-loaded value.
+    #
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
+    end
+    
+      def show
+    render json: outbox_presenter, serializer: ActivityPub::OutboxSerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
   end
     
-        private
+          if new_email != @user.email
+        @user.update!(
+          unconfirmed_email: new_email,
+          # Regenerate the confirmation token:
+          confirmation_token: nil
+        )
     
-        # .btn { ... } -> @mixin btn { ... }; .btn { @include btn }
-    def extract_mixins_from_selectors(file, selectors_to_mixins)
-      selectors_to_mixins.each do |selector, mixin|
-        file = replace_rules file, Regexp.escape(selector), prefix: false do |selector_css|
-          log_transform '#{selector} { ... } -> @mixin #{mixin} { ... }; #{selector} { @include #{mixin} } ', from: 'extract_mixins_from_selectors'
-          <<-SCSS
-// [converter] extracted from `#{selector}` for libsass compatibility
-@mixin #{mixin} {#{unwrap_rule_block(selector_css)}
-}
-// [converter] extracted as `@mixin #{mixin}` for libsass compatibility
-#{selector} {
-  @include #{mixin};
-}
-          SCSS
-        end
-      end
-      file
-    end
-    
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-    
-            parser = Sass::SCSS::Parser.new(value,
-          @options[:filename], @options[:importer],
-          @line, to_parser_offset(@offset))
-        parsed_value = parser.parse_declaration_value
-        end_offset = start_offset + value.length
-      elsif value.strip.empty?
-        parsed_value = [Sass::Script::Tree::Literal.new(Sass::Script::Value::String.new(''))]
-        end_offset = start_offset
-      else
-        expr = parse_script(value, :offset => to_parser_offset(start_offset))
-        end_offset = expr.source_range.end_pos.offset - 1
-        parsed_value = [expr]
-      end
-      node = Tree::PropNode.new(parse_interp(name), parsed_value, prop)
-      node.value_source_range = Sass::Source::Range.new(
-        Sass::Source::Position.new(line.index, to_parser_offset(start_offset)),
-        Sass::Source::Position.new(line.index, to_parser_offset(end_offset)),
-        @options[:filename], @options[:importer])
-      if !node.custom_property? && value.strip.empty? && line.children.empty?
-        raise SyntaxError.new(
-          'Invalid property: \'#{node.declaration}\' (no value).' +
-          node.pseudo_class_selector_message)
-      end
-    
-        # The top-level Environment object.
-    #
-    # @return [Environment]
-    def global_env
-      @global_env ||= global? ? self : @parent.global_env
-    end
-    
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
+        def check_confirmation
+      if @user.confirmed?
+        flash[:error] = I18n.t('admin.accounts.resend_confirmation.already_confirmed')
+        redirect_to admin_accounts_path
       end
     end
   end
 end
 
     
-      include_examples 'multiline literal brace layout' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
-    let(:multi_prefix) { 'b: ' }
-    let(:multi) do
-      <<-RUBY.strip_indent.chomp
-        [
-        1
-        ]
-      RUBY
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
+    
+      before_action :set_account
+  respond_to :txt
+    
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
     end
-  end
+    
+    Given /^I reload my application$/ do
+  Rails::Application.reload!
+end
+    
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
+    end
