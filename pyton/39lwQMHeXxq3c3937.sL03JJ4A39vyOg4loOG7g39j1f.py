@@ -1,91 +1,208 @@
 
         
-            # Then we cluster the lines together as blocks
-    # Each block represents a collection of lines that should be sorted
-    # This was done by assuming only links ([...](...)) are meant to be sorted
-    # Clustering is done by indentation
-    blocks = []
-    last_indent = None
-    for line in read_me:
-        s_line = line.lstrip()
-        indent = len(line) - len(s_line)
+            def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
+    
+        import sys
+    from mymodule import entry_function
+    sys.exit(entry_function())
     
     
-@pytest.mark.parametrize('path', (
-    '/create',
-    '/1/update',
-    '/1/delete',
-))
-def test_login_required(client, path):
-    response = client.post(path)
-    assert response.headers['Location'] == 'http://localhost/auth/login'
-    
-    import pytest
-from flaskr.db import get_db
-    
-        The name of the package is used to resolve resources from inside the
-    package or the folder the module is contained in depending on if the
-    package parameter resolves to an actual python package (a folder with
-    an :file:`__init__.py` file inside) or a standard module (just a ``.py`` file).
-    
-        .. versionadded:: 0.2
-    
-        tag = to_json
-    
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
-    
-        def create(self):
-        while True:
-            self._session_key = self._get_new_session_key()
-            try:
-                # Save immediately to ensure we have a unique entry in the
-                # database.
-                self.save(must_create=True)
-            except CreateError:
-                # Key wasn't unique. Try again.
-                continue
-            self.modified = True
-            return
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
     
-class Session(AbstractBaseSession):
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
+    
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument command: Invalid choice, valid choices are:
+    
+    
+@pytest.mark.parametrize('before, after', [
+    ('brew install sshfs',
+     'brew cask install osxfuse && brew install sshfs')])
+def test_get_new_command(before, after):
+    command = Command(before, output)
+    assert get_new_command(command) == after
+
+    
+    
+def _plot(results, metrics, formats, title, x_ticks, x_label,
+          format_markers=('x', '|', 'o', '+'),
+          metric_colors=('c', 'm', 'y', 'k', 'g', 'r', 'b')):
     '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
+    Plot the results by metric, format and some other variable given by
+    x_label
+    '''
+    fig = plt.figure('scikit-learn multilabel metrics benchmarks')
+    plt.title(title)
+    ax = fig.add_subplot(111)
+    for i, metric in enumerate(metrics):
+        for j, format in enumerate(formats):
+            ax.plot(x_ticks, results[i, j].flat,
+                    label='{}, {}'.format(metric, format),
+                    marker=format_markers[j],
+                    color=metric_colors[i % len(metric_colors)])
+    ax.set_xlabel(x_label)
+    ax.set_ylabel('Time (s)')
+    ax.legend()
+    plt.show()
     
-        def __init__(self, info_dict, priority=None, changefreq=None, protocol=None):
-        self.queryset = info_dict['queryset']
-        self.date_field = info_dict.get('date_field')
-        self.priority = priority
-        self.changefreq = changefreq
-        self.protocol = protocol
+                plt.text((i + 0.02) / len(algorithms), 0.98, alg,
+                     transform=ax.transAxes,
+                     ha='left',
+                     va='top',
+                     bbox=dict(facecolor='w', edgecolor='w', alpha=0.5))
     
-        f2 = manager.Foo2()
-    f2.g()
-    f2._h()
-    assert not hasattr(f2, 'f')
-    assert sorted(f2._exposed_) == sorted(['g', '_h'])
+                gc.collect()
+            print('benchmarking orthogonal_mp (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=True,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp_gram[i_f, i_s] = delta
     
-    buffer = ''
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
+
     
-    cur.execute('insert into test(p) values (?)', (p,))
-cur.execute('select p from test')
-print('with declared types:', cur.fetchone()[0])
-cur.close()
-con.close()
     
-    if os.path.exists(DB_FILE):
-    os.remove(DB_FILE)
+# Make some random data with uniformly located non zero entries with
+# Gaussian distributed values
+def make_sparse_random_data(n_samples, n_features, n_nonzeros,
+                            random_state=None):
+    rng = np.random.RandomState(random_state)
+    data_coo = sp.coo_matrix(
+        (rng.randn(n_nonzeros),
+        (rng.randint(n_samples, size=n_nonzeros),
+         rng.randint(n_features, size=n_nonzeros))),
+        shape=(n_samples, n_features))
+    return data_coo.toarray(), data_coo.tocsr()
+    
+    from ..common import *
+from ..extractor import VideoExtractor
+import xml.etree.ElementTree as ET
+    
+    from ..common import *
+    
+        if '_text' in dictified['video'][0]['file'][0]:  #link exist
+        video_dict['links'] = [i['file'][0]['_text'].strip() for i in dictified['video']]
+    
+        def prepare(self, **kwargs):
+        self.api_data = json.loads(get_content(self.__class__.ep.format(self.vid)))
+        self.title = self.api_data['title']
+        for s in self.api_data['video']:
+            for st in self.__class__.stream_types:
+                if st['map_to'] == s:
+                    urls = self.api_data['video'][s]
+                    src = [u['url'] for u in urls]
+                    stream_data = dict(src=src, size=0, container='mp4', video_profile=st['video_profile'])
+                    self.streams[st['id']] = stream_data
+    
+        try:
+        json_data = get_coub_data(html)
+        title, video_url, audio_url = get_title_and_urls(json_data)
+        video_file_name, video_file_path = get_file_path(merge, output_dir, title, video_url)
+        audio_file_name, audio_file_path = get_file_path(merge, output_dir, title, audio_url)
+        download_url(audio_url, merge, output_dir, title, info_only)
+        download_url(video_url, merge, output_dir, title, info_only)
+        if not info_only:
+            try:
+                fix_coub_video_file(video_file_path)
+                audio_duration = float(ffmpeg.ffprobe_get_media_duration(audio_file_path))
+                video_duration = float(ffmpeg.ffprobe_get_media_duration(video_file_path))
+                loop_file_path = get_loop_file_path(title, output_dir)
+                single_file_path = audio_file_path
+                if audio_duration > video_duration:
+                    write_loop_file(int(audio_duration / video_duration), loop_file_path, video_file_name)
+                else:
+                    single_file_path = audio_file_path
+                    write_loop_file(int(video_duration / audio_duration), loop_file_path, audio_file_name)
+    
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
+    
+        urls = matchall(content, vimeo_embed_patters)
+    for url in urls:
+        found = True
+        vimeo_download_by_id(url, title=title, output_dir=output_dir, merge=merge, info_only=info_only, referer=url)
+    
+        title = r1(r'<title id='pageTitle'>(.+)</title>', html)
+    
+            # Adding model 'ApiAuthorization'
+        db.create_table(
+            'sentry_apiauthorization', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ApiApplication'], null=True
+                    )
+                ), (
+                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.User']
+                    )
+                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ApiAuthorization'])
+    
+            # Deleting field 'ApiKey.scope_list'
+        db.delete_column('sentry_apikey', 'scope_list')
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'Distribution'
+        db.create_table(
+            'sentry_distribution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'organization_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        db_index=True
+                    )
+                ), (
+                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Release']
+                    )
+                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['Distribution'])
