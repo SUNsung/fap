@@ -1,108 +1,42 @@
 
         
-        namespace atom {
-    }
-    
-    AutoUpdater::AutoUpdater(v8::Isolate* isolate) {
-  auto_updater::AutoUpdater::SetDelegate(this);
-  Init(isolate);
-}
-    
-    namespace api {
-    }
-    
-    namespace atom {
-    }
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(PowerSaveBlocker);
+    {
+    {    output() = 'A(m, 0) == A(m-1, 1)';
+  }
 };
     
-    /*!
- * \brief Registry entry for predictor.
- */
-struct PredictorReg
-    : public dmlc::FunctionRegEntryBase<PredictorReg,
-                                        std::function<Predictor*()>> {};
+      // Return the current record contents.  Only valid after the preceding call
+  // to GetNext() returned true
+  string record() const { return record_; }
+  // Return the current offset in the file.
+  uint64 offset() const { return offset_; }
     
-      size_t PeekRead(void* dptr, size_t size) {
-    size_t nbuffer = buffer_.length() - buffer_ptr_;
-    if (nbuffer < size) {
-      buffer_ = buffer_.substr(buffer_ptr_, buffer_.length());
-      buffer_ptr_ = 0;
-      buffer_.resize(size);
-      size_t nadd = strm_->Read(dmlc::BeginPtr(buffer_) + nbuffer, size - nbuffer);
-      buffer_.resize(nbuffer + nadd);
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_), buffer_.length());
-      return buffer_.length();
-    } else {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
-      return size;
-    }
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
+    
+      // Iterates through loaded DSOs with DlIteratePhdrCallback to find the
+  // driver-interfacing DSO version number. Returns it as a string.
+  static port::StatusOr<DriverVersion> FindDsoVersion();
+    
+    class GetCol2ImGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Im2Col', '', std::vector<string>{GO(0)}, std::vector<string>{GI(0)});
   }
-    
-    namespace xgboost {
-    }
-    
-    bool Shaky3D::initWithDuration(float duration, const Size& gridSize, int range, bool shakeZ)
-{
-    if (Grid3DAction::initWithDuration(duration, gridSize))
-    {
-        _randrange = range;
-        _shakeZ = shakeZ;
-    }
-    }
-    
-    bool AnimationCache::init()
-{
-    return true;
-}
+};
+REGISTER_GRADIENT(Col2Im, GetCol2ImGradient);
     
     
-    {  // Synchronous transmission of CAN messages
-  int32_t ret = canWrite(dev_handler_, send_frames_, frame_num, nullptr);
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'send message failed, error code: ' << ret << ', '
-           << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-  return ErrorCode::OK;
-}
-    
-      /**
-   * @brief Start the ESD CAN client.
-   * @return The status of the start action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Start() override;
-    
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
-    
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-      /*
-   * @brief get the length of protocol data. The length is usually 8.
-   * @return the length of protocol data.
-   */
-  virtual int32_t GetLength() const;
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
+    {	return 0;
 }
