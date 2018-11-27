@@ -1,53 +1,61 @@
 
         
-        class ActivityPub::CollectionsController < Api::BaseController
-  include SignatureVerification
+                  include_hidden = options.delete('include_hidden') { true }
+          checkbox = tag('input', options)
     
-        def show
-      authorize @user, :change_email?
+            private
+    
+        initializer 'action_view.form_with_generates_remote_forms' do |app|
+      ActiveSupport.on_load(:action_view) do
+        form_with_generates_remote_forms = app.config.action_view.delete(:form_with_generates_remote_forms)
+        ActionView::Helpers::FormHelper.form_with_generates_remote_forms = form_with_generates_remote_forms
+      end
     end
     
-      def payload
-    @_payload ||= request.body.read
+      # GET /resource/confirmation?confirmation_token=abcdef
+  def show
+    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
+    yield resource if block_given?
+    
+      protected
+    
+      # GET /resource/unlock?unlock_token=abcdef
+  def show
+    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
+    yield resource if block_given?
+    
+        def to_json
+      JSON.generate(as_json)
+    end
   end
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
-    end
-  end
-    
-        def URIEncodeOctets(octets, result, index)
-      if (@@hexCharCodeArray == 0)
-        @@hexCharCodeArray = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
-                              65, 66, 67, 68, 69, 70];
-      end
-      index = URIAddEncodedOctetToBuffer(octets[0], result, index);
-      if (octets[1]);
-        index = URIAddEncodedOctetToBuffer(octets[1], result, index)
-      end
-      if (octets[2]);
-        index = URIAddEncodedOctetToBuffer(octets[2], result, index)
-      end
-      if (octets[3]);
-        index = URIAddEncodedOctetToBuffer(octets[3], result, index)
-      end
-      return index;
-    end
-    
-          def use_identicon
-        @page.wiki.user_icons == 'identicon'
-      end
-    
-    def name
-  @name ||= Dir['*.gemspec'].first.split('.').first
 end
+
     
-        def not_found(msg = nil)
-      @message = msg || 'The requested page does not exist.'
-      status 404
-      return mustache :error
+        def request_one(url)
+      raise NotImplementedError
     end
+    
+          def other
+        css('#example', '.example', '#description_source', '#description_demo', '[id$='example']', 'hr').remove
+    
+    desc 'generates TOC'
+task :toc, [:readme] do |t, a|
+  a.with_defaults :readme => 'README.md'
+    
+    module Sinatra
+  class Application < Base
+    
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
+        end
+    
+            expect(cop.offenses.size).to eq(1)
+        expect(cop.highlights).to eq([close])
+        expect(cop.messages).to eq([described_class::ALWAYS_NEW_LINE_MESSAGE])
+      end
+    
+            self
+      end
