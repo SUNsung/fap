@@ -1,114 +1,35 @@
 
         
-          def command
-    abort 'This command requires a command argument' if ARGV.empty?
-    
-          old_name = name
-      old_path = path
-      old_remote = path.git_origin
-    
-      auto_updates true
-  depends_on cask: 'homebrew/cask-versions/adobe-photoshop-lightroom600'
-    
-    desc 'Compile bootstrap-sass to tmp/ (or first arg)'
-task :compile, :css_path do |t, args|
-  require 'sass'
-  require 'term/ansicolor'
-    
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-            path = File.join save_to, name.sub(/\.less$/, '.scss')
-        path = File.join File.dirname(path), '_' + File.basename(path)
-        save_file(path, file)
-        log_processed File.basename(path)
-      end
-    
-      config.active_support.test_order = :random
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Then(/^the release is created$/) do
-  run_vagrant_command('ls -g #{TestApp.releases_path}')
+        def docs_folder
+  'docs'
 end
     
-      class Configuration
-    def self.env
-      @env ||= new
-    end
+    # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
+# ------------------------------------------------------------------------
+def check_with_regex(content)
+  !content.to_s.match?(%r!{[{%]!)
+end
+    }
+    }
     
-          def using_default_scm?
-        return @using_default_scm if defined? @using_default_scm
-        @using_default_scm = (fetch(:scm) == DEFAULT_GIT)
-      end
-    
-          def set(key, value=nil, &block)
-        @trusted_keys << key if trusted? && !@trusted_keys.include?(key)
-        remember_location(key)
-        values[key] = block || value
-        trace_set(key)
-        values[key]
-      end
-    
-        def windows?
-      ::Gem.win_platform?
-    end
-    
-    module LogStash
-  module PluginManager
-  end
+    # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
     
-          prepare_package(explicit_plugins_specs, temp_path)
-      LogStash::Util::Zip.compress(temp_path, @target)
-    ensure
-      FileUtils.rm_rf(temp_path)
-    end
-    
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
-      end
-    end
-  end
-    
-        while readable_io = IO.select([self_read])
-      signal = readable_io.first[0].gets.strip
-      handle_signal(launcher, signal)
-    end
-  #end
-rescue SystemExit => e
-  #Sidekiq.logger.error('Profiling...')
-  #result = RubyProf.stop
-  #printer = RubyProf::GraphHtmlPrinter.new(result)
-  #printer.print(File.new('output.html', 'w'), :min_percent => 1)
-  # normal
-rescue => e
-  raise e if $DEBUG
-  STDERR.puts e.message
-  STDERR.puts e.backtrace.join('\n')
-  exit 1
-end
-
-    
-        def self.tid
-      Thread.current['sidekiq_tid'] ||= (Thread.current.object_id ^ ::Process.pid).to_s(36)
-    end
-    
-          # Drain all queued jobs across all workers
-      def drain_all
-        while jobs.any?
-          worker_classes = jobs.map { |job| job['class'] }.uniq
+            def initialize(_opts)
+          # If EventMachine SSL support on Windows ever gets better, the code below will
+          # set up the reactor to handle SSL
+          #
+          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
+          # if @ssl_enabled
+          #   em_opts[:tls_options] = {
+          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
+          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
+          #   }
+          #   em_opts[:secure] = true
+          # end
