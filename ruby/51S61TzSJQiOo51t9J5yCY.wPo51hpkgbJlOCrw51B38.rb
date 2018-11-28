@@ -1,127 +1,60 @@
 
         
-                # Builds a diff note from a GitHub API response.
-        #
-        # note - An instance of `Sawyer::Resource` containing the note details.
-        def self.from_api_response(note)
-          matches = note.html_url.match(NOTEABLE_ID_REGEX)
+                  def instantiate_builder(builder_class, item, value, text, html_options)
+            builder_class.new(@template_object, @object_name, @method_name, item,
+                              sanitize_attribute_name(value), text, value, html_options)
+          end
     
-          def action_name(env)
-        if env[CONTROLLER_KEY]
-          action_for_rails(env)
-        elsif env[ENDPOINT_KEY]
-          action_for_grape(env)
+            ActiveSupport::Notifications.instrument('render_#{name}.action_view', options) do |payload|
+          yield payload
         end
       end
     
-      def page_params
-    { page: true, max_id: params[:max_id], min_id: params[:min_id] }.compact
-  end
-end
-
+            def importer_class
+          IssueAndLabelLinksImporter
+        end
     
-          if @custom_emoji.update(resource_params)
-        log_action :update, @custom_emoji
-        flash[:notice] = I18n.t('admin.custom_emojis.updated_msg')
-      else
-        flash[:alert] =  I18n.t('admin.custom_emojis.update_failed_msg')
+            # Builds a new note using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+    
+            # Builds a lfs_object
+        def self.from_api_response(lfs_object)
+          new({ oid: lfs_object[0], download_link: lfs_object[1] })
+        end
+    
+            retval
       end
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+    
+        def stylesheets_path
+      File.join assets_path, 'stylesheets'
     end
     
-    module Admin
-  class ReportedStatusesController < BaseController
-    before_action :set_report
+        # Converts &-
+    def convert_less_ampersand(less)
+      regx = /^\.badge\s*\{[\s\/\w\(\)]+(&{1}-{1})\w.*?^}$/m
     
-    
-end
-end
-end
-
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
-          #
-          # @return [String] encoded principal
-          def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
-    
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptionKey into an
-          # ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_value], 1, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an String
-          #
-          # @param input [String] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-        # A list of classes that will be extracted into mixins
-    # Only the top-level selectors of form .CLASS { ... } are extracted. CLASS must not be used in any other rule definition.
-    # This is a work-around for libsass @extend issues
-    CLASSES_TO_MIXINS = %w(
-      list-unstyled form-inline
-    )
-    
-      class ShareVisibility < ApplicationRecord
-  end
-    
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
+        def log_processed(name)
+      puts green '    #{name}'
     end
+    
+    Given /^I am signed in( on the mobile website)?$/ do |mobile|
+  automatic_login
+  confirm_login mobile
+end
+    
+    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
+  stream_element_numbers_content(position).should have_content(post_text)
+end
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
   end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
+  end
+end
     
         it 'generates the contacts_json fixture', :fixture => true do
       json = bob.contacts.map { |c|
@@ -133,69 +66,87 @@ end
 end
 
     
-          if options[:install]
-        arguments << 'install'
-        arguments << '--clean' if options[:clean]
-        if options[:local]
-          arguments << '--local'
-          arguments << '--no-prune' # From bundler docs: Don't remove stale gems from the cache.
-        end
-      elsif options[:update]
-        arguments << 'update'
-        arguments << options[:update]
-        arguments << '--local' if options[:local]
-      elsif options[:clean]
-        arguments << 'clean'
-      elsif options[:package]
-        arguments << 'package'
-        arguments << '--all' if options[:all]
       end
     
-          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
-      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
-    
-            return nil
-      end
+        it 'returns a 401 for a private post when logged out' do
+      bob.like!(@message)
+      sign_out :user
+      get :index, params: {post_id: @message.id}, format: :json
+      expect(response.status).to eq(401)
     end
   end
-end end end
-
     
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
-      else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
+        shared_examples 'on a visible post' do
+      it 'creates the participation' do
+        post :create, params: {post_id: @post.id}
+        expect(alice.participations.where(:target_id => @post.id)).to exist
+        expect(response.code).to eq('201')
       end
     end
+    
+        def URIEncodePair(cc1, cc2, result, index)
+      u = ((cc1 >> 6) & 0xF) + 1;
+      w = (cc1 >> 2) & 0xF;
+      x = cc1 & 3;
+      y = (cc2 >> 6) & 0xF;
+      z = cc2 & 63;
+      octets = Array.new(4);
+      octets[0] = (u >> 2) + 240;
+      octets[1] = (((u & 3) << 4) | w) + 128;
+      octets[2] = ((x << 4) | y) + 128;
+      octets[3] = z + 128;
+      return URIEncodeOctets(octets, result, index);
+    end
+    
+          def extract_renamed_path_destination(file)
+        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
+      end
+    
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+      teardown do
+    FileUtils.rm_rf(@path)
   end
 end
 
     
-      context 'environment variable evaluation' do
-    let(:plugin_class) do
-      Class.new(LogStash::Filters::Base)  do
-        config_name 'one_plugin'
-        config :oneString, :validate => :string, :required => false
-        config :oneBoolean, :validate => :boolean, :required => false
-        config :oneNumber, :validate => :number, :required => false
-        config :oneArray, :validate => :array, :required => false
-        config :oneHash, :validate => :hash, :required => false
-        config :nestedHash, :validate => :hash, :required => false
-        config :nestedArray, :validate => :hash, :required => false
-        config :deepHash, :validate => :hash, :required => false
-    
-      it 'returns the config_hash' do
-    expect(subject.config_hash).not_to be_nil
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
+    end
   end
+end
+    
+            def show
+          @image = Image.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@image)
+        end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def scope
+          includes = { variant: [{ option_values: :option_type }, :product] }
+          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
+        end
+    
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
+          end
+        end
