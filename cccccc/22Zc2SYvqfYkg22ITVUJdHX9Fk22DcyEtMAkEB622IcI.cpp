@@ -1,156 +1,197 @@
 
         
-        #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
-
+        // This is initialized with a default, stub implementation.
+// If python-google.protobuf.cc is loaded, the function pointer is overridden
+// with a full implementation.
+const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
+    GetCProtoInsidePyProtoStub;
+Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
+    MutableCProtoInsidePyProtoStub;
     
-    
-    {}  // namespace atom
-    
-    #include 'atom/browser/api/atom_api_screen.h'
-    
-    #include <vector>
-    
-    void SavePageHandler::Destroy(download::DownloadItem* item) {
-  item->RemoveObserver(this);
-  delete this;
+    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
+    WriteDocCommentBody(printer, enumDescriptor);
+}
+void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
+    WriteDocCommentBody(printer, value);
 }
     
-      // Finds out the TrackableObject from the class it wraps.
-  static T* FromWrappedClass(v8::Isolate* isolate,
-                             base::SupportsUserData* wrapped) {
-    int32_t id = GetIDFromWrappedClass(wrapped);
-    if (!id)
-      return nullptr;
-    return FromWeakMapID(isolate, id);
+    #include <sstream>
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
   }
-    
-      if (!BrowserThread::PostTask(BrowserThread::UI, FROM_HERE, task)) {
-    // Without a UI thread to post the exit task to, there aren't many
-    // options.  Raise the signal again.  The default handler will pick it up
-    // and cause an ungraceful exit.
-    RAW_LOG(WARNING, 'No UI thread, exiting ungracefully.');
-    kill(getpid(), signal);
-    }
-    
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
-    }
-    
-    
-    {}  // namespace atom
-
-    
-    #endif // BITCOIN_QT_OPENURIDIALOG_H
-
-    
-        void showTab_SM(bool fShow);
-    void showTab_VM(bool fShow);
-    
-    #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
-
-    
-    /**
- * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
- */
-template<typename Lock>
-class reverse_lock
-{
-public:
-    }
-    
-    
-    {    secp256k1_scalar_clear(&s);
-    return ret;
 }
     
-    // Verify that difficulty is 1.0 for an empty chain.
-BOOST_AUTO_TEST_CASE(get_difficulty_for_null_tip)
-{
-    double difficulty = GetDifficulty(nullptr);
-    RejectDifficultyMismatch(difficulty, 1.0);
+    void ImmutableMapFieldGenerator::
+GenerateSerializationCode(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'com.google.protobuf.GeneratedMessage$ver$\n'
+      '  .serialize$short_key_type$MapTo(\n'
+      '    output,\n'
+      '    internalGet$capitalized_name$(),\n'
+      '    $default_entry$,\n'
+      '    $number$);\n');
 }
     
-        obj.clear();
-    BOOST_CHECK(obj.empty());
-    BOOST_CHECK_EQUAL(obj.size(), 0);
-    BOOST_CHECK_EQUAL(obj.getType(), UniValue::VNULL);
-    
-    const std::string LoggerConfigParserPlugin::kLoggerKey{'logger'};
-    
-    namespace osquery {
-    }
-    
-      // Make sure a subscription cannot be added for a non-existent event type.
-  // Note: It normally would not make sense to create a blank subscription.
-  auto subscription = Subscription::create('FakeSubscriber');
-  auto status = EventFactory::addSubscription('FakePublisher', subscription);
-  EXPECT_FALSE(status.ok());
-    
-      for (int32_t i = 0; i < *frame_num && i < MAX_CAN_RECV_FRAME_LEN; ++i) {
-    CanFrame cf;
-    cf.id = recv_frames_[i].id;
-    cf.len = recv_frames_[i].len;
-    std::memcpy(cf.data, recv_frames_[i].data, recv_frames_[i].len);
-    frames->push_back(cf);
+    // Get the full name of a Java class by prepending the Java package name
+// or outer class name.
+string ClassNameResolver::GetClassFullName(const string& name_without_package,
+                                           const FileDescriptor* file,
+                                           bool immutable,
+                                           bool multiple_files) {
+  string result;
+  if (multiple_files) {
+    result = FileJavaPackage(file, immutable);
+  } else {
+    result = GetClassName(file, immutable);
   }
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-    
-    /*
-TEST(HermesCanClient, send) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::HERMES_CAN);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-  HermesCanClient hermes_can;
-  EXPECT_TRUE(hermes_can.Init(param));
-    }
-    
-    
-    {  SocketCanClientRaw socket_can_client;
-  EXPECT_TRUE(socket_can_client.Init(param));
-  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(socket_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  socket_can_client.Stop();
+  if (!result.empty()) {
+    result += '.';
+  }
+  result += name_without_package;
+  return result;
 }
     
-    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
- public:
-  static const int32_t ID = 0x111;
-  MockProtocolData() {}
+    void EnumGenerator::GenerateHeader(io::Printer* printer) {
+  string enum_comments;
+  SourceLocation location;
+  if (descriptor_->GetSourceLocation(&location)) {
+    enum_comments = BuildCommentsString(location, true);
+  } else {
+    enum_comments = '';
+  }
+    }
+    
+    ExtensionGenerator::ExtensionGenerator(const string& root_class_name,
+                                       const FieldDescriptor* descriptor)
+    : method_name_(ExtensionMethodName(descriptor)),
+      root_class_and_method_name_(root_class_name + '_' + method_name_),
+      descriptor_(descriptor) {
+  if (descriptor->is_map()) {
+    // NOTE: src/google/protobuf/compiler/plugin.cc makes use of cerr for some
+    // error cases, so it seems to be ok to use as a back door for errors.
+    std::cerr << 'error: Extension is a map<>!'
+         << ' That used to be blocked by the compiler.' << std::endl;
+    std::cerr.flush();
+    abort();
+  }
+}
+    
+    
+    {    float _radZ;
+    float _radDeltaZ;
+    float _radX;
+    float _radDeltaX;
 };
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-    }
-    }
+    /** @class TintTo
+ * @brief Tints a Node that implements the NodeRGB protocol from current tint to a custom one.
+ @warning This action doesn't support 'reverse'
+ @since v0.7.2
+*/
+class CC_DLL TintTo : public ActionInterval
+{
+public:
+    /** 
+     * Creates an action with duration and color.
+     * @param duration Duration time, in seconds.
+     * @param red Red Color, from 0 to 255.
+     * @param green Green Color, from 0 to 255.
+     * @param blue Blue Color, from 0 to 255.
+     * @return An autoreleased TintTo object.
+     */
+    static TintTo* create(float duration, GLubyte red, GLubyte green, GLubyte blue);
+    /**
+     * Creates an action with duration and color.
+     * @param duration Duration time, in seconds.
+     * @param color It's a Color3B type.
+     * @return An autoreleased TintTo object.
+     */
+    static TintTo* create(float duration, const Color3B& color);
     }
     
-      /**
-   * @brief Transform an integer with the size of one byte to its hexadecimal
-   *        represented by a string.
-   * @param value The target integer to transform.
-   * @return Hexadecimal representing the target integer.
-   */
-  static std::string byte_to_hex(const uint8_t value);
+    void FadeOutUpTiles::transformTile(const Vec2& pos, float distance)
+{
+    Quad3 coords = getOriginalTile(pos);
+    Vec2 step = _gridNodeTarget->getGrid()->getStep();
+    }
     
-    // data file
-DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
+        /** Gets the units of time the frame takes.
+     *
+     * @return The units of time the frame takes.
+     */
+    float getDelayUnits() const { return _delayUnits; };
+    
+    /** Sets the units of time the frame takes.
+     *
+     * @param delayUnits The units of time the frame takes.
+     */
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
+    
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
+     *
+     * @return A dictionary as UserInfo
+     */
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
+    
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+    
+    {                continue;
+            }
+    
+        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
+    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
+    
+    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
+    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
