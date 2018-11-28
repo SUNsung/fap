@@ -1,111 +1,285 @@
 
         
-        #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
-
-    
-    
-    {  const T1 v1_;
-  const T2 v2_;
-  const T3 v3_;
-  const T4 v4_;
-  const T5 v5_;
-  const T6 v6_;
-  const T7 v7_;
-  const T8 v8_;
-  const T9 v9_;
-  const T10 v10_;
-  const T11 v11_;
-  const T12 v12_;
-  const T13 v13_;
-  const T14 v14_;
-  const T15 v15_;
-  const T16 v16_;
-  const T17 v17_;
-  const T18 v18_;
-  const T19 v19_;
-  const T20 v20_;
-  const T21 v21_;
-  const T22 v22_;
-  const T23 v23_;
-  const T24 v24_;
-  const T25 v25_;
-  const T26 v26_;
-  const T27 v27_;
-  const T28 v28_;
-  const T29 v29_;
-  const T30 v30_;
-};
-    
-    #include <string.h>
-#include <string>
-    
-      // serialize the QueryLogItem and make sure decorations go top level
-  auto doc = JSON::newObject();
-  auto status = serializeQueryLogItem(item, doc);
-  std::string expected = 'test';
-  std::string result = doc.doc()['load_test'].GetString();
-  EXPECT_EQ(result, expected);
-    
-      // Generate content to update/add to the config.
-  std::string content;
-  auto s = readFile(kTestDataPath + 'test_parse_items.conf', content);
-  EXPECT_TRUE(s.ok());
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
-    
-      QueryData r;
-  if (views.IsObject()) {
-    for (const auto& view : views.GetObject()) {
-      std::string name = view.name.GetString();
-      if (!view.value.IsString()) {
-        continue;
-      }
-      std::string query = view.value.GetString();
-      if (query.empty()) {
-        continue;
-      }
-    }
+          // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
     }
     
-      auto p = PlatformProcess(handle);
-  EXPECT_TRUE(p.isValid());
-  EXPECT_NE(p.nativeHandle(), handle);
+    #ifndef DIRECTIONAL_PREPOSITION
+#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
+#endif
     
+    DummyTaskQueue::~DummyTaskQueue() = default;
     
-    {  // And of the column has constraints:
-  EXPECT_TRUE(cm['path'].notExistsOrMatches('some'));
-  EXPECT_FALSE(cm['path'].notExistsOrMatches('not_some'));
-  EXPECT_TRUE(cm['path'].exists());
-  EXPECT_TRUE(cm['path'].existsAndMatches('some'));
+    namespace clang {
+class Sema;
+class NamedDecl;
+class TypeDecl;
+class FunctionDecl;
 }
     
-    Status deserializeDistributedQueryRequest(const rj::Value& obj,
-                                          DistributedQueryRequest& r) {
-  if (!obj.HasMember('query') || !obj.HasMember('id') ||
-      !obj['query'].IsString() || !obj['id'].IsString()) {
-    return Status(1, 'Malformed distributed query request');
-  }
-    }
+    #include 'swift/Demangling/Demangle.h'
+#include 'swift/Demangling/Demangler.h'
+#include <cstdio>
+    
+    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsCollision(body0, body1);
+}
+    
+    class RigidBodyBullet;
+class btTypedConstraint;
+    
+    	real_t getSoftnessDirLin() const;
+	real_t getRestitutionDirLin() const;
+	real_t getDampingDirLin() const;
+	real_t getSoftnessDirAng() const;
+	real_t getRestitutionDirAng() const;
+	real_t getDampingDirAng() const;
+	real_t getSoftnessLimLin() const;
+	real_t getRestitutionLimLin() const;
+	real_t getDampingLimLin() const;
+	real_t getSoftnessLimAng() const;
+	real_t getRestitutionLimAng() const;
+	real_t getDampingLimAng() const;
+	real_t getSoftnessOrthoLin() const;
+	real_t getRestitutionOrthoLin() const;
+	real_t getDampingOrthoLin() const;
+	real_t getSoftnessOrthoAng() const;
+	real_t getRestitutionOrthoAng() const;
+	real_t getDampingOrthoAng() const;
+	void setSoftnessDirLin(real_t softnessDirLin);
+	void setRestitutionDirLin(real_t restitutionDirLin);
+	void setDampingDirLin(real_t dampingDirLin);
+	void setSoftnessDirAng(real_t softnessDirAng);
+	void setRestitutionDirAng(real_t restitutionDirAng);
+	void setDampingDirAng(real_t dampingDirAng);
+	void setSoftnessLimLin(real_t softnessLimLin);
+	void setRestitutionLimLin(real_t restitutionLimLin);
+	void setDampingLimLin(real_t dampingLimLin);
+	void setSoftnessLimAng(real_t softnessLimAng);
+	void setRestitutionLimAng(real_t restitutionLimAng);
+	void setDampingLimAng(real_t dampingLimAng);
+	void setSoftnessOrthoLin(real_t softnessOrthoLin);
+	void setRestitutionOrthoLin(real_t restitutionOrthoLin);
+	void setDampingOrthoLin(real_t dampingOrthoLin);
+	void setSoftnessOrthoAng(real_t softnessOrthoAng);
+	void setRestitutionOrthoAng(real_t restitutionOrthoAng);
+	void setDampingOrthoAng(real_t dampingOrthoAng);
+	void setPoweredLinMotor(bool onOff);
+	bool getPoweredLinMotor();
+	void setTargetLinMotorVelocity(real_t targetLinMotorVelocity);
+	real_t getTargetLinMotorVelocity();
+	void setMaxLinMotorForce(real_t maxLinMotorForce);
+	real_t getMaxLinMotorForce();
+	void setPoweredAngMotor(bool onOff);
+	bool getPoweredAngMotor();
+	void setTargetAngMotorVelocity(real_t targetAngMotorVelocity);
+	real_t getTargetAngMotorVelocity();
+	void setMaxAngMotorForce(real_t maxAngMotorForce);
+	real_t getMaxAngMotorForce();
+	real_t getLinearPos();
+    
+    MemoryPool::Alloc *MemoryPool::allocs = NULL;
+MemoryPool::Alloc *MemoryPool::free_list = NULL;
+uint32_t MemoryPool::alloc_count = 0;
+uint32_t MemoryPool::allocs_used = 0;
+Mutex *MemoryPool::alloc_mutex = NULL;
+    
+    Shell::~Shell() {
+}
+    
+    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
+
     
     /**
- * @brief A more 'complex' example table is provided to assist with tests.
- *
- * This table will access options and flags known to the extension.
- * An extension should not assume access to any CLI flags- rather, access is
- * provided via the osquery-meta table: osquery_flags.
- *
- * There is no API/C++ wrapper to provide seamless use of flags yet.
- * We can force an implicit query to the manager though.
- *
- * Database access should be mediated by the *Database functions.
- * Direct use of the 'database' registry will lead to undefined behavior.
+ * \brief The interface to convert mxnet's tensor to caffe's blob
+ * \brief called in caffe_operator_inl.h
  */
-class ComplexExampleTable : public TablePlugin {
- private:
-  TableColumns columns() const {
-    return {
-        std::make_tuple('flag_test', TEXT_TYPE, ColumnOptions::DEFAULT),
-        std::make_tuple('database_test', TEXT_TYPE, ColumnOptions::DEFAULT),
-    };
+template<typename Device, typename Dtype>
+void TBlob2CaffeBlob(caffeMemoryTypes memType,
+                     typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
+                     typename std::vector<TBlob>::const_iterator tblob,
+                     int n = 1) {
+  for (int i = 0; i < n; ++i, ++blob, ++tblob) {
+    (*blob)->Reshape(TShape2Vector((*tblob).shape_));
+    SetDataGradToBlob<Device, Dtype>(memType, blob, tblob);
+  }
+}
+    
+    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
+.describe('Caffe loss layer')
+.add_arguments(CaffeLossParam::__FIELDS__());
+    
+    namespace mxnet {
+namespace engine {
+/*!
+ * \brief ThreadedEngine using global thread pool across all devices.
+ * The policy of this Engine:
+ *  - Execute Async operation immediately if pushed from Pusher.
+ *  - Use a common thread pool for normal operations on all devices.
+ *  - Use special thread pool for copy operations.
+ */
+class ThreadedEnginePooled : public ThreadedEngine {
+ public:
+  ThreadedEnginePooled() {
+    this->Start();
   }
     }
+    }
+    }
+    
+    Example::
+    
+      /**
+   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
+   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
+   * ntree_limit = 0) = 0;
+   *
+   * \brief predict the leaf index of each tree, the output will be nsample *
+   * ntree vector this is only valid in gbtree predictor.
+   *
+   * \param [in,out]  dmat        The input feature matrix.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       Model to make predictions from.
+   * \param           ntree_limit (Optional) The ntree limit.
+   */
+    
+      inline void ParseStr(std::string *tok) {
+    while ((ch_buf_ = this->GetChar()) != EOF) {
+      switch (ch_buf_) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        case '\r':
+        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
+        default: *tok += ch_buf_;
+      }
+    }
+    LOG(FATAL) << 'ConfigReader: unterminated string';
+  }
+  inline void ParseStrML(std::string *tok) {
+    while ((ch_buf_ = this->GetChar()) != EOF) {
+      switch (ch_buf_) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        default: *tok += ch_buf_;
+      }
+    }
+    LOG(FATAL) << 'unterminated string';
+  }
+  // return newline
+  inline bool GetNextToken(std::string *tok) {
+    tok->clear();
+    bool new_line = false;
+    while (ch_buf_ != EOF) {
+      switch (ch_buf_) {
+        case '#' : SkipLine(); new_line = true; break;
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStr(tok); ch_buf_ = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStrML(tok); ch_buf_ = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '=':
+          if (tok->length() == 0) {
+            ch_buf_ = this->GetChar();
+            *tok = '=';
+          }
+          return new_line;
+        case '\r':
+        case '\n':
+          if (tok->length() == 0) new_line = true;
+        case '\t':
+        case ' ' :
+          ch_buf_ = this->GetChar();
+          if (tok->length() != 0) return new_line;
+          break;
+        default:
+          *tok += ch_buf_;
+          ch_buf_ = this->GetChar();
+          break;
+      }
+    }
+    if (tok->length() == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+/*!
+ * \brief an iterator use stream base, allows use all types of istream
+ */
+class ConfigStreamReader: public ConfigReaderBase {
+ public:
+  /*!
+   * \brief constructor
+   * \param fin istream input stream
+   */
+  explicit ConfigStreamReader(std::istream &fin) : fin_(fin) {}
+    
+    
+    {    inline size_t Size() const {
+      return end - begin;
+    }
+  };
+  /* \brief specifies how to split a rowset into two */
+  struct Split {
+    std::vector<size_t> left;
+    std::vector<size_t> right;
+  };
+    
+    
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+        // Setup render state
+    const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
+    ctx->OMSetBlendState(g_pBlendState, blend_factor, 0xffffffff);
+    ctx->OMSetDepthStencilState(g_pDepthStencilState, 0);
+    ctx->RSSetState(g_pRasterizerState);
+    
+        ImGui_ImplVulkanH_FrameData* fd = &wd->Frames[wd->FrameIndex];
+    {
+		err = vkWaitForFences(g_Device, 1, &fd->Fence, VK_TRUE, UINT64_MAX);	// wait indefinitely instead of periodically checking
+        check_vk_result(err);
+    }
+    
+                    // Average normals
+                ImVec2 dm = (temp_normals[i1] + temp_normals[i2]) * 0.5f;
+                float dmr2 = dm.x*dm.x + dm.y*dm.y;
+                if (dmr2 > 0.000001f)
+                {
+                    float scale = 1.0f / dmr2;
+                    if (scale > 100.0f) scale = 100.0f;
+                    dm *= scale;
+                }
+                dm *= AA_SIZE;
+                temp_points[i2*2+0] = points[i2] + dm;
+                temp_points[i2*2+1] = points[i2] - dm;
