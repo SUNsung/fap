@@ -1,160 +1,180 @@
 
         
-              #
+          def [](key)
+    @checksums[key]
+  end
     
-    module Jekyll
-  module Deprecator
-    extend self
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+  end
     
-          it 'updates the notification count on destroy' do
-        Notification.any_instance.expects(:refresh_notification_count).returns(nil)
-        notification.destroy!
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
       end
-    
-      smoke_user = User.seed do |u|
-    u.id = 0
-    u.name = 'smoke_user'
-    u.username = 'smoke_user'
-    u.username_lower = 'smoke_user'
-    u.password = 'P4ssw0rd'
-    u.active = true
-    u.approved = true
-    u.approved_at = Time.now
-    u.trust_level = TrustLevel[3]
-  end.first
-    
-        def suggest_ruby_reinstall(e)
-      ui = FastlaneCore::UI
-      ui.error('-----------------------------------------------------------------------')
-      ui.error(e.to_s)
-      ui.error('')
-      ui.error('SSL errors can be caused by various components on your local machine.')
-      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
-        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
-        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
-      end
-      ui.error('')
-      ui.error('The best solution is to use the self-contained fastlane version.')
-      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
-      ui.error(' - Use Homebrew')
-      ui.error('    - update brew with `brew update`')
-      ui.error('    - install fastlane using:')
-      ui.error('      - `brew cask install fastlane`')
-      ui.error(' - Use One-Click-Installer:')
-      ui.error('    - download fastlane at https://download.fastlane.tools')
-      ui.error('    - extract the archive and double click the `install`')
-      ui.error('-----------------------------------------------------------')
-      ui.error('for more details on ways to install fastlane please refer the documentation:')
-      ui.error('-----------------------------------------------------------')
-      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
-      ui.error('-----------------------------------------------------------')
-      ui.error('')
-      ui.error('You can also install a new version of Ruby')
-      ui.error('')
-      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
-      ui.error('- If you use system Ruby:')
-      ui.error('  - Run `brew update && brew install ruby`')
-      ui.error('- If you use rbenv with ruby-build:')
-      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
-      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
-      ui.error('- If you use rvm:')
-      ui.error('  - First run `rvm osx-ssl-certs update all`')
-      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
-      ui.error('')
-      ui.error('If that doesn't fix your issue, please google for the following error message:')
-      ui.error('  '#{e}'')
-      ui.error('-----------------------------------------------------------------------')
     end
     
-          it 'generates the correct git command with a shell-escaped message' do
-        message = 'message with 'quotes' (and parens)'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: \'#{message}\')
-        end').runner.execute(:test)
-        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
-      end
+      def find_internal_commands(directory)
+    directory.children.reduce([]) do |cmds, f|
+      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
+      cmds
     end
   end
 end
 
     
-        def document?
-      @content =~ DOCUMENT_RGX
-    end
+      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
+    %w[Caskroom cask],
+    %w[Caskroom versions]
+  ]
     
-        def html?
-      mime_type.include? 'html'
-    end
+              # Set all of our instance variables on the new class
+          [self, other].each do |obj|
+            obj.instance_variables.each do |key|
+              # Ignore keys that start with a double underscore. This allows
+              # configuration classes to still hold around internal state
+              # that isn't propagated.
+              if !key.to_s.start_with?('@__')
+                result.instance_variable_set(key, obj.instance_variable_get(key))
+              end
+            end
+          end
     
-    module Docs
-  class URL < URI::Generic
-    PARSER = URI::Parser.new
-    
-        # use Feedbag as a backup to Google Feeds Api
-    if rss_url.nil?
-      rss_url = Feedbag.find(web_url).first
-      if rss_url.nil?
-        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
-        suggested_paths.each do |suggested_path|
-          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
-          break if rss_url
+            # This method is automatically called when the system is available (when
+        # Vagrant can successfully SSH into the machine) to give the system a chance
+        # to determine the distro and return a distro-specific system.
+        #
+        # If this method returns nil, then this instance is assumed to be
+        # the most specific guest implementation.
+        def distro_dispatch
         end
+    
+              @registered.each do |plugin|
+            result.merge!(plugin.communicator.to_hash)
+          end
+    
+            # This returns all the registered guests.
+        #
+        # @return [Hash]
+        def hosts
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.hosts)
+            end
+          end
+        end
+    
+            # Registers additional synced folder implementations.
+        #
+        # @param [String] name Name of the implementation.
+        # @param [Integer] priority The priority of the implementation,
+        # higher (big) numbers are tried before lower (small) numbers.
+        def self.synced_folder(name, priority=10, &block)
+          components.synced_folders.register(name.to_sym) do
+            [block.call, priority]
+          end
+    
+        # Get a value by the given key.
+    #
+    # This will evaluate the block given to `register` and return the
+    # resulting value.
+    def get(key)
+      return nil if !@items.key?(key)
+      return @results_cache[key] if @results_cache.key?(key)
+      @results_cache[key] = @items[key].call
+    end
+    alias :[] :get
+    
+            if current_rule.nil? || first_sseq(current_rule) != first
+          current_rule = Tree::RuleNode.new([])
+          current_rule.parsed_rules = make_seq(first)
+        end
+    
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
       end
-    end
-  end
     
-      people = []
-  contacts = []
-  aspect_memberships = []
+    class Rack::Builder
+  include Sinatra::Delegator
+end
+
     
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-        it 'returns a 404 for a post not visible to the user' do
-      sign_in eve
-      expect {
-        get :index, params: {post_id: @message.id}
-      }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    
-        it 'should redirect back in the mobile version if it has > 0 notifications' do
-      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
-      get :read_all, params: {type: 'liked'}, format: :mobile
-      expect(response).to redirect_to(notifications_path)
-    end
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
+    begin
+  require 'bundler'
+  Bundler::GemHelper.install_tasks
+rescue LoadError => e
+  $stderr.puts e
 end
     
-    module Capistrano
-  class Configuration
-    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
-    # with `fetch`. Does internal bookkeeping to help identify user mistakes
-    # like spelling errors or unused variables that may lead to unexpected
-    # behavior.
-    class Variables
-      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
-      IGNORED_LOCATIONS = [
-        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
-        '#{CAPISTRANO_LOCATION}/configuration.rb:',
-        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
-        '/dsl.rb:',
-        '/forwardable.rb:'
-      ].freeze
-      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
+          # Creates a masked version of the authenticity token that varies
+      # on each request. The masking is used to mitigate SSL attacks
+      # like BREACH.
+      def mask_token(token)
+        token = decode_token(token)
+        one_time_pad = SecureRandom.random_bytes(token.length)
+        encrypted_token = xor_byte_strings(one_time_pad, token)
+        masked_token = one_time_pad + encrypted_token
+        encode_token(masked_token)
+      end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+          def empty_cookie(host, path)
+        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
+      end
     
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS
+    # Supported browsers:: all
+    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
+    #
+    # Automatically escapes Rack::Request#params so they can be embedded in HTML
+    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
+    # strings if defined, to avoid double-escaping in Rails.
+    #
+    # Options:
+    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
+    #          Available: :html (default), :javascript, :url
+    class EscapedParams < Base
+      extend Rack::Utils
     
+      it 'denies post form requests with wrong authenticity_token field' do
+    post('/', {'authenticity_token' => bad_token}, 'rack.session' => session)
+    expect(last_response).not_to be_ok
+  end
+    
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
+    end
