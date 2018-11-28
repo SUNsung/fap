@@ -1,112 +1,144 @@
 
         
-          # Print rows
-  for i, label1 in enumerate(short_labels):
-    row = '%{0}s '.format(columnwidth) % label1[:10]
-    for j in range(len(short_labels)):
-      value = int(cm[i, j]) if not np.isnan(cm[i, j]) else 0
-      cell = ' %{0}d '.format(10) % value
-      row += cell + ' '
-    print(row)
-    
-    
-def plot_lfads(train_bxtxd, train_model_vals,
-               train_ext_input_bxtxi=None, train_truth_bxtxd=None,
-               valid_bxtxd=None, valid_model_vals=None,
-               valid_ext_input_bxtxi=None, valid_truth_bxtxd=None,
-               bidx=None, cf=1.0, output_dist='poisson'):
-    
-      # print('Number of batches per epoch: %d' % epoch_size)
-  for i in range(epoch_size):
-    x = data[:, i * num_steps:(i + 1) * num_steps]
-    y = data[:, i * num_steps + 1:(i + 1) * num_steps + 1]
-    w = np.ones_like(x)
-    yield (x, y, w)
-
-    
-    
-def print_and_log(log, id_to_word, sequence_eval, max_num_to_print=5):
-  '''Helper function for printing and logging evaluated sequences.'''
-  indices_eval = convert_to_indices(sequence_eval)
-  indices_arr = np.asarray(indices_eval)
-  samples = convert_to_human_readable(id_to_word, indices_arr, max_num_to_print)
-    
-      # *Total* number of n-grams produced by the generator.
-  total_ngrams_produced = 0
-    
-      Returns:
-    variable_mapping:  Dictionary with Key: ckpt_name, Value: model_varself.
-  '''
-  assert FLAGS.discriminator_model == 'seq2seq_vd'
-  assert hparams.dis_num_layers == 2
-    
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
-    
-    
-def sanitize_module_name(module_name):
-    '''Sanitize the given module name, by replacing dashes and points
-    with underscores and prefixing it with a letter if it doesn't start
-    with one
+        
+def check_alphabetical(lines):
     '''
-    module_name = module_name.replace('-', '_').replace('.', '_')
-    if module_name[0] not in string.ascii_letters:
-        module_name = 'a' + module_name
-    return module_name
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
+        title_re_match = link_re.match(raw_title)
+        if title_re_match:
+            sections[category].append(title_re_match.group(1).upper())
     
-        def __init__(self, crawler):
-        self._crawler = crawler
-        self._schemes = {}  # stores acceptable schemes on instancing
-        self._handlers = {}  # stores instanced handlers for schemes
-        self._notconfigured = {}  # remembers failed handlers
-        handlers = without_none_values(
-            crawler.settings.getwithbase('DOWNLOAD_HANDLERS'))
-        for scheme, clspath in six.iteritems(handlers):
-            self._schemes[scheme] = clspath
+    EXAMPLES = '''
+- name: obtain all WAF facts
+  aws_waf_facts:
     
-        def download_request(self, request, spider):
-        parsed_url = urlparse_cached(request)
-        user = request.meta.get('ftp_user', self.default_user)
-        password = request.meta.get('ftp_password', self.default_password)
-        passive_mode = 1 if bool(request.meta.get('ftp_passive',
-                                                  self.passive_mode)) else 0
-        creator = ClientCreator(reactor, FTPClient, user, password,
-            passive=passive_mode)
-        return creator.connectTCP(parsed_url.hostname, parsed_url.port or 21).addCallback(self.gotClient,
-                                request, unquote(parsed_url.path))
+        distribution_id = validation_mgr.validate_distribution_id(distribution_id, alias)
+    valid_target_paths = validation_mgr.validate_invalidation_batch(target_paths, caller_reference)
+    valid_pascal_target_paths = snake_dict_to_camel_dict(valid_target_paths, True)
+    result, changed = service_mgr.create_invalidation(distribution_id, valid_pascal_target_paths)
     
-            self.assertEqual(self.vhosts[5], self._call(self.vhosts))
+            if matched_name and matched_tags:
+            asg = camel_dict_to_snake_dict(asg)
+            # compatibility with ec2_asg module
+            asg['launch_config_name'] = asg['launch_configuration_name']
+            # workaround for https://github.com/ansible/ansible/pull/25015
+            if 'target_group_ar_ns' in asg:
+                asg['target_group_arns'] = asg['target_group_ar_ns']
+                del(asg['target_group_ar_ns'])
+            if asg.get('target_group_arns'):
+                if elbv2:
+                    try:
+                        tg_paginator = elbv2.get_paginator('describe_target_groups')
+                        tg_result = tg_paginator.paginate(TargetGroupArns=asg['target_group_arns']).build_full_result()
+                        asg['target_group_names'] = [tg['TargetGroupName'] for tg in tg_result['TargetGroups']]
+                    except ClientError as e:
+                        if e.response['Error']['Code'] == 'TargetGroupNotFound':
+                            asg['target_group_names'] = []
+            else:
+                asg['target_group_names'] = []
+            matched_asgs.append(asg)
     
-        def test_simple(self):
-        def f(p):
-            pass
-        f_ident = ident(f)
-        self.check_events(f, [(1, 'call', f_ident),
-                              (1, 'return', f_ident),
-                              ])
+        if not HAS_BOTOCORE:
+        module.fail_json(msg='botocore is required.')
     
-        @property
-    def suffixes(self):
-        '''A list of the final component's suffixes, if any.'''
-        name = self.name
-        if name.endswith('.'):
-            return []
-        name = name.lstrip('.')
-        return ['.' + suffix for suffix in name.split('.')[1:]]
+        task_mgr = EcsServiceManager(module)
+    if show_details:
+        if module.params['service']:
+            services = module.params['service']
+        else:
+            services = task_mgr.list_services(module.params['cluster'])['services']
+        ecs_facts = dict(services=[], services_not_running=[])
+        for chunk in chunks(services, 10):
+            running_services, services_not_running = task_mgr.describe_services(module.params['cluster'], chunk)
+            ecs_facts['services'].extend(running_services)
+            ecs_facts['services_not_running'].extend(services_not_running)
+    else:
+        ecs_facts = task_mgr.list_services(module.params['cluster'])
     
-        if AVAILABLE_TARGETS:
-        # Coercion is expected to use the first available target locale
-        CLI_COERCION_TARGET = AVAILABLE_TARGETS[0]
-        CLI_COERCION_WARNING = CLI_COERCION_WARNING_FMT.format(CLI_COERCION_TARGET)
+    RETURN = '''
+server_certificate_id:
+    description: The 21 character certificate id
+    returned: success
+    type: str
+    sample: 'ADWAJXWTZAXIPIMQHMJPO'
+certificate_body:
+    description: The asn1der encoded PEM string
+    returned: success
+    type: str
+    sample: '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----'
+server_certificate_name:
+    description: The name of the server certificate
+    returned: success
+    type: str
+    sample: 'server-cert-name'
+arn:
+    description: The Amazon resource name of the server certificate
+    returned: success
+    type: str
+    sample: 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
+path:
+    description: The path of the server certificate
+    returned: success
+    type: str
+    sample: '/'
+expiration:
+    description: The date and time this server certificate will expire, in ISO 8601 format.
+    returned: success
+    type: str
+    sample: '2017-06-15T12:00:00+00:00'
+upload_date:
+    description: The date and time this server certificate was uploaded, in ISO 8601 format.
+    returned: success
+    type: str
+    sample: '2015-04-25T00:36:40+00:00'
+'''
     
-    --Pepé
-''')
+        for snapshot in results:
+        try:
+            snapshot['Tags'] = boto3_tag_list_to_ansible_dict(conn.list_tags_for_resource(ResourceName=snapshot['%sArn' % prefix],
+                                                                                          aws_retry=True)['TagList'])
+        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+            module.fail_json_aws(e, 'Couldn't get tags for snapshot %s' % snapshot['%sIdentifier' % prefix])
+    
+    EXAMPLES = '''
+# Add or change a subnet group
+- rds_subnet_group:
+    state: present
+    name: norwegian-blue
+    description: My Fancy Ex Parrot Subnet Group
+    subnets:
+      - subnet-aaaaaaaa
+      - subnet-bbbbbbbb
+    
+                    if record.get('delegation_set_id') is not None:
+                    params['DelegationSetId'] = record['delegation_set_id']
+    
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+    
+      def InAsmBlock(self):
+    '''Check if we are currently one level inside an inline ASM block.
+    
+        Snippets without code (only comments) or containing lines starting with ??? should not yeld files,
+    but the counter for naming snippets should still increment.
+    '''
+    parser = argparse.ArgumentParser(description='Split md file into plain text and code blocks')
+    parser.add_argument('sourcefile',
+                        help='which file to read')
+    parser.add_argument('targetfile',
+                        help='where to put plain text')
+    parser.add_argument('codedir',
+                        help='where to put codeblocks')
+    args = parser.parse_args()
