@@ -1,280 +1,211 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17>
-internal::ValueArray17<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17) {
-  return internal::ValueArray17<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10,
-      v11, v12, v13, v14, v15, v16, v17);
+        namespace api {
+    }
+    
+    #endif
+    
+      // display::DisplayObserver:
+  void OnDisplayAdded(const display::Display& new_display) override;
+  void OnDisplayRemoved(const display::Display& old_display) override;
+  void OnDisplayMetricsChanged(const display::Display& display,
+                               uint32_t changed_metrics) override;
+    
+    
+    {  if (use_native_event) {
+    mate::Handle<mate::Event> native_event = mate::Event::Create(isolate);
+    native_event->SetSenderAndMessage(sender, message);
+    event = v8::Local<v8::Object>::Cast(native_event.ToV8());
+  } else {
+    event = CreateEventObject(isolate);
+  }
+  mate::Dictionary(isolate, event).Set('sender', object);
+  return event;
 }
     
-      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
-      GTEST_BY_REF_(T2) f2) : f0_(f0), f1_(f1), f2_(f2) {}
+      base::WeakPtrFactory<TrackableObjectBase> weak_factory_;
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15>
-struct Types15 {
-  typedef T1 Head;
-  typedef Types14<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15> Tail;
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
+    }
+    
+      DefaultCacheKey CKey(Key, &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    if (Entry->second == Value)
+      return;
+    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
+    DCache.Entries.erase(Entry);
+  }
+    
+    void PrefixMapKeyPrinter<char>::print(raw_ostream &out, ArrayRef<char> key) {
+  out << QuotedString(StringRef(key.data(), key.size()));
 };
     
-    // We don't want to require the users to write TypesN<...> directly,
-// as that would require them to count the length.  Types<...> is much
-// easier to write, but generates horrible messages when there is a
-// compiler error, as gcc insists on printing out each template
-// argument, even if it has the default value (this means Types<int>
-// will appear as Types<int, None, None, ..., None> in the compiler
-// errors).
-//
-// Our solution is to combine the best part of the two approaches: a
-// user would write Types<T1, ..., TN>, and Google Test will translate
-// that to TypesN<T1, ..., TN> internally to make error messages
-// readable.  The translation is done by the 'type' member of the
-// Types template.
+    #include 'swift/Basic/Unicode.h'
     
-    #include 'sample2.h'
-#include 'gtest/gtest.h'
+    #include 'llvm/ADT/PointerUnion.h'
     
-    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H */
+    #endif // SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
 
     
-      void StartTransportStreamOpBatch(grpc_call_element* elem,
-                                   TransportStreamOpBatch* op) override;
+    class PlatformStyle;
+class WalletModel;
     
-      CensusContext(absl::string_view name,
-                const ::opencensus::trace::SpanContext& parent_ctxt)
-      : span_(::opencensus::trace::Span::StartSpanWithRemoteParent(
-            name, parent_ctxt)) {}
-    
-    MeasureDouble RpcClientRoundtripLatency() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientRoundtripLatencyMeasureName,
-      'Time between first byte of request sent to last byte of response '
-      'received, or terminal error',
-      kUnitMilliseconds);
-  return measure;
-}
-    
-    #include 'src/cpp/ext/proto_server_reflection.h'
-    
-    namespace grpc {
-namespace {
-    }
+    class TrafficGraphWidget : public QWidget
+{
+    Q_OBJECT
     }
     
-    namespace grpc {
+        if (len > 0) {
+        /* The z of the final point gives us the 'global Z' for the table. */
+        r[i].x = a[i].x;
+        r[i].y = a[i].y;
+        *globalz = a[i].z;
+        r[i].infinity = 0;
+        zs = zr[i];
     }
     
-    
-    {    static bool IsVariable(const nnvm::NodePtr& node) {
-      AGInfo& info = Get(node);
-      return info.grad_req != kNullOp && info.outputs.size() == 1
-             && info.out_grads.size() == 1;
-    }
-  };
-  /*! \brief whether operator recording is on. */
-  bool is_training() const {
-    return is_train_;
-  }
-  /*! \brief turn on or turn off operator recording for autograd. */
-  bool set_is_training(bool is_train) {
-      bool old = is_train_;
-      is_train_ = is_train;
-      return old;
-  }
-  /*! \brief whether operator recording is on. */
-  bool is_recording() const {
-    return is_recording_;
-  }
-  /*! \brief turn on or turn off operator recording for autograd. */
-  bool set_is_recording(bool is_recording) {
-      bool old = is_recording_;
-      is_recording_ = is_recording;
-      return old;
-  }
-  /*! \brief to record operator, return corresponding node. */
-  void RecordOp(nnvm::NodeAttrs&& attrs,
-                const std::vector<NDArray*>& inputs,
-                const std::vector<NDArray*>& outputs,
-                const OpStatePtr& state = OpStatePtr(),
-                std::vector<bool>* p_save_inputs = nullptr,
-                std::vector<bool>* p_save_outputs = nullptr);
-  /*! \brief */
-  OpStatePtr Invoke(const Context& default_ctx,
-                    const nnvm::NodeAttrs& attrs,
-                    const std::vector<NDArray*>& inputs,
-                    const std::vector<NDArray*>& outputs);
-  /*! \brief */
-  OpStatePtr InvokeOp(const Context& ctx,
-                      const nnvm::NodeAttrs& attrs,
-                      const std::vector<NDArray*>& inputs,
-                      const std::vector<NDArray*>& outputs,
-                      const std::vector<OpReqType>& req,
-                      const DispatchMode dispatch_mode,
-                      OpStatePtr state = OpStatePtr());
-  /*! \brief mark variables for computing gradients. */
-  void MarkVariables(const std::vector<NDArray*>& variables,
-                     const std::vector<mx_uint>& grad_reqs,
-                     const std::vector<NDArray*>& gradients);
-  /*! \brief compute the gradient of outputs w.r.t variables. */
-  std::vector<NDArray*> Backward(const std::vector<NDArray*>& outputs,
-                                 const std::vector<NDArray*>& ograds,
-                                 const std::vector<NDArray*>& variables,
-                                 bool is_train, bool retain_graph,
-                                 bool create_graph);
-  /*! \return AutogradRuntime singleton */
-  static Imperative* Get();
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
-}
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
-    
-     protected:
-  void PushToExecute(OprBlock *opr_block, bool pusher_thread) override {
-    if (opr_block->opr->prop == FnProperty::kAsync && pusher_thread) {
-      DoExecute(opr_block);
+    static void secp256k1_ecdsa_recoverable_signature_load(const secp256k1_context* ctx, secp256k1_scalar* r, secp256k1_scalar* s, int* recid, const secp256k1_ecdsa_recoverable_signature* sig) {
+    (void)ctx;
+    if (sizeof(secp256k1_scalar) == 32) {
+        /* When the secp256k1_scalar type is exactly 32 byte, use its
+         * representation inside secp256k1_ecdsa_signature, as conversion is very fast.
+         * Note that secp256k1_ecdsa_signature_save must use the same representation. */
+        memcpy(r, &sig->data[0], 32);
+        memcpy(s, &sig->data[32], 32);
     } else {
-      DoPushToQueue(opr_block);
+        secp256k1_scalar_set_b32(r, &sig->data[0], NULL);
+        secp256k1_scalar_set_b32(s, &sig->data[32], NULL);
     }
-  }
-    
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file iter_batchloader.h
- * \brief define a batch adapter to create tblob batch
- */
-#ifndef MXNET_IO_ITER_BATCHLOADER_H_
-#define MXNET_IO_ITER_BATCHLOADER_H_
-    
-    ActionCamera* ActionCamera::clone() const
-{
-    auto action = new (std::nothrow) ActionCamera();
-    if (action)
-    {
-        action->autorelease();
-        return action;
-    }
-    
-    delete action;
-    return nullptr;
+    *recid = sig->data[64];
 }
     
-    /** @class CallFuncN
-* @brief Calls a 'callback' with the node as the first argument. N means Node.
-* @js NA
-*/
-class CC_DLL CallFuncN : public CallFunc
+    static CBlockIndex* CreateBlockIndexWithNbits(uint32_t nbits)
 {
-public:
-    /** Creates the action with the callback of type std::function<void()>.
-     This is the preferred way to create the callback.
-     *
-     * @param func  A callback function need to be executed.
-     * @return  An autoreleased CallFuncN object.
-     */
-    static CallFuncN * create(const std::function<void(Node*)>& func);
-    }
+    CBlockIndex* block_index = new CBlockIndex();
+    block_index->nHeight = 46367;
+    block_index->nTime = 1269211443;
+    block_index->nBits = nbits;
+    return block_index;
+}
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ShakyTiles3D);
+    #ifdef TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
+template<typename T, bool convertible = is_convertible<T, int>::value>
+struct formatZeroIntegerWorkaround
+{
+    static bool invoke(std::ostream& /**/, const T& /**/) { return false; }
 };
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
+template<typename T>
+struct formatZeroIntegerWorkaround<T,true>
 {
-    auto ret = new (std::nothrow) AnimationFrame();
-    if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
+    static bool invoke(std::ostream& out, const T& value)
     {
-        ret->autorelease();
+        if (static_cast<int>(value) == 0 && out.flags() & std::ios::showpos)
+        {
+            out << '+0';
+            return true;
+        }
+        return false;
     }
-    else
-    {
-        CC_SAFE_DELETE(ret);
+};
+#endif // TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
+    
+    bool RunProtoCompiler(const string& filename,
+                      const string& plugin_specific_args,
+                      CommandLineInterface* cli, FileDescriptorProto* file) {
+  cli->SetInputsAreProtoPathRelative(true);
     }
-    return ret;
+    
+    TEST(MovableMessageTest, MoveDifferentArenas) {
+  Arena arena1, arena2;
+    }
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
 }
     
-        /** duration in seconds of the whole animation. It is the result of totalDelayUnits * delayPerUnit. */
-    float _duration;
+    // Strip package name from a descriptor's full name.
+// For example:
+//   Full name   : foo.Bar.Baz
+//   Package name: foo
+//   After strip : Bar.Baz
+string StripPackageName(const string& full_name,
+                        const FileDescriptor* file) {
+  if (file->package().empty()) {
+    return full_name;
+  } else {
+    // Strip package name
+    return full_name.substr(file->package().size() + 1);
+  }
+}
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+    ExtensionGenerator::ExtensionGenerator(const string& root_class_name,
+                                       const FieldDescriptor* descriptor)
+    : method_name_(ExtensionMethodName(descriptor)),
+      root_class_and_method_name_(root_class_name + '_' + method_name_),
+      descriptor_(descriptor) {
+  if (descriptor->is_map()) {
+    // NOTE: src/google/protobuf/compiler/plugin.cc makes use of cerr for some
+    // error cases, so it seems to be ok to use as a back door for errors.
+    std::cerr << 'error: Extension is a map<>!'
+         << ' That used to be blocked by the compiler.' << std::endl;
+    std::cerr.flush();
+    abort();
+  }
+}
     
-        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
+    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
+    : descriptor_(descriptor) {
+  variables_['enum_name'] = OneofEnumName(descriptor_);
+  variables_['name'] = OneofName(descriptor_);
+  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
+  variables_['raw_index'] = SimpleItoa(descriptor_->index());
+  const Descriptor* msg_descriptor = descriptor_->containing_type();
+  variables_['owning_message_class'] = ClassName(msg_descriptor);
+    }
     
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
-    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
+      Blob<Dtype> mean_, variance_, temp_, x_norm_;
+  bool use_global_stats_;
+  Dtype moving_average_fraction_;
+  int channels_;
+  Dtype eps_;
+    
+                    FT_Glyph ft_glyph = NULL;
+                FT_BitmapGlyph ft_glyph_bitmap = NULL; // NB: will point to bitmap within FT_Glyph
+                GlyphInfo glyph_info;
+                if (!font_face.CalcGlyphInfo(codepoint, glyph_info, ft_glyph, ft_glyph_bitmap))
+                    continue;
+    
+        g_ShaderHandle = glCreateProgram();
+    glAttachShader(g_ShaderHandle, g_VertHandle);
+    glAttachShader(g_ShaderHandle, g_FragHandle);
+    glLinkProgram(g_ShaderHandle);
+    CheckProgram(g_ShaderHandle, 'shader program');
+    
+    // Simple column measurement, currently used for MenuItem() only.. This is very short-sighted/throw-away code and NOT a generic helper.
+struct IMGUI_API ImGuiMenuColumns
+{
+    int         Count;
+    float       Spacing;
+    float       Width, NextWidth;
+    float       Pos[4], NextWidths[4];
+    }
