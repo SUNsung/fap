@@ -1,115 +1,91 @@
 
         
-        require 'formula'
-require 'erb'
-require 'ostruct'
-require 'cli_parser'
-require 'dev-cmd/audit'
-require 'dev-cmd/bottle'
-require 'dev-cmd/bump-formula-pr'
-require 'dev-cmd/create'
-require 'dev-cmd/edit'
-require 'dev-cmd/extract'
-require 'dev-cmd/formula'
-require 'dev-cmd/irb'
-require 'dev-cmd/linkage'
-require 'dev-cmd/mirror'
-require 'dev-cmd/prof'
-require 'dev-cmd/pull'
-require 'dev-cmd/release-notes'
-require 'dev-cmd/ruby'
-require 'dev-cmd/tap-new'
-require 'dev-cmd/test'
-require 'dev-cmd/tests'
-require 'dev-cmd/update-test'
+          context 'with a user' do
+    let(:user) { Fabricate(:user) }
     
-          # This allows generic Altivec PPC bottles to be supported in some
-      # formulae, while also allowing specific bottles in others; e.g.,
-      # sometimes a formula has just :tiger_altivec, other times it has
-      # :tiger_g4, :tiger_g5, etc.
-      def find_altivec_tag(tag)
-        return unless tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-    Then(/^the releases path is created$/) do
-  run_vagrant_command(test_dir_exists(TestApp.releases_path))
-end
-    
-    World(VagrantHelpers)
-
-    
-        def exit_because_of_exception(ex)
-      if respond_to?(:deploying?) && deploying?
-        exit_deploy_because_of_exception(ex)
-      else
-        super
-      end
+          expect(user.unread_notifications).to eq(0)
+      expect(user.total_unread_notifications).to eq(2)
+      expect(user.unread_private_messages).to eq(1)
     end
+  end
     
-      class Configuration
-    def self.env
-      @env ||= new
-    end
+        # Add permissions and a description to the Staff category.
     
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
+    module Vagrant
+  module Plugin
+    module V1
+      # This is the base class for a CLI command.
+      class Command
+        include Util::SafePuts
     
-              if Spree::Cart::Update.call(order: @order, params: line_items_attributes).success?
-            @line_item.reload
-            respond_with(@line_item, default_template: :show)
-          else
-            invalid_resource!(@line_item)
-          end
+            # Converts this configuration object to JSON.
+        def to_json(*a)
+          instance_variables_hash.to_json(*a)
         end
     
-            def find_property
-          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
-        end
+            # This returns all the registered guests.
+        #
+        # @return [Hash]
+        def guests
+          result = {}
     
-          private
+              # Register a new provisioner class only if a name was given
+          data[:provisioners].register(name.to_sym, &block) if name != UNSET_VALUE
     
-        # Sidekiq::Client normally uses the default Redis pool but you may
-    # pass a custom ConnectionPool if you want to shard your
-    # Sidekiq jobs across several Redis instances (for scalability
-    # reasons, e.g.)
+              # First determine the proper array of VMs.
+          machines = []
+          if names.length > 0
+            names.each do |name|
+              if pattern = name[/^\/(.+?)\/$/, 1]
+                @logger.debug('Finding machines that match regex: #{pattern}')
+    
+        # Register a key with a lazy-loaded value.
     #
-    #   Sidekiq::Client.new(ConnectionPool.new { Redis.new })
-    #
-    # Generally this is only needed for very large Sidekiq installs processing
-    # thousands of jobs per second.  I don't recommend sharding unless you
-    # cannot scale any other way (e.g. splitting your app into smaller apps).
-    def initialize(redis_pool=nil)
-      @redis_pool = redis_pool || Thread.current[:sidekiq_via_pool] || Sidekiq.redis_pool
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
     end
     
-          ObjectSpace.each_object(File) do |fp|
-        begin
-          if !fp.closed? && fp.stat.file? && fp.sync && (fp.fcntl(Fcntl::F_GETFL) & append_flags) == append_flags
-            to_reopen << fp
+    # Default timings
+IAX_DEFAULT_REG_REFRESH = 60
+IAX_DEFAULT_TIMEOUT     = 10
+    
+              private
+    
+              # Encodes the start_time field
+          #
+          # @return [String]
+          def encode_start_time
+            [start_time].pack('N')
           end
-        rescue IOError, Errno::EBADF
-        end
-      end
     
-          def initialize
-        @entries = []
-        yield self if block_given?
-      end
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-          # Queue for this worker
-      def queue
-        self.sidekiq_options['queue']
-      end
+              # Decodes the type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_type(input)
+            input.value[0].value.to_i
+          end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcRequestBody attributes from input
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcRequestBody, invalid input'
+            end
