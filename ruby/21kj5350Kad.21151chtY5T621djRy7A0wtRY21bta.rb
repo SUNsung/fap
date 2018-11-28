@@ -1,131 +1,102 @@
 
         
-            # Controls whether an action should be rendered using a layout.
-    # If you want to disable any <tt>layout</tt> settings for the
-    # current action so that it is rendered without a layout then
-    # either override this method in your controller to return false
-    # for that action or set the <tt>action_has_layout</tt> attribute
-    # to false before rendering.
-    def action_has_layout?
-      @_action_has_layout
-    end
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-            post_args[:topic].notify_muted!(user)
-        expect {
-          Fabricate(:post, user: user2, topic: post.topic, raw: 'hello @' + user.username)
-        }.to change(user.notifications, :count).by(0)
-      end
-    end
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for Staff category!'
-        end
-    
-      # Override prefixes to consider the scoped view.
-  # Notice we need to check for the request due to a bug in
-  # Action Controller tests that forces _prefixes to be
-  # loaded before even having a request object.
-  #
-  # This method should be public as it is in ActionPack
-  # itself. Changing its visibility may break other gems.
-  def _prefixes #:nodoc:
-    @_prefixes ||= if self.class.scoped_views? && request && devise_mapping
-      ['#{devise_mapping.scoped_path}/#{controller_name}'] + super
-    else
-      super
-    end
+      def unknown_action!(msg)
+    logger.debug '[Devise] #{msg}' if logger
+    raise AbstractController::ActionNotFound, msg
   end
     
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+    require 'rack/test'
+require 'action_controller/railtie'
+require 'active_record'
+require 'devise/rails/routes'
+require 'devise/rails/warden_compat'
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
       end
     
-    module Devise
-  module Controllers
-    # Provide sign in and sign out functionality.
-    # Included by default in all controllers.
-    module SignInOut
-      # Return true if the given scope is signed in session. If no scope given, return
-      # true if any scope is signed in. This will run authentication hooks, which may
-      # cause exceptions to be thrown from this method; if you simply want to check
-      # if a scope has already previously been authenticated without running
-      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
-      def signed_in?(scope=nil)
-        [scope || Devise.mappings.keys].flatten.any? do |_scope|
-          warden.authenticate?(scope: _scope)
+        def routes
+      @routes ||= ROUTES.values_at(*self.modules).compact.uniq
+    end
+    
+            def fire
+          inventory_unit.send('#{@event}!') if @event
         end
-      end
     
-    group :development do
-  cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
-  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
-  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
-  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
-  cp_gem 'cocoapods-search',      'cocoapods-search'
-  cp_gem 'cocoapods-stats',       'cocoapods-stats'
-  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
-  cp_gem 'cocoapods-try',         'cocoapods-try'
-  cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'nanaimo',               'Nanaimo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
     
-    require_relative '../lib/bootstrap/environment'
+            def update
+          @stock_item = StockItem.accessible_by(current_ability, :update).find(params[:id])
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
+            def destroy
+          authorize! :destroy, @store
+          @store.destroy
+          respond_with(@store, status: 204)
+        end
     
-      parameter '[PLUGIN] ...', 'Plugin name(s) to upgrade to latest version', :attribute_name => :plugins_arg
-  option '--[no-]verify', :flag, 'verify plugin validity before installation', :default => true
-  option '--local', :flag, 'force local-only plugin update. see bin/logstash-plugin package|unpack', :default => false
+            def destroy
+          authorize! :destroy, taxonomy
+          taxonomy.destroy
+          respond_with(taxonomy, status: 204)
+        end
     
-          it 'does not autocorrect the closing brace' do
-        new_source = autocorrect_source(source)
-        expect(new_source).to eq([source].join($RS))
-      end
-    end
+            def destroy
+          authorize! :destroy, zone
+          zone.destroy
+          respond_with(zone, status: 204)
+        end
     
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
+    Monitoring = Thread.new do
+  watchdog('monitor thread') do
+    while true
+      sleep 1
+      qsize, retries = Sidekiq.redis do |conn|
+        conn.pipelined do
+          conn.llen 'queue:default'
+          conn.zcard 'retry'
+        end
+      end.map(&:to_i)
+      total = qsize + retries
+      #GC.start
+      Sidekiq.logger.error('RSS: #{Process.rss} Pending: #{total}')
+      if total == 0
+        Sidekiq.logger.error('Done')
+        exit(0)
       end
     end
   end
 end
-
     
-          # Calls the given block for each `pair` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_pair
-        return each_child_node(:pair).to_enum unless block_given?
-    
-    module RuboCop
-  module AST
-    # Common functionality for nodes that are parameterized:
-    # `send`, `super`, `zsuper`, `def`, `defs`
-    module ParameterizedNode
-      # Checks whether this node's arguments are wrapped in parentheses.
-      #
-      # @return [Boolean] whether this node's arguments are
-      #                   wrapped in parentheses
-      def parenthesized?
-        loc.end && loc.end.is?(')')
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
+          end
+        end
       end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+    end
