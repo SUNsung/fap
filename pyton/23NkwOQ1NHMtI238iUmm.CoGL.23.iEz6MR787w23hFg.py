@@ -1,58 +1,73 @@
 
         
-        EXAMPLES = '''
-  - name: create web ACL
-    aws_waf_web_acl:
-      name: my_web_acl
-      rules:
-        - name: my_rule
-          priority: 1
-          action: block
-      default_action: block
-      purge_rules: yes
-      state: present
+        
+class Rank(Enum):
     
-        desc_log_group_result = dict(changed=False, log_groups=final_log_group_snake)
-    module.exit_json(**desc_log_group_result)
+        def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
     
-        if last_snapshot_min_age > 0:
-        try:
-            current_snapshots = ec2.get_all_snapshots(filters={'volume_id': volume_id})
-        except boto.exception.BotoServerError as e:
-            module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
+    
+def build_completion(opt_parser):
+    commands = []
+    
+    import rsa
+import json
+from binascii import hexlify
     
     
 if __name__ == '__main__':
     main()
 
     
-        if not HAS_BOTO3:
-        module.fail_json(msg='boto3 required for this module')
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-      - name: show results
-    debug:
-      var: lambda_facts
+        def matching_ies(self, url):
+        return [ie.IE_NAME for ie in self.ies if ie.suitable(url) and ie.IE_NAME != 'generic']
     
-        function_name = module.params.get('function_name')
-    if function_name:
-        params = dict()
-        if module.params.get('max_items'):
-            params['MaxItems'] = module.params.get('max_items')
+                if is_playlist:
+                self.assertTrue(res_dict['_type'] in ['playlist', 'multi_video'])
+                self.assertTrue('entries' in res_dict)
+                expect_info_dict(self, res_dict, test_case.get('info_dict', {}))
     
-        def __init__(self):
-        super().__init__()
-        self.api_data = None
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
+class CheckIp(front_base.check_ip.CheckIp):
+    def check_response(self, response):
+        server_type = response.headers.get('Server', '')
+        self.logger.debug('status:%d', response.status)
+        self.logger.debug('Server type:%s', server_type)
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+        def get_stat(self):
+        return self.network_stat
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+            Terence implemented packed table initializers, because Java has a
+        size restriction on .class files and the lookup tables can grow
+        pretty large. The generated JavaLexer.java of the Java.g example
+        would be about 15MB with uncompressed array initializers.
     
-        type, ext, size = url_info(video_url, headers=fake_headers)
+    
+    def getTokens(self, start=None, stop=None, types=None):
+        '''
+        Given a start and stop index, return a list of all tokens in
+        the token type set.  Return None if no tokens were found.  This
+        method looks at both on and off channel tokens.
+        '''
+    
+        def __init__(self, type=None, text=None, channel=DEFAULT_CHANNEL,
+                 oldToken=None
+                 ):
+        Token.__init__(self)
+        
+        if oldToken is not None:
+            self.text = oldToken.text
+            self.type = oldToken.type
+            self.line = oldToken.line
+            self.charPositionInLine = oldToken.charPositionInLine
+            self.channel = oldToken.channel
+            
+        self.text = text
+        self.type = type
+        self.line = None
+        self.charPositionInLine = None
+        self.channel = channel
+        self.index = None
