@@ -1,289 +1,421 @@
 
         
-        #include 'base/stl_util.h'
-    
-    class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
-                      public in_app_purchase::TransactionObserver {
- public:
-  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
-    }
-    
-    Net::Net(v8::Isolate* isolate) {
-  Init(isolate);
-}
-    
-    #if defined(OS_MACOSX) || defined(OS_WIN)
-  void InitPlatformSpecificMonitors();
-#endif
-    
-    class WebRequest : public mate::TrackableObject<WebRequest> {
- public:
-  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
-                                         AtomBrowserContext* browser_context);
-    }
-    
-    #include <string>
-    
-    #ifndef NDEBUG
-/// Verify that the types of fields are valid within a given generic signature.
-static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
-  for (auto &field : Fields) {
-    auto ty = field.getLoweredType();
-    // Layouts should never refer to archetypes, since they represent an
-    // abstract generic type layout.
-    assert(!ty->hasArchetype()
-           && 'SILLayout field cannot have an archetype type');
-    assert(!ty->hasTypeVariable()
-           && 'SILLayout cannot contain constraint system type variables');
-    if (!ty->hasTypeParameter())
-      continue;
-    field.getLoweredType().findIf([Sig](Type t) -> bool {
-      if (auto gpt = t->getAs<GenericTypeParamType>()) {
-        // Check that the generic param exists in the generic signature.
-        assert(Sig && 'generic param in nongeneric layout?');
-        assert(std::find(Sig.getGenericParams().begin(),
-                         Sig.getGenericParams().end(),
-                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
-               && 'generic param not declared in generic signature?!');
-      }
+        
+bool GetAnyFieldDescriptors(const Message& message,
+                            const FieldDescriptor** type_url_field,
+                            const FieldDescriptor** value_field) {
+    const Descriptor* descriptor = message.GetDescriptor();
+    if (descriptor->full_name() != kAnyFullTypeName) {
       return false;
-    });
-  }
-}
-#endif
-    
-      /// Retrieve the array of protocol conformances, which line up with the
-  /// requirements of the generic signature.
-  ArrayRef<ProtocolConformanceRef> getConformances() const {
-    return llvm::makeArrayRef(getTrailingObjects<ProtocolConformanceRef>(),
-                              numConformanceRequirements);
-  }
-  MutableArrayRef<ProtocolConformanceRef> getConformances() {
-    return MutableArrayRef<ProtocolConformanceRef>(
-                              getTrailingObjects<ProtocolConformanceRef>(),
-                              numConformanceRequirements);
-  }
-    
-    
-    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    // FIXME: Not thread-safe! It should avoid deleting the value until
-    // 'releaseValue is called on it.
-    *Value_out = Entry->second;
-    return true;
-  }
-  return false;
-}
-    
-      char *oldAllocation = Allocated;
-  char *oldBegin = Begin;
-  std::size_t oldSize = (std::size_t) (End - oldBegin);
-    
-      // By default, put the preposition on the argument label.
-  bool prepositionOnArgLabel =
-    shouldPlacePrepositionOnArgLabel(beforePreposition, preposition,
-                                     afterPreposition);
-  if (prepositionOnArgLabel)
-    ++nameWordRevIter;
-    
-      ::UUID uuid2;
-  memcpy(&uuid2, y.Value, Size);
-    
-    unsigned swift::unicode::extractFirstUnicodeScalar(StringRef S) {
-  unsigned Scalar;
-  bool Result = extractFirstUnicodeScalarImpl(S, Scalar);
-  assert(Result && 'string does not consist of one Unicode scalar');
-  (void)Result;
-  return Scalar;
-}
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #endif  // CAFFE_CONV_LAYER_HPP_
-
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
     }
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
-    
-    #  define ASSERT_DEBUG_DEATH(statement, regex) \
-  ASSERT_DEATH(statement, regex)
-    
-    #if 0
-    
-    
-    
-      // Returns true iff the given string ends with the given suffix, ignoring
-  // case. Any string is considered to end with an empty suffix.
-  static bool EndsWithCaseInsensitive(
-      const std::string& str, const std::string& suffix);
-    
-    // SameSizeTuplePrefixComparator<k, k>::Eq(t1, t2) returns true if the
-// first k fields of t1 equals the first k fields of t2.
-// SameSizeTuplePrefixComparator(k1, k2) would be a compiler error if
-// k1 != k2.
-template <int kSize1, int kSize2>
-struct SameSizeTuplePrefixComparator;
-    
-    // A unique struct template used as the default value for the
-// arguments of class template Templates.  This allows us to simulate
-// variadic templates (e.g. Templates<int>, Templates<int, double>,
-// and etc), which C++ doesn't support directly.
-template <typename T>
-struct NoneT {};
-    
-    
-// This sample shows how to write a more complex unit test for a class
-// that has multiple member functions.
-//
-// Usually, it's a good idea to have one test for each method in your
-// class.  You don't have to do that exactly, but it helps to keep
-// your tests organized.  You may also throw in additional tests as
-// needed.
-    
-    template <>
-template <typename T>
-bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
-  EnforceOnCPU<T>(Input(0));
-  return true;
+    *type_url_field = descriptor->FindFieldByNumber(1);
+    *value_field = descriptor->FindFieldByNumber(2);
+    return (*type_url_field != NULL &&
+            (*type_url_field)->type() == FieldDescriptor::TYPE_STRING &&
+            *value_field != NULL &&
+            (*value_field)->type() == FieldDescriptor::TYPE_BYTES);
 }
     
-    **Code**
     
-    #endif // CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
-
-    
-    static bool show_demo_window = true;
-static bool show_another_window = false;
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-        // Create depth-stencil State
     {
-        D3D11_DEPTH_STENCIL_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.DepthEnable = false;
-        desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-        desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
-        desc.StencilEnable = false;
-        desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-        desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-        desc.BackFace = desc.FrontFace;
-        g_pd3dDevice->CreateDepthStencilState(&desc, &g_pDepthStencilState);
+    {
+    {}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    #include <memory>
+    
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
+}
+    
+      if (HasDescriptorMethods(file_, options_.enforce_lite)) {
+    // Generate descriptors.
+    string classname = name_resolver_->GetDescriptorClassName(file_);
+    string filename = package_dir + classname + '.java';
+    file_list->push_back(filename);
+    std::unique_ptr<io::ZeroCopyOutputStream> output(context->Open(filename));
+    GeneratedCodeInfo annotations;
+    io::AnnotationProtoCollector<GeneratedCodeInfo> annotation_collector(
+        &annotations);
+    std::unique_ptr<io::Printer> printer(
+        new io::Printer(output.get(), '$',
+                        options_.annotate_code ? &annotation_collector : NULL));
+    string info_relative_path = classname + '.java.pb.meta';
+    string info_full_path = filename + '.pb.meta';
+    printer->Print(
+        '// Generated by the protocol buffer compiler.  DO NOT EDIT!\n'
+        '// source: $filename$\n'
+        '\n',
+        'filename', file_->name());
+    if (!java_package.empty()) {
+      printer->Print(
+        'package $package$;\n'
+        '\n',
+        'package', java_package);
+    }
+    PrintGeneratedAnnotation(printer.get(), '$',
+                             options_.annotate_code ? info_relative_path : '');
+    printer->Print(
+        'public final class $classname$ {\n'
+        '  public static com.google.protobuf.Descriptors.FileDescriptor\n'
+        '      descriptor;\n'
+        '  static {\n',
+        'classname', classname);
+    printer->Annotate('classname', file_->name());
+    printer->Indent();
+    printer->Indent();
+    GenerateDescriptors(printer.get());
+    printer->Outdent();
+    printer->Outdent();
+    printer->Print(
+      '  }\n'
+      '}\n');
     }
     
-    int32 ImGui_Marmalade_CharCallback(void* system_data, void* user_data)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    s3eKeyboardCharEvent* e = (s3eKeyboardCharEvent*)system_data;
-    if ((e->m_Char > 0 && e->m_Char < 0x10000))
-        io.AddInputCharacter((unsigned short)e->m_Char);
-    }
+      ObjectiveCType objc_type = GetObjectiveCType(descriptor_);
+  string singular_type;
+  if (objc_type == OBJECTIVECTYPE_MESSAGE) {
+    vars['type'] = string('GPBStringifySymbol(') +
+                   ClassName(descriptor_->message_type()) + ')';
+  } else {
+    vars['type'] = 'NULL';
+  }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    bool ImGui_ImplAllegro5_Init(ALLEGRO_DISPLAY* display)
-{
-    g_Display = display;
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
     }
+  }
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
+#endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
     
-        blocklen = buflen % 5552;
-    while (buflen) {
-        for (i=0; i + 7 < blocklen; i += 8) {
-            s1 += buffer[0], s2 += s1;
-            s1 += buffer[1], s2 += s1;
-            s1 += buffer[2], s2 += s1;
-            s1 += buffer[3], s2 += s1;
-            s1 += buffer[4], s2 += s1;
-            s1 += buffer[5], s2 += s1;
-            s1 += buffer[6], s2 += s1;
-            s1 += buffer[7], s2 += s1;
+    // Computes matrix.vector v = Wu.
+// u is of size W.dim2() - 1 and the output v is of size W.dim1().
+// u is imagined to have an extra element at the end with value 1, to
+// implement the bias, but it doesn't actually have it.
+void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                                    const GenericVector<double>& scales,
+                                    const int8_t* u, double* v) const {
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  if (partial_funcs_.empty()) {
+    // Base implementation.
+    for (int i = 0; i < num_out; ++i) {
+      const int8_t* wi = w[i];
+      int total = 0;
+      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
+      // Add in the bias and correct for integer values.
+      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
     }
+  } else {
+    const int8_t* w_data = shaped_w_.data();
+    const double* scales_data = &scales[0];
+    // Each call to a partial_func_ produces group_size outputs, except the
+    // last one, which can produce less.
+    int group_size = num_outputs_per_register_ * max_output_registers_;
+    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+    int rounded_num_out = RoundOutputs(num_out);
+    int output = 0;
+    for (auto fn : partial_funcs_) {
+      // The amount of w_data consumed by each call to fn.
+      int w_step = (rounded_num_in + 1) * group_size;
+      // Run with this group size, until it would produce too much output, then
+      // switch to a smaller size.
+      for (; output + group_size <= rounded_num_out; output += group_size) {
+        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
+        w_data += w_step;
+        scales_data += group_size;
+        v += group_size;
+      }
+      group_size /= 2;
     }
-    
-    // Empirically, this indicates if the runtime supports
-// std::exception_ptr, as not all (arm, for instance) do.
-#if defined(__GNUC__) && defined(__GCC_ATOMIC_INT_LOCK_FREE) && \
-    __GCC_ATOMIC_INT_LOCK_FREE > 1
-inline fbstring exceptionStr(std::exception_ptr ep) {
-  try {
-    std::rethrow_exception(ep);
-  } catch (const std::exception& e) {
-    return exceptionStr(e);
-  } catch (...) {
-    return '<unknown exception>';
   }
 }
-#endif
     
-    #pragma once
+    #include <cstdint>
+#include <vector>
+    
+    #include <cstdint>
+#include <vector>
+#include 'dotproductsse.h'
+    
+    enum GARBAGE_LEVEL
+{
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
+};
+    
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
+    }
+  }
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
+    }
+    
+      if (up_in_image.x() == 0.0F) {
+    if (up_in_image.y() > 0.0F) {
+      *orientation = ORIENTATION_PAGE_UP;
+    } else {
+      *orientation = ORIENTATION_PAGE_DOWN;
+    }
+  } else if (up_in_image.x() > 0.0F) {
+    *orientation = ORIENTATION_PAGE_RIGHT;
+  } else {
+    *orientation = ORIENTATION_PAGE_LEFT;
+  }
+    
+    ELISTIZEH(ParamContent)
+    
+    /**********************************************************************
+ * recog_word
+ *
+ * Convert the word to tess form and pass it to the tess segmenter.
+ * Convert the output back to editor form.
+ **********************************************************************/
+namespace tesseract {
+void Tesseract::recog_word(WERD_RES *word) {
+  if (wordrec_skip_no_truth_words && (word->blamer_bundle == nullptr ||
+      word->blamer_bundle->incorrect_result_reason() == IRR_NO_TRUTH)) {
+    if (classify_debug_level) tprintf('No truth for word - skipping\n');
+    word->tess_failed = true;
+    return;
+  }
+  ASSERT_HOST(!word->chopped_word->blobs.empty());
+  recog_word_recursive(word);
+  word->SetupBoxWord();
+  if (word->best_choice->length() != word->box_word->length()) {
+    tprintf('recog_word ASSERT FAIL String:\'%s\'; '
+            'Strlen=%d; #Blobs=%d\n',
+            word->best_choice->debug_string().string(),
+            word->best_choice->length(), word->box_word->length());
+  }
+  ASSERT_HOST(word->best_choice->length() == word->box_word->length());
+  // Check that the ratings matrix size matches the sum of all the
+  // segmentation states.
+  if (!word->StatesAllValid()) {
+    tprintf('Not all words have valid states relative to ratings matrix!!');
+    word->DebugWordChoices(true, nullptr);
+    ASSERT_HOST(word->StatesAllValid());
+  }
+  if (tessedit_override_permuter) {
+    /* Override the permuter type if a straight dictionary check disagrees. */
+    uint8_t perm_type = word->best_choice->permuter();
+    if ((perm_type != SYSTEM_DAWG_PERM) &&
+        (perm_type != FREQ_DAWG_PERM) && (perm_type != USER_DAWG_PERM)) {
+      uint8_t real_dict_perm_type = dict_word(*word->best_choice);
+      if (((real_dict_perm_type == SYSTEM_DAWG_PERM) ||
+           (real_dict_perm_type == FREQ_DAWG_PERM) ||
+           (real_dict_perm_type == USER_DAWG_PERM)) &&
+          (alpha_count(word->best_choice->unichar_string().string(),
+                       word->best_choice->unichar_lengths().string()) > 0)) {
+        word->best_choice->set_permuter(real_dict_perm_type);  // use dict perm
+      }
+    }
+    if (tessedit_rejection_debug &&
+        perm_type != word->best_choice->permuter()) {
+      tprintf('Permuter Type Flipped from %d to %d\n',
+              perm_type, word->best_choice->permuter());
+    }
+  }
+  // Factored out from control.cpp
+  ASSERT_HOST((word->best_choice == nullptr) == (word->raw_choice == nullptr));
+  if (word->best_choice == nullptr || word->best_choice->length() == 0 ||
+      static_cast<int>(strspn(word->best_choice->unichar_string().string(),
+                              ' ')) == word->best_choice->length()) {
+    word->tess_failed = true;
+    word->reject_map.initialise(word->box_word->length());
+    word->reject_map.rej_word_tess_failure();
+  } else {
+    word->tess_failed = false;
+  }
+}
+    }
+    
+    BENCHMARK_PARAM(BENCHFUN(pushBack), 16)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 128)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 1024)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 10240)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 102400)
+BENCHMARK_PARAM(BENCHFUN(pushBack), 1024000)
+
+    
+    template <class... Args>
+std::system_error makeSystemError(Args&&... args) {
+  return makeSystemErrorExplicit(errno, std::forward<Args>(args)...);
+}
     
     
-    {    // break ties deterministically by cpu
-    return lhs < rhs;
-  });
+    {void Executor::keepAliveRelease() {
+  LOG(FATAL) << __func__ << '() should not be called for folly::Executor types '
+             << 'which do not override keepAliveAcquire()';
+}
+} // namespace folly
+
+    
+      template <class T>
+  class SecureRNG {
+   public:
+    using result_type = typename std::enable_if<
+        std::is_integral<T>::value && !std::is_same<T, bool>::value,
+        T>::type;
+    }
+    
+      tv = to<struct timeval>(nanoseconds(987654321012LL));
+  EXPECT_EQ(987, tv.tv_sec);
+  EXPECT_EQ(654321, tv.tv_usec);
+    
+    namespace folly {
+namespace io {
+enum class CodecType;
+} // namespace io
+    }
+    
+    /**
+ * Get the default options for gzip compression.
+ * A codec created with these options will have type CodecType::GZIP.
+ */
+Options defaultGzipOptions();
+    
+        oldptr = takeOwnedBase(success);
+    if (!owners_eq(oldptr, CountedDetail::get_counted_base(expected))) {
+      expected = get_shared_ptr(oldptr, false);
+      release_external(newptr);
+      return false;
+    }
+    expectedptr = oldptr; // Need oldptr to release if failed
+    if (ptr_.compare_exchange_weak(expectedptr, newptr, success, failure)) {
+      if (oldptr.get()) {
+        release_external(oldptr, -1);
+      }
+      return true;
+    } else {
+      if (oldptr.get()) {
+        expected = get_shared_ptr(oldptr, false);
+      } else {
+        expected = SharedPtr(nullptr);
+      }
+      release_external(newptr);
+      return false;
+    }
+  }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      SharedPtr&& desired,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_weak(
+        expected, desired, mo, detail::default_failure_memory_order(mo));
+  }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      SharedPtr&& desired,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    return compare_exchange_weak(expected, desired, success, failure);
+  }
+  bool compare_exchange_strong(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_strong(
+        expected, n, mo, detail::default_failure_memory_order(mo));
+  }
+  bool compare_exchange_strong(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    auto local_expected = expected;
+    do {
+      if (compare_exchange_weak(expected, n, success, failure)) {
+        return true;
+      }
+    } while (local_expected == expected);
