@@ -1,53 +1,57 @@
-if __name__ == '__main__':
-  Main()
 
+        
+            else:
+        sys.stdout.write('.')
+    sys.stdout.flush()
     
     
-class DebugInfoRequest( BaseRequest ):
-  def __init__( self, extra_data = None ):
-    super( DebugInfoRequest, self ).__init__()
-    self._extra_data = extra_data
-    self._response = None
+def get_base_name(base):
+    if base is InfoExtractor:
+        return 'LazyLoadExtractor'
+    elif base is SearchInfoExtractor:
+        return 'LazyLoadSearchExtractor'
+    else:
+        return base.__name__
     
-    from ycm.client.completion_request import CompletionRequest
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
+    
+            info_dict = _make_result(list(formats_order), extractor='youtube')
+        ydl = YDL({'format': 'bestvideo/best,bestaudio'})
+        yie = YoutubeIE(ydl)
+        yie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(info_dict)
+        downloaded_ids = [info['format_id'] for info in ydl.downloaded_info_dicts]
+        self.assertEqual(downloaded_ids, ['137', '141'])
+    
+        def test_keywords(self):
+        self.assertMatch(':ytsubs', ['youtube:subscriptions'])
+        self.assertMatch(':ytsubscriptions', ['youtube:subscriptions'])
+        self.assertMatch(':ythistory', ['youtube:history'])
+    
+            Punctuation:               'bold #000000',   # class: 'p'
+    
+        pyopenssl_info = {
+        'version': None,
+        'openssl_version': '',
+    }
+    if OpenSSL:
+        pyopenssl_info = {
+            'version': OpenSSL.__version__,
+            'openssl_version': '%x' % OpenSSL.SSL.OPENSSL_VERSION_NUMBER,
+        }
+    cryptography_info = {
+        'version': getattr(cryptography, '__version__', ''),
+    }
+    idna_info = {
+        'version': getattr(idna, '__version__', ''),
+    }
+    
+    packages = ['requests']
     
     
-  def Start( self ):
-    self.PostDataToHandler( {},
-                            'shutdown',
-                            TIMEOUT_SECONDS,
-                            display_message = False )
-    
-    
-# Not caching the result of this function; users shouldn't have to restart Vim
-# after running the install script or setting the
-# `g:ycm_server_python_interpreter` option.
-def PathToPythonInterpreter():
-  # Not calling the Python interpreter to check its version as it significantly
-  # impacts startup time.
-  from ycmd import utils
-    
-        @YouCompleteMeInstance( { 'log_level': 'debug',
-                              'keep_logfiles': 1 } )
-    def Debug_test( ycm ):
-        ...
-  '''
-  def Decorator( test ):
-    @functools.wraps( test )
-    def Wrapper( *args, **kwargs ):
-      with UserOptions( custom_options ):
-        ycm = YouCompleteMe()
-        WaitUntilReady()
-        ycm.CheckIfServerIsReady()
-        try:
-          test( ycm, *args, **kwargs )
-        finally:
-          StopServer( ycm )
-    return Wrapper
-  return Decorator
-
-    
-      post_vim_message.assert_has_exact_calls( [
-    call( 'this is a message', warning=False, truncate=True ),
-    call( 'this is another one', warning=False, truncate=True )
-  ] )
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
