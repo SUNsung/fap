@@ -1,156 +1,112 @@
 
         
-              # Sort tags based on their version number
-      return git_tags
-             .select { |tag| FastlaneCore::TagVersion.correct?(tag) }
-             .sort_by { |tag| FastlaneCore::TagVersion.new(tag) }
+              obj.should_receive(:to_int).and_return(10)
+      format('%b', obj).should == '1010'
     end
     
-        def suggest_ruby_reinstall(e)
-      ui = FastlaneCore::UI
-      ui.error('-----------------------------------------------------------------------')
-      ui.error(e.to_s)
-      ui.error('')
-      ui.error('SSL errors can be caused by various components on your local machine.')
-      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
-        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
-        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
-      end
-      ui.error('')
-      ui.error('The best solution is to use the self-contained fastlane version.')
-      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
-      ui.error(' - Use Homebrew')
-      ui.error('    - update brew with `brew update`')
-      ui.error('    - install fastlane using:')
-      ui.error('      - `brew cask install fastlane`')
-      ui.error(' - Use One-Click-Installer:')
-      ui.error('    - download fastlane at https://download.fastlane.tools')
-      ui.error('    - extract the archive and double click the `install`')
-      ui.error('-----------------------------------------------------------')
-      ui.error('for more details on ways to install fastlane please refer the documentation:')
-      ui.error('-----------------------------------------------------------')
-      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
-      ui.error('-----------------------------------------------------------')
-      ui.error('')
-      ui.error('You can also install a new version of Ruby')
-      ui.error('')
-      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
-      ui.error('- If you use system Ruby:')
-      ui.error('  - Run `brew update && brew install ruby`')
-      ui.error('- If you use rbenv with ruby-build:')
-      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
-      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
-      ui.error('- If you use rvm:')
-      ui.error('  - First run `rvm osx-ssl-certs update all`')
-      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
-      ui.error('')
-      ui.error('If that doesn't fix your issue, please google for the following error message:')
-      ui.error('  '#{e}'')
-      ui.error('-----------------------------------------------------------------------')
+        trace_var :$Kernel_trace_var_global do |value|
+      captured = value
     end
     
-            [
-          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
-          list,
-          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
-        ].join('\n')
+    namespace :bower do
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+    group :debugging do
+  gem 'cocoapods_debug'
+    
+    Then(/^git wrapper permissions are 0700$/) do
+  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
+  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
+    
+          def call
+        ask_question
+        value_or_default
       end
     
-            inner_command = 'git describe --tags `git rev-list --tags=#{tag_match_pattern.shellescape} --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
+          def left_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, li                  = *line.match(/\-(\d+)/)
+          @left_diff_line_number = li.to_i
+          @current_line_number   = @left_diff_line_number
+          ret                    = '...'
+        elsif line[0] == ?-
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        elsif line[0] == ?+
+          ret = ' '
+        else
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        end
+        ret
       end
     
-          it 'works with unlock and name and password' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            name: 'test.keychain',
-            password: 'testpassword',
-            unlock: true,
-          })
-        end').runner.execute(:test)
+          def title
+        h1 = @h1_title ? page_header_from_content(@content) : false
+        h1 || @page.url_path_title
+      end
     
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path.shellescape}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '#{path}')
-          end').runner.execute(:test)
+    desc 'Validate lib files and version file'
+task :validate do
+  libfiles = Dir['lib/*'] - ['lib/#{name}.rb', 'lib/#{name}']
+  unless libfiles.empty?
+    puts 'Directory `lib` should only contain a `#{name}.rb` file and `#{name}` dir.'
+    exit!
+  end
+  unless Dir['VERSION*'].empty?
+    puts 'A `VERSION` file at root level violates Gem best practices.'
+    exit!
+  end
+end
+
+    
+          # Returns an array of all the when branches in the `case` statement.
+      #
+      # @return [Array<WhenNode>] an array of `when` nodes
+      def when_branches
+        node_parts[1...-1]
+      end
+    
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
+    
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
+            @country.states.accessible_by(current_ability, :read).order('name ASC')
+          else
+            State.accessible_by(current_ability, :read).order('name ASC')
+          end
         end
       end
-    
-              value = config_item.auto_convert_value(nil)
-    
-        os = 'windows'
-    shelljoin_testcases.each do |testcase|
-      it testcase['it'] + ': ' + testcase['it_result'][os] do
-        array = testcase['input']
-        expect_correct_implementation_to_be_called(array, :shelljoin, os)
-        joined = array.shelljoin
-        expect(joined).to eq(testcase['expect'][os])
-      end
-    end
-  end
-    
-      # POST /resource/confirmation
-  def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
-    yield resource if block_given?
-    
-      config.logger = Logger.new($stdout)
-  Rails.logger  = config.logger
-    
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
-    
-    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
-# requests with `config.assets.quiet`, because the default silence method of
-# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
-Logging::Logger.send :alias_method, :local_level, :level
-Logging::Logger.send :alias_method, :local_level=, :level=
-Logging::Logger.send :include, LoggerSilence
-
-    
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-    RSpec::Matchers.define :have_path do |expected|
-  match do |actual|
-    await_condition { actual.current_path == expected }
-  end
-    
-      def navigate_to(page_name)
-    path = path_to(page_name)
-    if path.is_a?(Hash)
-      visit(path[:path])
-      await_elem = path[:special_elem]
-      find(await_elem.delete(:selector), await_elem)
-    else
-      visit(path)
-    end
-  end
-    
-      class PostToService < Base
-    def perform(*_args)
-      # don't post to services in cucumber
-    end
-  end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
     end
   end
 end
 
     
-        it 'supports a limit per_page parameter' do
-      2.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
-      get :index, params: {per_page: 2}
-      expect(assigns[:notifications].count).to eq(2)
-    end
+            def taxonomies
+          @taxonomies = Taxonomy.accessible_by(current_ability, :read).order('name').includes(root: :children).
+                        ransack(params[:q]).result.
+                        page(params[:page]).per(params[:per_page])
+        end
+    
+              @users = if params[:ids]
+                     @users.ransack(id_in: params[:ids].split(','))
+                   else
+                     @users.ransack(params[:q])
+                   end
