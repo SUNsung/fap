@@ -1,146 +1,137 @@
 
         
-        # Part of speech tags used in the paths.
-POSTAGS = [
-    'PAD',   'VERB',   'CONJ',   'NOUN',   'PUNCT',
-    'ADP',   'ADJ',    'DET',    'ADV',    'PART',
-    'NUM',   'X',      'INTJ',   'SYM',
-]
-    
-      truth_data_e = normalize_rates(data_e, E, N)
-    
-    rnn_a = generate_rnn(rnn_rngs[0], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnn_b = generate_rnn(rnn_rngs[1], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnns = [rnn_a, rnn_b]
-    
-    
-def _SampleModel(prefix_words, vocab):
-  '''Predict next words using the given prefix words.
-    
-      def __init__(self, test_data_name='wsc273'):
-    vocab_file = os.path.join(FLAGS.data_dir, 'vocab.txt')
-    self.vocab = utils.CharsVocabulary(vocab_file, 50)
-    assert test_data_name in ['pdp60', 'wsc273'], (
-        'Test data must be pdp60 or wsc273, got {}'.format(test_data_name))
-    self.test_data_name = test_data_name
-    
-      # Attention score function
-  attention_score_fn = _create_attention_score_fn('attention_score', num_units,
-                                                  attention_option, reuse)
-  # Attention construction function
-  attention_construct_fn = _create_attention_construct_fn(
-      'attention_construct', num_units, attention_score_fn, reuse)
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        if state == 'present':
-        if not all((replication_id, cluster_id)):
-            module.fail_json(msg='The state 'present' requires options: 'replication_id' and 'cluster_id'')
-        response, changed = create(module, connection, replication_id, cluster_id, name)
-    elif state == 'absent':
-        response, changed = delete(module, connection, name)
-    elif state == 'copy':
-        if not all((target, bucket)):
-            module.fail_json(msg='The state 'copy' requires options: 'target' and 'bucket'.')
-        response, changed = copy(module, connection, name, target, bucket)
-    
-            try:
-            matching_groups = conn.describe_cache_subnet_groups(group_name, max_records=100)
-            exists = len(matching_groups) > 0
-        except BotoServerError as e:
-            if e.error_code != 'CacheSubnetGroupNotFoundFault':
-                module.fail_json(msg=e.error_message)
-    
-        Returns:
-        List (bool, str)
-    '''
-    success = False
-    err_msg = ''
-    params = {
-        'StreamName': stream_name
-    }
-    try:
-        if not check_mode:
-            if action == 'start_encryption':
-                params['EncryptionType'] = encryption_type
-                params['KeyId'] = key_id
-                client.start_stream_encryption(**params)
-                success = True
-            elif action == 'stop_encryption':
-                params['EncryptionType'] = encryption_type
-                params['KeyId'] = key_id
-                client.stop_stream_encryption(**params)
-                success = True
-            else:
-                err_msg = 'Invalid encryption action {0}'.format(action)
-        else:
-            if action == 'start_encryption':
-                success = True
-            elif action == 'stop_encryption':
-                success = True
-            else:
-                err_msg = 'Invalid encryption action {0}'.format(action)
-    
-        aws = AWSConnection(module, ['lambda'])
-    
+            def _init_github_account(self):
         try:
-        lambda_facts.update(mappings=client.list_event_source_mappings(**params)['EventSourceMappings'])
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'ResourceNotFoundException':
-            lambda_facts.update(mappings=[])
-        else:
-            module.fail_json_aws(e, msg='Trying to get source event mappings')
-    
-        params = dict()
-    if snapshot_name:
-        params['DBClusterSnapshotIdentifier'] = snapshot_name
-    if instance_name:
-        params['DBClusterInstanceIdentifier'] = instance_name
-    if snapshot_type:
-        params['SnapshotType'] = snapshot_type
-        if snapshot_type == 'public':
-            params['IsPublic'] = True
-        elif snapshot_type == 'shared':
-            params['IsShared'] = True
+            info = netrc.netrc().authenticators(self._NETRC_MACHINE)
+            if info is not None:
+                self._username = info[0]
+                self._password = info[2]
+                compat_print('Using GitHub credentials found in .netrc...')
+                return
+            else:
+                compat_print('No GitHub credentials found in .netrc')
+        except (IOError, netrc.NetrcParseError):
+            compat_print('Unable to parse .netrc')
+        self._username = compat_input(
+            'Type your GitHub username or email address and press [Return]: ')
+        self._password = compat_getpass(
+            'Type your GitHub password and press [Return]: ')
     
     
-class Ellipse(Graphic):
-    def __init__(self, name):
-        self.name = name
+iv = key = [0x20, 0x15] + 14 * [0]
     
-        def test_3rd_am_station_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1510'
-        self.assertEqual(station, expected_station)
+    import io
+import sys
+import re
+    
+    import itertools
+import json
+import os
+import re
+import sys
     
     
-class Delegator(object):
-    '''
-    >>> delegator = Delegator(Delegate())
-    >>> delegator.p1
-    123
-    >>> delegator.p2
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'p2'
-    >>> delegator.do_something('nothing')
-    'Doing nothing'
-    >>> delegator.do_anything()
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'do_anything'
-    '''
+# And add them to TestDownload
+for n, test_case in enumerate(defs):
+    tname = 'test_' + str(test_case['name'])
+    i = 1
+    while hasattr(TestDownload, tname):
+        tname = 'test_%s_%d' % (test_case['name'], i)
+        i += 1
+    test_method = generator(test_case, tname)
+    test_method.__name__ = str(tname)
+    ie_list = test_case.get('add_ie')
+    test_method.add_ie = ie_list and ','.join(ie_list)
+    setattr(TestDownload, test_method.__name__, test_method)
+    del test_method
     
-        def __str__(self):
-        return 'Dog'
+        def test_module_exec(self):
+        if sys.version_info >= (2, 7):  # Python 2.6 doesn't support package execution
+            subprocess.check_call([sys.executable, '-m', 'youtube_dl', '--version'], cwd=rootDir, stdout=_DEV_NULL)
     
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+                result.printErrors()
+            result.printSummary(start, stop)
+            self.exitcode = int(not result.wasSuccessful())
+    
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
+    
+        def long_desc(self):
+        return ('Edit a spider using the editor defined in the EDITOR environment'
+                ' variable or else the EDITOR setting')
+    
+        def report_out_of_quota(self, appid):
+        self.logger.warn('report_out_of_quota:%s', appid)
+        with self.lock:
+            if appid not in self.out_of_quota_appids:
+                self.out_of_quota_appids.append(appid)
+            try:
+                self.working_appid_list.remove(appid)
+            except:
+                pass
+    
+            exist_ca_sha1 = get_exist_ca_sha1()
+        if exist_ca_sha1 == ca_hash:
+            xlog.info('GoAgent CA exist')
+            return
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
+data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
+if not os.path.isdir(data_path):
+    data_path = current_path
+    
+    MIN_TOKEN_TYPE = UP+1
+	
+INVALID_TOKEN_TYPE = 0
+    
+    
+    def combineFollows(self, exact):
+        followSet = set()
+        for idx, localFollowSet in reversed(list(enumerate(self._state.following))):
+            followSet |= localFollowSet
+            if exact:
+                # can we see end of rule?
+                if EOR_TOKEN_TYPE in localFollowSet:
+                    # Only leave EOR in set if at top (start rule); this lets
+                    # us know if have to include follow(start rule); i.e., EOF
+                    if idx > 0:
+                        followSet.remove(EOR_TOKEN_TYPE)
+                        
+                else:
+                    # can't see end of rule, quit
+                    break
+    
+    
+def get_github_url(app, view, path):
+    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
+    return (
+        github_fmt.format(app.config.edit_on_github_project, view,
+                          app.config.edit_on_github_branch,
+                          app.config.edit_on_github_src_path, path))
+    
+            if state is None or state.state == STATE_UNKNOWN:
+            return
+    
+            if self.accountname in _CONFIGURING:
+            request_id = _CONFIGURING.pop(self.accountname)
+            configurator = self.hass.components.configurator
+            configurator.request_done(request_id)
+    
+            _LOGGER.info('Scanner initialized')
+    
+        @property
+    def physical_address(self):
+        '''Return the physical address of device in HDMI network.'''
+        return str(self._device.physical_address)
+    
+                try:
+                kwargs['data'] = self._schema(data)
+            except vol.Invalid as err:
+                _LOGGER.error('Data does not match schema: %s', err)
+                return view.json_message(
+                    'Message format incorrect: {}'.format(err), 400)
