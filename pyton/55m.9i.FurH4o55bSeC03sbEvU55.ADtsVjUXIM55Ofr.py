@@ -1,83 +1,66 @@
 
         
-        from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
+            @abstractmethod
+    def escalate_call(self):
+        pass
     
-    Does two benchmarks
+        HOUSING = 0
+    FOOD = 1
+    GAS = 2
+    SHOPPING = 3
+    # ...
     
-        formats : array-like of callables (1d or 0d)
-        These may transform a dense indicator matrix into multilabel
-        representation.
+        def append_to_front(self, node):
+        ...
     
+        # make url_for('index') == url_for('blog.index')
+    # in another app, you might define a separate main index here with
+    # app.route, while giving the blog blueprint a url_prefix, but for
+    # the tutorial the blog will be the main index
+    app.add_url_rule('/', endpoint='index')
     
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
-    
-            ax.set_xlabel('n_samples')
-        ax.set_ylabel('n_features')
-        ax.set_zlabel('Time (s)')
-        ax.set_zlim3d(0.0, max_time * 1.1)
-        ax.set_title(label)
-        # ax.legend()
-        i += 1
-    plt.show()
-
-    
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
-    
-    import six
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-    n_samples, n_features = 5000, 300
-X = np.random.randn(n_samples, n_features)
-inds = np.arange(n_samples)
-np.random.shuffle(inds)
-X[inds[int(n_features / 1.2):]] = 0  # sparsify input
-print('input data sparsity: %f' % sparsity_ratio(X))
-coef = 3 * np.random.randn(n_features)
-inds = np.arange(n_features)
-np.random.shuffle(inds)
-coef[inds[n_features // 2:]] = 0  # sparsify coef
-print('true coef sparsity: %f' % sparsity_ratio(coef))
-y = np.dot(X, coef)
-    
-        mem_usage = memory_usage(run_vectorizer(Vectorizer, text, **params))
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
+        def __get__(self, obj, type=None):
+        if obj is None:
+            return self
+        rv = obj.config[self.__name__]
+        if self.get_converter is not None:
+            rv = self.get_converter(rv)
+        return rv
     
     
-def user_role(name, rawtext, text, lineno,
-              inliner, options=None, content=None):
-    '''Sphinx role for linking to a user profile. Defaults to linking to
-    GitHub profiles, but the profile URIS can be configured via the
-    ``issues_user_uri`` config value.
+_request_ctx_err_msg = '''\
+Working outside of request context.
+    
+        Example usage::
+    
+                # >leading or trailing LWS MAY be removed without
+            # >changing the semantics of the field value'
+            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
+            # Also, requests raises `InvalidHeader` for leading spaces.
+            value = value.strip()
+    
+        def process_body(self, chunk):
+        if not isinstance(chunk, str):
+            # Text when a converter has been used,
+            # otherwise it will always be bytes.
+            chunk = chunk.decode(self.msg.encoding, 'replace')
+        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
+        return chunk.encode(self.output_encoding, 'replace')
+    
+        def __call__(self, r):
+        '''
+        Override username/password serialization to allow unicode.
+    
+    
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+    
+def test_unicode_url_query_arg_item(httpbin):
+    r = http(httpbin.url + '/get', u'test==%s' % UNICODE)
+    assert HTTP_OK in r
+    assert r.json['args'] == {'test': UNICODE}, r
