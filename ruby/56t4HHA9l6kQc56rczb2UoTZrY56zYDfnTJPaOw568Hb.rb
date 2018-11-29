@@ -1,46 +1,56 @@
 
         
-          private
-    
-          ENV[new_initial_revision_var] ||= ENV[old_initial_revision_var]
-      ENV[new_current_revision_var] ||= ENV[old_current_revision_var]
-    
-    if Encoding.default_external != Encoding::UTF_8
-    
-      def prefix_from_bin(bin_name)
-    unless (path = `which #{bin_name}`.strip).empty?
-      File.dirname(File.dirname(path))
-    end
+          def migration_class_name
+    migration_name.camelize
   end
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
+        def define_class_getter
+      @klass.extend(ClassMethods)
+    end
+    
+        # Hash assignment of interpolations. Included only for compatibility,
+    # and is not intended for normal use.
+    def self.[]= name, block
+      define_method(name, &block)
+      @interpolators_cache = nil
+    end
+    
+        def synchronize_before?
+      synchronize == true || synchronize == 'before'
+    end
+    
+          it 'returns true' do
+        expect(Tmuxinator::Doctor.shell?).to be_truthy
       end
     end
-  end
-end
-
     
-    module Pod
-  class Command
-    class Env < Command
-      self.summary = 'Display pod environment'
-      self.description = 'Display pod environment.'
+      context 'hook value is Array' do
+    before do
+      project.yaml[hook_name] = [
+        'echo 'on hook'',
+        'echo 'another command here''
+      ]
+    end
+    
+    describe Tmuxinator::Cli do
+  shared_context :local_project_setup do
+    let(:local_project_config) { '.tmuxinator.yml' }
+    let(:content_fixture) { '../../fixtures/sample.yml' }
+    let(:content_relpath) { File.join(File.dirname(__FILE__), content_fixture) }
+    let(:content_path) { File.expand_path(content_relpath) }
+    let(:content) { File.read(content_path) }
+    let(:working_dir) { FileUtils.pwd }
+    let(:local_project_relpath) { File.join(working_dir, local_project_config) }
+    let(:local_project_path) { File.expand_path(local_project_relpath) }
+    
+      it 'creates mention if there is a user mentioned' do
+    comment.body_markdown = 'Hello @#{user.username}, you are cool.'
+    comment.save
+    Mention.create_all_without_delay(comment)
+    expect(Mention.all.size).to eq(1)
+  end
+    
+        #{Faker::Hipster.paragraph(2)}
+    #{Faker::Markdown.random}
+    #{Faker::Hipster.paragraph(2)}
+  MARKDOWN
