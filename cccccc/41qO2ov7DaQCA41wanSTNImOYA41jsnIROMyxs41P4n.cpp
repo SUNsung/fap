@@ -1,353 +1,153 @@
 
         
-          // Returns the number of TestPartResult objects in the array.
-  int size() const;
+        #ifndef BITCOIN_QT_NETWORKSTYLE_H
+#define BITCOIN_QT_NETWORKSTYLE_H
     
-      void depart() {
-    if (link_.depart()) delete value_;
-  }
+        /** Colorize an icon (given object) with the text color */
+    QIcon TextColorIcon(const QIcon& icon) const;
+    
+    public:
+    explicit TransactionDescDialog(const QModelIndex &idx, QWidget *parent = 0);
+    ~TransactionDescDialog();
     
     
-    {  T0 f0_;
-  T1 f1_;
-  T2 f2_;
+    {    Lock& lock;
+    Lock templock;
 };
     
-    // A unique type used as the default value for the arguments of class
-// template Types.  This allows us to simulate variadic templates
-// (e.g. Types<int>, Type<int, double>, and etc), which C++ doesn't
-// support directly.
-struct None {};
     
-    // QueueNode is a node in a Queue, which consists of an element of
-// type E and a pointer to the next node.
-template <typename E>  // E is the element type
-class QueueNode {
-  friend class Queue<E>;
-    }
-    
-    namespace grpc {
-    }
-    
-    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
-                                                        grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  GPR_ASSERT(calld != nullptr);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
-    FilterTrailingMetadata(calld->recv_trailing_metadata_,
-                           &calld->elapsed_time_);
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
-                   GRPC_ERROR_REF(error));
+    {    /** In case a->infinity == 1, replace r with (b->x, b->y, 1). */
+    secp256k1_fe_cmov(&r->x, &b->x, a->infinity);
+    secp256k1_fe_cmov(&r->y, &b->y, a->infinity);
+    secp256k1_fe_cmov(&r->z, &fe_1, a->infinity);
+    r->infinity = infinity;
 }
     
-    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
-                             'Number of messages received per RPC', kCount);
-  return measure;
+        secp256k1_context_set_error_callback(tctx, counting_illegal_callback_fn, &ecount);
+    secp256k1_context_set_illegal_callback(tctx, counting_illegal_callback_fn, &ecount);
+    CHECK(secp256k1_ec_pubkey_create(tctx, &point, s_one) == 1);
+    
+    #endif /* SECP256K1_MODULE_RECOVERY_MAIN_H */
+
+    
+        BOOST_CHECK(obj.exists('age'));
+    BOOST_CHECK(obj.exists('first'));
+    BOOST_CHECK(obj.exists('last'));
+    BOOST_CHECK(obj.exists('distance'));
+    BOOST_CHECK(obj.exists('time'));
+    BOOST_CHECK(obj.exists('calories'));
+    BOOST_CHECK(obj.exists('temperature'));
+    BOOST_CHECK(obj.exists('moon'));
+    BOOST_CHECK(obj.exists('spoon'));
+    BOOST_CHECK(obj.exists('cat1'));
+    BOOST_CHECK(obj.exists('cat2'));
+    
+    /*  upb_enum_iter i;
+ *  for(upb_enum_begin(&i, e); !upb_enum_done(&i); upb_enum_next(&i)) {
+ *    // ...
+ *  }
+ */
+void upb_enum_begin(upb_enum_iter *iter, const upb_enumdef *e);
+void upb_enum_next(upb_enum_iter *iter);
+bool upb_enum_done(upb_enum_iter *iter);
+const char *upb_enum_iter_name(upb_enum_iter *iter);
+int32_t upb_enum_iter_number(upb_enum_iter *iter);
+    
+    TEST(MovableMessageTest, SelfMoveAssignment) {
+  // The `self` reference is necessary to defeat -Wself-move.
+  protobuf_unittest::TestAllTypes message, &self = message;
+  TestUtil::SetAllFields(&message);
+  message = std::move(self);
+  TestUtil::ExpectAllFieldsSet(message);
 }
     
-    grpc::string ProtoServerReflectionPlugin::name() {
-  return 'proto_server_reflection';
-}
-    
-      XGBOOST_DEVICE GradientPairInternal<T> operator-(
-      const GradientPairInternal<T> &rhs) const {
-    GradientPairInternal<T> g;
-    g.grad_ = grad_ - rhs.grad_;
-    g.hess_ = hess_ - rhs.hess_;
-    return g;
-  }
-    
-      /**
-   * \fn  virtual void Predictor::PredictInstance( const SparsePage::Inst&
-   * inst, std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model,
-   * unsigned ntree_limit = 0, unsigned root_index = 0) = 0;
-   *
-   * \brief online prediction function, predict score for one instance at a time
-   * NOTE: use the batch prediction interface if possible, batch prediction is
-   * usually more efficient than online prediction This function is NOT
-   * threadsafe, make sure you only call from one thread.
-   *
-   * \param           inst        The instance to predict.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       The model to predict from
-   * \param           ntree_limit (Optional) The ntree limit.
-   * \param           root_index  (Optional) Zero-based index of the root.
-   */
-    
-    
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
+    void EnumGenerator::Generate(io::Printer* printer) {
+  WriteEnumDocComment(printer, descriptor_);
+  printer->Print('$access_level$ enum $name$ {\n',
+                 'access_level', class_access_level(),
+                 'name', descriptor_->name());
+  printer->Indent();
+  std::set<string> used_names;
+  std::set<int> used_number;
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+      WriteEnumValueDocComment(printer, descriptor_->value(i));
+      string original_name = descriptor_->value(i)->name();
+      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
+      // Make sure we don't get any duplicate names due to prefix removal.
+      while (!used_names.insert(name).second) {
+        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
+        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
+          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
+        name += '_';
       }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
+      int number = descriptor_->value(i)->number();
+      if (!used_number.insert(number).second) {
+          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      } else {
+          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
       }
-      ASSERT_TRUE(input == output2);
+  }
+  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('\n');
+}
+    
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+#include <google/protobuf/testing/file.h>
+    
+    #include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
+#include <google/protobuf/stubs/map_util.h>
+    
+    // Get the name of a message's Java class without package name prefix.
+string ClassNameWithoutPackage(const Descriptor* descriptor,
+                               bool immutable) {
+  return StripPackageName(descriptor->full_name(),
+                          descriptor->file());
+}
+    
+    OpSchema::Cost CostInferenceForFC(
+    const OperatorDef& def,
+    const vector<TensorShape>& in) {
+  CAFFE_ENFORCE_EQ(in.size(), 3, 'FC requires three inputs');
+  struct OpSchema::Cost c;
+  ArgumentHelper helper(def);
+    }
+    
+    ```
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
     }
   }
 }
-    
-    void Speed::stop()
-{
-    if (_innerAction)
-        _innerAction->stop();
-    
-    Action::stop();
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    
-    {    delete action;
-    return nullptr;
-}
-    
-    
-    {    CC_SAFE_DELETE(ret);
-    return nullptr;
-}
-    
-    /** @class Hide
-* @brief Hide the node.
-*/
-class CC_DLL Hide : public ActionInstant
-{
-public:
-    /** Allocates and initializes the action.
-     *
-     * @return An autoreleased Hide object.
-     */
-    static Hide * create();
-    }
-    
-    
-    /** Returns the numbers of actions that are running in a
-     *  certain target with a specific tag.
-     * Like getNumberOfRunningActionsInTarget Composable actions
-     * are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @param tag       Tag that will be searched.
-     * @return  The numbers of actions that are running in a certain target
-     *          with a specific tag.
-     * @see getNumberOfRunningActionsInTarget
-     * @js NA
-     */
-    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionPageTurn3D.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
-    
-        /**
-    @brief Create an action with duration, grid size.
-    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
-    */
-    static PageTurn3D* create(float duration, const Size& gridSize);
-    
-        //
-    // Overrides
-    //
-    virtual ProgressTo* clone() const override;
-    virtual ProgressTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ProgressTo() {}
-    virtual ~ProgressTo() {}
-    
-    void Animation::addSpriteFrameWithTexture(Texture2D *pobTexture, const Rect& rect)
-{
-    SpriteFrame *frame = SpriteFrame::createWithTexture(pobTexture, rect);
-    addSpriteFrame(frame);
-}
-    
-    
-    {            array.pushBack(animFrame);
-        }
-    
-    void AtlasNode::calculateMaxItems()
-{
-    Size s = _textureAtlas->getTexture()->getContentSize();
-    
-    if (_ignoreContentScaleFactor)
-    {
-        s = _textureAtlas->getTexture()->getContentSizeInPixels();
-    }
-    
-    _itemsPerColumn = (int)(s.height / _itemHeight);
-    _itemsPerRow = (int)(s.width / _itemWidth);
-}
-    
-    protected:
-    void calculateMaxItems();
-    void updateBlendFunc();
-    void updateOpacityModifyRGB();
-    
-        int getIndexFromPos(unsigned int x, unsigned int y) { return y*_width+x; }
-    cocos2d::Vec2 getPosFromIndex(unsigned int i) { return cocos2d::Vec2(static_cast<float>(i%_width), static_cast<float>(i/_width)); }
-    
-      std::shared_ptr<DHTNode> newNode_;
-    
-    DHTResponseMessage::DHTResponseMessage(
-    const std::shared_ptr<DHTNode>& localNode,
-    const std::shared_ptr<DHTNode>& remoteNode,
-    const std::string& transactionID)
-    : DHTAbstractMessage(localNode, remoteNode, transactionID)
-{
-}
-    
-    void DHTRoutingTable::getClosestKNodes(
-    std::vector<std::shared_ptr<DHTNode>>& nodes,
-    const unsigned char* key) const
-{
-  dht::findClosestKNodes(nodes, root_.get(), key);
-}
-    
-      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
-  {
-    return nodes_;
-  }
-    
-    void DHTRoutingTableSerializer::serialize(const std::string& filename)
-{
-  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
-  std::string filenameTemp = filename;
-  filenameTemp += '__temp';
-  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
-    }
-    
-    #include 'LogFactory.h'
-#include 'Logger.h'
-#include 'util.h'
-#include 'DHTNode.h'
-#include 'DHTConnectionImpl.h'
-#include 'DHTRoutingTable.h'
-#include 'DHTMessageFactoryImpl.h'
-#include 'DHTMessageTracker.h'
-#include 'DHTMessageDispatcherImpl.h'
-#include 'DHTMessageReceiver.h'
-#include 'DHTTaskQueueImpl.h'
-#include 'DHTTaskFactoryImpl.h'
-#include 'DHTPeerAnnounceStorage.h'
-#include 'DHTTokenTracker.h'
-#include 'DHTInteractionCommand.h'
-#include 'DHTTokenUpdateCommand.h'
-#include 'DHTBucketRefreshCommand.h'
-#include 'DHTPeerAnnounceCommand.h'
-#include 'DHTEntryPointNameResolveCommand.h'
-#include 'DHTAutoSaveCommand.h'
-#include 'DHTTask.h'
-#include 'DHTRoutingTableDeserializer.h'
-#include 'DHTRegistry.h'
-#include 'DHTBucketRefreshTask.h'
-#include 'DHTMessageCallback.h'
-#include 'DHTMessageTrackerEntry.h'
-#include 'DHTMessageEntry.h'
-#include 'UDPTrackerClient.h'
-#include 'BtRegistry.h'
-#include 'prefs.h'
-#include 'Option.h'
-#include 'SocketCore.h'
-#include 'DlAbortEx.h'
-#include 'RecoverableException.h'
-#include 'a2functional.h'
-#include 'DownloadEngine.h'
-#include 'fmt.h'
-    
-    #include <vector>
-#include <memory>
-    
-    DHTTaskExecutor::~DHTTaskExecutor() = default;
-    
-    bool IsZero(double n);
-    
-    // The CHECK macro returns a std::ostream object that can have extra information
-// written to it.
-#ifndef NDEBUG
-#define CHECK(b)                                                             \
-  (b ? ::benchmark::internal::GetNullLogInstance()                           \
-     : ::benchmark::internal::CheckHandler(#b, __FILE__, __func__, __LINE__) \
-           .GetLog())
-#else
-#define CHECK(b) ::benchmark::internal::GetNullLogInstance()
-#endif
-    
-    #include <cerrno>
-#include <cstdlib>
-#include <ctime>
-    
-    template <typename ValueType>
-class ForEach {
- public:
-  template <typename InputIterator>
-  ForEach(InputIterator begin, InputIterator end)
-      : func_([begin, end](FunctionRef<void(ValueType)> f) {
-          for (auto it = begin; it != end; ++it) {
-            f(*it);
-          }
-        }) {}
-    }
-    
-        ~KeepAlive() {
-      reset();
-    }
-    
-    #include <string>
-    
-      explicit Options(
-      Format format_ = Format::ZLIB,
-      int windowSize_ = 15,
-      int memLevel_ = 8,
-      int strategy_ = Z_DEFAULT_STRATEGY)
-      : format(format_),
-        windowSize(windowSize_),
-        memLevel(memLevel_),
-        strategy(strategy_) {}
