@@ -1,77 +1,57 @@
 
         
-              #
+              URL_HELPERS[key] ||= []
+      URL_HELPERS[key].concat(value)
+      URL_HELPERS[key].uniq!
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+            if uri 
+          path = remove_domain_from_uri(uri)
+          path = add_fragment_back_to_path(uri, path)
+    
+        def execute_bundler(options)
+      ::Bundler.reset!
+      ::Bundler::CLI.start(bundler_arguments(options))
+    end
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+      def update_gems!
+    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
+    previous_gem_specs_map = find_latest_gem_specs
+    
+        worker_count.times do |count|
+      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
+        owner node[:owner_name]
+        group node[:owner_name]
+        mode 0644
+        source 'sidekiq.yml.erb'
+        variables({
+          :require => '/data/#{app}/current'
+        })
+      end
+    end
+    
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+    
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
         end
-        # rubocop:enable Metrics/AbcSize
       end
     end
-  end
-end
-
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
-  end
-end
-
-    
-        def clean_path(path)
-      path = path.gsub %r{[!;:]}, '-'
-      path = path.gsub %r{\+}, '_plus_'
-      path
-    end
-  end
-end
-
-    
-        def as_json
-      @pages
-    end
-    
-        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
-    
-            subclass.base_url = base_url
-        subclass.root_path = root_path
-        subclass.initial_paths = initial_paths.dup
-        subclass.options = options.deep_dup
-        subclass.html_filters = html_filters.inheritable_copy
-        subclass.text_filters = text_filters.inheritable_copy
-        subclass.stubs = stubs.dup
+          def insert_after(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
+        entries.insert(i+1, new_entry)
       end
-    
-        <div id='backtrace' class='condensed'>
-      <h3>BACKTRACE</h3>
-      <p><a href='#' id='expando'
-            onclick='toggleBacktrace(); return false'>(expand)</a></p>
-      <p id='nav'><strong>JUMP TO:</strong>
-         <% unless bad_request?(exception) %>
-            <a href='#get-info'>GET</a>
-            <a href='#post-info'>POST</a>
-         <% end %>
-         <a href='#cookie-info'>COOKIES</a>
-         <a href='#env-info'>ENV</a>
-      </p>
-      <div class='clear'></div>
-    
-          attr_reader :app, :options
-    
-          def session_key
-        @session_key ||= options[:session_key]
-      end
-    end
-  end
-end
-
-    
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
-    end
