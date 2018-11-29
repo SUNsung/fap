@@ -1,68 +1,29 @@
 
         
-          context 'single action execution' do
-    let(:action_name) { 'some_action' }
+              ohai 'Migrating tap #{old_name} to #{new_name}...' if $stdout.tty?
     
-            expect(result).to eq('carthage archive')
-      end
+        # mixin
+    # Sass::Callable
+    inherited_hash_reader :mixin
     
-          it 'Handles tag names with characters that need shell escaping' do
-        tag = 'v1.8.0(30)'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(between: ['#{tag}', 'HEAD'])
-        end').runner.execute(:test)
+        # @param msg [String] The error message
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def initialize(msg, attrs = {})
+      @message = msg
+      @sass_backtrace = []
+      add_backtrace(attrs)
+    end
     
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0]} #{path[1]}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path})
-          end').runner.execute(:test)
+          opts.on('-T', '--to FORMAT',
+        'The format to convert to. Can be scss or sass.',
+        'By default, this is inferred from the output filename.',
+        'If there is none, defaults to sass.') do |name|
+        @options[:to] = name.downcase.to_sym
+        unless [:scss, :sass].include?(@options[:to])
+          raise 'Unknown format for sass-convert --to: #{name}'
         end
       end
     
-    class String
-  # CrossplatformShellwords
-  def shellescape
-    CrossplatformShellwords.shellescape(self)
-  end
-end
-    
-    def expect_correct_implementation_to_be_called(obj, method, os)
-  if method == :shellescape
-    # String.shellescape => CrossplatformShellwords.shellescape => ...
-    expect(obj).to receive(:shellescape).and_call_original
-    expect(CrossplatformShellwords).to receive(:shellescape).with(obj).and_call_original
-    if os == 'windows'
-      # WindowsShellwords.shellescape
-      expect(WindowsShellwords).to receive(:shellescape).with(obj).and_call_original
-      expect(Shellwords).not_to(receive(:escape))
-    else
-      # Shellswords.escape
-      expect(Shellwords).to receive(:escape).with(obj).and_call_original
-      expect(WindowsShellwords).not_to(receive(:shellescape))
-    end
-  elsif method == :shelljoin
-    # Array.shelljoin => CrossplatformShellwords.shelljoin => CrossplatformShellwords.shellescape ...
-    expect(obj).to receive(:shelljoin).and_call_original
-    expect(CrossplatformShellwords).to receive(:shelljoin).with(obj).and_call_original
-    expect(CrossplatformShellwords).to receive(:shellescape).at_least(:once).and_call_original
-  end
-end
-
-    
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-        def log_processed(name)
-      puts green '    #{name}'
-    end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-    LogStash::Bundler.setup!
+            @options[:sourcemap] = (type || :auto).to_sym
+      end
