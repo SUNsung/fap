@@ -1,172 +1,163 @@
 
         
-          def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
-  end
+          context 'with a user' do
+    let(:user) { Fabricate(:user) }
     
-        checks.inject_dump_stats! if ARGV.switch? 'D'
-    
-          # Sets a cache key to the given value.
-      #
-      # key - The cache key to write.
-      # value - The value to set.
-      # timeout - The time after which the cache key should expire.
-      def self.write(raw_key, value, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
-    
-            def labels?
-          label_names && label_names.any?
-        end
-    
-            # Builds a new lfs_object using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          new(Representation.symbolize_hash(raw_hash))
-        end
-    
-              # Assignees are optional so we only convert it from a Hash if one was
-          # set.
-          hash[:assignee] &&= Representation::User
-            .from_json_hash(hash[:assignee])
-    
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          # Configure default email options
-      def devise_mail(record, action, opts = {}, &block)
-        initialize_from_record(record)
-        mail headers_for(action, opts), &block
-      end
-    
-        # Include the chosen devise modules in your model:
-    #
-    #   devise :database_authenticatable, :confirmable, :recoverable
-    #
-    # You can also give any of the devise configuration values in form of a hash,
-    # with specific values for this model. Please check your Devise initializer
-    # for a complete description on those values.
-    #
-    def devise(*modules)
-      options = modules.extract_options!.dup
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
-    
-            # Defines additional command line commands available by key. The key
-        # becomes the subcommand, so if you register a command 'foo' then
-        # 'vagrant foo' becomes available.
-        #
-        # @param [String] name Subcommand key.
-        def self.command(name=UNSET_VALUE, &block)
-          data[:command] ||= Registry.new
-    
-          def react_and_close(env, body)
-        reaction = react(env)
-    
-    def ask(message, valid_options)
-  if valid_options
-    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
-  else
-    answer = get_stdin(message)
-  end
-  answer
+    User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
 end
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
+        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
+      require 'securerandom'
+      @session_id = SecureRandom.uuid
+      @client = analytics_ingester_client
+      @threads = []
+      @launch_event_sent = false
     end
     
-      def render(context)
-    config_tag(context.registers[:site].config, @key, @tag, @classname)
-  end
-end
+          it 'uses the correct command to import it' do
+        # We have to execute *something* using ` since otherwise we set expectations to `nil`, which is not healthy
+        `ls`
     
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
-          end
+          describe 'misc features' do
+        it 'makes it non optional by default' do
+          c = FastlaneCore::ConfigItem.new(key: :test,
+                                 default_value: '123')
+          expect(c.optional).to eq(false)
         end
+    
+    shelljoin_testcases = [
+  {
+    'it' => '(#1) on array with entry with space',
+    'it_result' => {
+      'windows' => 'wraps this entry in double quotes',
+      'other'   => 'escapes the space in this entry'
+    },
+    'input' => ['a', 'b c', 'd'],
+    'expect' => {
+      'windows' => 'a 'b c' d',
+      'other'   => 'a b\ c d'
+    }
+  },
+  {
+    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
+    'it_result' => {
+      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
+      'other'   => 'escapes the double quotes and escapes the space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a '''b'' c' d',
+      'other'   => 'a \'b\'\ c d'
+    }
+  },
+  {
+    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
+    'it_result' => {
+      'windows' => 'no changes',
+      'other'   => 'escapes the single quotes and space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a \''b' c\' d',
+      'other'   => 'a \\'b\\'\\ c d'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
+  {
+    'it' => '(#4) on array with entry that is `$$`',
+    'it_result' => {
+      'windows' => 'the result includes the process id',
+      'other'   => 'the result includes the process id'
+    },
+    'input' => ['ps', '-p', $$],
+    'expect' => {
+      'windows' => 'ps -p #{$$}',
+      'other'   => 'ps -p #{$$}'
+    }
+  }
+]
+    
+          it '#environment_variable_name_profile_name uses the correct env variable' do
+        result = Match::Utils.environment_variable_name_profile_name(app_identifier: 'tools.fastlane.app', type: 'appstore')
+        expect(result).to eq('sigh_tools.fastlane.app_appstore_profile-name')
       end
-      rtn
-    end
+    
+      # Compile a Sass or SCSS string to CSS.
+  # Defaults to SCSS.
+  #
+  # @param contents [String] The contents of the Sass file.
+  # @param options [{Symbol => Object}] An options hash;
+  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  def self.compile(contents, options = {})
+    options[:syntax] ||= :scss
+    Engine.new(contents, options).to_css
   end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        # Adds an entry to the exception's Sass backtrace.
+    #
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def add_backtrace(attrs)
+      sass_backtrace << attrs.reject {|_k, v| v.nil?}
+    end
+    
+        # Processes the options set by the command-line arguments. In particular,
+    # sets `@options[:input]` and `@options[:output]` to appropriate IO streams.
+    #
+    # This is meant to be overridden by subclasses
+    # so they can run their respective programs.
+    def process_result
+      input, output = @options[:input], @options[:output]
+      args = @args.dup
+      input ||=
+        begin
+          filename = args.shift
+          @options[:filename] = filename
+          open_file(filename) || $stdin
         end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      @options[:output_filename] = args.shift
+      output ||= @options[:output_filename] || $stdout
+      @options[:input], @options[:output] = input, output
+    end
+    
+          opts.on('-q', '--quiet', 'Silence warnings and status messages during conversion.') do |bool|
+        @options[:for_engine][:quiet] = bool
+      end
+    
+          def pack_uri(plugin_name)
+        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
+        URI.parse(url)
+      end
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+      def warn_local_gems(plugins_with_path)
+    puts('Update is not supported for manually defined plugins or local .gem plugin installations, skipping: #{plugins_with_path.join(', ')}')
+  end
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
       end
     end
