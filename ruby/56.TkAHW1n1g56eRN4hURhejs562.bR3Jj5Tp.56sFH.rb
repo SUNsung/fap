@@ -1,107 +1,125 @@
 
         
-          include SignatureVerification
+        def custom_release_header_anchors(markdown)
+  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
+  section_regexp = %r!^### \w+ \w+$!
+  markdown.split(%r!^##\s!).map do |release_notes|
+    _, major, minor, patch = *release_notes.match(header_regexp)
+    release_notes
+      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
+      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
+  end.join('\n## ')
+end
     
-        def set_account
-      @account = Account.find(params[:account_id])
-      @user = @account.user
-    end
-    
-          if @report_note.save
-        if params[:create_and_resolve]
-          @report.resolve!(current_account)
-          log_action :resolve, @report
-    
-              property = parse_property(name, parse_interp(name), value, :old, line, value_start_offset)
-          property.name_source_range = Sass::Source::Range.new(
-            Sass::Source::Position.new(@line, to_parser_offset(name_start_offset)),
-            Sass::Source::Position.new(@line, to_parser_offset(name_end_offset)),
-            @options[:filename], @options[:importer])
-          property
+              @reload_body = File.read(reload_file)
+          @reload_size = @reload_body.bytesize
         end
-      when ?$
-        parse_variable(line)
-      when COMMENT_CHAR
-        parse_comment(line)
-      when DIRECTIVE_CHAR
-        parse_directive(parent, line, root)
-      when ESCAPE_CHAR
-        Tree::RuleNode.new(parse_interp(line.text[1..-1]), full_line_range(line))
-      when MIXIN_DEFINITION_CHAR
-        parse_mixin_definition(line)
-      when MIXIN_INCLUDE_CHAR
-        if line.text[1].nil? || line.text[1] == ?\s
-          Tree::RuleNode.new(parse_interp(line.text), full_line_range(line))
-        else
-          parse_mixin_include(line, root)
-        end
-      else
-        parse_property_or_rule(line)
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
     end
     
-          def inherited_hash_writer(name)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def set_#{name}(name, value)
-            name = name.tr('_', '-')
-            @#{name}s[name] = value unless try_set_#{name}(name, value)
-          end
+        group.add(moderator)
+    group.save
     
-        def split_colon_path(path)
-      one, two = path.split(':', 2)
-      if one && two && Sass::Util.windows? &&
-          one =~ /\A[A-Za-z]\Z/ && two =~ %r{\A[/\\]}
-        # If we're on Windows and we were passed a drive letter path,
-        # don't split on that colon.
-        one2, two = two.split(':', 2)
-        one = one + ':' + one2
+            post_args[:topic].notify_muted!(user)
+        expect {
+          Fabricate(:post, user: user2, topic: post.topic, raw: 'hello @' + user.username)
+        }.to change(user.notifications, :count).by(0)
       end
-      return one, two
     end
     
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
+            # Reset topic count because we don't count the description topic
+        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
       end
-    
-    Given(/^an invalid release named '(.+)'$/) do |filename|
-  run_vagrant_command('mkdir -p #{TestApp.release_path(filename)}')
+    end
+  end
 end
 
     
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
-  end
-    
-          # Internal use only.
-      def peek(key, default=nil, &block)
-        value = fetch_for(key, default, &block)
-        while callable_without_parameters?(value)
-          value = (values[key] = value.call)
+            it 'does not use two's complement form for negative numbers for formats bBoxX' do
+          format('%+b', -10).should == '-1010'
+          format('%+B', -10).should == '-1010'
+          format('%+o', -87).should == '-127'
+          format('%+x', -196).should == '-c4'
+          format('%+X', -196).should == '-C4'
         end
-        value
       end
+    end
     
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    module Rex
+module Proto
+module Http
     
-        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
-    # calling update without requirements will remove any previous requirements
-    plugins = plugins_to_update(previous_gem_specs_map)
-    # Skipping the major version validation when using a local cache as we can have situations
-    # without internet connection.
-    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
-      .compact
-      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
-      .each   { |plugin| gemfile.update(plugin.name) }
-    
-      it 'records when the config was read' do
-    expect(subject.read_at).to be <= Time.now
+              # Encodes the value field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_value
+            OpenSSL::ASN1::OctetString.new(value)
+          end
+        end
+      end
+    end
   end
+end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+        def replace_vars(less)
+      less = less.dup
+      # skip header comment
+      less =~ %r(\A/\*(.*?)\*/)m
+      from           = $~ ? $~.to_s.length : 0
+      less[from..-1] = less[from..-1].
+          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
+          # variables that would be ignored by gsub above: e.g. @page-header-border-color
+          gsub(/@(page[\w-]+)/, '$\1')
+      less
+    end
+    
+        # get sha of the branch (= the latest commit)
+    def get_branch_sha
+      @branch_sha ||= begin
+        if @branch + '\n' == %x[git rev-parse #@branch]
+          @branch
+        else
+          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
+          log cmd
+          result = %x[#{cmd}]
+          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
+          result.split(/\s+/).first
+        end
+      end
+    end
+    
+      def generate_migration
+    migration_template('paperclip_migration.rb.erb',
+                       'db/migrate/#{migration_file_name}',
+                       migration_version: migration_version)
+  end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
+      end
+    end
+  end
+end
+
+    
+        private
+    
+        # Returns the larger of the two dimensions
+    def larger
+      [height, width].max
+    end
