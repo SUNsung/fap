@@ -1,154 +1,140 @@
 
         
-            self.weights1 = tf.get_variable(
-        'W1',
-        shape=[network_input, self.hparams.num_classes],
-        dtype=tf.float32)
-    self.bias1 = tf.get_variable(
-        'b1',
-        shape=[self.hparams.num_classes],
-        dtype=tf.float32)
+            @property
+    def config(self):
+        if not hasattr(self, '_config'):
+            self._config = Config(directory=self.config_dir)
+            if self._config.is_new():
+                self._config.save()
+            else:
+                self._config.load()
+        return self._config
     
-    import numpy as np
-import tensorflow as tf
+        @property
+    def body(self):
+        '''Return a `bytes` with the message's body.'''
+        raise NotImplementedError()
     
+        def get_auth_plugin(self, auth_type):
+        return self.get_auth_plugin_mapping()[auth_type]
     
-def evaluate_ensemble(test_data_name, number_of_lms):
-  ensemble = EnsembleLM(test_data_name)
-  model_list = ['lm{:02d}'.format(i+1) for i in range(number_of_lms)]
-  for model_name in model_list:
-    ensemble.add_single_model(model_name)
-  accuracy = ensemble.evaluate()
-  print('Accuracy of {} LM(s) on {} = {}'.format(
-      number_of_lms, test_data_name, accuracy))
-    
-      Args:
-    hparams:  Hyperparameters for the MaskGAN.
-    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
-    is_training:  Whether the model is training.
-    reuse (Optional):  Whether to reuse the model.
+        def test_GET_no_data_no_auto_headers(self, httpbin):
+        # https://github.com/jakubroztocil/httpie/issues/62
+        r = http('GET', httpbin.url + '/headers')
+        assert HTTP_OK in r
+        assert r.json['headers']['Accept'] == '*/*'
+        assert 'Content-Type' not in r.json['headers']
     
     
-def find_all_ngrams(dataset, n):
-  '''Generate a list of all ngrams.'''
-  return zip(*[dataset[i:] for i in xrange(n)])
-    
-    anchor = '###'
-min_entries_per_section = 3
-auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
-punctuation = ['.', '?', '!']
-https_keys = ['Yes', 'No']
-cors_keys = ['Yes', 'No', 'Unknown']
-    
-                affected_projects = set()
-            for release in releases:
-                affected_projects.update(
-                    [p for p in release.projects.values_list('slug', flat=True)]
-                )
-            has_prod = False
-            has_staging = False
-            has_dev = False
-            for p in affected_projects:
-                if 'prod' in p:
-                    has_prod = True
-                elif 'stag' in p or 'stg' in p:
-                    has_staging = True
-                elif 'dev' in p:
-                    has_dev = True
-            # assume projects are split by environment if there
-            # are at least prod/staging or prod/dev, etc
-            projects_split_by_env = len([x for x in [has_prod, has_dev, has_staging] if x]) >= 2
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
-        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
-    
-    
-class Migration(DataMigration):
-    def forwards(self, orm):
-        'Write your forwards methods here.'
-        db.commit_transaction()
-    
-                try:
-                with transaction.atomic():
-                    orm.EnvironmentProject.objects.filter(
-                        environment__in=from_envs,
-                    ).update(environment=to_env)
-            except IntegrityError:
-                for ep in orm.EnvironmentProject.objects.filter(environment__in=from_envs):
-                    try:
-                        with transaction.atomic():
-                            orm.EnvironmentProject.objects.filter(
-                                id=ep.id,
-                            ).update(environment=to_env)
-                    except IntegrityError:
-                        ep.delete()
-    
-        complete_apps = ['sentry']
-    symmetrical = True
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
-            # Adding field 'ApiToken.application'
-        db.add_column(
-            'sentry_apitoken',
-            'application',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.ApiApplication'], null=True
-            ),
-            keep_default=False
-        )
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
-    test_encode_face = '''
-encoding = face_recognition.face_encodings(image, known_face_locations=face_locations)[0]
-'''
+        time_ridge = np.empty(n_iter)
+    time_ols = np.empty(n_iter)
+    time_lasso = np.empty(n_iter)
     
-        # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    # datasets available: ['http', 'smtp', 'SA', 'SF', 'shuttle', 'forestcover']
+datasets = ['http', 'smtp', 'SA', 'SF', 'shuttle', 'forestcover']
     
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+        samples : array-like of ints (1d or 0d)
+        The number of samples to generate as input.
     
-        unknown_encodings = face_recognition.face_encodings(unknown_image)
+        i = 0
+    for c, (label, timings) in zip('br',
+                                   sorted(six.iteritems(results_2))):
+        i += 1
+        ax = fig.add_subplot(2, 2, i + 2)
+        y = np.asarray(timings)
+        ax.plot(chunks, y, color=c, alpha=0.8)
+        ax.set_xlabel('Chunks')
+        ax.set_ylabel(label)
     
-    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
-# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
-# 你可以参考这个教程配制你的树莓派：
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+                gc.collect()
+            print('benchmarking orthogonal_mp (without Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=False,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp[i_f, i_s] = delta
     
-    # You can change this to any folder on your system
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
+    
+    del sys
+
+    
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
+    
+                # trustRoot set to platformTrust() will use the platform's root CAs.
+            #
+            # This means that a website like https://www.cacert.org will be rejected
+            # by default, since CAcert.org CA certificate is seldom shipped.
+            return optionsForClientTLS(hostname.decode('ascii'),
+                                       trustRoot=platformTrust(),
+                                       extraCertificateOptions={
+                                            'method': self._ssl_method,
+                                       })
+    
+            crawler.signals.connect(self._close, signals.engine_stopped)
+    
+    site_info = 'baomihua.com'
+download = baomihua_download
+download_playlist = playlist_not_supported('baomihua')
+
+    
+    from ..common import *
+    
+    #----------------------------------------------------------------------
+def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
+    if is_xml:  #URL is XML URL
+        try:
+            title = kwargs['title']
+        except:
+            title = ''
+        try:
+            headers = kwargs['headers']  #headers provided
+            ckinfo = get_content(url, headers = headers)
+        except NameError:
+            ckinfo = get_content(url)
+        
+        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
+                                info_only, title = title)
+    
+        ep = 'http://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid={}'
     
     
-class FlicButton(BinarySensorDevice):
-    '''Representation of a flic button.'''
+def coub_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_content(url)
     
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([video_url], title, ext, size, output_dir, merge = merge, headers = headers)
     
-def get_scanner(hass, config):
-    '''Validate the configuration and return an Actiontec scanner.'''
-    scanner = ActiontecDeviceScanner(config[DOMAIN])
-    return scanner if scanner.success_init else None
-    
-            return self.last_results.keys()
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client['mac'] == device:
-                return client['host']
-        return None
-    
-    
-def setup_scanner(hass, config, see, discovery_info=None):
-    '''Set up the Volvo tracker.'''
-    if discovery_info is None:
-        return
-    
-    _LOGGER = logging.getLogger(__name__)
+        @classmethod
+    def get_coeff(cls, magic_list):
+        magic_set = set(magic_list)
+        no_dup = []
+        for item in magic_list:
+            if item in magic_set:
+                magic_set.remove(item)
+                no_dup.append(item)
+        # really necessary?
