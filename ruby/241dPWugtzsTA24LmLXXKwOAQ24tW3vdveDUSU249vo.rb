@@ -1,107 +1,128 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
-      #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
-      #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
+        describe DefaultScenarioImporter do
+  let(:user) { users(:bob) }
+  describe '.import' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      mock(DefaultScenarioImporter).seed(is_a(User))
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      DefaultScenarioImporter.import(user)
+    end
     
-              if options['multiple']
-            add_default_name_and_id_for_value(@checked_value, options)
-            options.delete('multiple')
-          else
-            add_default_name_and_id(options)
+        @taoe, Thread.abort_on_exception = Thread.abort_on_exception, false
+    @oso, @ose, $stdout, $stderr = $stdout, $stderr, StringIO.new, StringIO.new
+    
+        it 'requires a message' do
+      @log.message = ''
+      expect(@log).not_to be_valid
+      @log.message = nil
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:message)
+    end
+    
+        def clean_path(path)
+      path = path.gsub %r{[!;:]}, '-'
+      path = path.gsub %r{\+}, '_plus_'
+      path
+    end
+  end
+end
+
+    
+        def initialize
+      @pages = {}
+    end
+    
+          if dest.end_with? '/'
+        dest_dir.relative_path_from(base_dir).to_s.tap do |result|
+          result << '/' if result != '.'
+        end
+      else
+        dest_dir.parent.relative_path_from(base_dir).join(dest.split('/').last).to_s
+      end
+    end
+    
+            css('.filetree .children').each do |node|
+          node.css('.file').each do |n|
+            n.content = '  #{n.content}'
           end
+        end
     
-            private
+          ohai 'Migrating tap #{old_name} to #{new_name}...' if $stdout.tty?
     
-              content_is_options = content_or_options.is_a?(Hash)
-          if content_is_options
-            options.merge! content_or_options
-            @content = nil
-          else
-            @content = content_or_options
-          end
+          opts.on('--unix-newlines', 'Use Unix-style newlines in written files.',
+                                 ('Always true on Unix.' unless Sass::Util.windows?)) do
+        @options[:unix_newlines] = true if Sass::Util.windows?
+      end
+    end
     
-                if only = conditions[:only]
-              only.include?(action_name)
-            elsif except = conditions[:except]
-              !except.include?(action_name)
-            else
-              true
+          opts.on('-s', '--stdin', :NONE,
+              'Read input from standard input instead of an input file.',
+              'This is the default if no input file is specified.') do
+        @options[:input] = $stdin
+      end
+    
+          def escape_glob_characters(name)
+        name.gsub(/[\*\[\]\{\}\?]/) do |char|
+          '\\#{char}'
+        end
+      end
+    
+                it 'does not autocorrect the closing brace' do
+              new_source = autocorrect_source(source)
+              expect(new_source).to eq(source)
             end
           end
+    
+          # Checks whether the `for` node has a `do` keyword.
+      #
+      # @return [Boolean] whether the `for` node has a `do` keyword
+      def do?
+        loc.begin && loc.begin.is?('do')
       end
     
-          def instrument(name, **options) # :doc:
-        options[:identifier] ||= (@template && @template.identifier) || @path
-    
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-cert-signer \'Some signer\' --exit-threshold \'2\' input/dir')
+          # Checks whether any of the key value pairs in the `hash` literal are on
+      # the same line.
+      #
+      # @note A multiline `pair` is considered to be on the same line if it
+      #       shares any of its lines with another `pair`
+      #
+      # @return [Boolean] whether any `pair` nodes are on the same line
+      def pairs_on_same_line?
+        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
       end
     
-          it 'generates the correct git command with a shell-escaped message' do
-        message = 'message with 'quotes' (and parens)'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: \'#{message}\')
-        end').runner.execute(:test)
-        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
-      end
-    end
-  end
-end
-
-    
-          # Verify that value is the type that we're expecting, if we are expecting a type
-      if data_type == Fastlane::Boolean
-        ensure_boolean_type_passes_validation(value)
-      else
-        ensure_generic_type_passes_validation(value)
+          # Returns the delta between this element's value and the argument's.
+      #
+      # @note Keyword splats always return a delta of 0
+      #
+      # @return [Integer] the delta between the two values
+      def value_delta(other)
+        HashElementDelta.new(self, other).value_delta
       end
     
-              expect(c.valid?('a string')).to eq(true)
+          def api_key
+        request.headers['X-Spree-Token'] || params[:token]
+      end
+      helper_method :api_key
+    
+            def show
+          @state = scope.find(params[:id])
+          respond_with(@state)
         end
-      end
     
-            def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
+              @stock_item = scope.new(stock_item_params)
+          if @stock_item.save
+            @stock_item.adjust_count_on_hand(count_on_hand)
+            respond_with(@stock_item, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_item)
+          end
         end
-      end
-    end
-  end
-end
-
     
-          # Returns `true` if we're still allowed to perform API calls.
-      def requests_remaining?
-        remaining_requests > RATE_LIMIT_THRESHOLD
-      end
-    
-    module Gitlab
-  module GithubImport
-    module Importer
-      class DiffNotesImporter
-        include ParallelScheduling
-    
-    module Gitlab
-  module GithubImport
-    module ParallelScheduling
-      attr_reader :project, :client, :page_counter, :already_imported_cache_key
-    
-            # attributes - A Hash containing the raw lfs_object details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
+            def store_params
+          params.require(:store).permit(permitted_store_attributes)
         end
       end
     end
@@ -109,56 +130,9 @@ end
 end
 
     
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
-  end
-end
-    
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
-  end
-    
-      it 'transfers control to the innermost catch block waiting for the same sympol' do
-    one = two = three = 0
-    catch :duplicate do
-      catch :duplicate do
-        catch :duplicate do
-          one = 1
-          throw :duplicate
-        end
-        two = 2
-        throw :duplicate
+          Sidekiq.logger.debug { 'Re-queueing terminated jobs' }
+      jobs_to_requeue = {}
+      inprogress.each do |unit_of_work|
+        jobs_to_requeue[unit_of_work.queue_name] ||= []
+        jobs_to_requeue[unit_of_work.queue_name] << unit_of_work.job
       end
-      three = 3
-      throw :duplicate
-    end
-    [one, two, three].should == [1, 2, 3]
-  end
-    
-      after :each do
-    Object.send :remove_method, :boom
-  end
-    
-    lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano/version'
-    
-    Given(/^a test app without any configuration$/) do
-  TestApp.create_test_app
-end
-    
-        def add_cmdline_filter(type, values)
-      cmdline_filters << Filter.new(type, values)
-    end
-    
-          def response
-        return @response if defined? @response
