@@ -1,178 +1,113 @@
 
         
-                  new(hash)
-        end
-    
-            # Builds a PR from a GitHub API response.
-        #
-        # issue - An instance of `Sawyer::Resource` containing the PR details.
-        def self.from_api_response(pr)
-          assignee =
-            if pr.assignee
-              Representation::User.from_api_response(pr.assignee)
-            end
-    
-          def meta_path
-        File.join path, META_FILENAME
+            def suggest_ruby_reinstall(e)
+      ui = FastlaneCore::UI
+      ui.error('-----------------------------------------------------------------------')
+      ui.error(e.to_s)
+      ui.error('')
+      ui.error('SSL errors can be caused by various components on your local machine.')
+      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
+        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
+        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
       end
-    
-        def xpath(*args)
-      doc.xpath(*args)
+      ui.error('')
+      ui.error('The best solution is to use the self-contained fastlane version.')
+      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
+      ui.error(' - Use Homebrew')
+      ui.error('    - update brew with `brew update`')
+      ui.error('    - install fastlane using:')
+      ui.error('      - `brew cask install fastlane`')
+      ui.error(' - Use One-Click-Installer:')
+      ui.error('    - download fastlane at https://download.fastlane.tools')
+      ui.error('    - extract the archive and double click the `install`')
+      ui.error('-----------------------------------------------------------')
+      ui.error('for more details on ways to install fastlane please refer the documentation:')
+      ui.error('-----------------------------------------------------------')
+      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
+      ui.error('-----------------------------------------------------------')
+      ui.error('')
+      ui.error('You can also install a new version of Ruby')
+      ui.error('')
+      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
+      ui.error('- If you use system Ruby:')
+      ui.error('  - Run `brew update && brew install ruby`')
+      ui.error('- If you use rbenv with ruby-build:')
+      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
+      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
+      ui.error('- If you use rvm:')
+      ui.error('  - First run `rvm osx-ssl-certs update all`')
+      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
+      ui.error('')
+      ui.error('If that doesn't fix your issue, please google for the following error message:')
+      ui.error('  '#{e}'')
+      ui.error('-----------------------------------------------------------------------')
     end
     
-            subtitle = at_css('.hero-subtitle').try(:content)
-        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+          before :each do
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER] = build_number
+      end
     
-            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
-          node.css('> li > h3').each do |h3|
-            next if h3.content.present?
-            h3.content = h3.next_element.content
-            h3.next_element.remove
+            keychain = 'keychain with spaces.keychain'
+        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
+        require 'open3'
+    
+            describe '#keys' do
+          it 'returns all available keys' do
+            expect(@config.all_keys).to eq([:cert_name, :output, :wait_processing_interval])
           end
         end
-      end
+    
+    gemspec
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
     end
-  end
-end
-
     
-    def ruby_version_at_least?(version_string)
-  ruby_version = Gem::Version.new(RUBY_VERSION.dup)
-  version = Gem::Version.new(version_string)
-  ruby_version >= version
-end
-    
-      # Compile a file on disk to CSS.
-  #
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  #
-  # @overload compile_file(filename, options = {})
-  #   Return the compiled CSS rather than writing it to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @return [String] The compiled CSS.
-  #
-  # @overload compile_file(filename, css_filename, options = {})
-  #   Write the compiled CSS to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @param css_filename [String] The location to which to write the compiled CSS.
-  def self.compile_file(filename, *args)
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    css_filename = args.shift
-    result = Sass::Engine.for_file(filename, options).render
-    if css_filename
-      options[:css_filename] ||= css_filename
-      open(css_filename, 'w') {|css_file| css_file.write(result)}
-      nil
-    else
-      result
-    end
-  end
-end
-    
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
         end
-      rescue Errno::EACCES
-        # pass
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+      it 'sets the return value of the catch block to nil by default' do
+    res = catch :blah do
+      throw :blah
+    end
+    res.should == nil
+  end
+    
+      after :each do
+    Object.send :remove_method, :boom
+  end
+    
+    ```
+Executable Path: #{actual_path}
+```
+EOS
       end
     
-      # A read-only wrapper for a lexical environment for SassScript.
-  class ReadOnlyEnvironment < BaseEnvironment
-    def initialize(parent = nil, options = nil)
+    ERR
+      end
+    end
+    
+    module Jekyll
+  class GistTag < Liquid::Tag
+    def initialize(tag_name, text, token)
       super
-      @content_cached = nil
-    end
-    # The read-only environment of the caller of this environment's mixin or function.
-    #
-    # @see BaseEnvironment#caller
-    # @return {ReadOnlyEnvironment}
-    def caller
-      return @caller if @caller
-      env = super
-      @caller ||= env.is_a?(ReadOnlyEnvironment) ? env : ReadOnlyEnvironment.new(env, env.options)
+      @text           = text
+      @cache_disabled = false
+      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
+      FileUtils.mkdir_p @cache_folder
     end
     
-          input.close if input.is_a?(File)
-    
-      desc 'Updates the last know version of CocoaPods in the specs repo'
-  task :post_release do
-    title 'Updating last known version in Specs repo'
-    specs_branch = 'master'
-    Dir.chdir('../Specs') do
-      puts Dir.pwd
-      sh 'git checkout #{specs_branch}'
-      sh 'git pull'
-    
-    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
-    
-          private
-    
-          def header_format
-        has_header && @header.format.to_s
-      end
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-      begin
-    require 'gollum-lib'
-    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then
-      raise Gollum::InvalidGitRepositoryError
-    end
-    if wiki_options[:plantuml_url]
-      Gollum::Filter::PlantUML.configure do |config|
-        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-        config.url = wiki_options[:plantuml_url]
-      end
-    end
-    puts
-    puts 'Loaded Gollum wiki at:'
-    puts '#{File.expand_path(gollum_path).inspect}'
-    puts
-    puts 'Example API calls:'
-    puts %(    page = wiki.page('page-name'))
-    puts %(    # => <Gollum::Page>)
-    puts
-    puts %(    page.raw_data)
-    puts %(    # => '# My wiki page')
-    puts
-    puts %(    page.formatted_data)
-    puts %(    # => '<h1>My wiki page</h1>')
-    puts
-    puts 'Full API documentation at:'
-    puts 'https://github.com/gollum/gollum-lib'
-    puts
-    IRB.start_session(binding)
-  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
-    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
-    exit 0
-  end
-else
-  require 'gollum/app'
-  Precious::App.set(:gollum_path, gollum_path)
-  Precious::App.set(:wiki_options, wiki_options)
-  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
-    
-      s.test_files = s.files.select { |path| path =~ /^test\/test_.*\.rb/ }
-end
+    module Jekyll
