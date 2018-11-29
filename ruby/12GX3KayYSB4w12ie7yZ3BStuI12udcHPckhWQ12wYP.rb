@@ -1,145 +1,40 @@
 
         
-            # Is executed if an error occurred during fastlane execution
-    def error(&block)
-      @runner.set_error(@current_platform, block)
-    end
-    
-          command_return = ActionCommandReturn.new(
-        return_value: action_return,
-        return_value_type: action_class_ref.return_type,
-        closure_argument_value: closure_argument_value
-      )
-      return command_return
-    end
-    
-            show_github_issues(error_info) if should_show_github_issues
-    
-          def self.details
-        list = <<-LIST.markdown_list
-          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
-          `lane` is the name of the current fastlane lane
-          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
-          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
-          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
-        LIST
-    
-            message = 'builds/test/#{build_number}#{postfix} (fastlane)'
-        tag = 'builds/test/#{build_number}#{postfix}'
-        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
-      end
-    
-          it 'adds include param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            include: 'path/to/include'
-          )
-        end').runner.execute(:test)
-    
-            expect(result.size).to eq(4)
-        expect(result[0]).to eq('security create-keychain -p testpassword ~/Library/Keychains/test.keychain')
-    
-          it 'works given the path to compile_commands.json' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
-            )
-          end').runner.execute(:test)
-    
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-              # Handle the case that argv was empty or didn't contain any subcommand
-          main_args = argv.dup if main_args.nil?
-    
-              # Register a new config class only if a name was given.
-          if name != UNSET_VALUE
-            data[:config].register(name.to_sym, &block)
-    
-            # A default to_s implementation.
-        def to_s
-          self.class.to_s
-        end
-    
-                [block.call, parent]
+                    @template_object.label(@object_name, @sanitized_attribute_name, @text, html_options, &block)
           end
-          nil
         end
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
-        #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
-        end
+            private
     
-      def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
+          GivenDailyLike.decrement_for(user.id)
+      expect(value_for(user.id, dt)).to eq(1)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
     
-        def log_processed(name)
-      puts green '    #{name}'
-    end
+        # The category for users with trust level 3 has been created.
+    # Add initial permissions and description. They can be changed later.
     
-    Given(/config stage file has line '(.*?)'/) do |line|
-  TestApp.append_to_deploy_file(line)
-end
+    describe Admin::UsersController do
+  it 'requires to be signed in as an admin' do
+    login_as(users(:bob))
+    visit admin_users_path
+    expect(page).to have_text('Admin access required to view that page.')
+  end
     
-    World(RemoteCommandHelpers)
-
-    
-      def vagrant_cli_command(command)
-    puts '[vagrant] #{command}'
-    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
-      Open3.capture3('#{VAGRANT_BIN} #{command}')
-    end
-    
-            @response = (gets || '').chomp
+          open_dry_run_modal(agent)
+      find('.dry-run-event-sample').click
+      within(:css, '.modal .builder') do
+        expect(page).to have_text('http://xkcd.com/')
       end
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
     
-    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
+              @bar1 = Agents::DotBar.new(name: 'bar1').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.save!
+          },
     
-                import_params = if @current_user_roles.include?('admin')
-                              params[:order].present? ? params[:order].permit! : {}
-                            else
-                              order_params
-                            end
-    
-            def index
-          authorize! :admin, ReturnAuthorization
-          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
-                                   ransack(params[:q]).result.
-                                   page(params[:page]).per(params[:per_page])
-          respond_with(@return_authorizations)
-        end
+        it 'unregisters disabled SchedulerAgents' do
+      @scheduler.schedule_scheduler_agents
