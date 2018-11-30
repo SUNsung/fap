@@ -1,499 +1,355 @@
 
         
-            if (info.bytes > buf.size()) {
-      llvm::dbgs() << 'AST section too small.\n';
-      return false;
-    }
-    
-    DummyTaskQueue::~DummyTaskQueue() = default;
-    
-    #endif // SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
-
-    
-    /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
-    
-    class SignVerifyMessageDialog : public QDialog
-{
-    Q_OBJECT
-    }
-    
-    protected:
-    void paintEvent(QPaintEvent *);
-    
-    
-    {        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, y, sizeof(y));
-        secp256k1_sha256_write(&sha, x, sizeof(x));
-        secp256k1_sha256_finalize(&sha, result);
-        ret = 1;
-    }
-    
-    /// Make type-agnostic format list from list of template arguments.
-///
-/// The exact return type of this function is an implementation detail and
-/// shouldn't be relied upon.  Instead it should be stored as a FormatListRef:
-///
-///   FormatListRef formatList = makeFormatList( /*...*/ );
-template<typename... Args>
-detail::FormatListN<sizeof...(Args)> makeFormatList(const Args&... args)
-{
-    return detail::FormatListN<sizeof...(args)>(args...);
+        bool CacheImpl::remove(const void *Key) {
+  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
+  return Ret == 0;
 }
     
-    #define TYPE_METHODS(utype, ctype) \
-    inline bool Handlers::Set##utype##Handler(const FieldDef *f, \
-                                              const utype##Handler &h) { \
-      return SetValueHandler<ctype>(f, h); \
-    } \
+        // We can match a prefix so long as everything following the match is
+    // a number.
+    if (typeWord.startswith_lower(nameWord)) {
+      for (unsigned i = nameWord.size(), n = typeWord.size(); i != n; ++i) {
+        if (!clang::isDigit(typeWord[i])) return false;
+      }
+    }
     
-    ReflectionClassGenerator::~ReflectionClassGenerator() {
-}
     
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
+    {    return name;
   }
-}
     
-    void ExtensionGenerator::GenerateStaticVariablesInitialization(
-    io::Printer* printer) {
-  std::map<string, string> vars;
-  vars['root_class_and_method_name'] = root_class_and_method_name_;
-  vars['extended_type'] = ClassName(descriptor_->containing_type());
-  vars['number'] = SimpleItoa(descriptor_->number());
-    }
+      bool isGetter() const {
+    return accessorKind == IAMAccessorKind::Getter;
+  }
     
-      string error_msg;
-  CodeGeneratorResponse response;
-    
-                int32x4_t normh = vmovl_s16(vget_high_s16(norm));
-            int32x4_t norml = vmovl_s16(vget_low_s16(norm));
-    
-    #define MERGE_ASM2(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vst2.' #bits ' {d0, d2}, [%[out0]]           \n\t' \
-                                          'vst2.' #bits ' {d1, d3}, [%[out1]]           \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL2(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3' \
-                                      );
-#define MERGE_ASM3(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
-                                          'vst3.' #bits ' {d0, d2, d4}, [%[out0]]       \n\t' \
-                                          'vst3.' #bits ' {d1, d3, d5}, [%[out1]]       \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL3(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5' \
-                                      );
-#define MERGE_ASM4(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
-                                          'vld1.' #bits ' {d6-d7}, [%[in3]]             \n\t' \
-                                          'vst4.' #bits ' {d0, d2, d4, d6}, [%[out0]]   \n\t' \
-                                          'vst4.' #bits ' {d1, d3, d5, d7}, [%[out1]]   \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), [in3] 'r' (src3 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL4(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
-                                      );
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
-    {
-        v_dst = internal::vceq(v_src0, v_src1);
-    }
-    
-                for( ; j < (s32)size.width - 3; j++, ptr++ )
-            {
-                s32 v = ptr[0];
-                const u8* tab = &threshold_tab[0] - v + 255;
-                s32 d = tab[ptr[pixel[0]]] | tab[ptr[pixel[8]]];
-    }
-    
-    
-    {            prev = vaddw_u16(prev, vdup_lane_u16(el4h, 3));
-        }
-    
-    inline uint8x8_t vqtbl1_u8 (uint8x16_t a, uint8x8_t b)
-{
-#ifdef __aarch64__
-    // AArch64 supports this natively
-    return ::vqtbl1_u8(a, b);
-#else
-    union { uint8x16_t v; uint8x8x2_t w; } u = { a };
-    return vtbl2_u8(u.w, b);
-#endif
-}
-    
-    #endif  // TESSERACT_ARCH_DOTPRODUCTSSE_H_
-
-    
-      // Search the nearest neighbor of part in one vertical direction as defined in
-  // search_bottom. It returns the neighbor found that major x overlap with it,
-  // or nullptr when not found.
-  ColPartition* SearchNNVertical(const bool search_bottom,
-                                 const ColPartition* part);
-    
-    int os_detect_blobs(const GenericVector<int>* allowed_scripts,
-                    BLOBNBOX_CLIST* blob_list,
-                    OSResults* osr,
-                    tesseract::Tesseract* tess);
-    
-    /**
- * Sets up the internal data for iterating the blobs of a new word, then
- * moves the iterator to the given offset.
- */
-void PageIterator::BeginWord(int offset) {
-  WERD_RES* word_res = it_->word();
-  if (word_res == nullptr) {
-    // This is a non-text block, so there is no word.
-    word_length_ = 0;
-    blob_index_ = 0;
-    word_ = nullptr;
+    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
+  // Indent two spaces per depth.
+  for (unsigned i = 0; i < depth * 2; ++i) {
+    Out << ' ';
+  }
+  if (!node) {
+    Out << '<<NULL>>';
     return;
   }
-  if (word_res->best_choice != nullptr) {
-    // Recognition has been done, so we are using the box_word, which
-    // is already baseline denormalized.
-    word_length_ = word_res->best_choice->length();
-    if (word_res->box_word != nullptr) {
-      if (word_res->box_word->length() != word_length_) {
-        tprintf('Corrupted word! best_choice[len=%d] = %s, box_word[len=%d]: ',
-                word_length_, word_res->best_choice->unichar_string().string(),
-                word_res->box_word->length());
-        word_res->box_word->bounding_box().print();
-      }
-      ASSERT_HOST(word_res->box_word->length() == word_length_);
-    }
-    word_ = nullptr;
-    // We will be iterating the box_word.
-    delete cblob_it_;
-    cblob_it_ = nullptr;
-  } else {
-    // No recognition yet, so a 'symbol' is a cblob.
-    word_ = word_res->word;
-    ASSERT_HOST(word_->cblob_list() != nullptr);
-    word_length_ = word_->cblob_list()->length();
-    if (cblob_it_ == nullptr) cblob_it_ = new C_BLOB_IT;
-    cblob_it_->set_to_list(word_->cblob_list());
+  Out << 'kind=' << getNodeKindString(node->getKind());
+  if (node->hasText()) {
+    Out << ', text=\'' << node->getText() << '\'';
   }
-  for (blob_index_ = 0; blob_index_ < offset; ++blob_index_) {
-    if (cblob_it_ != nullptr)
-      cblob_it_->forward();
+  if (node->hasIndex()) {
+    Out << ', index=' << node->getIndex();
+  }
+  Out << '\n';
+  for (auto &child : *node) {
+    printNode(Out, child, depth + 1);
   }
 }
     
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
+    // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
+    
+    
+    {}
+    
+    void MenuItem::SetTooltip(const std::string& tooltip) {
+  is_modified_ = true;
+  tooltip_ = base::UTF8ToUTF16(tooltip);
+  if (menu_)
+    menu_->UpdateStates();
+}
+    
+      private:
+    bool ReadText(ClipboardData& data) {
+      DCHECK(data.type == TYPE_TEXT);
+      base::string16 text;
+      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
+    }
+    
+        LearnerAdam::LearnerAdam(const vector<Parameter>& parameters,
+        const LearningRateSchedule& learningRateSchedule,
+        const MomentumSchedule& momentumSchedule,
+        bool unitGain,
+        const MomentumSchedule& varianceMomentumSchedule,
+        double epsilon,
+        bool adamax,
+        AdditionalLearningOptions additionalOptions)
+        : LearnerMomentumSGD(parameters, learningRateSchedule, momentumSchedule,
+            unitGain, additionalOptions, 2),
+          m_varianceMomentumSchedule(varianceMomentumSchedule), m_epsilon(epsilon),
+          m_adamax(adamax)
+    {
+    }
+    
+    
+    {        memcpy(colStarts.data(), rawColStarts, numOfColsInMatrix * sizeof(SparseIndexType));
+        memcpy(nonZeroValues.data(), rawNonZeroValues, numNonZeroValues * sizeof(ElementType));
+        memcpy(rowIndices.data(), rawRowIndices, numNonZeroValues * sizeof(SparseIndexType));
+    }
+    
+            NDMaskPtr Mask() const override
+        {
+            Unpack();
+            return Value::Mask();
         }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
     
-    #define VARDIR        'configs/' /*parameters files */
-#define MAX_ITEMS_IN_SUBMENU 30
+                if (m_varKind == VariableKind::Input)
+            {
+                for (auto dim : m_shape.Dimensions())
+                {
+                    if (dim == 0)
+                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
+                }
+            }
     
-    // A rather hackish helper structure which can take any kind of parameter input
-// (defined by ParamType) and do a couple of common operations on them, like
-// comparisond or getting its value. It is used in the context of the
-// ParamsEditor as a bridge from the internal tesseract parameters to the
-// ones displayed by the ScrollView server.
-class ParamContent : public ELIST_LINK {
+    public:
+    CrossProcessMutex(const std::string& name)
+        : m_handle(NULL),
+          m_name('Global\\' + name)
+    {
+    }
+    
+            // replacements may point to nodes that are replacements themselves
+        // This really can only happen if a replacement itself is an old node.
+        for (auto& iter : replacements)
+            while (replacements.find(iter.second) != replacements.end())
+                iter.second = replacements.find(iter.second)->second;
+    
+        virtual void /*ComputationNode::*/ BackpropTo(const size_t inputIndex, const FrameRange& fr) override
+    {
+        if (inputIndex == 0) // left derivative
+        {
+            Matrix<ElemType> sliceOutputGrad = MaskedGradientFor(fr); // use Masked- version since this is reducing over frames
+            Matrix<ElemType> sliceInput1Value = Input(1)->MaskedValueFor(fr);
+            m_innerproduct->AssignInnerProductOf(sliceOutputGrad, sliceInput1Value, false);
+            InputRef(0).GradientAsMatrix() += *m_innerproduct;
+        }
+        else // right derivative
+        {
+            Matrix<ElemType> sliceOutputGrad = GradientFor(fr);
+            Matrix<ElemType> sliceInput1Grad = Input(1)->GradientFor(fr);
+            m_rightGradient->SetValue(sliceOutputGrad);
+            m_rightGradient->ColumnElementMultiplyWith(InputRef(0).ValueAsMatrix());
+            sliceInput1Grad += *m_rightGradient;
+        }
+    }
+    
+    
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
  public:
-  // Compare two VC objects by their name.
-  static int Compare(const void* v1, const void* v2);
-    }
-    
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
-    
-    // implementation of tensor to blob, called by TensorToBlob
-template<typename Device, typename Dtype>
-void SetDataGradToBlob(caffeMemoryTypes memType,
-                       typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
-                       typename std::vector<TBlob>::const_iterator itr);
-    
-    #include './exec_pass.h'
-    
-    #include <mxnet/io.h>
-#include <mxnet/base.h>
-#include <mxnet/tensor_blob.h>
-#include <dmlc/base.h>
-#include <mshadow/tensor.h>
-#include <vector>
-#include <string>
-    
-    // ColumnFamilySet has interesting thread-safety requirements
-// * CreateColumnFamily() or RemoveColumnFamily() -- need to be protected by DB
-// mutex AND executed in the write thread.
-// CreateColumnFamily() should ONLY be called from VersionSet::LogAndApply() AND
-// single-threaded write thread. It is also called during Recovery and in
-// DumpManifest().
-// RemoveColumnFamily() is only called from SetDropped(). DB mutex needs to be
-// held and it needs to be executed from the write thread. SetDropped() also
-// guarantees that it will be called only from single-threaded LogAndApply(),
-// but this condition is not that important.
-// * Iteration -- hold DB mutex, but you can release it in the body of
-// iteration. If you release DB mutex in body, reference the column
-// family before the mutex and unreference after you unlock, since the column
-// family might get dropped when the DB mutex is released
-// * GetDefault() -- thread safe
-// * GetColumnFamily() -- either inside of DB mutex or from a write thread
-// * GetNextColumnFamilyID(), GetMaxColumnFamily(), UpdateMaxColumnFamily(),
-// NumberOfColumnFamilies -- inside of DB mutex
-class ColumnFamilySet {
- public:
-  // ColumnFamilySet supports iteration
-  class iterator {
-   public:
-    explicit iterator(ColumnFamilyData* cfd)
-        : current_(cfd) {}
-    iterator& operator++() {
-      // dropped column families might still be included in this iteration
-      // (we're only removing them when client drops the last reference to the
-      // column family).
-      // dummy is never dead, so this will never be infinite
-      do {
-        current_ = current_->next_;
-      } while (current_->refs_.load(std::memory_order_relaxed) == 0);
-      return *this;
-    }
-    bool operator!=(const iterator& other) {
-      return this->current_ != other.current_;
-    }
-    ColumnFamilyData* operator*() { return current_; }
-    }
-    }
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-    namespace rocksdb {
-    }
-    
-      // 0-terminated strings storing the first 8 bytes of the smallest and
-  // largest key in the output.
-  static const size_t kMaxPrefixLength = 8;
-    
-    struct UndumpOptions {
-  // Database that we will load the dumped file into
-  std::string db_path;
-  // File location of the dumped file that will be loaded
-  std::string dump_location;
-  // Compact the db after loading the dumped file
-  bool compact_db = false;
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
 };
-    
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
-    
-    static const uint8_t kRangeLimitLut[4 * 256] = {
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
- 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
- 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
- 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
- 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
- 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
- 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
- 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
- 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
- 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-};
-    
-    // This function will create a Huffman tree.
-//
-// The catch here is that the tree cannot be arbitrarily deep.
-// Brotli specifies a maximum depth of 15 bits for 'code trees'
-// and 7 bits for 'code length code trees.'
-//
-// count_limit is the value that is to be faked as the minimum value
-// and this minimum value is raised until the tree matches the
-// maximum length requirement.
-//
-// This algorithm is not of excellent performance for very long data blocks,
-// especially when population counts are longer than 2**tree_limit, but
-// we are not planning to use this with extremely long blocks.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth) {
-  // For block sizes below 64 kB, we never need to do a second iteration
-  // of this loop. Probably all of our block sizes will be smaller than
-  // that, so this loop is mostly of academic interest. If we actually
-  // would need this, we would be better off with the Katajainen algorithm.
-  for (uint32_t count_limit = 1; ; count_limit *= 2) {
-    size_t n = 0;
-    for (size_t i = length; i != 0;) {
-      --i;
-      if (data[i]) {
-        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
-        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
-      }
-    }
-    }
-    }
-    
-    namespace guetzli {
-    }
-    
-    
-    {  fclose(f);
-  return result;
-}
-    
-    void InitJPEGDataForYUV444(int w, int h, JPEGData* jpg) {
-  jpg->width = w;
-  jpg->height = h;
-  jpg->max_h_samp_factor = 1;
-  jpg->max_v_samp_factor = 1;
-  jpg->MCU_rows = (h + 7) >> 3;
-  jpg->MCU_cols = (w + 7) >> 3;
-  jpg->quant.resize(3);
-  jpg->components.resize(3);
-  for (int i = 0; i < 3; ++i) {
-    JPEGComponent* c = &jpg->components[i];
-    c->id = i;
-    c->h_samp_factor = 1;
-    c->v_samp_factor = 1;
-    c->quant_idx = i;
-    c->width_in_blocks = jpg->MCU_cols;
-    c->height_in_blocks = jpg->MCU_rows;
-    c->num_blocks = c->width_in_blocks * c->height_in_blocks;
-    c->coeffs.resize(c->num_blocks * kDCTBlockSize);
-  }
-}
-    
-    #endif  // GUETZLI_JPEG_DATA_READER_H_
+} // namespace osquery
 
     
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
+    namespace osquery {
+    }
+    
+    #include <iostream>
+    
+      const auto& views = data_.doc()['views'];
+    
+    /**
+ * @brief Compute a hash digest from the file content at a path.
+ *
+ * @param hash_type The osquery-supported hash algorithm.
+ * @param path Filesystem path (the hash target).
+ * @return A string (hex) representation of the hash digest.
+ */
+std::string hashFromFile(HashType hash_type, const std::string& path);
+    
+      if (WIFEXITED(process_status)) {
+    status = WEXITSTATUS(process_status);
+    return PROCESS_EXITED;
   }
- private:
-  JPEGOutputHook cb;
-  void* data;
-};
+    
+      if (!::GetExitCodeProcess(process.nativeHandle(), &code)) {
+    return false;
+  }
+    
+    FLAG(bool,
+     disable_distributed,
+     true,
+     'Disable distributed queries (default true)');
+    
+      void RemoveAll(std::shared_ptr<INotifyEventPublisher>& pub) {
+    pub->subscriptions_.clear();
+    // Reset monitors.
+    std::vector<int> wds;
+    for (const auto& path : pub->descriptor_inosubctx_) {
+      wds.push_back(path.first);
+    }
+    for (const auto& wd : wds) {
+      pub->removeMonitor(wd, true);
+    }
+  }
+    
+      // This class is different but also uses different types!
+  auto fake_pub = std::make_shared<FakeEventPublisher>();
+  status = EventFactory::registerEventPublisher(fake_pub);
+  EXPECT_TRUE(status.ok());
+    
+    #ifdef BENCHMARK_HAS_CXX11
+template <class Lambda>
+internal::Benchmark* RegisterBenchmark(const char* name, Lambda&& fn) {
+  using BenchType =
+      internal::LambdaBenchmark<typename std::decay<Lambda>::type>;
+  return internal::RegisterBenchmarkInternal(
+      ::new BenchType(name, std::forward<Lambda>(fn)));
+}
+#endif
+    
+    // Find the coefficient for the high-order term in the running time, by
+// minimizing the sum of squares of relative error, for the fitting curve
+// given by the lambda expresion.
+//   - n             : Vector containing the size of the benchmark tests.
+//   - time          : Vector containing the times for the benchmark tests.
+//   - fitting_curve : lambda expresion (e.g. [](int n) {return n; };).
+    
+      // Format items per second
+  std::string items;
+  if (result.items_per_second > 0) {
+    items =
+        StrCat(' ', HumanReadableNumber(result.items_per_second), ' items/s');
+  }
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
+  }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
+    
+    
+    {
+    {
+    {  // Native Client does not provide any API to access cycle counter.
+  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
+  // because is provides nanosecond resolution (which is noticable at
+  // least for PNaCl modules running on x86 Mac & Linux).
+  // Initialize to always return 0 if clock_gettime fails.
+  struct timespec ts = { 0, 0 };
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
+#elif defined(__aarch64__)
+  // System timer of ARMv8 runs at a different frequency than the CPU's.
+  // The frequency is fixed, typically in the range 1-50MHz.  It can be
+  // read at CNTFRQ special register.  We assume the OS has set up
+  // the virtual timer properly.
+  int64_t virtual_timer_value;
+  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
+  return virtual_timer_value;
+#elif defined(__ARM_ARCH)
+  // V6 is the earliest arch that has a standard cyclecount
+  // Native Client validator doesn't allow MRC instructions.
+#if (__ARM_ARCH >= 6)
+  uint32_t pmccntr;
+  uint32_t pmuseren;
+  uint32_t pmcntenset;
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
+      // The counter is set up to count every 64th cycle
+      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+    }
+  }
+#endif
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#elif defined(__mips__)
+  // mips apparently only allows rdtsc for superusers, so we fall
+  // back to gettimeofday.  It's possible clock_gettime would be better.
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#else
+// The soft failover to a generic implementation is automatic only for ARM.
+// For other platforms the developer is expected to make an attempt to create
+// a fast implementation and use generic version if nothing better is available.
+#error You need to define CycleTimer for your OS and CPU
+#endif
+}
+}  // end namespace cycleclock
+}  // end namespace benchmark
+    
+    template <class Tp>
+LogType& operator<<(LogType& log, Tp const& value) {
+  if (log.out_) {
+    *log.out_ << value;
+  }
+  return log;
+}
+    
+    #define REQUIRES(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(requires_capability(__VA_ARGS__))
+    
+    #include 'internal_macros.h'
+    
+    BenchmarkReporter::~BenchmarkReporter() {}
+    
+    #include <atomic>
+    
+    BENCHMARK_RELATIVE(sformat_long_string_unsafe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& longString = getLongString();
+  while (iters--) {
+    std::string out;
+    suspender.dismissing([&] { out = sformat(longString); });
+  }
+}
+    
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
+  return ret;
+}
+    
+    static void branchTestFunc() {
+  uint32_t a = folly::Random::rand32();
+  uint32_t b = std::max(1u, folly::Random::rand32());
+  if (a > b) {
+    FOLLY_SDT(folly, test_static_tracepoint_branch_1, a / b);
+  } else {
+    FOLLY_SDT(folly, test_static_tracepoint_branch_2, double(a) / double(b));
+  }
+}
+    
+        template <
+        typename OtherExecutor,
+        typename = typename std::enable_if<
+            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
+    KeepAlive& operator=(KeepAlive<OtherExecutor>&& other) {
+      return *this = KeepAlive(std::move(other));
+    }
+    
+    
+    {} // namespace folly
+
+    
+    #include <string>
