@@ -1,147 +1,164 @@
 
         
-        require 'active_support/core_ext/string/output_safety'
-    
-                  if block_given?
-                @template_object.capture(builder, &block)
-              else
-                render_component(builder)
-              end
+                  def retrieve_autoindex(pre_match)
+            object = self.object || @template_object.instance_variable_get('@#{pre_match}')
+            if object && object.respond_to?(:to_param)
+              object.to_param
+            else
+              raise ArgumentError, 'object[] naming but object param and @object var don't exist or don't respond to to_param: #{object.inspect}'
             end
-    
-              def field_type
-            self.class.field_type
           end
+    
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
+        end
+    
+        private
+    
+    module ActionView
+  # This is the main entry point for rendering. It basically delegates
+  # to other objects like TemplateRenderer and PartialRenderer which
+  # actually renders the template.
+  #
+  # The Renderer will parse the options from the +render+ or +render_body+
+  # method and render a partial or a template based on the options. The
+  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
+  # the setup and logic necessary to render a view and a new object is created
+  # each time +render+ is called.
+  class Renderer
+    attr_accessor :lookup_context
+    
+            def importer_class
+          IssueAndLabelLinksImporter
+        end
+    
+              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
+        end
+    
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
       end
+    
+    module Gitlab
+  module GithubImport
+    module Representation
+      class Issue
+        include ToHash
+        include ExposeAttribute
+    
+            def truncated_title
+          title.truncate(255)
+        end
+    
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+        def translation_scope
+      'devise.unlocks'
     end
-  end
 end
 
     
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-      # Gets the actual resource stored in the instance variable
-  def resource
-    instance_variable_get(:'@#{resource_name}')
-  end
+          attr_reader :scope_name, :resource
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-            store.replace(path) do
-          new.build_pages do |page|
-            next unless store_page?(page)
-            store.write page[:store_path], page[:output]
-            index.add page[:entries]
-            pages.add page[:path], page[:output]
-          end
-    
-        def insert(index, *names)
-      @filters.insert assert_index(index), *filter_const(names)
-    end
-    
-        def error?
-      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
-    end
-    
-            # Remove ng-* attributes
-        css('*').each do |node|
-          node.attributes.each_key do |attribute|
-            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
-          end
-        end
-    
-      before :each do
-    ENV['TEST_SH_EXPANSION'] = 'foo'
-    @shell_var = '$TEST_SH_EXPANSION'
-    platform_is :windows do
-      @shell_var = '%TEST_SH_EXPANSION%'
-    end
-  end
-    
-      after :each do
-    Object.send :remove_method, :boom
-  end
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
-    end
-  end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
-end
-
-    
-          it 'doesn't post' do
-        expect(alice).not_to receive(:like!)
-        post :create, params: like_hash
-        expect(response.code).to eq('422')
+          if failed_attributes.any?
+        fail Devise::Models::MissingAttribute.new(failed_attributes)
       end
     end
     
-          # @see Base#\_retrieve
-      def _retrieve(key, version, sha)
-        return unless File.readable?(path_to(key))
-        begin
-          File.open(path_to(key), 'rb') do |f|
-            if f.readline('\n').strip == version && f.readline('\n').strip == sha
-              return f.read
+      def outbox_presenter
+    if page_requested?
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account, page_params),
+        type: :ordered,
+        part_of: account_outbox_url(@account),
+        prev: prev_page,
+        next: next_page,
+        items: @statuses
+      )
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account),
+        type: :ordered,
+        size: @account.statuses_count,
+        first: account_outbox_url(@account, page: true),
+        last: account_outbox_url(@account, page: true, min_id: 0)
+      )
+    end
+  end
+    
+        def resend
+      authorize @user, :confirm?
+    
+        def resource_params
+      params.require(:report_note).permit(
+        :content,
+        :report_id
+      )
+    end
+    
+        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
+  end
+    
+      def command
+    abort 'This command requires a command argument' if ARGV.empty?
+    
+          old_name = name
+      old_path = path
+      old_remote = path.git_origin
+    
+      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
+    head = [
+      0x06, 0x00, 0xff, 0x07,  # RMCP Header
+      0x06,                    # RMCP+ Authentication Type
+      PAYLOAD_RAKP1,           # Payload Type
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+    ].pack('C*')
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
             end
-          end
-          File.unlink path_to(key)
-        rescue Errno::ENOENT
-          # Already deleted. Race condition?
-        end
-        nil
-      rescue EOFError, TypeError, ArgumentError => e
-        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
+    
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
     
-        # @comment
-    #   rubocop:disable ParameterLists
-    def parse_property(name, parsed_name, value, prop, line, start_offset)
-      # rubocop:enable ParameterLists
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+          # Checks whether the `if` node has an `else` clause.
+      #
+      # @note This returns `true` for nodes containing an `elsif` clause.
+      #       This is legacy behavior, and many cops rely on it.
+      #
+      # @return [Boolean] whether the node has an `else` clause
+      def else?
+        loc.respond_to?(:else) && loc.else
       end
-    end
-  end
-end
-    
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
