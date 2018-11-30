@@ -1,252 +1,206 @@
 
         
-            return;
-  } else if (method == 'ClearCache') {
-    ClearCache(GetRenderProcessHost());
-    return;
-  } else if (method == 'CreateShortcut') {
-#if defined(OS_WIN)
-    base::string16 path;
-    arguments.GetString(0, &path);
-    
-    
-    { private:
-  App();
-  DISALLOW_COPY_AND_ASSIGN(App);
-};
-    
-      DVLOG(1) << 'remote::AllocateObject(routing_id=' << routing_id << ', object_id=' << object_id << ')';
-    
-    
-    {}  // namespace nwapi
-
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        v_dst = internal::vqadd(v_src0, v_src1);
-    }
-    
-    #define COMBINE(sgn,bits,n) void combine##n(const Size2D &_size                                             \
-                                        FILL_LINES##n(FARG, sgn##bits),                                     \
-                                        sgn##bits * dstBase, ptrdiff_t dstStride)                           \
-{                                                                                                           \
-    internal::assertSupportedConfiguration();                                                               \
-    Size2D size(_size);                                                                                     \
-    if (CONTSRC##n                                                                                          \
-        dstStride == (ptrdiff_t)(size.width))                                                               \
-    {                                                                                                       \
-        size.width *= size.height;                                                                          \
-        size.height = 1;                                                                                    \
-    }                                                                                                       \
-    typedef internal::VecTraits<sgn##bits, n>::vec128 vec128;                                               \
-    size_t roiw16 = size.width >= (16/sizeof(sgn##bits) - 1) ? size.width - (16/sizeof(sgn##bits) - 1) : 0; \
-    typedef internal::VecTraits<sgn##bits, n>::vec64 vec64;                                                 \
-    size_t roiw8 = size.width >= (8/sizeof(sgn##bits) - 1) ? size.width - (8/sizeof(sgn##bits) - 1) : 0;    \
-                                                                                                            \
-    for (size_t i = 0u; i < size.height; ++i)                                                               \
-    {                                                                                                       \
-        FILL_LINES##n(VROW, sgn##bits)                                                                      \
-        sgn##bits * dst = internal::getRowPtr(dstBase, dstStride, i);                                       \
-        size_t sj = 0u, dj = 0u;                                                                            \
-                                                                                                            \
-        for (; sj < roiw16; sj += 16/sizeof(sgn##bits), dj += MUL##n(16)/sizeof(sgn##bits))                 \
-            MERGE_QUAD(sgn, bits, n)                                                                        \
-                                                                                                            \
-        if ( sj < roiw8 )                                                                                   \
-        {                                                                                                   \
-            vec64 v_dst;                                                                                    \
-            FILL_LINES##n(VLD1, sgn##bits)                                                                  \
-            vst##n##_##sgn##bits(dst + dj, v_dst);                                                          \
-            sj += 8/sizeof(sgn##bits); dj += MUL##n(8)/sizeof(sgn##bits);                                   \
-        }                                                                                                   \
-                                                                                                            \
-        for (; sj < size.width; ++sj, dj += n)                                                              \
-        {                                                                                                   \
-            FILL_LINES##n(SLD, sgn##bits)                                                                   \
-        }                                                                                                   \
-    }                                                                                                       \
-}
-    
-        uint8x16_t delta = vdupq_n_u8(128);
-    uint8x16_t t = vdupq_n_u8(threshold);
-    uint8x16_t K16 = vdupq_n_u8((u8)K);
-    
-    
-    {
-    {    std::vector<T> ret(ret_index.size());
-    for (size_t i = 0; i < ret_index.size(); ++i) {
-      ret[i] = all_data[ret_index[i]];
-    }
-    return ret;
-  }
-  /*!
-   * \brief create OperatorProperty
-   * \param type_name the type string of the OperatorProperty
-   * \return a new constructed OperatorProperty
-   */
-  static OperatorProperty *Create(const char* type_name);
-  /*! \return execution type of the operator */
-  virtual ExecType exec_type() const {
-    return ExecType::kSync;
-  }
-};
-    
-    #endif  // MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
-#endif  // MXNET_RTC_H_
-
-    
-    template<>
-void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_cpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
-}
-    
-    
-MXNET_DLL int MXCVResize(NDArrayHandle src, const mx_uint w, const mx_uint h,
-                         const int interpolation, NDArrayHandle *out) {
-  API_BEGIN();
-  NDArray ndsrc = *static_cast<NDArray*>(src);
-  CHECK_EQ(ndsrc.shape().ndim(), 3);
-  CHECK_EQ(ndsrc.ctx(), Context::CPU());
-  CHECK_EQ(ndsrc.dtype(), mshadow::kUint8);
-    }
-    
-    
-    {
-    {/*! \brief typedef the factory function of data iterator */
-typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
-/*!
- * \brief Registry entry for DataIterator factory functions.
- */
-struct ImageAugmenterReg
-    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
-                                        ImageAugmenterFactory> {
-};
-//--------------------------------------------------------------
-// The following part are API Registration of Iterators
-//--------------------------------------------------------------
-/*!
- * \brief Macro to register image augmenter
- *
- * \code
- * // example of registering a mnist iterator
- * REGISTER_IMAGE_AUGMENTER(aug_default)
- * .describe('default augmenter')
- * .set_body([]() {
- *     return new DefaultAugmenter();
- *   });
- * \endcode
- */
-#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
-  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_USE_OPENCV
-    
-        {
-      MutexLock l(shared->GetMutex());
-      shared->IncInitialized();
-      if (shared->AllInitialized()) {
-        shared->GetCondVar()->SignalAll();
-      }
-      while (!shared->Started()) {
-        shared->GetCondVar()->Wait();
+        
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
+        }
       }
     }
-    thread->shared->GetCacheBench()->OperateCache(thread);
-    
-    Status PosixRandomRWFile::Close() {
-  if (close(fd_) < 0) {
-    return IOError('While close random read/write file', filename_, errno);
   }
-  fd_ = -1;
-  return Status::OK();
 }
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    { public:
-  PosixMmapReadableFile(const int fd, const std::string& fname, void* base,
-                        size_t length, const EnvOptions& options);
-  virtual ~PosixMmapReadableFile();
-  virtual Status Read(uint64_t offset, size_t n, Slice* result,
-                      char* scratch) const override;
-  virtual Status InvalidateCache(size_t offset, size_t length) override;
-};
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      // open DB with two column families
-  std::vector<ColumnFamilyDescriptor> column_families;
-  // have to open default column family
-  column_families.push_back(ColumnFamilyDescriptor(
-      kDefaultColumnFamilyName, ColumnFamilyOptions()));
-  // open the new one, too
-  column_families.push_back(ColumnFamilyDescriptor(
-      'new_cf', ColumnFamilyOptions()));
-  std::vector<ColumnFamilyHandle*> handles;
-  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
-  assert(s.ok());
-    
-    // This is an example interface of external-compaction algorithm.
-// Compaction algorithm can be implemented outside the core-RocksDB
-// code by using the pluggable compaction APIs that RocksDb provides.
-class Compactor : public EventListener {
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
  public:
-  // Picks and returns a compaction task given the specified DB
-  // and column family.  It is the caller's responsibility to
-  // destroy the returned CompactionTask.  Returns 'nullptr'
-  // if it cannot find a proper compaction task.
-  virtual CompactionTask* PickCompaction(
-      DB* db, const std::string& cf_name) = 0;
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
     }
     
-      // Start a transaction
-  Transaction* txn = txn_db->BeginTransaction(write_options);
-  assert(txn);
+    namespace mxnet {
+    }
     
-    static uint32_t arrayTestFunc() {
-  uint32_t v1 = folly::Random::rand32();
-  uint32_t v2 = folly::Random::rand32();
-  uint64_t v3 = v1 + v2;
-  uint32_t a[4] = {v1, v2, v1, v2};
-  FOLLY_SDT(folly, test_static_tracepoint_array, a, v1, v3);
-  return v1 + v2;
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.h
+ * \brief conversion between tensor and caffeBlob
+ * \author Haoran Wang
+*/
+#ifndef PLUGIN_CAFFE_CAFFE_BLOB_H_
+#define PLUGIN_CAFFE_CAFFE_BLOB_H_
+    
+      virtual bool Next(void) {
+    // MxNet iterator is expected to return CPU-accessible memory
+    if (::caffe::Caffe::mode() != ::caffe::Caffe::CPU) {
+      ::caffe::Caffe::set_mode(::caffe::Caffe::CPU);
+      CHECK_EQ(::caffe::Caffe::mode(), ::caffe::Caffe::CPU);
+    }
+    caffe_data_layer_->Forward(bottom_, top_);
+    CHECK_GT(batch_size_, 0) << 'batch size must be greater than zero';
+    CHECK_EQ(out_.batch_size, batch_size_) << 'Internal Error: batch size mismatch';
+    }
+    
+        // Set BP flag
+    for (int i = 0; i < param_.num_data; ++i)
+      flags_[i] = req[i] != kNullOp;
+    
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    // Set mode before backward
+    caffe::CaffeMode::SetMode<xpu>();
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(out_grad.size(), param_.num_out);
+    for (int i = 0; i < param_.num_data; ++i)
+      CHECK(req[i] != kAddTo) << 'caffe doesn't accm diff on bottom data';
+    }
+    
+    
+    {  Engine::Get()->PushSync([=](RunContext ctx){
+      ndout.CheckAndAlloc();
+      cv::Mat buf(h, w, c == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
+      cv::Mat dst(top+h+bot, left+w+right, c == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
+      cv::copyMakeBorder(buf, dst, top, bot, left, right, type, cv::Scalar(value));
+      CHECK(!dst.empty());
+    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
+  NDArray *tmp = new NDArray();
+  *tmp = ndout;
+  *out = tmp;
+  API_END();
+}
+
+    
+    
+    {
+    {    private:
+        // Disallow copy and move construction and assignment
+        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
+    };
+}
+
+    
+            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
+        {
+            // failed to acquire
+            int rc = ::CloseHandle(m_handle);
+            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+            {
+                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
+            }
+            m_handle = NULL;
+            return false;
+        }
+    
+    // SetLabelMapping - Sets the label mapping from integer index to label
+// labelMapping - mapping table from label values to IDs (must be 0-n)
+// note: for tasks with labels, the mapping table must be the same between a training run and a testing run
+void DataReader::SetLabelMapping(const std::wstring& sectionName, const std::map<LabelIdType, LabelType>& labelMapping)
+{
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        m_dataReaders[m_ioNames[i]]->SetLabelMapping(sectionName, labelMapping);
 }
     
     
-    {} // namespace folly
+    {
+    {
+    {}}}
 
     
-    template <class RNG, typename = void>
-struct StateSize {
-  // A sane default.
-  using type = std::integral_constant<size_t, 512>;
-};
-    
-    
-    {} // namespace folly
-
-    
-    /**
- * VirtualExecutor implements a light-weight view onto existing Executor.
- *
- * Multiple VirtualExecutors can be backed by a single Executor.
- *
- * VirtualExecutor's destructor blocks until all tasks scheduled through it are
- * complete. Executor's destructor also blocks until all VirtualExecutors
- * backed by it are released.
- */
-class VirtualExecutor : public DefaultKeepAliveExecutor {
-  auto wrapFunc(Func f) {
-    class FuncAndKeepAlive {
-     public:
-      FuncAndKeepAlive(Func&& f, VirtualExecutor* executor)
-          : keepAlive_(getKeepAliveToken(executor)), f_(std::move(f)) {}
+        virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override
+    {
+        Base::CopyTo(nodeP, newName, flags);
+        if (flags & CopyNodeFlags::copyNodeValue)
+        {
+            auto node = dynamic_pointer_cast<DiagTimesNode<ElemType>>(nodeP);
+            node->m_innerproduct->SetValue(*m_innerproduct);
+            node->m_rightGradient->SetValue(*m_rightGradient);
+        }
     }
+    // request matrices that are needed for gradient computation
+    virtual void RequestMatricesBeforeBackprop(MatrixPool& matrixPool)
+    {
+        Base::RequestMatricesBeforeBackprop(matrixPool);
+        RequestMatrixFromPool(m_innerproduct, matrixPool);
+        RequestMatrixFromPool(m_rightGradient, matrixPool);
     }
+    
+      int complexity_n_;
+    
+    // Macros for defining flags.
+#define DEFINE_bool(name, default_val, doc) bool FLAG(name) = (default_val)
+#define DEFINE_int32(name, default_val, doc) int32_t FLAG(name) = (default_val)
+#define DEFINE_int64(name, default_val, doc) int64_t FLAG(name) = (default_val)
+#define DEFINE_double(name, default_val, doc) double FLAG(name) = (default_val)
+#define DEFINE_string(name, default_val, doc) \
+  std::string FLAG(name) = (default_val)
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
+  }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
+    
+    class SCOPED_CAPABILITY MutexLock {
+  typedef std::unique_lock<std::mutex> MutexLockImp;
     }
