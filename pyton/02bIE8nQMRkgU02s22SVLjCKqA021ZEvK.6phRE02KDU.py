@@ -1,34 +1,126 @@
 
         
-            monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
-    result = runner.invoke(args=['init-db'])
-    assert 'Initialized' in result.output
-    assert Recorder.called
+            def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
+    
+        def __init__(self, results):
+        self.results = results
+        self.next = next
+    
+        def handle_budget_notifications(self, key, total):
+        '''Call notification API if nearing or exceeded budget.'''
+        ...
+    
+    
+class HitCounts(MRJob):
+    
+    
+class RemoveDuplicateUrls(MRJob):
+    
+        def crawled_similar(self, signature):
+        '''Determine if we've already crawled a page matching the given signature'''
+        pass
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    lazy_extractors_filename = sys.argv[1]
+if os.path.exists(lazy_extractors_filename):
+    os.remove(lazy_extractors_filename)
+    
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+    
+        ies = sorted(youtube_dl.gen_extractors(), key=lambda i: i.IE_NAME.lower())
+    out = '# Supported sites\n' + ''.join(
+        ' - ' + md + '\n'
+        for md in gen_ies_md(ies))
+    
+    import itertools
+import json
+import os
+import re
+import sys
+    
+    # -- Options for HTML output ----------------------------------------------
+    
+            password = intlist_to_bytes(self.key).decode('utf-8')
+        encrypted = base64.b64encode(
+            intlist_to_bytes(self.iv[:8]) +
+            b'\x0b\xe6\xa4\xd9z\x0e\xb8\xb9\xd0\xd4i_\x85\x1d\x99\x98_\xe5\x80\xe7.\xbf\xa5\x83'
+        ).decode('utf-8')
+        decrypted = (aes_decrypt_text(encrypted, password, 32))
+        self.assertEqual(decrypted, self.secret_msg)
+    
+        # make url_for('index') == url_for('blog.index')
+    # in another app, you might define a separate main index here with
+    # app.route, while giving the blog blueprint a url_prefix, but for
+    # the tutorial the blog will be the main index
+    app.add_url_rule('/', endpoint='index')
+    
+    
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
 
     
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
+            :param name: the optional name of the test, otherwise the
+                     function name will be used.
+        '''
+        def decorator(f):
+            self.add_app_template_test(f, name=name)
+            return f
+        return decorator
     
     
-def get_load_dotenv(default=True):
-    '''Get whether the user has disabled loading dotenv files by setting
-    :envvar:`FLASK_SKIP_DOTENV`. The default is ``True``, load the
-    files.
+def _lookup_app_object(name):
+    top = _app_ctx_stack.top
+    if top is None:
+        raise RuntimeError(_app_ctx_err_msg)
+    return getattr(top, name)
     
-        * :class:`dict`
-    * :class:`tuple`
-    * :class:`bytes`
-    * :class:`~flask.Markup`
-    * :class:`~uuid.UUID`
-    * :class:`~datetime.datetime`
+            By default, this function returns ``SEND_FILE_MAX_AGE_DEFAULT`` from
+        the configuration of :data:`~flask.current_app`.
+    
+            return list(result)
+    
+            # on exit we want to clean up earlier.  Normally the request context
+        # stays preserved until the next request in the same thread comes
+        # in.  See RequestGlobals.push() for the general behavior.
+        top = _request_ctx_stack.top
+        if top is not None and top.preserved:
+            top.pop()
+    
+            # We attach the view class to the view function for two reasons:
+        # first of all it allows us to easily figure out what class-based
+        # view this thing came from, secondly it's also used for instantiating
+        # the view class so you can actually replace it with something else
+        # for testing purposes and debugging.
+        view.view_class = cls
+        view.__name__ = name
+        view.__doc__ = cls.__doc__
+        view.__module__ = cls.__module__
+        view.methods = cls.methods
+        view.provide_automatic_options = cls.provide_automatic_options
+        return view
+    
+    
+def get_requests_kwargs(args, base_headers=None):
     '''
-    
-        if not has_level_handler(logger):
-        logger.addHandler(default_handler)
+    Translate our `args` into `requests.request` keyword arguments.
     
             status_line = 'HTTP/{version} {status} {reason}'.format(
             version=version,
@@ -46,140 +138,100 @@ def get_load_dotenv(default=True):
             # `headers` is a list of `name: val<CRLF>`.
             headers.extend(h.strip() for h in original.msg.headers)
     
-            '''
-        available_plugins = plugin_manager.get_formatters_grouped()
-        self.enabled_plugins = []
-        for group in groups:
-            for cls in available_plugins[group]:
-                p = cls(env=env, **kwargs)
-                if p.enabled:
-                    self.enabled_plugins.append(p)
+        def __call__(self, r):
+        '''
+        Override username/password serialization to allow unicode.
+    
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
+    
+    import httpie
+    
+            def get_auth(self, username=None, password=None):
+            assert self.raw_auth == USERNAME + SEP_CREDENTIALS + PASSWORD
+            assert username == USERNAME
+            assert password == PASSWORD
+            return basic_auth()
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
     
-class TestImplicitHTTPMethod:
-    def test_implicit_GET(self, httpbin):
-        r = http(httpbin.url + '/get')
-        assert HTTP_OK in r
+KEY = jose.JWKRSA.load(test_util.load_vector('rsa512_key.pem'))
     
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+    csr = OpenSSL.crypto.load_certificate_request(
+    OpenSSL.crypto.FILETYPE_ASN1, pkg_resources.resource_string(
+        'acme', os.path.join('testdata', 'csr.der')))
+try:
+    acme.request_issuance(jose.util.ComparableX509(csr), (authzr,))
+except messages.Error as error:
+    print ('This script is doomed to fail as no authorization '
+           'challenges are ever solved. Error from server: {0}'.format(error))
 
     
+    ALL_SSL_OPTIONS_HASHES = [
+    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
+    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
+    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
+    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
+    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
+    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
+    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
+    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
+]
+'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
     
-class TestDownloads:
-    # TODO: more tests
+        def test_include_missing(self):
+        # This should miss
+        self.verify_fnmatch('test_*.onf', False)
     
-    from httpie import ExitStatus
-from httpie.core import main
-    
-        def test_cert_pem(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', CLIENT_PEM)
-        assert HTTP_OK in r
-    
-    
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
-    
-        Stacks of (1 x 1)-(3 x 3)-(1 x 1) BN-ReLU-Conv2D or also known as
-    bottleneck layer
-    First shortcut connection per layer is 1 x 1 Conv2D.
-    Second and onwards shortcut connection is identity.
-    At the beginning of each stage, the feature map size is halved (downsampled)
-    by a convolutional layer with strides=2, while the number of filter maps is
-    doubled. Within each stage, the layers have the same number filters and the
-    same filter map sizes.
-    Features maps sizes:
-    conv1  : 32x32,  16
-    stage 0: 32x32,  64
-    stage 1: 16x16, 128
-    stage 2:  8x8,  256
-    
-        paths = []
-    for fname in files:
-        paths.append(get_file(fname,
-                              origin=base + fname,
-                              cache_subdir=dirname))
+        def test_same_server(self):
+        from certbot_apache.obj import VirtualHost
+        no_name1 = VirtualHost(
+            'fp', 'vhp', set([self.addr1]), False, False, None)
+        no_name2 = VirtualHost(
+            'fp', 'vhp', set([self.addr2]), False, False, None)
+        no_name3 = VirtualHost(
+            'fp', 'vhp', set([self.addr_default]),
+            False, False, None)
+        no_name4 = VirtualHost(
+            'fp', 'vhp', set([self.addr2, self.addr_default]),
+            False, False, None)
     
     
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
+class ApacheTlsSni01(common.TLSSNI01):
+    '''Class that performs TLS-SNI-01 challenges within the Apache configurator
     
-            self.kernel = self.add_weight(shape=(input_dim, self.units * 3),
-                                      name='kernel',
-                                      initializer=self.kernel_initializer,
-                                      regularizer=self.kernel_regularizer,
-                                      constraint=self.kernel_constraint)
-        self.recurrent_kernel = self.add_weight(
-            shape=(self.units, self.units * 3),
-            name='recurrent_kernel',
-            initializer=self.recurrent_initializer,
-            regularizer=self.recurrent_regularizer,
-            constraint=self.recurrent_constraint)
+    # If true, links to the reST sources are added to the pages.
+#html_show_sourcelink = True
     
-        @property
-    def recurrent_activation(self):
-        return self.cell.recurrent_activation
+            # avoid UnicodeDecodeError on Windows
+        undecodable_path = b'' if sys.platform == 'win32' else b'f\xf2\xf2'
     
-            if rotation > 0:
-            angle_rad = rotation * 3.141592653589793 / 180.0
-            angles = tf.random_uniform([batch_size], -angle_rad, angle_rad)
-            f = tf.contrib.image.angles_to_projective_transforms(angles,
-                                                                 height, width)
-            transforms.append(f)
+                p = subprocess.Popen(
+                (sys.executable, '-c', 'import sys; print(ascii(sys.argv[1]))', text),
+                stdout=subprocess.PIPE,
+                env=env)
+            stdout, stderr = p.communicate()
+            self.assertEqual(stdout, expected)
+            self.assertEqual(p.returncode, 0)
     
-    def get_srt_json(id):
-    url = 'http://danmu.aixifan.com/V2/%s' % id
-    return get_content(url)
+            # Decompress rest of data
+        out.append(bzd.decompress(self.DATA[300:]))
+        self.assertEqual(b''.join(out), self.TEXT)
     
-        stream_types = [  #this is just a sample. Will make it in prepare()
-        # {'id': '1080'},
-        # {'id': '720'},
-        # {'id': '360'},
-        # {'id': '288'},
-        # {'id': '190'},
-        # {'id': '180'},
-        
-    ]
-    
-    
-    def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            # Extract the stream
-            stream_id = kwargs['stream_id']
-    
-        print_info(site_info, title, mime, size)
-    if not info_only:
-        download_urls([real_url], title, ext, size, output_dir=output_dir, merge=merge)
-    
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
-    
-        urls = matchall(content, netease_embed_patterns)
-    for url in urls:
-        found = True
-        netease_download(url, output_dir=output_dir, merge=merge, info_only=info_only)
+    def test():
+    PROCESSES = 4
+    print('Creating pool with %d processes\n' % PROCESSES)
