@@ -1,174 +1,96 @@
 
         
-        void absDiff(const Size2D &size,
-             const u16 *src0Base, ptrdiff_t src0Stride,
-             const u16 *src1Base, ptrdiff_t src1Stride,
-             u16 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u16>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    
-    {
-    {
-    {            for (; j < size.width; j++)
-                dst[j] = (s16)((s32)src0[j] + (s32)src1[j]);
-        }
+          void AcquireLoad(ThreadState* thread) {
+    int dummy;
+    port::AtomicPointer ap(&dummy);
+    int count = 0;
+    void *ptr = nullptr;
+    thread->stats.AddMessage('(each op is 1000 loads)');
+    while (count < 100000) {
+      for (int i = 0; i < 1000; i++) {
+        ptr = ap.Acquire_Load();
+      }
+      count++;
+      thread->stats.FinishedSingleOp();
     }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-            s32* _mag = mag_buf[1] + 1; // take the central row
-        ptrdiff_t magstep1 = mag_buf[2] - mag_buf[1];
-        ptrdiff_t magstep2 = mag_buf[0] - mag_buf[1];
-    
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0, const typename internal::VecTraits<T>::vec128 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec128 & v_dst) const
-    {
-        v_dst = internal::vceqq(v_src0, v_src1);
-    }
-    
-    
-    {
-    {        for (; j < size.width; ++j, sj += 4, dj += 3)
-        {
-            dst[dj] = src[sj];
-            dst[dj + 1] = src[sj + 1];
-            dst[dj + 2] = src[sj + 2];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-            size_t i = 0;
-        int64x2_t ws = vmovq_n_s64(0);
-    
-    #ifndef __STDC_FORMAT_MACROS
-#define __STDC_FORMAT_MACROS
-#endif
-#ifndef GFLAGS
-#include <cstdio>
-int main() {
-  fprintf(stderr, 'Please install gflags to run rocksdb tools\n');
-  return 1;
-}
-#else
-    
-      ~CompactionIterator();
-    
-    #include 'db/write_controller.h'
-    
-    // For non linux platform, the following macros are used only as place
-// holder.
-#if !(defined OS_LINUX) && !(defined CYGWIN) && !(defined OS_AIX)
-#define POSIX_FADV_NORMAL 0     /* [MC1] no further special treatment */
-#define POSIX_FADV_RANDOM 1     /* [MC1] expect random page refs */
-#define POSIX_FADV_SEQUENTIAL 2 /* [MC1] expect sequential page refs */
-#define POSIX_FADV_WILLNEED 3   /* [MC1] will need these pages */
-#define POSIX_FADV_DONTNEED 4   /* [MC1] dont need these pages */
-#endif
-    
-      static void CompactFiles(void* arg) {
-    std::unique_ptr<CompactionTask> task(
-        reinterpret_cast<CompactionTask*>(arg));
-    assert(task);
-    assert(task->db);
-    Status s = task->db->CompactFiles(
-        task->compact_options,
-        task->input_file_names,
-        task->output_level);
-    printf('CompactFiles() finished with status %s\n', s.ToString().c_str());
-    if (!s.ok() && !s.IsIOError() && task->retry_on_fail) {
-      // If a compaction task with its retry_on_fail=true failed,
-      // try to schedule another compaction in case the reason
-      // is not an IO error.
-      CompactionTask* new_task = task->compactor->PickCompaction(
-          task->db, task->column_family_name);
-      task->compactor->ScheduleCompaction(new_task);
-    }
+    if (ptr == nullptr) exit(1); // Disable unused variable warning.
   }
     
-      WriteOptions write_options;
-  ReadOptions read_options;
-  TransactionOptions txn_options;
-  std::string value;
-    
-    struct DumpOptions {
-  // Database that will be dumped
-  std::string db_path;
-  // File location that will contain dump output
-  std::string dump_location;
-  // Don't include db information header in the dump
-  bool anonymous = false;
-};
-    
-      // Insert to page cache
-  //
-  // page_key   Identifier to identify a page uniquely across restarts
-  // data       Page data
-  // size       Size of the page
-  virtual Status Insert(const Slice& key, const char* data,
-                        const size_t size) = 0;
-    
-    
-    {} // namespace folly
-    
-    /// Returns a keep-alive token which guarantees that Executor will keep
-/// processing tasks until the token is released (if supported by Executor).
-/// KeepAlive always contains a valid pointer to an Executor.
-template <typename ExecutorT>
-Executor::KeepAlive<ExecutorT> getKeepAliveToken(ExecutorT* executor) {
-  static_assert(
-      std::is_base_of<Executor, ExecutorT>::value,
-      'getKeepAliveToken only works for folly::Executor implementations.');
-  return Executor::getKeepAliveToken(executor);
-}
-    
-    #pragma once
-    
-      /**
-   * 'The memLevel parameter specifies how much memory should be allocated for
-   * the internal compression state. memLevel=1 uses minimum memory but is slow
-   * and reduces compression ratio; memLevel=9 uses maximum memory for optimal
-   * speed. The default value is 8.'
-   */
-  int memLevel;
-    
-    #endif // BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
-
-    
     
     {
-    {        BOOST_DEFAULTED_FUNCTION(aligned(), {})
-        BOOST_FORCEINLINE BOOST_CONSTEXPR explicit aligned(type const& v) BOOST_NOEXCEPT : value(v) {}
-    };
-};
+    {    if (rnd.OneIn(2)) {
+      // Write values of the form <key, my id, counter>.
+      // We add some padding for force compactions.
+      snprintf(valbuf, sizeof(valbuf), '%d.%d.%-1000d',
+               key, id, static_cast<int>(counter));
+      ASSERT_OK(db->Put(WriteOptions(), Slice(keybuf), Slice(valbuf)));
+    } else {
+      // Read a value and verify that it matches the pattern written above.
+      Status s = db->Get(ReadOptions(), Slice(keybuf), &value);
+      if (s.IsNotFound()) {
+        // Key has not yet been written
+      } else {
+        // Check that the writer thread counter is >= the counter in the value
+        ASSERT_OK(s);
+        int k, w, c;
+        ASSERT_EQ(3, sscanf(value.c_str(), '%d.%d.%d', &k, &w, &c)) << value;
+        ASSERT_EQ(k, key);
+        ASSERT_GE(w, 0);
+        ASSERT_LT(w, kNumThreads);
+        ASSERT_LE(static_cast<uintptr_t>(c), reinterpret_cast<uintptr_t>(
+            t->state->counter[w].Acquire_Load()));
+      }
+    }
+    counter++;
+  }
+  t->state->thread_done[id].Release_Store(t);
+  fprintf(stderr, '... stopping thread %d after %d ops\n', id, int(counter));
+}
+    
+    // A helper class useful for DBImpl::Get()
+class LookupKey {
+ public:
+  // Initialize *this for looking up user_key at a snapshot with
+  // the specified sequence number.
+  LookupKey(const Slice& user_key, SequenceNumber sequence);
+    }
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    
+    {}  // namespace leveldb
+    
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-null, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
+         uint64_t initial_offset);
+    
+    namespace aria2 {
+    }
+    
+    void DHTRoutingTable::getBuckets(
+    std::vector<std::shared_ptr<DHTBucket>>& buckets) const
+{
+  dht::enumerateBucket(buckets, root_.get());
+}
+    
+    #include 'common.h'
+    
+    class DHTTaskFactory {
+public:
+  virtual ~DHTTaskFactory() = default;
+    }
