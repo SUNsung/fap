@@ -1,343 +1,242 @@
 
         
-        Status RunCppShapeInferenceImpl(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    const std::vector<PyObject*>& input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    std::vector<string>* output_tensor_shape_protos,
-    string* input_tensors_needed_out) {
-  tensorflow::NodeDef node;
-  if (!node.ParseFromString(serialized_node_def)) {
-    return errors::InvalidArgument(
-        'Error parsing node_def during cpp shape inference');
-  }
-  DCHECK_EQ(output_tensor_shape_protos->size(), 0);
-    }
+        #include <cstdint>      // for int32_t
     
-    // Convert an AttrValue with type `type` to the Python representation for
-// that value.
-string AttrValueToPython(const string& type, const AttrValue& value,
-                         const string& dtype_module = 'tf.');
     
-    class TestRandomAccessFile : public RandomAccessFile {
-  // The file contents is 10 bytes of all A's
-  Status Read(uint64 offset, size_t n, StringPiece* result,
-              char* scratch) const override {
-    Status s;
-    for (int i = 0; i < n; ++i) {
-      if (offset + i >= 10) {
-        n = i;
-        s = errors::OutOfRange('EOF');
-        break;
-      }
-      scratch[i] = 'A';
-    }
-    *result = StringPiece(scratch, n);
-    return s;
-  }
-};
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+    {}  // namespace tesseract
 
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Safe containers for an owned TF_Status. On destruction, the handle
-// will be deleted by TF_DeleteStatus.
-using Safe_TF_StatusPtr = std::unique_ptr<TF_Status, detail::TFStatusDeleter>;
-Safe_TF_StatusPtr make_safe(TF_Status* status);
-    
-    #include 'atom/common/node_includes.h'
-    
-    bool GlobalShortcut::Register(const ui::Accelerator& accelerator,
-                              const base::Closure& callback) {
-  if (!GlobalShortcutListener::GetInstance()->RegisterAccelerator(accelerator,
-                                                                  this)) {
-    return false;
-  }
+    // Computes part of matrix.vector v = Wu. Computes N=16 results.
+// For details see PartialMatrixDotVector64 with N=16.
+static void PartialMatrixDotVector16(const int8_t* wi, const double* scales,
+                                     const int8_t* u, int num_in, int num_out,
+                                     double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  __m256i result1 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
     }
-    
-    
-    {}  // namespace api
-    
-    // static
-mate::Handle<RenderProcessPreferences>
-RenderProcessPreferences::ForAllWebContents(v8::Isolate* isolate) {
-  return mate::CreateHandle(isolate,
-                            new RenderProcessPreferences(
-                                isolate, base::Bind(&IsWebContents, isolate)));
+  }
+  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  num_out -= kNumOutputsPerRegister;
+  ExtractResults(result1, shift_id, wi, scales,
+                 std::min(kNumOutputsPerRegister, num_out), v);
 }
     
-    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
-  }
-}
-
-    
-    private:
-  unsigned getNumReplacementTypes() const {
-    return genericSig->getGenericParams().size();
-  }
-    
-        if (info.status == serialization::Status::Valid) {
-      assert(info.bytes != 0);
-      if (!info.name.empty()) {
-        StringRef moduleData = buf.substr(0, info.bytes);
-        std::unique_ptr<llvm::MemoryBuffer> bitstream(
-          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
-    }
-    }
-    
-    
-    {  if (!lhs.hasOutOfLineData()) {
-    assert(lhs.Data == 0 || lhs.getLengthInChunks() == 1);
-    for (auto chunk : rhs.getOutOfLineChunks())
-      if (chunk != lhs.Data)
-        return false;
-    return true;
-  } else if (!rhs.hasOutOfLineData()) {
-    assert(rhs.Data == 0 || rhs.getLengthInChunks() == 1);
-    for (auto chunk : lhs.getOutOfLineChunks())
-      if (chunk != rhs.Data)
-        return false;
-    return true;
-  } else {
-    auto lhsChunks = lhs.getOutOfLineChunks();
-    auto rhsChunks = rhs.getOutOfLineChunks();
-    assert(lhsChunks.size() == rhsChunks.size());
-    return lhsChunks == rhsChunks;
-  }
-}
-    
-    #ifndef DIRECTIONAL_PREPOSITION
-#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
+    #if defined(X86_BUILD)
+#if defined(__GNUC__)
+#include <cpuid.h>
+#elif defined(_WIN32)
+#include <intrin.h>
+#endif
 #endif
     
-    /// Determine whether the preposition in a split is 'vacuous', and
-/// should be removed.
-static bool isVacuousPreposition(StringRef beforePreposition,
-                                 StringRef preposition,
-                                 StringRef afterPreposition,
-                                 const OmissionTypeName &paramType) {
-  // Only consider 'with' or 'using' to be potentially vacuous.
-  if (!camel_case::sameWordIgnoreFirstCase(preposition, 'with') &&
-      !camel_case::sameWordIgnoreFirstCase(preposition, 'using'))
-    return false;
-    }
-    
-      const llvm::UTF8 *SourceStart =
-    reinterpret_cast<const llvm::UTF8 *>(S.data());
-    
-    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
-    
-      static CFPointeeInfo forConstVoid() {
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = true;
-    info.Decl = nullptr;
-    return info;
-  }
-    
-    IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_AllocateId, int)
-    
-    namespace content {
-class RenderFrameHost;
-}
-    
-    base::StringPiece GetStringResource(int resource_id) {
-  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
-}
-    
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
-    
-    
-#include 'base/basictypes.h'
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-    class ObjectManager;
-    
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/message_loop/message_loop_current.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
-    
-    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
- public:
-  NwAppClearCacheFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-  void OnBrowsingDataRemoverDone() override;
+    namespace tesseract {
     }
     
     
-    {}
-    
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenStopMonitorFunction);
-  };
-    
-    struct Options;
-struct FileMetaData;
-    
-    DBImpl::DBImpl(const Options& raw_options, const std::string& dbname)
-    : env_(raw_options.env),
-      internal_comparator_(raw_options.comparator),
-      internal_filter_policy_(raw_options.filter_policy),
-      options_(SanitizeOptions(dbname, &internal_comparator_,
-                               &internal_filter_policy_, raw_options)),
-      owns_info_log_(options_.info_log != raw_options.info_log),
-      owns_cache_(options_.block_cache != raw_options.block_cache),
-      dbname_(dbname),
-      table_cache_(new TableCache(dbname_, options_, TableCacheSize(options_))),
-      db_lock_(nullptr),
-      shutting_down_(nullptr),
-      background_work_finished_signal_(&mutex_),
-      mem_(nullptr),
-      imm_(nullptr),
-      logfile_(nullptr),
-      logfile_number_(0),
-      log_(nullptr),
-      seed_(0),
-      tmp_batch_(new WriteBatch),
-      background_compaction_scheduled_(false),
-      manual_compaction_(nullptr),
-      versions_(new VersionSet(dbname_, &options_, table_cache_,
-                               &internal_comparator_)) {
-  has_imm_.Release_Store(nullptr);
-}
-    
-     public:
-  std::string dbname_;
-  SpecialEnv* env_;
-  DB* db_;
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
+// Write all (changed_) parameters to a config file.
+void ParamsEditor::WriteParams(char *filename,
+                               bool changes_only) {
+  FILE *fp;                      // input file
+  char msg_str[255];
+                                 // if file exists
+  if ((fp = fopen (filename, 'rb')) != nullptr) {
+    fclose(fp);
+    sprintf (msg_str, 'Overwrite file ' '%s' '? (Y/N)', filename);
+    int a = sv_window_->ShowYesNoDialog(msg_str);
+    if (a == 'n') {
+      return;
+    }  // don't write
   }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-     public:
-  LogTest() : reading_(false),
-              writer_(new Writer(&dest_)),
-              reader_(new Reader(&source_, &report_, true/*checksum*/,
-                      0/*initial_offset*/)) {
-  }
-    
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
-    
-     private:
-  enum { kMaxHeight = 12 };
-    
-          // Verify that everything in [pos,current) was not present in
-      // initial_state.
-      while (pos < current) {
-        ASSERT_LT(key(pos), K) << pos;
     }
     
-      static bool isInitialized6() { return data6_.initialized; }
     
-      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
+/**********************************************************************
+ * split_word
+ *
+ * Split a given WERD_RES in place into two smaller words for recognition.
+ * split_pt is the index of the first blob to go in the second word.
+ * The underlying word is left alone, only the TWERD (and subsequent data)
+ * are split up.  orig_blamer_bundle is set to the original blamer bundle,
+ * and will now be owned by the caller.  New blamer bundles are forged for the
+ * two pieces.
+ **********************************************************************/
+void Tesseract::split_word(WERD_RES *word,
+                           int split_pt,
+                           WERD_RES **right_piece,
+                           BlamerBundle **orig_blamer_bundle) const {
+  ASSERT_HOST(split_pt >0 && split_pt < word->chopped_word->NumBlobs());
+    }
     
-      DHTTaskQueue* taskQueue_;
+    struct Pix;
     
-      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    #include 'blread.h'
+#include <cstdio>       // for fclose, fopen, FILE
+#include 'host.h'       // for TRUE
+#include 'ocrblock.h'   // for BLOCK_IT, BLOCK, BLOCK_LIST (ptr only)
+#include 'scanutils.h'  // for tfscanf
     
-    
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
 };
     
+    namespace rabit {
+namespace utils {
+extern 'C' {
+  void (*Printf)(const char *fmt, ...) = Rprintf;
+  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
+  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
+  void (*Error)(const char *fmt, ...) = error;
+}
+}
+}
     
-    {  size_t getQueueSize() const { return queue_.size(); }
-};
+    struct SplitEvaluatorReg
+    : public dmlc::FunctionRegEntryBase<SplitEvaluatorReg,
+        std::function<SplitEvaluator* (std::unique_ptr<SplitEvaluator>)> > {};
     
-    #include <memory>
+    ConsoleReporter::OutputOptions GetOutputOptions(bool force_no_color = false);
+    
+    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
+                 va_list args);
+void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...);
+    
+      if (result.error_occurred) {
+    printer(Out, COLOR_RED, 'ERROR OCCURRED: \'%s\'',
+            result.error_message.c_str());
+    printer(Out, COLOR_DEFAULT, '\n');
+    return;
+  }
+  // Format bytes per second
+  std::string rate;
+  if (result.bytes_per_second > 0) {
+    rate = StrCat(' ', HumanReadableNumber(result.bytes_per_second), 'B/s');
+  }
+    
+        // print the header
+    for (auto B = elements.begin(); B != elements.end();) {
+      Out << *B++;
+      if (B != elements.end()) Out << ',';
+    }
+    for (auto B = user_counter_names_.begin(); B != user_counter_names_.end();) {
+      Out << ',\'' << *B++ << '\'';
+    }
+    Out << '\n';
+    
+    void JSONReporter::ReportRuns(std::vector<Run> const& reports) {
+  if (reports.empty()) {
+    return;
+  }
+  std::string indent(4, ' ');
+  std::ostream& out = GetOutputStream();
+  if (!first_report_) {
+    out << ',\n';
+  }
+  first_report_ = false;
+    }
     
     
-    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
-};
+    {}  // end namespace benchmark
     
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+    
+    {void SleepForSeconds(double seconds) {
+  SleepForMicroseconds(static_cast<int>(seconds * kNumMicrosPerSecond));
+}
+#endif  // BENCHMARK_OS_WINDOWS
+}  // end namespace benchmark
 
     
-    DNSCache::~DNSCache() = default;
-    
-      // Called once for every suite of benchmarks run.
-  // The parameter 'context' contains information that the
-  // reporter may wish to use when generating its report, for example the
-  // platform under which the benchmarks are running. The benchmark run is
-  // never started if this function returns false, allowing the reporter
-  // to skip runs based on the context information.
-  virtual bool ReportContext(const Context& context) = 0;
-    
-    Benchmark* Benchmark::Range(int start, int limit) {
-  CHECK(ArgsCnt() == -1 || ArgsCnt() == 1);
-  std::vector<int> arglist;
-  AddRange(&arglist, start, limit, range_multiplier_);
+      {
+    auto ka = getKeepAliveToken(exec);
+    EXPECT_TRUE(ka);
+    EXPECT_EQ(&exec, ka.get());
+    EXPECT_EQ(1, exec.refCount);
     }
     
-    #include 'check.h'
-#include 'internal_macros.h'
+      FunctionRef<int(int)> variant1 = of;
+  EXPECT_EQ(100 + 1 * 15, variant1(15));
+  FunctionRef<int(int)> const cvariant1 = of;
+  EXPECT_EQ(100 + 1 * 15, cvariant1(15));
     
-    int64_t RoundDouble(double v) { return static_cast<int64_t>(v + 0.5); }
+      /**
+   * Create a new RNG, seeded with a good seed.
+   *
+   * Note that you should usually use ThreadLocalPRNG unless you need
+   * reproducibility (such as during a test), in which case you'd want
+   * to create a RNG with a good seed in production, and seed it yourself
+   * in test.
+   */
+  template <class RNG = DefaultGenerator, class /* EnableIf */ = ValidRNG<RNG>>
+  static RNG create();
     
-    class Barrier {
- public:
-  Barrier(int num_threads) : running_threads_(num_threads) {}
+    #include <folly/Range.h>
+    
+    
+    {} // namespace uri_detail
+    
+      bool compare_exchange_weak(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_weak(
+        expected, n, mo, detail::default_failure_memory_order(mo));
+  }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    auto newptr = get_newptr(n);
+    PackedPtr oldptr, expectedptr;
     }
