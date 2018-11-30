@@ -1,155 +1,187 @@
 
         
-            if (info.bytes == 0)
-      return false;
+        // Calls the registered C++ shape inference function for <node> (a serialized
+// NodeDef).
+// Should not be called for shape functions that access input tensors; constant
+// input tensor values are not made available, and so the inferred shapes will
+// be less precise than they could be.
+//
+// Returns an error, or OK, in <out_status> according to whether the shape
+// inference was successful.
+//
+// On success, returns a vector populated with the inferred output shapes (as
+// serialized CppShapeInferenceResult protos) followed by a serialized
+// CppShapeInferenceInputsNeeded proto.
+//
+// This is temporary code to be used during the migration
+// from python shape inference functions to C++ shape inference functions.
+std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status);
     
-    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
-  llvm::SmallString<32> NameBuf(Name);
-  cache_attributes_t Attrs = {
-    CACHE_ATTRIBUTES_VERSION_2,
-    CBs.keyHashCB,
-    CBs.keyIsEqualCB,
-    nullptr,
-    CBs.keyDestroyCB,
-    CBs.valueReleaseCB,
-    nullptr,
-    nullptr,
-    CBs.UserData,
-    CBs.valueRetainCB,
-  };
-    }
-    
-    using namespace swift;
-using namespace swift::sys;
-    
-    swift::unicode::GraphemeClusterBreakProperty
-swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
-  // FIXME: replace linear search with a trie lookup.
-    }
-    
-    bool importer::isCFTypeDecl(
-       const clang::TypedefNameDecl *Decl) {
-  if (CFPointeeInfo::classifyTypedef(Decl))
-    return true;
-  return false;
-}
-    
-    /// Determine whether this typedef is a CF type.
-bool isCFTypeDecl(const clang::TypedefNameDecl *Decl);
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace cpp {
-    }
-    }
-    }
-    }
-    
-    void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
-    string comments = location.leading_comments.empty() ?
-        location.trailing_comments : location.leading_comments;
-    if (comments.empty()) {
-        return;
-    }
-    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
-    // node of a summary element, not part of an attribute.
-    comments = StringReplace(comments, '&', '&amp;', true);
-    comments = StringReplace(comments, '<', '&lt;', true);
-    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
-    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
-    // but that needs to be part of a bigger effort to understand the markdown better anyway.
-    printer->Print('/// <summary>\n');
-    bool last_was_empty = false;
-    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
-    // to preserve the blank lines themselves, as this is relevant in the markdown.
-    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
-    // (We don't skip 'just whitespace' lines, either.)
-    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-        string line = *it;
-        if (line.empty()) {
-            last_was_empty = true;
-        } else {
-            if (last_was_empty) {
-                printer->Print('///\n');
-            }
-            last_was_empty = false;
-            printer->Print('///$line$\n', 'line', *it);
-        }
-    }
-    printer->Print('/// </summary>\n');
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-      ObjectiveCType objc_type = GetObjectiveCType(descriptor_);
-  string singular_type;
-  if (objc_type == OBJECTIVECTYPE_MESSAGE) {
-    vars['type'] = string('GPBStringifySymbol(') +
-                   ClassName(descriptor_->message_type()) + ')';
-  } else {
-    vars['type'] = 'NULL';
-  }
-    
-    #include 'joint_bullet.h'
-    
-    class JointBullet : public ConstraintBullet {
-    }
-    
-    
-    {	_FORCE_INLINE_ void _set_physics_server(BulletPhysicsServer *p_physicsServer) { physicsServer = p_physicsServer; }
-	_FORCE_INLINE_ BulletPhysicsServer *get_physics_server() const { return physicsServer; }
-};
-#endif
+    #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_INTERNAL_H_
 
     
-    Speed* Speed::create(ActionInterval* action, float speed)
+    // Unlike test_ops.cc, these are built with the 'require_shapes' option in the
+// BUILD file.
+    
+      int width = 35;
+  int width_narrow = 15;
+  int width_wide = 20;
+  os << std::setw(width + 1) << 'Op,';
+  os << std::setw(width_narrow + 1) << 'Count,';
+  os << std::setw(width_wide + 1) << 'Measured time (ns),';
+  os << std::setw(width_narrow + 2) << 'Time percent,';
+  os << std::setw(width_narrow + 2) << 'Acc percent,';
+  os << std::setw(width_wide + 1) << 'Analytical upper,';
+  os << std::setw(width_wide + 1) << 'Analytical lower,';
+  os << std::setw(width_narrow + 2) << 'Overall eff';
+  os << std::setw(width_narrow + 2) << 'Compute eff';
+  os << std::setw(width_narrow + 2) << 'Memory eff' << std::endl;
+  float acc_percent = 0;
+  for (const auto& op : ops_) {
+    double percent = static_cast<double>(op.time) /
+                     static_cast<double>(total_time_measured_serialized_);
+    double eff =
+        static_cast<double>(op.time_upper) / static_cast<double>(op.time);
+    double compute_eff =
+        static_cast<double>(op.compute_time) / static_cast<double>(op.time);
+    double memory_eff =
+        static_cast<double>(op.memory_time) / static_cast<double>(op.time);
+    os << std::setw(width) << op.name << ',';
+    os << std::setw(width_narrow) << op.count << ',';
+    os << std::setw(width_wide) << op.time << ',';
+    os << std::setw(width_narrow) << std::setprecision(2) << percent * 100
+       << '%,';
+    acc_percent += percent;
+    os << std::setw(width_narrow) << std::setprecision(2) << acc_percent * 100
+       << '%,';
+    os << std::setw(width_wide) << op.time_upper << ',';
+    os << std::setw(width_wide) << op.time_lower << ',';
+    os << std::setw(width_narrow) << std::setprecision(2) << eff * 100 << '%,';
+    os << std::setw(width_narrow) << std::setprecision(2) << compute_eff * 100
+       << '%,';
+    os << std::setw(width_narrow) << std::setprecision(2) << memory_eff * 100
+       << '%,';
+    os << std::endl;
+  }
+  os << std::endl;
+    
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/c/tf_status_helper.h'
+#include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/python/lib/core/safe_ptr.h'
+    
+    // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
+    
+    // This file contains APIs that assume a StreamExecutor is backed by CUDA.
+// It reaches into the CUDA implementation to activate an underlying CUDA
+// context.
+//
+// Having this file separate from cuda_gpu_executor.h means that dependent
+// code does not also have to depend on cuda.h.
+    
+    #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
+    
+    #ifdef __SSE4_1__
+// Computes part of matrix.vector v = Wu. Computes 1 result.
+static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
+                                    const int8_t* u, int num_in, int num_out,
+                                    double* v) {
+  int total = IntDotProductSSE(u, wi, num_in);
+  // Add in the bias and correct for integer values.
+  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
+}
+#endif  // __SSE4_1__
+    
+      /**
+   * Returns an image of the current object at the given level in greyscale
+   * if available in the input. To guarantee a binary image use BinaryImage.
+   * NOTE that in order to give the best possible image, the bounds are
+   * expanded slightly over the binary connected component, by the supplied
+   * padding, so the top-left position of the returned image is returned
+   * in (left,top). These will most likely not match the coordinates
+   * returned by BoundingBox.
+   * If you do not supply an original image, you will get a binary one.
+   * Use pixDestroy to delete the image after use.
+   */
+  Pix* GetImage(PageIteratorLevel level, int padding, Pix* original_img,
+                int* left, int* top) const;
+    
+      // Write all (changed_) parameters to a config file.
+  void WriteParams(char* filename, bool changes_only);
+    
+    #endif // D_DHT_REPLACE_NODE_TASK_H
+
+    
+    const std::string DHTResponseMessage::R('r');
+    
+      // header
+  readBytes(fp, buf, buf.size(), 8);
+  if (memcmp(header, buf, 8) == 0) {
+    version = 3;
+  }
+  else if (memcmp(headerCompat, buf, 8) == 0) {
+    version = 2;
+  }
+  else {
+    throw DL_ABORT_EX(fmt('Failed to load DHT routing table from %s. cause:%s',
+                          filename.c_str(), 'bad header'));
+  }
+    
+    #include <vector>
+#include <memory>
+    
+    class DHTNode;
+class DHTRoutingTable;
+class DHTMessageDispatcher;
+class DHTMessageFactory;
+class DHTTaskQueue;
+class DHTAbstractTask;
+    
+    void DHTTaskQueueImpl::addPeriodicTask2(const std::shared_ptr<DHTTask>& task)
 {
-    Speed *ret = new (std::nothrow) Speed();
-    if (ret && ret->initWithAction(action, speed))
+  periodicTaskQueue2_.addTask(task);
+}
+    
+    #include <cstring>
+    
+    DNSCache::CacheEntry::~CacheEntry() = default;
+    
+    public:
+  DNSCache();
+  DNSCache(const DNSCache& c);
+  ~DNSCache();
+    
+    
     {
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
-}
-    
-    ReuseGrid* ReuseGrid::reverse() const
-{
-    // no reverse, just clone it
-    return this->clone();
-}
-    
-        /** Removes all actions from all the targets.
-     */
-    virtual void removeAllActions();
-    
-    
-    {        for(const auto &value : spritesheets) {
-            std::string path = FileUtils::getInstance()->fullPathFromRelativeFile(value.asString(),plist);
-            SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
+    {            return std::string_view(cache.data() + offset - cacheOffset, chunkSize);
+        } else {
+            /* Cache miss */
+            //std::cout << 'Cache miss!' << std::endl;
+            return std::string_view(nullptr, 0);
         }
     }
     
-    NS_CC_END
+        /* For debugging you may want to print this */
+    void printTree() {
+        printNode(&tree, -1);
+    }
+    
+    
+    {    /* Compression data */
+    InflationStream *inflationStream = nullptr;
+};
+    
+    
+    {        return this;
+    }
