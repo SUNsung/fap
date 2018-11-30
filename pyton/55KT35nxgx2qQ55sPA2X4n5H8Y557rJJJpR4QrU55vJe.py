@@ -1,76 +1,117 @@
 
         
-        
-def main():
-    import os
-    import re
-    import shutil
-    import sys
-    dests = sys.argv[1:] or ['.']
-    filename = re.sub('\.pyc$', '.py', __file__)
+          # Note that we put these 'truth' rates and input into this
+  # structure, the only data that is used in LFADS are the noisy
+  # data e.g. spike trains.  The rest is either for printing or posterity.
+  data = {'train_truth': rates_train,
+          'valid_truth': rates_valid,
+          'input_train_truth' : input_train,
+          'input_valid_truth' : inputs_valid,
+          'train_data' : noisy_data_train,
+          'valid_data' : noisy_data_valid,
+          'train_percentage' : train_percentage,
+          'nreplications' : nreplications,
+          'dt' : rnn['dt'],
+          'input_magnitude' : input_magnitude,
+          'input_times_train' : input_times_train,
+          'input_times_valid' : input_times_valid,
+          'P_sxn' : P_sxn,
+          'condition_labels_train' : condition_labels_train,
+          'condition_labels_valid' : condition_labels_valid,
+          'conversion_factor': 1.0 / rnn['conversion_factor']}
+  datasets[dataset_name] = data
     
-            for x in iterate_spider_output(cb(response)):
-            if isinstance(x, (BaseItem, dict)):
-                items.append(x)
-            elif isinstance(x, Request):
-                requests.append(x)
-        return items, requests
+    def get_data_batch(batch_size, T, rng, u_std):
+  u_bxt = rng.randn(batch_size, T) * u_std
+  running_sum_b = np.zeros([batch_size])
+  labels_bxt = np.zeros([batch_size, T])
+  for t in xrange(T):
+    running_sum_b += u_bxt[:, t]
+    labels_bxt[:, t] += running_sum_b
+  labels_bxt = np.clip(labels_bxt, -1, 1)
+  return u_bxt, labels_bxt
     
-    import logging
-from twisted.internet import defer
-import six
-from scrapy.exceptions import NotSupported, NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.misc import load_object
-from scrapy.utils.python import without_none_values
-from scrapy import signals
+      def evaluate(self):
+    '''Evaluate the current ensemble.'''
+    # Attach word probabilities and correctness label to each substitution
+    ensembled_probs = sum(self.all_probs) / len(self.all_probs)
+    scorings = []
+    for i, sentence in enumerate(self.sentences):
+      correctness = self.labels[i]
+      word_probs = ensembled_probs[i, :len(sentence)]
+      joint_prob = np.prod(word_probs, dtype=np.float64)
     
-        def download_request(self, request, spider):
-        parsed_url = urlparse_cached(request)
-        user = request.meta.get('ftp_user', self.default_user)
-        password = request.meta.get('ftp_password', self.default_password)
-        passive_mode = 1 if bool(request.meta.get('ftp_passive',
-                                                  self.passive_mode)) else 0
-        creator = ClientCreator(reactor, FTPClient, user, password,
-            passive=passive_mode)
-        return creator.connectTCP(parsed_url.hostname, parsed_url.port or 21).addCallback(self.gotClient,
-                                request, unquote(parsed_url.path))
+      return word_to_id
     
     
-def naughty_strings(filepath=FILEPATH):
-    '''Get the list of naughty_strings.
+def create_masked_cross_entropy_loss(targets, present, logits):
+  '''Calculate the cross entropy loss matrices for the masked tokens.'''
+  cross_entropy_losses = losses.cross_entropy_loss_matrix(targets, logits)
     
-      '''
-  # self._section will move monotonically through this set. If it ever
-  # needs to move backwards, CheckNextIncludeOrder will raise an error.
-  _INITIAL_SECTION = 0
-  _MY_H_SECTION = 1
-  _C_SECTION = 2
-  _CPP_SECTION = 3
-  _OTHER_H_SECTION = 4
+      Args:
+    hparams:  MaskGAN hyperparameters.
+    learning_rate:  tf.Variable scalar learning rate.
+    final_gen_objective:  Scalar final REINFORCE objective for the sequence.
+    averages_op:  ExponentialMovingAverage apply average op to
+      maintain the baseline.
+    global_step:  global_step tf.Variable.
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
+      ## Load weights from language model checkpoint.
+  if FLAGS.language_model_ckpt_dir:
+    if FLAGS.maskgan_ckpt is None:
+      ## Generator Models.
+      if FLAGS.generator_model == 'rnn_nas':
+        load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+        print('Restoring Generator from %s.' % load_ckpt)
+        tf.logging.info('Restoring Generator from %s.' % load_ckpt)
+        gen_init_saver = init_savers['gen_init_saver']
+        gen_init_saver.restore(sess, load_ckpt)
     
-            # Display results overlaid on an image
-        show_prediction_labels_on_image(os.path.join('knn_examples/test', image_file), predictions)
+    atom_template = atom_template.replace('@TIMESTAMP@', now_iso)
+    
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
+    
+    # The suffix of source filenames.
+source_suffix = '.rst'
+    
+            ydl = YDL({'format': 'mp3'})
+        ie = YoutubeIE(ydl)
+        ie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(copy.deepcopy(info_dict))
+        downloaded = ydl.downloaded_info_dicts[0]
+        self.assertEqual(downloaded['format_id'], 'mp3-64')
+    
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
+        )
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
+    
+    
+if __name__ == '__main__':
+    unittest.main()
 
     
-    for face_location in face_locations:
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-        # Label the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        if not name:
-            continue
+            for i in range(len(titles)):
+            title = titles[i]
+            real_url = real_urls[i]
     
-            # Now let's list all the faces we found in all 128 frames
-        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
-            number_of_faces_in_frame = len(face_locations)
+    '''
+refer to http://open.tudou.com/wiki/video/info
+'''
+tudou_api_patterns = [ ]
     
-    from setuptools import setup
-    
-    # 载入样本图片（奥巴马和拜登）
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
