@@ -1,127 +1,158 @@
 
         
-        task :spec => :test
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+        if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+    Then(%r!^I should (not )?see '(.*)' in '(.*)' if on Windows$!) do |negative, text, file|
+  step %(the '#{file}' file should exist)
+  regexp = Regexp.new(text, Regexp::MULTILINE)
+  if negative.nil? || negative.empty?
+    if Jekyll::Utils::Platforms.really_windows?
+      expect(file_contents(file)).to match regexp
+    else
+      expect(file_contents(file)).not_to match regexp
+    end
+  end
 end
     
-    Jekyll::Deprecator.process(ARGV)
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
     
-    def run_rubygem(args)
-  run_in_shell('gem', *args.strip.split(' '))
-end
+              # This is too noisy even for --verbose, but uncomment if you need it for
+          # a specific WebSockets issue.  Adding ?LR-verbose=true onto the URL will
+          # enable logging on the client side.
+          # em_opts[:debug] = true
     
-          plist_filename = if f.plist
-        f.plist_path.basename
-      else
-        File.basename Dir['#{keg}/*.plist'].first
-      end
-      plist_link = '#{destination}/#{plist_filename}'
-      plist_domain = f.plist_path.basename('.plist')
-      destination_path = Pathname.new File.expand_path destination
-      plist_path = destination_path/plist_filename
-    
-        puts 'Your system is ready to brew.' unless Homebrew.failed?
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
   end
 end
 
     
-          GitHub.open 'https://api.github.com/repos/#{user}/homebrew-#{repo}/git/trees/HEAD?recursive=1' do |json|
-        json['tree'].each do |object|
-          next unless object['type'] == 'blob'
-    
-        def initialize(content)
-      @content = content
-      @html = document? ? parse_as_document : parse_as_fragment
-    end
-    
-          if base == dest
-        ''
-      elsif dest.start_with? File.join(base, '')
-        url.path[(path.length)..-1]
+              <<-SQL.strip_heredoc
+            (CASE
+              WHEN (#{builds}) = (#{skipped}) AND (#{warnings}) THEN #{STATUSES[:success]}
+              WHEN (#{builds}) = (#{skipped}) THEN #{STATUSES[:skipped]}
+              WHEN (#{builds}) = (#{success}) THEN #{STATUSES[:success]}
+              WHEN (#{builds}) = (#{created}) THEN #{STATUSES[:created]}
+              WHEN (#{builds}) = (#{success}) + (#{skipped}) THEN #{STATUSES[:success]}
+              WHEN (#{builds}) = (#{success}) + (#{skipped}) + (#{canceled}) THEN #{STATUSES[:canceled]}
+              WHEN (#{builds}) = (#{created}) + (#{skipped}) + (#{pending}) THEN #{STATUSES[:pending]}
+              WHEN (#{running}) + (#{pending}) > 0 THEN #{STATUSES[:running]}
+              WHEN (#{manual}) > 0 THEN #{STATUSES[:manual]}
+              WHEN (#{created}) > 0 THEN #{STATUSES[:running]}
+              ELSE #{STATUSES[:failed]}
+            END)
+          SQL
+        end
       end
-    end
     
-            css('h1 + code').each do |node|
-          node.before('<p></p>')
-          while node.next_element.name == 'code'
-            node.previous_element << ' '
-            node.previous_element << node.next_element
-          end
-          node.previous_element.prepend_child(node)
+            def sidekiq_worker_class
+          ImportLfsObjectWorker
         end
     
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
-end
-puts '==================================================='
+            def sidekiq_worker_class
+          ImportNoteWorker
+        end
+    
+              new(hash)
+        end
+    
+              user = Representation::User.from_api_response(pr.user) if pr.user
+          hash = {
+            iid: pr.number,
+            title: pr.title,
+            description: pr.body,
+            source_branch: pr.head.ref,
+            target_branch: pr.base.ref,
+            source_branch_sha: pr.head.sha,
+            target_branch_sha: pr.base.sha,
+            source_repository_id: pr.head&.repo&.id,
+            target_repository_id: pr.base&.repo&.id,
+            source_repository_owner: pr.head&.user&.login,
+            state: pr.state == 'open' ? :opened : :closed,
+            milestone_number: pr.milestone&.number,
+            author: user,
+            assignee: assignee,
+            created_at: pr.created_at,
+            updated_at: pr.updated_at,
+            merged_at: pr.merged_at
+          }
+    
+            # Download a file from the remote machine to the local machine.
+        #
+        # @param [String] from Path of the file on the remote machine.
+        # @param [String] to Path of where to save the file locally.
+        def download(from, to)
+        end
+    
+            # Defines additional communicators to be available. Communicators
+        # should be returned by a block passed to this method. This is done
+        # to ensure that the class is lazy loaded, so if your class inherits
+        # from or uses any Vagrant internals specific to Vagrant 1.0, then
+        # the plugin can still be defined without breaking anything in future
+        # versions of Vagrant.
+        #
+        # @param [String] name Communicator name.
+        def self.communicator(name=UNSET_VALUE, &block)
+          data[:communicator] ||= Registry.new
+    
+        # Checks if this registry has any items.
+    #
+    # @return [Boolean]
+    def empty?
+      @items.keys.empty?
+    end
+    
+        private
+    
+    namespace :bower do
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
+    end
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+        require 'lib/sass'
+    
+    require 'sass/engine'
+require 'sass/plugin' if defined?(Merb::Plugins)
+require 'sass/railtie'
+require 'sass/features'
 
     
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin && loc.begin.is?('do')
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
-    
-      SPREE_GEMS.each do |gem_name|
-    rm_f  '#{gem_name}/Gemfile.lock'
-    rm_rf '#{gem_name}/pkg'
-    rm_rf '#{gem_name}/spec/dummy'
-  end
-end
-    
-          def gateway_error(exception)
-        @order.errors.add(:base, exception.message)
-        invalid_resource!(@order)
-      end
-    
-              unless inventory_unit.respond_to?(can_event) &&
-              inventory_unit.send(can_event)
-            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
-                   status: 200
-            false
-          end
-        end
-    
-            def show
-          respond_with(@payment)
-        end
-    
-            def update
-          if @property
-            authorize! :update, @property
-            @property.update_attributes(property_params)
-            respond_with(@property, status: 200, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
-        end
-    
-            def index
-          authorize! :read, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
-        end
-    
-            def update
-          authorize! :update, taxonomy
-          if taxonomy.update_attributes(taxonomy_params)
-            respond_with(taxonomy, status: 200, default_template: :show)
-          else
-            invalid_resource!(taxonomy)
-          end
-        end
+        # Returns a string representation of the Sass backtrace.
+    #
+    # @param default_filename [String] The filename to use for unknown files
+    # @see #sass_backtrace
+    # @return [String]
+    def sass_backtrace_str(default_filename = 'an unknown file')
+      lines = message.split('\n')
+      msg = lines[0] + lines[1..-1].
+        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
+      'Error: #{msg}' +
+        sass_backtrace.each_with_index.map do |entry, i|
+          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
+            ' of #{entry[:filename] || default_filename}' +
+            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
+        end.join
+    end
