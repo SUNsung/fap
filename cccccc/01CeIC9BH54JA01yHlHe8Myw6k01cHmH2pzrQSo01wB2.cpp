@@ -1,225 +1,265 @@
 
         
-          /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
+        namespace internal {
+    }
     
-      /**
-   * Called by the parent Layer's SetUp to check that the number of bottom
-   * and top Blobs provided as input match the expected numbers specified by
-   * the {ExactNum,Min,Max}{Bottom,Top}Blobs() functions.
+      // D'tor
+  virtual ~UnitTest();
+    
+    
+    {  static const bool value =
+      sizeof(Helper(ImplicitlyConvertible::MakeFrom())) == 1;
+# pragma warning(pop)           // Restores the warning state.
+#elif defined(__BORLANDC__)
+  // C++Builder cannot use member overload resolution during template
+  // instantiation.  The simplest workaround is to use its C++0x type traits
+  // functions (C++Builder 2009 and above only).
+  static const bool value = __is_convertible(From, To);
+#else
+  static const bool value =
+      sizeof(Helper(ImplicitlyConvertible::MakeFrom())) == 1;
+#endif  // _MSV_VER
+};
+template <typename From, typename To>
+const bool ImplicitlyConvertible<From, To>::value;
+    
+      // Many linked_ptr operations may change p.link_ for some linked_ptr
+  // variable p in the same circle as this object.  Therefore we need
+  // to prevent two such operations from occurring concurrently.
+  //
+  // Note that different types of linked_ptr objects can coexist in a
+  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
+  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
+  // protect all linked_ptr objects.  This can create serious
+  // contention in production code, but is acceptable in a testing
+  // framework.
+    
+    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
+int Factorial(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
+  }
+    }
+    
+    
+    {  return clone;
+}
+    
+    /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
+ */
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
+    
+    /*! \brief typedef the factory function of operator property */
+typedef std::function<OperatorProperty *()> OperatorPropertyFactory;
+/*!
+ * \brief Registry entry for OperatorProperty factory functions.
+ */
+struct OperatorPropertyReg
+    : public dmlc::FunctionRegEntryBase<OperatorPropertyReg,
+                                        OperatorPropertyFactory> {
+  /*!
+   * \brief Set key_var_num_args
+   *  When this is set, the API caller is required to pass in a
+   *  argument with key=key_num_args.c_str(), and value=num_args.
+   *  num_args is number of positional argument when calling the function.
+   *
+   *  This is used to pass in length of positional arguments
+   *  for operators that can take variable length of input.
+   *  Most operators do not need to set this property.
+   *
+   * \param key the key name to be set
    */
-  virtual void CheckBlobCounts(const vector<Blob<Dtype>*>& bottom,
-                               const vector<Blob<Dtype>*>& top) {
-    if (ExactNumBottomBlobs() >= 0) {
-      CHECK_EQ(ExactNumBottomBlobs(), bottom.size())
-          << type() << ' Layer takes ' << ExactNumBottomBlobs()
-          << ' bottom blob(s) as input.';
+  inline OperatorPropertyReg& set_key_var_num_args(const std::string &key) {  // NOLINT(*)
+    this->key_var_num_args = key;
+    return *this;
+  }
+  /*!
+   * \brief Check if TypeString of the type matches the registered name
+   */
+  inline OperatorPropertyReg& check_name() {
+    OperatorProperty *p = this->body();
+    std::string type = p->TypeString();
+    delete p;
+    CHECK_EQ(this->name, type)
+        << 'Register Name and TypeString mismatch, name=\'' << this->name << '\','
+        << ' but TypeString=\'' << type <<'\'';
+    return *this;
+  }
     }
-    if (MinBottomBlobs() >= 0) {
-      CHECK_LE(MinBottomBlobs(), bottom.size())
-          << type() << ' Layer takes at least ' << MinBottomBlobs()
-          << ' bottom blob(s) as input.';
+    
+    #include <caffe/proto/caffe.pb.h>
+#include <dmlc/parameter.h>
+#include <dmlc/base.h>
+#include <dmlc/json.h>
+#include <dmlc/logging.h>
+#include <dmlc/type_traits.h>
+#include <google/protobuf/message.h>
+#include <google/protobuf/text_format.h>
+    
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    // Set mode before backward
+    caffe::CaffeMode::SetMode<xpu>();
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(out_grad.size(), param_.num_out);
+    for (int i = 0; i < param_.num_data; ++i)
+      CHECK(req[i] != kAddTo) << 'caffe doesn't accm diff on bottom data';
+    CHECK(in_data.size() == param_.num_data);
     }
-    if (MaxBottomBlobs() >= 0) {
-      CHECK_GE(MaxBottomBlobs(), bottom.size())
-          << type() << ' Layer takes at most ' << MaxBottomBlobs()
-          << ' bottom blob(s) as input.';
+    
+        for (int i = 0; i < param_.num_data; ++i) {
+      TShape tshape = (*in_shape)[i];
+      if (tshape.ndim() == 0) return false;
+      auto blob_ptr = new Blob<float>();
+      blob_ptr->Reshape(caffe::TShape2Vector(tshape));
+      bot_blobs.push_back(blob_ptr);
     }
-    if (ExactNumTopBlobs() >= 0) {
-      CHECK_EQ(ExactNumTopBlobs(), top.size())
-          << type() << ' Layer produces ' << ExactNumTopBlobs()
-          << ' top blob(s) as output.';
+    
+    namespace mxnet {
+namespace engine {
+/*!
+ * \brief ThreadedEngine using global thread pool across all devices.
+ * The policy of this Engine:
+ *  - Execute Async operation immediately if pushed from Pusher.
+ *  - Use a common thread pool for normal operations on all devices.
+ *  - Use special thread pool for copy operations.
+ */
+class ThreadedEnginePooled : public ThreadedEngine {
+ public:
+  ThreadedEnginePooled() {
+    this->Start();
+  }
     }
-    if (MinTopBlobs() >= 0) {
-      CHECK_LE(MinTopBlobs(), top.size())
-          << type() << ' Layer produces at least ' << MinTopBlobs()
-          << ' top blob(s) as output.';
     }
-    if (MaxTopBlobs() >= 0) {
-      CHECK_GE(MaxTopBlobs(), top.size())
-          << type() << ' Layer produces at most ' << MaxTopBlobs()
-          << ' top blob(s) as output.';
     }
-    if (EqualNumBottomTopBlobs()) {
-      CHECK_EQ(bottom.size(), top.size())
-          << type() << ' Layer produces one top blob as output for each '
-          << 'bottom blob input.';
+    
+    class TBlobContainer : public TBlob {
+ public:
+  TBlobContainer(void)
+    : TBlob(), tensor_container_(nullptr) {}
+  ~TBlobContainer() {
+    if (tensor_container_) {
+      release();
     }
   }
+  void resize(const TShape &shape, int type_flag) {
+    if (tensor_container_) {
+      CHECK_EQ(this->type_flag_, type_flag);
+      this->shape_ = shape;
+      resize();
+    } else {
+      this->type_flag_ = type_flag;
+      this->shape_ = shape;
+      create();
+    }
+  }
+    }
     
+      std::chrono::seconds timeout_;
     
-    { protected:
-  TransformationParameter transform_param_;
-  shared_ptr<DataTransformer<Dtype> > data_transformer_;
-  bool output_labels_;
-};
+      virtual const std::string& getType() const CXX11_OVERRIDE;
     
-      virtual inline const char* type() const { return 'Convolution'; }
+    class DHTTask {
+public:
+  virtual ~DHTTask() = default;
+    }
+    
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+    void DHTTaskFactoryImpl::setRoutingTable(DHTRoutingTable* routingTable)
+{
+  routingTable_ = routingTable;
+}
+    
+      DHTTaskExecutor immediateTaskQueue_;
+    
+      const uint64_t num_threads_;
+  uint64_t num_initialized_;
+  bool start_;
+  uint64_t num_done_;
+    
+      // Need to refill more than one interval. Need to sleep longer. Check
+  // whether expiration will hit
+    
+      auto delay_token_2 = controller.GetDelayToken(10000000u);
+  // Rate reset after changing the token.
+  ASSERT_EQ(static_cast<uint64_t>(2000000),
+            controller.GetDelay(&env, 20000000u));
+    
+    #include 'rocksdb/cache.h'
+#include 'rocksdb/compaction_filter.h'
+#include 'rocksdb/db.h'
+#include 'rocksdb/options.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/table.h'
+#include 'rocksdb/utilities/options_util.h'
+    
+      ////////////////////////////////////////////////////////
+  //
+  // 'Repeatable Read' (Snapshot Isolation) Example
+  //   -- Using a single Snapshot
+  //
+  ////////////////////////////////////////////////////////
+    
+    // Take a default BlockBasedTableOptions 'table_options' in addition to a
+// map 'opts_map' of option name to option value to construct the new
+// BlockBasedTableOptions 'new_table_options'.
+//
+// Below are the instructions of how to config some non-primitive-typed
+// options in BlockBasedTableOptions:
+//
+// * filter_policy:
+//   We currently only support the following FilterPolicy in the convenience
+//   functions:
+//   - BloomFilter: use 'bloomfilter:[bits_per_key]:[use_block_based_builder]'
+//     to specify BloomFilter.  The above string is equivalent to calling
+//     NewBloomFilterPolicy(bits_per_key, use_block_based_builder).
+//     [Example]:
+//     - Pass {'filter_policy', 'bloomfilter:4:true'} in
+//       GetBlockBasedTableOptionsFromMap to use a BloomFilter with 4-bits
+//       per key and use_block_based_builder enabled.
+//
+// * block_cache / block_cache_compressed:
+//   We currently only support LRU cache in the GetOptions API.  The LRU
+//   cache can be set by directly specifying its size.
+//   [Example]:
+//   - Passing {'block_cache', '1M'} in GetBlockBasedTableOptionsFromMap is
+//     equivalent to setting block_cache using NewLRUCache(1024 * 1024).
+//
+// @param table_options the default options of the output 'new_table_options'.
+// @param opts_map an option name to value map for specifying how
+//     'new_table_options' should be set.
+// @param new_table_options the resulting options based on 'table_options'
+//     with the change specified in 'opts_map'.
+// @param input_strings_escaped when set to true, each escaped characters
+//     prefixed by '\' in the values of the opts_map will be further converted
+//     back to the raw string before assigning to the associated options.
+// @param ignore_unknown_options when set to true, unknown options are ignored
+//     instead of resulting in an unknown-option error.
+// @return Status::OK() on success.  Otherwise, a non-ok status indicating
+//     error will be returned, and 'new_table_options' will be set to
+//     'table_options'.
+Status GetBlockBasedTableOptionsFromMap(
+    const BlockBasedTableOptions& table_options,
+    const std::unordered_map<std::string, std::string>& opts_map,
+    BlockBasedTableOptions* new_table_options,
+    bool input_strings_escaped = false, bool ignore_unknown_options = false);
     
     
     {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
-};
-}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
-  }
-    
-      // Queue of writers.
-  std::deque<Writer*> writers_ GUARDED_BY(mutex_);
-  WriteBatch* tmp_batch_ GUARDED_BY(mutex_);
-    
-      DBTest() : option_config_(kDefault),
-             env_(new SpecialEnv(Env::Default())) {
-    filter_policy_ = NewBloomFilterPolicy(10);
-    dbname_ = test::TmpDir() + '/db_test';
-    DestroyDB(dbname_, Options());
-    db_ = nullptr;
-    Reopen();
-  }
-    
-    
-    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
-}
-    
-    #include <stdio.h>
-    
-    // Return the name of the lock file for the db named by
-// 'dbname'.  The result will be prefixed with 'dbname'.
-std::string LockFileName(const std::string& dbname);
-    
-    TEST(LogTest, ReadSecondStart) {
-  CheckInitialOffsetRecord(10007, 1);
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_SNAPSHOT_H_
-#define STORAGE_LEVELDB_DB_SNAPSHOT_H_
-    
-    static void ImGui_ImplDX11_CreateFontsTexture()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-    }
-    
-    void ImGui_ImplFreeGLUT_NewFrame()
-{
-    // Setup time step
-    ImGuiIO& io = ImGui::GetIO();
-    int current_time = glutGet(GLUT_ELAPSED_TIME);
-    io.DeltaTime = (current_time - g_Time) / 1000.0f;
-    g_Time = current_time;
-    }
-    
-        glutMainLoop();
-    
-    		bool isBackward() const { return !orEqual && offset<=0; } // True if the resolution of the KeySelector depends only on keys less than key
-		bool isFirstGreaterOrEqual() const { return !orEqual && offset==1; }
-		bool isFirstGreaterThan() const { return orEqual && offset==1; }
-		bool isLastLessOrEqual() const { return orEqual && offset==0; }
-    
-    		virtual Future<Reference<DirectorySubspace>> open(Reference<Transaction> const& tr, Path const& path, Standalone<StringRef> const& layer = Standalone<StringRef>()) = 0;
-		virtual Future<Reference<DirectorySubspace>> createOrOpen(Reference<Transaction> const& tr, Path const& path, Standalone<StringRef> const& layer = Standalone<StringRef>()) = 0;
-    
-    
-    {		// FIXME: test that this uses the keyRange arena and doesn't create another one
-		keyRange.KeyRangeRef::operator=(KeyRangeRef(StringRef(begin.begin(), begin.size()), StringRef(end.begin(), end.size())));
-		return keyRange;
-	}
-    
-    	static size_t find_string_terminator(const Standalone<VectorRef<unsigned char> > data, size_t offset ) {
-		size_t i = offset;
-		while (i < data.size() - 1 && !(data[i] == '\x00' && data[i+1] != (uint8_t)'\xff')) {
-			i += (data[i] == '\x00' ? 2 : 1);
-		}
-    }
-    
-    	private:
-		static const uint8_t NULL_CODE;
-		static const uint8_t BYTES_CODE;
-		static const uint8_t STRING_CODE;
-		static const uint8_t NESTED_CODE;
-		static const uint8_t INT_ZERO_CODE;
-		static const uint8_t POS_INT_END;
-		static const uint8_t NEG_INT_START;
-		static const uint8_t FLOAT_CODE;
-		static const uint8_t DOUBLE_CODE;
-		static const uint8_t FALSE_CODE;
-		static const uint8_t TRUE_CODE;
-		static const uint8_t UUID_CODE;
-    
-    
-    {		void logEvent(std::string id) const {
-			TraceEvent('TransactionTrace_GetError').detail('TransactionID', id).detail('ErrCode', errCode).detail('Key', printable(key));
-		}
-	};
-    
-    template<class S, class T>
-ThreadFuture<T> flatMapThreadFuture(ThreadFuture<S> source, std::function<ErrorOr<ThreadFuture<T>>(ErrorOr<S>)> mapValue) {
-	return ThreadFuture<T>(new FlatMapSingleAssignmentVar<S, T>(source, mapValue));
-}
-    
-    //          Copyright John W. Wilkinson 2007 - 2014
-// Distributed under the MIT License, see accompanying file LICENSE-OSS
-    
-    template <class Key, class Val, class Range, class Metric, class MetricFunc>
-void RangeMap<Key,Val,Range,Metric,MetricFunc>::insert( const Range& keys, const Val& value ) {
-	if(keys.begin == keys.end)
-		return;
-    }
-    
-    	void setTotal( double total, double t = timer() ) { addDelta( total - this->total, t); }
-	void addDelta( double delta, double t = timer() ) {
-		update(t);
-		total += delta;
-	}
-	// smoothTotal() is a continuous (under)estimate of the sum of all addDeltas()
-	double smoothTotal( double t = timer() ) {
-		update(t);
-		return estimate;
-	}
-	// smoothRate() is d/dt[smoothTotal], and is NOT continuous
-	double smoothRate( double t = timer() ) {
-		update(t);
-		return (total-estimate) / eFoldingTime;
-	}
+    {}  // namespace experimental
+}  // namespace rocksdb
