@@ -1,111 +1,87 @@
 
         
-                  branch_option = '--branch #{branch}' if branch != 'HEAD'
+          private
     
-          it 'works with default_keychain and name and password' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            name: 'test.keychain',
-            password: 'testpassword',
-            default_keychain: true,
-          })
-        end').runner.execute(:test)
+      def std_cmake_parameters
+    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
+  end
     
-          it 'handles the extensions parameter with a single element correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extensions: ['m'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.m')
-      end
+            def self.options
+          [[
+            '--short', 'Only print the path relative to the cache root'
+          ]].concat(super)
+        end
     
-          it 'generates the correct git command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: 'message')
-        end').runner.execute(:test)
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-            allow(File).to receive(:file?).and_return(false)
-        allow(File).to receive(:file?).with(keychain_path).and_return(true)
-        allow(File).to receive(:exist?).and_return(false)
-        expect(File).to receive(:exist?).with(cert_name).and_return(true)
-        allow(FastlaneCore::Helper).to receive(:backticks).with(allowed_command, print: true)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_command, print: true)
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
     
-            context 'when slather version is 2.4.1' do
-          let(:version) { '2.4.1' }
-          it 'pass the validation' do
-            expect(action.validate_params!(param)).to be_truthy
-          end
+          attr_reader :key, :default, :options
+    
+            def lvalue(key)
+          key.to_s.chomp('=').to_sym
         end
       end
-    
-      def select(&block)
-    self.class.new(@paths.select(&block))
+    end
   end
-    
-      def command
-    abort 'This command requires a command argument' if ARGV.empty?
-    
-    module Homebrew
-  module_function
-    
-              # Encodes the ticket field
-          #
-          # @return [String]
-          def encode_ticket
-            ticket.encode
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
-            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
-            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
-            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
-            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
-            seq_asn1.to_der
-          end
-    
-    # Declares a dependency to the git repo of CocoaPods gem. This declaration is
-# compatible with the local git repos feature of Bundler.
-#
-def cp_gem(name, repo_name, branch = 'master', path: false)
-  return gem name if SKIP_UNRELEASED_VERSIONS
-  opts = if path
-           { :path => '../#{repo_name}' }
-         else
-           url = 'https://github.com/CocoaPods/#{repo_name}.git'
-           { :git => url, :branch => branch }
-         end
-  gem name, opts
 end
+
     
-        export LANG=en_US.UTF-8
-    \e[0m
-    DOC
+          private
+    
+        puts('Packaging plugins for offline usage')
+    
+            return nil
+      end
+    end
+  end
+end end end
+
+    
+      # create list of plugins to update
+  def plugins_to_update(previous_gem_specs_map)
+    if update_all?
+      previous_gem_specs_map.values.map{|spec| spec.name}
+    else
+      # If the plugins isn't available in the gemspec or in 
+      # the gemfile defined with a local path, we assume the plugins is not
+      # installed.
+      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
+      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
+      plugins_arg
+    end
   end
     
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
+  end
     
-      class Command < CLAide::Command
-    require 'cocoapods/command/options/repo_update'
-    require 'cocoapods/command/options/project_directory'
-    include Options
+      class Blockquote < Liquid::Block
+    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
+    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
+    Author =  /(.+)/
     
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
+        def poster
+      'poster='#{@poster}'' if @poster
+    end
