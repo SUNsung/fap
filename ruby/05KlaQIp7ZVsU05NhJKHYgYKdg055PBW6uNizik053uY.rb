@@ -1,164 +1,80 @@
 
         
-                  def retrieve_autoindex(pre_match)
-            object = self.object || @template_object.instance_variable_get('@#{pre_match}')
-            if object && object.respond_to?(:to_param)
-              object.to_param
-            else
-              raise ArgumentError, 'object[] naming but object param and @object var don't exist or don't respond to to_param: #{object.inspect}'
-            end
-          end
+                next unless path.file?
+        file = path
     
-            def render(&block)
-          render_collection_for(RadioButtonBuilder, &block)
-        end
-    
-        private
-    
-    module ActionView
-  # This is the main entry point for rendering. It basically delegates
-  # to other objects like TemplateRenderer and PartialRenderer which
-  # actually renders the template.
-  #
-  # The Renderer will parse the options from the +render+ or +render_body+
-  # method and render a partial or a template based on the options. The
-  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
-  # the setup and logic necessary to render a view and a new object is created
-  # each time +render+ is called.
-  class Renderer
-    attr_accessor :lookup_context
-    
-            def importer_class
-          IssueAndLabelLinksImporter
-        end
-    
-              Gitlab::Database.bulk_insert(LabelLink.table_name, rows)
-        end
-    
-          # Associates the given database ID with the current object.
-      #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
       end
     
-    module Gitlab
-  module GithubImport
-    module Representation
-      class Issue
-        include ToHash
-        include ExposeAttribute
+      def search
+    if ARGV.empty?
+      puts_columns Formula.full_names
+    elsif ARGV.include? '--macports'
+      exec_browser 'https://www.macports.org/ports.php?by=name&substr=#{ARGV.next}'
+    elsif ARGV.include? '--fink'
+      exec_browser 'http://pdb.finkproject.org/pdb/browse.php?summary=#{ARGV.next}'
+    elsif ARGV.include? '--debian'
+      exec_browser 'https://packages.debian.org/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--opensuse'
+      exec_browser 'https://software.opensuse.org/search?q=#{ARGV.next}'
+    elsif ARGV.include? '--fedora'
+      exec_browser 'https://admin.fedoraproject.org/pkgdb/packages/%2A#{ARGV.next}%2A/'
+    elsif ARGV.include? '--ubuntu'
+      exec_browser 'http://packages.ubuntu.com/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--desc'
+      query = ARGV.next
+      rx = query_regexp(query)
+      Descriptions.search(rx, :desc).print
+    elsif ARGV.first =~ HOMEBREW_TAP_FORMULA_REGEX
+      query = ARGV.first
+      user, repo, name = query.split('/', 3)
     
-            def truncated_title
-          title.truncate(255)
+      def migrate_formula_rename
+    report[:R].each do |old_full_name, new_full_name|
+      old_name = old_full_name.split('/').last
+      next unless (dir = HOMEBREW_CELLAR/old_name).directory? && !dir.subdirs.empty?
+    
+      DATA = :DATA
+    
+          To export the needed variables, add them to your dotfiles.
+       * On Bash, add them to `~/.bash_profile`.
+       * On Zsh, add them to `~/.zprofile` instead.
+    
+            def id_for_already_imported_cache(note)
+          note.id
         end
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-        def translation_scope
-      'devise.unlocks'
+      end
     end
+  end
 end
 
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
+    module Gitlab
+  module GithubImport
+    module Importer
+      class LabelLinksImporter
+        attr_reader :issue, :project, :client, :label_finder
     
-          attr_reader :scope_name, :resource
+              hash = {
+            iid: issue.number,
+            title: issue.title,
+            description: issue.body,
+            milestone_number: issue.milestone&.number,
+            state: issue.state == 'open' ? :opened : :closed,
+            assignees: issue.assignees.map do |u|
+              Representation::User.from_api_response(u)
+            end,
+            label_names: issue.labels.map(&:name),
+            author: user,
+            created_at: issue.created_at,
+            updated_at: issue.updated_at,
+            pull_request: issue.pull_request ? true : false
+          }
     
-          if failed_attributes.any?
-        fail Devise::Models::MissingAttribute.new(failed_attributes)
-      end
-    end
-    
-      def outbox_presenter
-    if page_requested?
-      ActivityPub::CollectionPresenter.new(
-        id: account_outbox_url(@account, page_params),
-        type: :ordered,
-        part_of: account_outbox_url(@account),
-        prev: prev_page,
-        next: next_page,
-        items: @statuses
-      )
-    else
-      ActivityPub::CollectionPresenter.new(
-        id: account_outbox_url(@account),
-        type: :ordered,
-        size: @account.statuses_count,
-        first: account_outbox_url(@account, page: true),
-        last: account_outbox_url(@account, page: true, min_id: 0)
-      )
-    end
-  end
-    
-        def resend
-      authorize @user, :confirm?
-    
-        def resource_params
-      params.require(:report_note).permit(
-        :content,
-        :report_id
-      )
-    end
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-      def command
-    abort 'This command requires a command argument' if ARGV.empty?
-    
-          old_name = name
-      old_path = path
-      old_remote = path.git_origin
-    
-      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
-    head = [
-      0x06, 0x00, 0xff, 0x07,  # RMCP Header
-      0x06,                    # RMCP+ Authentication Type
-      PAYLOAD_RAKP1,           # Payload Type
-      0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00,
-    ].pack('C*')
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
-            end
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-          # Checks whether the `if` node has an `else` clause.
-      #
-      # @note This returns `true` for nodes containing an `elsif` clause.
-      #       This is legacy behavior, and many cops rely on it.
-      #
-      # @return [Boolean] whether the node has an `else` clause
-      def else?
-        loc.respond_to?(:else) && loc.else
-      end
+            expose_attribute :noteable_id, :noteable_type, :author, :note,
+                         :created_at, :updated_at, :github_id
