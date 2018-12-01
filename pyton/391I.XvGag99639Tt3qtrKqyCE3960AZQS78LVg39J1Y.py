@@ -1,217 +1,181 @@
 
         
-            def test_POST_no_data_no_auto_headers(self, httpbin):
-        # JSON headers shouldn't be automatically set for POST with no data.
-        r = http('POST', httpbin.url + '/post')
-        assert HTTP_OK in r
-        assert ''Accept': '*/*'' in r
-        assert ''Content-Type': 'application/json' not in r
-    
-    from utils import TESTS_ROOT
-    
-        validation_mgr = CloudFrontInvalidationValidationManager(module)
-    service_mgr = CloudFrontInvalidationServiceManager(module)
-    
-        def ensure_absent(self):
-        '''Ensures the rule and targets are absent'''
-        rule_description = self.rule.describe()
-        if not rule_description:
-            # Rule doesn't exist so don't need to delete
-            return
-        self.rule.delete()
-    
-        return matched_asgs
-    
-    # List all EIP addresses for several VMs.
-- ec2_eip_facts:
-    filters:
-       instance-id:
-         - i-123456789
-         - i-987654321
-  register: my_vms_eips
-    
-    
-DOCUMENTATION = '''
----
-module: ec2_lc_find
-short_description: Find AWS Autoscaling Launch Configurations
-description:
-  - Returns list of matching Launch Configurations for a given name, along with other useful information
-  - Results can be sorted and sliced
-  - It depends on boto
-  - Based on the work by Tom Bamford (https://github.com/tombamford)
-    
-    
-def get_vpc(module, connection, vpc_id):
-    # wait for vpc to be available
-    try:
-        connection.get_waiter('vpc_available').wait(VpcIds=[vpc_id])
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Unable to wait for VPC {0} to be available.'.format(vpc_id))
-    
-        def delete_repository(self, registry_id, name):
-        if not self.check_mode:
-            repo = self.ecr.delete_repository(
-                repositoryName=name, **build_kwargs(registry_id))
-            self.changed = True
-            return repo
-        else:
-            repo = self.get_repository(registry_id, name)
-            if repo:
-                self.skipped = True
-                return repo
-            return None
-    
-    
-def copy(module, connection, name, target, bucket):
-    ''' Copy an Elasticache backup. '''
-    try:
-        response = connection.copy_snapshot(SourceSnapshotName=name,
-                                            TargetSnapshotName=target,
-                                            TargetBucket=bucket)
-        changed = True
-    except botocore.exceptions.ClientError as e:
-        module.fail_json(msg='Unable to copy the snapshot.', exception=traceback.format_exc())
-    return response, changed
-    
-        state = module.params.get('state')
-    group_name = module.params.get('name').lower()
-    group_description = module.params.get('description')
-    group_subnets = module.params.get('subnets') or {}
-    
-    EXAMPLES = '''
-# Create a Redshift subnet group
-- local_action:
-    module: redshift_subnet_group
-    state: present
-    group_name: redshift-subnet
-    group_description: Redshift subnet
-    group_subnets:
-        - 'subnet-aaaaa'
-        - 'subnet-bbbbb'
-    
-            return True
-    
-        def close(self):
-        self.fd.close()
-    
-        def get(self):
-        n = random.randint(2, 3)
-        ws = []
-        for i in range(0, n):
-            w = self.slice.get()
-            ws.append(w)
-    
-    # tree.RewriteRuleElementStream
-# tree.RewriteRuleSubtreeStream
-# tree.RewriteRuleTokenStream
-# CharStream
-# DFA
-# TokenSource
-    
-            raise NotImplementedError
-    
-    
-        def test_relpath_bytes(self):
-        (real_getcwdb, os.getcwdb) = (os.getcwdb, lambda: br'/home/user/bar')
+            def deal_card(self):
         try:
-            curdir = os.path.split(os.getcwdb())[-1]
-            self.assertRaises(ValueError, posixpath.relpath, b'')
-            self.assertEqual(posixpath.relpath(b'a'), b'a')
-            self.assertEqual(posixpath.relpath(posixpath.abspath(b'a')), b'a')
-            self.assertEqual(posixpath.relpath(b'a/b'), b'a/b')
-            self.assertEqual(posixpath.relpath(b'../a/b'), b'../a/b')
-            self.assertEqual(posixpath.relpath(b'a', b'../b'),
-                             b'../'+curdir+b'/a')
-            self.assertEqual(posixpath.relpath(b'a/b', b'../c'),
-                             b'../'+curdir+b'/a/b')
-            self.assertEqual(posixpath.relpath(b'a', b'b/c'), b'../../a')
-            self.assertEqual(posixpath.relpath(b'a', b'a'), b'.')
-            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/x/y/z'), b'../../../foo/bar/bat')
-            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/foo/bar'), b'bat')
-            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/'), b'foo/bar/bat')
-            self.assertEqual(posixpath.relpath(b'/', b'/foo/bar/bat'), b'../../..')
-            self.assertEqual(posixpath.relpath(b'/foo/bar/bat', b'/x'), b'../foo/bar/bat')
-            self.assertEqual(posixpath.relpath(b'/x', b'/foo/bar/bat'), b'../../../x')
-            self.assertEqual(posixpath.relpath(b'/', b'/'), b'.')
-            self.assertEqual(posixpath.relpath(b'/a', b'/a'), b'.')
-            self.assertEqual(posixpath.relpath(b'/a/b', b'/a/b'), b'.')
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
     
-        def test_bad_params(self):
-        # Test invalid parameter combinations.
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'wbt')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'xbt')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'rb', encoding='utf-8')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'rb', errors='ignore')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'rb', newline='\n')
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
     
-    def worker(input, output):
-    for func, args in iter(input.get, 'STOP'):
-        result = calculate(func, args)
-        output.put(result)
-    
-        '''catalog of multiple class methods that are executed depending on an init
+        def parse_query(self, query):
+        '''Remove markup, break text into terms, deal with typos,
+        normalize capitalization, convert to use boolean operations.
+        '''
+        ...
     
     
-def count_to(count):
-    '''Counts by word numbers, up to a maximum of five'''
-    numbers = ['one', 'two', 'three', 'four', 'five']
-    for number in numbers[:count]:
-        yield number
+class Crawler(object):
     
-    ### OUTPUT ###
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# HexViewer: Subject Data 1 has data 0xa
-# Setting Data 2 = 15
-# HexViewer: Subject Data 2 has data 0xf
-# DecimalViewer: Subject Data 2 has data 15
-# Setting Data 1 = 3
-# DecimalViewer: Subject Data 1 has data 3
-# HexViewer: Subject Data 1 has data 0x3
-# Setting Data 2 = 5
-# HexViewer: Subject Data 2 has data 0x5
-# DecimalViewer: Subject Data 2 has data 5
-# Detach HexViewer from data1 and data2.
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# Setting Data 2 = 15
-# DecimalViewer: Subject Data 2 has data 15
+    
+def load_word_embeddings(word_embeddings_dir, word_embeddings_file):
+  '''Loads pretrained word embeddings from a binary file and returns the matrix.
+    
+      return data_wxhx3
 
     
-    ### OUTPUT ###
-# jim got cartoon
-# jack got music
-# gee got movie
-# jim got cartoon
-# jim got cartoon
-# gee got movie
+    # write out the dataset
+write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
+print ('Saved to ', os.path.join(FLAGS.save_dir,
+                                 FLAGS.datafile_name + '_' + dataset_name))
 
     
-        REGISTRY = {}
+      return spikes_e
     
-        strat0.execute()
-    strat1.execute()
-    strat2.execute()
+      Args:
+    tensor_bxtxn: The BxTxN numpy tensor.
     
-        def __get__(self, obj, type_):
-        if obj is None:
-            return self
-        val = self.function(obj)
-        obj.__dict__[self.function.__name__] = val
-        return val
+    EOS_INDEX = 0
     
     
-class MidnightTimeProvider(object):
-    '''
-    Class implemented as hard-coded stub (in contrast to configurable stub).
-    '''
+def calculate_reinforce_objective(hparams,
+                                  log_probs,
+                                  dis_predictions,
+                                  present,
+                                  estimated_values=None):
+  '''Calculate the REINFORCE objectives.  The REINFORCE objective should
+  only be on the tokens that were missing.  Specifically, the final Generator
+  reward should be based on the Discriminator predictions on missing tokens.
+  The log probaibilities should be only for missing tokens and the baseline
+  should be calculated only on the missing tokens.
+    
+        elif FLAGS.discriminator_model == 'seq2seq_vd':
+      # Encoder.
+      dis_encoder_variable_maps = variable_mapping.dis_encoder_seq2seq(hparams)
+      dis_encoder_init_saver = tf.train.Saver(
+          var_list=dis_encoder_variable_maps)
+      # Decoder.
+      dis_decoder_variable_maps = variable_mapping.dis_decoder_seq2seq(hparams)
+      dis_decoder_init_saver = tf.train.Saver(
+          var_list=dis_decoder_variable_maps)
+      init_savers['dis_encoder_init_saver'] = dis_encoder_init_saver
+      init_savers['dis_decoder_init_saver'] = dis_decoder_init_saver
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+      # Optional variable mappings.
+  if not FLAGS.dis_share_embedding:
+    variable_mapping['gen/decoder/rnn/embedding'] = decoder_embedding
+  if FLAGS.attention_option is not None:
+    variable_mapping[
+        'gen/decoder/attention_keys/weights'] = decoder_attention_keys
+    variable_mapping[
+        'gen/decoder/rnn/attention_construct/weights'] = decoder_attention_construct_weights
+    
+      Returns:
+    A decoder function with the required interface of `dynamic_rnn_decoder`
+    intended for inference.
+  '''
+  with tf.name_scope(name, 'attention_decoder_fn_inference', [
+      output_fn, encoder_state, attention_keys, attention_values,
+      attention_score_fn, attention_construct_fn, embeddings,
+      start_of_sequence_id, end_of_sequence_id, maximum_length,
+      num_decoder_symbols, dtype
+  ]):
+    start_of_sequence_id = tf.convert_to_tensor(start_of_sequence_id, dtype)
+    end_of_sequence_id = tf.convert_to_tensor(end_of_sequence_id, dtype)
+    maximum_length = tf.convert_to_tensor(maximum_length, dtype)
+    num_decoder_symbols = tf.convert_to_tensor(num_decoder_symbols, dtype)
+    encoder_info = tf.contrib.framework.nest.flatten(encoder_state)[0]
+    batch_size = encoder_info.get_shape()[0].value
+    if output_fn is None:
+      output_fn = lambda x: x
+    if batch_size is None:
+      batch_size = tf.shape(encoder_info)[0]
+    
+                    _filename = newfilename
+    
+        def render(self, request):
+        now = time()
+        delta = now - self.lasttime
+    
+    import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+from scrapy.utils.misc import walk_modules
+from scrapy.utils.project import inside_project, get_project_settings
+from scrapy.utils.python import garbage_collect
+from scrapy.settings.deprecated import check_deprecated_settings
+    
+        def syntax(self):
+        return '[options]'
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
+    
+        def download_request(self, request, spider):
+        parsed_url = urlparse_cached(request)
+        user = request.meta.get('ftp_user', self.default_user)
+        password = request.meta.get('ftp_password', self.default_password)
+        passive_mode = 1 if bool(request.meta.get('ftp_passive',
+                                                  self.passive_mode)) else 0
+        creator = ClientCreator(reactor, FTPClient, user, password,
+            passive=passive_mode)
+        return creator.connectTCP(parsed_url.hostname, parsed_url.port or 21).addCallback(self.gotClient,
+                                request, unquote(parsed_url.path))
+    
+                if item.get(CONF_DISPLAY_URL) is not None:
+                if isinstance(item.get(CONF_DISPLAY_URL),
+                              template.Template):
+                    output[ATTR_REDIRECTION_URL] = \
+                        item[CONF_DISPLAY_URL].async_render()
+                else:
+                    output[ATTR_REDIRECTION_URL] = item.get(CONF_DISPLAY_URL)
     
     
-class UnsupportedTransition(BaseException):
-    pass
+def setup(hass, config):
+    '''Listen for browse_url events.'''
+    import webbrowser
+    
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        if not self.last_results:
+            return None
+        for client in self.last_results:
+            if client.mac == device:
+                return client.ip
+        return None
+    
+            if self._userid is None:
+            if not self._login():
+                _LOGGER.error('Could not obtain a user ID from the router')
+                return False
+        last_results = []
+    
+            for code in self._product_codes:
+            order.add_item(code)
+    
+    
+CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({cv.slug: GRAPH_SCHEMA})
+}, extra=vol.ALLOW_EXTRA)
+    
+            return wrapper
