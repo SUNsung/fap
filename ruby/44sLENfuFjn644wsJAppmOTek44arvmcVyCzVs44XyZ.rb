@@ -1,50 +1,81 @@
 
         
-            reversible(&method(:up_down))
+              GivenDailyLike.increment_for(user.id)
+      expect(value_for(user.id, dt)).to eq(1)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
+    
+    UserOption.where(user_id: -1).update_all(
+  email_private_messages: false,
+  email_direct: false
+)
+    
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
+    
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for Staff category!'
+        end
+    
+          return unless old_path.directory?
+    
+      it 'no raises error on fixnum values' do
+    [1].each do |v|
+      lambda { v.taint }.should_not raise_error(RuntimeError)
+      v.tainted?.should == false
+    end
+  end
+end
+
+    
+    describe 'main#define_method' do
+  before :each do
+    @code = 'define_method(:boom) { :bam }'
   end
     
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-    Given /^a user with email '([^\']*)' is tagged '([^\']*)'$/ do |email, tags|
-  user = User.find_by_email(email)
-  user.profile.tag_string = tags
-  user.profile.build_tags
-  user.profile.save!
-end
-    
-        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
-      # adds one not mutual contact
-      bob.share_with(FactoryGirl.create(:person), @aspect)
-    
-    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
-  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
-  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
-    end
-    
-              it 'successfully install the plugin when verification is disabled' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
-          end
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
+        def URIEncodeSingle(cc, result, index)
+      x = (cc >> 12) & 0xF;
+      y = (cc >> 6) & 63;
+      z = cc & 63;
+      octets = Array.new(3);
+      if (cc <= 0x007F)
+        octets[0] = cc;
+      elsif (cc <= 0x07FF)
+        octets[0] = y + 192;
+        octets[1] = z + 128;
+      else
+        octets[0] = x + 224;
+        octets[1] = y + 128;
+        octets[2] = z + 128;
       end
+      return URIEncodeOctets(octets, result, index);
     end
-  end
+    
+          def line_class(line)
+        if line =~ /^@@/
+          'gc'
+        elsif line =~ /^\+/
+          'gi'
+        elsif line =~ /^\-/
+          'gd'
+        else
+          ''
+        end
+      end
+    
+    def testpath(path)
+  File.join(TEST_DIR, path)
 end
+    
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
+    end
