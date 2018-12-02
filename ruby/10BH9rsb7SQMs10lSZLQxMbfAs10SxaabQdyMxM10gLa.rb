@@ -1,126 +1,86 @@
 
         
-            def blank?
-      body.blank?
+              keg_only_deps.each do |dep|
+        ENV.prepend_path 'PATH', dep.opt_bin.to_s
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
+        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
+        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
+        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
+        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
+      end
     end
     
-            if root_path?
-          (options[:skip] ||= []).concat ['', '/']
-        end
-    
-    Given(/^a linked file '(.*?)'$/) do |file|
-  # ignoring other linked files
-  TestApp.append_to_deploy_file('set :linked_files, ['#{file}']')
-end
-    
-        def version
-      ['--version', '-V',
-       'Display the program version.',
-       lambda do |_value|
-         puts 'Capistrano Version: #{Capistrano::VERSION} (Rake Version: #{Rake::VERSION})'
-         exit
-       end]
-    end
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-        <div id='cookies'>
-      <h3 id='cookie-info'>COOKIES</h3>
-      <% unless req.cookies.empty? %>
-        <table class='req'>
-          <tr>
-            <th>Variable</th>
-            <th>Value</th>
-          </tr>
-          <% req.cookies.each { |key, val| %>
-            <tr>
-              <td><%=h key %></td>
-              <td class='code'><div><%=h val.inspect %></div></td>
-            </tr>
-          <% } %>
-        </table>
-      <% else %>
-        <p class='no-data'>No cookie data.</p>
-      <% end %>
-      <div class='clear'></div>
-    </div> <!-- /COOKIES -->
-    
-    namespace :doc do
-  task :readmes do
-    Dir.glob 'lib/rack/protection/*.rb' do |file|
-      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
-      next if excluded_files.include?(file)
-      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
-      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
-      Dir.mkdir 'doc' unless File.directory? 'doc'
-      puts 'writing #{file}'
-      File.open(file, 'w') { |f| f << doc }
-    end
+      def clang
+    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
   end
     
-          def default_options
-        DEFAULT_OPTIONS
-      end
+        attr_reader :filters
     
-      describe '#random_string' do
-    it 'outputs a string of 32 characters' do
-      expect(subject.random_string.length).to eq(32)
-    end
-  end
-    
-            def next
-          authorize! :update, @order, order_token
-          @order.next!
-          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
-        rescue StateMachines::InvalidTransition
-          respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
-        end
-    
-            def show
-          @option_type = Spree::OptionType.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@option_type)
-        end
-    
-            def property_params
-          params.require(:property).permit(permitted_property_attributes)
-        end
-      end
+        def as_json
+      { name: name, path: path, type: type }
     end
   end
 end
 
     
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
-          else
-            State.accessible_by(current_ability, :read).order('name ASC')
-          end
-        end
+          def initial_urls
+        super + self.class.base_urls[1..-1].deep_dup
+      end
+    
+        def initialize(*args)
+      if args.empty?
+        super(*Array.new(9))
+      elsif args.length == 1 && args.first.is_a?(Hash)
+        args.first.assert_valid_keys URI::Generic::COMPONENT
+        super(*args.first.values_at(*URI::Generic::COMPONENT))
+      else
+        super
       end
     end
-  end
-end
-
     
-            def user_params
-          params.require(:user).permit(permitted_user_attributes |
-                                         [bill_address_attributes: permitted_address_attributes,
-                                          ship_address_attributes: permitted_address_attributes])
-        end
-      end
+        # Converts the CSS template into Sass or SCSS code.
+    #
+    # @param fmt [Symbol] `:sass` or `:scss`, designating the format to return.
+    # @return [String] The resulting Sass or SCSS code
+    # @raise [Sass::SyntaxError] if there's an error parsing the CSS template
+    def render(fmt = :sass)
+      check_encoding!
+      build_tree.send('to_#{fmt}', @options).strip + '\n'
+    rescue Sass::SyntaxError => err
+      err.modify_backtrace(:filename => @options[:filename] || '(css)')
+      raise err
     end
+    
+    Backtrace:\n#{e.backtrace.join('\n').gsub('*/', '*\\/')}
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: '#{header.gsub(''', '\'').gsub('\n', '\\A ')}'; }
+END
+      end
+    
+          # Almost any real Unix terminal will support color,
+      # so we just filter for Windows terms (which don't set TERM)
+      # and not-real terminals, which aren't ttys.
+      return str if ENV['TERM'].nil? || ENV['TERM'].empty? || !STDOUT.tty?
+      '\e[#{COLORS[color]}m#{str}\e[0m'
+    end
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
+    
+      # TODO: raise SAFE level (0) to 4 if possible.
+  def generate
+    ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
   end
 end
-
-    
-        def erb(content, options = {})
-      if content.kind_of? Symbol
-        unless respond_to?(:'_erb_#{content}')
-          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
-          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
-        end
-      end
