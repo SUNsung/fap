@@ -1,132 +1,145 @@
 
         
-            def escalate_call(self):
-        self.call.level = Rank.DIRECTOR
-        self._escalate_call()
+        import numpy as np
+import gc
+from datetime import datetime
+from sklearn.isotonic import isotonic_regression
+from sklearn.utils.bench import total_seconds
+import matplotlib.pyplot as plt
+import argparse
     
-        def reject_friend_request(self, from_user_id, to_user_id):
-        pass
+                gc.collect()
+            print('benchmarking lasso_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            lasso_path(X, y, precompute=True)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lasso_path (with Gram)'].append(delta)
     
-        def spot_freed(self):
-        self.available_spots += 1
+        # Print results
+    ###########################################################################
+    print('Script arguments')
+    print('===========================')
+    arguments = vars(opts)
+    print('%s \t | %s ' % ('Arguments'.ljust(16),
+                           'Value'.center(12),))
+    print(25 * '-' + ('|' + '-' * 14) * 1)
+    for key, value in arguments.items():
+        print('%s \t | %s ' % (str(key).ljust(16),
+                               str(value).strip().center(12)))
+    print('')
     
-        def categorize(self, transaction):
-        if transaction.seller in self.seller_category_map:
-            return self.seller_category_map[transaction.seller]
-        if transaction.seller in self.seller_category_overrides_map:
-            seller_category_map[transaction.seller] = \
-                self.manual_overrides[transaction.seller].peek_min()
-            return self.seller_category_map[transaction.seller]
-        return None
+        Extension is everything from the last dot to the end, ignoring
+    leading dots.  Returns '(root, ext)'; ext may be empty.'''
+    # NOTE: This code must work for text and bytes strings.
     
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
+        def testReadInto(self):
+        self.createTempFile()
+        with BZ2File(self.filename) as bz2f:
+            n = 128
+            b = bytearray(n)
+            self.assertEqual(bz2f.readinto(b), n)
+            self.assertEqual(b, self.TEXT[:n])
+            n = len(self.TEXT) - n
+            b = bytearray(len(self.TEXT))
+            self.assertEqual(bz2f.readinto(b), n)
+            self.assertEqual(b[:n], self.TEXT[-n:])
     
+    # Simple class representing a record in our database.
+MemoRecord = namedtuple('MemoRecord', 'key, task')
     
-class Graph(object):
-    
-    
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
-    '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+    # Send the message via local SMTP server.
+with smtplib.SMTP('localhost') as s:
+    s.send_message(msg)
 
     
-        def logout(self):
-        return self._client.get('/auth/logout')
+    
+if __name__ == '__main__':
+    main()
+
+    
+    document = '''\
+<slideshow>
+<title>Demo slideshow</title>
+<slide><title>Slide title</title>
+<point>This is a demo</point>
+<point>Of a program for processing slides</point>
+</slide>
+    
+            print('Unordered results using pool.imap_unordered():')
+        for x in imap_unordered_it:
+            print('\t', x)
+        print()
+    
+    from ..common import *
+import json
+import random
+from urllib.parse import urlparse, parse_qs
     
     
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('a', 'test', b'Incorrect username.'),
-    ('test', 'a', b'Incorrect password.'),
-))
-def test_login_validate_input(auth, username, password, message):
-    response = auth.login(username, password)
-    assert message in response.data
+def funshion_download(url, **kwargs):
+    if re.match(r'http://www.fun.tv/vplay/v-(\w+)', url):
+        vid = re.search(r'http://www.fun.tv/vplay/v-(\w+)', url).group(1)
+        Funshion().download_by_vid(vid, single_video=True, **kwargs)
+    elif re.match(r'http://www.fun.tv/vplay/.*g-(\w+)', url):
+        epid = re.search(r'http://www.fun.tv/vplay/.*g-(\w+)', url).group(1)
+        url = 'http://pm.funshion.com/v5/media/episode?id={}&cl=mweb&uc=111'.format(epid)
+        meta = json.loads(get_content(url))
+        drama_name = meta['name']
+    
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
+    
+        if knn_clf is None and model_path is None:
+        raise Exception('Must supply knn classifier either thourgh knn_clf or model_path')
+    
+    for face_location in face_locations:
     
     
-def test_index(client, auth):
-    response = client.get('/')
-    assert b'Log In' in response.data
-    assert b'Register' in response.data
+    # Display the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
     
-                app.config.from_object('yourapplication.default_config')
-            from yourapplication import default_config
-            app.config.from_object(default_config)
-    
-        seems_fishy = False
-    if total_found == 0:
-        info.append('Error: the template could not be found.')
-        seems_fishy = True
-    elif total_found > 1:
-        info.append('Warning: multiple loaders returned a match for the template.')
-        seems_fishy = True
-    
-        def send_static_file(self, filename):
-        '''Function used internally to send static files from the static
-        folder to the browser.
+    # Display the resulting image
+pil_image.show()
     
     
-class PassDict(JSONTag):
-    __slots__ = ()
+def print_result(filename, name, distance, show_distance=False):
+    if show_distance:
+        print('{},{},{}'.format(filename, name, distance))
+    else:
+        print('{},{}'.format(filename, name))
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+        url = FLASH_BRIEFINGS_API_ENDPOINT
+    name = 'api:alexa:flash_briefings'
     
     
-def create_logger(app):
-    '''Get the ``'flask.app'`` logger and configure it if needed.
+def setup_button(hass, config, add_entities, client, address):
+    '''Set up a single button device.'''
+    timeout = config.get(CONF_TIMEOUT)
+    ignored_click_types = config.get(CONF_IGNORED_CLICK_TYPES)
+    button = FlicButton(hass, client, address, timeout, ignored_click_types)
+    _LOGGER.info('Connected to button %s', address)
     
-            for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
-                yield blueprint, loader
+            for key, value in states.items():
+            if isinstance(value, (float, int)):
+                attribute = '{}.{}'.format(metric, key.replace(' ', '_'))
+                statsd.gauge(
+                    attribute, value, sample_rate=sample_rate, tags=tags)
     
-    
-def make_handler(value):
-    return BitHandler(
-        keys=(
-            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
-            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
-            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
-        ),
-        value=value,
-    )
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'ReleaseHeadCommit'
-        db.create_table(
-            'sentry_releaseheadcommit', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'organization_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        db_index=True
-                    )
-                ), (
-                    'repository_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-                ), (
-                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Release']
-                    )
-                ), (
-                    'commit', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Commit']
-                    )
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ReleaseHeadCommit'])
+    CONF_HOURS_TO_SHOW = 'hours_to_show'
+CONF_REFRESH = 'refresh'
+ATTR_HOURS_TO_SHOW = CONF_HOURS_TO_SHOW
+ATTR_REFRESH = CONF_REFRESH
