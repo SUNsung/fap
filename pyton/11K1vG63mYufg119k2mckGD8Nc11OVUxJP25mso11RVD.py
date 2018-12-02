@@ -1,83 +1,81 @@
 
         
-        
-class Vehicle(metaclass=ABCMeta):
+            def load(self):
+        try:
+            data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            data = None
     
-            (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
+    
+class BaseSessionManager(models.Manager):
+    def encode(self, session_dict):
         '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
-    
-    
-class TooManyRedirects(RequestException):
-    '''Too many redirects.'''
-    
-    
-def info():
-    '''Generate information for a bug report.'''
-    try:
-        platform_info = {
-            'system': platform.system(),
-            'release': platform.release(),
-        }
-    except IOError:
-        platform_info = {
-            'system': 'Unknown',
-            'release': 'Unknown',
-        }
-    
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
-    
-    _proxy_combos += [(var.upper(), scheme) for var, scheme in _proxy_combos]
-    
-    
-def options(url, **kwargs):
-    r'''Sends an OPTIONS request.
-    
-    
-def replace_settingslist_nodes(app, doctree, fromdocname):
-    env = app.builder.env
-    
-    if __name__ == '__main__':
-    try:
-        execute()
-    finally:
-        # Twisted prints errors in DebugInfo.__del__, but PyPy does not run gc.collect()
-        # on exit: http://doc.pypy.org/en/latest/cpython_differences.html?highlight=gc.collect#differences-related-to-garbage-collection-strategies
-        garbage_collect()
-
-    
-        def syntax(self):
+        Return the given session dictionary serialized and encoded as a string.
         '''
-        Command syntax (preferably one-line). Do not include command name.
-        '''
-        return ''
+        session_store_class = self.model.get_session_store_class()
+        return session_store_class().encode(session_dict)
     
-        def long_desc(self):
-        return 'Fetch a URL using the Scrapy downloader and print its content ' \
-            'to stdout. You may want to use --nolog to disable logging'
+        def __setitem__(self, key, value):
+        setattr(self._connections, key, value)
     
-        def _start_crawler_thread(self):
-        t = Thread(target=self.crawler_process.start,
-                   kwargs={'stop_after_crawl': False})
-        t.daemon = True
-        t.start()
-
+    ESTIMATORS = {
+    'dummy': DummyClassifier(),
+    'random_forest': RandomForestClassifier(n_estimators=100,
+                                            max_features='sqrt',
+                                            min_samples_split=10),
+    'extra_trees': ExtraTreesClassifier(n_estimators=100,
+                                        max_features='sqrt',
+                                        min_samples_split=10),
+    'logistic_regression': LogisticRegression(),
+    'naive_bayes': MultinomialNB(),
+    'adaboost': AdaBoostClassifier(n_estimators=10),
+}
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
-            help='also display twisted/python/platform info (useful for bug reports)')
     
-    
-class ScrapesContract(Contract):
-    ''' Contract to check presence of fields in scraped items
-        @scrapes page_name page_body
+def bench_isotonic_regression(Y):
     '''
+    Runs a single iteration of isotonic regression on the input data,
+    and reports the total time taken (in seconds).
+    '''
+    gc.collect()
+    
+        n_features = 10
+    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
+                                            [n_features], precompute=True)
+    
+                results['kmeans_speed'].append(delta)
+            results['kmeans_quality'].append(kmeans.inertia_)
+    
+                gc.collect()
+            print('benchmarking lars_path (without Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            lars_path(X, y, method='lasso')
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lars_path (without Gram)'].append(delta)
+    
+            for step in xrange(opts.n_steps):
+            for it in xrange(opts.n_times):
+                time[name][step, it] = bench_sample(sampling_algorithm[name],
+                                                      opts.n_population,
+                                                      n_samples[step])
+    
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeRegressor()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
+    
+            text_filename = os.path.join(text_lang_folder,
+                                     '%s_%04d.txt' % (lang, i))
+        print('Writing %s' % text_filename)
+        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
+        i += 1
+    
+    
+if not os.path.exists(DATA_FOLDER):
