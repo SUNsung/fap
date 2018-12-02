@@ -1,171 +1,118 @@
 
         
-            for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
+        bool CodeGenerator::GenerateAll(
+    const std::vector<const FileDescriptor*>& files,
+    const string& parameter,
+    GeneratorContext* generator_context,
+    string* error) const {
+  // Default implemenation is just to call the per file method, and prefix any
+  // error string with the file to provide context.
+  bool succeeded = true;
+  for (int i = 0; i < files.size(); i++) {
+    const FileDescriptor* file = files[i];
+    succeeded = Generate(file, parameter, generator_context, error);
+    if (!succeeded && error && error->empty()) {
+      *error = 'Code generator returned false but provided no error '
+               'description.';
     }
-    
-            D3D12_TEXTURE_COPY_LOCATION srcLocation = {};
-        srcLocation.pResource = uploadBuffer;
-        srcLocation.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
-        srcLocation.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        srcLocation.PlacedFootprint.Footprint.Width = width;
-        srcLocation.PlacedFootprint.Footprint.Height = height;
-        srcLocation.PlacedFootprint.Footprint.Depth = 1;
-        srcLocation.PlacedFootprint.Footprint.RowPitch = uploadPitch;
-    
-    
-    {        // [Internals]
-        FontInfo        Info;               // Font descriptor of the current font.
-        unsigned int    UserFlags;          // = ImFontConfig::RasterizerFlags
-        FT_Library      FreetypeLibrary;
-        FT_Face         FreetypeFace;
-        FT_Int32        FreetypeLoadFlags;
-    };
-    
-    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    io.MousePos = ImVec2((float)x, (float)y);
-    int button = -1;
-    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
-    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
-    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
-    if (button != -1 && state == GLUT_DOWN)
-        io.MouseDown[button] = true;
-    if (button != -1 && state == GLUT_UP)
-        io.MouseDown[button] = false;
+    if (error && !error->empty()) {
+      *error = file->name() + ': ' + *error;
+      break;
+    }
+    if (!succeeded) {
+      break;
+    }
+  }
+  return succeeded;
 }
     
     
-    {    ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
-    if (imgui_cursor == ImGuiMouseCursor_None || io.MouseDrawCursor)
     {
-        // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
-        ::SetCursor(NULL);
-    }
-    else
     {
-        // Show OS mouse cursor
-        LPTSTR win32_cursor = IDC_ARROW;
-        switch (imgui_cursor)
-        {
-        case ImGuiMouseCursor_Arrow:        win32_cursor = IDC_ARROW; break;
-        case ImGuiMouseCursor_TextInput:    win32_cursor = IDC_IBEAM; break;
-        case ImGuiMouseCursor_ResizeAll:    win32_cursor = IDC_SIZEALL; break;
-        case ImGuiMouseCursor_ResizeEW:     win32_cursor = IDC_SIZEWE; break;
-        case ImGuiMouseCursor_ResizeNS:     win32_cursor = IDC_SIZENS; break;
-        case ImGuiMouseCursor_ResizeNESW:   win32_cursor = IDC_SIZENESW; break;
-        case ImGuiMouseCursor_ResizeNWSE:   win32_cursor = IDC_SIZENWSE; break;
-        case ImGuiMouseCursor_Hand:         win32_cursor = IDC_HAND; break;
-        }
-        ::SetCursor(::LoadCursor(NULL, win32_cursor));
-    }
-    return true;
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    void WriteServiceDocComment(io::Printer* printer,
+                            const ServiceDescriptor* service) {
+  printer->Print('/**\n');
+  WriteDocCommentBody(printer, service);
+  printer->Print(
+    ' * Protobuf service {@code $fullname$}\n'
+    ' */\n',
+    'fullname', EscapeJavadoc(service->full_name()));
 }
     
-    // Demo helper function to select among default colors. See ShowStyleEditor() for more advanced options.
-// Here we use the simplified Combo() api that packs items into a single literal string. Useful for quick combo boxes where the choices are known locally.
-bool ImGui::ShowStyleSelector(const char* label)
-{
-    static int style_idx = -1;
-    if (ImGui::Combo(label, &style_idx, 'Classic\0Dark\0Light\0'))
-    {
-        switch (style_idx)
-        {
-        case 0: ImGui::StyleColorsClassic(); break;
-        case 1: ImGui::StyleColorsDark(); break;
-        case 2: ImGui::StyleColorsLight(); break;
-        }
-        return true;
-    }
-    return false;
+    int ImmutableExtensionLiteGenerator::GenerateRegistrationCode(
+    io::Printer* printer) {
+  printer->Print(
+    'registry.add($scope$.$name$);\n',
+    'scope', scope_,
+    'name', UnderscoresToCamelCase(descriptor_));
+  return 7;
 }
     
-        // Create Swapchain
-    {
-        VkSwapchainCreateInfoKHR info = {};
-        info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        info.surface = wd->Surface;
-		info.minImageCount = min_image_count;
-        info.imageFormat = wd->SurfaceFormat.format;
-        info.imageColorSpace = wd->SurfaceFormat.colorSpace;
-        info.imageArrayLayers = 1;
-        info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-        info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;           // Assume that graphics family == present family
-        info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-        info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-        info.presentMode = wd->PresentMode;
-        info.clipped = VK_TRUE;
-        info.oldSwapchain = old_swapchain;
-        VkSurfaceCapabilitiesKHR cap;
-        err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physical_device, wd->Surface, &cap);
-        check_vk_result(err);
-        if (info.minImageCount < cap.minImageCount)
-			info.minImageCount = cap.minImageCount;
-		else if (cap.maxImageCount != 0 && info.minImageCount > cap.maxImageCount)
-			info.minImageCount = cap.maxImageCount;
-    }
+    void ImmutableMapFieldGenerator::
+GenerateEqualsCode(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'result = result && internalGet$capitalized_name$().equals(\n'
+      '    other.internalGet$capitalized_name$());\n');
+}
+    
+      printer->Print(
+    'com.google.protobuf.Descriptors.FileDescriptor.'
+    'InternalDescriptorAssigner assigner =\n'
+    '    new com.google.protobuf.Descriptors.FileDescriptor.'
+    '    InternalDescriptorAssigner() {\n'
+    '      public com.google.protobuf.ExtensionRegistry assignDescriptors(\n'
+    '          com.google.protobuf.Descriptors.FileDescriptor root) {\n'
+    '        descriptor = root;\n'
+    // Custom options will be handled when immutable messages' outer class is
+    // loaded. Here we just return null and let custom options be unknown
+    // fields.
+    '        return null;\n'
+    '      }\n'
+    '    };\n');
+    
+      EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', ''),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: got empty string for making TextFormat data, input:');
+  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('a', ''),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: got empty string for making TextFormat data, input:');
+  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', 'a'),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: got empty string for making TextFormat data, input:');
+    
+    
+    {  return 0;
+}
+    
+      // Doesn't include records skipped because of
+  // CompactionFilter::Decision::kRemoveAndSkipUntil.
+  int64_t num_record_drop_user = 0;
     
     #pragma once
     
-    // Set default OpenGL loader to be gl3w
-#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
-#define IMGUI_IMPL_OPENGL_LOADER_GL3W
-#endif
+      // if background compaction is not working, write will stall
+  // because of options.level0_stop_writes_trigger
+  for (int i = 1000; i < 99999; ++i) {
+    db->Put(WriteOptions(), std::to_string(i),
+                            std::string(500, 'a' + (i % 26)));
+  }
     
+      db->Get(ReadOptions(), 'key2', &value);
+  assert(value == 'value');
     
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
-    }
+      // Set a snapshot at start of transaction by setting set_snapshot=true
+  txn_options.set_snapshot = true;
+  txn = txn_db->BeginTransaction(write_options, txn_options);
     
-    
-    {
-    {
-    {} // namespace detail
-} // namespace atomics
-} // namespace mars_boost
-    
-    #pragma once
-    
-    	Subspace Subspace::subspace(Tuple const& tuple) const {
-		return Subspace(tuple, rawPrefix);
-	}
-    
-    #include 'flow/flow.h'
-#include 'bindings/flow/fdb_flow.h'
-#include 'Tuple.h'
-    
-    		Tuple& append(Tuple const& tuple);
-		Tuple& append(StringRef const& str, bool utf8=false);
-		Tuple& append(int32_t);
-		Tuple& append(int64_t);
-		Tuple& append(bool);
-		Tuple& append(float);
-		Tuple& append(double);
-		Tuple& append(Uuid);
-		Tuple& appendNested(Tuple const&);
-		Tuple& appendNull();
-    
-    
-    {
-    {
-    {			TraceEvent('TransactionTrace_CommitError').detail('TransactionID', id).detail('ErrCode', errCode);
-		}
-	};
-}
-    
-    		if( populationSize <= sampleSize ) {
-			samples.push_back( sample );
-		} else if( g_random->random01() < ( (double)sampleSize / populationSize ) ) {
-			samples[ g_random->randomInt( 0, sampleSize ) ] = sample;
-		}
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
