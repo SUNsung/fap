@@ -1,115 +1,107 @@
 
         
-          # String arguments should be evaluated in the context of the caller.
-  it 'accepts a String argument instead of a Proc or block' do
-    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
+                  def add_default_name_and_id_for_value(tag_value, options)
+            if tag_value.nil?
+              add_default_name_and_id(options)
+            else
+              specified_id = options['id']
+              add_default_name_and_id(options)
     
-      it 'does not append line-end if last character is line-end' do
-    lambda {
-      $VERBOSE = true
-      warn('this is some simple text with line-end\n')
-    }.should output(nil, 'this is some simple text with line-end\n')
-  end
-    
-    When /^I toggle nsfw posts$/ do
-  find('.toggle_nsfw_state', match: :first).click
-end
-    
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
-    end
-  end
-end
-    
-      # checks the page content to see, if the login was successful
-  def confirm_login(mobile)
-    if mobile
-      expect(page).to have_css '#menu-badge'
-    else
-      expect(find('#user-menu')).to have_content '#{@me.first_name} #{@me.last_name}'
-    end
-  end
-    
-    
-  config.vm.define 'centos6' do |centos6|
-    centos6.vm.box = 'puppetlabs/centos-6.6-64-puppet'
-  end
-    
-        scripts = register_script('post-install',   :after_install,   scripts)
-    scripts = register_script('pre-install',   :before_install,  scripts)
-    scripts = register_script('pre-upgrade',   :before_upgrade,  scripts)
-    scripts = register_script('post-upgrade',   :after_upgrade,  scripts)
-    scripts = register_script('pre-deinstall',  :before_remove,   scripts)
-    scripts = register_script('post-deinstall', :after_remove,    scripts)
-    
-        # Replace the shebangs in the executables
-    if attributes[:gem_shebang]
-      ::Dir.entries(bin_path).each do |file_name|
-        # exclude . and ..
-        next if ['.', '..'].include?(file_name)
-        # exclude everything which is not a file
-        file_path = File.join(bin_path, file_name)
-        next unless File.ftype(file_path) == 'file'
-        # replace shebang in files if there is one
-        file = File.read(file_path)
-        if file.gsub!(/\A#!.*$/, '#!#{attributes[:gem_shebang]}')
-          File.open(file_path, 'w'){|f| f << file}
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
+          end
         end
+    
+          it 'requires the passwords to match' do
+        visit new_admin_user_path
+        fill_in 'Email', with: 'test@test.com'
+        fill_in 'Username', with: 'usertest'
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Create User'
+        expect(page).to have_text('Password confirmation doesn't match')
       end
     end
     
-        # npm installs dependencies in the module itself, so if you do
-    # 'npm install express' it installs dependencies (like 'connect')
-    # to: node_modules/express/node_modules/connect/...
-    #
-    # To that end, I don't think we necessarily need to include
-    # any automatic dependency information since every 'npm install'
-    # is fully self-contained. That's why you don't see any bother, yet,
-    # to include the package's dependencies in here.
-    #
-    # It's possible someone will want to decouple that in the future,
-    # but I will wait for that feature request.
+      it 'imports a scenario that does not exist yet' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
+    expect(page).not_to have_text('This Scenario already exists in your system.')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
     
-        if attributes[:before_install_given?] or attributes[:after_install_given?]
-      write_scripts
-      args += ['--scripts', scripts_path]
+          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
     end
-    args << output_path
     
-      option '--channel', 'CHANNEL_URL',
-    'The pear channel url to use instead of the default.'
+        it 'should work with nested hashes' do
+      @agent.options['very'] = {'nested' => '$.value'}
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'very' => {'nested' => '{{value}}'}, 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
     
-      require 'pleaserun/platform/systemd'
-  require 'pleaserun/platform/upstart'
-  require 'pleaserun/platform/launchd'
-  require 'pleaserun/platform/sysv'
+        it 'cleans up old logs when there are more than log_length' do
+      stub(AgentLog).log_length { 4 }
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
+    end
     
-      option '--group', 'GROUP',
-    'Set the group to GROUP in the prototype file.',
-    :default => 'root'
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-    task default: %i[rubocop spec]
+          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
+      # based on the current mapping:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           user_subject: '...'
+      #
+      # If one does not exist, it fallbacks to ActionMailer default:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           subject: '...'
+      #
+      def subject_for(key)
+        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
+          default: [:subject, key.to_s.humanize])
+      end
+    end
+  end
+end
 
     
-        def write(header)
-      @cookies.select { |key, _value| @send_cookies[key] == true }.each do |name, value|
-        cookie_value = value.is_a?(Hash) ? value : { value: value }
-        Rack::Utils.set_cookie_header! header, name, cookie_value
-      end
-    end
+    load './tasks/bower.rake'
     
-            def document_attribute(names, opts)
-          setting = description_field(:params)
-          setting ||= description_field(:params, {})
-          Array(names).each do |name|
-            setting[name[:full_name].to_s] ||= {}
-            setting[name[:full_name].to_s].merge!(opts)
+        def configure_sass
+      require 'sass'
     
-            unless presenter || env[Grape::Env::GRAPE_ROUTING_ARGS].nil?
-          # env['api.endpoint'].route does not work when the error occurs within a middleware
-          # the Endpoint does not have a valid env at this moment
-          http_codes = env[Grape::Env::GRAPE_ROUTING_ARGS][:route_info].http_codes || []
+    require 'open-uri'
+require 'json'
+require 'strscan'
+require 'forwardable'
+require 'term/ansicolor'
+require 'fileutils'
