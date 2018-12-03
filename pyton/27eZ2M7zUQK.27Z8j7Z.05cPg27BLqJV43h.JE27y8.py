@@ -1,61 +1,61 @@
 
         
-            :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    '''
-    post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,)
-    ).fetchone()
+        
+def unicode_is_ascii(u_string):
+    '''Determine if unicode string only contains ASCII characters.
     
-    # read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
+        return inner
     
+        # Check urllib3 for compatibility.
+    major, minor, patch = urllib3_version  # noqa: F811
+    major, minor, patch = int(major), int(minor), int(patch)
+    # urllib3 >= 1.21.1, <= 1.24
+    assert major == 1
+    assert minor >= 21
+    assert minor <= 24
     
-def _dump_loader_info(loader):
-    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
-    for key, value in sorted(loader.__dict__.items()):
-        if key.startswith('_'):
-            continue
-        if isinstance(value, (tuple, list)):
-            if not all(isinstance(x, (str, text_type)) for x in value):
-                continue
-            yield '%s:' % key
-            for item in value:
-                yield '  - %s' % item
-            continue
-        elif not isinstance(value, (str, text_type, int, float, bool)):
-            continue
-        yield '%s: %r' % (key, value)
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
+    about = {}
+with open(os.path.join(here, 'requests', '__version__.py'), 'r', 'utf-8') as f:
+    exec(f.read(), about)
     
-def loads(s, **kwargs):
-    '''Unserialize a JSON object from a string ``s`` by using the application's
-    configured decoder (:attr:`~flask.Flask.json_decoder`) if there is an
-    application on the stack.
-    '''
-    _load_arg_defaults(kwargs)
-    if isinstance(s, bytes):
-        encoding = kwargs.pop('encoding', None)
-        if encoding is None:
-            encoding = detect_encoding(s)
-        s = s.decode(encoding)
-    return _json.loads(s, **kwargs)
+    def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
+        sys.exit()
     
-        def __init__(self, *args, **kwargs):
-        super(FlaskClient, self).__init__(*args, **kwargs)
-        self.environ_base = {
-            'REMOTE_ADDR': '127.0.0.1',
-            'HTTP_USER_AGENT': 'werkzeug/' + werkzeug.__version__
-        }
+            return new_key
+
     
-            # If the request method is HEAD and we don't have a handler for it
-        # retry with GET.
-        if meth is None and request.method == 'HEAD':
-            meth = getattr(self, 'get', None)
+        dp = [[False for x in range(s+1)]for y in range(n+1)]
+    
+        def train(self, X, y):
+        '''
+        train:
+        @param X: a one dimensional numpy array
+        @param y: a one dimensional numpy array. 
+        The contents of y are the labels for the corresponding X values
+    
+    Requirements:
+  - sklearn
+  - numpy
+  - matplotlib
+    
+    #Mean Squared Error
+def mse(predict, actual):
+    predict = np.array(predict)
+    actual = np.array(actual)
+    
+            a += a
+        b >>= 1
