@@ -1,233 +1,83 @@
 
         
-        #endif  // TESSERACT_ARCH_DOTPRODUCTSSE_H_
+            http://www.apache.org/licenses/LICENSE-2.0
+    
+    
+    {}  // namespace tensorflow
 
     
-    // Extracts and converts 8x32-bit results from result, adding the bias from wi
-// and scaling by scales, before storing in *v. Note that wi, scales and v are
-// expected to contain 8 consecutive elements or num_out if less.
-inline void ExtractResults(__m256i& result, __m256i& shift_id,
-                           const int8_t*& wi, const double*& scales,
-                           int num_out, double*& v) {
-  for (int out = 0; out < num_out; ++out) {
-    int32_t res =
-#ifndef _MSC_VER
-        _mm256_extract_epi32(result, 0)
-#else
-        // Workaround MSVC's ICE
-        // _mm256_extract_epi32(X, Y) == ((int32_t*)&X)[Y]
-        ((int32_t*)&result)[0]
-#endif
-        ;
-    *v++ = (static_cast<double>(res) / INT8_MAX + *wi++) * *scales++;
-    // Rotate the results in int32_t units, so the next result is ready.
-    result = _mm256_permutevar8x32_epi32(result, shift_id);
-  }
-}
+    // Returns the id number of the bfloat16 numpy type.
+int Bfloat16NumpyType();
     
-      // Array holding scores for each orientation id [0,3].
-  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
-  // page respectively, where the values refer to the amount of clockwise
-  // rotation to be applied to the page for the text to be upright and readable.
-  float orientations[4];
-  // Script confidence scores for each of 4 possible orientations.
-  float scripts_na[4][kMaxNumberOfScripts];
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    
-    {  TBLOB* blob;
-  Tesseract* tesseract;
-  BLOB_CHOICE_LIST** choices;
-};
-    
-    #endif  // GRAPHICS_DISABLED
-#endif  // TESSERACT_CCMAIN_PARAMSD_H_
-
-    
-      bool Next() override {
-    if (!parser_->Next()) return false;
-    const RowBlock<IndexType>& batch = parser_->Value();
-    LOG(INFO) << batch.size;
-    dense_index_.resize(num_col_ * batch.size);
-    dense_value_.resize(num_col_ * batch.size);
-    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
-    offset_.resize(batch.size + 1);
-    offset_[0] = 0;
-    }
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
-  }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf_ != EOF) {
-      switch (ch_buf_) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf_ = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf_ = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf_;
-          ch_buf_ = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-};
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
  public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin_(fin) {}
-    
-    // common regressions
-// linear regression
-struct LinearSquareLoss {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    return 1.0f;
-  }
-  template <typename T>
-  static T PredTransform(T x) { return x; }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() { return ''; }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-          ASSERT_TRUE(input == output);
-    
-    /*!
- * \brief macro to check the call.
- */
-#define CHECK_CALL(x)                           \
-  if ((x) != 0) {                               \
-    error(XGBGetLastError());                   \
-  }
-    
-      /// The inotify file descriptor handle.
-  std::atomic<int> inotify_handle_{-1};
-    
-    #include <gtest/gtest.h>
-    
-      int num_greetings = 10;
-  greeter.SayManyHellos(name, num_greetings, [](const std::string &message) {
-    std::cerr << 'Greeter received: ' << message << std::endl;
-  });
-    
-      builder.Finish(orc);  // Serialize the root of the object.
-    
-    namespace flatbuffers {
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
     }
     
-    #include 'monster_test_generated.h'
-#include 'flatbuffers/grpc.h'
-    
-    template<typename T> const char *EnumName(T tval, const TypeTable *type_table) {
-  if (!type_table || !type_table->names) return nullptr;
-  auto i = LookupEnum(static_cast<int64_t>(tval), type_table->values,
-                      type_table->num_elems);
-  if (i >= 0 && i < static_cast<int64_t>(type_table->num_elems)) {
-    return type_table->names[i];
-  }
-  return nullptr;
-}
-    
-    #endif // STATICDISPATCH_H
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
 
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    {        /* Drain the queue */
-        for (auto &x : loopData->deferQueues[oldDeferQueue]) {
-            x();
-        }
-        loopData->deferQueues[oldDeferQueue].clear();
+    // This file contains APIs that assume a StreamExecutor is backed by CUDA.
+// It reaches into the CUDA implementation to activate an underlying CUDA
+// context.
+//
+// Having this file separate from cuda_gpu_executor.h means that dependent
+// code does not also have to depend on cuda.h.
+    
+      // Logs information about the kernel driver version and userspace driver
+  // library version.
+  static void LogDriverVersionInformation();
+    
+      // Checks that the context has remained activated for the duration of the
+  // scope.
+  ~ScopedActivateContext();
+    
+      MutableArrayRef<Type> getReplacementTypes() {
+    return MutableArrayRef<Type>(getTrailingObjects<Type>(),
+                                 getNumReplacementTypes());
+  }
+    
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
     }
     
-                /* Remove onAborted function if we reach the end */
-            if (httpResponseData->offset == totalSize) {
-                httpResponseData->onAborted = nullptr;
-                /* Also remove onWritable so that we do not emit when draining behind the scenes. */
-                httpResponseData->onWritable = nullptr;
-            }
-    
-    
-    {            return s;
-        });
-    
-    namespace uWS {
-    }
-    
-        static inline bool consumeContinuation(char *&src, unsigned int &length, WebSocketState<isServer> *wState, void *user) {
-        if (wState->remainingBytes <= length) {
-            if (isServer) {
-                int n = wState->remainingBytes >> 2;
-                unmaskInplace(src, src + n * 4, wState->mask);
-                for (int i = 0, s = wState->remainingBytes % 4; i < s; i++) {
-                    src[n * 4 + i] ^= wState->mask[i];
-                }
-            }
-    }
-    }
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
+  }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
+}
