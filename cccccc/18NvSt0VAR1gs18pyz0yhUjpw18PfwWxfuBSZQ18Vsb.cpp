@@ -1,223 +1,278 @@
 
         
-        // Used to print an STL-style container when the user doesn't define
-// a PrintTo() for it.
-template <typename C>
-void DefaultPrintTo(IsContainer /* dummy */,
-                    false_type /* is not a pointer */,
-                    const C& container, ::std::ostream* os) {
-  const size_t kMaxCount = 32;  // The maximum number of elements to print.
-  *os << '{';
-  size_t count = 0;
-  for (typename C::const_iterator it = container.begin();
-       it != container.end(); ++it, ++count) {
-    if (count > 0) {
-      *os << ',';
-      if (count == kMaxCount) {  // Enough has been printed.
-        *os << ' ...';
-        break;
-      }
-    }
-    *os << ' ';
-    // We cannot call PrintTo(*it, os) here as PrintTo() doesn't
-    // handle *it being a native array.
-    internal::UniversalPrint(*it, os);
-  }
-    }
-    }
-    
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-    
-      // Returns the test name.
-  const char* name() const { return name_.c_str(); }
-    
-    // In describing the results of death tests, these terms are used with
-// the corresponding definitions:
-//
-// exit status:  The integer exit information in the format specified
-//               by wait(2)
-// exit code:    The integer code passed to exit(3), _exit(2), or
-//               returned from main()
-class GTEST_API_ DeathTest {
+        /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
  public:
-  // Create returns false if there was an error determining the
-  // appropriate action to take for the current death test; for example,
-  // if the gtest_death_test_style flag is set to an invalid value.
-  // The LastMessage method will return a more detailed message in that
-  // case.  Otherwise, the DeathTest pointer pointed to by the 'test'
-  // argument is set.  If the death test should be skipped, the pointer
-  // is set to NULL; otherwise, it is set to the address of a new concrete
-  // DeathTest object that controls the execution of the current test.
-  static bool Create(const char* statement, const RE* regex,
-                     const char* file, int line, DeathTest** test);
-  DeathTest();
-  virtual ~DeathTest() { }
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
+    
+    
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
+    }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
+};
+    
+    template <typename Dtype>
+class CropLayer : public Layer<Dtype> {
+ public:
+  explicit CropLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-        // First, registers the first type-parameterized test in the type
-    // list.
-    MakeAndRegisterTestInfo(
-        (std::string(prefix) + (prefix[0] == '\0' ? '' : '/') + case_name + '/'
-         + StreamableToString(index)).c_str(),
-        GetPrefixUntilComma(test_names).c_str(),
-        GetTypeName<Type>().c_str(),
-        NULL,  // No value parameter.
-        GetTypeId<FixtureClass>(),
-        TestClass::SetUpTestCase,
-        TestClass::TearDownTestCase,
-        new TestFactoryImpl<TestClass>);
     
-    // Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
-}
-    
-    struct grpc_auth_context;
-    
-    #include <grpc/grpc_security.h>
-#include 'src/core/lib/channel/channel_args.h'
-    
-    #include <grpc/support/port_platform.h>
-    
-    namespace grpc {
-    }
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
-               grpc_closure* then_call_closure) override;
-    
-    const ViewDescriptor& ServerCompletedRpcsCumulative() {
-  const static ViewDescriptor descriptor =
-      ViewDescriptor()
-          .set_name('grpc.io/server/completed_rpcs/cumulative')
-          .set_measure(kRpcServerServerLatencyMeasureName)
-          .set_aggregation(Aggregation::Count())
-          .add_column(ServerMethodTagKey())
-          .add_column(ServerStatusTagKey());
-  return descriptor;
-}
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
-#define GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
-    
-      /*
-   * @brief a unique ID identifying the 'carve'
-   *
-   * This unique generated GUID is used to identify the carve session from
-   * other carves. It is also used by our backend service to derive a
-   * session key for exfiltration.
-   */
-  std::string carveGuid_;
-    
-    
-    {  return Status();
-}
-    
-    #include <osquery/config.h>
-#include <osquery/logger.h>
-#include <osquery/registry_factory.h>
-    
-    DECLARE_bool(disable_decorators);
-DECLARE_bool(decorations_top_level);
-    
-    TEST_F(PacksTests, test_discovery_cache) {
-  Config c;
-  // This pack and discovery query are valid, expect the SQL to execute.
-  c.addPack('valid_discovery_pack', '', getPackWithValidDiscovery().doc());
-  size_t query_count = 0U;
-  size_t query_attemts = 5U;
-  for (size_t i = 0; i < query_attemts; i++) {
-    c.scheduledQueries(
-        ([&query_count](std::string name, const ScheduledQuery& query) {
-          query_count++;
-        }));
-  }
-  EXPECT_EQ(query_count, query_attemts);
-    }
-    
-    TEST_F(QueryTests, test_query_name_not_found_in_db) {
-  // Try to retrieve results from a query that has not executed.
-  QueryDataSet previous_qd;
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('not_a_real_query', query);
-  auto status = cf.getPreviousQueryResults(previous_qd);
-  EXPECT_FALSE(status.ok());
-  EXPECT_TRUE(previous_qd.empty());
-}
-    
-      /// Remove an autoloadable extension path.
-  void removeExtensionPath(const std::string& extension);
-    
-    void DHTReplaceNodeTask::sendMessage()
-{
-  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
-  if (!questionableNode) {
-    setFinished(true);
-  }
-  else {
-    getMessageDispatcher()->addMessageToQueue(
-        getMessageFactory()->createPingMessage(questionableNode), timeout_,
-        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
-  }
-}
-    
-    class DHTReplaceNodeTask : public DHTAbstractTask {
-private:
-  std::shared_ptr<DHTBucket> bucket_;
-    }
-    
-      ~DHTRoutingTableSerializer();
-    
-    
-    {} // namespace aria2
-    
-    #include <vector>
-#include <deque>
-#include <memory>
-    
-      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
-    
-      DHTTaskExecutor periodicTaskQueue2_;
-    
-    public:
-  DHTTokenTracker();
-    
-    std::string DHTUnknownMessage::toString() const
-{
-  size_t sampleLength = 8;
-  if (length_ < sampleLength) {
-    sampleLength = length_;
-  }
-  return fmt('dht unknown Remote:%s(%u) length=%lu, first 8 bytes(hex)=%s',
-             ipaddr_.c_str(), port_, static_cast<unsigned long>(length_),
-             util::toHex(data_, sampleLength).c_str());
-}
-    
-    public:
-  // _remoteNode is always null
-  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                    const unsigned char* data, size_t length,
-                    const std::string& ipaddr, uint16_t port);
-    
-    bool DNSCache::CacheEntry::contains(const std::string& addr) const
-{
-  return find(addr) != addrEntries_.end();
-}
-    
-    #if BOOST_ATOMIC_THREAD_FENCE > 0
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::thread_fence(order);
-}
-#else
-BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::thread_fence();
-}
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
 #endif
+    
+    
+    {}  // namespace caffe
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
+}
+    
+    #include 'src/cpp/ext/filters/census/context.h'
+    
+    
+    {}  // namespace grpc
+    
+    
+    {    fprintf(stderr,
+            'expected=%d..%d; got=%d; bad_keys=%d; bad_values=%d; missed=%d\n',
+            min_expected, max_expected, correct, bad_keys, bad_values, missed);
+    ASSERT_LE(min_expected, correct);
+    ASSERT_GE(max_expected, correct);
+  }
+    
+    // Sanitize db options.  The caller should delete result.info_log if
+// it is not equal to src.info_log.
+Options SanitizeOptions(const std::string& db,
+                        const InternalKeyComparator* icmp,
+                        const InternalFilterPolicy* ipolicy,
+                        const Options& src);
+    
+    TEST(DBTest, GetMemUsage) {
+  do {
+    ASSERT_OK(Put('foo', 'v1'));
+    std::string val;
+    ASSERT_TRUE(db_->GetProperty('leveldb.approximate-memory-usage', &val));
+    int mem_usage = atoi(val.c_str());
+    ASSERT_GT(mem_usage, 0);
+    ASSERT_LT(mem_usage, 5*1024*1024);
+  } while (ChangeOptions());
+}
+    
+    // A comparator for internal keys that uses a specified comparator for
+// the user key portion and breaks ties by decreasing sequence number.
+class InternalKeyComparator : public Comparator {
+ private:
+  const Comparator* user_comparator_;
+ public:
+  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
+  virtual const char* Name() const;
+  virtual int Compare(const Slice& a, const Slice& b) const;
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const;
+  virtual void FindShortSuccessor(std::string* key) const;
+    }
+    
+    #include 'db/dbformat.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
+    
+    // Called on every item found in a WriteBatch.
+class WriteBatchItemPrinter : public WriteBatch::Handler {
+ public:
+  WritableFile* dst_;
+  virtual void Put(const Slice& key, const Slice& value) {
+    std::string r = '  put '';
+    AppendEscapedStringTo(&r, key);
+    r += '' '';
+    AppendEscapedStringTo(&r, value);
+    r += ''\n';
+    dst_->Append(r);
+  }
+  virtual void Delete(const Slice& key) {
+    std::string r = '  del '';
+    AppendEscapedStringTo(&r, key);
+    r += ''\n';
+    dst_->Append(r);
+  }
+};
+    
+    std::string TableFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'ldb');
+}
+    
+    int main(int argc, char** argv) {
+  leveldb::Env* env = leveldb::Env::Default();
+  bool ok = true;
+  if (argc < 2) {
+    Usage();
+    ok = false;
+  } else {
+    std::string command = argv[1];
+    if (command == 'dump') {
+      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+    } else {
+      Usage();
+      ok = false;
+    }
+  }
+  return (ok ? 0 : 1);
+}
+
+    
+      // Increase reference count.
+  void Ref() { ++refs_; }
+    
+    Speed *Speed::clone() const
+{
+    // no copy constructor
+    if (_innerAction)
+        return Speed::create(_innerAction->clone(), _speed);
+    
+    return nullptr;
+}
+    
+    /** @class OrbitCamera
+ *
+ * @brief OrbitCamera action.
+ * Orbits the camera around the center of the screen using spherical coordinates.
+ * @ingroup Actions
+ */
+class CC_DLL OrbitCamera : public ActionCamera
+{
+public:
+    /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. 
+     *
+     * @param t Duration in seconds.
+     * @param radius The start radius.
+     * @param deltaRadius The delta radius.
+     * @param angleZ The start angle in Z.
+     * @param deltaAngleZ The delta angle in Z.
+     * @param angleX The start angle in X.
+     * @param deltaAngleX The delta angle in X.
+     * @return An OrbitCamera.
+     */
+    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    
+    /** Positions the camera according to spherical coordinates. 
+     *
+     * @param r The spherical radius.
+     * @param zenith The spherical zenith.
+     * @param azimuth The spherical azimuth.
+     */
+    void sphericalRadius(float *r, float *zenith, float *azimuth);
+    }
+    
+    FlipY3D* FlipY3D::create(float duration)
+{
+    FlipY3D *action = new (std::nothrow) FlipY3D();
+    }
+    
+    class CC_DLL __CCCallFuncO : public CallFunc
+{
+public:
+    /** Creates the action with the callback.
+        typedef void (Ref::*SEL_CallFuncO)(Ref*);
+     *
+     * @param target    A certain target.
+     * @param selector  The callback need to be executed.
+     * @param object    An object as the callback's first argument.
+     * @return An autoreleased __CCCallFuncO object.
+     */
+    CC_DEPRECATED_ATTRIBUTE static __CCCallFuncO * create(Ref* target, SEL_CallFuncO selector, Ref* object);
+    //
+    // Overrides
+    //
+    virtual __CCCallFuncO* clone() const override;
+    virtual void execute() override;
+    
+    Ref* getObject() const;
+    void setObject(Ref* obj);
+    
+CC_CONSTRUCTOR_ACCESS:
+    __CCCallFuncO();
+    virtual ~__CCCallFuncO();
+    /** initializes the action with the callback
+    }
+    
+        /** initializes the Spawn action with the 2 actions to spawn */
+    bool initWithTwoActions(FiniteTimeAction *action1, FiniteTimeAction *action2);
+    bool init(const Vector<FiniteTimeAction*>& arrayOfActions);
+    
+    void ActionManager::resumeTarget(Node *target)
+{
+    tHashElement *element = nullptr;
+    HASH_FIND_PTR(_targets, &target, element);
+    if (element)
+    {
+        element->paused = false;
+    }
+}
+    
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
+{
+public:
+    /**
+     * @js NA 
+     */
+    virtual GridBase* getGrid() override;
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
+    
+    void ActionTween::startWithTarget(Node *target)
+{
+    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
+    ActionInterval::startWithTarget(target);
+    _delta = _to - _from;
+}
+    
+    NS_CC_END
