@@ -1,172 +1,100 @@
 
         
-                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
-        end
+                private
     
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
-        end
-    
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-        def self.cleanup_formula(formula)
-      formula.eligible_kegs_for_cleanup.each do |keg|
-        cleanup_path(keg) { keg.uninstall }
-      end
-    end
-    
-      def llvm
-    @llvm ||= MacOS.llvm_build_version if MacOS.has_apple_developer_tools?
-  end
-    
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
-      end
-    
-    class ReporterHub
-  attr_reader :reporters
-    
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
+            class << self
+          def field_type
+            @field_type ||= name.split('::').last.sub('Field', '').downcase
           end
         end
     
-          if @account_moderation_note.save
-        redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.created_msg')
-      else
-        @account          = @account_moderation_note.target_account
-        @moderation_notes = @account.targeted_moderation_notes.latest
-    
-            log_action :change_email, @user
-    
-        def resource_params
-      params.require(:report_note).permit(
-        :content,
-        :report_id
-      )
-    end
-    
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
-  end
-end
-
-    
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
-    
-      def to_str
-    @paths.join(File::PATH_SEPARATOR)
-  end
-  alias to_s to_str
-    
-          # If the handler class requires a relative resource...
-      if (handler.relative_resource_required?)
-        # Substituted the mount point root in the request to make things
-        # relative to the mount point.
-        request.relative_resource = request.resource.gsub(/^#{root}/, '')
-        request.relative_resource = '/' + request.relative_resource if (request.relative_resource !~ /^\//)
+              details[key] = Array(value) if value
+        end
       end
     
-    =begin
-   +-------------+---------------+-------------------------------------+
-   | VALUE       | Name          | Description                         |
-   +-------------+---------------+-------------------------------------+
-   | 0x01        | Hangup        | The call has been hungup at the     |
-   |             |               | remote end                          |
-   |             |               |                                     |
-   | 0x02        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
-   |             |               |                                     |
-   | 0x04        | Answer        | Remote end has answered             |
-   |             |               |                                     |
-   | 0x05        | Busy          | Remote end is busy                  |
-   |             |               |                                     |
-   | 0x06        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x07        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x08        | Congestion    | The call is congested               |
-   |             |               |                                     |
-   | 0x09        | Flash Hook    | Flash hook                          |
-   |             |               |                                     |
-   | 0x0a        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x0b        | Option        | Device-specific options are being   |
-   |             |               | transmitted                         |
-   |             |               |                                     |
-   | 0x0c        | Key Radio     | Key Radio                           |
-   |             |               |                                     |
-   | 0x0d        | Unkey Radio   | Unkey Radio                         |
-   |             |               |                                     |
-   | 0x0e        | Call Progress | Call is in progress                 |
-   |             |               |                                     |
-   | 0x0f        | Call          | Call is proceeding                  |
-   |             | Proceeding    |                                     |
-   |             |               |                                     |
-   | 0x10        | Hold          | Call is placed on hold              |
-   |             |               |                                     |
-   | 0x11        | Unhold        | Call is taken off hold              |
-   +-------------+---------------+-------------------------------------+
-=end
+        def initialize(lookup_context)
+      @lookup_context = lookup_context
+    end
     
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
+              res = nil
+          case protocol
+          when 'tcp'
+            res = recv_response_tcp
+          when 'udp'
+            res = recv_response_udp
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
           end
     
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
-          # OpenSSL::ASN1::Sequence
+              # Encodes the components field
           #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            seq_values = input.value
+          # @return [String]
+          def encode_components
+            encoded = ''
     
-              # Encodes the pvno field
+              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
           #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_pvno
-            bn = OpenSSL::BN.new(pvno.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
+          def decode_asn1_pa_data(input)
+            pre_auth = []
+            input.value[0].value.each do |pre_auth_data|
+              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
+            end
+    
+      test 'clean path with leading slash' do
+    assert_equal '/Mordor', clean_path('/Mordor')
+  end
+    
+        @wiki = Gollum::Wiki.new(@path)
+    page  = @wiki.page('PG')
+    assert_equal '바뀐 text', utf8(page.raw_data)
+    assert_equal 'ghi', page.version.message
+  end
+    
+      # replace name version and date
+  replace_header(head, :name)
+  replace_header(head, :version)
+  replace_header(head, :date)
+  #comment this out if your rubyforge_project has a different name
+  replace_header(head, :rubyforge_project)
+    
+      begin
+    require 'gollum-lib'
+    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
+    if !wiki.exist? then
+      raise Gollum::InvalidGitRepositoryError
+    end
+    if wiki_options[:plantuml_url]
+      Gollum::Filter::PlantUML.configure do |config|
+        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
+        config.url = wiki_options[:plantuml_url]
+      end
+    end
+    puts
+    puts 'Loaded Gollum wiki at:'
+    puts '#{File.expand_path(gollum_path).inspect}'
+    puts
+    puts 'Example API calls:'
+    puts %(    page = wiki.page('page-name'))
+    puts %(    # => <Gollum::Page>)
+    puts
+    puts %(    page.raw_data)
+    puts %(    # => '# My wiki page')
+    puts
+    puts %(    page.formatted_data)
+    puts %(    # => '<h1>My wiki page</h1>')
+    puts
+    puts 'Full API documentation at:'
+    puts 'https://github.com/gollum/gollum-lib'
+    puts
+    IRB.start_session(binding)
+  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
+    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
+    exit 0
+  end
+else
+  require 'gollum/app'
+  Precious::App.set(:gollum_path, gollum_path)
+  Precious::App.set(:wiki_options, wiki_options)
+  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
