@@ -1,123 +1,197 @@
 
         
-        require 'benchmark/ips'
-require 'jekyll'
-require 'json'
+              command.args.each do |arg|
+        arg_value = arg.value
+        if arg.value_type.to_s.to_sym == :string_closure
+          closure = proc { |string_value| closure_argument_value = string_value }
+          arg_value = closure
+        end
+        parameter_map[arg.name.to_sym] = arg_value
+      end
     
-      matter = matter.join.chomp
-  content = \
-    if !input_hash['input'] || !input_hash['filter']
-      then input_hash['content']
-    else '{{ #{input_hash['input']} | ' \
-        '#{input_hash['filter']} }}'
+    module FastlaneCore
+  class AnalyticsSession
+    GA_TRACKING = 'UA-121171860-1'
+    
+        def action_completed(action_name, status: nil, exception: nil)
+      # https://github.com/fastlane/fastlane/issues/11913
+      # if exception.nil? || exception.fastlane_should_report_metrics?
+      #   action_completion_context = FastlaneCore::ActionCompletionContext.context_for_action_name(action_name, args: ARGV, status: status)
+      #   FastlaneCore.session.action_completed(completion_context: action_completion_context)
+      # end
     end
     
-    Badge.seed do |b|
-  b.id = Badge::Anniversary
-  b.name = 'Anniversary'
-  b.default_icon = 'fa-clock-o'
-  b.badge_type_id = BadgeType::Silver
-  b.default_badge_grouping_id = BadgeGrouping::Community
-  b.query = nil
-  b.trigger = Badge::Trigger::None
-  b.auto_revoke = false
-  b.system = true
-  b.multiple_grant = true
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --exit-threshold \'2\' #{input_dir.shellescape}')
+      end
+    
+          it 'sets the platform to Mac' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              platform: 'Mac'
+            )
+          end').runner.execute(:test)
+    
+          it 'Handles tag names with characters that need shell escaping' do
+        tag = 'v1.8.0(30)'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(between: ['#{tag}', 'HEAD'])
+        end').runner.execute(:test)
+    
+            Fastlane::FastFile.new.parse('lane :test do
+          import_certificate ({
+            keychain_name: '#{keychain}',
+            certificate_path: '#{cert_name}',
+            certificate_password: '#{password}',
+            log_output: true
+          })
+        end').runner.execute(:test)
+      end
+    end
+  end
 end
+
     
-    Group.user_trust_level_change!(-1, TrustLevel[4])
+          it 'works with single quote in rule name' do
+        rule = 'CoveredSwitchStatementsDon'tNeedDefault'
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              enable_rules: [\'#{rule}\'],
+              disable_rules: [\'#{rule}\']
+            )
+          end').runner.execute(:test)
     
-          it 'analytics session: launch' do
-        expect(SecureRandom).to receive(:uuid).and_return(session_id)
+        os = 'windows'
+    shellescape_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        str = testcase['str'].to_s
+        expect_correct_implementation_to_be_called(str, :shellescape, os)
+        escaped = str.shellescape
+        expect(escaped).to eq(testcase['expect'][os])
+      end
+    end
+  end
     
-          def self.details
-        list = <<-LIST.markdown_list
-          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
-          `lane` is the name of the current fastlane lane
-          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
-          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
-          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
-        LIST
+          click_on 'Save'
     
-              expect(UI).to have_received(:shell_error!).with('Exit status of command 'exit 1' was 1 instead of 0.\n')
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
+    end
+    
+              expect(scenario_import.scenario.name).to eq(name)
+          expect(scenario_import.scenario.description).to eq(description)
+          expect(scenario_import.scenario.guid).to eq(guid)
+          expect(scenario_import.scenario.tag_fg_color).to eq(tag_fg_color)
+          expect(scenario_import.scenario.tag_bg_color).to eq(tag_bg_color)
+          expect(scenario_import.scenario.icon).to eq(icon)
+          expect(scenario_import.scenario.source_url).to eq(source_url)
+          expect(scenario_import.scenario.public).to be_falsey
+        end
+    
+      it 'provides hash-style access to its properties with both symbol and string keys' do
+    expect(location[:lat]).to be_a Float
+    expect(location[:lat]).to eq 2.0
+    expect(location['lat']).to be_a Float
+    expect(location['lat']).to eq 2.0
+  end
+    
+        it 'cleans up old logs when there are more than log_length' do
+      stub(AgentLog).log_length { 4 }
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
+    end
+    
+    gemspec
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+      # Set the OmniAuth path prefix so it can be overridden when
+  # Devise is used in a mountable engine
+  mattr_accessor :omniauth_path_prefix
+  @@omniauth_path_prefix = nil
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+            if uri 
+          path = remove_domain_from_uri(uri)
+          path = add_fragment_back_to_path(uri, path)
+    
+          selected_modules = modules.map(&:to_sym).uniq.sort_by do |s|
+        Devise::ALL.index(s) || -1  # follow Devise::ALL order
+      end
+    
+    describe 'Kernel.throw' do
+  it 'transfers control to the end of the active catch block waiting for symbol' do
+    catch(:blah) do
+      :value
+      throw :blah
+      fail('throw didn't transfer the control')
+    end.should be_nil
+  end
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
+    
+              # Encodes a Rex::Proto::Kerberos::Model::AuthorizationData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            seqs = []
+            elements.each do |elem|
+              elems = []
+              type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type(elem[:type])], 0, :CONTEXT_SPECIFIC)
+              elems << type_asn1
+              data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_data(elem[:data])], 1, :CONTEXT_SPECIFIC)
+              elems << data_asn1
+              seqs << OpenSSL::ASN1::Sequence.new(elems)
+            end
+    
+              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
+          def decode_asn1_req_body(input)
+            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
+          end
         end
       end
     end
-    
-        describe 'shell escaping' do
-      let(:keychain_name) { 'keychain with spaces.keychain' }
-      let(:shell_escaped_name) { keychain_name.shellescape }
-      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
-    
-      protected
-    
-      end
-end
-    
-      # Generate a friendly string randomly to be used as token.
-  # By default, length is 20 characters.
-  def self.friendly_token(length = 20)
-    # To calculate real characters, we must perform this operation.
-    # See SecureRandom.urlsafe_base64
-    rlength = (length * 3) / 4
-    SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
-  end
-    
-    module URI
-  ;
-  class << self
-# Does the char code correspond to an alpha-numeric char.
-# isAlphaNumeric('a'.ord) => true
-# isAlphaNumeric(''.ord) => false
-    def isAlphaNumeric(cc)
-      # a - z
-      if (97 <= cc && cc <= 122);
-        return true
-      end
-      # A - Z
-      if (65 <= cc && cc <= 90);
-        return true
-      end
-      # 0 - 9
-      if (48 <= cc && cc <= 57);
-        return true
-      end
-    
-          attr_reader :page, :name
-    
-          def format
-        @format = (@page.format || false) if @format.nil?
-        @format.to_s.downcase
-      end
-    end
   end
 end
-
-    
-          def has_path
-        !@path.nil?
-      end
-    
-        assert_match /Delete this Page/, last_response.body, ''Delete this Page' link is blocked in page template'
-    assert_match /New/,              last_response.body, ''New' button is blocked in page template'
-    assert_match /Upload/,           last_response.body, ''Upload' link is blocked in page template'
-    assert_match /Rename/,           last_response.body, ''Rename' link is blocked in page template'
-    assert_match /Edit/,             last_response.body, ''Edit' link is blocked in page template'
-    
-        assert body.include?('<span class='username'>Charles Pence</span>'), '/latest_changes should include the Author Charles Pence'
-    assert body.include?('a8ad3c0'), '/latest_changes should include the :latest_changes_count commit'
-    assert !body.include?('60f12f4'), '/latest_changes should not include more than latest_changes_count commits'
-    assert body.include?('<a href='Data-Two.csv/874f597a5659b4c3b153674ea04e406ff393975e'>Data-Two.csv</a>'), '/latest_changes include links to modified files in #{body}'
-    assert body.include?('<a href='Hobbit/874f597a5659b4c3b153674ea04e406ff393975e'>Hobbit.md</a>'), '/latest_changes should include links to modified pages in #{body}'
-  end
-    
-        # Title is based on file name when h1_title is false.
-    actual = @view.title
-    assert_equal 'H1', title
-  end
-end
-
-    
-      def self.assets_path
-    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
-  end
