@@ -1,138 +1,122 @@
 
         
-            def create_origin_access_identity(self, caller_reference, comment):
-        try:
-            return self.client.create_cloud_front_origin_access_identity(
-                CloudFrontOriginAccessIdentityConfig={
-                    'CallerReference': caller_reference,
-                    'Comment': comment
-                }
-            )
-        except (ClientError, BotoCoreError) as e:
-            self.module.fail_json_aws(e, msg='Error creating cloud front origin access identity.')
-    
-    import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
-    
-        try:
-        images = ec2_client.describe_images(ImageIds=image_ids, Filters=filters, Owners=owner_param, ExecutableUsers=executable_users)
-        images = [camel_dict_to_snake_dict(image) for image in images['Images']]
-    except (ClientError, BotoCoreError) as err:
-        module.fail_json_aws(err, msg='error describing images')
-    for image in images:
-        try:
-            image['tags'] = boto3_tag_list_to_ansible_dict(image.get('tags', []))
-            if module.params.get('describe_image_attributes'):
-                launch_permissions = ec2_client.describe_image_attribute(Attribute='launchPermission', ImageId=image['image_id'])['LaunchPermissions']
-                image['launch_permissions'] = [camel_dict_to_snake_dict(perm) for perm in launch_permissions]
-        except (ClientError, BotoCoreError) as err:
-            # describing launch permissions of images owned by others is not permitted, but shouldn't cause failures
-            pass
-    
-        argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(type='str'),
-            tags=dict(type='dict'),
-        )
-    )
-    module = AnsibleModule(argument_spec=argument_spec)
+        
+@pytest.fixture(autouse=True)
+def shell(mocker):
+    shell = mocker.patch('thefuck.entrypoints.not_configured.shell',
+                         new_callable=MagicMock)
+    shell.get_history.return_value = []
+    shell.how_to_configure.return_value = ShellConfiguration(
+        content='eval $(thefuck --alias)',
+        path='/tmp/.bashrc',
+        reload='bash',
+        can_configure_automatically=True)
+    return shell
     
     
-if __name__ == '__main__':
-    main()
+@pytest.mark.parametrize('script, output, help_text, result', [
+    ('apt-get isntall vim', invalid_operation('isntall'),
+     apt_get_help, 'apt-get install vim'),
+    ('apt saerch vim', invalid_operation('saerch'),
+     apt_help, 'apt search vim'),
+])
+def test_get_new_command(set_help, output, script, help_text, result):
+    set_help(help_text)
+    assert get_new_command(Command(script, output))[0] == result
 
     
-                if delete_policy:
-                original_policy = ecr.get_repository_policy(registry_id, name)
+    
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
     
-def get_elasticache_clusters(client, module, region):
-    try:
-        clusters = describe_cache_clusters_with_backoff(client, cluster_id=module.params.get('name'))
-    except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-        module.fail_json_aws(e, msg='Couldn't obtain cache cluster info')
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
     
-                # check if alias has changed -- only version and description can change
-            alias_params = ('function_version', 'description')
-            for param in alias_params:
-                if module.params.get(param) != facts.get(pc(param)):
-                    changed = True
-                    break
+    \tDid you mean `build`?
+'''
     
-            if module.params.get('next_marker'):
-            params['Marker'] = module.params.get('next_marker')
+    site_info = 'baomihua.com'
+download = baomihua_download
+download_playlist = playlist_not_supported('baomihua')
+
+    
+    #----------------------------------------------------------------------
+def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
+    if is_xml:  #URL is XML URL
         try:
-            lambda_facts.update(aliases=client.list_aliases(FunctionName=function_name, **params)['Aliases'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(aliases=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get aliases')
+            title = kwargs['title']
+        except:
+            title = ''
+        try:
+            headers = kwargs['headers']  #headers provided
+            ckinfo = get_content(url, headers = headers)
+        except NameError:
+            ckinfo = get_content(url)
+        
+        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
+                                info_only, title = title)
+    
+    
+'''
+http://open.iqiyi.com/lib/player.html
+'''
+iqiyi_patterns = [r'(?:\'|\')(https?://dispatcher\.video\.qiyi\.com\/disp\/shareplayer\.swf\?.+?)(?:\'|\')',
+                  r'(?:\'|\')(https?://open\.iqiyi\.com\/developer\/player_js\/coopPlayerIndex\.html\?.+?)(?:\'|\')']
+    
+            coeff = [0, 0, 0, 0]
+        for num_pair in no_dup:
+            idx = int(num_pair[-1])
+            val = int(num_pair[:-1], 16)
+            coeff[idx] = val
+    
+        pil_image.show()
+
+    
+    # See how far apart the test image is from the known faces
+face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+    app = Flask(__name__)
+    
+    
+def process_images_in_process_pool(images_to_check, number_of_cpus, model):
+    if number_of_cpus == -1:
+        processes = None
     else:
-        module.fail_json(msg='Parameter function_name required for query=aliases.')
+        processes = number_of_cpus
     
-            print('Training %s ... ' % name, end='')
-        t0 = time()
-        clf.fit(X_train, y_train)
-        train_time[name] = time() - t0
-        t0 = time()
-        y_pred = clf.predict(X_test)
-        test_time[name] = time() - t0
-        accuracy[name] = accuracy_score(y_test, y_pred)
-        print('done')
+            # Draw a label with a name below the face
+        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
     
-            X = np.random.randn(n_samples, n_features)
-        Y = np.random.randn(n_samples)
-    
-    We generate a synthetic dataset of size 10^n, for n in [min, max], and
-examine the time taken to run isotonic regression over the dataset.
-    
-        if dataset_name == 'forestcover':
-        dataset = fetch_covtype()
-        X = dataset.data
-        y = dataset.target
-        # normal data are those with attribute 2
-        # abnormal those with attribute 4
-        s = (y == 2) + (y == 4)
-        X = X[s, :]
-        y = y[s]
-        y = (y != 2).astype(int)
-    
-    import numpy as np
-from numpy import random as nr
+                for face_location in face_locations:
+                # Print the location of each face in this frame
+                top, right, bottom, left = face_location
+                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
     
-def compute_bench(samples_range, features_range):
+def print_result(filename, name, distance, show_distance=False):
+    if show_distance:
+        print('{},{},{}'.format(filename, name, distance))
+    else:
+        print('{},{}'.format(filename, name))
     
-        if netloc.startswith(('127.0.0.', '::1', 'localhost')):
-        start_response('400 Bad Request', [('Content-Type', 'text/html')])
-        html = ''.join('<a href='https://%s/'>%s</a><br/>' % (x, x) for x in ('google.com', 'mail.google.com'))
-        yield message_html('GoAgent %s is Running' % __version__, 'Now you can visit some websites', html)
-        raise StopIteration
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
-    
-        def _update_info(self):
-        '''Ensure the information from the router is up to date.
-    
-                        with open(final_path, 'wb') as fil:
-                        for chunk in req.iter_content(1024):
-                            fil.write(chunk)
-    
-            def on_created(self, event):
-            '''File created.'''
-            self.process(event)
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
