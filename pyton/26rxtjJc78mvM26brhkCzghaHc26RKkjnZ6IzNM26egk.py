@@ -1,141 +1,125 @@
 
         
-            mobj = re.search(r'(?s)version %s\n{2}(.+?)\n{3}' % version, changelog)
-    body = mobj.group(1) if mobj else ''
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
     
-    FISH_COMPLETION_FILE = 'youtube-dl.fish'
-FISH_COMPLETION_TEMPLATE = 'devscripts/fish-completion.in'
+        for asset in os.listdir(build_path):
+        compat_print('Uploading %s...' % asset)
+        releaser.create_asset(release_id, os.path.join(build_path, asset))
     
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
     
     
-def filter_options(readme):
-    ret = ''
-    in_options = False
-    for line in readme.split('\n'):
-        if line.startswith('# '):
-            if line[2:].startswith('OPTIONS'):
-                in_options = True
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+    lazy_extractors_filename = sys.argv[1]
+if os.path.exists(lazy_extractors_filename):
+    os.remove(lazy_extractors_filename)
+    
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
+    
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    
+class TestFormatSelection(unittest.TestCase):
+    def test_prefer_free_formats(self):
+        # Same resolution => download webm
+        ydl = YDL()
+        ydl.params['prefer_free_formats'] = True
+        formats = [
+            {'ext': 'webm', 'height': 460, 'url': TEST_URL},
+            {'ext': 'mp4', 'height': 460, 'url': TEST_URL},
+        ]
+        info_dict = _make_result(formats)
+        yie = YoutubeIE(ydl)
+        yie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(info_dict)
+        downloaded = ydl.downloaded_info_dicts[0]
+        self.assertEqual(downloaded['ext'], 'webm')
+    
+                if fail or self.network_stat != 'OK':
+                # Fail or unknown
+                if time_now - self.last_check_time < 3:
+                    return
             else:
-                in_options = False
-    
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
+                if time_now - self.last_check_time < 10:
+                    return
     
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
+def best_server(probe_nat=False):
+    best_server = None
+    prober = new_pteredor(probe_nat=probe_nat)
+    prober.qualified = True
+    if not probe_nat:
+        prober.nat_type = 'unknown'
+        prober.rs_cone_flag = 0
     
-        def test_module_exec(self):
-        if sys.version_info >= (2, 7):  # Python 2.6 doesn't support package execution
-            subprocess.check_call([sys.executable, '-m', 'youtube_dl', '--version'], cwd=rootDir, stdout=_DEV_NULL)
+    try:
+    from io import BytesIO
+except ImportError:
+    from cStringIO import StringIO as BytesIO
+try:
+    from google.appengine.api import urlfetch
+    from google.appengine.runtime import apiproxy_errors
+except ImportError:
+    urlfetch = None
+try:
+    import sae
+except ImportError:
+    sae = None
+try:
+    import bae.core.wsgi
+except ImportError:
+    bae = None
+try:
+    import socket
+    import select
+except ImportError:
+    socket = None
+try:
+    import OpenSSL
+except ImportError:
+    OpenSSL = None
     
-        # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+            self._state.syntaxErrors += 1 # don't count spurious
+        self._state.errorRecovery = True
     
-    UIR_ARGS = ['always', 'set', 'Content-Security-Policy',
-            'upgrade-insecure-requests']
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
     
-    
-# Return the longest prefix of all list elements.
-def commonprefix(m):
-    'Given a list of pathnames, returns the longest common leading component'
-    if not m: return ''
-    # Some people pass in a list of pathname parts to operate in an OS-agnostic
-    # fashion; don't try to translate in that case as that's an abuse of the
-    # API and they are already doing what they need to be OS-agnostic and so
-    # they most likely won't be using an os.PathLike object in the sublists.
-    if not isinstance(m[0], (list, tuple)):
-        m = tuple(map(os.fspath, m))
-    s1 = min(m)
-    s2 = max(m)
-    for i, c in enumerate(s1):
-        if c != s2[i]:
-            return s1[:i]
-    return s1
-    
-    class norm_error(Exception):
-    '''Path cannot be normalized'''
-    
-        def __init__(self, child_parts):
-        self.child_parts = child_parts
-        if child_parts:
-            self.successor = _make_selector(child_parts)
-            self.dironly = True
-        else:
-            self.successor = _TerminatingSelector()
-            self.dironly = False
-    
-        def persistent_load(self, pid):
-        # This method is invoked whenever a persistent ID is encountered.
-        # Here, pid is the tuple returned by DBPickler.
-        cursor = self.connection.cursor()
-        type_tag, key_id = pid
-        if type_tag == 'MemoRecord':
-            # Fetch the referenced record from the database and return it.
-            cursor.execute('SELECT * FROM memos WHERE key=?', (str(key_id),))
-            key, task = cursor.fetchone()
-            return MemoRecord(key, task)
-        else:
-            # Always raises an error if you cannot return the correct object.
-            # Otherwise, the unpickler will think None is the object referenced
-            # by the persistent ID.
-            raise pickle.UnpicklingError('unsupported persistent object')
-    
-    image = face_recognition.load_image_file('{}')
-face_locations = face_recognition.face_locations(image)
+    '''
+http://www.tudou.com/programs/view/html5embed.action?type=0&amp;code=3LS_URGvl54&amp;lcode=&amp;resourceId=0_06_05_99
 '''
+tudou_embed_patterns = [ 'tudou\.com[a-zA-Z0-9\/\?=\&\.\;]+code=([a-zA-Z0-9_-]+)\&',
+                         'www\.tudou\.com/v/([a-zA-Z0-9_-]+)/[^']*v\.swf'
+                       ]
     
-        # Sparkle the eyes
-    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
-    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
-    
-        # If no valid image file was uploaded, show the file upload form:
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
-    
-        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
-    :param image_shape: numpy shape of the image array
-    :return: a trimmed plain tuple representation of the rect in (top, right, bottom, left) order
-    '''
-    return max(css[0], 0), min(css[1], image_shape[1]), min(css[2], image_shape[0]), max(css[3], 0)
-    
-    
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
-    
-    # Load an image with an unknown face
-unknown_image = face_recognition.load_image_file('two_people.jpg')
-    
-            faces_to_compare = [
-            face_encoding_a2,
-            face_encoding_a3,
-            face_encoding_b1]
+    site_info = 'Google.com'
+download = google_download
+download_playlist = playlist_not_supported('google')
