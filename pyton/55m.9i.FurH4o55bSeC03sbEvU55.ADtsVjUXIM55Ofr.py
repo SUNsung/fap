@@ -1,66 +1,35 @@
 
         
-            @abstractmethod
-    def escalate_call(self):
-        pass
+        logging.getLogger(__name__).addHandler(NullHandler())
     
-        HOUSING = 0
-    FOOD = 1
-    GAS = 2
-    SHOPPING = 3
-    # ...
+            if isinstance(timeout, tuple):
+            try:
+                connect, read = timeout
+                timeout = TimeoutSauce(connect=connect, read=read)
+            except ValueError as e:
+                # this may raise a string formatting error.
+                err = ('Invalid timeout {}. Pass a (connect, read) '
+                       'timeout tuple, or a single float to set '
+                       'both timeouts to the same value'.format(timeout))
+                raise ValueError(err)
+        elif isinstance(timeout, TimeoutSauce):
+            pass
+        else:
+            timeout = TimeoutSauce(connect=timeout, read=timeout)
     
-        def append_to_front(self, node):
-        ...
+        if cookie_dict is not None:
+        names_from_jar = [cookie.name for cookie in cookiejar]
+        for name in cookie_dict:
+            if overwrite or (name not in names_from_jar):
+                cookiejar.set_cookie(create_cookie(name, cookie_dict[name]))
     
-        # make url_for('index') == url_for('blog.index')
-    # in another app, you might define a separate main index here with
-    # app.route, while giving the blog blueprint a url_prefix, but for
-    # the tutorial the blog will be the main index
-    app.add_url_rule('/', endpoint='index')
+        This function works best on CPython and PyPy: in particular, it probably
+    doesn't work for Jython or IronPython. Future investigation should be done
+    to work out the correct shape of the code for those platforms.
+    '''
+    implementation = platform.python_implementation()
     
-        def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
-    
-    
-_request_ctx_err_msg = '''\
-Working outside of request context.
-    
-        Example usage::
-    
-                # >leading or trailing LWS MAY be removed without
-            # >changing the semantics of the field value'
-            # -https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
-            # Also, requests raises `InvalidHeader` for leading spaces.
-            value = value.strip()
-    
-        def process_body(self, chunk):
-        if not isinstance(chunk, str):
-            # Text when a converter has been used,
-            # otherwise it will always be bytes.
-            chunk = chunk.decode(self.msg.encoding, 'replace')
-        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
-        return chunk.encode(self.output_encoding, 'replace')
-    
-        def __call__(self, r):
-        '''
-        Override username/password serialization to allow unicode.
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-    
-def test_unicode_url_query_arg_item(httpbin):
-    r = http(httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['args'] == {'test': UNICODE}, r
+            # Verify Authorization is sent correctly again, and return 200 OK.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert expected_digest in request_content
+        sock.send(text_200)
