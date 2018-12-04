@@ -1,189 +1,259 @@
 
         
-          /// Retrieve the array of replacement types, which line up with the
-  /// generic parameters.
-  ///
-  /// Note that the types may be null, for cases where the generic parameter
-  /// is concrete but hasn't been queried yet.
-  ArrayRef<Type> getReplacementTypes() const {
-    return llvm::makeArrayRef(getTrailingObjects<Type>(),
-                              getNumReplacementTypes());
-  }
-    
-    #include 'swift/Basic/TaskQueue.h'
-    
-    #include 'llvm/ADT/Optional.h'
-#include 'llvm/ADT/StringRef.h'
-    
-    // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id);
-    
-    void Menu::Remove(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.erase(begin+pos);
-  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
-}
-    
-      // implement nw.Screen.getScreens()
-  class NwScreenGetScreensFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenGetScreensFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
+  const base::CommandLine::StringType dashdash(2, '-');
+  bool block_args = false;
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i] == dashdash)
+      break;
+    if (block_args) {
+      return false;
+    } else if (IsUrlArg(argv[i])) {
+      block_args = true;
     }
+  }
+  return true;
+}
     
-    #define INSTANTIATE_LAYER_GPU_BACKWARD(classname) \
-  template void classname<float>::Backward_gpu( \
-      const std::vector<Blob<float>*>& top, \
-      const std::vector<bool>& propagate_down, \
-      const std::vector<Blob<float>*>& bottom); \
-  template void classname<double>::Backward_gpu( \
-      const std::vector<Blob<double>*>& top, \
-      const std::vector<bool>& propagate_down, \
-      const std::vector<Blob<double>*>& bottom)
-    
-      int top_k_;
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
     
      protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  Screen(v8::Isolate* isolate, display::Screen* screen);
+  ~Screen() override;
     
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #ifndef ATOM_BROWSER_API_ATOM_API_TRAY_H_
+#define ATOM_BROWSER_API_ATOM_API_TRAY_H_
     
-    #include <vector>
+     private:
+  scoped_refptr<AtomBrowserContext> browser_context_;
     
-    #include <utility>
-#include <vector>
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t bias_desc_;
-  cudnnFilterDescriptor_t filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-      int size_, pre_pad_;
-  Dtype alpha_, beta_, k_;
+    #include <string>
     
     
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-      grpc::string GetPeerIdentityPropertyName() const override;
-    
-    Status ProtoServerReflection::ServerReflectionInfo(
-    ServerContext* context,
-    ServerReaderWriter<ServerReflectionResponse, ServerReflectionRequest>*
-        stream) {
-  ServerReflectionRequest request;
-  ServerReflectionResponse response;
-  Status status;
-  while (stream->Read(&request)) {
-    switch (request.message_request_case()) {
-      case ServerReflectionRequest::MessageRequestCase::kFileByFilename:
-        status = GetFileByName(context, request.file_by_filename(), &response);
-        break;
-      case ServerReflectionRequest::MessageRequestCase::kFileContainingSymbol:
-        status = GetFileContainingSymbol(
-            context, request.file_containing_symbol(), &response);
-        break;
-      case ServerReflectionRequest::MessageRequestCase::
-          kFileContainingExtension:
-        status = GetFileContainingExtension(
-            context, &request.file_containing_extension(), &response);
-        break;
-      case ServerReflectionRequest::MessageRequestCase::
-          kAllExtensionNumbersOfType:
-        status = GetAllExtensionNumbers(
-            context, request.all_extension_numbers_of_type(),
-            response.mutable_all_extension_numbers_response());
-        break;
-      case ServerReflectionRequest::MessageRequestCase::kListServices:
-        status =
-            ListService(context, response.mutable_list_services_response());
-        break;
-      default:
-        status = Status(StatusCode::UNIMPLEMENTED, '');
-    }
-    }
-    }
-    
-    
-    {
-    {}  // namespace reflection
-}  // namespace grpc
+    {}  // namespace atom
 
     
     
+    {}  // namespace atom
     
-    /*
- * Before using the parallel module, you can configure these to change
- * how much parallelism is used.
+    // The browser want to open a file.
+IPC_MESSAGE_CONTROL1(ShellViewMsg_Open,
+                     std::string /* file name */)
+    
+    #include <string>
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(Base);
+};
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
+    
+    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+
+    
+    MenuItem::~MenuItem() {
+  Destroy();
+}
+    
+      std::string icon;
+  if (option.GetString('icon', &icon) && !icon.empty())
+    SetIcon(icon);
+    
+    
+    {      return true;
+    }
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
+  return true;
+}
+    
+    
+    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
+  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
+  y_shape.resize(canonical_axis + 1);
+  y_shape[canonical_axis] = N;
+  out[0] = CreateTensorShape(y_shape, in[0].data_type());
+  return out;
+}
+    
+    <summary> <b>Example</b> </summary>
+    
+    #include 'caffe2/operators/glu_op.h'
+    
+    /*!
+ * \brief The result holder of storage type of each NodeEntry in the graph.
+ * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
+ *
+ * \code
+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
+ *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
+ *  // get storage type by entry id
+ *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
+ * \endcode
+ *
+ * \sa FInferStorageType
  */
-extern size_t num_threads;
-extern size_t work_chunk;
+using StorageTypeVector = std::vector<int>;
     
-    void Label::branchFar(Assembler& a,
-                  BranchConditions bc,
-                  LinkReg lr,
-                  ImmType immt,
-                  bool immMayChange) {
-  // Marking current address for patchAbsolute
-  addJump(&a);
+    
+struct NULLDeleter {template<typename T> void operator()(T*){}};
+    
+    #ifdef CHECK_NEXT_TIMING
+#define IF_CHECK_TIMING(__t$) __t$
+#else
+#define IF_CHECK_TIMING(__t$)
+#endif
+    
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+}
+    
+    #if defined(__CUDACC__)
+    // Sync cpu diff to gpu diff
+    for (uint32_t i = 0; i < bot_.size(); ++i)
+      bot_[i]->gpu_diff();
+    
+    TRACE_SET_MOD(asmppc64);
+    
+    #include 'hphp/runtime/base/apc-object.h'
+#include 'hphp/runtime/base/apc-array.h'
+#include 'hphp/runtime/base/apc-stats.h'
+#include 'hphp/runtime/base/object-data.h'
+#include 'hphp/runtime/base/type-object.h'
+#include 'hphp/runtime/ext/apc/ext_apc.h'
+#include 'hphp/runtime/base/collections.h'
+#include 'hphp/runtime/ext/collections/ext_collections-map.h'
+#include 'hphp/runtime/ext/collections/ext_collections-set.h'
+#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
+#include 'hphp/runtime/base/data-walker.h'
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    ALWAYS_INLINE
+APCLocalArray* APCLocalArray::asApcArray(ArrayData* ad) {
+  assertx(ad->kind() == kApcKind);
+  return static_cast<APCLocalArray*>(ad);
+}
+    
+    inline Variant ExecutionContext::invokeMethodV(
+  ObjectData* obj,
+  const Func* meth,
+  InvokeArgs args,
+  bool dynamic
+) {
+  // Construct variant without triggering incref.
+  return Variant::attach(invokeMethod(obj, meth, args, dynamic));
+}
+    
+    #include 'benchmark/benchmark.h'
+    
+    namespace benchmark {
+enum LogColor {
+  COLOR_DEFAULT,
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_YELLOW,
+  COLOR_BLUE,
+  COLOR_MAGENTA,
+  COLOR_CYAN,
+  COLOR_WHITE
+};
     }
     
-    inline size_t APCLocalArray::heapSize() const {
-  return sizeof(*this) + m_size * sizeof(TypedValue);
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
+    
+    #include 'benchmark/benchmark.h'
+    
+      if (!items.empty()) {
+    printer(Out, COLOR_DEFAULT, ' %*s', 18, items.c_str());
+  }
+    
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
 }
     
-    void Config::ParseIniString(const std::string &iniStr, IniSettingMap &ini,
-                            const bool constants_only /* = false */ ) {
-  Config::SetParsedIni(ini, iniStr, '', constants_only, true);
+    #include <stdexcept>
+    
+      // Acquire a keep alive token. Should return false if keep-alive mechanism
+  // is not supported.
+  virtual bool keepAliveAcquire();
+  // Release a keep alive token previously acquired by keepAliveAcquire().
+  // Will never be called if keepAliveAcquire() returns false.
+  virtual void keepAliveRelease();
+    
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
+    
+    inline UriTuple as_tuple(const folly::Uri& k) {
+  return UriTuple(
+      k.scheme(),
+      k.username(),
+      k.password(),
+      k.host(),
+      k.port(),
+      k.path(),
+      k.query(),
+      k.fragment());
 }
     
-    bool ArrayDirectory::isEof() const {
-  return m_it.end();
-}
+    #include <folly/DefaultKeepAliveExecutor.h>
     
-        // skipping emacs leftovers
-    char last = ename[strlen(ename) - 1];
-    if (last == '~' || last == '#') {
-      continue;
+    void* SimpleAllocator::allocateHard() {
+  // Allocate a new slab.
+  mem_ = static_cast<uint8_t*>(folly::aligned_malloc(allocSize_, allocSize_));
+  if (!mem_) {
+    throw_exception<std::bad_alloc>();
+  }
+  end_ = mem_ + allocSize_;
+  blocks_.push_back(mem_);
     }
     
-    ///////////////////////////////////////////////////////////////////////////////
-// virtual functions
+      void reset(const std::shared_ptr<T>& p = nullptr) {
+    // Allocate each Holder in a different CoreRawAllocator stripe to
+    // prevent false sharing. Their control blocks will be adjacent
+    // thanks to allocate_shared().
+    for (auto slot : folly::enumerate(slots_)) {
+      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
+      auto holder = std::allocate_shared<Holder>(alloc, p);
+      *slot = std::shared_ptr<T>(holder, p.get());
+    }
+  }
