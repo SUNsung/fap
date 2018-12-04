@@ -1,267 +1,207 @@
 
         
-                  lowest_ev_cost = run_avg_lve
-          checkpoint_path = os.path.join(self.hps.lfads_save_dir,
-                                         self.hps.checkpoint_name + '_lve.ckpt')
-          self.lve_saver.save(session, checkpoint_path,
-                              global_step=self.train_step,
-                              latest_filename='checkpoint_lve')
+        # build the model
+model = Sequential()
+model.add(layers.Dense(256, input_shape=(784,)))
+model.add(Antirectifier())
+model.add(layers.Dropout(0.1))
+model.add(layers.Dense(256))
+model.add(Antirectifier())
+model.add(layers.Dropout(0.1))
+model.add(layers.Dense(num_classes))
+model.add(layers.Activation('softmax'))
     
-        states_t_bxn, outputs_t_bxn = sess.run([states_t, outputs_t],
-                                           feed_dict=feed_dict)
-    states_nxt = np.transpose(np.squeeze(np.asarray(states_t_bxn)))
-    outputs_t_bxn = np.squeeze(np.asarray(outputs_t_bxn))
-    r_sxt = np.dot(P_nxn, states_nxt)
+    from ..utils.data_utils import get_file
+import numpy as np
     
-      return datasets
+        def __call__(self, x):
+        regularization = 0.
+        if self.l1:
+            regularization += K.sum(self.l1 * K.abs(x))
+        if self.l2:
+            regularization += K.sum(self.l2 * K.square(x))
+        return regularization
+    
+        # Arguments
+        model: Keras model instance.
+        line_length: Total length of printed lines
+            (e.g. set this to adapt the display to different
+            terminal window sizes).
+        positions: Relative or absolute positions of log elements in each line.
+            If not provided, defaults to `[.33, .55, .67, 1.]`.
+        print_fn: Print function to use.
+            It will be called on each line of the summary.
+            You can set it to a custom function
+            in order to capture the string summary.
+            It defaults to `print` (prints to stdout).
+    '''
+    if print_fn is None:
+        print_fn = print
+    
+    
+def _normalize_device_name(name):
+    name = '/' + ':'.join(name.lower().replace('/', '').split(':')[-2:])
+    return name
+    
+        # When using the delayed-build pattern (no input shape specified), you can
+    # choose to manually build your model by calling
+    # `build(batch_input_shape)`:
+    model = Sequential()
+    model.add(Dense(32))
+    model.add(Dense(32))
+    model.build((None, 500))
+    model.weights  # returns list of length 4
+    ```
+    '''
+    
+                    # Shift the ground truth by 1
+                x_shift = xstart + directionx * (t + 1)
+                y_shift = ystart + directiony * (t + 1)
+                shifted_movies[i, t, x_shift - w: x_shift + w,
+                               y_shift - w: y_shift + w, 0] += 1
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
 
     
-        if no_more_data and np.sum(weights) == 0:
-      # There is no more data and this is an empty batch. Done!
-      break
-    yield inputs, char_inputs, global_word_ids, targets, weights
+    # we add a Convolution1D, which will learn filters
+# word group filters of size filter_length:
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+# we use max pooling:
+model.add(GlobalMaxPooling1D())
     
+        return out
     
-def print_and_log(log, id_to_word, sequence_eval, max_num_to_print=5):
-  '''Helper function for printing and logging evaluated sequences.'''
-  indices_eval = convert_to_indices(sequence_eval)
-  indices_arr = np.asarray(indices_eval)
-  samples = convert_to_human_readable(id_to_word, indices_arr, max_num_to_print)
+                # Consume content and release the original connection
+            # to allow our new request to reuse the same one.
+            r.content
+            r.close()
+            prep = r.request.copy()
+            extract_cookies_to_jar(prep._cookies, r.request, r.raw)
+            prep.prepare_cookies(prep._cookies)
     
+    # ---------
+# Specifics
+# ---------
     
-def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_pretrain_op = optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_pretrain_op
-    
-        # Finalize headers.
-    headers = get_default_headers(args)
-    if base_headers:
-        headers.update(base_headers)
-    headers.update(args.headers)
-    headers = finalize_headers(headers)
-    
-        # Auth
-    def get_auth_plugins(self):
-        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
-    
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
         try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
+    
+    # The scheme of the identifier. Typical schemes are ISBN or URL.
+#epub_scheme = ''
+    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+        print('Classifier Training')
+    print('===================')
+    accuracy, train_time, test_time = {}, {}, {}
+    for name in sorted(args['estimators']):
+        clf = ESTIMATORS[name]
+        try:
+            clf.set_params(random_state=0)
+        except (TypeError, ValueError):
+            pass
+    
+    from sklearn.cluster import AgglomerativeClustering
+    
+    if __name__ == '__main__':
+    list_n_samples = np.linspace(100, 10000, 5).astype(np.int)
+    list_n_features = [10, 100, 1000]
+    n_test = 1000
+    max_iter = 1000
+    noise = 0.1
+    alpha = 0.01
+    sgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    elnet_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    ridge_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    asgd_results = np.zeros((len(list_n_samples), len(list_n_features), 2))
+    for i, n_train in enumerate(list_n_samples):
+        for j, n_features in enumerate(list_n_features):
+            X, y, coef = make_regression(
+                n_samples=n_train + n_test, n_features=n_features,
+                noise=noise, coef=True)
+    
+    File: sparsity_benchmark.py
+Function: benchmark_dense_predict at line 51
+Total time: 0.532979 s
+    
+    from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import (CountVectorizer, TfidfVectorizer,
+                                             HashingVectorizer)
+    
+    
+class Header(jose.Header):
+    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    '''
+    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
+    kid = jose.Field('kid', omitempty=True)
+    url = jose.Field('url', omitempty=True)
+    
+    
+class HeaderTest(unittest.TestCase):
+    '''Tests for acme.jws.Header.'''
+    
+            :raises .errors.PluginError: If there has been an error in parsing with
+            the specified lens.
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
 
     
+        def test_include_missing(self):
+        # This should miss
+        self.verify_fnmatch('test_*.onf', False)
     
-filenames = list(rst_filenames())
-assert filenames
+        print(' - Face locations: {:.4f}s ({:.2f} fps)'.format(*run_test(setup_locate_faces.format(image), test_locate_faces)))
+    print(' - Face landmarks: {:.4f}s ({:.2f} fps)'.format(*run_test(setup_face_landmarks.format(image), test_face_landmarks)))
+    print(' - Encode face (inc. landmarks): {:.4f}s ({:.2f} fps)'.format(*run_test(setup_encode_face.format(image), test_encode_face)))
+    print(' - End-to-end: {:.4f}s ({:.2f} fps)'.format(*run_test(setup_end_to_end.format(image), test_end_to_end)))
+    print()
+
     
-        @pytest.mark.parametrize(
-        'orig_name, unique_on_attempt, expected',
-        [
-            # Simple
-            ('foo.bar', 0, 'foo.bar'),
-            ('foo.bar', 1, 'foo.bar-1'),
-            ('foo.bar', 10, 'foo.bar-10'),
-            # Trim
-            ('A' * 20, 0, 'A' * 10),
-            ('A' * 20, 1, 'A' * 8 + '-1'),
-            ('A' * 20, 10, 'A' * 7 + '-10'),
-            # Trim before ext
-            ('A' * 20 + '.txt', 0, 'A' * 6 + '.txt'),
-            ('A' * 20 + '.txt', 1, 'A' * 4 + '.txt-1'),
-            # Trim at the end
-            ('foo.' + 'A' * 20, 0, 'foo.' + 'A' * 6),
-            ('foo.' + 'A' * 20, 1, 'foo.' + 'A' * 4 + '-1'),
-            ('foo.' + 'A' * 20, 10, 'foo.' + 'A' * 3 + '-10'),
-        ]
-    )
-    @mock.patch('httpie.downloads.get_filename_max_length')
-    def test_unique_filename(self, get_filename_max_length,
-                             orig_name, unique_on_attempt,
-                             expected):
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
+    frames = []
+frame_count = 0
     
-def bench_isotonic_regression(Y):
-    '''
-    Runs a single iteration of isotonic regression on the input data,
-    and reports the total time taken (in seconds).
-    '''
-    gc.collect()
+            result = runner.invoke(face_detection_cli.main, args=[image_file])
+        self.assertEqual(result.exit_code, 0)
+        self.assertTrue('obama_partial_face2.jpg' in result.output)
+        self.assertTrue('obama.jpg' in result.output)
+        self.assertTrue('obama2.jpg' in result.output)
+        self.assertTrue('obama3.jpg' in result.output)
+        self.assertTrue('biden.jpg' in result.output)
     
-        for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
+    requirements = [
+    'face_recognition_models>=0.3.0',
+    'Click>=6.0',
+    'dlib>=19.7',
+    'numpy',
+    'Pillow'
+]
     
-    import numpy as np
-from numpy import random as nr
-    
-            for k in sorted(results_dict.keys()):
-            all_times[k].append(results_dict[k]['time'])
-            all_errors[k].append(results_dict[k]['error'])
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-        op.add_option('--algorithm',
-                  dest='selected_algorithm',
-                  default=default_algorithms,
-                  type=str,
-                  help='Comma-separated list of transformer to benchmark. '
-                       'Default: %default. \nAvailable: %default')
-    
-    n_samples, n_features = 5000, 300
-X = np.random.randn(n_samples, n_features)
-inds = np.arange(n_samples)
-np.random.shuffle(inds)
-X[inds[int(n_features / 1.2):]] = 0  # sparsify input
-print('input data sparsity: %f' % sparsity_ratio(X))
-coef = 3 * np.random.randn(n_features)
-inds = np.arange(n_features)
-np.random.shuffle(inds)
-coef[inds[n_features // 2:]] = 0  # sparsify coef
-print('true coef sparsity: %f' % sparsity_ratio(coef))
-y = np.dot(X, coef)
-    
-    import numpy as np
-import pandas as pd
-from memory_profiler import memory_usage
-    
-        print('============================================')
-    print('Warning: this is going to take a looong time')
-    print('============================================')
-    
-    
-URL = ('http://www.cs.cornell.edu/people/pabo/'
-       'movie-review-data/review_polarity.tar.gz')
-    
-        def test_raise_reraise(self):
-        def f(p):
-            try: 1/0
-            except: raise
-        f_ident = ident(f)
-        self.check_events(f, [(1, 'call', f_ident),
-                              (1, 'return', f_ident),
-                              ])
-    
-        def _iterate_directories(self, parent_path, is_dir, scandir):
-        yield parent_path
-        try:
-            entries = list(scandir(parent_path))
-            for entry in entries:
-                entry_is_dir = False
-                try:
-                    entry_is_dir = entry.is_dir()
-                except OSError as e:
-                    if e.errno not in _IGNORED_ERROS:
-                        raise
-                if entry_is_dir and not entry.is_symlink():
-                    path = parent_path._make_child_relpath(entry.name)
-                    for p in self._iterate_directories(path, is_dir, scandir):
-                        yield p
-        except PermissionError:
-            return
-    
-    # Split a pathname into a drive specification and the rest of the
-# path.  Useful on DOS/Windows/NT; on Unix, the drive is always empty.
-    
-        @unittest.skipUnless(hasattr(os, 'pipe'), 'requires os.pipe()')
-    def test_exists_fd(self):
-        r, w = os.pipe()
-        try:
-            self.assertTrue(self.pathmodule.exists(r))
-        finally:
-            os.close(r)
-            os.close(w)
-        self.assertFalse(self.pathmodule.exists(r))
-    
-    
-@contextmanager
-def path(package: Package, resource: Resource) -> Iterator[Path]:
-    '''A context manager providing a file path object to the resource.
-    
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
-        else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
-    
-    def revise_centroids(data, k, cluster_assignment):
-    new_centroids = []
-    for i in range(k):
-        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
-        member_data_points = data[cluster_assignment==i]
-        # Compute the mean of the data points. Fill in the blank (RHS only)
-        centroid = member_data_points.mean(axis=0)
-        new_centroids.append(centroid)
-    new_centroids = np.array(new_centroids)
-    
-    return new_centroids
-    
-    print('writing anagrams to file...')
-with open('anagrams.txt', 'w') as file:
-    file.write('all_anagrams = ')
-    file.write(pprint.pformat(all_anagrams))
-    
-        return res
+    import face_recognition
+import picamera
+import numpy as np
