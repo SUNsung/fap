@@ -1,133 +1,218 @@
 
         
-                const auto paramShape = GetMatrixShape(parameter);
-        NDShape shape;
-        if (factor == 0)
-        {
-            shape = NDShape({});
-        }
-        else
-        {
-            if (factor == 1)
-                shape = parameter.Shape();
-            else
-                shape = NDShape({ paramShape[0], factor * paramShape[1] });
-        }
+        bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
+    return false;
+    }
     
-            auto matrix = sequenceData->GetMatrix<ElementType>();
-        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(DeviceDescriptor::CPUDevice()), true);
-        auto cpuSparseMatrix = matrix->m_CPUSparseMatrix;
-        auto currentSequenceNumCols = matrix->GetNumCols();
-        auto currentSequenceColStarts = cpuSparseMatrix->SecondaryIndexLocation();
-        auto currentSequenceNumNonZeroValues = currentSequenceColStarts[currentSequenceNumCols] - currentSequenceColStarts[0];
-        std::copy(cpuSparseMatrix->MajorIndexLocation(), cpuSparseMatrix->MajorIndexLocation() + currentSequenceNumNonZeroValues, std::back_inserter(rowIndices));
-        std::copy((char*)(cpuSparseMatrix->Data()), (char*)(cpuSparseMatrix->Data() + currentSequenceNumNonZeroValues), std::back_inserter(nonZeroValues));
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
+    }
     
-        static void noOpAlarmHandler(int /*signum*/)
+      while ((!QueuedTasks.empty() && !SubtaskFailed) ||
+         !ExecutingTasks.empty()) {
+    // Enqueue additional tasks if we have additional tasks, we aren't already
+    // at the parallel limit, and no earlier subtasks have failed.
+    while (!SubtaskFailed && !QueuedTasks.empty() &&
+           ExecutingTasks.size() < MaxNumberOfParallelTasks) {
+      std::unique_ptr<DummyTask> T(QueuedTasks.front().release());
+      QueuedTasks.pop();
+    }
+    }
+    
+      static CFPointeeInfo forRecord(bool isConst, const clang::RecordDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = isConst;
+    info.Decl = decl;
+    return info;
+  }
+    
+    
+    
+    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
+
+    
+    // Declare Memory Type for Caffe blob
+enum caffeMemoryTypes {Data, Grad, Non};
+    
+      // override set_default
+  inline FieldEntry<caffe::LayerParameter> &set_default(const std::string &value) {
+    caffe::NetParameter net_param;
+    if (!ReadProtoFromTextContent(value, &net_param))
+      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
+    }
+    
+      virtual void Backward(const OpContext &ctx,
+                        const std::vector<TBlob> &out_grad,
+                        const std::vector<TBlob> &in_data,
+                        const std::vector<TBlob> &out_data,
+                        const std::vector<OpReqType> &req,
+                        const std::vector<TBlob> &in_grad,
+                        const std::vector<TBlob> &aux_args) {
+    // Set mode before backward
+    caffe::CaffeMode::SetMode<xpu>();
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(out_grad.size(), param_.num_out);
+    for (int i = 0; i < param_.num_data; ++i)
+      CHECK(req[i] != kAddTo) << 'caffe doesn't accm diff on bottom data';
+    CHECK(in_data.size() == param_.num_data);
+    }
+    
+    Graph DetectInplaceAddTo(Graph g) {
+  nnvm::StorageVector storage_id =
+      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
+  std::vector<int> storage_inplace_index =
+      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
+  static const Op* ewise_plus_op = Op::Get('_grad_add');
+  auto& idx = g.indexed_graph();
+  // reference cont.
+  std::vector<int> ref_count(idx.num_node_entries(), 0);
+  std::vector<int> addto_entry(idx.num_node_entries(), 0);
+  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
+    }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
     {
-        // this handler is intentionally NO-OP
-        // the side effect of execution this handler
-        // will be a termination of fcntl call below with EINTR
-    }
+    {}}
     
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
     
-        void Start();
-    void Stop();
-    void Restart();
+    //////////////////////////////////////////////////////////////////////
     
-        // master data structure
-    std::list<QueryUrls> m_queryUrls;
-    // buffer for sorting
-    std::vector<Url> m_urlSorter;
-    // lookup table for position based weights
-    std::vector<ElemType> m_logWeights;
-    
-    
-    {        bool isImage = configp->Get(L'isImage');
-        if (!isImage)
-            Init(configp->Get(L'shape'), isSparse, axisName);
-        else
-            Init(ImageDimensions::AsTensorShape(configp->Get(L'imageWidth'), configp->Get(L'imageHeight'), configp->Get(L'imageChannels'), ImageLayoutKindFrom(configp->Get(L'imageLayout'))), isSparse, axisName);
-    }
-    
-    
-    {    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    state.SetBytesProcessed(state.iterations() * file.tellg());
+    inline TypedValue ExecutionContext::invokeMethod(
+  ObjectData* obj,
+  const Func* meth,
+  InvokeArgs args,
+  bool dynamic
+) {
+  return invokeFuncFew(
+    meth,
+    ActRec::encodeThis(obj),
+    nullptr /* invName */,
+    args.size(),
+    args.start(),
+    dynamic
+  );
 }
-BENCHMARK_CAPTURE(ParseFile, jeopardy,      'data/jeopardy/jeopardy.json');
-BENCHMARK_CAPTURE(ParseFile, canada,        'data/nativejson-benchmark/canada.json');
-BENCHMARK_CAPTURE(ParseFile, citm_catalog,  'data/nativejson-benchmark/citm_catalog.json');
-BENCHMARK_CAPTURE(ParseFile, twitter,       'data/nativejson-benchmark/twitter.json');
-BENCHMARK_CAPTURE(ParseFile, floats,        'data/numbers/floats.json');
-BENCHMARK_CAPTURE(ParseFile, signed_ints,   'data/numbers/signed_ints.json');
-BENCHMARK_CAPTURE(ParseFile, unsigned_ints, 'data/numbers/unsigned_ints.json');
     
-    // Parses a string for a Double flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseDoubleFlag(const char* str, const char* flag, double* value);
-    
-      if (run.bytes_per_second > 0.0) {
-    Out << run.bytes_per_second;
+      if (!spath.empty() && !isDirSeparator(spath.back())) {
+    spath += getDirSeparator();
   }
-  Out << ',';
-  if (run.items_per_second > 0.0) {
-    Out << run.items_per_second;
+  auto fullPath = root + spath;
+  if (fullPath.empty()) {
+    return;
   }
-  Out << ',';
-  if (!run.report_label.empty()) {
-    // Field with embedded double-quote characters must be doubled and the field
-    // delimited with double-quotes.
-    std::string label = run.report_label;
-    ReplaceAll(&label, '\'', '\'\'');
-    Out << '\'' << label << '\'';
+  if (!callback(spath, true)) {
+    return;
   }
-  Out << ',,';  // for error_occurred and error_message
     
-      out << indent << '\'caches\': [\n';
-  indent = std::string(6, ' ');
-  std::string cache_indent(8, ' ');
-  for (size_t i = 0; i < info.caches.size(); ++i) {
-    auto& CI = info.caches[i];
-    out << indent << '{\n';
-    out << cache_indent << FormatKV('type', CI.type) << ',\n';
-    out << cache_indent << FormatKV('level', static_cast<int64_t>(CI.level))
-        << ',\n';
-    out << cache_indent
-        << FormatKV('size', static_cast<int64_t>(CI.size) * 1000u) << ',\n';
-    out << cache_indent
-        << FormatKV('num_sharing', static_cast<int64_t>(CI.num_sharing))
-        << '\n';
-    out << indent << '}';
-    if (i != info.caches.size() - 1) out << ',';
-    out << '\n';
+    
+    {  auto glob = HHVM_FN(glob)(String(path_str, path_len, CopyString));
+  if (!glob.isArray()) {
+    return nullptr;
   }
-  indent = std::string(4, ' ');
-  out << indent << '],\n';
+  return req::make<ArrayDirectory>(glob.toArray());
+}
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    /**
+ * @brief Parser plugin for logger configurations.
+ */
+class LoggerConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {kLoggerKey};
+  }
+    }
+    
+    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_run_load_top_level) {
+  // Re-enable the decorators, then update the config.
+  // The 'load' decorator set should run every time the config is updated.
+  FLAGS_disable_decorators = false;
+  // enable top level decorations for the test
+  FLAGS_decorations_top_level = true;
+  Config::get().update(config_data_);
+    }
+    
+    #include 'osquery/tests/test_util.h'
+    
+    #include <gtest/gtest.h>
+    
+    #ifdef WIN32
+TEST_F(ProcessTests, test_constructorWin) {
+  HANDLE handle =
+      ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, ::GetCurrentProcessId());
+  EXPECT_NE(handle, reinterpret_cast<HANDLE>(nullptr));
+    }
+    
+      auto status = startExtension('example', '0.0.1');
+  if (!status.ok()) {
+    LOG(ERROR) << status.getMessage();
+    runner.requestShutdown(status.getCode());
+  }
+    
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
+    
+    #endif  // GUETZLI_IDCT_H_
+
+    
+    #include <assert.h>
+#include <string.h>
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
     
     
-    { private:
-  LogType(std::ostream* out) : out_(out) {}
-  std::ostream* out_;
-  BENCHMARK_DISALLOW_COPY_AND_ASSIGN(LogType);
-};
+    {  return true;
+}
     
-          // regerror returns the number of bytes necessary to null terminate
-      // the string, so we move that when assigning to error.
-      CHECK_NE(needed, 0);
-      error->assign(errbuf, needed - 1);
+    size_t FindNextMarker(const uint8_t* data, const size_t len, size_t pos) {
+  // kIsValidMarker[i] == 1 means (0xc0 + i) is a valid marker.
+  static const uint8_t kIsValidMarker[] = {
+    1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+  };
+  size_t num_skipped = 0;
+  while (pos + 1 < len &&
+         (data[pos] != 0xff || data[pos + 1] < 0xc0 ||
+          !kIsValidMarker[data[pos + 1] - 0xc0])) {
+    ++pos;
+    ++num_skipped;
+  }
+  return num_skipped;
+}
+    
+    void BuildSequentialHuffmanCodes(
+    const JPEGData& jpg,
+    std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
+    std::vector<HuffmanCodeTable>* ac_huffman_code_tables) {
+  JPEGOutput out(NullOut, nullptr);
+  BuildAndEncodeHuffmanCodes(jpg, out, dc_huffman_code_tables,
+                             ac_huffman_code_tables);
+}
+    
+    #include 'guetzli/jpeg_data.h'
