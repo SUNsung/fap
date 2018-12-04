@@ -1,137 +1,122 @@
 
         
-              it 'allows you to specify your own tag' do
-        tag = '2.0.0'
+              if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
     
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
-      end
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-          context 'as string with wildcards' do
-        it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add *.txt', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '*.txt', shell_escape: false)
-          end').runner.execute(:test)
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
         end
-      end
     
-          it 'generates the correct git command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: 'message')
-        end').runner.execute(:test)
+                    @env.machine_names.each do |machine_name|
+                  if machine_name =~ regex
+                    machines << get_machine.call(machine_name)
+                  end
+                end
     
-          it 'allows a single array to be passed to support older Fastlane syntax' do
-        expect_command('ls -la /tmp')
-        Fastlane::Actions.sh(['ls -la', '/tmp'])
-      end
+      preflight do
+    processes = system_command '/bin/launchctl', args: ['list']
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+        def byte_to_str_pos(pos)
+      @s.string.byteslice(0, pos).length
     end
     
-              expect do
-            config_item.valid?('ABC')
-          end.to raise_error(FastlaneCore::Interface::FastlaneError, ''foo' value must be a Float! Found String instead.')
-        end
-    
-          class MergeRequest < ActiveRecord::Base
-        self.table_name = 'merge_requests'
-    
-          def get_token
-        @api.token
-      end
-    
-          def same
-        @base && @head && @base.id == @head.id
-      end
-    
-              resolution
-        end
-      end
+        # apply general less to scss conversion
+    def convert_to_scss(file)
+      # get local mixin names before converting the definitions
+      mixins = shared_mixins + read_mixins(file)
+      file   = replace_vars(file)
+      file   = replace_mixin_definitions(file)
+      file   = replace_mixins(file, mixins)
+      file   = extract_mixins_from_selectors(file, CLASSES_TO_MIXINS.inject({}) { |h, cl| h.update('.#{cl}' => cl) })
+      file   = replace_spin(file)
+      file   = replace_fadein(file)
+      file   = replace_image_urls(file)
+      file   = replace_escaping(file)
+      file   = convert_less_ampersand(file)
+      file   = deinterpolate_vararg_mixins(file)
+      file   = replace_calculation_semantics(file)
+      file   = replace_file_imports(file)
+      file   = wrap_at_groups_with_at_root(file)
+      file
     end
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
   end
 end
-
     
-                    line_obj_index += 1
-              end
-            end
-    
-            def submodules_by_name
-          @result
-        end
+          def assert_value_or_block_not_both(value, block)
+        return if value.nil? || block.nil?
+        raise Capistrano::ValidationError,
+              'Value and block both passed to Configuration#set'
       end
     
-        def replace_all(file, regex, replacement = nil, &block)
-      log_transform regex, replacement
-      new_file = file.gsub(regex, replacement, &block)
-      raise 'replace_all #{regex}, #{replacement} NO MATCH' if file == new_file
-      new_file
-    end
+    Given /^(?:|I )am on (.+)$/ do |page_name|
+  visit path_to(page_name)
+end
     
-        def log_processed(name)
-      puts green '    #{name}'
-    end
-    
-      # Enable Rack::Cache to put a simple HTTP cache in front of your application
-  # Add `rack-cache` to your Gemfile before enabling this.
-  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
-  # config.action_dispatch.rack_cache = true
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
-    
-      let(:unordered_config_parts) { ordered_config_parts.shuffle }
-  let(:settings) { LogStash::SETTINGS }
-    
-              it 'successfully install the plugin when verification is disabled' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
-          end
-    
-          it 'display a list of installed plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
-    
-          # Calls the given block for each `when` node in the `case` statement.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_when
-        return when_branches.to_enum(__method__) unless block_given?
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
-        end
-      end
-    end
+      def framework_major_version
+    framework_version.split('.').first.to_i
   end
 end
+World(RailsCommandHelpers)
 
     
-              @properties = @properties.page(params[:page]).per(params[:per_page])
-          respond_with(@properties)
-        end
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
     
-            def update
-          @stock_item = StockItem.accessible_by(current_ability, :update).find(params[:id])
-    
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
+    end
