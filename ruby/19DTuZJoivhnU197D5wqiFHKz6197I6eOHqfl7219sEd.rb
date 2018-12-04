@@ -1,179 +1,159 @@
 
         
-          # This allows generic Altivec PPC bottles to be supported in some
-  # formulae, while also allowing specific bottles in others; e.g.,
-  # sometimes a formula has just :tiger_altivec, other times it has
-  # :tiger_g4, :tiger_g5, etc.
-  def find_altivec_tag(tag)
-    if tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
-      altivec_tag = '#{$1}_altivec'.to_sym
-      altivec_tag if key?(altivec_tag)
-    end
-  end
+                  content = if block_given?
+            @template_object.capture(builder, &block)
+          elsif @content.present?
+            @content.to_s
+          else
+            render_component(builder)
+          end
     
-      def observe_file_removal(path)
-    path.extend(ObserverPathnameExtension).unlink if path.exist?
-  end
-    
-        def self.cleanup_logs
-      return unless HOMEBREW_LOGS.directory?
-      HOMEBREW_LOGS.subdirs.each do |dir|
-        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
+        # Main render entry point shared by Action View and Action Controller.
+    def render(context, options)
+      if options.key?(:partial)
+        render_partial(context, options)
+      else
+        render_template(context, options)
       end
     end
     
-      def clt
-    if instance_variable_defined?(:@clt)
-      @clt
-    elsif MacOS::CLT.installed? && MacOS::Xcode.version >= '4.3'
-      @clt = MacOS::CLT.version
-    end
+    require 'benchmark/ips'
+require 'jekyll'
+require 'json'
+    
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
-    
-        @@remote_tap_formulae ||= Hash.new do |cache, key|
-      user, repo = key.split('/', 2)
-      tree = {}
-    
-          case status
-      when 'A', 'D'
-        @report[status.to_sym] << tap.formula_file_to_name(src)
-      when 'M'
-        begin
-          formula = Formulary.factory(tap.path/src)
-          new_version = formula.pkg_version
-          old_version = FormulaVersions.new(formula).formula_at_revision(@initial_revision, &:pkg_version)
-          next if new_version == old_version
-        rescue Exception => e
-          onoe e if ARGV.homebrew_developer?
-        end
-        @report[:M] << tap.formula_file_to_name(src)
-      when /^R\d{0,3}/
-        @report[:D] << tap.formula_file_to_name(src) if tap.formula_file?(src)
-        @report[:A] << tap.formula_file_to_name(dst) if tap.formula_file?(dst)
-      end
-    end
-    
-      def command
-    abort 'This command requires a command argument' if ARGV.empty?
-    
-      def package(gem, ext='')
-    'pkg/#{gem}-#{source_version}' + ext
-  end
-    
-    get '/stream', :provides => 'text/event-stream' do
-  stream :keep_open do |out|
-    connections << out
-    out.callback { connections.delete(out) }
-  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
 end
-    
-          def empty_cookie(host, path)
-        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
-      end
-    
-          def call(env)
-        request               = Request.new(env)
-        status, headers, body = app.call(env)
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-    module Jekyll
-    
-    
-===============================================
- Error for category_generator.rb plugin
------------------------------------------------
- No 'category_index.html' in source/_layouts/
- Perhaps you haven't installed a theme yet.
-===============================================
-    
-        def cache(gist, file, data)
-      cache_file = get_cache_file_for gist, file
-      File.open(cache_file, 'w') do |io|
-        io.write data
-      end
-    end
-    
-      class PageFilters < Octopress::Hooks::Page
-    def pre_render(page)
-      OctopressFilters::pre_filter(page)
-    end
-    
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
-    
-            return nil
-      end
-    end
-  end
-end end end
 
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
+    Benchmark.ips do |x|
+  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
+  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
     
-      # create list of plugins to update
-  def plugins_to_update(previous_gem_specs_map)
-    if update_all?
-      previous_gem_specs_map.values.map{|spec| spec.name}
-    else
-      # If the plugins isn't available in the gemspec or in 
-      # the gemfile defined with a local path, we assume the plugins is not
-      # installed.
-      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
-      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
-      plugins_arg
+        option_names.any? do |name|
+      if option_defined? 'with-#{name}'
+        include? 'with-#{name}'
+      elsif option_defined? 'without-#{name}'
+        !include? 'without-#{name}'
+      else
+        false
+      end
     end
   end
     
-          def error_during_processing(exception)
-        Rails.logger.error exception.message
-        Rails.logger.error exception.backtrace.join('\n')
+          plist_filename = if f.plist
+        f.plist_path.basename
+      else
+        File.basename Dir['#{keg}/*.plist'].first
+      end
+      plist_link = '#{destination}/#{plist_filename}'
+      plist_domain = f.plist_path.basename('.plist')
+      destination_path = Pathname.new File.expand_path destination
+      plist_path = destination_path/plist_filename
+    
+      def head
+    Homebrew.git_head || '(none)'
+  end
+    
+        # Exclude cache, logs, and repository, if they are located under the prefix.
+    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
+      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
+    end
+    dirs.delete 'etc'
+    dirs.delete 'var'
+    
+        def assert_index(index)
+      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
+      raise 'No such filter to insert: #{index}' unless i
+      i
+    end
+  end
+end
+
     
             def new; end
     
-            def show
-          @option_type = Spree::OptionType.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@option_type)
-        end
-    
-            def index
-          if params[:ids]
-            @products = product_scope.where(id: params[:ids].split(',').flatten)
+            def create
+          authorize! :create, Spree::OptionValue
+          @option_value = scope.new(option_value_params)
+          if @option_value.save
+            render :show, status: 201
           else
-            @products = product_scope.ransack(params[:q]).result
-          end
-    
-            def mine
-          if current_api_user.persisted?
-            @shipments = Spree::Shipment.
-                         reverse_chronological.
-                         joins(:order).
-                         where(spree_orders: { user_id: current_api_user.id }).
-                         includes(mine_includes).
-                         ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          else
-            render 'spree/api/errors/unauthorized', status: :unauthorized
+            invalid_resource!(@option_value)
           end
         end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def create
+          authorize! :create, Store
+          @store = Store.new(store_params)
+          @store.code = params[:store][:code]
+          if @store.save
+            respond_with(@store, status: 201, default_template: :show)
+          else
+            invalid_resource!(@store)
+          end
+        end
+    
+            def products
+          # Returns the products sorted by their position with the classification
+          # Products#index does not do the sorting.
+          taxon = Spree::Taxon.find(params[:id])
+          @products = taxon.products.ransack(params[:q]).result
+          @products = @products.page(params[:page]).per(params[:per_page] || 500)
+          render 'spree/api/v1/products/index'
+        end
+    
+            def destroy
+          authorize! :destroy, user
+          user.destroy
+          respond_with(user, status: 204)
+        end
+    
+      steps %{
+    And I turn off class caching
+    And I write to 'Gemfile' with:
+      '''
+      source 'http://rubygems.org'
+      gem 'rails', '#{framework_version}'
+      gem 'sqlite3', :platform => [:ruby, :rbx]
+      gem 'activerecord-jdbcsqlite3-adapter', :platform => :jruby
+      gem 'jruby-openssl', :platform => :jruby
+      gem 'capybara'
+      gem 'gherkin'
+      gem 'aws-sdk-s3'
+      gem 'racc', :platform => :rbx
+      gem 'rubysl', :platform => :rbx
+      '''
+    And I remove turbolinks
+    And I comment out lines that contain 'action_mailer' in 'config/environments/*.rb'
+    And I empty the application.js file
+    And I configure the application to use 'paperclip' from this project
+  }
+    
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
+    
+          [ scale_geometry, crop_geometry ]
+    end
