@@ -1,40 +1,79 @@
 
         
-          # GET /resource/password/edit?reset_password_token=abcdef
-  def edit
-    self.resource = resource_class.new
-    set_minimum_password_length
-    resource.reset_password_token = params[:reset_password_token]
+          def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
   end
     
-          # The scope root url to be used when they're signed in. By default, it first
-      # tries to find a resource_root_path, otherwise it uses the root_path.
-      def signed_in_root_path(resource_or_scope)
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        router_name = Devise.mappings[scope].router_name
+        def translation_scope
+      'devise.unlocks'
+    end
+end
+
     
-      def safely_remove_file(_path)
-    run_vagrant_command('rm #{test_file}')
-  rescue
-    VagrantHelpers::VagrantSSHCommandError
+      private
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
+      end
+    
+    $redis = Redis.new
+    
+    
+    end
   end
 end
+
     
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
+        module PsychAutoload
+      def resolve_class(klass_name)
+        return nil if !klass_name || klass_name.empty?
+        # constantize
+        names = klass_name.split('::')
+        names.shift if names.empty? || names.first.empty?
     
-        def hostfilter
-      ['--hosts HOSTS', '-z',
-       'Run SSH commands only on matching hosts',
-       lambda do |value|
-         Configuration.env.add_cmdline_filter(:host, value)
-       end]
+        module ActionMailer
+      def sidekiq_delay(options={})
+        Proxy.new(DelayedMailer, self, options)
+      end
+      def sidekiq_delay_for(interval, options={})
+        Proxy.new(DelayedMailer, self, options.merge('at' => Time.now.to_f + interval.to_f))
+      end
+      def sidekiq_delay_until(timestamp, options={})
+        Proxy.new(DelayedMailer, self, options.merge('at' => timestamp.to_f))
+      end
+      alias_method :delay, :sidekiq_delay
+      alias_method :delay_for, :sidekiq_delay_for
+      alias_method :delay_until, :sidekiq_delay_until
     end
     
-          def built_in_scm_plugin_class_name
-        'Capistrano::SCM::#{scm_name.to_s.capitalize}'
+          if file.kind_of?(String)
+        ERB.new(file).result(binding)
+      else
+        send(:'_erb_#{file}')
       end
+    end
+  end
+end
+
+    
+        def match(request_method, path)
+      case matcher
+      when String
+        {} if path == matcher
+      else
+        if path_match = path.match(matcher)
+          Hash[path_match.names.map(&:to_sym).zip(path_match.captures)]
+        end
+      end
+    end
+  end
+end
