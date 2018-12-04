@@ -1,174 +1,177 @@
 
         
-            def __init__(self, employee_id, name, rank, call_center):
-        self.employee_id = employee_id
-        self.name = name
-        self.rank = rank
-        self.call = None
-        self.call_center = call_center
+          S = P_sxn.shape[0]
+  data_e = normalize_rates(data_e, E, S)
     
-        def __init__(self, vehicle_size, license_plate, spot_size):
-        self.vehicle_size = vehicle_size
-        self.license_plate = license_plate
-        self.spot_size
-        self.spots_taken = []
+      dir_name = os.path.dirname(data_fname)
+  if not os.path.exists(dir_name):
+    os.makedirs(dir_name)
     
+      data_gen = dataset.get_batch(BATCH_SIZE, NUM_TIMESTEPS, forever=False)
+  sum_num = 0.0
+  sum_den = 0.0
+  perplexity = 0.0
+  for i, (inputs, char_inputs, _, targets, weights) in enumerate(data_gen):
+    input_dict = {t['inputs_in']: inputs,
+                  t['targets_in']: targets,
+                  t['target_weights_in']: weights}
+    if 'char_inputs_in' in t:
+      input_dict[t['char_inputs_in']] = char_inputs
+    log_perp = sess.run(t['log_perplexity_out'], feed_dict=input_dict)
     
-class DefaultCategories(Enum):
+        if FLAGS.prefix_label and use_prefix:
+      label = sequence_example.context.feature['class'].int64_list.value[0]
+      review_words = [EOS_INDEX + 1 + label]
+    else:
+      review_words = []
+    review_words.extend([
+        f.int64_list.value[0]
+        for f in sequence_example.feature_lists.feature_list['token_id'].feature
+    ])
+    all_words.append(review_words)
+  return all_words
     
-    
-class LookupService(object):
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-
-    
-        Returns:
-      the labels of these instances.
-    '''
-    return session.run(self.labels_to_load,
-                       feed_dict={self.instances_to_load: instances})
-    
-        for i, word in enumerate(self._id_to_word):
-      if i == self.bos:
-        self._word_char_ids[i] = self.bos_chars
-      elif i == self.eos:
-        self._word_char_ids[i] = self.eos_chars
-      else:
-        self._word_char_ids[i] = self._convert_word_to_char_ids(word)
-    
-      if epoch_size == 0:
-    raise ValueError('epoch_size == 0, decrease batch_size or num_steps')
+      Args:
+    hparams:  Hyperparameters for the MaskGAN.
+    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
+    is_training:  Whether the model is training.
+    reuse (Optional):  Whether to reuse the model.
     
     # Dependency imports
     
-                elif opt in ('-V', '--version'):
-                # Display version.
-                log.println('you-get:', log.BOLD)
-                log.println('    version:  {}'.format(__version__))
-                if head is not None:
-                    log.println('    branch:   {}\n    commit:   {}'.format(*head))
-                else:
-                    log.println('    branch:   {}\n    commit:   {}'.format('(stable)', '(tag v{})'.format(__version__)))
+        ## Load the Discriminator weights from the MaskGAN checkpoint if
+    # the weights are compatible.
+    if FLAGS.discriminator_model == 'seq2seq_vd':
+      print('Restoring Discriminator from %s.' % FLAGS.maskgan_ckpt)
+      tf.logging.info('Restoring Discriminator from %s.' % FLAGS.maskgan_ckpt)
+      dis_init_saver = init_savers['dis_init_saver']
+      dis_init_saver.restore(sess, FLAGS.maskgan_ckpt)
     
-        #call extractor decided by sourceId
-    if sourceType == 'sina':
-        sina_download_by_vid(sourceId, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'youku':
-        youku_download_by_vid(sourceId, title=title, output_dir=output_dir, merge=merge, info_only=info_only, **kwargs)
-    elif sourceType == 'tudou':
-        tudou_download_by_iid(sourceId, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'qq':
-        qq_download_by_vid(sourceId, title, True, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'letv':
-        letvcloud_download_by_vu(sourceId, '2d8c027396', title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'zhuzhan':
-        #As in Jul.28.2016, Acfun is using embsig to anti hotlink so we need to pass this
-#In Mar. 2017 there is a dedicated ``acfun_proxy'' in youku cloud player
-#old code removed
-        url = 'http://www.acfun.cn/v/ac' + vid
-        yk_streams = youku_acfun_proxy(info['sourceId'], info['encode'], url)
-        seq = ['mp4hd3', 'mp4hd2', 'mp4hd', 'flvhd']
-        for t in seq:
-            if yk_streams.get(t):
-                preferred = yk_streams[t]
-                break
-#total_size in the json could be incorrect(F.I. 0)
-        size = 0
-        for url in preferred[0]:
-            _, _, seg_size = url_info(url)
-            size += seg_size
-#fallback to flvhd is not quite possible
-        print_info(site_info, title, 'mp4', size)
-        if not info_only:
-            download_urls(preferred[0], title, 'mp4', size, output_dir=output_dir, merge=merge)
-    else:
-        raise NotImplementedError(sourceType)
+      # *Total* number of n-grams produced by the generator.
+  total_ngrams_produced = 0
     
-    from ..common import *
-from ..extractor import VideoExtractor
+      if not FLAGS.seq2seq_share_embedding:
+    variable_mapping = {
+        'Model/embeddings/input_embedding':
+            encoder_embedding,
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_0,
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_0,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_1,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_1
+    }
+  else:
+    variable_mapping = {
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_0,
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_0,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_1,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_1
+    }
+  return variable_mapping
     
-    site_info = 'CNTV.com'
-download = cntv_download
-download_playlist = playlist_not_supported('cntv')
+            # Insert the import statement to setup.py if not present
+        with open(setup_path, 'a+') as setup:
+            setup.seek(0)
+            setup_content = setup.read()
+            if not 'import fastentrypoints' in setup_content:
+                setup.seek(0)
+                setup.truncate()
+                setup.write('import fastentrypoints\n' + setup_content)
+    
+    
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
+    proc.sendline(u'fish')
+    return proc
+    
+    
+@pytest.mark.parametrize('command, new_command, packages', [
+    (Command('vim', ''), 'sudo apt-get install vim && vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')]),
+    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')])])
+def test_get_new_command(mocker, command, new_command, packages):
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
+    assert new_command == 'sudo apt upgrade'
 
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+      * dynamodb
+'''
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+    You can install with Homebrew-Cask:
+  brew cask install osxfuse
     
-        # Try harder, check all iframes
-    if 'recur_lv' not in kwargs or kwargs['recur_lv'] < recur_limit:
-        r = kwargs.get('recur_lv')
-        if r is None:
-            r = 1
-        else:
-            r += 1
-        iframes = matchall(content, [r'<iframe.+?src=(?:\'|\')(.+?)(?:\'|\')'])
-        for iframe in iframes:
-            if not iframe.startswith('http'):
-                src = urllib.parse.urljoin(url, iframe)
-            else:
-                src = iframe
-            found = embed_download(src, output_dir=output_dir, merge=merge, info_only=info_only, recur_lv=r, **kwargs)
-            if found:
-                return True
+    \tDid you mean `build`?
+'''
     
-        sd_urls = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'sd_src_no_ratelimit:'([^']*)'', html)
-    ]))
-    hd_urls = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'hd_src_no_ratelimit:'([^']*)'', html)
-    ]))
-    urls = hd_urls if hd_urls else sd_urls
+        def __init__(self):
+        self.settings = None  # set in scrapy.cmdline
     
-        title = html['data']['tv']['title']
+        def short_desc(self):
+        return 'Run quick benchmark test'
     
-    #----------------------------------------------------------------------
-def makeMimi(upid):
-    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
-    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
-    L110'''
-    strSeed = 'gGddgPfeaf_gzyr'
-    prehash = upid + '_' + strSeed
-    return md5(prehash.encode('utf-8')).hexdigest()
+            self.crawler_process.crawl(spname, **opts.spargs)
+        self.crawler_process.start()
     
-    def get_single_photo_url(url):
-    page = get_html(url)
-    pid = get_photo_id(url, page)
-    title = match1(page, pattern_inline_title)
-    if match1(page, pattern_inline_video_mark):
-        api_key = get_api_key(page)
-        reply = get_content(tmpl_api_call_photo_info % (api_key, get_photo_id(url, page)))
-        secret = json.loads(reply)['photo']['secret']
-        return get_orig_video_source(api_key, pid, secret), title
-    #last match always has the best resolution
-    match = match1(page, pattern_inline_img_url)
-    return 'https:' + match.replace('\\', ''), title
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
     
-        :param img: An image (as a numpy array)
-    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
-    :param model: Which face detection model to use. 'hog' is less accurate but faster on CPUs. 'cnn' is a more accurate
-                  deep-learning model which is GPU/CUDA accelerated (if available). The default is 'hog'.
-    :return: A list of tuples of found face locations in css (top, right, bottom, left) order
-    '''
-    if model == 'cnn':
-        return [_trim_css_to_bounds(_rect_to_css(face.rect), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample, 'cnn')]
-    else:
-        return [_trim_css_to_bounds(_rect_to_css(face), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample, model)]
+    from importlib import import_module
+from os.path import join, dirname, abspath, exists, splitext
     
-            # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        requires_project = False
+    default_settings = {'LOG_ENABLED': False,
+                        'SPIDER_LOADER_WARN_ONLY': True}
     
     
-def test_image(image_to_check, known_names, known_face_encodings, tolerance=0.6, show_distance=False):
-    unknown_image = face_recognition.load_image_file(image_to_check)
+class Resource(jose.Field):
+    '''Resource MITM field.'''
+    
+    
+KEY = jose.JWKRSA.load(test_util.load_vector('rsa512_key.pem'))
+    
+    csr = OpenSSL.crypto.load_certificate_request(
+    OpenSSL.crypto.FILETYPE_ASN1, pkg_resources.resource_string(
+        'acme', os.path.join('testdata', 'csr.der')))
+try:
+    acme.request_issuance(jose.util.ComparableX509(csr), (authzr,))
+except messages.Error as error:
+    print ('This script is doomed to fail as no authorization '
+           'challenges are ever solved. Error from server: {0}'.format(error))
+
+    
+            Reverts all modified files that have not been saved as a checkpoint
+    
+        def test_basic_variable_parsing_quotes(self):
+        matches = self.parser.find_dir('TestVariablePortStr')
+    
+            self.assertTrue(self.addr_default.conflicts(self.addr))
+        self.assertTrue(self.addr_default.conflicts(self.addr1))
+        self.assertTrue(self.addr_default.conflicts(self.addr_defined))
+    
+            # Make sure calls made to mocked function were correct
+        self.assertEqual(
+            mock_setup_cert.call_args_list[0], mock.call(self.achalls[0]))
+        self.assertEqual(
+            mock_setup_cert.call_args_list[1], mock.call(self.achalls[1]))
