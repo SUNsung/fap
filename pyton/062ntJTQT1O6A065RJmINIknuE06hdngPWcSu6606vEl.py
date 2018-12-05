@@ -1,213 +1,147 @@
 
         
-        try:
-    input = raw_input
-except NameError:
-    pass
+            See also `test_auth_plugins.py`
     
-        with io.open(infile, encoding='utf-8') as inf:
-        readme = inf.read()
+        Assumes `from __future__ import division`.
     
-                        # Pandoc's definition_lists. See http://pandoc.org/README.html
-                    # for more information.
-                    ret += '\n%s\n:   %s\n' % (option, description)
-                    continue
-            ret += line.lstrip() + '\n'
-        else:
-            ret += line + '\n'
-    
-        with open(ZSH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    
-            def get_ids(params):
-            ydl = YDL(params)
-            # make a copy because the dictionary can be modified
-            ydl.process_ie_result(playlist.copy())
-            return [int(v['id']) for v in ydl.downloaded_info_dicts]
-    
-            password = intlist_to_bytes(self.key).decode('utf-8')
-        encrypted = base64.b64encode(
-            intlist_to_bytes(self.iv[:8]) +
-            b'\x0b\xe6\xa4\xd9z\x0e\xb8\xb9\xd0\xd4i_\x85\x1d\x99\x98_\xe5\x80\xe7.\xbf\xa5\x83'
-        ).decode('utf-8')
-        decrypted = (aes_decrypt_text(encrypted, password, 32))
-        self.assertEqual(decrypted, self.secret_msg)
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            BASIC_AUTH_HEADER_VALUE,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
     
-        def test_all_present(self):
-        import youtube_dl.compat
-        all_names = youtube_dl.compat.__all__
-        present_names = set(filter(
-            lambda c: '_' in c and not c.startswith('_'),
-            dir(youtube_dl.compat))) - set(['unicode_literals'])
-        self.assertEqual(all_names, sorted(present_names))
+        def test_POST_form_auto_Content_Type(self, httpbin):
+        r = http('--form', 'POST', httpbin.url + '/post')
+        assert HTTP_OK in r
+        assert ''Content-Type': 'application/x-www-form-urlencoded' in r
     
-    
-def test_current_version():
-    version = Environment().config['__meta__']['httpie']
-    assert version == __version__
+        def test_download_interrupted(self, httpbin_both):
+        devnull = open(os.devnull, 'w')
+        downloader = Downloader(output_file=devnull, progress_file=devnull)
+        downloader.start(Response(
+            url=httpbin_both.url + '/',
+            headers={'Content-Length': 5}
+        ))
+        downloader.chunk_downloaded(b'1234')
+        downloader.finish()
+        assert downloader.interrupted
 
     
-        def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
-            )
-        super().__init__(get_response)
+    
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+        if num in lowPrimes:
+        return True
     
     
-def x_robots_tag(func):
-    @wraps(func)
-    def inner(request, *args, **kwargs):
-        response = func(request, *args, **kwargs)
-        response['X-Robots-Tag'] = 'noindex, noodp, noarchive'
-        return response
-    return inner
-    
-    
-@pytest.fixture
-def httpbin(httpbin):
-    return prepare_url(httpbin)
-    
-    import pytest
-    
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-            A1 = '%s:%s:%s' % (self.username, realm, self.password)
-        A2 = '%s:%s' % (method, path)
-    
-    author:
-  - Mike Mochan (@mmochan)
-  - Will Thames (@willthames)
-extends_documentation_fragment:
-  - aws
-  - ec2
-options:
-    name:
-        description: Name of the Web Application Firewall rule
-        required: yes
-    metric_name:
-        description:
-        - A friendly name or description for the metrics for the rule
-        - The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace.
-        - You can't change metric_name after you create the rule
-        - Defaults to the same as name with disallowed characters removed
-    state:
-        description: whether the rule should be present or absent
-        choices:
-        - present
-        - absent
-        default: present
-    conditions:
-        description: >
-          list of conditions used in the rule. Each condition should
-          contain I(type): which is one of [C(byte), C(geo), C(ip), C(size), C(sql) or C(xss)]
-          I(negated): whether the condition should be negated, and C(condition),
-          the name of the existing condition. M(aws_waf_condition) can be used to
-          create new conditions
-    purge_conditions:
-        description:
-          - Whether or not to remove conditions that are not passed when updating `conditions`.
-            Defaults to false.
-'''
-    
-    - name: create a batch of invalidations using an alias as a reference and one path using a wildcard match
-  cloudfront_invalidation:
-    alias: alias.test.com
-    caller_reference: testing 123
-    target_paths:
-      - /testpathone/test4.css
-      - /testpathtwo/test5.js
-      - /testpaththree/*
-    
-    
-def describe_log_group(client, log_group_name, module):
-    params = {}
-    if log_group_name:
-        params['logGroupNamePrefix'] = log_group_name
-    try:
-        desc_log_group = client.describe_log_groups(**params)
-        return desc_log_group
-    except botocore.exceptions.ClientError as e:
-        module.fail_json(msg='Unable to describe log group {0}: {1}'.format(log_group_name, to_native(e)),
-                         exception=traceback.format_exc(), **camel_dict_to_snake_dict(e.response))
-    except botocore.exceptions.BotoCoreError as e:
-        module.fail_json(msg='Unable to describe log group {0}: {1}'.format(log_group_name, to_native(e)),
-                         exception=traceback.format_exc())
-    
-    version_added: '2.2'
-author: 'Jose Armesto (@fiunchinho)'
-options:
-  region:
-    description:
-      - The AWS region to use.
-    required: true
-    aliases: ['aws_region', 'ec2_region']
-  name_regex:
-    description:
-      - A Launch Configuration to match
-      - It'll be compiled as regex
-    required: True
-  sort_order:
-    description:
-      - Order in which to sort results.
-    choices: ['ascending', 'descending']
-    default: 'ascending'
-  limit:
-    description:
-      - How many results to show.
-      - Corresponds to Python slice notation like list[:limit].
-requirements:
-  - 'python >= 2.6'
-  - boto3
-extends_documentation_fragment:
-    - aws
-'''
-    
-    - debug: msg='{{ specific_ec2_placement_groups | json_query(\'[?name=='my-cluster']\') }}'
-    
-        module       : AnsibleModule object
-    conn         : boto3 client connection object
-    vpc_id       : ID of the VPC we are operating on
+class DoubleHash(HashTable):
     '''
-    gateway_id = None
-    changed = False
+        Hash Table example with open addressing and Double Hash
+    '''
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     
     
-def run(ecr, params, verbosity):
-    # type: (EcsEcr, dict, int) -> Tuple[bool, dict]
-    result = {}
+
+    
     try:
-        name = params['name']
-        state = params['state']
-        policy_text = params['policy']
-        delete_policy = params['delete_policy']
-        registry_id = params['registry_id']
-        force_set_policy = params['force_set_policy']
+	raw_input		#Python 2
+except NameError:
+	raw_input = input	#Python 3
+    
+            '''
+        this section is to check that the inputs conform to our dimensionality constraints
+        '''
+        if X.ndim != 1:
+            print('Error: Input data set must be one dimensional')
+            return
+        if len(X) != len(y):
+            print('Error: X and y have different lengths')
+            return
+        if y.ndim != 1:
+            print('Error: Data set labels must be one dimensional')
+            return
+    
+            a *= a
+        b >>= 1
     
     
-def stream_action(client, stream_name, shard_count=1, action='create',
-                  timeout=300, check_mode=False):
-    '''Create or Delete an Amazon Kinesis Stream.
-    Args:
-        client (botocore.client.EC2): Boto3 client.
-        stream_name (str): The name of the kinesis stream.
+class BufferFull(UnpackException):
+    pass
+    
+        def test_frame_tz_localize(self):
+        rng = date_range('1/1/2011', periods=100, freq='H')
+    
+    
+def testUnsignedInt():
+    check(b'\x99\xcc\x00\xcc\x80\xcc\xff\xcd\x00\x00\xcd\x80\x00'
+          b'\xcd\xff\xff\xce\x00\x00\x00\x00\xce\x80\x00\x00\x00'
+          b'\xce\xff\xff\xff\xff',
+          (0,
+           128,
+           255,
+           0,
+           32768,
+           65535,
+           0,
+           2147483648,
+           4294967295, ), )
+    
+        def testPackUTF32(self):
+        test_data = [
+            compat.u(''),
+            compat.u('abcd'),
+            [compat.u('defgh')],
+            compat.u('Русский текст'),
+        ]
+        for td in test_data:
+            re = unpackb(
+                packb(td, encoding='utf-32'), use_list=1, encoding='utf-32')
+            assert re == td
+    
+        NUMBER_OF_STRINGS = 6
+    read_size = 16
+    
+        def put_string(self, col, row, s=None, color=None, background=None):
+        '''
+        Put string <s> with foreground color <color> and background color <background>
+        ad <col>, <row>
+        '''
+        for i, c in enumerate(s):
+            self.put_point(col+i, row, c, color=color, background=background)
+    
+        >>> rewrite_editor_section_name('js')
+    'js'
+    >>> rewrite_editor_section_name('vscode:js')
+    'js'
+    '''
+    if ':' not in section_name:
+        return section_name
+    
+        def __init__(self):
+        self.intervals = ['min', 'hour', 'day']
+    
+    import requests
