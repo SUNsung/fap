@@ -1,14 +1,205 @@
 
         
-                case array.length
-        when 0
-          ''.html_safe
-        when 1
-          ERB::Util.html_escape(array[0])
-        when 2
-          safe_join([array[0], array[1]], options[:two_words_connector])
-        else
-          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
+                  def add_default_name_and_id_for_value(tag_value, options)
+            if tag_value.nil?
+              add_default_name_and_id(options)
+            else
+              specified_id = options['id']
+              add_default_name_and_id(options)
+    
+              def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
+    
+        delegate :[], :include?, :pop, :size, :each, to: :paths
+    
+        # Render but returns a valid Rack body. If fibers are defined, we return
+    # a streaming body that renders the template piece by piece.
+    #
+    # Note that partials are not supported to be rendered with streaming,
+    # so in such cases, we just wrap them in an array.
+    def render_body(context, options)
+      if options.key?(:partial)
+        [render_partial(context, options)]
+      else
+        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
+      end
+    end
+    
+          select_agent_type('Scheduler Agent')
+      fill_in(:agent_name, with: 'Test Scheduler Agent')
+    
+        it 'is turned off for existing instances of Huginn' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
+      DefaultScenarioImporter.import(user)
+    end
+    
+      it 'provides hash-style access to its properties with both symbol and string keys' do
+    expect(location[:lat]).to be_a Float
+    expect(location[:lat]).to eq 2.0
+    expect(location['lat']).to be_a Float
+    expect(location['lat']).to eq 2.0
+  end
+    
+    puts '\nUnable to find an RSS feed for the following blogs:'
+puts '==================================================='
+unavailable.each do |b|
+  puts '#{b.name} | #{b.web_url}'
+end
+puts '==================================================='
+
+    
+      # More readable inspect that only shows the url and resources
+  # @return [String]
+  def inspect
+    resources_str = resources.keys.map{|r| r.inspect }.join ', '
+    
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+            # Creates a connection through a Rex socket
+        #
+        # @return [Rex::Socket::Tcp]
+        # @raise [RuntimeError] if the connection can not be created
+        def connect
+          return connection if connection
+    
+                data_encrypt = Rex::Text::rand_text(8) + data
+    
+                int
+          end
+    
+              # Decodes the flags field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_flags(input)
+            input.value[0].value.to_i
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KrbError
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 0
+                self.pvno = decode_pvno(val)
+              when 1
+                self.msg_type = decode_msg_type(val)
+              when 2
+                self.ctime = decode_ctime(val)
+              when 3
+                self.cusec = decode_cusec(val)
+              when 4
+                self.stime = decode_stime(val)
+              when 5
+                self.susec = decode_susec(val)
+              when 6
+                self.error_code = decode_error_code(val)
+              when 7
+                self.crealm = decode_crealm(val)
+              when 8
+                self.cname = decode_cname(val)
+              when 9
+                self.realm = decode_realm(val)
+              when 10
+                self.sname = decode_sname(val)
+              when 12
+                self.e_data = decode_e_data(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
+              end
+            end
+          end
+    
+          def upload_dest
+        @upload_dest
+      end
+    
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
+          end
+        end
+        @sidebar
+      end
+    
+        end
+  end
+end
+
+    
+        assert_match /Delete this Page/, last_response.body, ''Delete this Page' link is blocked in page template'
+    assert_match /New/,              last_response.body, ''New' button is blocked in page template'
+    assert_match /Upload/,           last_response.body, ''Upload' link is blocked in page template'
+    assert_match /Rename/,           last_response.body, ''Rename' link is blocked in page template'
+    assert_match /Edit/,             last_response.body, ''Edit' link is blocked in page template'
+    
+        @wiki.clear_cache
+    page2 = @wiki.page(page1.name)
+    
+      test 'displays_latest_changes' do
+    get('/latest_changes')
+    body = last_response.body
+    
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def create
+          authorize! :create, Spree::OptionValue
+          @option_value = scope.new(option_value_params)
+          if @option_value.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_value)
+          end
+        end
+    
+            def update
+          @shipment = Spree::Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
+          @shipment.update_attributes_and_order(shipment_params)
+    
+            def destroy
+          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
+          @stock_item.destroy
+          respond_with(@stock_item, status: 204)
+        end
+    
+            def update
+          authorize! :update, @store
+          if @store.update_attributes(store_params)
+            respond_with(@store, status: 200, default_template: :show)
+          else
+            invalid_resource!(@store)
+          end
+        end
+    
+            def taxonomy_params
+          if params[:taxonomy] && !params[:taxonomy].empty?
+            params.require(:taxonomy).permit(permitted_taxonomy_attributes)
+          else
+            {}
+          end
         end
       end
     end
@@ -16,190 +207,57 @@
 end
 
     
-            def initialize(object_name, method_name, template_object, options = {})
-          @object_name, @method_name = object_name.to_s.dup, method_name.to_s.dup
-          @template_object = template_object
+              @users = @users.result.page(params[:page]).per(params[:per_page])
+          expires_in 15.minutes, public: true
+          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
+          respond_with(@users)
+        end
     
-              def render_collection_for(builder_class, &block)
-            options = @options.stringify_keys
-            rendered_collection = render_collection do |item, value, text, default_html_options|
-              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
-    
-            private
-    
-        def +(array)
-      PathSet.new(paths + array)
-    end
-    
-          def prepend_formats(formats) # :doc:
-        formats = Array(formats)
-        return if formats.empty? || @lookup_context.html_fallback_for_js
-    
-          begin
-        Dir.chdir(custom_dir) do # go up from the fastlane folder, to the project folder
-          # If another action is calling this action, we shouldn't show it in the summary
-          # (see https://github.com/fastlane/fastlane/issues/4546)
-    
-          handle_unknown_error!(e)
-    end
-    
-        context 'action launch' do
-      let(:launch_context) do
-        FastlaneCore::ActionLaunchContext.new(
-          action_name: action_name,
-          p_hash: p_hash,
-          platform: 'ios',
-          fastlane_client_language: fastlane_client_language
-        )
-      end
-    
-            expect(result[1]).to start_with('security set-keychain-settings')
-        expect(result[1]).to include('-t 300')
-        expect(result[1]).to_not(include('-l'))
-        expect(result[1]).to_not(include('-u'))
-        expect(result[1]).to include('~/Library/Keychains/test.keychain')
-        expect(result[2]).to start_with('security list-keychains -s')
-        expect(result[2]).to end_with(File.expand_path('~/Library/Keychains/test.keychain').to_s)
-      end
-    
-          it 'handles the exclude_dirs parameter with a single element correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle')
-      end
-    
-            keychain_path = File.expand_path(File.join('~', 'Library', 'Keychains', keychain))
-        expected_command = 'security import #{cert_name} -k '#{keychain_path}' -P #{password} -T /usr/bin/codesign -T /usr/bin/security'
-    
-        it 'shelljoins multiple args' do
-      message = 'A message'
-      command = command_from_args('git', 'commit', '-m', message)
-      expect(command).to eq('git commit -m #{message.shellescape}')
-    end
-    
-          describe 'data_type' do
-        it 'sets the data type correctly if `is_string` is not set but type is specified' do
-          config_item = FastlaneCore::ConfigItem.new(key: :foo,
-                                                     description: 'foo',
-                                                     type: Array)
-    
-      # https://stackoverflow.com/a/18623297/252627, last variant
-  require 'open3'
-  Open3.popen3(compare_command) do |stdin, stdout, stderr, thread|
-    error = stderr.read.chomp
-    # expect(error).to eq(expected_compare_error)
-    expect(error).to eq(expected_compare_error) # match(/#{expected_compare_error}/)
-  end
-end
-    
-            # this command is also sent on macOS Sierra and we need to allow it or else the test will fail
-        allowed_command = 'security set-key-partition-list -S apple-tool:,apple: -k #{''.shellescape} #{Dir.home}/Library/Keychains/login.keychain &> /dev/null'
-    
-    
-end
-end
-end
-
-    
-                cipher = OpenSSL::Cipher.new('rc4')
-            cipher.encrypt
-            cipher.key = k3
-            encrypted = cipher.update(data_encrypt) + cipher.final
-    
-                int
+            def update
+          authorize! :update, zone
+          if zone.update_attributes(zone_params)
+            respond_with(zone, status: 200, default_template: :show)
+          else
+            invalid_resource!(zone)
           end
+        end
     
-              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
-            end
+    # The project root directory
+$root = ::File.dirname(__FILE__)
     
-    module Sass
-  # This class converts CSS documents into Sass or SCSS templates.
-  # It works by parsing the CSS document into a {Sass::Tree} structure,
-  # and then applying various transformations to the structure
-  # to produce more concise and idiomatic Sass/SCSS.
-  #
-  # Example usage:
-  #
-  #     Sass::CSS.new('p { color: blue }').render(:sass) #=> 'p\n  color: blue'
-  #     Sass::CSS.new('p { color: blue }').render(:scss) #=> 'p {\n  color: blue; }'
-  class CSS
-    # @param template [String] The CSS stylesheet.
-    #   This stylesheet can be encoded using any encoding
-    #   that can be converted to Unicode.
-    #   If the stylesheet contains an `@charset` declaration,
-    #   that overrides the Ruby encoding
-    #   (see {file:SASS_REFERENCE.md#Encodings the encoding documentation})
-    # @option options :old [Boolean] (false)
-    #     Whether or not to output old property syntax
-    #     (`:color blue` as opposed to `color: blue`).
-    #     This is only meaningful when generating Sass code,
-    #     rather than SCSS.
-    # @option options :indent [String] ('  ')
-    #     The string to use for indenting each line. Defaults to two spaces.
-    def initialize(template, options = {})
-      if template.is_a? IO
-        template = template.read
-      end
-    
-          # @see Base#mtime
-      def mtime(name, options)
-        file, _ = Sass::Util.destructure(find_real_file(@root, name, options))
-        File.mtime(file) if file
-      rescue Errno::ENOENT
-        nil
-      end
-    
-    # Declares a dependency to the git repo of CocoaPods gem. This declaration is
-# compatible with the local git repos feature of Bundler.
-#
-def cp_gem(name, repo_name, branch = 'master', path: false)
-  return gem name if SKIP_UNRELEASED_VERSIONS
-  opts = if path
-           { :path => '../#{repo_name}' }
-         else
-           url = 'https://github.com/CocoaPods/#{repo_name}.git'
-           { :git => url, :branch => branch }
-         end
-  gem name, opts
-end
-    
-          def plugins_string
-        UI::ErrorReport.plugins_string
-      end
-    
-        def oss_only?
-      return true if ENV['OSS']=='true'
-    
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
     end
   end
 end
     
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
     end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+      class ImageTag < Liquid::Tag
+    @img = nil
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
+    end
+  end
+end
