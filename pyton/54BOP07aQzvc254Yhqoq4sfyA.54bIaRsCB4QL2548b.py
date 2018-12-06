@@ -1,94 +1,155 @@
 
         
-        
-def write_stream(stream, outfile, flush):
-    '''Write the output stream.'''
-    try:
-        # Writing bytes so we use the buffer interface (Python 3).
-        buf = outfile.buffer
-    except AttributeError:
-        buf = outfile
+            def test_distant_exception(self):
+        def f():
+            1/0
+        def g():
+            f()
+        def h():
+            g()
+        def i():
+            h()
+        def j(p):
+            i()
+        f_ident = ident(f)
+        g_ident = ident(g)
+        h_ident = ident(h)
+        i_ident = ident(i)
+        j_ident = ident(j)
+        self.check_events(j, [(1, 'call', j_ident),
+                              (2, 'call', i_ident),
+                              (3, 'call', h_ident),
+                              (4, 'call', g_ident),
+                              (5, 'call', f_ident),
+                              (5, 'return', f_ident),
+                              (4, 'return', g_ident),
+                              (3, 'return', h_ident),
+                              (2, 'return', i_ident),
+                              (1, 'return', j_ident),
+                              ])
     
-        def convert(self, content_bytes):
+    
+# Does a path exist?
+# This is false for dangling symbolic links on systems that support them.
+def exists(path):
+    '''Test whether a path exists.  Returns False for broken symbolic links'''
+    try:
+        os.stat(path)
+    except (OSError, ValueError):
+        return False
+    return True
+    
+        def test_path_commonprefix(self):
+        self.assertEqual(os.path.commonprefix([self.file_path, self.file_name]),
+                         self.file_name)
+    
+    # Add the html version.  This converts the message into a multipart/alternative
+# container, with the original text message as the first part and the new html
+# message as the second part.
+asparagus_cid = make_msgid()
+msg.add_alternative('''\
+<html>
+  <head></head>
+  <body>
+    <p>Salut!</p>
+    <p>Cela ressemble à un excellent
+        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
+            recipie
+        </a> déjeuner.
+    </p>
+    <img src='cid:{asparagus_cid}' />
+  </body>
+</html>
+'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
+# note that we needed to peel the <> off the msgid for use in the html.
+    
+    p = Point(4.0, -3.2)
+    
+    class _FunctionState(object):
+  '''Tracks current function name and the number of lines in its body.'''
+    
+            if time_diff > self._timeout:
+            _LOGGER.warning(
+                'Queued %s dropped for %s. Time in queue was %s',
+                click_type, self.address, time_string)
+            return True
+        _LOGGER.info(
+            'Queued %s allowed for %s. Time in queue was %s',
+            click_type, self.address, time_string)
+        return False
+    
+    
+def setup_scanner(hass, config, see, discovery_info=None):
+    '''Set up the demo tracker.'''
+    def offset():
+        '''Return random offset.'''
+        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
+    
+            self.success_init = self._update_info()
+        _LOGGER.info('Scanner initialized')
+    
+        def keep_alive(self, now):
+        '''Keep the API alive.'''
+        if self.api is None:
+            self.reset_account_icloud()
+    
+            Return boolean if scanning successful.
+        '''
+        if not self.success_init:
+            return False
+    
+        async def async_get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        filter_named = [result.name for result in self.last_results
+                        if result.mac == device]
+    
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+        self.last_results = {}
+    
+                        with open(final_path, 'wb') as fil:
+                        for chunk in req.iter_content(1024):
+                            fil.write(chunk)
+    
+        def __init__(self, path, patterns, hass):
+        '''Initialise the watchdog observer.'''
+        from watchdog.observers import Observer
+        self._observer = Observer()
+        self._observer.schedule(
+            create_event_handler(patterns, hass),
+            path,
+            recursive=True)
+        hass.bus.listen_once(EVENT_HOMEASSISTANT_START, self.startup)
+        hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP, self.shutdown)
+    
+    
+if __name__ == '__main__':
+    import doctest
+    
+        def amount(self, val):
+        print(val, end=' ')
+        return self
+    
+        def __get__(self, obj, T):
+        def transaction(*args, **kwargs):
+            state = memento(obj)
+            try:
+                return self.method(obj, *args, **kwargs)
+            except Exception as e:
+                state()
+                raise e
+    
+        root_specification = UserSpecification().and_specification(SuperUserSpecification())
+    
+    ingredients = 'spam eggs apple'
+line = '-' * 10
+    
+        def build_floor(self):
         raise NotImplementedError
     
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
-    
-    
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-    
-def l1(l=0.01):
-    return L1L2(l1=l)
-    
-        # Returns
-        The total number of scalars composing the weights
-    '''
-    return int(np.sum([K.count_params(p) for p in set(weights)]))
-    
-        # Arguments
-        model: Keras model instance.
-        f: Keras function returning a list of tensors.
-        ins: list of tensors to be fed to `f`.
-        batch_size: integer batch size.
-        verbose: verbosity mode.
-        steps: Total number of steps (batches of samples)
-            before declaring `predict_loop` finished.
-            Ignored with the default value of `None`.
-    
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
-    
-        pil_image.show()
-
-    
-    
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
-    # Check if a valid image file was uploaded
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
-    
-    
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
-    
-            # If you had more than 2 faces, you could make this logic a lot prettier
-        # but I kept it simple for the demo
-        name = None
-        if match[0]:
-            name = 'Lin-Manuel Miranda'
-        elif match[1]:
-            name = 'Alex Lacamoire'
-    
-    # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
-    
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    frame = frame[:, :, ::-1]
-    
-    from setuptools import setup
+        sample_queue.put('sam')
+    test_object(sample_queue)
+    print('Outside func: {}'.format(sample_queue.get()))
