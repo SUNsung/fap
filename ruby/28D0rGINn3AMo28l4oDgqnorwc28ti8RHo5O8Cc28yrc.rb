@@ -1,133 +1,130 @@
 
         
-        # User for the smoke tests
-if ENV['SMOKE'] == '1'
-  UserEmail.seed do |ue|
-    ue.id = 0
-    ue.email = 'smoke_user@discourse.org'
-    ue.primary = true
-    ue.user_id = 0
+            Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
+    
+        def class_ref_for_action(named: nil)
+      class_ref = Actions.action_class_ref(named)
+      unless class_ref
+        if Fastlane::Actions.formerly_bundled_actions.include?(action)
+          # This was a formerly bundled action which is now a plugin.
+          UI.verbose(caller.join('\n'))
+          UI.user_error!('The action '#{action}' is no longer bundled with fastlane. You can install it using `fastlane add_plugin #{action}`')
+        else
+          Fastlane::ActionsList.print_suggestions(action)
+          UI.user_error!('Action '#{action}' not available, run `fastlane actions` to get a full list')
+        end
+      end
+    
+        def show_message
+      UI.message('Sending anonymous analytics information')
+      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
+      UI.message('No personal or sensitive data is sent.')
+      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+    end
+    
+          def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :tag,
+                                       env_name: 'FL_GIT_TAG_TAG',
+                                       description: 'Define your own tag text. This will replace all other parameters',
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :grouping,
+                                       env_name: 'FL_GIT_TAG_GROUPING',
+                                       description: 'Is used to keep your tags organised under one 'folder'',
+                                       default_value: 'builds'),
+          FastlaneCore::ConfigItem.new(key: :prefix,
+                                       env_name: 'FL_GIT_TAG_PREFIX',
+                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :postfix,
+                                       env_name: 'FL_GIT_TAG_POSTFIX',
+                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :build_number,
+                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
+                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
+                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
+                                       default_value_dynamic: true,
+                                       is_string: false),
+          FastlaneCore::ConfigItem.new(key: :message,
+                                       env_name: 'FL_GIT_TAG_MESSAGE',
+                                       description: 'The tag message. Defaults to the tag's name',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :commit,
+                                       env_name: 'FL_GIT_TAG_COMMIT',
+                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :force,
+                                       env_name: 'FL_GIT_TAG_FORCE',
+                                       description: 'Force adding the tag',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :sign,
+                                       env_name: 'FL_GIT_TAG_SIGN',
+                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false)
+        ]
+      end
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+          })
+        end').runner.execute(:test)
+    
+            expect(result).to eq('carthage bootstrap --configuration Release')
+      end
+    
+            context 'with given path to oclint' do
+          let(:result) do
+            Fastlane::FastFile.new.parse('lane :test do
+              oclint(
+                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+                oclint_path: 'test/bin/oclint'
+              )
+            end').runner.execute(:test)
+          end
+          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
+    
+        cmd = HOMEBREW_INTERNAL_COMMAND_ALIASES.fetch(ARGV.first, ARGV.first)
+    
+      it 'accepts a Float' do
+    sleep(0.1).should be_close(0, 2)
   end
     
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
+      it 'can throw an object' do
+    lambda {
+      obj = Object.new
+      catch obj do
+        throw obj
       end
-    
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
-    
-            # This clears out all the registered plugins. This is only used by
-        # unit tests and should not be called directly.
-        def reset!
-          @registered.clear
-        end
-    
-              # Return the result
-          result
-        end
-    
-              machines.each do |machine|
-            # Set the machine color
-            machine.ui.opts[:color] = color_order[color_index % color_order.length]
-            color_index += 1
-    
-        true
+    }.should_not raise_error(NameError)
   end
+end
     
-            def initialize(opts = {})
-          self.host = opts[:host]
-          self.port     = (opts[:port] || 88).to_i
-          self.timeout  = (opts[:timeout] || 10).to_i
-          self.protocol = opts[:protocol] || 'tcp'
-          self.context  = opts[:context] || {}
-        end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Crypto
-        module Rc4Hmac
-          # Decrypts the cipher using RC4-HMAC schema
-          #
-          # @param cipher [String] the data to decrypt
-          # @param key [String] the key to decrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the decrypted cipher
-          # @raise [RuntimeError] if decryption doesn't succeed
-          def decrypt_rc4_hmac(cipher, key, msg_type)
-            unless cipher && cipher.length > 16
-              raise ::RuntimeError, 'RC4-HMAC decryption failed'
-            end
-    
-                seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], AP_REQ, :APPLICATION)
-    
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
-          end
-    
-              # Decodes the realm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_realm(input)
-            input.value[0].value
-          end
-    
-        def execute
-      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
-      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
-    
-        desc 'Generate a valid ssh-config'
-    task :ssh_config do
-      require 'json'
-      # Loop until the Vagrant box finishes SSH bootstrap
-      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
-          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
-      end
-      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
-      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
+        # @return [String] the ruby version string bundler uses to craft its gem path
+    def gem_ruby_version
+      RbConfig::CONFIG['ruby_version']
     end
     
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
-    end
-    
-        execute 'ensure-sidekiq-is-setup-with-monit' do 
-      command %Q{ 
-        monit reload 
-      } 
-    end
-    
-          # Example usage:
-      #   Sidekiq::Client.enqueue_to_in(:queue_name, 3.minutes, MyWorker, 'foo', 1, :bat => 'bar')
-      #
-      def enqueue_to_in(queue, interval, klass, *args)
-        int = interval.to_f
-        now = Time.now.to_f
-        ts = (int < 1_000_000_000 ? now + int : int)
-    
-          ObjectSpace.each_object(File) do |fp|
-        begin
-          if !fp.closed? && fp.stat.file? && fp.sync && (fp.fcntl(Fcntl::F_GETFL) & append_flags) == append_flags
-            to_reopen << fp
-          end
-        rescue IOError, Errno::EBADF
-        end
-      end
-    
-        def call(env)
-      app.call(env)
+      super
     end
