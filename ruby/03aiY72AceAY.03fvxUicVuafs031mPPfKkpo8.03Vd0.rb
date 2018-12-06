@@ -1,120 +1,144 @@
 
         
-              # Converts the array to a comma-separated sentence where the last element is
-      # joined by the connector word. This is the html_safe-aware version of
-      # ActiveSupport's {Array#to_sentence}[http://api.rubyonrails.org/classes/Array.html#method-i-to_sentence].
+            execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
+    
+    When /^I (?:add|remove) the person (?:to|from) my '([^\']*)' aspect(?: within '([^']*)')?$/ do |aspect_name, within_selector| # rubocop:disable Metrics/LineLength
+  with_scope(within_selector) do
+    toggle_aspect_via_ui(aspect_name)
+  end
+end
+    
+      def navigate_to(page_name)
+    path = path_to(page_name)
+    if path.is_a?(Hash)
+      visit(path[:path])
+      await_elem = path[:special_elem]
+      find(await_elem.delete(:selector), await_elem)
+    else
+      visit(path)
+    end
+  end
+    
+    describe StatusMessagesController, :type => :controller do
+  describe '#bookmarklet' do
+    before do
+      sign_in bob, scope: :user
+    end
+    
+      # The global load paths for Sass files. This is meant for plugins and
+  # libraries to register the paths to their Sass stylesheets to that they may
+  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
+  # They are lower-precedence than any load paths passed in via the
+  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
+  #
+  # If the `SASS_PATH` environment variable is set,
+  # the initial value of `load_paths` will be initialized based on that.
+  # The variable should be a colon-separated list of path names
+  # (semicolon-separated on Windows).
+  #
+  # Note that files on the global load path are never compiled to CSS
+  # themselves, even if they aren't partials. They exist only to be imported.
+  #
+  # @example
+  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
+  # @return [Array<String, Pathname, Sass::Importers::Base>]
+  def self.load_paths
+    @load_paths ||= if ENV['SASS_PATH']
+                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
+                    else
+                      []
+                    end
+  end
+    
+          # Returns the path to a file for the given key.
       #
-      def to_sentence(array, options = {})
-        options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector, :locale)
-    
-              if include_hidden
-            hidden = hidden_field_for_checkbox(options)
-            hidden + checkbox
-          else
-            checkbox
-          end
-        end
-    
-          _write_layout_method
-    end
-    
-        def exists?(path, prefixes, *args)
-      find_all(path, prefixes, *args).any?
-    end
-    
-    describe 'Dry running an Agent', js: true do
-  let(:agent)   { agents(:bob_website_agent) }
-  let(:formatting_agent) { agents(:bob_formatting_agent) }
-  let(:user)    { users(:bob) }
-  let(:emitter) { agents(:bob_weather_agent) }
-    
-      it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-      let :reverted_extract do
-    old_extract
-  end
-    
-            @receiver = Agents::CannotBeScheduled.new(
-          name: 'Agent',
-          options: { foo: 'bar3' },
-          keep_events_for: 3.days,
-          propagate_immediately: true)
-        @receiver.user = users(:bob)
-        @receiver.sources << @sender
-        @receiver.memory[:test] = 1
-        @receiver.save!
-      end
-    
-          attr_reader :page, :name
-    
-          def format
-        @format = (@page.format || false) if @format.nil?
-        @format.to_s.downcase
+      # @param key [String]
+      # @return [String] The path to the cache file.
+      def path_to(key)
+        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
+        File.join(cache_location, key)
       end
     end
   end
 end
 
     
-          def next_link
-        label = 'Next &raquo;'
-        if @versions.size == Gollum::Page.per_page
-          link = '/history/#{@page.name}?page=#{@page_num+1}'
-          %(<a href='#{link}' hotkey='l'>#{label}</a>)
-        else
-          %(<span class='disabled'>#{label}</span>)
-        end
+      # The lexical environment for SassScript.
+  # This keeps track of variable, mixin, and function definitions.
+  #
+  # A new environment is created for each level of Sass nesting.
+  # This allows variables to be lexically scoped.
+  # The new environment refers to the environment in the upper scope,
+  # so it has access to variables defined in enclosing scopes,
+  # but new variables are defined locally.
+  #
+  # Environment also keeps track of the {Engine} options
+  # so that they can be made available to {Sass::Script::Functions}.
+  class Environment < BaseEnvironment
+    # The enclosing environment,
+    # or nil if this is the global environment.
+    #
+    # @return [Environment]
+    attr_reader :parent
+    
+          # @see Base#mtime
+      def mtime(name, options)
+        file, _ = Sass::Util.destructure(find_real_file(@root, name, options))
+        File.mtime(file) if file
+      rescue Errno::ENOENT
+        nil
+      end
+    
+    gens = ARGV[0] ? [eval(ARGV[0]).gen_step] : GenSteps[0..-2]
+text = ARGV[1] || 'Hello'
+    
+      def start(code)
+    eval Machine.new(code, InitialEnv, InitialDump)
+  end
+    
+          # A helper that calculates the url to the previous page.
+      #
+      # ==== Examples
+      # Basic usage:
+      #
+      #   <%= prev_page_url @items %>
+      #   #-> http://www.example.org/items
+      #
+      # It will return `nil` if there is no previous page.
+      def prev_page_url(scope, options = {})
+        '#{request.base_url}#{prev_page_path(scope, options)}' if scope.prev_page
+      end
+      alias previous_page_url     prev_page_url
+      alias url_to_prev_page      prev_page_url
+      alias url_to_previous_page  prev_page_url
+    
+      spec.summary       = 'Kaminari Active Record adapter'
+  spec.description   = 'kaminari-activerecord lets your Active Record models be paginatable'
+  spec.homepage      = 'https://github.com/kaminari/kaminari'
+  spec.license       = 'MIT'
+  spec.required_ruby_version = '>= 2.0.0'
+    
+    module Kaminari
+  module PageScopeMethods
+    # Specify the <tt>per_page</tt> value for the preceding <tt>page</tt> scope
+    #   Model.page(3).per(10)
+    def per(num, max_per_page: nil)
+      max_per_page ||= ((defined?(@_max_per_page) && @_max_per_page) || self.max_per_page)
+      @_per = (num || default_per_page).to_i
+      if (n = num.to_i) < 0 || !(/^\d/ =~ num.to_s)
+        self
+      elsif n.zero?
+        limit(n)
+      elsif max_per_page && (max_per_page < n)
+        limit(max_per_page).offset(offset_value / limit_value * max_per_page)
+      else
+        limit(n).offset(offset_value / limit_value * n)
       end
     end
-  end
-end
-
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
-    end
-  end
-end
