@@ -1,278 +1,341 @@
 
         
-        /// @brief Fills a Blob with constant or randomly-generated data.
-template <typename Dtype>
-class Filler {
- public:
-  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
-  virtual ~Filler() {}
-  virtual void Fill(Blob<Dtype>* blob) = 0;
- protected:
-  FillerParameter filler_param_;
-};  // class Filler
+        
+    {}  // namespace atom
     
+    #endif  // ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
+
     
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_in_app_purchase, Initialize)
+
     
-    template <typename Dtype>
-class CropLayer : public Layer<Dtype> {
- public:
-  explicit CropLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
+#define ATOM_BROWSER_API_ATOM_API_NET_H_
     
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    
-    {}  // namespace caffe
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
+    namespace gfx {
+class Image;
 }
     
-    #include 'src/cpp/ext/filters/census/context.h'
     
+    {}  // namespace atom
     
-    {}  // namespace grpc
-    
-    
-    {    fprintf(stderr,
-            'expected=%d..%d; got=%d; bad_keys=%d; bad_values=%d; missed=%d\n',
-            min_expected, max_expected, correct, bad_keys, bad_values, missed);
-    ASSERT_LE(min_expected, correct);
-    ASSERT_GE(max_expected, correct);
-  }
-    
-    // Sanitize db options.  The caller should delete result.info_log if
-// it is not equal to src.info_log.
-Options SanitizeOptions(const std::string& db,
-                        const InternalKeyComparator* icmp,
-                        const InternalFilterPolicy* ipolicy,
-                        const Options& src);
-    
-    TEST(DBTest, GetMemUsage) {
-  do {
-    ASSERT_OK(Put('foo', 'v1'));
-    std::string val;
-    ASSERT_TRUE(db_->GetProperty('leveldb.approximate-memory-usage', &val));
-    int mem_usage = atoi(val.c_str());
-    ASSERT_GT(mem_usage, 0);
-    ASSERT_LT(mem_usage, 5*1024*1024);
-  } while (ChangeOptions());
+    void Event::RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
+                                   content::RenderFrameHost* new_rfh) {
+  if (sender_ && sender_ == old_rfh)
+    sender_ = new_rfh;
 }
     
-    // A comparator for internal keys that uses a specified comparator for
-// the user key portion and breaks ties by decreasing sequence number.
-class InternalKeyComparator : public Comparator {
- private:
-  const Comparator* user_comparator_;
+    v8::Local<v8::Object> CreateEventFromFlags(v8::Isolate* isolate, int flags) {
+  mate::Dictionary obj = mate::Dictionary::CreateEmpty(isolate);
+  obj.Set('shiftKey', static_cast<bool>(flags & ui::EF_SHIFT_DOWN));
+  obj.Set('ctrlKey', static_cast<bool>(flags & ui::EF_CONTROL_DOWN));
+  obj.Set('altKey', static_cast<bool>(flags & ui::EF_ALT_DOWN));
+  obj.Set('metaKey', static_cast<bool>(flags & ui::EF_COMMAND_DOWN));
+  return obj.GetHandle();
+}
+    
+    
+    {}  // namespace api
+    
+    // Users should use TrackableObject instead.
+class TrackableObjectBase {
  public:
-  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
-  virtual const char* Name() const;
-  virtual int Compare(const Slice& a, const Slice& b) const;
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const;
-  virtual void FindShortSuccessor(std::string* key) const;
+  TrackableObjectBase();
     }
     
-    #include 'db/dbformat.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
+    static const char* kModuleName = '_api_implementation';
+static const char kModuleDocstring[] =
+'_api_implementation is a module that exposes compile-time constants that\n'
+'determine the default API implementation to use for Python proto2.\n'
+'\n'
+'It complements api_implementation.py by setting defaults using compile-time\n'
+'constants defined in C, such that one can set defaults at compilation\n'
+'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
     
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
- public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
-  }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
-  }
-};
+    /* The maximum number of bytes we are required to buffer internally between
+ * calls to the decoder.  The value is 14: a 5 byte unknown tag plus ten-byte
+ * varint, less one because we are buffering an incomplete value.
+ *
+ * Should only be used by unit tests. */
+#define UPB_DECODER_MAX_RESIDUAL_BYTES 14
     
-    std::string TableFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'ldb');
+    bool AnyMetadata::InternalIs(const Descriptor* descriptor) const {
+  const string type_url = type_url_->GetNoArena();
+  string full_name;
+  if (!ParseAnyTypeUrl(type_url, &full_name)) {
+    return false;
+  }
+  return full_name == descriptor->full_name();
 }
     
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
+    void GeneratorContext::GetCompilerVersion(Version* version) const {
+  version->set_major(GOOGLE_PROTOBUF_VERSION / 1000000);
+  version->set_minor(GOOGLE_PROTOBUF_VERSION / 1000 % 1000);
+  version->set_patch(GOOGLE_PROTOBUF_VERSION % 1000);
+  version->set_suffix(GOOGLE_PROTOBUF_VERSION_SUFFIX);
+}
+    
+    #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/test_util.h>
+#include <google/protobuf/unittest.pb.h>
+#include <gtest/gtest.h>
+    
+    #include <memory>
+    
+    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    // Author: kenton@google.com (Kenton Varda)
+    
+    ImmutableExtensionLiteGenerator::ImmutableExtensionLiteGenerator(
+    const FieldDescriptor* descriptor, Context* context)
+  : descriptor_(descriptor), context_(context),
+    name_resolver_(context->GetNameResolver()) {
+  if (descriptor_->extension_scope() != NULL) {
+    scope_ = name_resolver_->GetImmutableClassName(
+        descriptor_->extension_scope());
   } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
+    scope_ = name_resolver_->GetImmutableClassName(descriptor_->file());
   }
-  return (ok ? 0 : 1);
+}
+    
+      (*variables)['type'] =
+      name_resolver->GetImmutableClassName(descriptor->message_type());
+  const FieldDescriptor* key = KeyField(descriptor);
+  const FieldDescriptor* value = ValueField(descriptor);
+  const JavaType keyJavaType = GetJavaType(key);
+  const JavaType valueJavaType = GetJavaType(value);
+    
+    #include 'collision_object_bullet.h'
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    	if (instance == NULL) {
+		instance = memnew(ZipArchive);
+	};
+    
+      // RFC 2397 specifies 'data:' as the prefix,
+  // but zend's PHP supports 'data://' as well
+  if (data_len >= 2 && data[0] == '/' && data[1] == '/') {
+    data_len -= 2;
+    data += 2;
+  }
+    
+    
+    {  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+};
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+      CLASSNAME_IS('OutputFile');
+  // overriding ResourceData
+  const String& o_getClassNameHook() const override { return classnameof(); }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      QueryLogItem item;
+  item.epoch = 0L;
+  item.counter = 0L;
+  getDecorations(item.decorations);
+  ASSERT_EQ(item.decorations.size(), 2U);
+  EXPECT_EQ(item.decorations.at('internal_60_test'), 'test');
+    
+     private:
+  /// The hashing algorithm which is used to compute the hash
+  HashType algorithm_;
+    
+            auto name = std::string(query_entry.name.GetString());
+        auto query = std::string(query_entry.value.GetString());
+        if (name.empty() || query.empty()) {
+          return Status(1, 'Distributed query is not a string');
+        }
+    
+    
+    {bool INotifyEventPublisher::isPathMonitored(const std::string& path) const {
+  WriteLock lock(path_mutex_);
+  std::string parent_path;
+  if (!isDirectory(path).ok()) {
+    if (path_descriptors_.find(path) != path_descriptors_.end()) {
+      // Path is a file, and is directly monitored.
+      return true;
+    }
+    // Important to add a trailing '/' for inotify.
+    parent_path = fs::path(path).parent_path().string() + '/';
+  } else {
+    parent_path = path;
+  }
+  // Directory or parent of file monitoring
+  auto path_iterator = path_descriptors_.find(parent_path);
+  return (path_iterator != path_descriptors_.end());
+}
 }
 
     
-      // Increase reference count.
-  void Ref() { ++refs_; }
     
-    Speed *Speed::clone() const
-{
-    // no copy constructor
-    if (_innerAction)
-        return Speed::create(_innerAction->clone(), _speed);
+    {  // Finally wait for a signal / interrupt to shutdown.
+  runner.waitForShutdown();
+  return 0;
+}
+
     
-    return nullptr;
+    
+    {        state.PauseTiming();
+        delete f;
+        delete j;
+        state.ResumeTiming();
+    }
+    
+    // Support for registering benchmarks for functions.
+    
+    #include 'benchmark/benchmark.h'
+    
+    std::string FormatString(const char* msg, ...) {
+  va_list args;
+  va_start(args, msg);
+  auto tmp = FormatString(msg, args);
+  va_end(args);
+  return tmp;
 }
     
-    /** @class OrbitCamera
- *
- * @brief OrbitCamera action.
- * Orbits the camera around the center of the screen using spherical coordinates.
- * @ingroup Actions
- */
-class CC_DLL OrbitCamera : public ActionCamera
-{
-public:
-    /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. 
-     *
-     * @param t Duration in seconds.
-     * @param radius The start radius.
-     * @param deltaRadius The delta radius.
-     * @param angleZ The start angle in Z.
-     * @param deltaAngleZ The delta angle in Z.
-     * @param angleX The start angle in X.
-     * @param deltaAngleX The delta angle in X.
-     * @return An OrbitCamera.
-     */
-    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    // Parses a string for a Double flag, in the form of
+// '--flag=value'.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseDoubleFlag(const char* str, const char* flag, double* value);
     
-    /** Positions the camera according to spherical coordinates. 
-     *
-     * @param r The spherical radius.
-     * @param zenith The spherical zenith.
-     * @param azimuth The spherical azimuth.
-     */
-    void sphericalRadius(float *r, float *zenith, float *azimuth);
+      // Calculate least square fitting parameter
+  for (size_t i = 0; i < n.size(); ++i) {
+    double gn_i = fitting_curve(n[i]);
+    sigma_gn += gn_i;
+    sigma_gn_squared += gn_i * gn_i;
+    sigma_time += time[i];
+    sigma_time_gn += time[i] * gn_i;
+  }
+    
+    namespace benchmark {
+namespace internal {
+    }
     }
     
-    FlipY3D* FlipY3D::create(float duration)
-{
-    FlipY3D *action = new (std::nothrow) FlipY3D();
-    }
-    
-    class CC_DLL __CCCallFuncO : public CallFunc
-{
-public:
-    /** Creates the action with the callback.
-        typedef void (Ref::*SEL_CallFuncO)(Ref*);
-     *
-     * @param target    A certain target.
-     * @param selector  The callback need to be executed.
-     * @param object    An object as the callback's first argument.
-     * @return An autoreleased __CCCallFuncO object.
-     */
-    CC_DEPRECATED_ATTRIBUTE static __CCCallFuncO * create(Ref* target, SEL_CallFuncO selector, Ref* object);
-    //
-    // Overrides
-    //
-    virtual __CCCallFuncO* clone() const override;
-    virtual void execute() override;
-    
-    Ref* getObject() const;
-    void setObject(Ref* obj);
-    
-CC_CONSTRUCTOR_ACCESS:
-    __CCCallFuncO();
-    virtual ~__CCCallFuncO();
-    /** initializes the action with the callback
-    }
-    
-        /** initializes the Spawn action with the 2 actions to spawn */
-    bool initWithTwoActions(FiniteTimeAction *action1, FiniteTimeAction *action2);
-    bool init(const Vector<FiniteTimeAction*>& arrayOfActions);
-    
-    void ActionManager::resumeTarget(Node *target)
-{
-    tHashElement *element = nullptr;
-    HASH_FIND_PTR(_targets, &target, element);
-    if (element)
+      // Called by each thread
+  bool wait() EXCLUDES(lock_) {
+    bool last_thread = false;
     {
-        element->paused = false;
+      MutexLock ml(lock_);
+      last_thread = createBarrier(ml);
     }
+    if (last_thread) phase_condition_.notify_all();
+    return last_thread;
+  }
+    
+    BenchmarkReporter::~BenchmarkReporter() {}
+    
+    // this test makes sure that the coroutine is destroyed properly
+TEST(Expected, CoroutineCleanedUp) {
+  int count_dest = 0;
+  auto r = [&]() -> Expected<int, Err> {
+    SCOPE_EXIT {
+      ++count_dest;
+    };
+    auto x = co_await Expected<int, Err>(makeUnexpected(Err::badder()));
+    ADD_FAILURE() << 'Should not be resuming';
+    co_return x;
+  }();
+  EXPECT_FALSE(r.hasValue());
+  EXPECT_EQ(1, count_dest);
 }
     
-    /**
- @brief This action simulates a page turn from the bottom right hand corner of the screen.
- 
- @details It's not much use by itself but is used by the PageTurnTransition.
-         Based on an original paper by L Hong et al.
-         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
-  
- @since v0.8.2
- */
-class CC_DLL PageTurn3D : public Grid3DAction
-{
-public:
-    /**
-     * @js NA 
-     */
-    virtual GridBase* getGrid() override;
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPROGRESS_TIMER_H__
-#define __ACTION_CCPROGRESS_TIMER_H__
-    
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
+    BENCHMARK(BENCHFUN(defaultCtor), iters) {
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v;
+    doNotOptimizeAway(&v);
+  }
 }
     
-    NS_CC_END
+    TEST(FunctionRef, ForEach) {
+  std::list<int> s{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    }
+    
+    
+    {} // namespace detail
+    
+        // Test the upper boundary of conversion to uint32_t hours
+    using hours_u32 = std::chrono::duration<uint32_t, std::ratio<3600>>;
+    ts.tv_sec = 15461882262000LL;
+    ts.tv_nsec = 0;
+    EXPECT_EQ(std::numeric_limits<uint32_t>::max(), to<hours_u32>(ts).count());
+    ts.tv_sec = 15461882265599LL;
+    EXPECT_EQ(std::numeric_limits<uint32_t>::max(), to<hours_u32>(ts).count());
+    ts.tv_sec = 15461882265600LL;
+    EXPECT_THROW(to<hours_u32>(ts), std::range_error);
+    
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+};
+    
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
+  }
+    
+    
+    {}  // namespace guetzli
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    bool JPEGData::Is444() const {
+  return (components.size() == 3 &&
+          max_h_samp_factor == 1 &&
+          max_v_samp_factor == 1 &&
+          components[0].h_samp_factor == 1 &&
+          components[0].v_samp_factor == 1 &&
+          components[1].h_samp_factor == 1 &&
+          components[1].v_samp_factor == 1 &&
+          components[2].h_samp_factor == 1 &&
+          components[2].v_samp_factor == 1);
+}
+    
+    typedef int16_t coeff_t;
+    
+    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
