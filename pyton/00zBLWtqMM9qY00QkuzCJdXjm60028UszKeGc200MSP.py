@@ -1,146 +1,111 @@
 
         
-        
-def main():
-    if len(sys.argv) < 2:
-        print('No file passed (file should contain Markdown table syntax)')
-        sys.exit(1)
-    check_format(sys.argv[1])
-    if len(errors) > 0:
-        for err in errors:
-            print(err)
-        sys.exit(1)
+            self.seso_saver = tf.train.Saver(tf.global_variables(),
+                                     max_to_keep=hps.max_ckpt_to_keep)
+    
+    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
+            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N
+nreplications = FLAGS.nreplications
+E = nreplications * C
+train_percentage = FLAGS.train_percentage
+ntimesteps = int(T / FLAGS.dt)
     
     
-@functools.lru_cache()
-def get_citext_oids(connection_alias):
-    '''Return citext array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
-        return tuple(row[0] for row in cursor)
+def _DumpEmb(vocab):
+  '''Dump the softmax weights and word embeddings to files.
     
-            r = None
+        max_it = len(samples_range) * len(features_range)
+    for i_s, n_samples in enumerate(samples_range):
+        for i_f, n_features in enumerate(features_range):
+            it += 1
+            n_informative = n_features / 10
+            print('====================')
+            print('Iteration %03d of %03d' % (it, max_it))
+            print('====================')
+            # dataset_kwargs = {
+            #     'n_train_samples': n_samples,
+            #     'n_test_samples': 2,
+            #     'n_features': n_features,
+            #     'n_informative': n_informative,
+            #     'effective_rank': min(n_samples, n_features) / 10,
+            #     #'effective_rank': None,
+            #     'bias': 0.0,
+            # }
+            dataset_kwargs = {
+                'n_samples': 1,
+                'n_components': n_features,
+                'n_features': n_samples,
+                'n_nonzero_coefs': n_informative,
+                'random_state': 0
+            }
+            print('n_samples: %d' % n_samples)
+            print('n_features: %d' % n_features)
+            y, X, _ = make_sparse_coded_signal(**dataset_kwargs)
+            X = np.asfortranarray(X)
+    
+        ###########################################################################
+    # Set SparseRandomProjection input
+    sparse_matrix_params = {
+        'n_components': opts.n_components,
+        'random_state': opts.random_seed,
+        'density': opts.density,
+        'eps': opts.eps,
+    }
+    
+                gc.collect()
+            print('- benchmarking SGD')
+            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
+                               max_iter=max_iter, learning_rate='invscaling',
+                               eta0=.01, power_t=0.25, tol=1e-3)
+    
+    from scipy.sparse.csr import csr_matrix
+import numpy as np
+from sklearn.linear_model.stochastic_gradient import SGDRegressor
+from sklearn.metrics import r2_score
+    
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
+    
+    def _print_header(settings, inproject):
+    if inproject:
+        print('Scrapy %s - project: %s\n' % (scrapy.__version__, \
+            settings['BOT_NAME']))
+    else:
+        print('Scrapy %s - no active project\n' % scrapy.__version__)
+    
+        def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
+    
+            editor = self.settings['EDITOR']
         try:
-            r = Redirect.objects.get(site=current_site, old_path=full_path)
-        except Redirect.DoesNotExist:
-            pass
-        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
-            try:
-                r = Redirect.objects.get(
-                    site=current_site,
-                    old_path=request.get_full_path(force_append_slash=True),
-                )
-            except Redirect.DoesNotExist:
-                pass
-        if r is not None:
-            if r.new_path == '':
-                return self.response_gone_class()
-            return self.response_redirect_class(r.new_path)
+            spidercls = self.crawler_process.spider_loader.load(args[0])
+        except KeyError:
+            return self._err('Spider not found: %s' % args[0])
     
-        def load(self):
-        try:
-            session_data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            session_data = None
-        if session_data is not None:
-            return session_data
-        self._session_key = None
-        return {}
+    from scrapy.commands import ScrapyCommand
+from scrapy.http import Request
+from scrapy.exceptions import UsageError
+from scrapy.utils.datatypes import SequenceExclude
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
     
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
+                if depth < opts.depth:
+                for req in requests:
+                    req.meta['_depth'] = depth + 1
+                    req.meta['_callback'] = req.callback
+                    req.callback = callback
+                return requests
     
-        def test_encode(self):
-        self.assertEqual('x', self.field.encode('x'))
-    
-        def test_json_de_serializable(self):
-        self.assertTrue(isinstance(self.certr, jose.JSONDeSerializable))
-        from acme.messages import CertificateResource
-        self.assertEqual(
-            self.certr, CertificateResource.from_json(self.certr.to_json()))
-    
-        def test_bad_parse(self):
-        # pylint: disable=protected-access
-        self.config.parser.parse_file(os.path.join(
-            self.config.parser.root, 'conf-available', 'bad_conf_file.conf'))
-        self.assertRaises(
-            errors.PluginError, self.config.check_parsing_errors, 'httpd.aug')
-    
-        def test_nested(self):
-        self.assertEqual(len(self.parser.find_dir('NESTED_DIRECTIVE')), 3)
-        self.assertEqual(
-            len(self.parser.find_dir('INVALID_NESTED_DIRECTIVE')), 0)
-    
-        def test_nonexistent_like(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                for like in entrypoint.OVERRIDE_CLASSES.keys():
-                    mock_like.return_value = [like]
-                    self.assertEqual(entrypoint.get_configurator(),
-                                     entrypoint.OVERRIDE_CLASSES[like])
-    
-        result = False
-    try:
-        ret = urlopen(url, timeout=2)
-        result = (ret.code == 200)
-    except HTTPError as e:
-        print(e, file=sys.stderr)
-    except URLError as e:
-        print(e, file=sys.stderr)
-    except timeout as e:
-        print(e, file=sys.stderr)
-    except Exception as e:
-        print(e, file=sys.stderr)
-    
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
-    
-        def publishReport(self):
-        self._db.update()
-        self._reporter.report()
-    
-    
-class UserSpecification(CompositeSpecification):
-    def is_satisfied_by(self, candidate):
-        return isinstance(candidate, User)
-    
-    
-# Create our template functions
-templates = [
-    make_template(s, g, a)
-    for g in (get_list, get_lists)
-    for a in (print_item, reverse_item)
-    for s in (iter_elements, rev_elements)
-]
-    
-    
-class A(Node):
-    pass
-    
-    *TL;DR80
-Delays the eval of an expr until its value is needed and avoids repeated evals.
-'''
-    
-    '''
-*What is this pattern about?
-This pattern is used when creating an object is costly (and they are
-created frequently) but only a few are used at a time. With a Pool we
-can manage those instances we have as of now by caching them. Now it
-is possible to skip the costly creation of an object if one is
-available in the pool.
-A pool allows to 'check out' an inactive object and then to return it.
-If none are available the pool creates one to provide without wait.
-    
-    
-if __name__ == '__main__':
-    blackboard = Blackboard()
+            general form:
+        @returns request(s)/item(s) [min=1 [max]]
