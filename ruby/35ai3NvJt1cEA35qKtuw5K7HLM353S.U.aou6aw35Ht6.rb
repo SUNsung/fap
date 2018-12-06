@@ -1,67 +1,83 @@
 
         
-            A binary installer is available:
-      https://www.haskell.org/platform/mac.html
-    EOS
-  when 'mysqldump-secure' then <<-EOS.undent
-    The creator of mysqldump-secure tried to game our popularity metrics.
-    EOS
-  when 'ngrok' then <<-EOS.undent
-    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
+      #
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      #
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
     
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
+              def tag_id(index = nil)
+            # a little duplication to construct less strings
+            case
+            when @object_name.empty?
+              sanitized_method_name.dup
+            when index
+              '#{sanitized_object_name}_#{index}_#{sanitized_method_name}'
+            else
+              '#{sanitized_object_name}_#{sanitized_method_name}'
+            end
+          end
     
-          open_dry_run_modal(formatting_agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('Line 1\nLine 2\nLine 3')
-      end
-      click_on('Dry Run')
-      expect(page).to have_text('Line 1,Line 2,Line 3')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
-  end
-    
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
-    
-          context '#run_workers' do
-        it 'runs all the workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
     
-      it 'converts values to Float' do
-    expect(location.lat).to be_a Float
-    expect(location.lat).to eq 2.0
-    expect(location.lng).to be_a Float
-    expect(location.lng).to eq 3.0
-    expect(location.radius).to be_a Float
-    expect(location.radius).to eq 300.0
-    expect(location.speed).to be_a Float
-    expect(location.speed).to eq 2.0
-    expect(location.course).to be_a Float
-    expect(location.course).to eq 30.0
-  end
+              super(object_name, method_name, template_object, options)
+        end
     
-        it 'accepts objects as well as strings' do
-      log = AgentLog.log_for_agent(agents(:jane_website_agent), events(:bob_website_agent_event).payload)
-      expect(log.message).to include(''title'=>'foo'')
-    end
-  end
+            class << self
+          def field_type
+            @field_type ||= name.split('::').last.sub('Field', '').downcase
+          end
+        end
     
-          flatten_rules(rule)
-    end
-    
-          opts.on('-s', '--stdin', :NONE,
-              'Read input from standard input instead of an input file.',
-              'This is the default if no input file is specified. Requires --from.') do
-        @options[:input] = $stdin
+        initializer 'action_view.per_request_digest_cache' do |app|
+      ActiveSupport.on_load(:action_view) do
+        unless ActionView::Resolver.caching?
+          app.executor.to_run ActionView::Digestor::PerExecutionDigestCacheExpiry
+        end
       end
+    end
+    
+        desc 'Commits the version to github repository'
+    task :commit_version do
+      sh <<-SH
+        sed -i 's/.*VERSION.*/  VERSION = '#{source_version}'/' lib/sinatra/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' sinatra-contrib/lib/sinatra/contrib/version.rb
+        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' rack-protection/lib/rack/protection/version.rb
+      SH
+    
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
+    
+    task :gemspec => 'rack-protection.gemspec'
+task :default => :spec
+task :test    => :spec
+
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+    When /^(?:|I )attach the file '([^']*)' to '([^']*)'$/ do |path, field|
+  attach_file(field, File.expand_path(path))
+end
+    
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
+    end
