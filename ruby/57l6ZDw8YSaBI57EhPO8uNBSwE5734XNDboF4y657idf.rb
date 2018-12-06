@@ -1,158 +1,122 @@
 
         
-        if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
+              # Converts the array to a comma-separated sentence where the last element is
+      # joined by the connector word. This is the html_safe-aware version of
+      # ActiveSupport's {Array#to_sentence}[http://api.rubyonrails.org/classes/Array.html#method-i-to_sentence].
+      #
+      def to_sentence(array, options = {})
+        options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector, :locale)
     
-    Then(%r!^I should (not )?see '(.*)' in '(.*)' if on Windows$!) do |negative, text, file|
-  step %(the '#{file}' file should exist)
-  regexp = Regexp.new(text, Regexp::MULTILINE)
-  if negative.nil? || negative.empty?
-    if Jekyll::Utils::Platforms.really_windows?
-      expect(file_contents(file)).to match regexp
-    else
-      expect(file_contents(file)).not_to match regexp
-    end
-  end
-end
+              def render_collection
+            @collection.map do |item|
+              value = value_for_collection(item, @value_method)
+              text  = value_for_collection(item, @text_method)
+              default_html_options = default_html_options_for_collection(item, value)
+              additional_html_options = option_html_attributes(item)
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+                options = options.dup
+            options[:field_name]           = @method_name
+            options[:include_position]     = true
+            options[:prefix]             ||= @object_name
+            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
     
-              # This is too noisy even for --verbose, but uncomment if you need it for
-          # a specific WebSockets issue.  Adding ?LR-verbose=true onto the URL will
-          # enable logging on the client side.
-          # em_opts[:debug] = true
-    
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
-  end
-end
-
-    
-              <<-SQL.strip_heredoc
-            (CASE
-              WHEN (#{builds}) = (#{skipped}) AND (#{warnings}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{skipped}) THEN #{STATUSES[:skipped]}
-              WHEN (#{builds}) = (#{success}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{created}) THEN #{STATUSES[:created]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) + (#{canceled}) THEN #{STATUSES[:canceled]}
-              WHEN (#{builds}) = (#{created}) + (#{skipped}) + (#{pending}) THEN #{STATUSES[:pending]}
-              WHEN (#{running}) + (#{pending}) > 0 THEN #{STATUSES[:running]}
-              WHEN (#{manual}) > 0 THEN #{STATUSES[:manual]}
-              WHEN (#{created}) > 0 THEN #{STATUSES[:running]}
-              ELSE #{STATUSES[:failed]}
-            END)
-          SQL
+          def _find_all(path, prefixes, args, outside_app)
+        prefixes = [prefixes] if String === prefixes
+        prefixes.each do |prefix|
+          paths.each do |resolver|
+            if outside_app
+              templates = resolver.find_all_anywhere(path, prefix, *args)
+            else
+              templates = resolver.find_all(path, prefix, *args)
+            end
+            return templates unless templates.empty?
+          end
         end
+        []
       end
     
-            def sidekiq_worker_class
-          ImportLfsObjectWorker
+          def left_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, li                  = *line.match(/\-(\d+)/)
+          @left_diff_line_number = li.to_i
+          @current_line_number   = @left_diff_line_number
+          ret                    = '...'
+        elsif line[0] == ?-
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
+        elsif line[0] == ?+
+          ret = ' '
+        else
+          ret                    = @left_diff_line_number.to_s
+          @left_diff_line_number += 1
+          @current_line_number   = @left_diff_line_number - 1
         end
+        ret
+      end
     
-            def sidekiq_worker_class
-          ImportNoteWorker
-        end
+      s.summary     = 'A simple, Git-powered wiki.'
+  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
     
-              new(hash)
-        end
+    # internal
+require File.expand_path('../gollum/uri_encode_component', __FILE__)
     
-              user = Representation::User.from_api_response(pr.user) if pr.user
-          hash = {
-            iid: pr.number,
-            title: pr.title,
-            description: pr.body,
-            source_branch: pr.head.ref,
-            target_branch: pr.base.ref,
-            source_branch_sha: pr.head.sha,
-            target_branch_sha: pr.base.sha,
-            source_repository_id: pr.head&.repo&.id,
-            target_repository_id: pr.base&.repo&.id,
-            source_repository_owner: pr.head&.user&.login,
-            state: pr.state == 'open' ? :opened : :closed,
-            milestone_number: pr.milestone&.number,
-            author: user,
-            assignee: assignee,
-            created_at: pr.created_at,
-            updated_at: pr.updated_at,
-            merged_at: pr.merged_at
-          }
+    end
     
-            # Download a file from the remote machine to the local machine.
-        #
-        # @param [String] from Path of the file on the remote machine.
-        # @param [String] to Path of where to save the file locally.
-        def download(from, to)
-        end
-    
-            # Defines additional communicators to be available. Communicators
-        # should be returned by a block passed to this method. This is done
-        # to ensure that the class is lazy loaded, so if your class inherits
-        # from or uses any Vagrant internals specific to Vagrant 1.0, then
-        # the plugin can still be defined without breaking anything in future
-        # versions of Vagrant.
-        #
-        # @param [String] name Communicator name.
-        def self.communicator(name=UNSET_VALUE, &block)
-          data[:communicator] ||= Registry.new
-    
-        # Checks if this registry has any items.
+        # Initializes a new CategoryIndex.
     #
-    # @return [Boolean]
-    def empty?
-      @items.keys.empty?
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'index.html'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
     end
     
-        private
-    
-    namespace :bower do
-    
-        def puts(*args)
-      STDERR.puts *args unless @silence
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
     end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-        require 'lib/sass'
-    
-    require 'sass/engine'
-require 'sass/plugin' if defined?(Merb::Plugins)
-require 'sass/railtie'
-require 'sass/features'
-
-    
-        # Returns a string representation of the Sass backtrace.
-    #
-    # @param default_filename [String] The filename to use for unknown files
-    # @see #sass_backtrace
-    # @return [String]
-    def sass_backtrace_str(default_filename = 'an unknown file')
-      lines = message.split('\n')
-      msg = lines[0] + lines[1..-1].
-        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
-      'Error: #{msg}' +
-        sass_backtrace.each_with_index.map do |entry, i|
-          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
-            ' of #{entry[:filename] || default_filename}' +
-            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
-        end.join
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
     end
+  end
+    
+      # Removes trailing forward slash from a string for easily appending url segments
+  def strip_slash(input)
+    if input =~ /(.+)\/$|^\/$/
+      input = $1
+    end
+    input
+  end
