@@ -1,92 +1,127 @@
 
         
-            def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
-            )
-        super().__init__(get_response)
+            return diag_gaussian_log_likelihood(z, self.mean, self.logvar)
     
-    
-def load_backend(backend_name):
+        Args:
+      datasets: A dict of data dicts.  The dataset dict is simply a
+        name(string)-> data dictionary mapping (See top of lfads.py).
     '''
-    Return a database backend's 'base' module given a fully qualified database
-    backend name, or raise an error if it doesn't exist.
-    '''
-    # This backend was renamed in Django 1.9.
-    if backend_name == 'django.db.backends.postgresql_psycopg2':
-        backend_name = 'django.db.backends.postgresql'
+    hps = self.hps
+    has_any_valid_set = False
+    for data_dict in datasets.values():
+      if data_dict['valid_data'] is not None:
+        has_any_valid_set = True
+        break
     
-        return (x_train, y_train), (x_test, y_test)
+      def assign_probs(self, sentences, test_data_name='wsc273'):
+    '''Return prediction accuracy using this LM for a test.'''
+    
+    
+def imdb_iterator(raw_data, batch_size, num_steps, epoch_size_override=None):
+  '''Iterate on the raw IMDB data.
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+        elif FLAGS.discriminator_model == 'seq2seq_vd':
+      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      print('Restoring Discriminator from %s.' % load_ckpt)
+      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
+      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
+      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
+      dis_encoder_init_saver.restore(sess, load_ckpt)
+      dis_decoder_init_saver.restore(sess, load_ckpt)
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+        infile, outfile = args
+    
+    from youtube_dl.extractor import _ALL_CLASSES
+from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
+    
+    README_FILE = 'README.md'
+helptext = sys.stdin.read()
+    
+        def encode(self, value):
+        if value != self.value:
+            logger.warning(
+                'Overriding fixed field (%s) with %r', self.json_name, value)
+        return value
+    
+        def test_default_decoder_raises_deserialization_error(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            jose.DeserializationError, RFC3339Field.default_decoder, '')
+    
+    # If true, the index is split into individual pages for each letter.
+#html_split_index = False
+    
+    
+MOD_SSL_CONF_DEST = 'options-ssl-apache.conf'
+'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
+    
+        def setUp(self):
+        self.base_dir = '/example_path'
+        self.vhosts = util.get_vh_truth(
+            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
+    
+            account_number = match1(html, r'data-account='(\d+)'')
+    
+    #----------------------------------------------------------------------
+def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
+    if is_xml:  #URL is XML URL
+        try:
+            title = kwargs['title']
+        except:
+            title = ''
+        try:
+            headers = kwargs['headers']  #headers provided
+            ckinfo = get_content(url, headers = headers)
+        except NameError:
+            ckinfo = get_content(url)
+        
+        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
+                                info_only, title = title)
+    
+    site_info = 'dilidili'
+download = dilidili_download
+download_playlist = playlist_not_supported('dilidili')
 
     
-        with gzip.open(paths[2], 'rb') as lbpath:
-        y_test = np.frombuffer(lbpath.read(), np.uint8, offset=8)
+    '''
+refer to http://open.youku.com/tools
+'''
+youku_embed_patterns = [ 'youku\.com/v_show/id_([a-zA-Z0-9=]+)',
+                         'player\.youku\.com/player\.php/sid/([a-zA-Z0-9=]+)/v\.swf',
+                         'loader\.swf\?VideoIDS=([a-zA-Z0-9=]+)',
+                         'player\.youku\.com/embed/([a-zA-Z0-9=]+)',
+                         'YKU.Player\(\'[a-zA-Z0-9]+\',{ client_id: \'[a-zA-Z0-9]+\', vid: \'([a-zA-Z0-9]+)\''
+                       ]
+    }
     
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([video_url], title, ext, size, output_dir, merge = merge, headers = headers)
     
-        def add(self, layer):
-        '''Adds a layer instance on top of the layer stack.
-    
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
-    
-    
-from certbot import errors
-from certbot.plugins import common
-    
-    AUTOHSTS_PERMANENT = 31536000
-'''Value for the last max-age of HSTS'''
-    
-            if not generic:
-            if vhost.get_names() != self.get_names():
-                return False
-    
-        def test_basic_variable_parsing(self):
-        matches = self.parser.find_dir('TestVariablePort')
-    
-            self.vhosts.append(
-            obj.VirtualHost(
-                'path', 'aug_path', set([obj.Addr.fromstring('*:80')]),
-                False, False,
-                'wildcard.com', set(['*.wildcard.com'])))
-    
-        def test_nonexistent_like(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                for like in entrypoint.OVERRIDE_CLASSES.keys():
-                    mock_like.return_value = [like]
-                    self.assertEqual(entrypoint.get_configurator(),
-                                     entrypoint.OVERRIDE_CLASSES[like])
-    
-        def test_mod_config(self):
-        z_domains = []
-        for achall in self.achalls:
-            self.sni.add_chall(achall)
-            z_domain = achall.response(self.auth_key).z_domain
-            z_domains.append(set([z_domain.decode('ascii')]))
-    
-    
-__licence__ = 'BSD (3 clause)'
-    
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
-    
-            distances = []
-        for zone_state in zones:
-            zone_state_lat = zone_state.attributes['latitude']
-            zone_state_long = zone_state.attributes['longitude']
-            zone_distance = distance(
-                latitude, longitude, zone_state_lat, zone_state_long)
-            distances.append(round(zone_distance / 1000, 1))
-    
-            _LOGGER.debug('Nmap last results %s', self.last_results)
-    
-        return scanner if scanner.success_init else None
+            # attempt to extract images first
+        # TBD: posts with > 4 images
+        # TBD: album links
+        html = get_html(parse.unquote(url), faker=True)
+        real_urls = []
+        for src in re.findall(r'src='([^']+)'[^>]*itemprop='image'', html):
+            t = src.split('/')
+            t[0], t[-2] = t[0] or 'https:', 's0-d'
+            u = '/'.join(t)
+            real_urls.append(u)
+        if not real_urls:
+            real_urls = [r1(r'<meta property='og:image' content='([^']+)', html)]
+            real_urls = [re.sub(r'w\d+-h\d+-p', 's0', u) for u in real_urls]
+        post_date = r1(r''?(20\d\d[-/]?[01]\d[-/]?[0123]\d)'?', html)
+        post_id = r1(r'/posts/([^']+)', html)
+        title = post_date + '_' + post_id
