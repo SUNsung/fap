@@ -1,35 +1,42 @@
 
         
-        def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    	title = video.attributes['title'].value
-	assert title 
-    
-                orm.Environment.objects.filter(id__in=from_env_ids).delete()
-    
-            # Adding field 'ApiToken.scope_list'
-        db.add_column(
-            'sentry_apitoken',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
+        
+class NotSpecification(CompositeSpecification):
+    _wrapped = Specification()
     
     
-def make_handler(value):
-    return BitHandler(
-        keys=(
-            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
-            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
-            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
-        ),
-        value=value,
-    )
+class Node(object):
+    pass
+    
+    ### OUTPUT ###
+# We have a lovely Cat
+# It says meow
+#
+# We have a lovely Dog
+# It says woof
+# ====================
+# We have a lovely Cat
+# It says meow
+# ====================
+# We have a lovely Cat
+# It says meow
+# ====================
+
+    
+        sample_queue.put('sam')
+    test_object(sample_queue)
+    print('Outside func: {}'.format(sample_queue.get()))
+    
+        d = prototype.clone()
+    a = prototype.clone(value='a-value', category='a')
+    b = prototype.clone(value='b-value', is_checked=True)
+    dispatcher.register_object('objecta', a)
+    dispatcher.register_object('objectb', b)
+    dispatcher.register_object('default', d)
+    print([{n: p.value} for n, p in dispatcher.get_objects().items()])
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
