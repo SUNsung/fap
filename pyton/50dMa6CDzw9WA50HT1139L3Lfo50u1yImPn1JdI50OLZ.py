@@ -1,144 +1,186 @@
 
         
-        versions_info['signature'] = signature
-with open('update/versions.json', 'w') as versionsf:
-    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+            def load_installed_plugins(self):
+        for entry_point_name in ENTRY_POINT_NAMES:
+            for entry_point in iter_entry_points(entry_point_name):
+                plugin = entry_point.load()
+                plugin.package_name = entry_point.dist.key
+                self.register(entry_point.load())
+    
+    
+setup(
+    name='httpie',
+    version=httpie.__version__,
+    description=httpie.__doc__.strip(),
+    long_description=long_description(),
+    url='http://httpie.org/',
+    download_url='https://github.com/jakubroztocil/httpie',
+    author=httpie.__author__,
+    author_email='jakub@roztocil.co',
+    license=httpie.__licence__,
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'http = httpie.__main__:main',
+        ],
+    },
+    extras_require=extras_require,
+    install_requires=install_requires,
+    tests_require=tests_require,
+    cmdclass={'test': PyTest},
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development',
+        'Topic :: System :: Networking',
+        'Topic :: Terminals',
+        'Topic :: Text Processing',
+        'Topic :: Utilities'
+    ],
+)
 
     
     
-def main():
-    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
-        template = tmplf.read()
+def test_credentials_in_url(httpbin_both):
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:password')
+    r = http('GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        @property
+    def path(self):
+        '''Return the config file path creating basedir, if needed.'''
+        path = self._get_path()
+        try:
+            os.makedirs(os.path.dirname(path), mode=0o700)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+        return path
+    
+        It can be used in place of a ReLU.
+    
+    tensorboard = TensorBoard(batch_size=batch_size,
+                          embeddings_freq=1,
+                          embeddings_layer_names=['features'],
+                          embeddings_metadata='metadata.tsv',
+                          embeddings_data=x_test)
     
     
-def filter_options(readme):
-    ret = ''
-    in_options = False
-    for line in readme.split('\n'):
-        if line.startswith('# '):
-            if line[2:].startswith('OPTIONS'):
-                in_options = True
-            else:
-                in_options = False
-    
-        if not releases:
-        break
-    
-    # The suffix of source filenames.
-source_suffix = '.rst'
+def test_imdb():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = imdb.load_data()
+        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = imdb.get_word_index()
+        assert isinstance(word_index, dict)
     
     
-def _is_empty(d):
-    return not bool(os.listdir(d))
+if __name__ == '__main__':
+    pytest.main([__file__])
+
     
-        # close and remove the temporary database
-    os.close(db_fd)
-    os.unlink(db_path)
+        E.g. for use with categorical_crossentropy.
     
-            :param name: the optional name of the filter, otherwise the
-                     function name will be used.
-        '''
-        def decorator(f):
-            self.add_app_template_filter(f, name=name)
-            return f
-        return decorator
+        # Note that when using this delayed-build pattern
+    # (no input shape specified),
+    # the model doesn't have any weights until the first call
+    # to a training/evaluation method (since it isn't yet built):
+    model = Sequential()
+    model.add(Dense(32))
+    model.add(Dense(32))
+    model.weights  # returns []
     
-                app.config['IMAGE_STORE_TYPE'] = 'fs'
-            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
-            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
-            image_store_config = app.config.get_namespace('IMAGE_STORE_')
+        # Cut to a 40x40 window
+    noisy_movies = noisy_movies[::, ::, 20:60, 20:60, ::]
+    shifted_movies = shifted_movies[::, ::, 20:60, 20:60, ::]
+    noisy_movies[noisy_movies >= 1] = 1
+    shifted_movies[shifted_movies >= 1] = 1
+    return noisy_movies, shifted_movies
     
-        def get_cookie_secure(self, app):
-        '''Returns True if the cookie should be secure.  This currently
-        just returns the value of the ``SESSION_COOKIE_SECURE`` setting.
-        '''
-        return app.config['SESSION_COOKIE_SECURE']
+    # We add a vanilla hidden layer:
+model.add(Dense(hidden_dims))
+model.add(Dropout(0.2))
+model.add(Activation('relu'))
     
-        def state_forwards(self, app_label, state):
-        pass
+        @nonce.decoder
+    def nonce(value):  # pylint: disable=missing-docstring,no-self-argument
+        try:
+            return jose.decode_b64jose(value)
+        except jose.DeserializationError as error:
+            # TODO: custom error
+            raise jose.DeserializationError('Invalid nonce: {0}'.format(error))
     
-    KEY_PREFIX = 'django.contrib.sessions.cached_db'
+    # If true, the index is split into individual pages for each letter.
+#html_split_index = False
     
+        :param str vhost_path: Augeas virtual host path
     
-@x_robots_tag
-def index(request, sitemaps,
-          template_name='sitemap_index.xml', content_type='application/xml',
-          sitemap_url_name='django.contrib.sitemaps.views.sitemap'):
+    AUTOHSTS_PERMANENT = 31536000
+'''Value for the last max-age of HSTS'''
     
-            try:
-            create_file(filename)
-            self.assertIs(self.pathmodule.isfile(filename), True)
-            self.assertIs(self.pathmodule.isfile(bfilename), True)
-        finally:
-            support.unlink(filename)
+        The decoding-related arguments have the same semantics as those of
+    bytes.decode().
+    '''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    with open_text(package, resource, encoding, errors) as fp:
+        return fp.read()
     
-            self.assertEqual(posixpath.join(b'/foo', b'bar', b'/bar', b'baz'),
-                         b'/bar/baz')
-        self.assertEqual(posixpath.join(b'/foo', b'bar', b'baz'),
-                         b'/foo/bar/baz')
-        self.assertEqual(posixpath.join(b'/foo/', b'bar/', b'baz/'),
-                         b'/foo/bar/baz/')
+            rc, out, err = assert_python_ok('-c', code, PYTHONHASHSEED='random')
+        self.assertIn(b'random is 1', out)
     
-        def run_xdev(self, *args, check_exitcode=True, xdev=True):
-        env = dict(os.environ)
-        env.pop('PYTHONWARNINGS', None)
-        env.pop('PYTHONDEVMODE', None)
-        env.pop('PYTHONMALLOC', None)
-    
-        def testReadMultiStream(self):
-        self.createTempFile(streams=5)
-        with BZ2File(self.filename) as bz2f:
-            self.assertRaises(TypeError, bz2f.read, float())
-            self.assertEqual(bz2f.read(), self.TEXT * 5)
-    
-    # Now add the related image to the html part.
-with open('roasted-asparagus.jpg', 'rb') as img:
-    msg.get_payload()[1].add_related(img.read(), 'image', 'jpeg',
-                                     cid=asparagus_cid)
-    
-    
-def main():
-    parser = ArgumentParser(description='''\
-Send the contents of a directory as a MIME message.
-Unless the -o option is given, the email is sent by forwarding to your local
-SMTP server, which then does the normal delivery process.  Your local machine
-must be running an SMTP server.
-''')
-    parser.add_argument('-d', '--directory',
-                        help='''Mail the contents of the specified directory,
-                        otherwise use the current directory.  Only the regular
-                        files in the directory are sent, and we don't recurse to
-                        subdirectories.''')
-    parser.add_argument('-o', '--output',
-                        metavar='FILE',
-                        help='''Print the composed message to FILE instead of
-                        sending the message to the SMTP server.''')
-    parser.add_argument('-s', '--sender', required=True,
-                        help='The value of the From: header (required)')
-    parser.add_argument('-r', '--recipient', required=True,
-                        action='append', metavar='RECIPIENT',
-                        default=[], dest='recipients',
-                        help='A To: header value (at least one required)')
-    args = parser.parse_args()
-    directory = args.directory
-    if not directory:
-        directory = '.'
-    # Create the message
-    msg = EmailMessage()
-    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
-    msg['To'] = ', '.join(args.recipients)
-    msg['From'] = args.sender
-    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
-    
-    # If we want to print a preview of the message content, we can extract whatever
-# the least formatted payload is and print the first three lines.  Of course,
-# if the message has no plain text part printing the first three lines of html
-# is probably useless, but this is just a conceptual example.
-simplest = msg.get_body(preferencelist=('plain', 'html'))
-print()
-print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
+    from email.message import EmailMessage
+from email.headerregistry import Address
+from email.utils import make_msgid
     
     ##
     
-    def noop(x):
-    pass
+    
+# Not caching the result of this function; users shouldn't have to restart Vim
+# after running the install script or setting the
+# `g:ycm_server_python_interpreter` option.
+def PathToPythonInterpreter():
+  # Not calling the Python interpreter to check its version as it significantly
+  # impacts startup time.
+  from ycmd import utils
+    
+    
+  def done( self ):
+    return self._done
+    
+    def _create_and_install_waiters(fs, return_when):
+    if return_when == _AS_COMPLETED:
+        waiter = _AsCompletedWaiter()
+    elif return_when == FIRST_COMPLETED:
+        waiter = _FirstCompletedWaiter()
+    else:
+        pending_count = sum(
+                f._state not in [CANCELLED_AND_NOTIFIED, FINISHED] for f in fs)
+    
+    # The paper size ('letter' or 'a4').
+#latex_paper_size = 'letter'
+    
+        sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+    return True
