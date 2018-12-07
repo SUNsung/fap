@@ -1,430 +1,484 @@
 
         
-        //  This file implements a default caching implementation that never evicts
-//  its entries.
+        // Returns the id number of the bfloat16 numpy type.
+int Bfloat16NumpyType();
     
-      struct IndentScope {
-    TreePrinter *Printer;
-    size_t OldLength;
-    IndentScope(TreePrinter *printer, StringRef indent)
-        : Printer(printer), OldLength(printer->Indent.size()) {
-      Printer->Indent += indent;
-    }
-    ~IndentScope() { Printer->Indent.resize(OldLength); }
-  };
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
     
-    {    RawText = RawText.drop_front(Pos);
-    unsigned NewlineBytes = measureNewline(RawText);
-    RawText = RawText.drop_front(NewlineBytes);
-  }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    
-    {
-    {void TaskProcessInformation::provideMapping(json::Output &out) {
-  out.mapRequired('real_pid', OSPid);
-  if (ProcessUsage.hasValue())
-    out.mapRequired('usage', ProcessUsage.getValue());
-}
-}
-}
-    
-    swift::UUID::UUID() {
-#if defined(_WIN32)
-  ::UUID uuid = *((::UUID *)&Value);
-  UuidCreateNil(&uuid);
+    namespace cuda {
     }
     
-    StringRef importer::getCFTypeName(
-            const clang::TypedefNameDecl *decl) {
-  if (auto pointee = CFPointeeInfo::classifyTypedef(decl)) {
-    auto name = decl->getName();
-    if (pointee.isRecord() || pointee.isTypedef())
-      if (name.endswith(SWIFT_CFTYPE_SUFFIX))
-        return name.drop_back(strlen(SWIFT_CFTYPE_SUFFIX));
-    }
-    }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    // POSIX sys/types.h.
-MAP_STDLIB_TYPE('ssize_t', SignedWord, 0, 'Int', false, DefineOnly)
-MAP_STDLIB_TYPE('u_int8_t',  UnsignedInt, 8,  'UInt8',  false, DoNothing)
-MAP_STDLIB_TYPE('u_int16_t', UnsignedInt, 16, 'UInt16', false, DoNothing)
-MAP_STDLIB_TYPE('u_int32_t', UnsignedInt, 32, 'UInt32', false, DoNothing)
-MAP_STDLIB_TYPE('u_int64_t', UnsignedInt, 64, 'UInt64', false, DoNothing)
     
-    #define TegraGenOp_Invoker(name, func, src_cnt, dst_cnt, scale_cnt, ...) \
-template <typename ST, typename DT> \
-class TegraGenOp_##name##_Invoker : public cv::ParallelLoopBody \
-{ \
-public: \
-    TegraGenOp_##name##_Invoker(SRC_ARG##src_cnt \
-                                DST_ARG##dst_cnt \
-                                int width_, int height_ \
-                                SCALE_ARG##scale_cnt) : \
-        cv::ParallelLoopBody(), SRC_STORE##src_cnt \
-                                DST_STORE##dst_cnt \
-                                width(width_), height(height_) \
-                                SCALE_STORE##scale_cnt {} \
-    virtual void operator()(const cv::Range& range) const \
-    { \
-        CAROTENE_NS::func(CAROTENE_NS::Size2D(width, range.end-range.start), __VA_ARGS__); \
-    } \
-private: \
-    SRC_VAR##src_cnt \
-    DST_VAR##dst_cnt \
-    int width, height; \
-    SCALE_VAR##scale_cnt \
-    const TegraGenOp_##name##_Invoker& operator= (const TegraGenOp_##name##_Invoker&); \
+    {    QString name;
+    bool imagesOnButtons;
+    bool colorizeIcons;
+    bool useExtraSpacing;
+    QColor singleColor;
+    QColor textColor;
+    /* ... more to come later */
 };
     
-    namespace CAROTENE_NS {
-    }
+    #include <QDialog>
     
-        #define CANNY_PUSH(d)    *(d) = u8(2), *stack_top++ = (d)
-    #define CANNY_POP(d)     (d) = *--stack_top
+    public:
+    explicit TransactionDescDialog(const QModelIndex &idx, QWidget *parent = 0);
+    ~TransactionDescDialog();
     
     
-    {            if (mask)
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-    
-    // caclulate sqrt value
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-      /** Will not return until the internal thread has exited. */
-  void StopInternalThread();
-    
-      /**
-   * @brief Does layer-specific setup: your layer should implement this function
-   *        as well as Reshape.
-   *
-   * @param bottom
-   *     the preshaped input blobs, whose data fields store the input data for
-   *     this layer
-   * @param top
-   *     the allocated but unshaped output blobs
-   *
-   * This method should do one-time layer specific setup. This includes reading
-   * and processing relevent parameters from the <code>layer_param_</code>.
-   * Setting up the shapes of top blobs and internal buffers should be done in
-   * <code>Reshape</code>, which will be called before the forward pass to
-   * adjust the top blob sizes.
-   */
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    template <typename Dtype>
-class CropLayer : public Layer<Dtype> {
- public:
-  explicit CropLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    static void secp256k1_ecdsa_recoverable_signature_save(secp256k1_ecdsa_recoverable_signature* sig, const secp256k1_scalar* r, const secp256k1_scalar* s, int recid) {
+    if (sizeof(secp256k1_scalar) == 32) {
+        memcpy(&sig->data[0], r, 32);
+        memcpy(&sig->data[32], s, 32);
+    } else {
+        secp256k1_scalar_get_b32(&sig->data[0], r);
+        secp256k1_scalar_get_b32(&sig->data[32], s);
     }
+    sig->data[64] = recid;
+}
     
-    
-    {}  // namespace caffe
-    
-    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
+    BOOST_AUTO_TEST_SUITE_END()
 
     
-    #include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/registry.h>
-#include <nnvm/node.h>
-#include <vector>
-#include <map>
-#include <string>
-#include <utility>
-#include './base.h'
-#include './resource.h'
-#include './op_attr_types.h'
-    
-    #include <caffe/layer.hpp>
-#include <caffe/blob.hpp>
-#include <caffe/layer_factory.hpp>
-    
-    template<typename Dtype>
-class CaffeDataIter : public IIterator<TBlobBatch> {
- public:
-  explicit CaffeDataIter(int type_flag) : batch_size_(0), channels_(1), width_(1), height_(1)
-                               , type_flag_(type_flag), loc_(0)
-  {}
-  virtual ~CaffeDataIter(void) {}
-    }
-    
-        for (int i = 0; i < param_.num_data; ++i) {
-      TShape tshape = (*in_shape)[i];
-      if (tshape.ndim() == 0) return false;
-      auto blob_ptr = new Blob<float>();
-      blob_ptr->Reshape(caffe::TShape2Vector(tshape));
-      bot_blobs.push_back(blob_ptr);
-    }
-    
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeLoss<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeLoss<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
-}
-    }
-    }
-    
-    MXNET_DLL int MXCVImdecode(const unsigned char *img, const mx_uint len,
-                           const int flag, NDArrayHandle *out) {
-  API_BEGIN();
-  mx_uint dims[3];
-  CHECK_GE(flag, 0) << 'flag must be 0 (grayscale) or 1 (colored).';
-  dims[2] = flag == 0 ? 1 : 3;
-  if (get_jpeg_size(img, len, dims+1, dims)) {
-  } else if (get_png_size(img, len, dims+1, dims)) {
-  } else {
-    LOG(FATAL) << 'Only supports png and jpg.';
-  }
-  NDArray ndout(TShape(dims, dims+3), Context::CPU(), true, mshadow::kUint8);
-  unsigned char *img_cpy = new unsigned char[len];
-  memcpy(img_cpy, img, sizeof(unsigned char)*len);
-  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(1, len, CV_8U, img_cpy);
-      cv::Mat dst(dims[0], dims[1], flag == 0 ? CV_8U : CV_8UC3, ndout.data().dptr_);
-#if (CV_MAJOR_VERSION > 3 || (CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION >= 3))
-      cv::imdecode(buf, flag | cv::IMREAD_IGNORE_ORIENTATION, &dst);
-#else
-      cv::imdecode(buf, flag, &dst);
-#endif
-      CHECK(!dst.empty());
-      delete[] img_cpy;
-    }, ndout.ctx(), {}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
-}
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
-    
-      ~ThreadedEnginePooled() noexcept(false) {
-    StopNoWait();
-  }
-    
-    namespace mxnet {
-namespace io {
-/*!
- * \brief a vector of tensor with various shape
- *
- * data are stored in memory continuously
- */
-template<int dim, typename DType>
-class TensorVector {
- public:
-  TensorVector(void) {
-    this->Clear();
-  }
-  /*! \brief get the buffer to the i-th tensor */
-  inline mshadow::Tensor<cpu, dim, DType>
-  operator[](size_t i) const {
-    CHECK_LT(i + 1, offset_.size());
-    CHECK_EQ(shape_[i].Size(), offset_[i + 1] - offset_[i]);
-    return mshadow::Tensor<cpu, dim, DType>
-        ((DType*)dmlc::BeginPtr(content_) + offset_[i], shape_[i]);  // NOLINT(*)
-  }
-  inline mshadow::Tensor<cpu, dim, DType> Back() const {
-    return (*this)[Size() - 1];
-  }
-  inline size_t Size(void) const {
-    return shape_.size();
-  }
-  /*! \brief allocate space given the shape (data are copied) */
-  inline void Push(mshadow::Shape<dim> shape) {
-    shape_.push_back(shape);
-    offset_.push_back(offset_.back() + shape.Size());
-    content_.resize(offset_.back());
-  }
-  inline void Clear(void) {
-    offset_.clear();
-    offset_.push_back(0);
-    content_.clear();
-    shape_.clear();
-  }
-    }
-    }
-    }
-    
-        private:
-        std::unordered_set<StreamInformation> m_streamInfos;
-        bool m_epochEndReached;
-        size_t m_numWorkers;
-        size_t m_workerRank;
-        size_t m_prevMinibatchSize;
-        size_t m_maxNumSamplesToRead;
-        size_t m_maxNumSweepsToRead;
-        size_t m_truncationLength;
-        size_t m_maxErrors;
-        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
-    
-    
-    {        return (const TensorView<V1ElemType>*)(m_tensorView.get());
-    }
-    
-                m_totalSummaries++;
-            auto now = std::chrono::high_resolution_clock::now();
-            size_t durationMs = std::chrono::duration_cast<std::chrono::milliseconds>(now - m_lastResetTime).count();
-    
-            static bool IsUDF(const FunctionPtr& f);
-    
-        template <typename ElementType, typename DestType>
-    void CopyDenseToOneHot(const ElementType *source, const size_t sampleCount, const size_t sampleSize, std::vector<DestType>& dest);
-    
-    #include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <signal.h>
-    
-    class Timer
+    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
 {
-public:
-    Timer()
-        : m_start(0), m_end(0)
-    {
+    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
+    auto ret = ParseTorReplyMapping(input);
+    BOOST_CHECK_EQUAL(ret.size(), expected.size());
+    auto r_it = ret.begin();
+    auto e_it = expected.begin();
+    while (r_it != ret.end() && e_it != expected.end()) {
+        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
+        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
+        r_it++;
+        e_it++;
     }
-    }
-    
-    DEFINE_int32(threads, 16, 'Number of concurrent threads to run.');
-DEFINE_int64(cache_size, 8 * KB * KB,
-             'Number of bytes to use as a cache of uncompressed data.');
-DEFINE_int32(num_shard_bits, 4, 'shard_bits.');
-    
-    
-    {
-    {  // No copying allowed
-  CompactedDBImpl(const CompactedDBImpl&);
-  void operator=(const CompactedDBImpl&);
-};
-}
-#endif  // ROCKSDB_LITE
-
-    
-    std::unique_ptr<WriteControllerToken>
-WriteController::GetCompactionPressureToken() {
-  ++total_compaction_pressure_;
-  return std::unique_ptr<WriteControllerToken>(
-      new CompactionPressureToken(this));
 }
     
-    struct PosixMemoryMappedFileBuffer : public MemoryMappedFileBuffer {
-  PosixMemoryMappedFileBuffer(void* _base, size_t _length)
-      : MemoryMappedFileBuffer(_base, _length) {}
-  virtual ~PosixMemoryMappedFileBuffer();
-};
-    
-      // put and get from non-default column family
-  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
-  assert(s.ok());
-  std::string value;
-  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
-  assert(s.ok());
-    
-      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
-                          const rocksdb::Slice& existing_value) const override {
-    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
-    ++merge_count_;
-    return existing_value == 'bad';
+      // Rounds the size up to a multiple of the input register size (in int8_t).
+  int RoundInputs(int size) const {
+    return Roundup(size, num_inputs_per_register_);
+  }
+  // Rounds the size up to a multiple of the output register size (in int32_t).
+  int RoundOutputs(int size) const {
+    return Roundup(size, num_outputs_per_register_);
   }
     
-    struct UndumpOptions {
-  // Database that we will load the dumped file into
-  std::string db_path;
-  // File location of the dumped file that will be loaded
-  std::string dump_location;
-  // Compact the db after loading the dumped file
-  bool compact_db = false;
-};
+    // Getter for the description.
+const char* ParamContent::GetDescription() const {
+  if (param_type_ == VT_INTEGER) { return iIt->info_str(); }
+  else if (param_type_ == VT_BOOLEAN) { return bIt->info_str(); }
+  else if (param_type_ == VT_DOUBLE) { return dIt->info_str(); }
+  else if (param_type_ == VT_STRING) { return sIt->info_str(); }
+  else return nullptr;
+}
     
-      // Is cache storing uncompressed data ?
-  //
-  // True if the cache is configured to store uncompressed data else false
-  virtual bool IsCompressed() = 0;
+    // This and other putatively are the same, so call the (permanent) callback
+// for each blob index where the bounding boxes match.
+// The callback is deleted on completion.
+void BoxWord::ProcessMatchedBlobs(const TWERD& other,
+                                  TessCallback1<int>* cb) const {
+  for (int i = 0; i < length_ && i < other.NumBlobs(); ++i) {
+    TBOX blob_box = other.blobs[i]->bounding_box();
+    if (blob_box == boxes_[i])
+      cb->Run(i);
+  }
+  delete cb;
+}
+    
+    //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+/*
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
+        operator MyVec2() const { return MyVec2(x,y); }
+    
+    
+    {        ImGui::TreePop();
+    }
+    
+        // Widgets: Drags (tip: ctrl+click on a drag box to input with keyboard. manually input values aren't clamped, can go off-bounds)
+    // For all the Float2/Float3/Float4/Int2/Int3/Int4 versions of every functions, note that a 'float v[X]' function argument is the same as 'float* v', the array syntax is just a way to document the number of elements that are expected to be accessible. You can pass address of your first element out of a contiguous set, e.g. &myvector.x
+    // Adjust format string to decorate the value with a prefix, a suffix, or adapt the editing and display precision e.g. '%.3f' -> 1.234; '%5.2f secs' -> 01.23 secs; 'Biscuit: %.0f' -> Biscuit: 1; etc.
+    // Speed are per-pixel of mouse movement (v_speed=0.2f: mouse needs to move by 5 pixels to increase value by 1). For gamepad/keyboard navigation, minimum speed is Max(v_speed, minimum_step_at_given_precision).
+    IMGUI_API bool          DragFloat(const char* label, float* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = '%.3f', float power = 1.0f);     // If v_min >= v_max we have no bound
+    IMGUI_API bool          DragFloat2(const char* label, float v[2], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = '%.3f', float power = 1.0f);
+    IMGUI_API bool          DragFloat3(const char* label, float v[3], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = '%.3f', float power = 1.0f);
+    IMGUI_API bool          DragFloat4(const char* label, float v[4], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = '%.3f', float power = 1.0f);
+    IMGUI_API bool          DragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = '%.3f', const char* format_max = NULL, float power = 1.0f);
+    IMGUI_API bool          DragInt(const char* label, int* v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = '%d');                                       // If v_min >= v_max we have no bound
+    IMGUI_API bool          DragInt2(const char* label, int v[2], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = '%d');
+    IMGUI_API bool          DragInt3(const char* label, int v[3], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = '%d');
+    IMGUI_API bool          DragInt4(const char* label, int v[4], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = '%d');
+    IMGUI_API bool          DragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = '%d', const char* format_max = NULL);
+    IMGUI_API bool          DragScalar(const char* label, ImGuiDataType data_type, void* v, float v_speed, const void* v_min = NULL, const void* v_max = NULL, const char* format = NULL, float power = 1.0f);
+    IMGUI_API bool          DragScalarN(const char* label, ImGuiDataType data_type, void* v, int components, float v_speed, const void* v_min = NULL, const void* v_max = NULL, const char* format = NULL, float power = 1.0f);
+    
+        // Setup Platform/Renderer bindings
+    ImGui_ImplAllegro5_Init(display);
+    
+    
+    {    vkDestroyDevice(g_Device, g_Allocator);
+    vkDestroyInstance(g_Instance, g_Allocator);
+}
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+        SDL_GL_SwapWindow(window);
+    }
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        SDL_GL_MakeCurrent(window, gl_context);
+        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        SDL_GL_SwapWindow(window);
+    }
+    
+    
+    {
+}  // namespace guetzli
+
+    
+      // Returns true if the argument of the last Compare() call (or the baseline
+  // image, if Compare() was not called yet) meets the image acceptance
+  // criteria. The target_mul modifies the acceptance criteria used in this call
+  // the following way:
+  //    = 1.0 : the original acceptance criteria is used,
+  //    < 1.0 : a more strict acceptance criteria is used,
+  //    > 1.0 : a less strict acceptance criteria is used.
+  virtual bool DistanceOK(double target_mul) const = 0;
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    #ifndef GUETZLI_DEBUG_PRINT_H_
+#define GUETZLI_DEBUG_PRINT_H_
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
+}
+    
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
+    
+    // Handles the packing of bits into output bytes.
+struct BitWriter {
+  explicit BitWriter(size_t length) : len(length),
+                                      data(new uint8_t[len]),
+                                      pos(0),
+                                      put_buffer(0),
+                                      put_bits(64),
+                                      overflow(false) {}
+    }
+    
+    // Represents one component of a jpeg file.
+struct JPEGComponent {
+  JPEGComponent() : id(0),
+                    h_samp_factor(1),
+                    v_samp_factor(1),
+                    quant_idx(0),
+                    width_in_blocks(0),
+                    height_in_blocks(0) {}
+    }
+    
+      // Cluster DC histograms.
+  size_t num_dc_histo = ncomps;
+  int dc_histo_indexes[kMaxComponents];
+  std::vector<uint8_t> depths(ncomps * JpegHistogram::kSize);
+  ClusterHistograms(&histograms[0], &num_dc_histo, dc_histo_indexes,
+                    &depths[0]);
