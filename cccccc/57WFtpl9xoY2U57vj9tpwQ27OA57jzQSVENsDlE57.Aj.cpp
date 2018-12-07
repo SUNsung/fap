@@ -1,245 +1,185 @@
 
         
-        #endif  // ATOM_APP_UV_TASK_RUNNER_H_
+        
+    {
+    {}  // namespace swig
+}  // namespace tensorflow
 
     
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/mac/in_app_purchase.h'
-#include 'atom/browser/mac/in_app_purchase_observer.h'
-#include 'atom/browser/mac/in_app_purchase_product.h'
-#include 'native_mate/handle.h'
+    #include 'tensorflow/core/framework/op.h'
     
-    namespace {
-    }
-    
-    class RenderProcessPreferences
-    : public mate::Wrappable<RenderProcessPreferences> {
- public:
-  static mate::Handle<RenderProcessPreferences> ForAllWebContents(
-      v8::Isolate* isolate);
-    }
-    
-    namespace atom {
-    }
-    
-      // content::WebContentsObserver implementations:
-  void RenderFrameDeleted(content::RenderFrameHost* rfh) override;
-  void RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
-                              content::RenderFrameHost* new_rfh) override;
-  void FrameDeleted(content::RenderFrameHost* rfh) override;
-    
-    namespace mate {
-    }
-    
-      // Make the convinient methods visible:
-  // https://isocpp.org/wiki/faq/templates#nondependent-name-lookup-members
-  v8::Isolate* isolate() const { return Wrappable<T>::isolate(); }
-  v8::Local<v8::Object> GetWrapper() const {
-    return Wrappable<T>::GetWrapper();
-  }
-    
-    #include <string>
-    
-    #include 'atom/browser/atom_quota_permission_context.h'
-    
-        const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
-    
-    #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
-
-    
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_invalid)
-{
-    static const std::string CASES[] = {
-        ' 1nwldj5',
-        '\x7f''1axkwrx',
-        '\x80''1eym55h',
-        'an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx',
-        'pzry9x0s0muk',
-        '1pzry9x0s0muk',
-        'x1b4n0q5v',
-        'li1dgmt3',
-        'de1lg7wt\xff',
-        'A1G7SGD8',
-        '10a06t8',
-        '1qzzfhee',
-        'a12UEL5L',
-        'A12uEL5L',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(ret.first.empty());
-    }
-}
-    
-        // Other valid inputs
-    CheckParseTorReplyMapping(
-        'Foo=Bar=Baz Spam=Eggs', {
-            {'Foo', 'Bar=Baz'},
-            {'Spam', 'Eggs'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar=Baz\'', {
-            {'Foo', 'Bar=Baz'},
-        });
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar Baz\'', {
-            {'Foo', 'Bar Baz'},
-        });
-    
-        BOOST_CHECK_EQUAL(v[0].getValStr(), '1.10000000');
-    
-    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
-    WriteDocCommentBody(printer, enumDescriptor);
-}
-void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
-    WriteDocCommentBody(printer, value);
-}
-    
-      // Nested enums
-  if (descriptor->enum_type_count() > 0) {
-      std::vector<std::string> enums;
-      for (int i = 0; i < descriptor->enum_type_count(); i++) {
-          enums.push_back(GetClassName(descriptor->enum_type(i)));
+    void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
+                                  const GraphProperties& properties, bool debug,
+                                  std::ostream& os) const {
+  os << node->name() << ' [' << node->op() << ']' << std::endl;
+  if (properties.HasOutputProperties(node->name())) {
+    const std::vector<OpInfo::TensorProperties>& props =
+        properties.GetOutputProperties(node->name());
+    for (int i = 0; i < props.size(); ++i) {
+      const OpInfo::TensorProperties& prop = props[i];
+      os << '\t'
+         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
+         << ') has shape ';
+      if (prop.shape().unknown_rank()) {
+        os << '?';
+      } else {
+        os << '[';
+        for (int i = 0; i < prop.shape().dim_size(); ++i) {
+          if (i > 0) {
+            os << ', ';
+          }
+          if (prop.shape().dim(i).size() >= 0) {
+            // Print the actual dimension.
+            os << prop.shape().dim(i).size();
+          } else if (prop.shape().dim(i).size() == -1) {
+            // We don't know anything about the dimension.
+            os << '?';
+          } else {
+            // Symbolic dimension.
+            os << 'x' << -prop.shape().dim(i).size();
+          }
+        }
+        os << ']';
       }
-      printer->Print('new[]{ typeof($enums$) }, ', 'enums', JoinStrings(enums, '), typeof('));
-  }
-  else {
-      printer->Print('null, ');
-  }
-    
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
-  }
-}
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_doc_comment.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_name_resolver.h>
-#include <google/protobuf/io/printer.h>
-    
-    // Checks if a message contains any enums definitions (on the message or
-// a nested message under it).
-bool MessageContainsEnums(const Descriptor* message) {
-  if (message->enum_type_count() > 0) {
-    return true;
-  }
-  for (int i = 0; i < message->nested_type_count(); i++) {
-    if (MessageContainsEnums(message->nested_type(i))) {
-      return true;
+      os << std::endl;
     }
   }
-  return false;
+    }
+    
+    bool TfPyInt_Check(PyObject* object) { return PyInt_Check(object); }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    // A wrapper around io::RecordReader that is more easily SWIG wrapped for
+// Python.  An instance of this class is not safe for concurrent access
+// by multiple threads.
+class PyRecordReader {
+ public:
+  // TODO(vrv): make this take a shared proto to configure
+  // the compression options.
+  static PyRecordReader* New(const string& filename, uint64 start_offset,
+                             const string& compression_type_string,
+                             TF_Status* out_status);
+    }
+    
+    static void secp256k1_gej_rescale(secp256k1_gej *r, const secp256k1_fe *s) {
+    /* Operations: 4 mul, 1 sqr */
+    secp256k1_fe zz;
+    VERIFY_CHECK(!secp256k1_fe_is_zero(s));
+    secp256k1_fe_sqr(&zz, s);
+    secp256k1_fe_mul(&r->x, &r->x, &zz);                /* r->x *= s^2 */
+    secp256k1_fe_mul(&r->y, &r->y, &zz);
+    secp256k1_fe_mul(&r->y, &r->y, s);                  /* r->y *= s^3 */
+    secp256k1_fe_mul(&r->z, &r->z, s);                  /* r->z *= s   */
+}
+    
+    #include <boost/test/unit_test.hpp>
+    
+    
+    {} // namespace bech32
+    
+    /**
+ * Factory method
+ */
+static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
+                                                   Transliterator::Token /*context*/) {
+    /* We don't need the ID or context. We just remove data */
+    return new RemoveTransliterator();
 }
     
     
+//
+//   compile, UText mode
+//
+RegexPattern * U_EXPORT2
+RegexPattern::compile(UText                *regex,
+                      uint32_t             flags,
+                      UParseError          &pe,
+                      UErrorCode           &status)
+{
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    }
+    
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
+    
+    #ifndef __SHARED_BREAKITERATOR_H__
+#define __SHARED_BREAKITERATOR_H__
+    
+    U_NAMESPACE_BEGIN
+    
+    //---- Don't implement some functions to reduce linkage requirements.
+//#define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS   // [Win32] Don't implement default clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
+//#define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS         // [Win32] Don't implement default IME handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow.
+//#define IMGUI_DISABLE_WIN32_FUNCTIONS                     // [Win32] Won't use and link with any Win32 function.
+//#define IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with vsnprintf.
+//#define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself. Declare your prototypes in imconfig.h.
+//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free() to avoid linking with them. You will need to call ImGui::SetAllocatorFunctions().
+    
+        // Select graphics queue family
     {
-    {
-    {
-    {}  // namespace objectivec
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+        uint32_t count;
+        vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, NULL);
+        VkQueueFamilyProperties* queues = (VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties) * count);
+        vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, queues);
+        for (uint32_t i = 0; i < count; i++)
+            if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            {
+                g_QueueFamily = i;
+                break;
+            }
+        free(queues);
+        IM_ASSERT(g_QueueFamily != -1);
+    }
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
 
     
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        v_dst = vandq_u8(v_src0, v_src1);
-    }
-    
-                float32x4_t v = vaddq_f32(v1, v2);
-            float32x4_t w0 = vaddq_f32(v, v0);
-            float32x4_t w1 = vaddq_f32(v, v3);
-    
-                uint8x16x2_t v_y = vld2q_u8(srcy + syj);
-            uint8x16x4_t v_dst;
-            v_dst.val[0] = v_y.val[0];
-            v_dst.val[1] = vld1q_u8(srcu + sj);
-            v_dst.val[2] = v_y.val[1];
-            v_dst.val[3] = vld1q_u8(srcv + sj);
-            vst4q_u8(dst + dj, v_dst);
-    
-                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
-                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
-                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
-    
-                    int8x16_t x0 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[0]), delta));
-                int8x16_t x1 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[4]), delta));
-                int8x16_t x2 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[8]), delta));
-                int8x16_t x3 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[12]), delta));
-    
-    #ifndef GODOT_RAY_WORLD_ALGORITHM_H
-#define GODOT_RAY_WORLD_ALGORITHM_H
-    
-    MemoryPool::Alloc *MemoryPool::allocs = NULL;
-MemoryPool::Alloc *MemoryPool::free_list = NULL;
-uint32_t MemoryPool::alloc_count = 0;
-uint32_t MemoryPool::allocs_used = 0;
-Mutex *MemoryPool::alloc_mutex = NULL;
-    
-    #include 'func_ref.h'
-    
-    		String fname = String('res://') + filename_inzip;
-		files[fname] = f;
-    
-    NetworkedMultiplayerPeer::NetworkedMultiplayerPeer() {
-}
-
-    
-    Shell *Shell::get_singleton() {
-    }
-    
-    BENCHMARK_RELATIVE(format_short_string_unsafe, iters) {
-  BenchmarkSuspender suspender;
-  auto const& shortString = getShortString();
-  while (iters--) {
-    fbstring out;
-    suspender.dismissing([&] { format(&out, shortString); });
-  }
-}
-    
-    // Empirically, this indicates if the runtime supports
-// std::exception_ptr, as not all (arm, for instance) do.
-#if defined(__GNUC__) && defined(__GCC_ATOMIC_INT_LOCK_FREE) && \
-    __GCC_ATOMIC_INT_LOCK_FREE > 1
-inline fbstring exceptionStr(std::exception_ptr ep) {
-  try {
-    std::rethrow_exception(ep);
-  } catch (const std::exception& e) {
-    return exceptionStr(e);
-  } catch (...) {
-    return '<unknown exception>';
-  }
-}
+    #ifdef _MSC_VER
+#pragma warning (disable: 4505) // unreferenced local function has been removed
 #endif
     
-    exception_wrapper::VTable const exception_wrapper::uninit_{
-    &noop_<void, exception_wrapper const*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*>,
-    &noop_<void, exception_wrapper const*>,
-    &uninit_type_,
-    &noop_<std::exception const*, exception_wrapper const*>,
-    &noop_<exception_wrapper, exception_wrapper const*>};
-    
-    #include <folly/Range.h>
-    
-    inline UriTuple as_tuple(const folly::Uri& k) {
-  return UriTuple(
-      k.scheme(),
-      k.username(),
-      k.password(),
-      k.host(),
-      k.port(),
-      k.path(),
-      k.query(),
-      k.fragment());
-}
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
