@@ -1,125 +1,114 @@
 
         
-            def render
-      raise NotImplementedError
+                if scanner.eos?
+          end_pos = str.source_range.end_pos
+          node = Tree::CssImportNode.new(str)
+        else
+          supports_parser = Sass::SCSS::Parser.new(scanner,
+            @options[:filename], @options[:importer],
+            @line, str.source_range.end_pos.offset)
+          supports_condition = supports_parser.parse_supports_clause
+    
+        # The content passed to this environment. This is naturally only set
+    # for mixin body environments with content passed in.
+    #
+    # @return {[Array<Sass::Tree::Node>, Environment]?} The content nodes and
+    #   the lexical environment of the content block.
+    def content
+      @content || (@parent && @parent.content)
     end
     
-        Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
+          super
+      input = @options[:input]
+      if File.directory?(input)
+        raise 'Error: '#{input.path}' is a directory (did you mean to use --recursive?)'
+      end
+      output = @options[:output]
+      output = input if @options[:in_place]
+      process_file(input, output)
+    end
+    
+    get '/' do
+  halt erb(:login) unless params[:user]
+  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
+end
+    
+          def referrer(env)
+        ref = env['HTTP_REFERER'].to_s
+        return if !options[:allow_empty_referrer] and ref.empty?
+        URI.parse(ref).host || Request.new(env).host
+      rescue URI::InvalidURIError
       end
     
-        def create
-      authorize @user, :confirm?
-      @user.confirm!
-      log_action :confirm, @user
-      redirect_to admin_accounts_path
-    end
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
     
-          if emoji.save
-        log_action :create, emoji
-        flash[:notice] = I18n.t('admin.custom_emojis.copied_msg')
-      else
-        flash[:alert] = I18n.t('admin.custom_emojis.copy_failed_msg')
+          def page_dir
+        @page_dir
       end
     
-        if PostRequests.include?(self.method)
-      return param_string
+        def self.xtest(*args)
     end
-    ''
+    
+        get '/pages'
+    
+      test 'clean path without leading slash' do
+    assert_equal '/Mordor', clean_path('Mordor')
   end
     
-              sent = 0
-          case protocol
-          when 'tcp'
-            sent = send_request_tcp(req)
-          when 'udp'
-            sent = send_request_udp(req)
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
+      test 'h1 title can be disabled' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
     
-              # Encodes the ticket field
-          #
-          # @return [String]
-          def encode_ticket
-            ticket.encode
-          end
+        # Ensure path begins with a single leading slash
+    def clean_path(path)
+      if path
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
+      end
+    end
     
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+    run SinatraStaticServer
+
     
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
     
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
+    Liquid::Template.register_tag('include_array', Jekyll::IncludeArrayTag)
+
     
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an String
-          #
-          # @param input [String] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
+end
     
-              # Decodes the susec field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_susec(input)
-            input.value[0].value.to_i
-          end
+        alias :empty? :empty_file?
     
-        <div id='rack'>
-      <h3 id='env-info'>Rack ENV</h3>
-      <table class='req'>
-        <tr>
-          <th>Variable</th>
-          <th>Value</th>
-        </tr>
-         <% env.sort_by { |k, v| k.to_s }.each { |key, val| %>
-         <tr>
-           <td><%=h key %></td>
-           <td class='code'><div><%=h val %></div></td>
-         </tr>
-         <% } %>
-      </table>
-      <div class='clear'></div>
-    </div> <!-- /RACK ENV -->
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
+    end
     
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
+        def make
+      geometry = GeometryParser.new(geometry_string.strip).make
+      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
+    end
+    
+        module ClassMethods
+      def attachment_definitions
+        Paperclip::AttachmentRegistry.definitions_for(self)
       end
     end
   end
 end
 
     
-      describe '.random_token' do
-    it 'generates a base64 encoded 32 character string' do
-      expect(Base64.strict_decode64(token).length).to eq(32)
+        # Returns the style, or the default style if nil is supplied.
+    def style attachment, style_name
+      style_name || attachment.default_style
     end
   end
 end
