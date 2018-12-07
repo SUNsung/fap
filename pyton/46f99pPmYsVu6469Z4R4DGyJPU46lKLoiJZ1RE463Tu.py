@@ -1,120 +1,111 @@
 
         
-            # Copy is required
-    def copy(self):
-        return CaseInsensitiveDict(self._store.values())
+            if K.image_data_format() == 'channels_last':
+        x_train = x_train.transpose(0, 2, 3, 1)
+        x_test = x_test.transpose(0, 2, 3, 1)
+    
+        def print_row(fields, positions):
+        line = ''
+        for i in range(len(fields)):
+            if i > 0:
+                line = line[:-1] + ' '
+            line += str(fields[i])
+            line = line[:positions[i]]
+            line += ' ' * (positions[i] - len(line))
+        print_fn(line)
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+    
+        def predict_proba(self, x, batch_size=32, verbose=0):
+        '''Generates class probability predictions for the input samples.
+    
+    from __future__ import print_function
+import numpy as np
+    
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
+    
+        process_this_frame = not process_this_frame
+    
+        for unknown_encoding in unknown_encodings:
+        distances = face_recognition.face_distance(known_face_encodings, unknown_encoding)
+        result = list(distances <= tolerance)
+    
+    # You can change this to any folder on your system
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+    
+        def assert_failure(self, res, code=None):
+        self.assertEqual(res.status, 200)
+        body = res.body
+        body = json.loads(body)
+        self.assertTrue('json' in body)
+        errors = body['json'].get('errors')
+        self.assertTrue(code in [x[0] for x in errors])
+        data = body['json'].get('data')
+        self.assertFalse(bool(data))
+    
+    import mock
+    
+        def test_no_upgrade_gets(self):
+        request.method = 'GET'
+        self._setSessionCookie(days_old=60)
+        upgrade_cookie_security()
+        self.assertFalse(c.cookies[g.login_cookie].dirty)
+    
+        def test_invalid_function_prelude(self):
+        testcase = u'*[foo=expression(alert(1))]{color:red;}'
+        self.assertInvalid(testcase)
+    
+        def test_returning(self):
+        request = MagicMock()
+        context = MagicMock()
+        request.cookies = {LOID_COOKIE: 'foo', LOID_CREATED_COOKIE: 'bar'}
+        loid = LoId.load(request, context, create=False)
+        self.assertEqual(loid.loid, 'foo')
+        self.assertNotEqual(loid.created, 'bar')
+        self.assertFalse(loid.new)
+        self.assertTrue(loid.serializable)
+        loid.save()
+        self.assertFalse(bool(context.cookies.add.called))
 
     
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
     
-        def handle_redirect(self, r, **kwargs):
-        '''Reset num_401_calls counter on redirects.'''
-        if r.is_redirect:
-            self._thread_local.num_401_calls = 1
+class TestImgixResizer(RedditTestCase):
+    def setUp(self):
+        self.provider = ImgixImageResizingProvider()
+        self.patch_g(
+            imgix_domain='example.com',
+            imgix_signing=False,
+        )
     
-    # TODO: response is the only one
+            for width in (108, 216, 320, 640, 960, 1080):
+            url = self.provider.resize_image(image, width)
+            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
+                width*2))
+
     
-        def run_tests(self):
-        import pytest
+        def test_tag_xmlns(self):
+        self.assertFragmentRaises('<xml:div></xml:div>',
+                                  SoupUnsupportedTagError)
+        self.assertFragmentRaises('<div xmlns='http://zombo.com/foo'></div>',
+                                  SoupError)
     
-            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(b'send something')
-            time.sleep(2.5)
-            sock.sendall(b'still alive')
-            block_server.set()  # release server block
-    
-        @pytest.mark.parametrize(
-        'url', (
-            'http://192.168.0.1:5000/',
-            'http://192.168.0.1/',
-            'http://172.16.1.1/',
-            'http://172.16.1.1:5000/',
-            'http://localhost.localdomain:5000/v1.0/',
-        ))
-    def test_bypass(self, url):
-        assert get_environ_proxies(url, no_proxy=None) == {}
-    
-    # The reST default role (used for this markup: `text`) to use for all
-# documents.
-#default_role = None
-    
-    
-# Split a path in root and extension.
-# The extension is everything starting at the last dot in the last
-# pathname component; the root is everything before that.
-# It is always true that root + ext == p.
-    
-    
-# Return the longest common sub-path of the sequence of paths given as input.
-# The paths are not normalized before comparing them (this is the
-# responsibility of the caller). Any trailing separator is stripped from the
-# returned path.
-    
-        def test_normcase(self):
-        normcase = self.pathmodule.normcase
-        # check that normcase() is idempotent
-        for p in ['FoO/./BaR', b'FoO/./BaR']:
-            p = normcase(p)
-            self.assertEqual(p, normcase(p))
-    
-    #
-#
-#
-    
-            next_prime_gt = next_prime(value % self.size_table) \
-            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
-        return next_prime_gt - (data % next_prime_gt)
-    
-    The problem is :
-Given two strings A and B. Find the minimum number of operations to string B such that A = B. The permitted operations are removal,  insertion, and substitution.
-'''
-from __future__ import print_function
-    
-    if __name__ == '__main__':
-	import sys
-    
-            if self.depth == 1:
-            self.prediction = np.mean(y)
-            return
-    
-    print('finding anagrams...')
-all_anagrams = {word: anagram(word)
-                for word in word_list if len(anagram(word)) > 1}
-    
-        assert len(blobs_in) == k_max - k_min + 1
-    bbox_feat_list = []
-    cls_pred_dim = (
-        model.num_classes if cfg.RETINANET.SOFTMAX else (model.num_classes - 1)
-    )
-    # unpacked bbox feature and add prediction layers
-    bbox_regr_dim = (
-        4 * (model.num_classes - 1) if cfg.RETINANET.CLASS_SPECIFIC_BBOX else 4
-    )
-    
-        if cfg.MODEL.FASTER_RCNN:
-        if model.train:
-            # Add op that generates training labels for in-network RPN proposals
-            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
-        else:
-            # Alias rois to rpn_rois for inference
-            model.net.Alias('rpn_rois', 'rois')
-    
-    '''Compute minibatch blobs for training a RetinaNet network.'''
+        def test_decrypt(self):
+        from r2.lib.tracking import _decrypt
+        decrypted = _decrypt(ENCRYPTED, SECRET)
+        self.assertEquals(MESSAGE, decrypted)
