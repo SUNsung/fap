@@ -1,173 +1,228 @@
 
         
-        #include <string>
+        #include <QComboBox>
+#include <QVariant>
     
-    #endif  // CAFFE_INTERNAL_THREAD_HPP_
-
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    #include 'caffe/layers/pooling_layer.hpp'
-    
-    void ConstraintBullet::set_space(SpaceBullet *p_space) {
-	space = p_space;
+    static void secp256k1_rfc6979_hmac_sha256_finalize(secp256k1_rfc6979_hmac_sha256_t *rng) {
+    memset(rng->k, 0, 32);
+    memset(rng->v, 0, 32);
+    rng->retry = 0;
 }
     
-    #include 'core/rid.h'
     
-    class RigidBodyBullet;
-    
-    MemoryPool::Alloc *MemoryPool::allocs = NULL;
-MemoryPool::Alloc *MemoryPool::free_list = NULL;
-uint32_t MemoryPool::alloc_count = 0;
-uint32_t MemoryPool::allocs_used = 0;
-Mutex *MemoryPool::alloc_mutex = NULL;
-    
-       static size_type length(const char_type* p) 
-   { 
-      return (std::strlen)(p); 
-   }
-    
-       mapfile_iterator() { node = 0; file = 0; offset = 0; }
-   mapfile_iterator(const mapfile* f, long arg_position)
-   {
-      file = f;
-      node = f->_first + arg_position / mapfile::buf_size;
-      offset = arg_position % mapfile::buf_size;
-      if(file)
-         file->lock(node);
-   }
-   mapfile_iterator(const mapfile_iterator& i)
-   {
-      file = i.file;
-      node = i.node;
-      offset = i.offset;
-      if(file)
-         file->lock(node);
-   }
-   ~mapfile_iterator()
-   {
-      if(file && node)
-         file->unlock(node);
-   }
-   mapfile_iterator& operator = (const mapfile_iterator& i);
-   char operator* ()const
-   {
-      BOOST_ASSERT(node >= file->_first);
-      BOOST_ASSERT(node < file->_last);
-      return file ? *(*node + sizeof(int) + offset) : char(0);
-   }
-   char operator[] (long off)const
-   {
-      mapfile_iterator tmp(*this);
-      tmp += off;
-      return *tmp;
-   }
-   mapfile_iterator& operator++ ();
-   mapfile_iterator operator++ (int);
-   mapfile_iterator& operator-- ();
-   mapfile_iterator operator-- (int);
-    
-    
-    {
-   vector_type            m_subs;                      // subexpressions
-   BidiIterator   m_base;                              // where the search started from
-   sub_match<BidiIterator> m_null;                     // a null match
-   boost::shared_ptr<named_sub_type> m_named_subs;     // Shared copy of named subs in the regex object
-   int m_last_closed_paren;                            // Last ) to be seen - used for formatting
-   bool m_is_singular;                                 // True if our stored iterators are singular
-};
-    
-    namespace boost{
-namespace BOOST_REGEX_DETAIL_NS{
+    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
+    ret &= !overflow;
+    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
+    ret &= !overflow;
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
+    } else {
+        memset(sig, 0, sizeof(*sig));
     }
-    }
+    return ret;
+}
     
-    #ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
-#define BOOST_REGEX_V4_PROTECTED_CALL_HPP
-    
-       void* BOOST_REGEX_CALL insert(size_type pos, size_type n);
-    
-    
-
-    
-    public:
-  static const Data& getData() { return data_; }
-    
-      Time getSerializedTime() const { return serializedTime_; }
-    
-        uint16_t port;
-    auto connection = make_unique<DHTConnectionImpl>(family);
-    {
-      port = e->getBtRegistry()->getUdpPort();
-      const std::string& addr = e->getOption()->get(
-          family == AF_INET ? PREF_DHT_LISTEN_ADDR : PREF_DHT_LISTEN_ADDR6);
-      // If UDP port is already used, use the same port
-      // number. Normally IPv4 port is available, then IPv6 port is
-      // (especially for port >= 1024). We don't loose much by doing
-      // this. We did the same thing in TCP socket. See BtSetup.cc.
-      bool rv;
-      if (port == 0) {
-        auto sgl =
-            util::parseIntSegments(e->getOption()->get(PREF_DHT_LISTEN_PORT));
-        sgl.normalize();
-        rv = connection->bind(port, addr, sgl);
-      }
-      else {
-        rv = connection->bind(port, addr);
-      }
-      if (!rv) {
-        throw DL_ABORT_EX('Error occurred while binding UDP port for DHT');
-      }
-      localNode->setPort(port);
-    }
-    A2_LOG_DEBUG(fmt('Initialized local node ID=%s',
-                     util::toHex(localNode->getID(), DHT_ID_LENGTH).c_str()));
-    auto tracker = std::make_shared<DHTMessageTracker>();
-    auto routingTable = make_unique<DHTRoutingTable>(localNode);
-    auto factory = make_unique<DHTMessageFactoryImpl>(family);
-    auto dispatcher = make_unique<DHTMessageDispatcherImpl>(tracker);
-    auto receiver = make_unique<DHTMessageReceiver>(tracker);
-    auto taskQueue = make_unique<DHTTaskQueueImpl>();
-    auto taskFactory = make_unique<DHTTaskFactoryImpl>();
-    auto peerAnnounceStorage = make_unique<DHTPeerAnnounceStorage>();
-    auto tokenTracker = make_unique<DHTTokenTracker>();
-    // For now, UDPTrackerClient was enabled along with DHT
-    auto udpTrackerClient = std::make_shared<UDPTrackerClient>();
-    const auto messageTimeout =
-        e->getOption()->getAsInt(PREF_DHT_MESSAGE_TIMEOUT);
-    // wiring up
-    tracker->setRoutingTable(routingTable.get());
-    tracker->setMessageFactory(factory.get());
-    
-    namespace aria2 {
-    }
-    
-    void DHTTaskFactoryImpl::setLocalNode(const std::shared_ptr<DHTNode>& localNode)
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
 {
-  localNode_ = localNode;
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
 }
     
-    #endif // D_DHT_TASK_QUEUE_H
+    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
+{
+    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
+    auto ret = SplitTorReplyLine(input);
+    BOOST_CHECK_EQUAL(ret.first, command);
+    BOOST_CHECK_EQUAL(ret.second, args);
+}
+    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vabd(v_src0, v_src1);
+    }
+    
+            if (policy == CONVERT_POLICY_SATURATE)
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src0 + j);
+                internal::prefetch(src1 + j);
+                uint8x16_t v_src0 = vld1q_u8(src0 + j);
+                int16x8_t v_src00 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src0)));
+                int16x8_t v_src01 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src0)));
+                int16x8_t v_src10 = vld1q_s16(src1 + j), v_src11 = vld1q_s16(src1 + j + 8);
+                int16x8_t v_dst0 = vqaddq_s16(v_src00, v_src10);
+                int16x8_t v_dst1 = vqaddq_s16(v_src01, v_src11);
+                vst1q_s16(dst + j, v_dst0);
+                vst1q_s16(dst + j + 8, v_dst1);
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src0 + j)));
+                int16x8_t v_src1 = vld1q_s16(src1 + j);
+                int16x8_t v_dst = vqaddq_s16(v_src0, v_src1);
+                vst1q_s16(dst + j, v_dst);
+            }
+    }
+    
+    template <> struct wAdd<s32>
+{
+    typedef s32 type;
+    }
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
+    
+            //left&right borders
+        if (borderType != BORDER_MODE_CONSTANT)
+            for (s32 k = 0; k < cn; ++k)
+            {
+                lanea[-cn+k] = lanea[idx_l + k];
+                lanea[colsn+k] = lanea[idx_r + k];
+                laneb[-cn+k] = laneb[idx_l + k];
+                laneb[colsn+k] = laneb[idx_r + k];
+            }
+    
+    #define SPLIT64(sgn,n) SPLIT(sgn,64,n)
+    
+    
+    {    void operator() (const T * src0, const T * src1, u8 * dst) const
+    {
+        dst[0] = src0[0] == src1[0] ? 0 : 255;
+    }
+};
+    
+        v1k8 = vextq_s16(d8_15, d16_23, 4);
+    ak8 = vminq_s16(ak8, v1k8);
+    bk8 = vmaxq_s16(bk8, v1k8);
+    
+    /**
+ * Factory method
+ */
+static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
+                                                   Transliterator::Token /*context*/) {
+    /* We don't need the ID or context. We just remove data */
+    return new RemoveTransliterator();
+}
+    
+    
+    {    } else if (fStartType == START_CHAR) {
+        printf('    First char of Match: ');
+        if (fInitialChar > 0x20) {
+                printf(''%s'\n', CStr(UnicodeString(fInitialChar))());
+            } else {
+                printf('%#x\n', fInitialChar);
+            }
+    }
+    
+    //-------------------------------------------------------------------------------
+//
+//  ScriptSet - A bit set representing a set of scripts.
+//
+//              This class was originally used exclusively with script sets appearing
+//              as part of the spoof check whole script confusable binary data. Its
+//              use has since become more general, but the continued use to wrap
+//              prebuilt binary data does constrain the design.
+//
+//-------------------------------------------------------------------------------
+class U_I18N_API ScriptSet: public UMemory {
+  public:
+    ScriptSet();
+    ScriptSet(const ScriptSet &other);
+    ~ScriptSet();
+    }
+    
+    SearchIterator::~SearchIterator()
+{
+    if (m_search_ != NULL) {
+        uprv_free(m_search_);
+    }
+}
+    
+    UnicodeString&
+SelectFormat::format(const Formattable& obj,
+                   UnicodeString& appendTo,
+                   FieldPosition& pos,
+                   UErrorCode& status) const
+{
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    if (obj.getType() == Formattable::kString) {
+        return format(obj.getString(status), appendTo, pos, status);
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return appendTo;
+    }
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
+};
+    
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
+};
+    
+    
+    {    /**
+     * Formats positiveValue using the given range of digit counts.
+     * Always uses standard digits '0' through '9'. Formatted value is
+     * left padded with '0' as necessary to achieve minimum digit count.
+     * Does not produce any grouping separators or trailing decimal point.
+     * Calling format to format a value with a particular digit count range
+     * when canFormat indicates that the same value and digit count range
+     * cannot be formatted results in undefined behavior.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static UnicodeString &format(
+            int32_t positiveValue,
+            const IntDigitCountRange &range,
+            UnicodeString &appendTo);
+    
+};
+    
+    int32_t StandardPlural::indexFromString(const char *keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
+    }
+}
