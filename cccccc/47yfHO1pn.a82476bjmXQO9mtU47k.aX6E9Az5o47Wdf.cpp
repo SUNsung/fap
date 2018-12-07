@@ -1,123 +1,242 @@
 
         
-          // Otherwise, we might need to establish the invariants.  If we
-  // were in inline-and-all-clear mode, the vector might logically
-  // be much longer than a single chunk, but all-zero.
-  HasOutOfLineData = true;
-  auto oldDataValue = Data;
-  auto newData = allocate(newCapacityInChunks);
+        #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
+  }
+}
+#endif
     
     
-    {  // Uppercase the first letter, append the rest.
-  buffer.push_back(clang::toUppercase(string[0]));
-  buffer.append(string.begin() + 1, string.end());
-  return StringRef(buffer.data(), buffer.size());
+    {  scratch = scratchStr;
+  return {scratch.begin(), scratch.size()};
 }
     
-      // Returns the mode: running on CPU or GPU.
-  inline static Brew mode() { return Get().mode_; }
-  // The setters for the variables
-  // Sets the mode. It is recommended that you don't change the mode halfway
-  // into the program since that may cause allocation of pinned memory being
-  // freed in a non-pinned way, which may cause problems - I haven't verified
-  // it personally but better to note it here in the header file.
-  inline static void set_mode(Brew mode) { Get().mode_ = mode; }
-  // Sets the random seed of both boost and curand
-  static void set_random_seed(const unsigned int seed);
-  // Sets the device. Since we have cublas and curand stuff, set device also
-  // requires us to reset those values.
-  static void SetDevice(const int device_id);
-  // Prints the current GPU status.
-  static void DeviceQuery();
-  // Check if specified device is available
-  static bool CheckDevice(const int device_id);
-  // Search from start_id to the highest possible device ordinal,
-  // return the ordinal of the first available device.
-  static int FindDevice(const int start_id = 0);
-  // Parallel training
-  inline static int solver_count() { return Get().solver_count_; }
-  inline static void set_solver_count(int val) { Get().solver_count_ = val; }
-  inline static int solver_rank() { return Get().solver_rank_; }
-  inline static void set_solver_rank(int val) { Get().solver_rank_ = val; }
-  inline static bool multiprocess() { return Get().multiprocess_; }
-  inline static void set_multiprocess(bool val) { Get().multiprocess_ = val; }
-  inline static bool root_solver() { return Get().solver_rank_ == 0; }
+    using namespace swift;
+using namespace Demangle;
     
-    #include <vector>
+    private:
+    Ui::SignVerifyMessageDialog *ui;
+    WalletModel *model;
+    const PlatformStyle *platformStyle;
     
-    /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
- */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
- public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+        secp256k1_pubkey_load(ctx, &pt, point);
+    secp256k1_scalar_set_b32(&s, scalar, &overflow);
+    if (overflow || secp256k1_scalar_is_zero(&s)) {
+        ret = 0;
+    } else {
+        unsigned char x[32];
+        unsigned char y[1];
+        secp256k1_sha256_t sha;
     }
     
-    #include <vector>
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
+    }
     
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t bias_desc_;
-  cudnnFilterDescriptor_t filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
+        if (secp256k1_scalar_is_zero(sigr) || secp256k1_scalar_is_zero(sigs)) {
+        return 0;
+    }
     
-    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
+    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
+    (void) msg32;
+    (void) key32;
+    (void) algo16;
+    (void) data;
+    }
+    
+        // Print remaining part of format string.
+    fmt = printFormatStringLiteral(out, fmt);
+    if(*fmt != '\0')
+        TINYFORMAT_ERROR('tinyformat: Too many conversion specifiers in format string');
+    
+        BOOST_CHECK(obj['key1'].isStr());
+    std::string correctValue('str');
+    correctValue.push_back('\0');
+    BOOST_CHECK_EQUAL(obj['key1'].getValStr(), correctValue);
+    BOOST_CHECK(obj['key2'].isNum());
+    BOOST_CHECK_EQUAL(obj['key2'].getValStr(), '800');
+    BOOST_CHECK(obj['key3'].isObject());
+    
+    
+    {}  // namespace remote
+    
+    
+    {}  // namespace nwapi
+    
+    
+    {}  // namespace nw
 
     
-      virtual void PredictInstance(const SparsePage::Inst& inst,
-                               std::vector<bst_float>* out_preds,
-                               const gbm::GBTreeModel& model,
-                               unsigned ntree_limit = 0,
-                               unsigned root_index = 0) = 0;
     
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
-    }
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.allocateId', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjAllocateIdFunction);
+};
     
-    #if DMLC_ENABLE_STD_THREAD
-namespace xgboost {
-namespace data {
-    }
-    }
+    AuthPropertyIterator::AuthPropertyIterator(
+    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
+    : property_(property),
+      ctx_(iter->ctx),
+      index_(iter->index),
+      name_(iter->name) {}
     
-      void InitTreesToUpdate() {
-    if (trees_to_update.size() == 0u) {
-      for (auto & tree : trees) {
-        trees_to_update.push_back(std::move(tree));
-      }
-      trees.clear();
-      param.num_trees = 0;
-      tree_info.clear();
-    }
+    #include <grpc/impl/codegen/grpc_types.h>
+#include <grpc/support/log.h>
+#include <grpcpp/grpcpp.h>
+#include <grpcpp/resource_quota.h>
+#include 'src/core/lib/channel/channel_args.h'
+#include 'src/core/lib/iomgr/exec_ctx.h'
+#include 'src/core/lib/iomgr/socket_mutator.h'
+    
+      void AddProperty(const grpc::string& key,
+                   const grpc::string_ref& value) override;
+    
+    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
+  if (b->idx.named.grpc_server_stats_bin != nullptr) {
+    ServerStatsDeserialize(
+        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
+            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
+        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
+        elapsed_time);
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
   }
+}
+    
+      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
+    
+    const ViewDescriptor& ServerReceivedBytesPerRpcCumulative() {
+  const static ViewDescriptor descriptor =
+      ViewDescriptor()
+          .set_name('grpc.io/server/sent_bytes_per_rpc/cumulative')
+          .set_measure(kRpcServerReceivedBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
+    
+    #include 'src/core/lib/gprpp/thd.h'
+#include 'src/cpp/server/thread_pool_interface.h'
+    
+      Object createObject() const;
+    
+    String ArrayDirectory::path() {
+  if (!m_it) {
+    return empty_string();
+  }
+    }
+    
+      if (need_file) {
+    char tmp[] = '/tmp/php-wrap-XXXXXX';
+    int tmp_fd = mkstemp(tmp);
+    if (tmp_fd == -1) {
+      fprintf(stderr, 'Error: unable to open temporary file');
+      exit(EXIT_FAILURE);
+    }
+    if (program == nullptr) {
+      // If the program wasn't specified on the command-line, ala' -r,
+      // is no command-line parameter, read the PHP file from stdin.
+      std::string line;
+      while (std::getline(std::cin, line)) {
+        write(tmp_fd, line.c_str(), line.length());
+        write(tmp_fd, '\n', 1);
+      }
+    } else {
+      // -r omits the braces
+      write(tmp_fd, '<?\n', 3);
+      write(tmp_fd, program, strlen(program));
+    }
+    close(tmp_fd);
+    }
+    
+    #ifndef incl_HPHP_OUTPUT_FILE_H_
+#define incl_HPHP_OUTPUT_FILE_H_
+    
+    
+    {  logAHMSubMapWarning(mapName);
+}
+    
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
+    
+      MergeOutputIterator merge_out_iter_;
+  // PinnedIteratorsManager used to pin input_ Iterator blocks while reading
+  // merge operands and then releasing them after consuming them.
+  PinnedIteratorsManager pinned_iters_mgr_;
+  std::string compaction_filter_value_;
+  InternalKey compaction_filter_skip_until_;
+  // 'level_ptrs' holds indices that remember which file of an associated
+  // level we were last checking during the last call to compaction->
+  // KeyNotExistsBeyondOutputLevel(). This allows future calls to the function
+  // to pick off where it left off since each subcompaction's key range is
+  // increasing so a later call to the function must be looking for a key that
+  // is in or beyond the last file checked during the previous call
+  std::vector<size_t> level_ptrs_;
+  CompactionIterationStats iter_stats_;
+    
+    Status WriteBatchBase::Merge(ColumnFamilyHandle* column_family,
+                             const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
+    }
+    
+      TimeSetEnv env;
+    
+      // In this example, we set the snapshot multiple times.  This is probably
+  // only necessary if you have very strict isolation requirements to
+  // implement.
+    
+    struct UndumpOptions {
+  // Database that we will load the dumped file into
+  std::string db_path;
+  // File location of the dumped file that will be loaded
+  std::string dump_location;
+  // Compact the db after loading the dumped file
+  bool compact_db = false;
+};
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
