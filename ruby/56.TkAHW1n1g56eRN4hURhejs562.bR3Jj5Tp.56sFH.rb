@@ -1,125 +1,116 @@
 
         
-        def custom_release_header_anchors(markdown)
-  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
-  section_regexp = %r!^### \w+ \w+$!
-  markdown.split(%r!^##\s!).map do |release_notes|
-    _, major, minor, patch = *release_notes.match(header_regexp)
-    release_notes
-      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
-      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
-  end.join('\n## ')
-end
+        #
     
-              @reload_body = File.read(reload_file)
-          @reload_size = @reload_body.bytesize
+    #
+    
+          if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
+        else
+          0444
         end
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
-    end
-    
-        group.add(moderator)
-    group.save
-    
-            post_args[:topic].notify_muted!(user)
-        expect {
-          Fabricate(:post, user: user2, topic: post.topic, raw: 'hello @' + user.username)
-        }.to change(user.notifications, :count).by(0)
-      end
-    end
-    
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
-      end
-    end
-  end
-end
-
-    
-            it 'does not use two's complement form for negative numbers for formats bBoxX' do
-          format('%+b', -10).should == '-1010'
-          format('%+B', -10).should == '-1010'
-          format('%+o', -87).should == '-127'
-          format('%+x', -196).should == '-c4'
-          format('%+X', -196).should == '-C4'
-        end
-      end
-    end
-    
-    module Rex
-module Proto
-module Http
-    
-              # Encodes the value field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_value
-            OpenSSL::ASN1::OctetString.new(value)
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
           end
         end
-      end
-    end
-  end
-end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-        def replace_vars(less)
-      less = less.dup
-      # skip header comment
-      less =~ %r(\A/\*(.*?)\*/)m
-      from           = $~ ? $~.to_s.length : 0
-      less[from..-1] = less[from..-1].
-          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
-          # variables that would be ignored by gsub above: e.g. @page-header-border-color
-          gsub(/@(page[\w-]+)/, '$\1')
-      less
-    end
-    
-        # get sha of the branch (= the latest commit)
-    def get_branch_sha
-      @branch_sha ||= begin
-        if @branch + '\n' == %x[git rev-parse #@branch]
-          @branch
-        else
-          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
-          log cmd
-          result = %x[#{cmd}]
-          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
-          result.split(/\s+/).first
-        end
-      end
-    end
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
+        path.chmod perms
       end
     end
   end
 end
 
     
-        private
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
     
-        # Returns the larger of the two dimensions
-    def larger
-      [height, width].max
+      def describe_python
+    python = which 'python'
+    return 'N/A' if python.nil?
+    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
+    python_binary = Pathname.new(python_binary).realpath
+    if python == python_binary
+      python
+    else
+      '#{python} => #{python_binary}'
+    end
+  end
+    
+      def list_unbrewed
+    dirs  = HOMEBREW_PREFIX.subdirs.map { |dir| dir.basename.to_s }
+    dirs -= %w[Library Cellar .git]
+    
+      def self.class_s(name)
+    Formulary.class_s(name)
+  end
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+            def representation_class
+          Representation::Issue
+        end
+    
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+          # The base cache key to use for storing/retrieving issuable IDs.
+      CACHE_KEY = 'github-import/issuable-finder/%{project}/%{type}/%{iid}'.freeze
+    
+        def assets_path
+      @assets_path ||= File.join gem_path, 'assets'
+    end
+    
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
+  end
+end
+
+    
+        prefixes
+  end
+    
+    abstract_target 'Abstract Target' do
+    use_modular_headers!
+    
+        EMPTY_TYPE = 'inode/x-empty'
+    SENSIBLE_DEFAULT = 'application/octet-stream'
+    
+        # Returns the smaller of the two dimensions
+    def smaller
+      [height, width].min
+    end
+    
+        # Returns the Rails.root constant.
+    def rails_root attachment, style_name
+      Rails.root
     end
