@@ -1,142 +1,140 @@
 
         
-          p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
-      end
+                      if value_came_from_user? && object.respond_to?(method_before_type_cast)
+                object.public_send(method_before_type_cast)
+              else
+                value
+              end
+            end
+          end
+    
+            def render
+          options = @options.stringify_keys
+          options['type']     = 'checkbox'
+          options['value']    = @checked_value
+          options['checked'] = 'checked' if input_checked?(options)
+    
+                options = options.dup
+            options[:field_name]           = @method_name
+            options[:include_position]     = true
+            options[:prefix]             ||= @object_name
+            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
+    
+      protected
+    
+      prepend_before_action :assert_is_devise_resource!
+  respond_to :html if mimes_for_respond_to.empty?
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+        proxy = Devise::Hooks::Proxy.new(warden)
+    
+          # Lock a user setting its locked_at to actual time.
+      # * +opts+: Hash options if you don't want to send email
+      #   when you lock access, you could pass the next hash
+      #   `{ send_instructions: false } as option`.
+      def lock_access!(opts = { })
+        self.locked_at = Time.now.utc
+    
+      def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
+  end
+    
+      module ClassMethods
+    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
+    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
+    # The attribute returns a Paperclip::Attachment object which handles the management of
+    # that file. The intent is to make the attachment as much like a normal attribute. The
+    # thumbnails will be created when the new file is assigned, but they will *not* be saved
+    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
+    # called on it, the attachment will *not* be deleted until +save+ is called. See the
+    # Paperclip::Attachment documentation for more specifics. There are a number of options
+    # you can set to change the behavior of a Paperclip attachment:
+    # * +url+: The full URL of where the attachment is publicly accessible. This can just
+    #   as easily point to a directory served directly through Apache as it can to an action
+    #   that can control permissions. You can specify the full domain and path, but usually
+    #   just an absolute path is sufficient. The leading slash *must* be included manually for
+    #   absolute paths. The default value is
+    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
+    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
+    #     :url => '/:class/:attachment/:id/:style_:filename'
+    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
+    #   Note: When using the +s3+ storage option, the +url+ option expects
+    #   particular values. See the Paperclip::Storage::S3#url documentation for
+    #   specifics.
+    # * +default_url+: The URL that will be returned if there is no attachment assigned.
+    #   This field is interpolated just as the url is. The default value is
+    #   '/:attachment/:style/missing.png'
+    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
+    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
+    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
+    #   geometry strings at the ImageMagick website
+    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
+    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
+    #   inside the dimensions and then crop the rest off (weighted at the center). The
+    #   default value is to generate no thumbnails.
+    # * +default_style+: The thumbnail style that will be used by default URLs.
+    #   Defaults to +original+.
+    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
+    #                       :default_style => :normal
+    #     user.avatar.url # => '/avatars/23/normal_me.png'
+    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
+    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
+    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
+    #   record is destroyed. Defaults to +false+.
+    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
+    #   to a command line error. This will override the global setting for this attachment.
+    #   Defaults to true.
+    # * +convert_options+: When creating thumbnails, use this free-form options
+    #   array to pass in various convert command options.  Typical options are '-strip' to
+    #   remove all Exif data from the image (save space for thumbnails and avatars) or
+    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
+    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
+    #   Note that this option takes a hash of options, each of which correspond to the style
+    #   of thumbnail being generated. You can also specify :all as a key, which will apply
+    #   to all of the thumbnails being generated. If you specify options for the :original,
+    #   it would be best if you did not specify destructive options, as the intent of keeping
+    #   the original around is to regenerate all the thumbnails when requirements change.
+    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
+    #                                :convert_options => {
+    #                                  :all => '-strip',
+    #                                  :negative => '-negate'
+    #                                }
+    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
+    #   It is recommended that :convert_options option be included in the hash passed to each
+    #   :styles for compatibility with future versions.
+    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
+    #   shell quoting for safety. If your options require a space, please pre-split them
+    #   and pass an array to :convert_options instead.
+    # * +storage+: Chooses the storage backend where the files will be stored. The current
+    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
+    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
+    #   for backend-specific options.
+    #
+    # It's also possible for you to dynamically define your interpolation string for :url,
+    # :default_url, and :path in your model by passing a method name as a symbol as a argument
+    # for your has_attached_file definition:
+    #
+    #   class Person
+    #     has_attached_file :avatar, :default_url => :default_url_by_gender
+    #
+    #     private
+    #
+    #     def default_url_by_gender
+    #       '/assets/avatars/default_#{gender}.png'
+    #     end
+    #   end
+    def has_attached_file(name, options = {})
+      HasAttachedFile.define_on(self, name, options)
     end
   end
 end
-
-    
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
-    
-              # This is too noisy even for --verbose, but uncomment if you need it for
-          # a specific WebSockets issue.  Adding ?LR-verbose=true onto the URL will
-          # enable logging on the client side.
-          # em_opts[:debug] = true
-    
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
-    
-        def as_json
-      @pages
-    end
-    
-        def load_capybara_selenium
-      require 'capybara/dsl'
-      require 'selenium/webdriver'
-      Capybara.register_driver :chrome do |app|
-        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-      end
-      Capybara.javascript_driver = :chrome
-      Capybara.current_driver = :chrome
-      Capybara.run_server = false
-      Capybara
-    end
-    
-        def self.subscribe_to(notifier)
-      attach_to(namespace, new, notifier)
-    end
-    
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
-          end
-        end
-    
-            # Remove ng-* attributes
-        css('*').each do |node|
-          node.attributes.each_key do |attribute|
-            node.remove_attribute(attribute) if attribute.start_with? 'ng-'
-          end
-        end
-    
-    module Vagrant
-  # MachineIndex is able to manage the index of created Vagrant environments
-  # in a central location.
-  #
-  # The MachineIndex stores a mapping of UUIDs to basic information about
-  # a machine. The UUIDs are stored with the Vagrant environment and are
-  # looked up in the machine index.
-  #
-  # The MachineIndex stores information such as the name of a machine,
-  # the directory it was last seen at, its last known state, etc. Using
-  # this information, we can load the entire {Machine} object for a machine,
-  # or we can just display metadata if needed.
-  #
-  # The internal format of the data file is currently JSON in the following
-  # structure:
-  #
-  #   {
-  #     'version': 1,
-  #     'machines': {
-  #       'uuid': {
-  #         'name': 'foo',
-  #         'provider': 'vmware_fusion',
-  #         'data_path': '/path/to/data/dir',
-  #         'vagrantfile_path': '/path/to/Vagrantfile',
-  #         'state': 'running',
-  #         'updated_at': '2014-03-02 11:11:44 +0100'
-  #       }
-  #     }
-  #   }
-  #
-  class MachineIndex
-    include Enumerable
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
-    
-            # Registers additional providers to be available.
-        #
-        # @param [Symbol] name Name of the provider.
-        def self.provider(name=UNSET_VALUE, &block)
-          data[:providers] ||= Registry.new
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-      def symlinked?(symlink_path, target_path)
-    '[ #{symlink_path} -ef #{target_path} ]'
-  end
-    
-            if callable_without_parameters?(value_to_evaluate)
-          super(key, assert_valid_later(key, value_to_evaluate), &nil)
-        else
-          assert_valid_now(key, value_to_evaluate)
-          super
-        end
-      end
-    
-            private
-    
-            private
-    
-            def create
-          authorize! :create, Taxon
-          @taxon = Spree::Taxon.new(taxon_params)
-          @taxon.taxonomy_id = params[:taxonomy_id]
-          taxonomy = Spree::Taxonomy.find_by(id: params[:taxonomy_id])
