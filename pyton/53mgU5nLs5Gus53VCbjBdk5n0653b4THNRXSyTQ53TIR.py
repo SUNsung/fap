@@ -1,127 +1,231 @@
 
         
-            return diag_gaussian_log_likelihood(z, self.mean, self.logvar)
+        
+class Antirectifier(layers.Layer):
+    '''This is the combination of a sample-wise
+    L2 normalization with the concatenation of the
+    positive part of the input with the negative part
+    of the input. The result is a tensor of samples that are
+    twice as large as the input samples.
     
-        Args:
-      datasets: A dict of data dicts.  The dataset dict is simply a
-        name(string)-> data dictionary mapping (See top of lfads.py).
+        return (x_train, y_train), (x_test, y_test)
+
+    
+    
+def deserialize(config, custom_objects=None):
+    return deserialize_keras_object(config,
+                                    module_objects=globals(),
+                                    custom_objects=custom_objects,
+                                    printable_module_name='regularizer')
+    
+    
+def test_kernel_regularization():
+    x_train, y_train = get_data()
+    for reg in [regularizers.l1(),
+                regularizers.l2(),
+                regularizers.l1_l2()]:
+        model = create_model(kernel_regularizer=reg)
+        model.compile(loss='categorical_crossentropy', optimizer='sgd')
+        assert len(model.losses) == 1
+        model.train_on_batch(x_train, y_train)
+    
+    
+def _get_available_devices():
+    return [x.name for x in K.get_session().list_devices()]
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+y_train = np.array(y_train)
+y_test = np.array(y_test)
+    
+    import pytest
+    
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+    
+        By default, the pair of `name` and `value` will be set for the domain ''
+    and sent on every request (this is sometimes called a 'supercookie').
     '''
-    hps = self.hps
-    has_any_valid_set = False
-    for data_dict in datasets.values():
-      if data_dict['valid_data'] is not None:
-        has_any_valid_set = True
-        break
-    
-      def assign_probs(self, sentences, test_data_name='wsc273'):
-    '''Return prediction accuracy using this LM for a test.'''
-    
-    
-def imdb_iterator(raw_data, batch_size, num_steps, epoch_size_override=None):
-  '''Iterate on the raw IMDB data.
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-        elif FLAGS.discriminator_model == 'seq2seq_vd':
-      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      print('Restoring Discriminator from %s.' % load_ckpt)
-      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
-      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
-      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
-      dis_encoder_init_saver.restore(sess, load_ckpt)
-      dis_decoder_init_saver.restore(sess, load_ckpt)
+    result = {
+        'version': 0,
+        'name': name,
+        'value': value,
+        'port': None,
+        'domain': '',
+        'path': '/',
+        'secure': False,
+        'expires': None,
+        'discard': True,
+        'comment': None,
+        'comment_url': None,
+        'rest': {'HttpOnly': None},
+        'rfc2109': False,
+    }
     
     
 def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-        infile, outfile = args
-    
-    from youtube_dl.extractor import _ALL_CLASSES
-from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
-    
-    README_FILE = 'README.md'
-helptext = sys.stdin.read()
-    
-        def encode(self, value):
-        if value != self.value:
-            logger.warning(
-                'Overriding fixed field (%s) with %r', self.json_name, value)
-        return value
-    
-        def test_default_decoder_raises_deserialization_error(self):
-        from acme.fields import RFC3339Field
-        self.assertRaises(
-            jose.DeserializationError, RFC3339Field.default_decoder, '')
-    
-    # If true, the index is split into individual pages for each letter.
-#html_split_index = False
+    '''Pretty-print the bug information as JSON.'''
+    print(json.dumps(info(), sort_keys=True, indent=2))
     
     
-MOD_SSL_CONF_DEST = 'options-ssl-apache.conf'
-'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-        def setUp(self):
-        self.base_dir = '/example_path'
-        self.vhosts = util.get_vh_truth(
-            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
+        def digest_response_handler(sock):
+        # Respond to initial GET with a challenge.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert request_content.startswith(b'GET / HTTP/1.1')
+        sock.send(text_401)
     
-            account_number = match1(html, r'data-account='(\d+)'')
+            return result, changed
     
-    #----------------------------------------------------------------------
-def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
-    if is_xml:  #URL is XML URL
         try:
-            title = kwargs['title']
-        except:
-            title = ''
-        try:
-            headers = kwargs['headers']  #headers provided
-            ckinfo = get_content(url, headers = headers)
-        except NameError:
-            ckinfo = get_content(url)
-        
-        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
-                                info_only, title = title)
+        response = conn.delete_egress_only_internet_gateway(DryRun=module.check_mode, EgressOnlyInternetGatewayId=eigw_id)
+    except botocore.exceptions.ClientError as e:
+        # When boto3 method is run with DryRun=True it returns an error on success
+        # We need to catch the error and return something valid
+        if e.response.get('Error', {}).get('Code') == 'DryRunOperation':
+            changed = True
+        else:
+            module.fail_json_aws(e, msg='Could not delete Egress-Only Internet Gateway {0} from VPC {1}'.format(eigw_id, module.vpc_id))
+    except botocore.exceptions.BotoCoreError as e:
+        module.fail_json_aws(e, msg='Could not delete Egress-Only Internet Gateway {0} from VPC {1}'.format(eigw_id, module.vpc_id))
     
-    site_info = 'dilidili'
-download = dilidili_download
-download_playlist = playlist_not_supported('dilidili')
+        @AWSRetry.backoff(tries=5, delay=5, backoff=2.0)
+    def list_services_with_backoff(self, **kwargs):
+        paginator = self.ecs.get_paginator('list_services')
+        try:
+            return paginator.paginate(**kwargs).build_full_result()
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == 'ClusterNotFoundException':
+                self.module.fail_json_aws(e, 'Could not find cluster to list services')
+            else:
+                raise
+    
+        if zone_in in [z['Name'] for z in matching_zones]:
+        if hosted_zone_id:
+            changed, result = delete_hosted_id(module, client, hosted_zone_id, matching_zones)
+        else:
+            if private_zone:
+                changed, result = delete_private(module, client, matching_zones, vpc_id, vpc_region)
+            else:
+                changed, result = delete_public(module, client, matching_zones)
+    else:
+        changed = False
+        result = 'No zone to delete.'
+    
+    
+DOCUMENTATION = '''
+---
+module: azure_rm_functionapp_facts
+version_added: '2.4'
+short_description: Get Azure Function App facts
+description:
+    - Get facts for one Azure Function App or all Function Apps within a resource group
+options:
+    name:
+        description:
+            - Only show results for a specific Function App
+    resource_group:
+        description:
+            - Limit results to a resource group. Required when filtering by name
+        aliases:
+            - resource_group_name
+    tags:
+        description:
+            - Limit results by providing a list of tags. Format tags as 'key' or 'key:value'.
+    
+    
+def plot_feature_errors(all_errors, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_errors['pca'], label='PCA')
+    plot_results(all_components, all_errors['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. n_components\n'
+                 'LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Mean absolute error')
+    
+    File: sparsity_benchmark.py
+Function: benchmark_dense_predict at line 51
+Total time: 0.532979 s
+    
+     * scikit-learn
+ * pandas
+ * memory_profiler
+ * psutil (optional, but recommended)
+    
+        def run(self, args, opts):
+        '''
+        Entry point for running commands
+        '''
+        raise NotImplementedError
 
     
-    '''
-refer to http://open.youku.com/tools
-'''
-youku_embed_patterns = [ 'youku\.com/v_show/id_([a-zA-Z0-9=]+)',
-                         'player\.youku\.com/player\.php/sid/([a-zA-Z0-9=]+)/v\.swf',
-                         'loader\.swf\?VideoIDS=([a-zA-Z0-9=]+)',
-                         'player\.youku\.com/embed/([a-zA-Z0-9=]+)',
-                         'YKU.Player\(\'[a-zA-Z0-9]+\',{ client_id: \'[a-zA-Z0-9]+\', vid: \'([a-zA-Z0-9]+)\''
-                       ]
-    }
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge = merge, headers = headers)
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
     
-            # attempt to extract images first
-        # TBD: posts with > 4 images
-        # TBD: album links
-        html = get_html(parse.unquote(url), faker=True)
-        real_urls = []
-        for src in re.findall(r'src='([^']+)'[^>]*itemprop='image'', html):
-            t = src.split('/')
-            t[0], t[-2] = t[0] or 'https:', 's0-d'
-            u = '/'.join(t)
-            real_urls.append(u)
-        if not real_urls:
-            real_urls = [r1(r'<meta property='og:image' content='([^']+)', html)]
-            real_urls = [re.sub(r'w\d+-h\d+-p', 's0', u) for u in real_urls]
-        post_date = r1(r''?(20\d\d[-/]?[01]\d[-/]?[0123]\d)'?', html)
-        post_id = r1(r'/posts/([^']+)', html)
-        title = post_date + '_' + post_id
+            # The crawler is created this way since the Shell manually handles the
+        # crawling engine, so the set up in the crawl method won't work
+        crawler = self.crawler_process._create_crawler(spidercls)
+        # The Shell class needs a persistent engine in the crawler
+        crawler.engine = crawler._create_engine()
+        crawler.engine.start()
+    
+        def __init__(self):
+        super().__init__()
+        self.api_data = None
+    
+                if new_key is None:
+                break
+    
+        def __solveDP(self, x, y):
+        if (x==-1):
+            return y+1
+        elif (y==-1):
+            return x+1
+        elif (self.dp[x][y]>-1):
+            return self.dp[x][y]
+        else:
+            if (self.A[x]==self.B[y]):
+                self.dp[x][y] = self.__solveDP(x-1,y-1)
+            else:
+                self.dp[x][y] = 1+min(self.__solveDP(x,y-1), self.__solveDP(x-1,y), self.__solveDP(x-1,y-1))
+    
+    try:
+	raw_input		#Python 2
+except NameError:
+	raw_input = input	#Python 3
+    
+    def anagram(myword):
+    return word_bysig[signature(myword)]
