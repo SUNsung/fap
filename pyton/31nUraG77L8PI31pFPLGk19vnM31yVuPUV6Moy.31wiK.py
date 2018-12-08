@@ -1,163 +1,133 @@
 
         
-            def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+            def _escalate_call(self):
+        self.call.state = CallState.READY
+        call = self.call
+        self.call = None
+        self.call_center.notify_call_escalated(call)
+    
+        def __init__(self, results):
+        self.results = results
+        self.next = next
     
         def reducer(self, key, values):
-        total = sum(values)
-        if total == 1:
-            yield key, total
+        '''Sum values for each key.
     
     
-class State(Enum):
-    unvisited = 0
-    visited = 1
+class RemoveDuplicateUrls(MRJob):
     
-        def __init__(self, key, value):
-        self.key = key
-        self.value = value
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
     
-    RETURN = '''
-wafs:
-  description: The WAFs that match the passed arguments
-  returned: success
-  type: complex
-  contains:
-    name:
-      description: A friendly name or description of the WebACL
-      returned: always
-      type: string
-      sample: test_waf
-    default_action:
-      description: The action to perform if none of the Rules contained in the WebACL match.
-      returned: always
-      type: int
-      sample: BLOCK
-    metric_name:
-      description: A friendly name or description for the metrics for this WebACL
-      returned: always
-      type: string
-      sample: test_waf_metric
-    rules:
-      description: An array that contains the action for each Rule in a WebACL , the priority of the Rule
-      returned: always
-      type: complex
-      contains:
-        action:
-          description: The action to perform if the Rule matches
-          returned: always
-          type: string
-          sample: BLOCK
-        metric_name:
-          description: A friendly name or description for the metrics for this Rule
-          returned: always
-          type: string
-          sample: ipblockrule
-        name:
-          description: A friendly name or description of the Rule
-          returned: always
-          type: string
-          sample: ip_block_rule
-        predicates:
-          description: The Predicates list contains a Predicate for each
-            ByteMatchSet, IPSet, SizeConstraintSet, SqlInjectionMatchSet or XssMatchSet
-            object in a Rule
-          returned: always
-          type: list
-          sample:
-            [
-              {
-                'byte_match_set_id': '47b822b5-abcd-1234-faaf-1234567890',
-                'byte_match_tuples': [
-                  {
-                    'field_to_match': {
-                      'type': 'QUERY_STRING'
-                    },
-                    'positional_constraint': 'STARTS_WITH',
-                    'target_string': 'bobbins',
-                    'text_transformation': 'NONE'
-                  }
-                ],
-                'name': 'bobbins',
-                'negated': false,
-                'type': 'ByteMatch'
-              }
-            ]
+    # List all EIP addresses for several VMs.
+- ec2_eip_facts:
+    filters:
+       instance-id:
+         - i-123456789
+         - i-987654321
+  register: my_vms_eips
+    
+        create_snapshot(
+        module=module,
+        state=state,
+        description=description,
+        wait=wait,
+        wait_timeout=wait_timeout,
+        ec2=ec2,
+        volume_id=volume_id,
+        instance_id=instance_id,
+        snapshot_id=snapshot_id,
+        device_name=device_name,
+        snapshot_tags=snapshot_tags,
+        last_snapshot_min_age=last_snapshot_min_age
+    )
+    
+    from ansible.module_utils.aws.core import AnsibleAWSModule
+from ansible.module_utils.ec2 import ec2_argument_spec, AWSRetry
+    
+    
+@AWSRetry.exponential_backoff()
+def list_iam_role_policies_with_backoff(client, role_name):
+    paginator = client.get_paginator('list_role_policies')
+    return paginator.paginate(RoleName=role_name).build_full_result()['PolicyNames']
+    
+    
+DOCUMENTATION = '''
+---
+module: iam_server_certificate_facts
+short_description: Retrieve the facts of a server certificate
+description:
+  - Retrieve the attributes of a server certificate
+version_added: '2.2'
+author: 'Allen Sanabria (@linuxdynasty)'
+requirements: [boto3, botocore]
+options:
+  name:
+    description:
+      - The name of the server certificate you are retrieving attributes for.
+    required: true
+extends_documentation_fragment:
+    - aws
+    - ec2
 '''
     
-        try:
-        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-        autoscaling = boto3_conn(module, conn_type='client', resource='autoscaling', region=region, endpoint=ec2_url, **aws_connect_kwargs)
-    except ClientError as e:
-        module.fail_json(msg=e.message, **camel_dict_to_snake_dict(e.response))
+        state = module.params.get('state')
+    group_name = module.params.get('group_name')
+    group_description = module.params.get('group_description')
+    group_subnets = module.params.get('group_subnets')
     
-    RETURN = '''
-gateway.customer_gateways:
-    description: details about the gateway that was created.
-    returned: success
-    type: complex
-    contains:
-        bgp_asn:
-            description: The Border Gateway Autonomous System Number.
-            returned: when exists and gateway is available.
-            sample: 65123
-            type: string
-        customer_gateway_id:
-            description: gateway id assigned by amazon.
-            returned: when exists and gateway is available.
-            sample: cgw-cb6386a2
-            type: string
-        ip_address:
-            description: ip address of your gateway device.
-            returned: when exists and gateway is available.
-            sample: 1.2.3.4
-            type: string
-        state:
-            description: state of gateway.
-            returned: when gateway exists and is available.
-            state: available
-            type: string
-        tags:
-            description: any tags on the gateway.
-            returned: when gateway exists and is available, and when tags exist.
-            state: available
-            type: string
-        type:
-            description: encryption type.
-            returned: when gateway exists and is available.
-            sample: ipsec.1
-            type: string
-'''
+        test_suite = 'tests',
     
-        volume_id = module.params.get('volume_id')
-    snapshot_id = module.params.get('snapshot_id')
-    description = module.params.get('description')
-    instance_id = module.params.get('instance_id')
-    device_name = module.params.get('device_name')
-    wait = module.params.get('wait')
-    wait_timeout = module.params.get('wait_timeout')
-    last_snapshot_min_age = module.params.get('last_snapshot_min_age')
-    snapshot_tags = module.params.get('snapshot_tags')
-    state = module.params.get('state')
+    _options = [
+    'help',
+    'version',
+    'gui',
+    'force',
+    'playlists',
+]
+_short_options = 'hVgfl'
     
-        elif state == 'absent':
+        #if dictify(e)['ckplayer']['info'][0]['title'][0]['_text'].strip():  #duration
+        #video_dict['title'] = dictify(e)['ckplayer']['info'][0]['title'][0]['_text'].strip()
     
-    def get_srt_json(id):
-    url = 'http://danmu.aixifan.com/V2/%s' % id
-    return get_content(url)
+    import json
+import re
     
-    site_info = 'CBS.com'
-download = cbs_download
-download_playlist = playlist_not_supported('cbs')
-
+            #type_, ext, size = url_info(url)
+        #print_info(site_info, title, type_, size)
+        #if not info_only:
+            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
-    
-        vids = matchall(content, tudou_embed_patterns)
-    for vid in set(vids):
-        found = True
-        tudou_download_by_id(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    def flickr_download_main(url, output_dir = '.', merge = False, info_only = False, **kwargs):
+    urls = None
+    size = 'o' # works for collections only
+    title = None
+    if 'stream_id' in kwargs:
+        size = kwargs['stream_id']
+    if match1(url, pattern_url_single_photo):
+        url, title = get_single_photo_url(url)
+        urls = [url]
+    else:
+        urls, title = fetch_photo_url_list(url, size)
+    index = 0
+    for url in urls:
+        mime, ext, size = url_info(url)
+        print_info('Flickr.com', title, mime, size)
+        if not info_only:
+            suffix = '[%d]' % index
+            download_urls([url], title + suffix, ext, False, output_dir, None, False, False)
+            index = index + 1
