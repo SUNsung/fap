@@ -1,388 +1,212 @@
 
         
-        void ProtoFromShapeHandle(tensorflow::shape_inference::ShapeHandle s,
-                          tensorflow::shape_inference::InferenceContext* c,
-                          TensorShapeProto* out) {
-  if (c->RankKnown(s)) {
-    const int32 rank = c->Rank(s);
-    for (int i = 0; i < rank; ++i) {
-      shape_inference::DimensionHandle d = c->Dim(s, i);
-      auto* out_dim = out->add_dim();
-      if (c->ValueKnown(d)) {
-        out_dim->set_size(c->Value(d));
-      } else {
-        out_dim->set_size(-1);
-      }
-    }
-  } else {
-    out->set_unknown_rank(true);
-  }
-}
-    
-    
-    {  // TODO(yaozhang): add a test to make sure that op_perf_analytical_ and
-  // op_perf_ cover the same set of nodes.
-  op_perf_analytical_ = CostGraphToOpPerformanceData(
-      cost_graph_analytical_filtered, item_->graph);
-  op_perf_ =
-      CostGraphToOpPerformanceData(cost_graph_measured_filtered, item_->graph);
-}
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Converts Python object `obj` representing a rectangular array of
-// Python values (a scalar, a sequence of scalars, a sequence of
-// sequences, etc.) into a C++ TensorFlow Tensor and stores it in
-// *ret.  If dtype is not None it should by a Python integer
-// representing the desired dtype of the resulting Tensor.
-// This is used only as a hint, *ret may not have that dtype on
-// success and may require a cast.
-Status PySeqToTensor(PyObject* obj, PyObject* dtype, Tensor* ret);
-    
-      // Returns whether code in the from context can access memory in the to
-  // context via cuDeviceCanAccessPeer.
-  // http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__PEER__ACCESS.html#group__CUDA__PEER__ACCESS_1g496bdaae1f632ebfb695b99d2c40f19e
-  static bool CanEnablePeerAccess(CudaContext* from, CudaContext* to);
-    
-      if (LangOpts.Target.isTvOS()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-            ? PlatformKind::tvOSApplicationExtension
-            : PlatformKind::tvOS);
-  }
-    
-      // Now, add all generic parameters from the conforming type.
-  if (conformanceSig) {
-    for (auto param : conformanceSig->getGenericParams()) {
-      auto substParam = Type(param).subst(conformanceToSyntheticTypeFn,
-                                          conformanceToSyntheticConformanceFn);
-      builder.addGenericParameter(substParam->castTo<GenericTypeParamType>());
-    }
-  }
-    
-      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
-    
-    
-    {  OutLines.append(Lines.begin(), Lines.end());
-}
-
-    
-        /// Returns true if \p loc is inside one of Swift's synthetic buffers.
-    static bool isInSwiftBuffers(clang::FullSourceLoc loc) {
-      StringRef bufName = StringRef(loc.getManager().getBufferName(loc));
-      return bufName == ClangImporter::Implementation::moduleImportBufferName ||
-             bufName == ClangImporter::Implementation::bridgingHeaderBufferName;
+        
+struct MorphCtx
+{
+    int operation;
+    int channels;
+    CAROTENE_NS::Size2D ksize;
+    int anchor_x, anchor_y;
+    CAROTENE_NS::BORDER_MODE border;
+    uchar borderValues[4];
+};
+inline int TEGRA_MORPHINIT(cvhalFilter2D **context, int operation, int src_type, int dst_type, int, int,
+                           int kernel_type, uchar *kernel_data, size_t kernel_step, int kernel_width, int kernel_height, int anchor_x, int anchor_y,
+                           int borderType, const double borderValue[4], int iterations, bool allowSubmatrix, bool allowInplace)
+{
+    if(!context || !kernel_data || src_type != dst_type ||
+       CV_MAT_DEPTH(src_type) != CV_8U || src_type < 0 || (src_type >> CV_CN_SHIFT) > 3 ||
     }
     
-    // SwiftStddef.h defines its own copy of stddef.h types.
-MAP_STDLIB_TYPE('__swift_ptrdiff_t', SignedWord, 0, 'Int', false,
-                DefineOnly)
-MAP_STDLIB_TYPE('__swift_size_t', UnsignedWord, 0, 'Int', false,
-                DefineOnly)
-MAP_STDLIB_TYPE('__swift_ssize_t', SignedWord, 0, 'Int', false,
-                DefineOnly)
-    
-    /// Translate the given operator character into its mangled form.
-///
-/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
-char Mangle::translateOperatorChar(char op) {
-  switch (op) {
-    case '&': return 'a'; // 'and'
-    case '@': return 'c'; // 'commercial at sign'
-    case '/': return 'd'; // 'divide'
-    case '=': return 'e'; // 'equal'
-    case '>': return 'g'; // 'greater'
-    case '<': return 'l'; // 'less'
-    case '*': return 'm'; // 'multiply'
-    case '!': return 'n'; // 'negate'
-    case '|': return 'o'; // 'or'
-    case '+': return 'p'; // 'plus'
-    case '?': return 'q'; // 'question'
-    case '%': return 'r'; // 'remainder'
-    case '-': return 's'; // 'subtract'
-    case '~': return 't'; // 'tilde'
-    case '^': return 'x'; // 'xor'
-    case '.': return 'z'; // 'zperiod' (the z is silent)
-    default:
-      return op;
-  }
-}
-    
-    #include 'base/command_line.h'
-#include 'base/logging.h'
-#include 'base/message_loop/message_loop.h'
-#include 'base/values.h'
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    #include <vector>
-    
-        protected:
-      ~NwScreenInitEventListenersFunction() override {}
-      DECLARE_EXTENSION_FUNCTION('nw.Screen.initEventListeners', UNKNOWN)
-    
-    #ifdef __SSE4_1__
-// Computes part of matrix.vector v = Wu. Computes 1 result.
-static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
-                                    const int8_t* u, int num_in, int num_out,
-                                    double* v) {
-  int total = IntDotProductSSE(u, wi, num_in);
-  // Add in the bias and correct for integer values.
-  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
-}
-#endif  // __SSE4_1__
-    
-      // Generate the tiff file name for output/debug file.
-  void GetOutputTiffName(const char* name, STRING* image_name) const;
-    
-    struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
+        {
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
     }
     
     
-    {  svMenuRoot->BuildMenu(sv, false);
+    {    if (!parametersSupported) {
+        std::cerr << 'internal error: attempted to use a function with unsupported parameters' << std::endl;
+        std::abort();
+    }
 }
     
-      // How many alt choices from each should we try to get?
-  const int kAltsPerPiece = 2;
-  // When do we start throwing away extra alt choices?
-  const int kTooManyAltChoices = 100;
-    
-    
-//////////////////////////////////////////////////////////////////////////////
-// parse JSON from string
-//////////////////////////////////////////////////////////////////////////////
-    
-      // Equivalent to Ranges({{lo1, hi1}, {lo2, hi2}}).
-  // NOTE: This is a legacy C++03 interface provided for compatibility only.
-  //   New code should use 'Ranges'.
-  Benchmark* RangePair(int lo1, int hi1, int lo2, int hi2) {
-    std::vector<std::pair<int, int> > ranges;
-    ranges.push_back(std::make_pair(lo1, hi1));
-    ranges.push_back(std::make_pair(lo2, hi2));
-    return Ranges(ranges);
-  }
-    
-          // Determine if this run should be reported; Either it has
-      // run for a sufficient amount of time or because an error was reported.
-      const bool should_report =  repetition_num > 0
-        || has_explicit_iteration_count // An exact iteration count was requested
-        || results.has_error_
-        || iters >= kMaxIterations
-        || seconds >= min_time // the elapsed time is large enough
-        // CPU time is specified but the elapsed real time greatly exceeds the
-        // minimum time. Note that user provided timers are except from this
-        // sanity check.
-        || ((results.real_time_used >= 5 * min_time) && !b.use_manual_time);
-    
-    BENCHMARK_NORETURN inline void CallAbortHandler() {
-  GetAbortHandler()();
-  std::abort();  // fallback to enforce noreturn
-}
-    
-    std::string FormatString(const char* msg, va_list args) {
-  // we might need a second shot at this, so pre-emptivly make a copy
-  va_list args_cp;
-  va_copy(args_cp, args);
-    }
-    
-    
-    {}  // end namespace benchmark
-    
-        // print the header
-    for (auto B = elements.begin(); B != elements.end();) {
-      Out << *B++;
-      if (B != elements.end()) Out << ',';
-    }
-    for (auto B = user_counter_names_.begin(); B != user_counter_names_.end();) {
-      Out << ',\'' << *B++ << '\'';
-    }
-    Out << '\n';
-    
-      // Called by each thread
-  bool wait() EXCLUDES(lock_) {
-    bool last_thread = false;
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC1(f32, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-      MutexLock ml(lock_);
-      last_thread = createBarrier(ml);
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
+            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
+            'vmul.f32 q4, q2, q0                                     \n\t'
+            'vmul.f32 q5, q3, q0                                     \n\t'
+            'vadd.f32 q6, q4, q1                                     \n\t'
+            'vadd.f32 q7, q5, q1                                     \n\t'
+            'vst1.32 {d12-d13}, [%[dst1]]                            \n\t'
+            'vst1.32 {d14-d15}, [%[dst2]]                            \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              'w' (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
+        );
     }
-    if (last_thread) phase_condition_.notify_all();
-    return last_thread;
-  }
-    
-    inline bool Regex::Init(const std::string& spec, std::string* error) {
-#ifdef BENCHMARK_HAS_NO_EXCEPTIONS
-  ((void)error); // suppress unused warning
+})
 #else
-  try {
-#endif
-    re_ = std::regex(spec, std::regex_constants::extended);
-    init_ = true;
-#ifndef BENCHMARK_HAS_NO_EXCEPTIONS
-  } catch (const std::regex_error& e) {
-    if (error) {
-      *error = e.what();
-    }
-  }
-#endif
-  return init_;
-}
-    
-    
-    {void SleepForSeconds(double seconds) {
-  SleepForMicroseconds(static_cast<int>(seconds * kNumMicrosPerSecond));
-}
-#endif  // BENCHMARK_OS_WINDOWS
-}  // end namespace benchmark
-
-    
-      if (!is_started_) {
-    AERROR << 'Esd can client has not been initiated! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
-  }
-  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
-    send_frames_[i].id = frames[i].id;
-    send_frames_[i].len = frames[i].len;
-    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
-  }
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-      /**
-   * @brief Start the fake CAN client.
-   * @return The status of the start action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Start() override;
-    
-    
-    {  int32_t frame_num = FRAME_LEN;
-  auto ret = send_client_->Send(frames, &frame_num);
-  EXPECT_EQ(ret, ErrorCode::OK);
-  EXPECT_EQ(send_client_->GetErrorString(0), '');
-  send_client_->Stop();
-}
-    
-    
-    {  // Synchronous transmission of CAN messages
-  int32_t send_num = *frame_num;
-  int32_t ret = bcan_send(_dev_handler, _send_frames, send_num);
-  if (ret < 0) {
-    int ret_send_error = bcan_get_status(_dev_handler);
-    AERROR << 'send message failed, error code: ' << ret
-           << ', send error: ' << ret_send_error;
-    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
-  }
-  *frame_num = ret;
-  return ErrorCode::OK;
-}
-    
-    
+CVTS_FUNC1(f32, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
+        internal::prefetch(_src + i);
+        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
+        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vst1q_f32(_dst + i + 0, vline1_f32);
+        vst1q_f32(_dst + i + 4, vline2_f32);
+    }
+})
+#endif
     
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
+                    uint8x16_t c0 = vmovq_n_u8(0);
+                uint8x16_t c1 = vmovq_n_u8(0);
+                uint8x16_t max0 = vmovq_n_u8(0);
+                uint8x16_t max1 = vmovq_n_u8(0);
+                for( k = 0; k < N; k++ )
+                {
+                    int8x16_t x = vreinterpretq_s8_u8(veorq_u8(vld1q_u8(ptr + pixel[k]), delta));
+                    m0 = vcgtq_s8(x, v2);
+                    m1 = vcgtq_s8(v1, x);
     }
     
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
+        //vertical convolution
+        ptrdiff_t idx_rm2 = internal::borderInterpolate(i - 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
+    }
+    
+        // the others
+    for (size_t i = 1; i < size.height ; ++i)
+    {
+        src = internal::getRowPtr(srcBase, srcStride, i);
+        f64 * prevSqSum = internal::getRowPtr(sqsumBase, sqsumStride, i - 1);
+        sqsum = internal::getRowPtr(sqsumBase, sqsumStride, i);
+    }
+    
+    inline float32x4_t vrsqrtq_f32(float32x4_t val)
+{
+    float32x4_t e = vrsqrteq_f32(val);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    return e;
 }
     
-    /**
- * @class Byte
- * @brief The class of one byte, which is 8 bits.
- *        It includes some operations on one byte.
- */
-class Byte {
- public:
-  /**
-   * @brief Constructor which takes a pointer to a one-byte unsigned integer.
-   * @param value The pointer to a one-byte unsigned integer for construction.
-   */
-  explicit Byte(const uint8_t *value);
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    
+    
+    {  // The name of the source file where the test part took place, or
+  // '' if the source file is unknown.
+  std::string file_name_;
+  // The line in the source file where the test part took place, or -1
+  // if the line number is unknown.
+  int line_number_;
+  std::string summary_;  // The test failure summary.
+  std::string message_;  // The test failure message.
+};
+    
+    // Forward declarations of ValuesIn(), which is implemented in
+// include/gtest/gtest-param-test.h.
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end);
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
+    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41>
+struct Templates41 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates40<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> Tail;
+};
+    
+      // Now, we have that n is odd and n >= 3.
+    
+    typedef void (*Transform1d)(const double* in, int stride, double* out);
+    
+    
+// these are the macro required by COLUMN_*
+#define LOAD_CST(dst, src) (dst) = (src)
+#define LOAD(dst, src) (dst) = (src)
+#define MULT(a, b)  (a) = (((a) * (b)) >> 16)
+#define ADD(a, b)   (a) = (a) + (b)
+#define SUB(a, b)   (a) = (a) - (b)
+#define LSHIFT(a, n) (a) = ((a) << (n))
+#define STORE16(a, b) (a) = (b)
+#define CORRECT_LSB(a) (a) += 1
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+    #include <stdint.h>
+    
+    // Creates a JPEG from the rgb pixel data. Returns true on success.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg);
+    
+    inline int ReadUint16(const uint8_t* data, size_t* pos) {
+  int v = (data[*pos] << 8) + data[*pos + 1];
+  *pos += 2;
+  return v;
+}
