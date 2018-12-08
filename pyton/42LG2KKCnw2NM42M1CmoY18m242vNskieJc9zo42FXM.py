@@ -1,186 +1,148 @@
-        if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
-    
-      with open(vocab_file) as f_in:
-    vocab = [line.strip() for line in f_in]
-    
-    # This flag is used for an experiment where one sees if training a model with
-# many days data can be used to learn the dynamics from a held-out days data.
-# If you don't care about that particular experiment, this flag should always be
-# false.
-flags.DEFINE_boolean('do_train_io_only', DO_TRAIN_IO_ONLY,
-                     'Train only the input (readin) and output (readout) \
-                     affine functions.')
-    
-      # A bit of filtering. We don't care about spectral properties, or
-  # filtering artifacts, simply correlate time steps a bit.
-  filt_len = 6
-  bc_filt = np.ones([filt_len])/float(filt_len)
-  for c in range(nchannels_all):
-    all_data_nxtc[c,:] = scipy.signal.filtfilt(bc_filt, [1.0], all_data_nxtc[c,:])
-    
-    
-def init_linear(in_size, out_size, do_bias=True, mat_init_value=None,
-                bias_init_value=None, alpha=1.0, identity_if_possible=False,
-                normalized=False, name=None, collections=None, trainable=True):
-  '''Linear (affine) transformation, y = x W + b, for a variety of
-  configurations.
-    
-        if len(word) > self.max_word_length - 2:
-      word = word[:self.max_word_length-2]
-    cur_word = self.bow_char + word + self.eow_char
-    for j in range(len(cur_word)):
-      code[j] = ord(cur_word[j])
-    return code
-    
-      inputs = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
-  char_ids_inputs = np.zeros(
-      [BATCH_SIZE, NUM_TIMESTEPS, vocab.max_word_length], np.int32)
-  for i in xrange(len(word_ids)):
-    inputs[0, 0] = word_ids[i]
-    char_ids_inputs[0, 0, :] = char_ids[i]
-    
-        batch_size, num_timesteps = self.shape
-    softmax = softmax.reshape((num_timesteps, batch_size, -1))
-    softmax = np.transpose(softmax, [1, 0, 2])
-    probs = np.array([[softmax[row, col, target_ids[row, col]]
-                       for col in range(num_timesteps)]
-                      for row in range(batch_size)])
-    print(probs)
-    return probs
-    
-    
-def cut_to_patches(sentences, batch_size, num_timesteps):
-  '''Cut sentences into patches of shape (batch_size, num_timesteps).
-    
-        if FLAGS.prefix_label and use_prefix:
-      label = sequence_example.context.feature['class'].int64_list.value[0]
-      review_words = [EOS_INDEX + 1 + label]
-    else:
-      review_words = []
-    review_words.extend([
-        f.int64_list.value[0]
-        for f in sequence_example.feature_lists.feature_list['token_id'].feature
-    ])
-    all_words.append(review_words)
-  return all_words
-    
-    
-def ptb_raw_data(data_path=None):
-  '''Load PTB raw data from data directory 'data_path'.
-  Reads PTB text files, converts strings to integer ids,
-  and performs mini-batching of the inputs.
-  The PTB dataset comes from Tomas Mikolov's webpage:
-  http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz
-  Args:
-    data_path: string path to the directory where simple-examples.tgz has
-      been extracted.
-  Returns:
-    tuple (train_data, valid_data, test_data, vocabulary)
-    where each of the data objects can be passed to PTBIterator.
-  '''
-    
-    '''Random helper functions for converting between indices and one-hot encodings
-as well as printing/logging helpers.
-'''
-    
-    
-def _create_attention_score_fn(name,
-                               num_units,
-                               attention_option,
-                               reuse,
-                               dtype=tf.float32):
-  '''Different ways to compute attention scores.
-    
-        # 'I want us to put a big-ol' comment on top of it that
-    # says that this behaviour is dumb but we need to preserve
-    # it because people are relying on it.'
-    #    - Lukasa
-    #
-    # These are here solely to maintain backwards compatibility
-    # for things like ints. This will be removed in 3.0.0.
-    if not isinstance(username, basestring):
-        warnings.warn(
-            'Non-string usernames will no longer be supported in Requests '
-            '3.0.0. Please convert the object you've passed in ({!r}) to '
-            'a string or bytes object in the near future to avoid '
-            'problems.'.format(username),
-            category=DeprecationWarning,
-        )
-        username = str(username)
-    
-    '''
-requests.compat
-~~~~~~~~~~~~~~~
-    
-        return {'name': implementation, 'version': implementation_version}
-    
-        def test_zipped_paths_extracted(self, tmpdir):
-        zipped_py = tmpdir.join('test.zip')
-        with zipfile.ZipFile(zipped_py.strpath, 'w') as f:
-            f.write(__file__)
-    
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-            video_id = match1(html, r'data-brightcove-id='(\d+)'')
+
         
-        assert account_number, video_id
+            x = inputs
+    if conv_first:
+        x = conv(x)
+        if batch_normalization:
+            x = BatchNormalization()(x)
+        if activation is not None:
+            x = Activation(activation)(x)
+    else:
+        if batch_normalization:
+            x = BatchNormalization()(x)
+        if activation is not None:
+            x = Activation(activation)(x)
+        x = conv(x)
+    return x
     
-        print_info(site_info, title, mime, size)
-    if not info_only:
-        download_urls([real_url], title, ext, size, output_dir=output_dir, merge=merge)
+    import numpy as np
     
-        urls = matchall(content, dailymotion_embed_patterns)
-    for url in urls:
-        found = True
-        dailymotion_download(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        with gzip.open(paths[0], 'rb') as lbpath:
+        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
     
-    from ..common import *
-import json
+        out1 = utils.preprocess_input(x, 'channels_last')
+    out1int = utils.preprocess_input(xint, 'channels_last')
+    out2 = utils.preprocess_input(np.transpose(x, (2, 0, 1)),
+                                  'channels_first')
+    out2int = utils.preprocess_input(np.transpose(xint, (2, 0, 1)),
+                                     'channels_first')
+    assert_allclose(out1, out2.transpose(1, 2, 0))
+    assert_allclose(out1int, out2int.transpose(1, 2, 0))
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
+        Example 3 - Training models with weights merge on GPU (recommended for NV-link)
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls(url, title, ext, size, output_dir, merge=False)
+        def __init__(self, filters,
+                 kernel_size,
+                 strides=(1, 1),
+                 padding='valid',
+                 data_format=None,
+                 dilation_rate=(1, 1),
+                 activation='tanh',
+                 recurrent_activation='hard_sigmoid',
+                 use_bias=True,
+                 kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal',
+                 bias_initializer='zeros',
+                 unit_forget_bias=True,
+                 kernel_regularizer=None,
+                 recurrent_regularizer=None,
+                 bias_regularizer=None,
+                 kernel_constraint=None,
+                 recurrent_constraint=None,
+                 bias_constraint=None,
+                 dropout=0.,
+                 recurrent_dropout=0.,
+                 **kwargs):
+        super(ConvLSTM2DCell, self).__init__(**kwargs)
+        self.filters = filters
+        self.kernel_size = conv_utils.normalize_tuple(kernel_size, 2, 'kernel_size')
+        self.strides = conv_utils.normalize_tuple(strides, 2, 'strides')
+        self.padding = conv_utils.normalize_padding(padding)
+        self.data_format = K.normalize_data_format(data_format)
+        self.dilation_rate = conv_utils.normalize_tuple(dilation_rate, 2,
+                                                        'dilation_rate')
+        self.activation = activations.get(activation)
+        self.recurrent_activation = activations.get(recurrent_activation)
+        self.use_bias = use_bias
     
-    # The reST default role (used for this markup: `text`) to use for all
-# documents.
-#default_role = None
+    import numpy as np
+from scipy.sparse import issparse
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+        def decode(self, value):
+        if value != self.value:
+            raise jose.DeserializationError('Expected {0!r}'.format(self.value))
+        return self.value
     
     
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+class RFC3339FieldTest(unittest.TestCase):
+    '''Tests for acme.fields.RFC3339Field.'''
     
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+        def test_recovery_routine_error(self):
+        self.config.reverter.recovery_routine = mock.Mock(
+            side_effect=errors.ReverterError)
     
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+            self.assertFalse(self.addr_defined.conflicts(self.addr1))
+        self.assertFalse(self.addr_defined.conflicts(self.addr2))
+        self.assertFalse(self.addr_defined.conflicts(self.addr))
+        self.assertFalse(self.addr_defined.conflicts(self.addr_default))
+    
+        :param list indices: Meant to hold indices of challenges in a
+        larger array. ApacheTlsSni01 is capable of solving many challenges
+        at once which causes an indexing issue within ApacheConfigurator
+        who must return all responses in order.  Imagine ApacheConfigurator
+        maintaining state about where all of the http-01 Challenges,
+        TLS-SNI-01 Challenges belong in the response array.  This is an
+        optional utility.
+    
+        failures = []
+    while point is not None:
+        if point.name:
+            if re.search('h[1-2]', point.name):
+                if point.name == 'h1':
+                    h1_directory = os.path.join(output_directory, clean_text(point.text))
+                    current_directory = h1_directory
+                elif point.name == 'h2':
+                    current_directory = os.path.join(h1_directory, clean_text(point.text))  
+                if not os.path.exists(current_directory):
+                    os.makedirs(current_directory)
+                print_title(point.text)
+    
+        # Resize frame of video to 1/4 size for faster face detection processing
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    
+            # If a match was found in known_face_encodings, just use the first one.
+        if True in matches:
+            first_match_index = matches.index(True)
+            name = known_face_names[first_match_index]
+    
+    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
+# other example, but it includes some basic performance tweaks to make things run a lot faster:
+#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
+#   2. Only detect faces in every other frame of video.
+    
+    # This code finds all faces in a list of images using the CNN model.
+#
+# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
+# are the exact same size. This is common in video processing applications where you have lots of video frames
+# to process.
+#
+# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
+# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+    # This is an example of running face recognition on a single image
+# and drawing a box around each person that was identified.
+    
+        # 获得所有人脸的位置以及它们的编码
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
