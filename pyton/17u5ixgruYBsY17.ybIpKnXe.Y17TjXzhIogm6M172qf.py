@@ -1,13 +1,59 @@
 
         
-            elif METHOD == 'LIST':
-        domain = compat_urllib_parse_urlparse(test['url']).netloc
-        if not domain:
-            print('\nFail: {0}'.format(test['name']))
-            continue
-        domain = '.'.join(domain.split('.')[-2:])
+        # Direction codes used in the paths.
+DIRS = '_^V<>'
+DIR_TO_ID = {dir: did for did, dir in enumerate(DIRS)}
     
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # save down the inputs used to generate this data
+train_inputs_u, valid_inputs_u = split_list_by_inds(u_e,
+                                                    train_inds,
+                                                    valid_inds)
+train_inputs_u = nparray_and_transpose(train_inputs_u)
+valid_inputs_u = nparray_and_transpose(valid_inputs_u)
+    
+    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
+            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N
+nreplications = FLAGS.nreplications
+E = nreplications * C
+train_percentage = FLAGS.train_percentage
+ntimesteps = int(T / FLAGS.dt)
+    
+    
+def imdb_raw_data(data_path=None):
+  '''Load IMDB raw data from data directory 'data_path'.
+  Reads IMDB tf record files containing integer ids,
+  and performs mini-batching of the inputs.
+  Args:
+    data_path: string path to the directory where simple-examples.tgz has
+      been extracted.
+  Returns:
+    tuple (train_data, valid_data)
+    where each of the data objects can be passed to IMDBIterator.
+  '''
+    
+      Returns:
+    loss_matrix:  Loss matrix of shape [batch_size, sequence_length].
+  '''
+  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
+      labels=gen_labels, logits=gen_logits)
+  return cross_entropy_loss
+    
+      for i, sample in enumerate(samples):
+    print('Sample', i, '. ', sample)
+    log.write('\nSample ' + str(i) + '. ' + sample)
+  log.write('\n')
+  print('\n')
+  log.flush()
+    
+      Args:
+    hparams:  Hyperparameters for the MaskGAN.
+    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
+    is_training:  Whether the model is training.
+    reuse (Optional):  Whether to reuse the model.
     
     
 def openssl_encode(algo, key, iv):
@@ -16,257 +62,120 @@ def openssl_encode(algo, key, iv):
     out, _ = prog.communicate(secret_msg)
     return out
     
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
+    
+    names = []
+for ie in ordered_cls:
+    name = ie.__name__
+    src = build_lazy_ie(ie, name)
+    module_contents.append(src)
+    if ie in _ALL_CLASSES:
+        names.append(name)
+    
+                        # Pandoc's definition_lists. See http://pandoc.org/README.html
+                    # for more information.
+                    ret += '\n%s\n:   %s\n' % (option, description)
+                    continue
+            ret += line.lstrip() + '\n'
+        else:
+            ret += line + '\n'
+    
+    # The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+html_theme = 'default'
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+        assert match(command)
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+def test_match():
+    assert match(Command('sudo apt update', match_output))
     
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+      * scan
+'''
     
-    
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
-    
-        params = {
-        'data_files': data_files,
-    }
-    if setuptools_available:
-        params['entry_points'] = {'console_scripts': ['youtube-dl = youtube_dl:main']}
-    else:
-        params['scripts'] = ['bin/youtube-dl']
-    
-    
-class FakeYDL(YoutubeDL):
-    def __init__(self, override=None):
-        # Different instances of the downloader can't share the same dictionary
-        # some test set the 'sublang' parameter, which would break the md5 checks.
-        params = get_params(override=override)
-        super(FakeYDL, self).__init__(params, auto_init=False)
-        self.result = []
-    
-    from .compat import is_py2, builtin_str, str
-    
-        return {
-        'platform': platform_info,
-        'implementation': implementation_info,
-        'system_ssl': system_ssl_info,
-        'using_pyopenssl': pyopenssl is not None,
-        'pyOpenSSL': pyopenssl_info,
-        'urllib3': urllib3_info,
-        'chardet': chardet_info,
-        'cryptography': cryptography_info,
-        'idna': idna_info,
-        'requests': {
-            'version': requests_version,
-        },
-    }
-    
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-    setup(
-    name=about['__title__'],
-    version=about['__version__'],
-    description=about['__description__'],
-    long_description=readme,
-    long_description_content_type='text/markdown',
-    author=about['__author__'],
-    author_email=about['__author_email__'],
-    url=about['__url__'],
-    packages=packages,
-    package_data={'': ['LICENSE', 'NOTICE'], 'requests': ['*.pem']},
-    package_dir={'requests': 'requests'},
-    include_package_data=True,
-    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=requires,
-    license=about['__license__'],
-    zip_safe=False,
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy'
-    ],
-    cmdclass={'test': PyTest},
-    tests_require=test_requirements,
-    extras_require={
-        'security': [PYOPENSSL_VERSION, 'cryptography>=1.3.4', 'idna>=2.0.0'],
-        'socks': ['PySocks>=1.5.6, !=1.5.7'],
-        'socks:sys_platform == 'win32' and (python_version == '2.7' or python_version == '2.6')': ['win_inet_pton'],
-    },
-)
+        assert get_new_command(Command('brew install aa',
+                                   brew_no_available_formula))\
+        != 'brew install aha'
 
     
-        def __init__(self):
-        self._content = False
-        self._content_consumed = False
-        self._next = None
+            Did you mean `build`?
+'''
     
-            # install new cert
-        xlog.info('Add cert to database $HOME/.pki/nssdb')
-        cmd_line = 'certutil -d sql:$HOME/.pki/nssdb -A -t 'C,,' -n '%s' -i '%s'' % (common_name, ca_file)
-        os.system(cmd_line)
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
+    
+        fpath = os.path.join(path, 'test')
+    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
+    
+        E.g. for use with categorical_crossentropy.
+    
+                    # Apply model on slice
+                # (creating a model replica on the target device).
+                outputs = model(inputs)
+                outputs = to_list(outputs)
+    
+                if verbose == 1:
+                progbar.update(batch_end)
+        for i in range(len(outs)):
+            if i not in stateful_metric_indices:
+                outs[i] /= num_samples
+    return unpack_singleton(outs)
+
+    
+    seq.add(Conv3D(filters=1, kernel_size=(3, 3, 3),
+               activation='sigmoid',
+               padding='same', data_format='channels_last'))
+seq.compile(loss='binary_crossentropy', optimizer='adadelta')
+    
+    
+class FlicButton(BinarySensorDevice):
+    '''Representation of a flic button.'''
+    
+            active_clients = [client for client in data.values() if
+                          client['status']]
+        self.last_results = active_clients
         return True
     
-    def message_html(title, banner, detail=''):
-    MESSAGE_TEMPLATE = '''
-    <html><head>
-    <meta http-equiv='content-type' content='text/html;charset=utf-8'>
-    <title>$title</title>
-    <style><!--
-    body {font-family: arial,sans-serif}
-    div.nav {margin-top: 1ex}
-    div.nav A {font-size: 10pt; font-family: arial,sans-serif}
-    span.nav {font-size: 10pt; font-family: arial,sans-serif; font-weight: bold}
-    div.nav A,span.big {font-size: 12pt; color: #0000cc}
-    div.nav A {font-size: 10pt; color: black}
-    A.l:link {color: #6f6f6f}
-    A.u:link {color: green}
-    //--></style>
-    </head>
-    <body text=#000000 bgcolor=#ffffff>
-    <table border=0 cellpadding=2 cellspacing=0 width=100%>
-    <tr><td bgcolor=#3366cc><font face=arial,sans-serif color=#ffffff><b>Message</b></td></tr>
-    <tr><td> </td></tr></table>
-    <blockquote>
-    <H1>$banner</H1>
-    $detail
-    <p>
-    </blockquote>
-    <table width=100% cellpadding=0 cellspacing=0><tr><td bgcolor=#3366cc><img alt='' width=1 height=4></td></tr></table>
-    </body></html>
-    '''
-    return string.Template(MESSAGE_TEMPLATE).substitute(title=title, banner=banner, detail=detail)
+            for order in target_orders:
+            order.place()
+    
+    import voluptuous as vol
     
     
-    def noViableAlt(self, s, input):
-        if self.recognizer._state.backtracking > 0:
-            raise BacktrackingFailed
+class Watcher():
+    '''Class for starting Watchdog.'''
     
-            return m
+        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
+                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
+                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
+                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
+                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
+                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
+                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
+                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
+                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
+                 971, 977, 983, 991, 997]
     
-            return {
-            'type': typename,
-            'message': ''.join(msg),
-            '': ''.join(tb),
-        }
-    
-                positional arguments:
-              bar                   bar help
-    
-    
-# Debug build?
-Py_DEBUG = hasattr(sys, 'gettotalrefcount')
-    
-    # To simplify imports in test code
-_pack_uint32 = _bootstrap_external._pack_uint32
-_unpack_uint32 = _bootstrap_external._unpack_uint32
-    
-        # verify that none of the target files exist
-    assert not lexists('foo.txt')
-    assert not lexists('bar.txt')
-    assert not lexists('baz.txt')
-    try:
-        with open('foo.txt', 'w'):  # Creating the file
-            pass
-    
-    *TL;DR80
-Encapsulates how a set of objects interact.
-'''
+            if self.values[key] is None:
+            self._set_value(key, data)
     
     
-### OUTPUT ###
-# <NumObj: -1>
-# <NumObj: 0>
-# <NumObj: 1>
-# <NumObj: 2>
-# -- committed
-# <NumObj: 3>
-# <NumObj: 4>
-# <NumObj: 5>
-# -- rolled back
-# <NumObj: 2>
-# -- now doing stuff ...
-# -> doing stuff failed!
-# Traceback (most recent call last):
-# File 'memento.py', line 97, in <module>
-#     num_obj.do_stuff()
-#   File 'memento.py', line 52, in transaction
-#     raise e
-#   File 'memento.py', line 49, in transaction
-#     return self.method(obj, *args, **kwargs)
-#   File 'memento.py', line 70, in do_stuff
-#     self.increment()     # <- will fail and rollback
-#   File 'memento.py', line 65, in increment
-#     self.value += 1
-# TypeError: Can't convert 'int' object to str implicitly
-# <NumObj: 2>
-
-    
-        def publish(self, msg):
-        self.provider.notify(msg)
-    
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
-    
-        def __init__(self, one, other):
-        self._one = one
-        self._other = other
-    
-        def get_objects(self):
-        '''Get all objects'''
-        return self._objects
-    
-        def __init__(self):
-        self.time_provider = datetime.datetime
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-            path.append(start)
-        if start == end:
-            return path
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpath = self.find_path(node, end, path[:])
-                if newpath:
-                    return newpath
+def b_expo(a, b):
+    res = 0
+    while b > 0:
+        if b&1:
+            res += a
