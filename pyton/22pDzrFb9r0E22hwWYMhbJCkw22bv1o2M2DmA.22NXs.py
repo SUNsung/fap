@@ -1,123 +1,180 @@
 
         
-            def __setstate__(self, state):
-        # Can't handle by adding 'proxy_manager' to self.__attrs__ because
-        # self.poolmanager uses a lambda function, which isn't pickleable.
-        self.proxy_manager = {}
-        self.config = {}
+        
+class HTTPMessage(object):
+    '''Abstract class for HTTP messages.'''
     
+            yield self.process_body(body)
+
     
-def extract_cookies_to_jar(jar, request, response):
-    '''Extract the cookies from the response into a CookieJar.
-    
-    
-def main():
-    '''Pretty-print the bug information as JSON.'''
-    print(json.dumps(info(), sort_keys=True, indent=2))
-    
-        @property
-    def is_redirect(self):
-        '''True if this Response is a well-formed HTTP redirect that could have
-        been processed automatically (by :meth:`Session.resolve_redirects`).
+        def __call__(self, r):
         '''
-        return ('location' in self.headers and self.status_code in REDIRECT_STATI)
+        Override username/password serialization to allow unicode.
     
-        def send(self, request, **kwargs):
-        '''Send a given PreparedRequest.
-    
-    
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
-    
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-            for k in sorted(results_dict.keys()):
-            all_times[k].append(results_dict[k]['time'])
-            all_errors[k].append(results_dict[k]['error'])
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-                gc.collect()
-            print('- benchmarking SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.01, power_t=0.25, tol=1e-3)
-    
-        res.append(bench)
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
     
-if not os.path.exists(DATA_FOLDER):
-    
-        def appid_exist(self, appids):
-        for appid in appids.split('|'):
-            if appid == '':
-                continue
-            if appid in self.config.GAE_APPIDS:
-                return True
-        return False
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-root_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir))
-data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data'))
-module_data_path = os.path.join(data_path, 'gae_proxy')
-python_path = os.path.abspath( os.path.join(root_path, 'python27', '1.0'))
-    
-        if __hostsdeny__ and netloc.endswith(__hostsdeny__):
-        start_response('403 Forbidden', [('Content-Type', 'text/html')])
-        yield message_html('403 Hosts Deny', 'Hosts Deny(%r)' % netloc, detail='共用appid因为资源有限，限制观看视频和文件下载等消耗资源过多的访问，请使用自己的appid <a href=' https://github.com/XX-net/XX-Net/wiki/Register-Google-appid' target='_blank'>帮助</a> ')
-        raise StopIteration
-    
-    @section recognizers Recognizers
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
     
+setup(
+    name='httpie',
+    version=httpie.__version__,
+    description=httpie.__doc__.strip(),
+    long_description=long_description(),
+    url='http://httpie.org/',
+    download_url='https://github.com/jakubroztocil/httpie',
+    author=httpie.__author__,
+    author_email='jakub@roztocil.co',
+    license=httpie.__licence__,
+    packages=find_packages(),
+    entry_points={
+        'console_scripts': [
+            'http = httpie.__main__:main',
+        ],
+    },
+    extras_require=extras_require,
+    install_requires=install_requires,
+    tests_require=tests_require,
+    cmdclass={'test': PyTest},
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: BSD License',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development',
+        'Topic :: System :: Networking',
+        'Topic :: Terminals',
+        'Topic :: Text Processing',
+        'Topic :: Utilities'
+    ],
+)
+
     
-            Using setter/getter methods is deprecated. Use o.text instead.
-        '''
-        raise NotImplementedError
     
-    def setText(self, text):
-        '''@brief Set the text of the token.
-    
-            # Deleting model 'EnvironmentProject'
-        db.delete_table('sentry_environmentproject')
-    
-            # Adding unique constraint on 'ProcessingIssue', fields ['project', 'checksum', 'type']
-        db.create_unique('sentry_processingissue', ['project_id', 'checksum', 'type'])
-    
-            # User chose to not deal with backwards NULL issues for 'ReleaseEnvironment.project_id'
-        raise RuntimeError(
-            'Cannot reverse this migration. 'ReleaseEnvironment.project_id' and its values cannot be restored.'
-        )
-    
-            # Adding unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
-        db.create_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
     
     
-@callback
-def async_setup(hass, flash_briefing_config):
-    '''Activate Alexa component.'''
-    hass.http.register_view(
-        AlexaFlashBriefingView(hass, flash_briefing_config))
+def test_migrate_implicit_content_type():
+    config = MockEnvironment().config
     
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/browser/
+        def test_print_overridable_when_stdout_redirected(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
+        assert HTTP_OK in r
+
+    
+    from time import time
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.metrics import roc_curve, auc
+from sklearn.datasets import fetch_kddcup99, fetch_covtype, fetch_mldata
+from sklearn.preprocessing import LabelBinarizer
+    
+        n_times : int
+        Time calling the metric n_times times.
+    
+    
+def fixed_batch_size_comparison(data):
+    all_features = [i.astype(int) for i in np.linspace(data.shape[1] // 10,
+                                                       data.shape[1], num=5)]
+    batch_size = 1000
+    # Compare runtimes and error for fixed batch size
+    all_times = defaultdict(list)
+    all_errors = defaultdict(list)
+    for n_components in all_features:
+        pca = PCA(n_components=n_components)
+        ipca = IncrementalPCA(n_components=n_components, batch_size=batch_size)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('ipca', ipca)]}
+    
+        #------------------------------------------------------------
+    # varying k
+    k_results_build = dict([(alg, np.zeros(len(krange)))
+                            for alg in algorithms])
+    k_results_query = dict([(alg, np.zeros(len(krange)))
+                            for alg in algorithms])
+    
+            start = time.time()
+        func(X, n_jobs=-1)
+        multi_core.append(time.time() - start)
+    
+    Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    56                                           @profile
+    57                                           def benchmark_sparse_predict():
+    58         1        10854  10854.0      2.8      X_test_sparse = csr_matrix(X_test)
+    59       301          477      1.6      0.1      for _ in range(300):
+    60       300       381409   1271.4     97.1          clf.predict(X_test_sparse)
 '''
-import voluptuous as vol
     
-            # Test the router is accessible.
-        data = self.get_thomson_data()
-        self.success_init = data is not None
+    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
     
-            # Required for receiving multicast
-        ssdp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    
+# Symlinks should have same data as target
+for src, dst in symlinks.items():
+    if dst in dirs:
+        dirs[src] = dirs[dst]
+    
+            # split the paragraph into fake smaller paragraphs to make the
+        # problem harder e.g. more similar to tweets
+        if lang in ('zh', 'ja'):
+        # FIXME: whitespace tokenizing does not work on chinese and japanese
+            continue
+        words = content.split()
+        n_groups = len(words) / n_words_per_short_text
+        if n_groups < 1:
+            continue
+        groups = np.array_split(words, n_groups)
+    
+    # The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+            # Draw a box around the face
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+    
+    # Load an image with an unknown face
+unknown_image = face_recognition.load_image_file('two_people.jpg')
+    
+    from setuptools import setup
+    
+    import face_recognition
+from flask import Flask, jsonify, request, redirect
