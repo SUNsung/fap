@@ -1,211 +1,241 @@
 
         
-        namespace api {
+        /** @class FadeOut
+ * @brief Fades Out an object that implements the RGBAProtocol protocol. It modifies the opacity from 255 to 0.
+ The 'reverse' of this action is FadeIn
+*/
+class CC_DLL FadeOut : public FadeTo
+{
+public:
+    /** 
+     * Creates the action.
+     * @param d Duration time, in seconds.
+     */
+    static FadeOut* create(float d);
     }
     
-    #endif
+    void ActionManager::actionAllocWithHashElement(tHashElement *element)
+{
+    // 4 actions per Node by default
+    if (element->actions == nullptr)
+    {
+        element->actions = ccArrayNew(4);
+    }else 
+    if (element->actions->num == element->actions->max)
+    {
+        ccArrayDoubleCapacity(element->actions);
+    }
+    }
     
-      // display::DisplayObserver:
-  void OnDisplayAdded(const display::Display& new_display) override;
-  void OnDisplayRemoved(const display::Display& old_display) override;
-  void OnDisplayMetricsChanged(const display::Display& display,
-                               uint32_t changed_metrics) override;
+    /**
+@brief Progress to percentage.
+@details This action show the target node from current percentage to the specified percentage.
+        You should specify the destination percentage when creating the action.
+@since v0.99.1
+*/
+class CC_DLL ProgressTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes with a duration and a destination percentage.
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
+     */
+    static ProgressTo* create(float duration, float percent);
+    }
+    
+    /**
+@brief The delegate class for ActionTween.
+@details If you want to use ActionTween on a node.
+        You should implement the node follow these steps:
+        1. The node should be inherit from ActionTweenDelegate.
+        2. Override the virtual method updateTweenAction in the node.
+    
+    void Animation::addSpriteFrame(SpriteFrame* spriteFrame)
+{
+    AnimationFrame *animFrame = AnimationFrame::create(spriteFrame, 1.0f, ValueMap());
+    _frames.pushBack(animFrame);
+    }
+    
+                if( ! spriteFrame ) {
+                CCLOG('cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the SpriteFrameCache. This frame will not be added to the animation.', name.c_str(), spriteFrameName.c_str());
+    }
     
     
-    {  if (use_native_event) {
-    mate::Handle<mate::Event> native_event = mate::Event::Create(isolate);
-    native_event->SetSenderAndMessage(sender, message);
-    event = v8::Local<v8::Object>::Cast(native_event.ToV8());
-  } else {
-    event = CreateEventObject(isolate);
-  }
-  mate::Dictionary(isolate, event).Set('sender', object);
-  return event;
+    {// end of sprite_nodes group
+/// @}
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    private:
+    CC_DISALLOW_COPY_AND_ASSIGN(AtlasNode);
+    
+    unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold)
+{
+    /*
+     checking the 2x2 pixel grid, assigning these values to each pixel, if not transparent
+     +---+---+
+     | 1 | 2 |
+     +---+---+
+     | 4 | 8 | <- current pixel (curx,cury)
+     +---+---+
+     */
+    unsigned int sv = 0;
+    //NOTE: due to the way we pick points from texture, rect needs to be smaller, otherwise it goes outside 1 pixel
+    auto fixedRect = Rect(rect.origin, rect.size-Size(2,2));
+    
+    Vec2 tl = Vec2(x-1, y-1);
+    sv += (fixedRect.containsPoint(tl) && getAlphaByPos(tl) > threshold)? 1 : 0;
+    Vec2 tr = Vec2(x, y-1);
+    sv += (fixedRect.containsPoint(tr) && getAlphaByPos(tr) > threshold)? 2 : 0;
+    Vec2 bl = Vec2(x-1, y);
+    sv += (fixedRect.containsPoint(bl) && getAlphaByPos(bl) > threshold)? 4 : 0;
+    Vec2 br = Vec2(x, y);
+    sv += (fixedRect.containsPoint(br) && getAlphaByPos(br) > threshold)? 8 : 0;
+    CCASSERT(sv != 0 && sv != 15, 'square value should not be 0, or 15');
+    return sv;
 }
     
-      base::WeakPtrFactory<TrackableObjectBase> weak_factory_;
+    // That gcc wants both of these prototypes seems mysterious. VC, for
+// its part, can't decide which to use (another mystery). Matching of
+// template overloads: the final frontier.
+#ifndef COMPILER_MSVC
+template <typename T, size_t N>
+char (&ArraySizeHelper(const T (&array)[N]))[N];
+#endif
     
-      // An AST section consists of one or more AST modules, optionally with
-  // headers. Iterate over all AST modules.
-  while (!buf.empty()) {
-    auto info = serialization::validateSerializedAST(buf);
-    }
+      CheckHandler& operator=(const CheckHandler&) = delete;
+  CheckHandler(const CheckHandler&) = delete;
+  CheckHandler() = delete;
     
-      DefaultCacheKey CKey(Key, &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    if (Entry->second == Value)
-      return;
-    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
-    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
-    DCache.Entries.erase(Entry);
-  }
     
-    void PrefixMapKeyPrinter<char>::print(raw_ostream &out, ArrayRef<char> key) {
-  out << QuotedString(StringRef(key.data(), key.size()));
-};
-    
-    #include 'swift/Basic/Unicode.h'
-    
-    #include 'llvm/ADT/PointerUnion.h'
-    
-    #endif // SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
+    {}  // end namespace benchmark
 
     
-    class PlatformStyle;
-class WalletModel;
-    
-    class TrafficGraphWidget : public QWidget
-{
-    Q_OBJECT
+    // NOTE: Wrappers for std::mutex and std::unique_lock are provided so that
+// we can annotate them with thread safety attributes and use the
+// -Wthread-safety warning with clang. The standard library types cannot be
+// used directly because they do not provided the required annotations.
+class CAPABILITY('mutex') Mutex {
+ public:
+  Mutex() {}
     }
     
-        if (len > 0) {
-        /* The z of the final point gives us the 'global Z' for the table. */
-        r[i].x = a[i].x;
-        r[i].y = a[i].y;
-        *globalz = a[i].z;
-        r[i].infinity = 0;
-        zs = zr[i];
-    }
+    #endif  // BENCHMARK_RE_H_
+
     
-    static void secp256k1_ecdsa_recoverable_signature_load(const secp256k1_context* ctx, secp256k1_scalar* r, secp256k1_scalar* s, int* recid, const secp256k1_ecdsa_recoverable_signature* sig) {
-    (void)ctx;
-    if (sizeof(secp256k1_scalar) == 32) {
-        /* When the secp256k1_scalar type is exactly 32 byte, use its
-         * representation inside secp256k1_ecdsa_signature, as conversion is very fast.
-         * Note that secp256k1_ecdsa_signature_save must use the same representation. */
-        memcpy(r, &sig->data[0], 32);
-        memcpy(s, &sig->data[32], 32);
-    } else {
-        secp256k1_scalar_set_b32(r, &sig->data[0], NULL);
-        secp256k1_scalar_set_b32(s, &sig->data[32], NULL);
-    }
-    *recid = sig->data[64];
+    #include 'sleep.h'
+    
+      // init config and state
+  // After a CAN handle is created with canOpen() the CAN-ID filter is
+  // cleared
+  // (no CAN messages
+  // will pass the filter). To receive a CAN message with a certain CAN-ID
+  // or an
+  // NTCAN-Event with
+  // a certain Event-ID it is required to enable this ID in the handle
+  // filter as
+  // otherwise a
+  // received  message or event is discarded by the driver for this handle.
+  // 1. set receive message_id filter, ie white list
+  int32_t id_count = 0x800;
+  ret = canIdRegionAdd(dev_handler_, 0, &id_count);
+  if (ret != NTCAN_SUCCESS) {
+    AERROR << 'add receive msg id filter error code: ' << ret << ', '
+           << GetErrorString(ret);
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+    
+    
+    {  if (static_cast<size_t>(*frame_num) != frames.size()) {
+    AERROR << 'frame num is incorrect.';
+    return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
+  }
+  for (size_t i = 0; i < frames.size(); ++i) {
+    ADEBUG << 'send frame i:' << i;
+    ADEBUG << frames[i].CanFrameString();
+    frame_info_ << frames[i].CanFrameString();
+  }
+  ++send_counter_;
+  return ErrorCode::OK;
 }
     
-    static CBlockIndex* CreateBlockIndexWithNbits(uint32_t nbits)
-{
-    CBlockIndex* block_index = new CBlockIndex();
-    block_index->nHeight = 46367;
-    block_index->nTime = 1269211443;
-    block_index->nBits = nbits;
-    return block_index;
-}
     
-    #ifdef TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
-template<typename T, bool convertible = is_convertible<T, int>::value>
-struct formatZeroIntegerWorkaround
-{
-    static bool invoke(std::ostream& /**/, const T& /**/) { return false; }
-};
-template<typename T>
-struct formatZeroIntegerWorkaround<T,true>
-{
-    static bool invoke(std::ostream& out, const T& value)
     {
-        if (static_cast<int>(value) == 0 && out.flags() & std::ios::showpos)
-        {
-            out << '+0';
-            return true;
-        }
-        return false;
-    }
-};
-#endif // TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
     
-    bool RunProtoCompiler(const string& filename,
-                      const string& plugin_specific_args,
-                      CommandLineInterface* cli, FileDescriptorProto* file) {
-  cli->SetInputsAreProtoPathRelative(true);
-    }
-    
-    TEST(MovableMessageTest, MoveDifferentArenas) {
-  Arena arena1, arena2;
+    TEST(HermesCanClient, receiver) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::HERMES_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+  HermesCanClient hermes_can;
+  EXPECT_TRUE(hermes_can.Init(param));
     }
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+      /**
+   * @brief Send messages
+   * @param frames The messages to send.
+   * @param frame_num The amount of messages to send.
+   * @return The status of the sending action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
+                                 int32_t *const frame_num) override;
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/message_manager.h'
     
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
-}
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
     
-    // Strip package name from a descriptor's full name.
-// For example:
-//   Full name   : foo.Bar.Baz
-//   Package name: foo
-//   After strip : Bar.Baz
-string StripPackageName(const string& full_name,
-                        const FileDescriptor* file) {
-  if (file->package().empty()) {
-    return full_name;
-  } else {
-    // Strip package name
-    return full_name.substr(file->package().size() + 1);
-  }
-}
+    const uint8_t BIT_MASK_1[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+const uint8_t BIT_MASK_0[] = {0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F};
+const uint8_t RANG_MASK_1_L[] = {0x01, 0x03, 0x07, 0x0F,
+                                 0x1F, 0x3F, 0x7F, 0xFF};
+const uint8_t RANG_MASK_0_L[] = {0xFE, 0XFC, 0xF8, 0xF0,
+                                 0xE0, 0xC0, 0x80, 0x00};
     
-    ExtensionGenerator::ExtensionGenerator(const string& root_class_name,
-                                       const FieldDescriptor* descriptor)
-    : method_name_(ExtensionMethodName(descriptor)),
-      root_class_and_method_name_(root_class_name + '_' + method_name_),
-      descriptor_(descriptor) {
-  if (descriptor->is_map()) {
-    // NOTE: src/google/protobuf/compiler/plugin.cc makes use of cerr for some
-    // error cases, so it seems to be ok to use as a back door for errors.
-    std::cerr << 'error: Extension is a map<>!'
-         << ' That used to be blocked by the compiler.' << std::endl;
-    std::cerr.flush();
-    abort();
-  }
-}
+      /**
+   * @brief Constructor which takes a reference to a one-byte unsigned integer.
+   * @param value The reference to a one-byte unsigned integer for construction.
+   */
+  Byte(const Byte &value);
     
-    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
-    : descriptor_(descriptor) {
-  variables_['enum_name'] = OneofEnumName(descriptor_);
-  variables_['name'] = OneofName(descriptor_);
-  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
-  variables_['raw_index'] = SimpleItoa(descriptor_->index());
-  const Descriptor* msg_descriptor = descriptor_->containing_type();
-  variables_['owning_message_class'] = ClassName(msg_descriptor);
+    // System gflags
+DEFINE_string(sensor_node_name, '', 'Sensor node name.');
+
+    
+    #ifndef GUETZLI_FAST_LOG_H_
+#define GUETZLI_FAST_LOG_H_
+    
+      int verbose = 0;
+  int quality = kDefaultJPEGQuality;
+  int memlimit_mb = kDefaultMemlimitMB;
+    
+    
+    {}  // namespace guetzli
+    
+    namespace guetzli {
     }
     
-      Blob<Dtype> mean_, variance_, temp_, x_norm_;
-  bool use_global_stats_;
-  Dtype moving_average_fraction_;
-  int channels_;
-  Dtype eps_;
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
     
-                    FT_Glyph ft_glyph = NULL;
-                FT_BitmapGlyph ft_glyph_bitmap = NULL; // NB: will point to bitmap within FT_Glyph
-                GlyphInfo glyph_info;
-                if (!font_face.CalcGlyphInfo(codepoint, glyph_info, ft_glyph, ft_glyph_bitmap))
-                    continue;
-    
-        g_ShaderHandle = glCreateProgram();
-    glAttachShader(g_ShaderHandle, g_VertHandle);
-    glAttachShader(g_ShaderHandle, g_FragHandle);
-    glLinkProgram(g_ShaderHandle);
-    CheckProgram(g_ShaderHandle, 'shader program');
-    
-    // Simple column measurement, currently used for MenuItem() only.. This is very short-sighted/throw-away code and NOT a generic helper.
-struct IMGUI_API ImGuiMenuColumns
-{
-    int         Count;
-    float       Spacing;
-    float       Width, NextWidth;
-    float       Pos[4], NextWidths[4];
-    }
+    #endif  // GUETZLI_JPEG_DATA_READER_H_
