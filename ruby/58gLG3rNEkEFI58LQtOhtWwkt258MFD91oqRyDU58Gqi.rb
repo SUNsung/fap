@@ -1,125 +1,252 @@
 
         
-            A binary installer is available:
-      https://www.haskell.org/platform/mac.html
-    EOS
-  when 'mysqldump-secure' then <<-EOS.undent
-    The creator of mysqldump-secure tried to game our popularity metrics.
-    EOS
-  when 'ngrok' then <<-EOS.undent
-    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
+                # Fix the order of receivers
+        @agents.each do |agent|
+          stub.proxy(agent).receivers { |orig| orig.order(:id) }
+        end
+      end
     
-      # True if a {Formula} is being built in 32-bit/x86 mode.
-  # This is needed for some use-cases though we prefer to build Universal
-  # when a 32-bit version is needed.
-  def build_32_bit?
-    include?('32-bit') && option_defined?('32-bit')
+          agent_runner.stop
+    end
+  end
+end
+    
+      it 'does not allow hash-style assignment' do
+    expect {
+      location[:lat] = 2.0
+    }.to raise_error(NoMethodError)
   end
     
-        return if Language::Python.reads_brewed_pth_files?('python')
-    
-        dump_formula_report :A, 'New Formulae'
-    dump_formula_report :M, 'Updated Formulae'
-    dump_formula_report :R, 'Renamed Formulae'
-    dump_formula_report :D, 'Deleted Formulae'
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
   end
     
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
+            im_receiver = Agents::CannotBeScheduled.new(
+           :name => 'Immediate Receiving Agent',
+        )
+        im_receiver.propagate_immediately = true
+        im_receiver.user = users(:bob)
+        im_receiver.sources << sender
     
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
+        def to_json
+      JSON.generate(as_json)
+    end
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is usable. This should return true or false.
-        #
-        # If raise_error is true, then instead of returning false, this
-        # should raise an error with a helpful message about why this
-        # provider cannot be used.
-        #
-        # @param [Boolean] raise_error If true, raise exception if not usable.
-        # @return [Boolean]
-        def self.usable?(raise_error=false)
-          # Return true by default for backwards compat since this was
-          # introduced long after providers were being written.
-          true
-        end
+        def document?
+      @content =~ DOCUMENT_RGX
+    end
     
-        private
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
+          def process_response(response)
+        super.merge! response_url: response.url
+      end
+    end
   end
 end
 
     
-        # extracts rule immediately after it's parent, and adjust the selector
-    # .x { textarea& { ... }}
-    # to:
-    # .x { ... }
-    # textarea.x { ... }
-    def extract_nested_rule(file, selector, new_selector = nil)
-      matches = []
-      # first find the rules, and remove them
-      file    = replace_rules(file, '\s*#{selector}', comments: true) { |rule, pos, css|
-        new_sel = new_selector || '#{get_selector(rule).gsub(/&/, selector_for_pos(css, pos.begin))}'
-        matches << [rule, pos, new_sel]
-        indent '// [converter] extracted #{get_selector(rule)} to #{new_sel}'.tr('\n', ' ').squeeze(' '), indent_width(rule)
-      }
-      raise 'extract_nested_rule: no such selector: #{selector}' if matches.empty?
-      # replace rule selector with new_selector
-      matches.each do |m|
-        m[0].sub! /(#{COMMENT_RE}*)^(\s*).*?(\s*){/m, '\\1\\2#{m[2]}\\3{'
-        log_transform selector, m[2]
-      end
-      replace_substrings_at file,
-                            matches.map { |_, pos| close_brace_pos(file, pos.begin, 1) + 1 },
-                            matches.map { |rule, _| '\n\n' + unindent(rule) }
-    end
-    }
-    }
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
+          @terminal_width = if !tty?
+        nil
+      elsif ENV['COLUMNS']
+        ENV['COLUMNS'].to_i
       else
-        puts dark cyan s
+        `stty size`.scan(/\d+/).last.to_i
+      end
+    rescue
+      @terminal_width = nil
+    end
+  end
+end
+
+    
+            css('.c10', '.showcase', '.showcase-content', '.l-main-section', 'div.div', 'div[flex]', 'code-tabs', 'md-card', 'md-card-content', 'div:not([class])', 'footer', '.card-row', '.card-row-container', 'figure', 'blockquote', 'exported', 'defined', 'div.ng-scope', '.code-example header', 'section.desc', '.row', '.dart-api-entry-main', '.main-content', 'section.summary', 'span.signature').each do |node|
+          node.before(node.children).remove
+        end
+    
+    protected
+    
+      #
+  # Gets cookies from the Set-Cookie header in a format to be used
+  # in the 'cookie' send_request field
+  #
+  def get_cookies
+    cookies = ''
+    if (self.headers.include?('Set-Cookie'))
+      set_cookies = self.headers['Set-Cookie']
+      key_vals = set_cookies.scan(/\s?([^, ;]+?)=([^, ;]*?)[;,]/)
+      key_vals.each do |k, v|
+        # Dont downcase actual cookie name as may be case sensitive
+        name = k.downcase
+        next if name == 'path'
+        next if name == 'expires'
+        next if name == 'domain'
+        next if name == 'max-age'
+        cookies << '#{k}=#{v}; '
       end
     end
     
-        def get_paths_by_type(dir, file_re, recursive = true)
-      get_file_paths(dir, recursive).select { |path| path =~ file_re }
+      #
+  # Move these into an IPMI stack or mixin at some point
+  #
+    
+        data =
+      [0x00, 0x00, 0x00, 0x00].pack('C*') +
+      bmc_session_id +
+      console_random_id +
+      [
+        0x14, 0x00, 0x00,
+        username.length
+      ].pack('C*') +
+      username
+    
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+    
+                if kvno
+              kvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_kvno], 1, :CONTEXT_SPECIFIC)
+              elems << kvno_asn1
+            end
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
+  end
+end
+
     
-    abstract_target 'Abstract Target' do
-    use_modular_headers!
+    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
+do |username, password, mobile|
+  @me = User.find_by_username(username)
+  @me.password ||= password
+  manual_login
+  confirm_login mobile
+end
     
-          private
+    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
+  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+end
     
-          if payload
-        raw_push([payload])
-        payload['jid']
+          @conv2 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
+             .increase_unread(alice)
+    
+    Given(/^file '(.*?)' exists in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
+  run_vagrant_command('touch #{file_shared_path}')
+end
+    
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
+        end
+      end
+    
+            def lvalue(key)
+          key.to_s.chomp('=').to_sym
+        end
       end
     end
+  end
+end
+
+    
+    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
+# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
+# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
+# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
+if $0 == __FILE__
+  LogStash::Bundler.setup!({:without => [:build, :development]})
+  require_relative 'patches/jar_dependencies'
+    
+    require 'bootstrap/environment'
+    
+          prepare_package(explicit_plugins_specs, temp_path)
+      LogStash::Util::Zip.compress(temp_path, @target)
+    ensure
+      FileUtils.rm_rf(temp_path)
+    end
+    
+        # any errors will be logged to $stderr by invoke!
+    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
+    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
+    options[:local] = true if local?
+    output = LogStash::Bundler.invoke!(options)
+    # We currently dont removed unused gems from the logstash installation
+    # see: https://github.com/elastic/logstash/issues/6339
+    # output = LogStash::Bundler.invoke!(:clean => true)
+    display_updated_plugins(previous_gem_specs_map)
+  rescue => exception
+    gemfile.restore!
+    report_exception('Updated Aborted', exception)
+  ensure
+    display_bundler_output(output)
+  end
+    
+              it 'fails when installing a non logstash plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install  bundler')
+            expect(command).not_to install_successfully
+          end
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+              scope = scope.not_deleted unless params[:show_deleted]
+          scope = scope.not_discontinued unless params[:show_discontinued]
+        else
+          scope = Product.accessible_by(current_ability, :read).active.includes(*product_includes)
+        end
+    
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        end
+    
+            def new; end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+              @line_item = Spree::Cart::AddItem.call(order: @order,
+                                                 variant: variant,
+                                                 quantity: quantity,
+                                                 options: { shipment: @shipment }).value
+    
+              if params[:page] || params[:per_page]
+            @states = @states.page(params[:page]).per(params[:per_page])
+          end
+    
+            def show
+          authorize! :read, @store
+          respond_with(@store)
+        end
+    
+            def jstree
+          show
+        end
+    
+            private
