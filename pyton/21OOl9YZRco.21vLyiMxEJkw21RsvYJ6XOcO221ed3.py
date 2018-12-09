@@ -1,94 +1,108 @@
 
         
-            # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+            @get_item_parameters
+    def test_get(self, key, value):
+        assert self.lookup_dict.get(key) == value
+
     
-        def __call__(self, x):
-        regularization = 0.
-        if self.l1:
-            regularization += K.sum(self.l1 * K.abs(x))
-        if self.l2:
-            regularization += K.sum(self.l2 * K.square(x))
-        return regularization
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+        else:
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
     
-        model = create_multi_input_model_from(*models)
-    model.compile(loss='categorical_crossentropy', optimizer='sgd')
-    assert len(model.losses) == 8
+            with server as (host, port):
+            server_url = 'http://{}:{}'.format(host, port)
+            for _ in range(requests_to_handle):
+                r = requests.get(server_url)
+                assert r.status_code == 200
     
-            # On-the-fly setting of symbolic model inputs
-        # (either by using the tensor provided,
-        # or by creating a placeholder if Numpy data was provided).
-        self.inputs = []
-        self.input_names = []
-        self._feed_inputs = []
-        self._feed_input_names = []
-        self._feed_input_shapes = []
-        inputs = to_list(inputs, allow_tuple=True)
-    
-    	# Track the line at which the error occurred in case this is
-	# generated from a lexer.  We need to track this since the
-        # unexpected char doesn't carry the line info.
-        self.line = None
-    
-    
-class DeleteOp(ReplaceOp):
-    '''
-    @brief Internal helper class.
-    '''
-    
-        def __init__(self, json_name, value):
-        self.value = value
-        super(Fixed, self).__init__(
-            json_name=json_name, default=value, omitempty=False)
-    
-    import josepy as jose
-    
-    def get_mod_deps(mod_name):
-    '''Get known module dependencies.
-    
-            self.config.revert_challenge_config()
-        self.assertEqual(mock_load.call_count, 1)
-    
-        def test_include_missing(self):
-        # This should miss
-        self.verify_fnmatch('test_*.onf', False)
-    
-        def test_nonexistent_like(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                for like in entrypoint.OVERRIDE_CLASSES.keys():
-                    mock_like.return_value = [like]
-                    self.assertEqual(entrypoint.get_configurator(),
-                                     entrypoint.OVERRIDE_CLASSES[like])
-    
-            complex_vh = VirtualHost(
-            'fp', 'vhp',
-            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
-            False, False)
-        self.assertTrue(complex_vh.conflicts([self.addr1]))
-        self.assertTrue(complex_vh.conflicts([self.addr2]))
-        self.assertFalse(complex_vh.conflicts([self.addr_default]))
+        global __doc__
+    __doc__ = (__doc__ + '\n' +
+               '\n'.join(doc(code) for code in sorted(_codes))
+               if __doc__ is not None else None)
     
     # If false, no module index is generated.
 #latex_domain_indices = True
     
-          # Pop the stack if there is a matching '<'.  Otherwise, ignore
-      # this '>' since it must be an operator.
-      if stack:
-        if stack[-1] == '<':
-          stack.pop()
-          if not stack:
-            return (i + 1, None)
-    elif char == ';':
-      # Found something that look like end of statements.  If we are currently
-      # expecting a '>', the matching '<' must have been an operator, since
-      # template argument list should not contain statements.
-      while stack and stack[-1] == '<':
-        stack.pop()
-      if not stack:
-        return (-1, None)
+        plt.figure('scikit-learn GLM benchmark results')
+    plt.xlabel('Dimensions')
+    plt.ylabel('Time (s)')
+    plt.plot(dimensions, time_ridge, color='r')
+    plt.plot(dimensions, time_ols, color='g')
+    plt.plot(dimensions, time_lasso, color='b')
+    
+    print(__doc__)
+    
+    
+@ignore_warnings
+def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
+              formats=tuple(v for k, v in sorted(FORMATS.items())),
+              samples=1000, classes=4, density=.2,
+              n_times=5):
+    '''Times metric calculations for a number of inputs
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+        label = 'scikit-learn singular value decomposition benchmark results'
+    fig = plt.figure(label)
+    ax = fig.gca(projection='3d')
+    for c, (label, timings) in zip('rbg', sorted(six.iteritems(results))):
+        X, Y = np.meshgrid(samples_range, features_range)
+        Z = np.asarray(timings).reshape(samples_range.shape[0],
+                                        features_range.shape[0])
+        # plot the actual surface
+        ax.plot_surface(X, Y, Z, rstride=8, cstride=8, alpha=0.3,
+                        color=c)
+        # dummy point plot to stick the legend to since surface plot do not
+        # support legends (yet?)
+        ax.plot([1], [1], [1], color=c, label=label)
+    
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
+    
+        An example with a long-untouched module that everyone has
+    >>> _linkcode_resolve('py', {'module': 'tty',
+    ...                          'fullname': 'setraw'},
+    ...                   package='tty',
+    ...                   url_fmt='http://hg.python.org/cpython/file/'
+    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
+    ...                   revision='xxxx')
+    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
+    '''
+    
+    
+if not os.path.exists(TRAIN_FOLDER) or not os.path.exists(TEST_FOLDER):
+    
+                if self.values.count(None) > 0:
+                new_key = self.hash_function(new_key + 1)
+            else:
+                new_key = None
+                break
+    
+    	for n in xrange(m+1):
+		for k in xrange(1, m):
+			memo[n][k] += memo[n][k-1]
+			if n-k > 0:
+				memo[n][k] += memo[n-k-1][k]
+    
+    This is a pure Python implementation of Dynamic Programming solution to the longest_sub_array problem.
+    
+    	Arguments:
+		i {[int]} -- [integer]
+	'''
+    
+        return res
