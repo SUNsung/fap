@@ -1,126 +1,85 @@
 
         
-            def __init__(self, debuglevel=0):
-        self._init_github_account()
-        https_handler = make_HTTPS_handler({}, debuglevel=debuglevel)
-        self._opener = compat_urllib_request.build_opener(https_handler)
+        
+def _get_package(package) -> ModuleType:
+    '''Take a package name or module object and return the module.
     
+    def test():
+    NUMBER_OF_PROCESSES = 4
+    TASKS1 = [(mul, (i, 7)) for i in range(20)]
+    TASKS2 = [(plus, (i, 8)) for i in range(10)]
     
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
+                if point.name == 'p':
+                link = point.find('a')
+                if link is not None:
+                    link = clean_pdf_link(link.attrs['href'])
+                    ext = get_extension(link)
+                    print(ext)
+                    if not ext in forbidden_extensions:
+                        print(shorten_title(point.text) + ' (' + link + ')')
+                        try:
+                            name = clean_text(point.text.split('[' + ext + ']')[0])
+                            fullname = '.'.join((name, ext))
+                            if not os.path.exists('/'.join((current_directory, fullname)) ):
+                                download_pdf(link, current_directory, '.'.join((name, ext)))
+                        except KeyboardInterrupt:
+                            try:
+                                print('Press Ctrl-C in 1 second to quit')
+                                time.sleep(1)
+                            except KeyboardInterrupt:
+                                print('Cancelling..')
+                                break
+                        except:
+                            failures.append(point.text)
+                        
+        point = point.next_sibling          
     
-    new_version = {}
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
     
-    import datetime
-import io
-import json
-import textwrap
+         Structure:
+        <train_dir>/
+        ├── <person1>/
+        │   ├── <somename1>.jpeg
+        │   ├── <somename2>.jpeg
+        │   ├── ...
+        ├── <person2>/
+        │   ├── <somename1>.jpeg
+        │   └── <somename2>.jpeg
+        └── ...
     
-    import youtube_dl
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    lazy_extractors_filename = sys.argv[1]
-if os.path.exists(lazy_extractors_filename):
-    os.remove(lazy_extractors_filename)
-    
-        def test_cbc_decrypt(self):
-        data = bytes_to_intlist(
-            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
-        )
-        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
-        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
-    
-        @classmethod
-    def default_decoder(cls, value):
-        try:
-            return pyrfc3339.parse(value)
-        except ValueError as error:
-            raise jose.DeserializationError(error)
-    
-        def test_default_decoder_raises_deserialization_error(self):
-        from acme.fields import RFC3339Field
-        self.assertRaises(
-            jose.DeserializationError, RFC3339Field.default_decoder, '')
-    
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'acme-python.tex', u'acme-python Documentation',
-     u'Let\'s Encrypt Project', 'manual'),
-]
-    
-    
-def _split_aug_path(vhost_path):
-    '''Splits an Augeas path into a file path and an internal path.
-    
-            self.assertEqual(mock_logger.debug.call_count, 1)
-    
-            complex_vh = VirtualHost(
-            'fp', 'vhp',
-            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
-            False, False)
-        self.assertTrue(complex_vh.conflicts([self.addr1]))
-        self.assertTrue(complex_vh.conflicts([self.addr2]))
-        self.assertFalse(complex_vh.conflicts([self.addr_default]))
-    
-        def _get_addrs(self, achall):
-        '''Return the Apache addresses needed for TLS-SNI-01.'''
-        # TODO: Checkout _default_ rules.
-        addrs = set()
-        default_addr = obj.Addr(('*', str(
-            self.configurator.config.tls_sni_01_port)))
-    
-        a_transaction = Transaction(True, num_obj)
-    try:
-        for i in range(3):
-            num_obj.increment()
-            print(num_obj)
-        a_transaction.commit()
-        print('-- committed')
-    
-        root_specification = UserSpecification().and_specification(SuperUserSpecification())
-    
-    ### OUTPUT ###
-# Scanning... Station is 1380 AM
-# Scanning... Station is 1510 AM
-# Switching to FM
-# Scanning... Station is 89.1 FM
-# Scanning... Station is 103.9 FM
-# Scanning... Station is 81.3 FM
-# Scanning... Station is 89.1 FM
-# Switching to AM
-# Scanning... Station is 1250 AM
-# Scanning... Station is 1380 AM
+        # You can access the actual face itself like this:
+    face_image = image[top:bottom, left:right]
+    pil_image = Image.fromarray(face_image)
+    pil_image.show()
 
     
-        def __get__(self, obj, type_):
-        if obj is None:
-            return self
-        val = self.function(obj)
-        obj.__dict__[self.function.__name__] = val
-        return val
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
     
-    
-def main():
-    try:
-        import queue
-    except ImportError:  # python 2.x compatibility
-        import Queue as queue
-    
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
+        :param known_face_encodings: A list of known face encodings
+    :param face_encoding_to_check: A single face encoding to compare against the list
+    :param tolerance: How much distance between faces to consider it a match. Lower is more strict. 0.6 is typical best performance.
+    :return: A list of True/False values indicating which known_face_encodings match the face encoding to check
+    '''
+    return list(face_distance(known_face_encodings, face_encoding_to_check) <= tolerance)
 
     
-        def _send_switchover_response(self):
-        return 'send switchover response'
+            # Draw a label with a name below the face
+        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
+    
+    # This is a super simple (but slow) example of running face recognition on live video from your webcam.
+# There's a second example that's a little more complicated but runs faster.
+    
+                for face_location in face_locations:
+                # Print the location of each face in this frame
+                top, right, bottom, left = face_location
+                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        # Let's trace out each facial feature in the image with a line!
+    for facial_feature in face_landmarks.keys():
+        d.line(face_landmarks[facial_feature], width=5)
