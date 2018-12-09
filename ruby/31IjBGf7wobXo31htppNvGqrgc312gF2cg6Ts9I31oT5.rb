@@ -1,100 +1,107 @@
 
         
-                private
+          formula = ARGV.formulae.first
+  options = Options.create(ARGV.flags_only)
+  build   = Build.new(formula, options)
+  build.install
+rescue Exception => e
+  Marshal.dump(e, error_pipe)
+  error_pipe.close
+  exit! 1
+end
+
     
-            class << self
-          def field_type
-            @field_type ||= name.split('::').last.sub('Field', '').downcase
+            if Pathname::BOTTLE_EXTNAME_RX === file.to_s
+          version = bottle_resolve_version(file) rescue file.version
+        else
+          version = file.version
+        end
+        next unless version
+        next unless (name = file.basename.to_s[/(.*)-(?:#{Regexp.escape(version)})/, 1])
+    
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
+    
+            protected
+    
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
+        #
+        # @param [Environment] env Vagrant::Environment object of the
+        #   environment that this configuration has been loaded into. This
+        #   gives you convenient access to things like the the root path
+        #   and so on.
+        # @param [ErrorRecorder] errors
+        def validate(env, errors)
+        end
+      end
+    end
+  end
+end
+
+    
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
+    
+            # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
+        end
+      end
+    end
+  end
+end
+
+    
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
           end
         end
     
-              details[key] = Array(value) if value
-        end
+    describe 'Kernel#taint' do
+  it 'returns self' do
+    o = Object.new
+    o.taint.should equal(o)
+  end
+    
+        after :each do
+      @tmp_file.close
+      rm_r @tmp_file
+    end
+    
+    describe 'Kernel#warn' do
+  before :each do
+    @before_verbose = $VERBOSE
+    @before_separator = $/
+  end
+    
+          def is_edit_page
+        true
       end
     
-        def initialize(lookup_context)
-      @lookup_context = lookup_context
-    end
-    
-              res = nil
-          case protocol
-          when 'tcp'
-            res = recv_response_tcp
-          when 'udp'
-            res = recv_response_udp
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
-    
-              # Encodes the components field
-          #
-          # @return [String]
-          def encode_components
-            encoded = ''
-    
-              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
-          def decode_asn1_pa_data(input)
-            pre_auth = []
-            input.value[0].value.each do |pre_auth_data|
-              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
-            end
-    
-      test 'clean path with leading slash' do
-    assert_equal '/Mordor', clean_path('/Mordor')
-  end
-    
-        @wiki = Gollum::Wiki.new(@path)
-    page  = @wiki.page('PG')
-    assert_equal '바뀐 text', utf8(page.raw_data)
-    assert_equal 'ghi', page.version.message
-  end
-    
-      # replace name version and date
-  replace_header(head, :name)
-  replace_header(head, :version)
-  replace_header(head, :date)
-  #comment this out if your rubyforge_project has a different name
-  replace_header(head, :rubyforge_project)
-    
-      begin
-    require 'gollum-lib'
-    wiki = Gollum::Wiki.new(gollum_path, wiki_options)
-    if !wiki.exist? then
-      raise Gollum::InvalidGitRepositoryError
-    end
-    if wiki_options[:plantuml_url]
-      Gollum::Filter::PlantUML.configure do |config|
-        puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-        config.url = wiki_options[:plantuml_url]
-      end
-    end
-    puts
-    puts 'Loaded Gollum wiki at:'
-    puts '#{File.expand_path(gollum_path).inspect}'
-    puts
-    puts 'Example API calls:'
-    puts %(    page = wiki.page('page-name'))
-    puts %(    # => <Gollum::Page>)
-    puts
-    puts %(    page.raw_data)
-    puts %(    # => '# My wiki page')
-    puts
-    puts %(    page.formatted_data)
-    puts %(    # => '<h1>My wiki page</h1>')
-    puts
-    puts 'Full API documentation at:'
-    puts 'https://github.com/gollum/gollum-lib'
-    puts
-    IRB.start_session(binding)
-  rescue Gollum::InvalidGitRepositoryError, Gollum::NoSuchPathError
-    puts 'Invalid Gollum wiki at #{File.expand_path(gollum_path).inspect}'
-    exit 0
-  end
-else
-  require 'gollum/app'
-  Precious::App.set(:gollum_path, gollum_path)
-  Precious::App.set(:wiki_options, wiki_options)
-  Precious::App.settings.mustache[:templates] = wiki_options[:template_dir] if wiki_options[:template_dir]
+        post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
