@@ -1,163 +1,174 @@
 
         
-          context 'with a user' do
-    let(:user) { Fabricate(:user) }
+        # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-    User.seed do |u|
-  u.id = -1
-  u.name = 'system'
-  u.username = 'system'
-  u.username_lower = 'system'
-  u.password = SecureRandom.hex
-  u.active = true
-  u.admin = true
-  u.moderator = true
-  u.approved = true
-  u.trust_level = TrustLevel[4]
+    Mercenary.program(:jekyll) do |p|
+  p.version Jekyll::VERSION
+  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
+  p.syntax 'jekyll <subcommand> [options]'
+    
+      matter = matter.join.chomp
+  content = \
+    if !input_hash['input'] || !input_hash['filter']
+      then input_hash['content']
+    else '{{ #{input_hash['input']} | ' \
+        '#{input_hash['filter']} }}'
+    end
+    
+          dt = Date.today
+      freeze_time dt
+    
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
+    
+        private
+    
+        def request_all(url, &block)
+      raise NotImplementedError
+    end
+    
+            # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
+        end
+    
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
+    
+            protected
+    
+                  next env.machine(entry.name.to_sym, entry.provider.to_sym)
+            end
+    
+        # Register a key with a lazy-loaded value.
+    #
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
+    end
+    
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
+    
+        # Make rules use nesting so that
+    #
+    #     foo
+    #       color: green
+    #     foo bar
+    #       color: red
+    #     foo baz
+    #       color: blue
+    #
+    # becomes
+    #
+    #     foo
+    #       color: green
+    #       bar
+    #         color: red
+    #       baz
+    #         color: blue
+    #
+    # @param root [Tree::Node] The parent node
+    def nest_seqs(root)
+      current_rule = nil
+      root.children.map! do |child|
+        unless child.is_a?(Tree::RuleNode)
+          nest_seqs(child) if child.is_a?(Tree::DirectiveNode)
+          next child
+        end
+    
+        # Parses the command-line arguments and runs the executable.
+    # This does not handle exceptions or exit the program.
+    #
+    # @see #parse!
+    def parse
+      @opts = OptionParser.new(&method(:set_opts))
+      @opts.parse!(@args)
+    
+          opts.on('-t', '--style NAME', 'Output style. Can be nested (default), compact, ' \
+                                    'compressed, or expanded.') do |name|
+        @options[:for_engine][:style] = name.to_sym
+      end
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
+    
+    
+===============================================
+ Error for category_generator.rb plugin
+-----------------------------------------------
+ No 'category_index.html' in source/_layouts/
+ Perhaps you haven't installed a theme yet.
+===============================================
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
+    end
+  end
 end
-    
-        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
-    end
-    
-          it 'uses the correct command to import it' do
-        # We have to execute *something* using ` since otherwise we set expectations to `nil`, which is not healthy
-        `ls`
-    
-          describe 'misc features' do
-        it 'makes it non optional by default' do
-          c = FastlaneCore::ConfigItem.new(key: :test,
-                                 default_value: '123')
-          expect(c.optional).to eq(false)
-        end
-    
-    shelljoin_testcases = [
-  {
-    'it' => '(#1) on array with entry with space',
-    'it_result' => {
-      'windows' => 'wraps this entry in double quotes',
-      'other'   => 'escapes the space in this entry'
-    },
-    'input' => ['a', 'b c', 'd'],
-    'expect' => {
-      'windows' => 'a 'b c' d',
-      'other'   => 'a b\ c d'
-    }
-  },
-  {
-    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
-    'it_result' => {
-      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
-      'other'   => 'escapes the double quotes and escapes the space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a '''b'' c' d',
-      'other'   => 'a \'b\'\ c d'
-    }
-  },
-  {
-    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
-    'it_result' => {
-      'windows' => 'no changes',
-      'other'   => 'escapes the single quotes and space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a \''b' c\' d',
-      'other'   => 'a \\'b\\'\\ c d'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
-  {
-    'it' => '(#4) on array with entry that is `$$`',
-    'it_result' => {
-      'windows' => 'the result includes the process id',
-      'other'   => 'the result includes the process id'
-    },
-    'input' => ['ps', '-p', $$],
-    'expect' => {
-      'windows' => 'ps -p #{$$}',
-      'other'   => 'ps -p #{$$}'
-    }
-  }
-]
-    
-          it '#environment_variable_name_profile_name uses the correct env variable' do
-        result = Match::Utils.environment_variable_name_profile_name(app_identifier: 'tools.fastlane.app', type: 'appstore')
-        expect(result).to eq('sigh_tools.fastlane.app_appstore_profile-name')
-      end
-    
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
-  end
-    
-        # Adds an entry to the exception's Sass backtrace.
-    #
-    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def add_backtrace(attrs)
-      sass_backtrace << attrs.reject {|_k, v| v.nil?}
-    end
-    
-        # Processes the options set by the command-line arguments. In particular,
-    # sets `@options[:input]` and `@options[:output]` to appropriate IO streams.
-    #
-    # This is meant to be overridden by subclasses
-    # so they can run their respective programs.
-    def process_result
-      input, output = @options[:input], @options[:output]
-      args = @args.dup
-      input ||=
-        begin
-          filename = args.shift
-          @options[:filename] = filename
-          open_file(filename) || $stdin
-        end
-      @options[:output_filename] = args.shift
-      output ||= @options[:output_filename] || $stdout
-      @options[:input], @options[:output] = input, output
-    end
-    
-          opts.on('-q', '--quiet', 'Silence warnings and status messages during conversion.') do |bool|
-        @options[:for_engine][:quiet] = bool
-      end
-    
-          def pack_uri(plugin_name)
-        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
-        URI.parse(url)
-      end
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
-  end
-    
-      def warn_local_gems(plugins_with_path)
-    puts('Update is not supported for manually defined plugins or local .gem plugin installations, skipping: #{plugins_with_path.join(', ')}')
-  end
-    
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
-      end
-    end
