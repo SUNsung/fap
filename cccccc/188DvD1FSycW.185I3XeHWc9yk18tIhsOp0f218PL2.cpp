@@ -1,272 +1,219 @@
 
         
-        // FreeOp frees the content of the output blob. We allow it to take in input
-// blobs purely for the reason that it can 'wait' on the input blobs to be
-// produced by some of the earlier operators before a free is called.
-template <class Context>
-class FreeOp : public Operator<Context> {
+         private:
+  // A string containing a description of the outcome of the last death test.
+  static std::string last_death_test_message_;
+    
+      // Smart pointer members.
+  void reset(T* ptr = NULL) {
+    depart();
+    capture(ptr);
+  }
+  T* get() const { return value_; }
+  T* operator->() const { return value_; }
+  T& operator*() const { return *value_; }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6>
+class ValueArray6 {
  public:
-  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
+  ValueArray6(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6) : v1_(v1), v2_(v2),
+      v3_(v3), v4_(v4), v5_(v5), v6_(v6) {}
     }
     
-      ~SecureAuthContext() override;
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
     
-    class CensusChannelData : public ChannelData {
- public:
-  grpc_error* Init(grpc_channel_element* elem,
-                   grpc_channel_element_args* args) override;
-};
+    namespace internal {
+    }
     
     
-    {}  // namespace grpc
-
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
+  }
     
-    #include 'opencensus/stats/stats.h'
-#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+      if (comma != data) {
+    // we have meta
+    ssize_t meta_len = comma - data;
+    data_len -= meta_len;
+    char* semi = (char*)memchr(data, ';', meta_len);
+    char* slash = (char*)memchr(data, '/', meta_len);
+    }
     
     
     { private:
-  CensusContext context_;
-  // server method
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // Pointer to the grpc_call element
-  grpc_call* gc_;
-  // Authorization context for the call.
-  grpc_auth_context* auth_context_;
-  // Metadata element for census stats.
-  grpc_linked_mdelem census_bin_;
-  // recv callback
-  grpc_metadata_batch* recv_initial_metadata_;
-  grpc_closure* initial_on_done_recv_initial_metadata_;
-  grpc_closure on_done_recv_initial_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  absl::Time start_time_;
-  absl::Duration elapsed_time_;
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference it when adding metatdata to
-  // response.
-  char stats_buf_[kMaxServerStatsLen];
+  int mkdir_recursive(const String& path, int mode);
 };
     
-    const ViewDescriptor& ServerReceivedMessagesPerRpcMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/server/received_messages_per_rpc/minute')
-          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
-          .set_aggregation(CountDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
+    template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
 }
-    
-    
-    {
-    {   private:
-    const grpc::string name_;
-    const int value_;
-  };
-  return std::unique_ptr<ServerBuilderOption>(new IntOption(name, value));
+template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 0, rate, fillCols);
 }
-    
-    DynamicThreadPool::~DynamicThreadPool() {
-  std::unique_lock<std::mutex> lock(mu_);
-  shutdown_ = true;
-  cv_.notify_all();
-  while (nthreads_ != 0) {
-    shutdown_cv_.wait(lock);
-  }
-  ReapThreads(&dead_threads_);
-}
-    
-    #ifndef GRPC_INTERNAL_CPP_DYNAMIC_THREAD_POOL_H
-#define GRPC_INTERNAL_CPP_DYNAMIC_THREAD_POOL_H
     
     /**
- * @brief Parser plugin for logger configurations.
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
  */
-class LoggerConfigParserPlugin : public ConfigParserPlugin {
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
  public:
-  std::vector<std::string> keys() const override {
-    return {kLoggerKey};
-  }
-    }
-    
-      // Generate content to update/add to the config.
-  std::string content;
-  auto s = readFile(kTestDataPath + 'test_parse_items.conf', content);
-  EXPECT_TRUE(s.ok());
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
-    
-    class ViewsConfigParserPluginTests : public testing::Test {};
-    
-    TEST_F(QueryTests, test_get_query_results) {
-  // Grab an expected set of query data and add it as the previous result.
-  auto encoded_qd = getSerializedQueryDataJSON();
-  auto query = getOsqueryScheduledQuery();
-  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
-  EXPECT_TRUE(status.ok());
-    }
-    
-    void Initializer::platformSetup() {
-  // Initialize the COM libraries utilized by Windows WMI calls.
-  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
-  if (ret != S_OK) {
-    ::CoUninitialize();
-  }
-}
-    
-    const uint32_t kFileDefaultMasks = IN_MOVED_TO | IN_MOVED_FROM | IN_MODIFY |
-                                   IN_DELETE | IN_CREATE | IN_CLOSE_WRITE |
-                                   IN_ATTRIB;
-const uint32_t kFileAccessMasks = IN_OPEN | IN_ACCESS;
-    
-    
-    {        D3DCompile(pixelShader, strlen(pixelShader), NULL, NULL, NULL, 'main', 'ps_4_0', 0, 0, &g_pPixelShaderBlob, NULL);
-        if (g_pPixelShaderBlob == NULL)  // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
-            return false;
-        if (g_pd3dDevice->CreatePixelShader((DWORD*)g_pPixelShaderBlob->GetBufferPointer(), g_pPixelShaderBlob->GetBufferSize(), NULL, &g_pPixelShader) != S_OK)
-            return false;
+  std::vector<std::string> keys() const override;
     }
     
     
-    {    switch (ev->type)
-    {
-    case ALLEGRO_EVENT_MOUSE_AXES:
-        io.MouseWheel += ev->mouse.dz;
-        io.MouseWheelH += ev->mouse.dw;
-        return true;
-    case ALLEGRO_EVENT_KEY_CHAR:
-        if (ev->keyboard.display == g_Display)
-            if (ev->keyboard.unichar > 0 && ev->keyboard.unichar < 0x10000)
-                io.AddInputCharacter((unsigned short)ev->keyboard.unichar);
-        return true;
-    case ALLEGRO_EVENT_KEY_DOWN:
-    case ALLEGRO_EVENT_KEY_UP:
-        if (ev->keyboard.display == g_Display)
-            io.KeysDown[ev->keyboard.keycode] = (ev->type == ALLEGRO_EVENT_KEY_DOWN);
-        return true;
-    }
-    return false;
-}
-    
-        const char* s = text_begin;
-    while (s < text_end)
-    {
-        if (word_wrap_enabled)
-        {
-            // Calculate how far we can render. Requires two passes on the string data but keeps the code simple and not intrusive for what's essentially an uncommon feature.
-            if (!word_wrap_eol)
-            {
-                word_wrap_eol = CalcWordWrapPositionA(scale, s, text_end, wrap_width - line_width);
-                if (word_wrap_eol == s) // Wrap_width is too small to fit anything. Force displaying 1 character to minimize the height discontinuity.
-                    word_wrap_eol++;    // +1 may not be a character start point in UTF-8 but it's ok because we use s >= word_wrap_eol below
-            }
-    }
-    }
-    
-        // Stateful path API, add points then finish with PathFillConvex() or PathStroke()
-    inline    void  PathClear()                                                 { _Path.resize(0); }
-    inline    void  PathLineTo(const ImVec2& pos)                               { _Path.push_back(pos); }
-    inline    void  PathLineToMergeDuplicate(const ImVec2& pos)                 { if (_Path.Size == 0 || memcmp(&_Path[_Path.Size-1], &pos, 8) != 0) _Path.push_back(pos); }
-    inline    void  PathFillConvex(ImU32 col)                                   { AddConvexPolyFilled(_Path.Data, _Path.Size, col); PathClear(); }  // Note: Anti-aliased filling requires points to be in clockwise order.
-    inline    void  PathStroke(ImU32 col, bool closed, float thickness = 1.0f)  { AddPolyline(_Path.Data, _Path.Size, col, closed, thickness); PathClear(); }
-    IMGUI_API void  PathArcTo(const ImVec2& centre, float radius, float a_min, float a_max, int num_segments = 10);
-    IMGUI_API void  PathArcToFast(const ImVec2& centre, float radius, int a_min_of_12, int a_max_of_12);                                            // Use precomputed angles for a 12 steps circle
-    IMGUI_API void  PathBezierCurveTo(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, int num_segments = 0);
-    IMGUI_API void  PathRect(const ImVec2& rect_min, const ImVec2& rect_max, float rounding = 0.0f, int rounding_corners_flags = ImDrawCornerFlags_All);
-    
-            ImGui::Text('Color button with Picker:');
-        ImGui::SameLine(); ShowHelpMarker('With the ImGuiColorEditFlags_NoInputs flag you can hide all the slider/text inputs.\nWith the ImGuiColorEditFlags_NoLabel flag you can pass a non-empty label which will only be used for the tooltip and picker popup.');
-        ImGui::ColorEdit4('MyColor##3', (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | misc_flags);
-    
-        VkPipelineVertexInputStateCreateInfo vertex_info = {};
-    vertex_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertex_info.vertexBindingDescriptionCount = 1;
-    vertex_info.pVertexBindingDescriptions = binding_desc;
-    vertex_info.vertexAttributeDescriptionCount = 3;
-    vertex_info.pVertexAttributeDescriptions = attribute_desc;
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
 
     
-    class ButteraugliComparator : public Comparator {
+    namespace osquery {
+    }
+    
+    #include <osquery/config.h>
+#include <osquery/database.h>
+#include <osquery/registry.h>
+    
+    
+    {  if (handle) {
+    ::CloseHandle(handle);
+  }
+}
+#else
+TEST_F(ProcessTests, test_constructorPosix) {
+  auto p = PlatformProcess(getpid());
+  EXPECT_TRUE(p.isValid());
+  EXPECT_EQ(p.nativeHandle(), getpid());
+}
+#endif
+    
+    #include <Objbase.h>
+#include <Windows.h>
+    
+    Status serializeDistributedQueryRequestJSON(const DistributedQueryRequest& r,
+                                            std::string& json) {
+  auto doc = JSON::newObject();
+  auto s = serializeDistributedQueryRequest(r, doc, doc.doc());
+  if (!s.ok()) {
+    return s;
+  }
+    }
+    
+      /**
+   * @brief Helper method to map a string action to `inotify` action mask bit.
+   *
+   * This helper method will set the `mask` value for this SubscriptionContext.
+   *
+   * @param action The string action, a value in kMaskAction%s.
+   */
+  void requireAction(const std::string& action) {
+    for (const auto& bit : kMaskActions) {
+      if (action == bit.second) {
+        mask = mask | bit.first;
+      }
+    }
+  }
+    
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+      ColumnFamilyData* GetDefault() const;
+  // GetColumnFamily() calls return nullptr if column family is not found
+  ColumnFamilyData* GetColumnFamily(uint32_t id) const;
+  ColumnFamilyData* GetColumnFamily(const std::string& name) const;
+  // this call will return the next available column family ID. it guarantees
+  // that there is no column family with id greater than or equal to the
+  // returned value in the current running instance or anytime in RocksDB
+  // instance history.
+  uint32_t GetNextColumnFamilyID();
+  uint32_t GetMaxColumnFamily();
+  void UpdateMaxColumnFamily(uint32_t new_max_column_family);
+  size_t NumberOfColumnFamilies() const;
+    
+    Status WriteBatchBase::Put(const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
+    }
+    
+    Status PosixRandomRWFile::Close() {
+  if (close(fd_) < 0) {
+    return IOError('While close random read/write file', filename_, errno);
+  }
+  fd_ = -1;
+  return Status::OK();
+}
+    
+    // A simple compaction algorithm that always compacts everything
+// to the highest level whenever possible.
+class FullCompactor : public Compactor {
  public:
-  ButteraugliComparator(const int width, const int height,
-                        const std::vector<uint8_t>* rgb,
-                        const float target_distance, ProcessStats* stats);
-    }
-    
-    void DCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
-    }
+  explicit FullCompactor(const Options options) : options_(options) {
+    compact_options_.compression = options_.compression;
+    compact_options_.output_file_size_limit =
+        options_.target_file_size_base;
   }
-}
-    
-    
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
     }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
-  }
-}
     
-    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
-  coeff_t colidcts[kDCTBlockSize];
-  const int kColScale = 11;
-  const int kColRound = 1 << (kColScale - 1);
-  for (int x = 0; x < 8; ++x) {
-    int colbuf[8] = { 0 };
-    Compute1dIDCT(&block[x], 8, colbuf);
-    for (int y = 0; y < 8; ++y) {
-      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
-    }
-  }
-  const int kRowScale = 18;
-  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
-  for (int y = 0; y < 8; ++y) {
-    const int rowidx = 8 * y;
-    int rowbuf[8] = { 0 };
-    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
-    for (int x = 0; x < 8; ++x) {
-      out[rowidx + x] =
-          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
-    }
-  }
-}
+      // Write a key in this transaction
+  s = txn->Put('abc', 'def');
+  assert(s.ok());
     
-    #include 'guetzli/jpeg_data.h'
+    #pragma once
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
     
-    #include 'guetzli/jpeg_data_decoder.h'
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
+    // Create a RateLimiter object, which can be shared among RocksDB instances to
+// control write rate of flush and compaction.
+// @rate_bytes_per_sec: this is the only parameter you want to set most of the
+// time. It controls the total write rate of compaction and flush in bytes per
+// second. Currently, RocksDB does not enforce rate limit for anything other
+// than flush and compaction, e.g. write to WAL.
+// @refill_period_us: this controls how often tokens are refilled. For example,
+// when rate_bytes_per_sec is set to 10MB/s and refill_period_us is set to
+// 100ms, then 1MB is refilled every 100ms internally. Larger value can lead to
+// burstier writes while smaller value introduces more CPU overhead.
+// The default should work for most cases.
+// @fairness: RateLimiter accepts high-pri requests and low-pri requests.
+// A low-pri request is usually blocked in favor of hi-pri request. Currently,
+// RocksDB assigns low-pri to request from compaction and high-pri to request
+// from flush. Low-pri requests can get blocked if flush requests come in
+// continuously. This fairness parameter grants low-pri requests permission by
+// 1/fairness chance even though high-pri requests exist to avoid starvation.
+// You should be good by leaving it at default 10.
+// @mode: Mode indicates which types of operations count against the limit.
+// @auto_tuned: Enables dynamic adjustment of rate limit within the range
+//              `[rate_bytes_per_sec / 20, rate_bytes_per_sec]`, according to
+//              the recent demand for background I/O.
+extern RateLimiter* NewGenericRateLimiter(
+    int64_t rate_bytes_per_sec, int64_t refill_period_us = 100 * 1000,
+    int32_t fairness = 10,
+    RateLimiter::Mode mode = RateLimiter::Mode::kWritesOnly,
+    bool auto_tuned = false);
