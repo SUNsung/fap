@@ -1,215 +1,180 @@
 
         
-              for n in xrange(FLAGS.number_epochs):
-        print('Epoch number: %d' % n)
-        # print('Percent done: %.2f' % float(n) / float(FLAGS.number_epochs))
-        iterator = get_iterator(data)
-        for x, y, _ in iterator:
-          if FLAGS.eval_language_model:
-            is_present_rate = 0.
-          else:
-            is_present_rate = FLAGS.is_present_rate
-          tf.logging.info(
-              'Evaluating on is_present_rate=%.3f.' % is_present_rate)
-    
-        # Maximize reward.
-    gen_grads = tf.gradients(-final_gen_reward, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    maximize_op = gen_optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+        
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
     
     
-def hash_function(input_tuple):
-  '''Hash function for a tuple.'''
-  return hash(input_tuple)
+@bp.route('/login', methods=('GET', 'POST'))
+def login():
+    '''Log in a registered user by adding the user id to the session.'''
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = db.execute(
+            'SELECT * FROM user WHERE username = ?', (username,)
+        ).fetchone()
     
-            # Keyword arguments > stream.encoding > default utf8
-        if self.stdin_encoding is None:
-            self.stdin_encoding = getattr(
-                self.stdin, 'encoding', None) or 'utf8'
-        if self.stdout_encoding is None:
-            actual_stdout = self.stdout
-            if is_windows:
-                # noinspection PyUnresolvedReferences
-                from colorama import AnsiToWin32
-                if isinstance(self.stdout, AnsiToWin32):
-                    actual_stdout = self.stdout.wrapped
-            self.stdout_encoding = getattr(
-                actual_stdout, 'encoding', None) or 'utf8'
-    
-        @property
-    def content_type(self):
-        '''Return the message content type.'''
-        ct = self._orig.headers.get('Content-Type', '')
-        if not isinstance(ct, str):
-            ct = ct.decode('utf8')
-        return ct
-    
-        def format_headers(self, headers):
-        '''Return processed `headers`
+    import click
+from flask import current_app, g
+from flask.cli import with_appcontext
     
     
-class BasicAuthPlugin(BuiltinAuthPlugin):
+@pytest.mark.parametrize('path', (
+    '/create',
+    '/1/update',
+    '/1/delete',
+))
+def test_login_required(client, path):
+    response = client.post(path)
+    assert response.headers['Location'] == 'http://localhost/auth/login'
+    
+    import pytest
+from flaskr.db import get_db
+    
+            :param namespace: a configuration namespace
+        :param lowercase: a flag indicating if the keys of the resulting
+                          dictionary should be lowercase
+        :param trim_namespace: a flag indicating if the keys of the resulting
+                          dictionary should not include the namespace
+    
+        while current:
+        if any(handler.level <= level for handler in current.handlers):
+            return True
+    
+        If :meth:`open_session` returns ``None`` Flask will call into
+    :meth:`make_null_session` to create a session that acts as replacement
+    if the session support cannot work because some requirement is not
+    fulfilled.  The default :class:`NullSession` class that is created
+    will complain that the secret key was not set.
+    
+            # We attach the view class to the view function for two reasons:
+        # first of all it allows us to easily figure out what class-based
+        # view this thing came from, secondly it's also used for instantiating
+        # the view class so you can actually replace it with something else
+        # for testing purposes and debugging.
+        view.view_class = cls
+        view.__name__ = name
+        view.__doc__ = cls.__doc__
+        view.__module__ = cls.__module__
+        view.methods = cls.methods
+        view.provide_automatic_options = cls.provide_automatic_options
+        return view
     
     
-def test_headers_unset(httpbin_both):
-    r = http('GET', httpbin_both + '/headers')
-    assert 'Accept' in r.json['headers']  # default Accept present
-    
-        deadline = URLFETCH_TIMEOUT
-    validate_certificate = bool(int(kwargs.get('validate', 0)))
-    accept_encoding = headers.get('Accept-Encoding', '')
-    errors = []
-    for i in xrange(int(kwargs.get('fetchmax', URLFETCH_MAX))):
-        try:
-            response = urlfetch.fetch(url, payload, fetchmethod, headers, allow_truncated=False, follow_redirects=False, deadline=deadline, validate_certificate=validate_certificate)
-            break
-        except apiproxy_errors.OverQuotaError as e:
-            time.sleep(5)
-        except urlfetch.DeadlineExceededError as e:
-            errors.append('%r, deadline=%s' % (e, deadline))
-            logging.error('DeadlineExceededError(deadline=%s, url=%r)', deadline, url)
-            time.sleep(1)
-            deadline = URLFETCH_TIMEOUT * 2
-        except urlfetch.DownloadError as e:
-            errors.append('%r, deadline=%s' % (e, deadline))
-            logging.error('DownloadError(deadline=%s, url=%r)', deadline, url)
-            time.sleep(1)
-            deadline = URLFETCH_TIMEOUT * 2
-        except urlfetch.ResponseTooLargeError as e:
-            errors.append('%r, deadline=%s' % (e, deadline))
-            response = e.response
-            logging.error('ResponseTooLargeError(deadline=%s, url=%r) response(%r)', deadline, url, response)
-            m = re.search(r'=\s*(\d+)-', headers.get('Range') or headers.get('range') or '')
-            if m is None:
-                headers['Range'] = 'bytes=0-%d' % int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE))
-            else:
-                headers.pop('Range', '')
-                headers.pop('range', '')
-                start = int(m.group(1))
-                headers['Range'] = 'bytes=%s-%d' % (start, start+int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE)))
-            deadline = URLFETCH_TIMEOUT * 2
-        except urlfetch.SSLCertificateError as e:
-            errors.append('%r, should validate=0 ?' % e)
-            logging.error('%r, deadline=%s', e, deadline)
-        except Exception as e:
-            errors.append(str(e))
-            if i == 0 and method == 'GET':
-                deadline = URLFETCH_TIMEOUT * 2
-    else:
-        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
-        error_string = '<br />\n'.join(errors)
-        if not error_string:
-            logurl = 'https://appengine.google.com/logs?&app_id=%s' % os.environ['APPLICATION_ID']
-            error_string = 'Internal Server Error. <p/>try <a href='javascript:window.location.reload(true);'>refresh</a> or goto <a href='%s' target='_blank'>appengine.google.com</a> for details' % logurl
-        yield message_html('502 Urlfetch Error', 'Python Urlfetch Error: %r' % method,  error_string)
-        raise StopIteration
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-        :param bool condition: If ``False``, the test will be skipped
-    :param str reason: the reason for skipping the test
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
     
     
-from certbot import errors
-from certbot.plugins import common
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
     
-            self.assertFalse(self.addr_defined.conflicts(self.addr1))
-        self.assertFalse(self.addr_defined.conflicts(self.addr2))
-        self.assertFalse(self.addr_defined.conflicts(self.addr))
-        self.assertFalse(self.addr_defined.conflicts(self.addr_default))
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument command: Invalid choice, valid choices are:
     
-        #call extractor decided by sourceId
-    if sourceType == 'sina':
-        sina_download_by_vid(sourceId, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'youku':
-        youku_download_by_vid(sourceId, title=title, output_dir=output_dir, merge=merge, info_only=info_only, **kwargs)
-    elif sourceType == 'tudou':
-        tudou_download_by_iid(sourceId, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'qq':
-        qq_download_by_vid(sourceId, title, True, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'letv':
-        letvcloud_download_by_vu(sourceId, '2d8c027396', title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif sourceType == 'zhuzhan':
-        #As in Jul.28.2016, Acfun is using embsig to anti hotlink so we need to pass this
-#In Mar. 2017 there is a dedicated ``acfun_proxy'' in youku cloud player
-#old code removed
-        url = 'http://www.acfun.cn/v/ac' + vid
-        yk_streams = youku_acfun_proxy(info['sourceId'], info['encode'], url)
-        seq = ['mp4hd3', 'mp4hd2', 'mp4hd', 'flvhd']
-        for t in seq:
-            if yk_streams.get(t):
-                preferred = yk_streams[t]
-                break
-#total_size in the json could be incorrect(F.I. 0)
-        size = 0
-        for url in preferred[0]:
-            _, _, seg_size = url_info(url)
-            size += seg_size
-#fallback to flvhd is not quite possible
-        print_info(site_info, title, 'mp4', size)
-        if not info_only:
-            download_urls(preferred[0], title, 'mp4', size, output_dir=output_dir, merge=merge)
-    else:
-        raise NotImplementedError(sourceType)
+        # Optional short description. Will be be shown in the help
+    # under --auth-type.
+    description = None
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
+            See https://github.com/jakubroztocil/httpie/issues/212
     
-        if '_text' in dictified['video'][0]['file'][0]:  #link exist
-        video_dict['links'] = [i['file'][0]['_text'].strip() for i in dictified['video']]
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
+
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
     
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
+@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
+def test_digest_auth(httpbin_both, argument_name):
+    r = http(argument_name + '=digest', '--auth=user:password',
+             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    __all__ = ['facebook_download']
     
-        title = match1(html, r'&title=([^&]+)')
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+        def test_actual_download(self, httpbin_both, httpbin):
+        robots_txt = '/robots.txt'
+        body = urlopen(httpbin + robots_txt).read().decode()
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--download', httpbin_both.url + robots_txt, env=env)
+        assert 'Downloading' in r.stderr
+        assert '[K' in r.stderr
+        assert 'Done' in r.stderr
+        assert body == r
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_error(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+    
+def batch_face_locations(images, number_of_times_to_upsample=1, batch_size=128):
+    '''
+    Returns an 2d array of bounding boxes of human faces in a image using the cnn face detector
+    If you are using a GPU, this can give you much faster results since the GPU
+    can process batches of images at once. If you aren't using a GPU, you don't need this function.
+    
+    # Initialize some variables
+face_locations = []
+face_encodings = []
+    
+    for face_landmarks in face_landmarks_list:
+    
+                affected_projects = set()
+            for release in releases:
+                affected_projects.update(
+                    [p for p in release.projects.values_list('slug', flat=True)]
+                )
+            has_prod = False
+            has_staging = False
+            has_dev = False
+            for p in affected_projects:
+                if 'prod' in p:
+                    has_prod = True
+                elif 'stag' in p or 'stg' in p:
+                    has_staging = True
+                elif 'dev' in p:
+                    has_dev = True
+            # assume projects are split by environment if there
+            # are at least prod/staging or prod/dev, etc
+            projects_split_by_env = len([x for x in [has_prod, has_dev, has_staging] if x]) >= 2
+    
+            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
+    
+            db.start_transaction()
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
+        db.delete_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
