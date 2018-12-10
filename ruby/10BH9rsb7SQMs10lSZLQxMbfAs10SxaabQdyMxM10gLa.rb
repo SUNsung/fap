@@ -1,86 +1,55 @@
 
         
-              keg_only_deps.each do |dep|
-        ENV.prepend_path 'PATH', dep.opt_bin.to_s
-        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
-        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
-        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
-        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
-        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
-        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
-      end
-    end
+                css('.status-badge').each do |node|
+          node.name = 'code'
+          node.content = node.content.strip
+          node.remove_attribute('class')
+        end
     
-      def clang
-    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
+      protected
+    
+      def devise_i18n_options(options)
+    options
   end
     
-        attr_reader :filters
+    require 'uri'
     
-        def as_json
-      { name: name, path: path, type: type }
-    end
-  end
-end
-
-    
-          def initial_urls
-        super + self.class.base_urls[1..-1].deep_dup
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
+        end
       end
     
-        def initialize(*args)
-      if args.empty?
-        super(*Array.new(9))
-      elsif args.length == 1 && args.first.is_a?(Hash)
-        args.first.assert_valid_keys URI::Generic::COMPONENT
-        super(*args.first.values_at(*URI::Generic::COMPONENT))
-      else
-        super
-      end
-    end
+        alias :name :singular
     
-        # Converts the CSS template into Sass or SCSS code.
+        def handle_options
+      options.rakelib = ['rakelib']
+      options.trace_output = $stderr
+    
+    module Capistrano
+  class Configuration
+    # Decorates a Variables object to additionally perform an optional set of
+    # user-supplied validation rules. Each rule for a given key is invoked
+    # immediately whenever `set` is called with a value for that key.
     #
-    # @param fmt [Symbol] `:sass` or `:scss`, designating the format to return.
-    # @return [String] The resulting Sass or SCSS code
-    # @raise [Sass::SyntaxError] if there's an error parsing the CSS template
-    def render(fmt = :sass)
-      check_encoding!
-      build_tree.send('to_#{fmt}', @options).strip + '\n'
-    rescue Sass::SyntaxError => err
-      err.modify_backtrace(:filename => @options[:filename] || '(css)')
-      raise err
-    end
-    
-    Backtrace:\n#{e.backtrace.join('\n').gsub('*/', '*\\/')}
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: '#{header.gsub(''', '\'').gsub('\n', '\\A ')}'; }
-END
-      end
-    
-          # Almost any real Unix terminal will support color,
-      # so we just filter for Windows terms (which don't set TERM)
-      # and not-real terminals, which aren't ttys.
-      return str if ENV['TERM'].nil? || ENV['TERM'].empty? || !STDOUT.tty?
-      '\e[#{COLORS[color]}m#{str}\e[0m'
-    end
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
-      end
-    
-      # TODO: raise SAFE level (0) to 4 if possible.
-  def generate
-    ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
-  end
-end
+    # If `set` is called with a callable value or a block, validation is not
+    # performed immediately. Instead, the validation rules are invoked the first
+    # time `fetch` is used to access the value.
+    #
+    # A rule is simply a block that accepts two arguments: key and value. It is
+    # up to the rule to raise an exception when it deems the value is invalid
+    # (or just print a warning).
+    #
+    # Rules can be registered using the DSL like this:
+    #
+    #   validate(:my_key) do |key, value|
+    #     # rule goes here
+    #   end
+    #
+    class ValidatedVariables < SimpleDelegator
+      include Capistrano::ProcHelpers
