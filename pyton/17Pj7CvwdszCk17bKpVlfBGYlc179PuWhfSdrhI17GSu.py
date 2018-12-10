@@ -1,187 +1,96 @@
 
         
-            log_var_init = np.log(var_init)
-    if var_max > var_min:
-      var_is_trainable = True
-    else:
-      var_is_trainable = False
+            elif not RESULT and ('info_dict' in test and 'age_limit' in test['info_dict'] and
+                         test['info_dict']['age_limit'] == 18):
+        print('\nPotential false negative: {0}'.format(test['name']))
     
-        if hps.output_dist == 'poisson':
-      out_dist_params = np.zeros([E_to_process, T, D])
-    elif hps.output_dist == 'gaussian':
-      out_dist_params = np.zeros([E_to_process, T, D+D])
-    else:
-      assert False, 'NIY'
+        with open(FISH_COMPLETION_TEMPLATE) as f:
+        template = f.read()
+    filled_template = template.replace('{{commands}}', '\n'.join(commands))
+    with open(FISH_COMPLETION_FILE, 'w') as f:
+        f.write(filled_template)
     
-      input_title = ''
-  if 'controller_outputs' in model_vals.keys():
-    input_title += ' Controller Output'
-    plt.subplot(nrows,2,3+subplot_cidx)
-    u_t = model_vals['controller_outputs'][0:-1]
-    plot_time_series(u_t, bidx, n_to_plot=n_to_plot, color='c', scale=1.0,
-                     title=col_title + input_title)
+    entries = []
+for v in versions:
+    fields = v.split('.')
+    year, month, day = map(int, fields[:3])
+    faked = 0
+    patchlevel = 0
+    while True:
+        try:
+            datetime.date(year, month, day)
+        except ValueError:
+            day -= 1
+            faked += 1
+            assert day > 0
+            continue
+        break
+    if len(fields) >= 4:
+        try:
+            patchlevel = int(fields[3])
+        except ValueError:
+            patchlevel = 1
+    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
     
-    # not the best way to do this but E is small enough
-rates = []
-spikes = []
-for trial in xrange(E):
-  if rnn_to_use[trial] == 0:
-    rates.append(rates_a[trial])
-    spikes.append(spikes_a[trial])
-  else:
-    rates.append(rates_b[trial])
-    spikes.append(spikes_b[trial])
+    # We must be able to import youtube_dl
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     
-    _START_SPECIAL_CHARS = ['.', ',', '?', '!', ';', ':', '[', ']', '\'', '+', '/',
-                        '\xc2\xa3', '$', '~', '*', '%', '{', '}', '#', '&', '-',
-                        ''', '(', ')', '='] + list(_SPECIAL_CHAR_MAP.keys())
-_SPECIAL_CHARS = _START_SPECIAL_CHARS + [
-    '\'s', '\'m', '\'t', '\'re', '\'d', '\'ve', '\'ll']
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-    '''Losses for Generator and Discriminator.'''
+        readme = filter_options(readme)
     
+                info_dict = _make_result([f2, f1], extractor='youtube')
+            ydl = YDL({'format': 'best/bestvideo'})
+            yie = YoutubeIE(ydl)
+            yie._sort_formats(info_dict['formats'])
+            ydl.process_ie_result(info_dict)
+            downloaded = ydl.downloaded_info_dicts[0]
+            self.assertEqual(downloaded['format_id'], f1['format_id'])
     
-def convert_to_indices(sequences):
-  '''Convert a list of size [batch_size, sequence_length, vocab_size] to
-  a list of size [batch_size, sequence_length] where the vocab element is
-  denoted by the index.
-  '''
-  batch_of_indices = []
+                        if try_num == RETRIES:
+                        report_warning('%s failed due to network errors, skipping...' % tname)
+                        return
     
-      Args:
-    logits:  tf.float32 Tensor of the logits of shape [batch_size,
-      sequence_length, vocab_size].
-    targets:  tf.int32 Tensor of the sequence target of shape [batch_size,
-      sequence_length].
-    present:  tf.bool Tensor indicating the presence or absence of the token
-      of shape [batch_size, sequence_length].
+        def test_module_exec(self):
+        if sys.version_info >= (2, 7):  # Python 2.6 doesn't support package execution
+            subprocess.check_call([sys.executable, '-m', 'youtube_dl', '--version'], cwd=rootDir, stdout=_DEV_NULL)
     
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
+        def __repr__(self):
+        return '<{0} {1}>'.format(type(self).__name__, str(self))
+
+    
+        def iter_body(self):
+        # Read the whole body before prettifying it,
+        # but bail out immediately if the body is binary.
+        converter = None
+        body = bytearray()
+    
+        class Plugin(AuthPlugin):
+        auth_type = 'test-require-false-yet-provided'
+        auth_require = False
     
     
-def bench(factory, X, Y, X_test, Y_test, ref_coef):
-    gc.collect()
-    
-        for n_samples in sample_sizes:
-        X = random_state.rand(n_samples, 300)
-    
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            X = make_low_rank_matrix(n_samples, n_features,
-                                  effective_rank=rank,
-                                  tail_strength=0.2)
-    
-    import gc
-    
-        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
-                                   'blob/{revision}/{package}/'
-                                   '{path}#L{lineno}')
-    '''
-    revision = _get_git_revision()
-    return partial(_linkcode_resolve, revision=revision, package=package,
-                   url_fmt=url_fmt)
+def test_current_version():
+    version = Environment().config['__meta__']['httpie']
+    assert version == __version__
 
     
     
-if not os.path.exists(DATA_FOLDER):
+filenames = list(rst_filenames())
+assert filenames
     
-        def test_with(self):
-        p = self.cls(BASE)
-        it = p.iterdir()
-        it2 = p.iterdir()
-        next(it2)
-        with p:
-            pass
-        # I/O operation on closed path
-        self.assertRaises(ValueError, next, it)
-        self.assertRaises(ValueError, next, it2)
-        self.assertRaises(ValueError, p.open)
-        self.assertRaises(ValueError, p.resolve)
-        self.assertRaises(ValueError, p.absolute)
-        self.assertRaises(ValueError, p.__enter__)
+            def attempts(unique_on_attempt=0):
+            # noinspection PyUnresolvedReferences,PyUnusedLocal
+            def exists(filename):
+                if exists.attempt == unique_on_attempt:
+                    return False
+                exists.attempt += 1
+                return True
     
-    from argparse import ArgumentParser
-    
-        counter = 1
-    for part in msg.walk():
-        # multipart/* are just containers
-        if part.get_content_maintype() == 'multipart':
-            continue
-        # Applications should really sanitize the given filename so that an
-        # email message can't be used to overwrite important files
-        filename = part.get_filename()
-        if not filename:
-            ext = mimetypes.guess_extension(part.get_content_type())
-            if not ext:
-                # Use a generic bag-of-bits extension
-                ext = '.bin'
-            filename = 'part-%03d%s' % (counter, ext)
-        counter += 1
-        with open(os.path.join(args.directory, filename), 'wb') as fp:
-            fp.write(part.get_payload(decode=True))
-    
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
-from homeassistant.util import Throttle
-from homeassistant.components.device_tracker import (
-    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
-    
-        def get_thomson_data(self):
-        '''Retrieve data from THOMSON and return parsed result.'''
-        try:
-            telnet = telnetlib.Telnet(self.host)
-            telnet.read_until(b'Username : ')
-            telnet.write((self.username + '\r\n').encode('ascii'))
-            telnet.read_until(b'Password : ')
-            telnet.write((self.password + '\r\n').encode('ascii'))
-            telnet.read_until(b'=>')
-            telnet.write(('hostmgr list\r\n').encode('ascii'))
-            devices_result = telnet.read_until(b'=>').split(b'\r\n')
-            telnet.write('exit\r\n'.encode('ascii'))
-        except EOFError:
-            _LOGGER.exception('Unexpected response from router')
-            return
-        except ConnectionRefusedError:
-            _LOGGER.exception(
-                'Connection refused by router. Telnet enabled?')
-            return
-    
-                    if subdir:
-                    subdir = sanitize_filename(subdir)
-    
-        def startup(self, event):
-        '''Start the watcher.'''
-        self._observer.start()
-    
-    '''
-The number of partitions of a number n into at least k parts equals the number of partitions into exactly k parts
-plus the number of partitions into at least k-1 parts. Subtracting 1 from each part of a partition of n into k parts
-gives a partition of n-k into k parts. These two facts together are used for this algorithm.
-'''
-def partition(m):
-	memo = [[0 for _ in xrange(m)] for _ in xrange(m+1)]
-	for i in xrange(m+1):
-		memo[i][0] = 1
-    
-        difference = predict - actual
-    square_diff = np.square(difference)
-    mean_square_diff = square_diff.mean()
-    score = np.sqrt(mean_square_diff)
-    return score
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
