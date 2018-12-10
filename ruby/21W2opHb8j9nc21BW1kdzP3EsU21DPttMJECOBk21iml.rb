@@ -1,111 +1,102 @@
 
         
-                array.flatten.map! { |i| ERB::Util.unwrapped_html_escape(i) }.join(sep).html_safe
+                unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
+    
+      def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
+  end
+    
+      def local_domain?
+    TagManager.instance.web_domain?(hub_topic_domain)
+  end
+    
+      class OfflinePluginPackager
+    LOGSTASH_DIR = 'logstash'
+    DEPENDENCIES_DIR = ::File.join(LOGSTASH_DIR, 'dependencies')
+    
+        validate_target_file
+    LogStash::Bundler.invoke!({:package => true, :all => true})
+    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
+    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
+    
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
+  end
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
+    
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
       end
     
-    require 'action_view/helpers/tags/collection_helpers'
-    
-            conditions.each { |k, v| conditions[k] = Array(v).map(&:to_s) }
-        self._layout_conditions = conditions
-    
-        You can install it using Cask:
-    
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-        it 'sends escape characters correctly to the backend' do
-      emitter.events << Event.new(payload: {data: 'Line 1\nLine 2\nLine 3'})
-      formatting_agent.sources << emitter
-      formatting_agent.options.merge!('instructions' => {'data' => '{{data | newline_to_br | strip_newlines | split: '<br />' | join: ','}}'})
-      formatting_agent.save!
-    
-      it 'renders the import form' do
-    visit new_scenario_imports_path
-    expect(page).to have_text('Import a Public Scenario')
-  end
-    
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
     
-        it 'outputs a structure containing name, description, the date, all agents & their links' do
-      data = exporter.as_json
-      expect(data[:name]).to eq(name)
-      expect(data[:description]).to eq(description)
-      expect(data[:source_url]).to eq(source_url)
-      expect(data[:guid]).to eq(guid)
-      expect(data[:schema_version]).to eq(1)
-      expect(data[:tag_fg_color]).to eq(tag_fg_color)
-      expect(data[:tag_bg_color]).to eq(tag_bg_color)
-      expect(data[:icon]).to eq(icon)
-      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
-      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
-      expect(data[:control_links]).to eq([])
-      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
-      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
+      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
     
-          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
-    end
-    
-      def post_path_by_content(text)
-    p = Post.find_by_text(text)
-    post_path(p)
-  end
-    
-        get '/history/A'
-    
-        get page
-    # good html:
-    # <pre><code>one\ntwo\nthree\nfour\n</code></pre>\n
-    # broken html:
-    # <pre>\n  <code>one\ntwo\nthree\nfour\n</code>\n</pre>
-    assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
-  end
-    
-      test 'clean path with leading slash' do
-    assert_equal '/Mordor', clean_path('/Mordor')
-  end
-    
-      test 'creates korean page which contains korean content' do
-    post '/create', :content => '한글 text', :page => 'k',
-         :format             => 'markdown', :message => 'def'
-    follow_redirect!
-    assert last_response.ok?
-    
+          it 'allows closing brace on separate line from last multiline element' do
+        expect_no_offenses(construct(true, a, make_multi(multi), true))
       end
+    
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
+    
+          # Returns the branch of the `if` node that gets evaluated when its
+      # condition is falsey.
+      #
+      # @note This is normalized for `unless` nodes.
+      #
+      # @return [Node] the falsey branch node of the `if` node
+      # @return [nil] when there is no else branch
+      def else_branch
+        node_parts[2]
+      end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
+    end
+  end
 end
-
-    
-            def update
-          authorize! :update, @order, order_token
-    
-            def find_product
-          super(params[:id])
-        end
-    
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@return_authorization)
-        end
-    
-            def load_transfer_params
-          @original_shipment         = Spree::Shipment.find_by!(number: params[:original_shipment_number])
-          @variant                   = Spree::Variant.find(params[:variant_id])
-          @quantity                  = params[:quantity].to_i
-          authorize! :read, @original_shipment
-          authorize! :create, Shipment
-        end
-    
-            def update
-          @stock_item = StockItem.accessible_by(current_ability, :update).find(params[:id])
