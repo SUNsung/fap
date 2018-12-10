@@ -1,60 +1,70 @@
 
         
-              # Initializes an entry.
-      #
-      # The parameter given should be nil if this is being created
-      # publicly.
-      def initialize(id=nil, raw=nil)
-        @extra_data = {}
+            group = Group.create!(name: 'bob')
+    group.add(moderator)
+    group.save
     
-              # Setup the options hash
-          options ||= {}
+    Group.user_trust_level_change!(-1, TrustLevel[4])
     
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
-        #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
         end
     
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
-        end
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
     
-        # Register a key with a lazy-loaded value.
-    #
-    # If a key with the given name already exists, it is overwritten.
-    def register(key, &block)
-      raise ArgumentError, 'block required' if !block_given?
-      @items[key] = block
-    end
-    
-      def show
-    render json: outbox_presenter, serializer: ActivityPub::OutboxSerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
-  end
-    
-          if new_email != @user.email
-        @user.update!(
-          unconfirmed_email: new_email,
-          # Regenerate the confirmation token:
-          confirmation_token: nil
-        )
-    
-        def check_confirmation
-      if @user.confirmed?
-        flash[:error] = I18n.t('admin.accounts.resend_confirmation.already_confirmed')
-        redirect_to admin_accounts_path
+            a_split <=> b_split
+      else
+        a.casecmp(b)
       end
     end
+  end
+end
+
+    
+        def assert_index(index)
+      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
+      raise 'No such filter to insert: #{index}' unless i
+      i
+    end
+  end
+end
+
+    
+        def as_json
+      { name: name, path: path, type: type }
+    end
+  end
+end
+
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+            css('h1:not(:first-child)').each do |node|
+          node.name = 'h2'
+        end unless at_css('h2')
+    
+      def collection_presenter
+    ActivityPub::CollectionPresenter.new(
+      id: account_collection_url(@account, params[:id]),
+      type: :ordered,
+      size: @size,
+      items: @statuses
+    )
+  end
+end
+
+    
+      def page_params
+    { page: true, max_id: params[:max_id], min_id: params[:min_id] }.compact
   end
 end
 
@@ -64,24 +74,20 @@ end
           log_action :reopen, @report
         end
     
-      before_action :set_account
-  respond_to :txt
+    class Api::OEmbedController < Api::BaseController
+  respond_to :json
     
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
+        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
+  end
+    
+          spec['version'] = Bootstrap::VERSION
+    
+        def get_tree(sha, recursive = true)
+      get_json('https://api.github.com/repos/#@repo/git/trees/#{sha}#{'?recursive=1' if recursive}')
     end
     
-    Given /^I reload my application$/ do
-  Rails::Application.reload!
-end
-    
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
