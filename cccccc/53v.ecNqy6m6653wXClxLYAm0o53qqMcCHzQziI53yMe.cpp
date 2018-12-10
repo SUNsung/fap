@@ -1,226 +1,267 @@
 
         
-        #include <cstdint>
-#include <vector>
-#include 'dotproductsse.h'
+          // A light version of SplitCPHor: instead of really doing the part split, we
+  // simply compute the union bounding box of each split part.
+  void SplitCPHorLite(ColPartition* part, GenericVector<TBOX>* splitted_boxes);
     
-    #include <cstdint>  // for int16_t
-    
-    int os_detect_blobs(const GenericVector<int>* allowed_scripts,
-                    BLOBNBOX_CLIST* blob_list,
-                    OSResults* osr,
-                    tesseract::Tesseract* tess);
-    
-      // go through the list again and this time create the menu structure.
-  vc_it.move_to_first();
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
-    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
-    }
-    
-    
-/**********************************************************************
- * recog_word_recursive
- *
- * Convert the word to tess form and pass it to the tess segmenter.
- * Convert the output back to editor form.
- **********************************************************************/
-void Tesseract::recog_word_recursive(WERD_RES *word) {
-  int word_length = word->chopped_word->NumBlobs();  // no of blobs
-  if (word_length > MAX_UNDIVIDED_LENGTH) {
-    return split_and_recog_word(word);
-  }
-  cc_recog(word);
-  word_length = word->rebuild_word->NumBlobs();  // No of blobs in output.
-    }
-    
-    	real_t get_hinge_angle();
-    
-    public:
-	JointBullet();
-	virtual ~JointBullet();
-    
-    #ifndef PIN_JOINT_BULLET_H
-#define PIN_JOINT_BULLET_H
-    
-    #include 'func_ref.h'
-    
-    #include 'core/reference.h'
-    
-    Shell::Shell() {
-    }
-    
-    /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
- */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
-    
-    
-    {
-    {   private:
-    friend class CudaModule;
-    /*!
-     * \brief constructor
-     * \param mod module of this kernel
-     * \param mangled_name mangled kernel name
-     * \param signature kernel argument signature
-     */
-    Kernel(const std::shared_ptr<Chunk>& mod,
-           const std::string& mangled_name,
-           const std::vector<ArgType>& signature);
-    /*! \brief mangled kernel name */
-    std::string mangled_name_;
-    /*! \brief kernel argument signature */
-    std::vector<ArgType> signature_;
-    /*! \brief module of this kernel */
-    std::shared_ptr<Chunk> mod_;
-    /*! \brief cached kernel function on each device */
-    std::unordered_map<int, CUfunction> func_;
-  };
-  /*!
-   * \brief CudaModule constructor
-   * \param source cuda source code.
-   * \param exports export symbols before mangling.
-   */
-  CudaModule(const char* source,
-             const std::vector<std::string>& options,
-             const std::vector<std::string>& exports)
-      : ptr_(std::make_shared<Chunk>(source, options, exports)) {}
-  /*!
-   * \brief Get cuda kernal from module by name
-   * \param name kernel name
-   * \param signature kernel signature
-   * \return shared pointer to cuda kernel
-   */
-  std::shared_ptr<Kernel> GetKernel(const std::string& name,
-                                    const std::vector<ArgType>& signature);
-};
-    
-    namespace mxnet {
-namespace op {
-namespace caffe {
-    }
-    }
-    }
-    
-    
-    {
-    {      if (top_size > DATA) {
-        if (param_.flat) {
-          batch_data_ = TBlob(nullptr, mshadow::Shape2(batch_size_,
-                                                       channels_ * width_ * height_),
-                              cpu::kDevCPU, type_flag_);
-        } else {
-          batch_data_ = TBlob(nullptr, mxnet::TShape(top_[DATA]->shape().begin(),
-                                                     top_[DATA]->shape().end()),
-                              cpu::kDevCPU, type_flag_);
-        }
-      }
-      out_.data.clear();
-      if (top_size > LABEL) {
-          batch_label_ = TBlob(nullptr, mxnet::TShape(top_[LABEL]->shape().begin(),
-                                                      top_[LABEL]->shape().end()),
-                               cpu::kDevCPU, type_flag_);
-      }
-      out_.batch_size = batch_size_;
-    }
-  }
-    
-        for (auto blob_ptr : bot_blobs)
-      delete blob_ptr;
-    for (auto blob_ptr : top_blobs)
-      delete blob_ptr;
-    
-    DMLC_REGISTER_PARAMETER(CaffeOpParam);
-    
-    /*!
- * \file iter_libsvm.cc
- * \brief define a LibSVM Reader to read in arrays
- */
-#include <mxnet/io.h>
-#include <dmlc/base.h>
-#include <dmlc/logging.h>
-#include <dmlc/parameter.h>
-#include <dmlc/data.h>
-#include './iter_sparse_prefetcher.h'
-#include './iter_sparse_batchloader.h'
-    
-    
-    {
-    {}  // namespace common
-}  // namespace xgboost
-    
-    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
-  R_API_BEGIN();
-  int len = length(array);
-  const char *name = CHAR(asChar(field));
-  if (!strcmp('group', name)) {
-    std::vector<unsigned> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
-    }
-    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
-  } else {
-    std::vector<float> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = REAL(array)[i];
-    }
-    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
-                                   CHAR(asChar(field)),
-                                   BeginPtr(vec), len));
-  }
-  R_API_END();
-  return R_NilValue;
+    const PageIterator& PageIterator::operator=(const PageIterator& src) {
+  page_res_ = src.page_res_;
+  tesseract_ = src.tesseract_;
+  include_upper_dots_ = src.include_upper_dots_;
+  include_lower_dots_ = src.include_lower_dots_;
+  scale_ = src.scale_;
+  scaled_yres_ = src.scaled_yres_;
+  rect_left_ = src.rect_left_;
+  rect_top_ = src.rect_top_;
+  rect_width_ = src.rect_width_;
+  rect_height_ = src.rect_height_;
+  delete it_;
+  it_ = new PAGE_RES_IT(*src.it_);
+  BeginWord(src.blob_index_);
+  return *this;
 }
     
-    namespace xgboost {
-ConsoleLogger::~ConsoleLogger() {
-  dmlc::CustomLogMessage::Log(log_stream_.str());
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
+    }
+    
+      // blow away the copied chopped_word, as we want to work with
+  // the blobs from the input chopped_word so seam_arrays can be merged.
+  TWERD *chopped = word->chopped_word;
+  TWERD *chopped2 = new TWERD;
+  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
+  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
+    chopped2->blobs.push_back(chopped->blobs[i]);
+  }
+  chopped->blobs.truncate(split_pt);
+  word->chopped_word = nullptr;
+  delete word2->chopped_word;
+  word2->chopped_word = nullptr;
+    
+      // Set the resolution of the source image in pixels per inch.
+  // This should be called right after SetImage(), and will let us return
+  // appropriate font sizes for the text.
+  void SetSourceYResolution(int ppi) {
+    yres_ = ppi;
+    estimated_res_ = ppi;
+  }
+  int GetSourceYResolution() const {
+    return yres_;
+  }
+  int GetScaledYResolution() const {
+    return scale_ * yres_;
+  }
+  // Set the resolution of the source image in pixels per inch, as estimated
+  // by the thresholder from the text size found during thresholding.
+  // This value will be used to set internal size thresholds during recognition
+  // and will not influence the output 'point size.' The default value is
+  // the same as the source resolution. (yres_)
+  void SetEstimatedResolution(int ppi) {
+    estimated_res_ = ppi;
+  }
+  // Returns the estimated resolution, including any active scaling.
+  // This value will be used to set internal size thresholds during recognition.
+  int GetScaledEstimatedResolution() const {
+    return scale_ * estimated_res_;
+  }
+    
+    // Parses the given box file string into a page_number, utf8_str, and
+// bounding_box. Returns true on a successful parse.
+bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
+                     STRING* utf8_str, TBOX* bounding_box);
+    
+    
+    {}  // namespace tesseract.
+
+    
+    #include <grpc/support/port_platform.h>
+    
+    namespace grpc {
+    }
+    
+    const ViewDescriptor& ClientCompletedRpcsMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/client/completed_rpcs/minute')
+          .set_measure(kRpcClientRoundtripLatencyMeasureName)
+          .set_aggregation(Aggregation::Count())
+          .add_column(ClientMethodTagKey())
+          .add_column(ClientStatusTagKey());
+  return descriptor;
 }
-TrackerLogger::~TrackerLogger() {
-  dmlc::CustomLogMessage::Log(log_stream_.str());
+    
+    class ProtoServerReflection final
+    : public reflection::v1alpha::ServerReflection::Service {
+ public:
+  ProtoServerReflection();
+    }
+    
+    
+    {  m_last_elem_pos += 1;
+  return offset;
 }
-}  // namespace xgboost
     
     /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ * Parts of the language can individually be made stricter, warning or
+ * erroring when there's dangerous/unintuive usage; for example,
+ * array_fill_keys() with non-int/string keys: Hack.Lang.StrictArrayFillKeys
  */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-    }
+enum class HackStrictOption {
+  OFF, // PHP5 behavior
+  WARN,
+  ON
+};
     
-    Status LoggerConfigParserPlugin::update(const std::string& /* source */,
-                                        const ParserConfig& config) {
-  rj::Document& doc = data_.doc();
-    }
+    #endif // HPHP_DATA_STREAM_WRAPPER_H
+
     
-      const auto& views = data_.doc()['views'];
     
-      std::vector<std::string> pack_names;
-  c.packs(
-      ([&pack_names](const Pack& p) { pack_names.push_back(p.getName()); }));
-    
-    void Initializer::platformSetup() {
-  // Initialize the COM libraries utilized by Windows WMI calls.
-  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
-  if (ret != S_OK) {
-    ::CoUninitialize();
+    {  /**
+   * Execute a debugger action.
+   */
+  virtual String debuggerVerb(const std::string& /*verb*/,
+                              const std::vector<std::string>& /*args*/) {
+    return String();
   }
+};
+    
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+
+    
+    namespace CNTK
+{
+    class CompositeMinibatchSource final : public MinibatchSource
+    {
+        static const std::wstring PositionAttributeName;
+        static const std::wstring DistributedAfterSampleCountAttributeName;
+    }
+    }
+    
+        NDArrayViewPtr NDArrayView::DeepClone(const DeviceDescriptor& device, bool readOnly/* = false*/) const
+    {
+        NDArrayViewPtr newView = MakeSharedObject<NDArrayView>(this->GetDataType(), this->GetStorageFormat(), this->Shape(), device);
+        switch (m_dataType)
+        {
+        case DataType::Float:
+        {
+            auto newMatrix = newView->GetWritableMatrix<float>();
+            auto thisMatrix = GetMatrix<float>();
+            newMatrix->AssignValuesOf(*thisMatrix);
+            break;
+        }
+        case DataType::Double:
+        {
+            auto newMatrix = newView->GetWritableMatrix<double>();
+            auto thisMatrix = GetMatrix<double>();
+            newMatrix->AssignValuesOf(*thisMatrix);
+            break;
+        }
+        case DataType::Float16:
+        {
+            auto newMatrix = newView->GetWritableMatrix<half>();
+            auto thisMatrix = GetMatrix<half>();
+            newMatrix->AssignValuesOf(*thisMatrix);
+            break;
+        }
+        case DataType::Int8:
+        {
+            auto newMatrix = newView->GetWritableMatrix<char>();
+            auto thisMatrix = GetMatrix<char>();
+            newMatrix->AssignValuesOf(*thisMatrix);
+            break;
+        }
+        case DataType::Int16:
+        {
+            auto newMatrix = newView->GetWritableMatrix<short>();
+            auto thisMatrix = GetMatrix<short>();
+            newMatrix->AssignValuesOf(*thisMatrix);
+            break;
+        }
+        default:
+            LogicError('NDArrayView::DeepClone: Unsupported DataType %s', DataTypeName(m_dataType));
+            break;
+        }
+    }
+    
+        template <typename T> 
+    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
+    {
+        std::stringstream info;
+        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
+             << ', Dictionary version = ' << dictVersion;
+        return info.str();
+    }
+    
+        template <typename ElementType>
+    /*static*/ ValuePtr Value::Create(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/)
+    {
+        if (oneHotSequences.size() == 0)
+            InvalidArgument('Value::Create:: The number of sequences must be > 0');
+    }
+    
+    
+    {                if ((filterRank + outputRank) > shape.Rank())
+                    InvalidArgument('Sum of filter rank (%d) and output rank (%d) of the parameter initializer cannot exceed the Parameter shape '%S' rank (%d)', filterRank, outputRank, shape.AsString().c_str(), (int)shape.Rank());
+            }
+    
+    #define NOMINMAX
+#include 'Windows.h' // for HANDLE
+    
+    template <class ElemType>
+class EnvironmentInputNode : public ComputationNodeNonLooping<ElemType>, public NumInputs<0>
+{
+    typedef ComputationNodeNonLooping<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'EnvironmentInput'; }
+    }
+    
+    U_NAMESPACE_END
+    
+    SelectFormat::SelectFormat(const UnicodeString& pat,
+                           UErrorCode& status) : msgPattern(status) {
+   applyPattern(pat, status);
 }
     
-    #include <osquery/config.h>
-#include <osquery/events.h>
-#include <osquery/registry_factory.h>
-#include <osquery/tables.h>
+    U_NAMESPACE_BEGIN
     
-      QueryData generate(QueryContext& request) {
-    Row r;
+    #endif /* #if !UCONFIG_NO_COLLATION */
+
+    
+    namespace benchmark {
+enum LogColor {
+  COLOR_DEFAULT,
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_YELLOW,
+  COLOR_BLUE,
+  COLOR_MAGENTA,
+  COLOR_CYAN,
+  COLOR_WHITE
+};
     }
+    
+    bool SameNames(UserCounters const& l, UserCounters const& r) {
+  if (&l == &r) return true;
+  if (l.size() != r.size()) {
+    return false;
+  }
+  for (auto const& c : l) {
+    if (r.find(c.first) == r.end()) {
+      return false;
+    }
+  }
+  return true;
+}
+    
+    double BenchmarkReporter::Run::GetAdjustedCPUTime() const {
+  double new_time = cpu_accumulated_time * GetTimeUnitMultiplier(time_unit);
+  if (iterations != 0) new_time /= static_cast<double>(iterations);
+  return new_time;
+}
