@@ -1,160 +1,165 @@
 
         
-        
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
-    
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
-    
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
+                if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
     
     
-if __name__ == '__main__':
-    main()
-
+def with_metaclass(meta, *bases):
+    '''Create a base class with a metaclass.'''
+    # This requires a bit of explanation: the basic idea is to make a
+    # dummy metaclass for one level of class instantiation that replaces
+    # itself with the actual metaclass.
+    class metaclass(type):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+    return type.__new__(metaclass, 'temporary_class', (), {})
     
-    # Get the version from youtube_dl/version.py without importing the package
-exec(compile(open('youtube_dl/version.py').read(),
-             'youtube_dl/version.py', 'exec'))
+        Blueprints are the recommended way to implement larger or more
+    pluggable applications in Flask 0.7 and later.
     
-            info_dict = _make_result(list(formats_order), extractor='youtube')
-        ydl = YDL({'format': '(bestvideo[ext=mp4],bestvideo[ext=webm])+bestaudio'})
-        yie = YoutubeIE(ydl)
-        yie._sort_formats(info_dict['formats'])
-        ydl.process_ie_result(info_dict)
-        downloaded_ids = [info['format_id'] for info in ydl.downloaded_info_dicts]
-        self.assertEqual(downloaded_ids, ['137+141', '248+141'])
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
     
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-    VERSION = '3.27'
-    
-        proc.sendline(u'git h')
-    assert proc.expect([TIMEOUT, u'git: 'h' is not a git command.'])
+            if ip:
+            warnings.warn(
+                'The session cookie domain is an IP address. This may not work'
+                ' as intended in some browsers. Add an entry to your hosts'
+                ' file, for example 'localhost.localdomain', and use that'
+                ' instead.'
+            )
     
     
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
+class HTTPRequest(HTTPMessage):
+    '''A :class:`requests.models.Request` wrapper.'''
     
     
-def test_get_new_command():
-    new_command = get_new_command(Command('apt list --upgradable', match_output))
-    assert new_command == 'apt upgrade'
+def is_valid_mime(mime):
+    return mime and MIME_RE.match(mime)
     
-    query                                    | scan
-update-item                              | update-table
+        # By default the `-a` argument is parsed for `username:password`.
+    # Set this to `False` to disable the parsing and error handling.
+    auth_parse = True
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
+        def load_installed_plugins(self):
+        for entry_point_name in ENTRY_POINT_NAMES:
+            for entry_point in iter_entry_points(entry_point_name):
+                plugin = entry_point.load()
+                plugin.package_name = entry_point.dist.key
+                self.register(entry_point.load())
+    
+    
+class TestAutoContentTypeAndAcceptHeaders:
     '''
-    assert isinstance(u_string, str)
+    Test that Accept and Content-Type correctly defaults to JSON,
+    but can still be overridden. The same with Content-Type when --form
+    -f is used.
+    
+    
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+    
+def linkcode_resolve(domain, info):
+    '''Determine the URL corresponding to Python object.'''
+    if domain != 'py':
+        return None
+    modname = info['module']
+    fullname = info['fullname']
+    submod = sys.modules.get(modname)
+    if submod is None:
+        return None
+    obj = submod
+    for part in fullname.split('.'):
+        try:
+            obj = getattr(obj, part)
+        except:
+            return None
     try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
+        fn = inspect.getsourcefile(obj)
+    except:
+        fn = None
+    if not fn:
+        return None
+    try:
+        source, lineno = inspect.findsource(obj)
+    except:
+        lineno = None
+    if lineno:
+        linespec = '#L%d' % (lineno + 1)
+    else:
+        linespec = ''
+    index = fn.find('/homeassistant/')
+    if index == -1:
+        index = 0
+    
+    from .const import (
+    ATTR_MAIN_TEXT, ATTR_REDIRECTION_URL, ATTR_STREAM_URL, ATTR_TITLE_TEXT,
+    ATTR_UID, ATTR_UPDATE_DATE, CONF_AUDIO, CONF_DISPLAY_URL, CONF_TEXT,
+    CONF_TITLE, CONF_UID, DATE_FORMAT)
+    
+    CONF_RATE = 'rate'
+DEFAULT_HOST = 'localhost'
+DEFAULT_PORT = 8125
+DEFAULT_PREFIX = 'hass'
+DEFAULT_RATE = 1
+DOMAIN = 'datadog'
+    
+                last_results.append(Device(mac.upper(), name))
+    
+        def _make_request(self):
+        # Weirdly enough, this doesn't seem to require authentication
+        data = [{
+            'request': {
+                'sinceRevision': 0
+            },
+            'action': 'http://linksys.com/jnap/devicelist/GetDevices'
+        }]
+        headers = {'X-JNAP-Action': 'http://linksys.com/jnap/core/Transaction'}
+        return requests.post('http://{}/JNAP/'.format(self.host),
+                             timeout=DEFAULT_TIMEOUT,
+                             headers=headers,
+                             json=data)
 
     
-    The other HTTP methods are supported - see `requests.api`. Full documentation
-is at <http://python-requests.org>.
+        async def async_get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        filter_named = [result.name for result in self.last_results
+                        if result.mac == device]
     
-            realm = self._thread_local.chal['realm']
-        nonce = self._thread_local.chal['nonce']
-        qop = self._thread_local.chal.get('qop')
-        algorithm = self._thread_local.chal.get('algorithm')
-        opaque = self._thread_local.chal.get('opaque')
-        hash_utf8 = None
+                    _LOGGER.error('UPNP Responder socket exception occurred: %s',
+                              ex.__str__)
+                # without the following continue, a second exception occurs
+                # because the data object has not been initialized
+                continue
     
-    # ---------
-# Specifics
-# ---------
+            def process(self, event):
+            '''On Watcher event, fire HA event.'''
+            _LOGGER.debug('process(%s)', event)
+            if not event.is_directory:
+                folder, file_name = os.path.split(event.src_path)
+                self.hass.bus.fire(
+                    DOMAIN, {
+                        'event_type': event.event_type,
+                        'path': event.src_path,
+                        'file': file_name,
+                        'folder': folder,
+                        })
     
-    
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
-    
-    def line_length(filename):
-    return sum(1 for line in open(filename))
-    
-    # If true, the current module name will be prepended to all description
-# unit titles (such as .. function::).
-#add_module_names = True
-    
-    * This implementation uses a weighted vote, such that the votes of closer-neighbors are weighted more heavily.
-    
-        :param faces: List of face encodings to compare
-    :param face_to_compare: A face encoding to compare against
-    :return: A numpy ndarray with the distance for each face in the same order as the 'faces' array
-    '''
-    if len(face_encodings) == 0:
-        return np.empty((0))
-    
-    
-def test_image(image_to_check, model):
-    unknown_image = face_recognition.load_image_file(image_to_check)
-    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
-    
-    # Initialize some variables
-face_locations = []
-face_encodings = []
-    
-            face_encoding_a1 = api.face_encodings(img_a1)[0]
-        face_encoding_a2 = api.face_encodings(img_a2)[0]
-        face_encoding_a3 = api.face_encodings(img_a3)[0]
-        face_encoding_b1 = api.face_encodings(img_b1)[0]
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_PASSWORD): cv.string,
+        vol.Required(CONF_USERNAME): cv.string,
+        vol.Optional(CONF_SCAN_INTERVAL, default=2): cv.positive_int,
+    })
+}, extra=vol.ALLOW_EXTRA)
