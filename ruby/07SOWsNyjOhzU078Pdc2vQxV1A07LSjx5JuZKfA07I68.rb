@@ -1,79 +1,48 @@
 
         
-          def failure_message
-    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
-    error   = exception.error_reason if exception.respond_to?(:error_reason)
-    error ||= exception.error        if exception.respond_to?(:error)
-    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
-    error.to_s.humanize if error
+                  # Generate default options for collection helpers, such as :checked and
+          # :disabled.
+          def default_html_options_for_collection(item, value)
+            html_options = @html_options.dup
+    
+    module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
+    
+        describe '-' do
+      it 'left-justifies the result of conversion if width is specified' do
+        format('%-10b', 10).should == '1010      '
+        format('%-10B', 10).should == '1010      '
+        format('%-10d', 112).should == '112       '
+        format('%-10i', 112).should == '112       '
+        format('%-10o', 87).should == '127       '
+        format('%-10u', 112).should == '112       '
+        format('%-10x', 196).should == 'c4        '
+        format('%-10X', 196).should == 'C4        '
+    
+    describe 'Kernel#taint' do
+  it 'returns self' do
+    o = Object.new
+    o.taint.should equal(o)
   end
     
-        def translation_scope
-      'devise.unlocks'
+      it 'sets the return value of the catch block to a value specified as second parameter' do
+    res = catch :blah do
+      throw :blah, :return_value
     end
-end
-
-    
-      private
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-    $redis = Redis.new
-    
-    
-    end
+    res.should == :return_value
   end
-end
-
     
-        module PsychAutoload
-      def resolve_class(klass_name)
-        return nil if !klass_name || klass_name.empty?
-        # constantize
-        names = klass_name.split('::')
-        names.shift if names.empty? || names.first.empty?
-    
-        module ActionMailer
-      def sidekiq_delay(options={})
-        Proxy.new(DelayedMailer, self, options)
-      end
-      def sidekiq_delay_for(interval, options={})
-        Proxy.new(DelayedMailer, self, options.merge('at' => Time.now.to_f + interval.to_f))
-      end
-      def sidekiq_delay_until(timestamp, options={})
-        Proxy.new(DelayedMailer, self, options.merge('at' => timestamp.to_f))
-      end
-      alias_method :delay, :sidekiq_delay
-      alias_method :delay_for, :sidekiq_delay_for
-      alias_method :delay_until, :sidekiq_delay_until
-    end
-    
-          if file.kind_of?(String)
-        ERB.new(file).result(binding)
-      else
-        send(:'_erb_#{file}')
-      end
-    end
+        $Kernel_trace_var_global = 'foo'
+    captured.should == 'foo'
   end
-end
-
-    
-        def match(request_method, path)
-      case matcher
-      when String
-        {} if path == matcher
-      else
-        if path_match = path.match(matcher)
-          Hash[path_match.names.map(&:to_sym).zip(path_match.captures)]
-        end
-      end
-    end
-  end
-end
