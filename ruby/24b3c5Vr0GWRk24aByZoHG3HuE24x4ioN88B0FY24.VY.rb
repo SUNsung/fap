@@ -1,85 +1,78 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+                  def label(label_html_options = {}, &block)
+            html_options = @input_html_options.slice(:index, :namespace).merge(label_html_options)
+            html_options[:for] ||= @input_html_options[:id] if @input_html_options[:id]
     
-          def step_name(_keyword, _step_match, status, _source_indent, _background, _file_colon_line)
-        @io.print CHARS[status]
-        @io.print ' '
-      end
-      # rubocop:enable Metrics/ParameterLists
-    
-              pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
-          end
+            def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
         end
     
-            def id_for_already_imported_cache(note)
-          note.id
-        end
-      end
+      it 'allows to click on on the agent name in select2 tags' do
+    visit new_agent_path
+    select_agent_type('Website Agent scrapes')
+    select2('SF Weather', from: 'Sources')
+    click_on 'SF Weather'
+    expect(page).to have_content 'Editing your WeatherAgent'
+  end
+    
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
+    
+      describe '#schedule_scheduler_agents' do
+    it 'registers active SchedulerAgents' do
+      @scheduler.schedule_scheduler_agents
+    
+      it 'ignores invalid values' do
+    location2 = Location.new(
+      lat: 2,
+      lng: 3,
+      radius: -1,
+      speed: -1,
+      course: -1)
+    expect(location2.radius).to be_nil
+    expect(location2.speed).to be_nil
+    expect(location2.course).to be_nil
+  end
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
   end
 end
-
     
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-      def scope_for_collection
-    case params[:id]
-    when 'featured'
-      @account.statuses.permitted_for(@account, signed_request_account).tap do |scope|
-        scope.merge!(@account.pinned_statuses)
-      end
-    else
-      raise ActiveRecord::NotFound
-    end
-  end
-    
-            render template: 'admin/accounts/show'
-      end
+        def log_status(status)
+      puts bold status
     end
     
-        def require_local_account!
-      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
-    end
+    require_relative '../lib/bootstrap/environment'
     
-        def index
-      authorize :email_domain_block, :index?
-      @email_domain_blocks = EmailDomainBlock.page(params[:page])
-    end
+    module LogStash module PluginManager module PackFetchStrategy
+  class Repository
+    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
+    PACK_EXTENSION = 'zip'
     
-      def update
-    response, status = process_push_request
-    render plain: response, status: status
-  end
-    
-        s = StringIO.new
-    SystemConfig.dump_verbose_config s
-    # Dummy summary file, asciibetically first, to control display title of gist
-    files['# #{f.name} - #{timestamp}.txt'] = { content: brief_build_info(f) }
-    files['00.config.out'] = { content: s.string }
-    files['00.doctor.out'] = { content: Utils.popen_read('#{HOMEBREW_PREFIX}/bin/brew', 'doctor', err: :out) }
-    unless f.core_formula?
-      tap = <<~EOS
-        Formula: #{f.name}
-        Tap: #{f.tap}
-        Path: #{f.path}
-      EOS
-      files['00.tap.out'] = { content: tap }
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
