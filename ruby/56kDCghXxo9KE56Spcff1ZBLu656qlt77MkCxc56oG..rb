@@ -1,102 +1,123 @@
 
         
-        gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
-    
-    class Devise::OmniauthCallbacksController < DeviseController
-  prepend_before_action { request.env['devise.skip_timeout'] = true }
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
-      end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-        private
-    
-      def maxheight_or_default
-    params[:maxheight].present? ? params[:maxheight].to_i : nil
+          # Compile a file on disk to CSS.
+  #
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  #
+  # @overload compile_file(filename, options = {})
+  #   Return the compiled CSS rather than writing it to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @return [String] The compiled CSS.
+  #
+  # @overload compile_file(filename, css_filename, options = {})
+  #   Write the compiled CSS to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @param css_filename [String] The location to which to write the compiled CSS.
+  def self.compile_file(filename, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    css_filename = args.shift
+    result = Sass::Engine.for_file(filename, options).render
+    if css_filename
+      options[:css_filename] ||= css_filename
+      open(css_filename, 'w') {|css_file| css_file.write(result)}
+      nil
+    else
+      result
+    end
   end
 end
-
     
-    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
-# requests with `config.assets.quiet`, because the default silence method of
-# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
-Logging::Logger.send :alias_method, :local_level, :level
-Logging::Logger.send :alias_method, :local_level=, :level=
-Logging::Logger.send :include, LoggerSilence
-
+          # @see Base#\_retrieve
+      def _retrieve(key, version, sha)
+        return unless File.readable?(path_to(key))
+        begin
+          File.open(path_to(key), 'rb') do |f|
+            if f.readline('\n').strip == version && f.readline('\n').strip == sha
+              return f.read
+            end
+          end
+          File.unlink path_to(key)
+        rescue Errno::ENOENT
+          # Already deleted. Race condition?
+        end
+        nil
+      rescue EOFError, TypeError, ArgumentError => e
+        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
+      end
     
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
+        def bubble_subject(root)
+      root.children.each do |child|
+        bubble_subject(child) if child.is_a?(Tree::RuleNode) || child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode) && !child.children.empty?
+        next unless child.children.all? do |c|
+          next unless c.is_a?(Tree::RuleNode)
+          first_simple_sel(c).is_a?(Sass::Selector::Parent) && first_sseq(c).subject?
+        end
+        first_sseq(child).subject = true
+        child.children.each {|c| first_sseq(c).subject = false}
+      end
+    end
+    
+          # This workaround is needed for the case when the variable value is part of the identifier,
+      # otherwise we end up with the offset equal to the value index inside the name:
+      # $red_color: red;
+      var_lhs_length = 1 + name.length # 1 stands for '$'
+      index = line.text.index(value, line.offset + var_lhs_length) || 0
+      expr = parse_script(value, :offset => to_parser_offset(line.offset + index))
+    
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+            return nil
+      end
     end
   end
+end end end
+
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
+      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
     
-        # Dump all the parsed {Sass::Tree::RuleNode} selectors to strings.
-    #
-    # @param root [Tree::Node] The parent node
-    def dump_selectors(root)
-      root.children.each do |child|
-        next dump_selectors(child) if child.is_a?(Tree::DirectiveNode)
-        next unless child.is_a?(Tree::RuleNode)
-        child.rule = [child.parsed_rules.to_s]
-        dump_selectors(child)
+          # An array containing the arguments of the method definition.
+      #
+      # @return [Array<Node>] the arguments of the method definition
+      def arguments
+        node_parts[1]
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
       end
     end
-    
-              def is_#{name}_global?(name)
-            return !@parent if @#{name}s && @#{name}s.has_key?(name)
-            @parent && @parent.is_#{name}_global?(name)
-          end
-        RUBY
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
-      #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
-      end
-    
-          # Checks whether the `if` node has at least one `elsif` branch. Returns
-      # true if this `if` node itself is an `elsif`.
-      #
-      # @return [Boolean] whether the `if` node has at least one `elsif` branch
-      def elsif_conditional?
-        else_branch && else_branch.if_type? && else_branch.elsif?
-      end
-    
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
-      #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
-      end
+  end
+end
