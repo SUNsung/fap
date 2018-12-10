@@ -1,312 +1,472 @@
 
         
-        bool DecodeMetadata(const string& path, GeneratedCodeInfo* info) {
-  string data;
-  GOOGLE_CHECK_OK(File::GetContents(path, &data, true));
-  io::ArrayInputStream input(data.data(), data.size());
-  return info->ParseFromZeroCopyStream(&input);
+        template <class R, class P1, class P2>
+struct ReturnOf<R (*)(P1, P2)> {
+  typedef R Return;
+};
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+    }
+    }
+    }
+    
+    std::string SourceGeneratorBase::class_access_level() {
+  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
 }
     
+    SharedCodeGenerator::SharedCodeGenerator(const FileDescriptor* file,
+                                         const Options& options)
+    : name_resolver_(new ClassNameResolver), file_(file), options_(options) {}
     
-#include <google/protobuf/compiler/csharp/csharp_enum.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_message.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-#include <google/protobuf/compiler/csharp/csharp_reflection_class.h>
+    void OneofGenerator::GenerateClearFunctionImplementation(io::Printer* printer) {
+  printer->Print(
+      variables_,
+      'void $owning_message_class$_Clear$capitalized_name$OneOfCase($owning_message_class$ *message) {\n'
+      '  GPBDescriptor *descriptor = [message descriptor];\n'
+      '  GPBOneofDescriptor *oneof = [descriptor.oneofs objectAtIndex:$raw_index$];\n'
+      '  GPBMaybeClearOneof(message, oneof, $index$, 0);\n'
+      '}\n');
+}
     
-      bool includes_oneof = false;
-  for (std::vector<MessageGenerator *>::iterator iter = message_generators_.begin();
-       iter != message_generators_.end(); ++iter) {
-    if ((*iter)->IncludesOneOfDefinition()) {
-      includes_oneof = true;
-      break;
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
     }
   }
-    
-    // Death tests do not work on Windows as of yet.
-#ifdef PROTOBUF_HAS_DEATH_TEST
-TEST(ObjCHelperDeathTest, TextFormatDecodeData_DecodeDataForString_Failures) {
-  // Empty inputs.
-    }
-    
-    void OneofGenerator::SetOneofIndexBase(int index_base) {
-  int index = descriptor_->index() + index_base;
-  // Flip the sign to mark it as a oneof.
-  variables_['index'] = SimpleItoa(-index);
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
+#endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
 }
+    
+    
+    {}  // namespace tesseract.
+    
+    /**
+ * Returns the baseline of the current object at the given level.
+ * The baseline is the line that passes through (x1, y1) and (x2, y2).
+ * WARNING: with vertical text, baselines may be vertical!
+ */
+bool PageIterator::Baseline(PageIteratorLevel level,
+                            int* x1, int* y1, int* x2, int* y2) const {
+  if (it_->word() == nullptr) return false;  // Already at the end!
+  ROW* row = it_->row()->row;
+  WERD* word = it_->word()->word;
+  TBOX box = (level == RIL_WORD || level == RIL_SYMBOL)
+           ? word->bounding_box()
+           : row->bounding_box();
+  int left = box.left();
+  ICOORD startpt(left, static_cast<int16_t>(row->base_line(left) + 0.5));
+  int right = box.right();
+  ICOORD endpt(right, static_cast<int16_t>(row->base_line(right) + 0.5));
+  // Rotate to image coordinates and convert to global image coords.
+  startpt.rotate(it_->block()->block->re_rotation());
+  endpt.rotate(it_->block()->block->re_rotation());
+  *x1 = startpt.x() / scale_ + rect_left_;
+  *y1 = (rect_height_ - startpt.y()) / scale_ + rect_top_;
+  *x2 = endpt.x() / scale_ + rect_left_;
+  *y2 = (rect_height_ - endpt.y()) / scale_ + rect_top_;
+  return true;
+}
+    
+      // If the current WERD_RES (it_->word()) is not nullptr, sets the BlamerBundle
+  // of the current word to the given pointer (takes ownership of the pointer)
+  // and returns true.
+  // Can only be used when iterating on the word level.
+  bool SetWordBlamerBundle(BlamerBundle *blamer_bundle);
+    
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
+  }
+    
+    #include 'blread.h'
+#include <cstdio>       // for fclose, fopen, FILE
+#include 'host.h'       // for TRUE
+#include 'ocrblock.h'   // for BLOCK_IT, BLOCK, BLOCK_LIST (ptr only)
+#include 'scanutils.h'  // for tfscanf
+    
+    #include 'blobs.h'
+#include 'boxword.h'
+#include 'normalis.h'
+#include 'ocrblock.h'
+#include 'pageres.h'
+    
+      // Adds the given pix to the set of pages in the PDF file, with the given
+  // caption added to the top.
+  void AddPix(const Pix* pix, const char* caption) {
+    int depth = pixGetDepth(const_cast<Pix*>(pix));
+    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
+    Pix* pix_debug = pixAddSingleTextblock(
+        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
+    pixaAddPix(pixa_, pix_debug, L_INSERT);
+  }
+    
+    
+    {
+    {}}
+    
+    //////////////////////////////////////////////////////////////////////
     
       /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
+   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
+   * These Bind()s should be used for ini settings. Specifically, they
+   * should be used when the bound setting is needed before the main ini
+   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
+   * value in an ini setting if it is set otherwise it will use the defValue.
    */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-    /// @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$.
-template <typename Dtype>
-class UniformFiller : public Filler<Dtype> {
- public:
-  explicit UniformFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), Dtype(this->filler_param_.min()),
-        Dtype(this->filler_param_.max()), blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
-
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
-}
-}  // namespace data
+  static void Bind(bool& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const bool defValue = false,
+                   const bool prepend_hhvm = true);
+  static void Bind(const char*& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char *defValue = nullptr,
+                   const bool prepend_hhvm = true);
+  static void Bind(std::string& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const std::string defValue = '',
+                   const bool prepend_hhvm = true);
+  static void Bind(char& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char defValue = 0, const bool prepend_hhvm = true);
+  static void Bind(unsigned char& loc,const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const unsigned char defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(double& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const double defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name,
+                   HackStrictOption def);
+  static void
+  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<std::string>& defValue = std::vector<std::string>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::unordered_map<std::string, int>& loc,
+       const IniSettingMap& ini, const Hdf& config,
+       const std::string& name = '',
+       const std::unordered_map<std::string, int>& defValue =
+         std::unordered_map<std::string, int>{},
+       const bool prepend_hhvm = true);
+  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMap& defValue = ConfigMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMapC& defValue = ConfigMapC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSet& defValue = ConfigSet(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSetC& defValue = ConfigSetC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigIMap& defValue = ConfigIMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
+                   const Hdf& config, const std::string& name = '',
+                   const ConfigFlatSet& defValue = ConfigFlatSet(),
+                   const bool prepend_hhvm = true);
     
     
     { private:
-  /*! \brief number of allocated pages */
-  size_t num_free_buffer_;
-  /*! \brief clock_pointer */
-  size_t clock_ptr_;
-  /*! \brief writer threads */
-  std::vector<std::unique_ptr<std::thread> > workers_;
-  /*! \brief recycler queue */
-  dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > qrecycle_;
-  /*! \brief worker threads */
-  std::vector<dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > > qworkers_;
+  int mkdir_recursive(const String& path, int mode);
 };
-#endif  // DMLC_ENABLE_STD_THREAD
     
-    #ifdef __CUDACC__
-#include 'device_helpers.cuh'
-#endif
+    /**
+ * For php://output, a simple wrapper of g_context->out().
+ */
+struct OutputFile : File {
+  DECLARE_RESOURCE_ALLOCATION(OutputFile);
+    }
     
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+        template <typename ElementType>
+    void Value::CopyVariableValueToCSCSparse(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<ElementType>& nonZeroValues, size_t& numNonZeroValues)
+    {
+        // All sanity check has been done in ValidateSparseCSCAndGetIndexSizes().
+        NDArrayViewPtr cpuView;
+        if (Device().Type() == DeviceKind::GPU)
+        {
+            // Todo: GPUSparseMatrix to CPUSparseMatrix is not implemented in matrix, as a workaround the dense matrix is used as intermediate presentation.
+            // However, it is possible that data value very close to 0 could treated as 0 after transformation between dense and sparse.
+            auto cpuDenseView = MakeSharedObject<NDArrayView>(GetDataType(), StorageFormat::Dense, Shape(), DeviceDescriptor::CPUDevice());
+            cpuDenseView->CopyFrom(*Data());
+            cpuView = MakeSharedObject<NDArrayView>(GetDataType(), GetStorageFormat(), Shape(), DeviceDescriptor::CPUDevice());
+            cpuView->CopyFrom(*cpuDenseView);
+        }
+        else
+            cpuView = Data();
+    }
+    
+    // GetData - Gets metadata from the specified section (into CPU memory)
+// sectionName - section name to retrieve data from
+// numRecords - number of records to read
+// data - pointer to data buffer, if NULL, dataBufferSize will be set to size of required buffer to accomidate request
+// dataBufferSize - [in] size of the databuffer in bytes
+//                  [out] size of buffer filled with data
+// recordStart - record to start reading from, defaults to zero (start of data)
+// returns: true if data remains to be read, false if the end of data was reached
+bool DataReader::GetData(const std::wstring& sectionName, size_t numRecords, void* data, size_t& dataBufferSize, size_t recordStart)
+{
+    bool bRet = true;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        bRet &= m_dataReaders[m_ioNames[i]]->GetData(sectionName, numRecords, data, dataBufferSize, recordStart);
+    return bRet;
+}
+    
+        EyeLikeNode(DEVICEID_TYPE deviceId, const wstring& name, bool isOutputSparse)
+        : Base(deviceId, name), m_isOutputSparse(isOutputSparse)
+    {
+    }
+    
+    /// Root key to retrieve Kafka topic configurations.
+extern const std::string kKafkaTopicParserRootKey;
+    
+      std::string log_line;
+  serializeQueryLogItemJSON(item, log_line);
+  std::string expected =
+      '{\'snapshot\':[],\'action\':\'snapshot\',\'name\':\'\','
+      '\'hostIdentifier\':\'\',\'calendarTime\':\'\',\'unixTime\':0,'
+      '\'epoch\':0,\'counter\':0,'
+      '\'decorations\':{\'internal_60_test\':\'test\',\'one\':\'1\'}}';
+  EXPECT_EQ(log_line, expected);
+    
+      update['awesome'] = R'raw({
+    'options': {
+      'custom_nested_json': 
+        {'foo':1,'bar':'baz'}
+    }
+  })raw';
+  auto s = c.update(update);
+  EXPECT_TRUE(s.ok());
+  EXPECT_EQ(s.toString(), 'OK');
+    
+    class ViewsConfigParserPluginTests : public testing::Test {};
+    
+    /**
+ * @brief A simple ConfigParserPlugin for a 'views' dictionary key.
+ */
+class ViewsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {'views'};
+  }
+    }
+    
+      Pack kpack('unrestricted_pack', getUnrestrictedPack().doc());
+  EXPECT_EQ(kpack.getDiscoveryQueries(), expected);
+    
+      struct ConstraintList cl2;
+  cl2.affinity = INTEGER_TYPE;
+  constraint = Constraint(LESS_THAN);
+  constraint.expr = '1000';
+  cl2.add(constraint);
+  constraint = Constraint(GREATER_THAN);
+  constraint.expr = '1';
+  cl2.add(constraint);
+    
+    #include <osquery/system.h>
+    
+      /// Check if the application-global `inotify` handle is alive.
+  bool isHandleOpen() const {
+    return inotify_handle_ > 0;
+  }
+    
+      // Create a subscription context
+  auto mc = std::make_shared<INotifySubscriptionContext>();
+  mc->path = real_test_path;
+  mc->mask = IN_ALL_EVENTS;
+  status = EventFactory::addSubscription(
+      'inotify', Subscription::create('TestINotifyEventSubscriber', mc));
+  EXPECT_TRUE(status.ok());
+  event_pub_->configure();
+    
+        // Use the basic 'force' flag to check implicit SQL usage.
+    auto flags =
+        SQL('select default_value from osquery_flags where name = 'force'');
+    if (flags.rows().size() > 0) {
+      r['flag_test'] = flags.rows().back().at('default_value');
+    }
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
     
                 ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
             ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
             ImGui::Checkbox('Another Window', &show_another_window);
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-        {
-        D3D12_COMMAND_QUEUE_DESC desc = {};
-        desc.Type     = D3D12_COMMAND_LIST_TYPE_DIRECT;
-        desc.Flags    = D3D12_COMMAND_QUEUE_FLAG_NONE;
-        desc.NodeMask = 1;
-        if (g_pd3dDevice->CreateCommandQueue(&desc, IID_PPV_ARGS(&g_pd3dCommandQueue)) != S_OK)
-            return E_FAIL;
-    }
-    
-        // Main loop
-    MSG msg;
-    ZeroMemory(&msg, sizeof(msg));
-    ShowWindow(hwnd, SW_SHOWDEFAULT);
-    UpdateWindow(hwnd);
-    while (msg.message != WM_QUIT)
-    {
-        // Poll and handle messages (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            continue;
-        }
-    }
-    
-    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
-    
-    // CHANGELOG 
-// (minor and older changes stripped away, please see git history for details)
-//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.
-//  2018-06-08: Misc: Extracted imgui_impl_dx9.cpp/.h away from the old combined DX9+Win32 example.
-//  2018-06-08: DirectX9: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-    
-      // Given a sequence number, return the sequence number of the
-  // earliest snapshot that this sequence number is visible in.
-  // The snapshots themselves are arranged in ascending order of
-  // sequence numbers.
-  // Employ a sequential search because the total number of
-  // snapshots are typically small.
-  inline SequenceNumber findEarliestVisibleSnapshot(
-      SequenceNumber in, SequenceNumber* prev_snapshot);
-    
-    
-    {  // Sleep just until `num_bytes` is allowed.
-  uint64_t sleep_amount =
-      static_cast<uint64_t>(num_bytes /
-                            static_cast<long double>(delayed_write_rate_) *
-                            kMicrosPerSecond) +
-      sleep_debt;
-  last_refill_time_ = time_now + sleep_amount;
-  return sleep_amount;
+    CallFunc::~CallFunc()
+{
+    CC_SAFE_RELEASE(_selectorTarget);
 }
     
-      std::atomic<int> total_stopped_;
-  std::atomic<int> total_delayed_;
-  std::atomic<int> total_compaction_pressure_;
-  uint64_t bytes_left_;
-  uint64_t last_refill_time_;
-  // write rate set when initialization or by `DBImpl::SetDBOptions`
-  uint64_t max_delayed_write_rate_;
-  // current write rate
-  uint64_t delayed_write_rate_;
     
-    /*
- * PosixSequentialFile
- */
-PosixSequentialFile::PosixSequentialFile(const std::string& fname, FILE* file,
-                                         int fd, const EnvOptions& options)
-    : filename_(fname),
-      file_(file),
-      fd_(fd),
-      use_direct_io_(options.use_direct_reads),
-      logical_sector_size_(GetLogicalBufferSize(fd_)) {
-  assert(!options.use_direct_reads || !options.use_mmap_reads);
-}
-    
-    int main() {
-  Options options;
-  options.create_if_missing = true;
-  // Disable RocksDB background compaction.
-  options.compaction_style = kCompactionStyleNone;
-  // Small slowdown and stop trigger for experimental purpose.
-  options.level0_slowdown_writes_trigger = 3;
-  options.level0_stop_writes_trigger = 5;
-  options.IncreaseParallelism(5);
-  options.listeners.emplace_back(new FullCompactor(options));
-    }
-    
-    class MyFilter : public rocksdb::CompactionFilter {
- public:
-  bool Filter(int level, const rocksdb::Slice& key,
-              const rocksdb::Slice& existing_value, std::string* new_value,
-              bool* value_changed) const override {
-    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
-    ++count_;
-    assert(*value_changed == false);
-    return false;
-  }
-    }
-    
-    
-    {}  // namespace
-    
-      PinnableSlice pinnable_val;
-  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
-  assert(s.IsNotFound());
-  // Reset PinnableSlice after each use and before each reuse
-  pinnable_val.Reset();
-  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
-  assert(pinnable_val == 'value');
-  pinnable_val.Reset();
-  // The Slice pointed by pinnable_val is not valid after this point
-    
-    namespace rocksdb {
-    }
-    
-    
-    {  virtual ~FlushBlockPolicyFactory() { }
+    {CC_CONSTRUCTOR_ACCESS:
+    FadeOut():_reverseAction(nullptr) {}
+    virtual ~FadeOut() {}
+private:
+    CC_DISALLOW_COPY_AND_ASSIGN(FadeOut);
+    FadeTo* _reverseAction;
 };
     
-    #include 'internal_macros.h'
     
+NS_CC_END
+
     
-    {}  // end namespace
+        for (auto& spriteFrame : frames)
+    {
+        auto animFrame = AnimationFrame::create(spriteFrame, 1, ValueMap());
+        _frames.pushBack(animFrame);
+        _totalDelayUnits++;
+    }
     
-    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
-                 va_list args);
-void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...);
-    
-    void Finish(UserCounters *l, double cpu_time, double num_threads) {
-  for (auto &c : *l) {
-    c.second.value = Finish(c.second, cpu_time, num_threads);
+    void BENCHFUN(fillCtor)(int iters, int size) {
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v(size_t(size), randomObject<VECTOR::value_type>());
+    doNotOptimizeAway(&v);
   }
 }
+BENCHMARK_PARAM(BENCHFUN(fillCtor), 16)
+BENCHMARK_PARAM(BENCHFUN(fillCtor), 128)
+BENCHMARK_PARAM(BENCHFUN(fillCtor), 1024)
     
-      const CPUInfo &info = context.cpu_info;
-  Out << 'Run on (' << info.num_cpus << ' X '
-      << (info.cycles_per_second / 1000000.0) << ' MHz CPU '
-      << ((info.num_cpus > 1) ? 's' : '') << ')\n';
-  if (info.caches.size() != 0) {
-    Out << 'CPU Caches:\n';
-    for (auto &CInfo : info.caches) {
-      Out << '  L' << CInfo.level << ' ' << CInfo.type << ' '
-          << (CInfo.size / 1000) << 'K';
-      if (CInfo.num_sharing != 0)
-        Out << ' (x' << (info.num_cpus / CInfo.num_sharing) << ')';
-      Out << '\n';
-    }
+      /**
+   * Returns a random uint64_t in [min, max). If min == max, returns 0.
+   */
+  static uint64_t rand64(uint64_t min, uint64_t max) {
+    return rand64(min, max, ThreadLocalPRNG());
   }
     
-    #include 'sleep.h'
+    // Some utility routines relating to unicode.
+    
+    /**
+ * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
+ * Returns true if the first n bytes are equal to prefix when interpreted as
+ * a little endian T.
+ */
+template <typename T>
+typename std::enable_if<std::is_unsigned<T>::value, bool>::type
+dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  T value;
+  Cursor cursor{data};
+  if (!cursor.tryReadLE(value)) {
+    return false;
+  }
+  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
+  return prefix == (value & mask);
+}
+    
+    TEST_F(SparseByteSetTest, empty) {
+  for (auto c = lims::min(); c < lims::max(); ++c) {
+    EXPECT_FALSE(s.contains(c));
+  }
+}
