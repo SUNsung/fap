@@ -1,92 +1,186 @@
 
         
-        public:
-    ~MacDockIconHandler();
+        namespace google {
+namespace protobuf {
+namespace python {
+    }
+    }
+    }
+    
+    // A CodeGenerator that captures the FileDescriptor it's passed as a
+// FileDescriptorProto.
+class DescriptorCapturingGenerator : public CodeGenerator {
+ public:
+  // Does not own file; file must outlive the Generator.
+  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
+      : file_(file) {}
+    }
+    
+    int ImmutableExtensionLiteGenerator::GenerateRegistrationCode(
+    io::Printer* printer) {
+  printer->Print(
+    'registry.add($scope$.$name$);\n',
+    'scope', scope_,
+    'name', UnderscoresToCamelCase(descriptor_));
+  return 7;
+}
+    
+      printer->Print('$comments$typedef$deprecated_attribute$ GPB_ENUM($name$) {\n',
+                 'comments', enum_comments,
+                 'deprecated_attribute', GetOptionalDeprecatedAttribute(descriptor_, descriptor_->file()),
+                 'name', name_);
+  printer->Indent();
+    }
+    
+    #pragma once
+    
+      // Invoke compaction filter if needed.
+  void InvokeFilterIfNeeded(bool* need_skip, Slice* skip_until);
+    
+    Status WriteBatchBase::DeleteRange(ColumnFamilyHandle* column_family,
+                                   const SliceParts& begin_key,
+                                   const SliceParts& end_key) {
+  std::string begin_key_buf, end_key_buf;
+  Slice begin_key_slice(begin_key, &begin_key_buf);
+  Slice end_key_slice(end_key, &end_key_buf);
+  return DeleteRange(column_family, begin_key_slice, end_key_slice);
+}
     
     
-    {    QString appName;
-    QIcon appIcon;
-    QIcon trayAndWindowIcon;
-    QString titleAddText;
+    { private:
+  // no copying allowed
+  WriteControllerToken(const WriteControllerToken&) = delete;
+  void operator=(const WriteControllerToken&) = delete;
 };
     
-    /**
- * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
- */
-template<typename Lock>
-class reverse_lock
-{
-public:
+      delay_token_2.reset();
+  // 1000 used, 8240 left
+  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 1000u));
+    
+            *j = json::parse(str);
+    
+    #define CHECK_FLOAT_EQ(a, b, eps) CHECK(std::fabs((a) - (b)) <  (eps))
+#define CHECK_FLOAT_NE(a, b, eps) CHECK(std::fabs((a) - (b)) >= (eps))
+#define CHECK_FLOAT_GE(a, b, eps) CHECK((a) - (b) > -(eps))
+#define CHECK_FLOAT_LE(a, b, eps) CHECK((b) - (a) > -(eps))
+#define CHECK_FLOAT_GT(a, b, eps) CHECK((a) - (b) >  (eps))
+#define CHECK_FLOAT_LT(a, b, eps) CHECK((b) - (a) >  (eps))
+    
+    
+    {}  // end namespace benchmark
+
+    
+    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+      /**
+   * @brief Start the fake CAN client.
+   * @return The status of the start action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Start() override;
+    
+    class FakeCanClientTest : public ::testing::Test {
+ public:
+  static const int32_t FRAME_LEN = 10;
     }
     
-    static void secp256k1_ge_clear(secp256k1_ge *r) {
-    r->infinity = 0;
-    secp256k1_fe_clear(&r->x);
-    secp256k1_fe_clear(&r->y);
-}
+    #include <iostream>
     
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
+    /*
+TEST(HermesCanClient, send) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::HERMES_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+  HermesCanClient hermes_can;
+  EXPECT_TRUE(hermes_can.Init(param));
+    }
+    
+    using apollo::common::ErrorCode;
+    
+      /**
+   * @brief Receive messages
+   * @param frames The messages to receive.
+   * @param frame_num The amount of messages to receive.
+   * @return The status of the receiving action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Receive(std::vector<CanFrame> *const frames,
+                                    int32_t *const frame_num) override;
+    
+      int32_t Start(bool is_blocked);
+    
+    template <typename SensorType>
+void MessageManager<SensorType>::ResetSendMessages() {
+  for (auto &protocol_data : send_protocol_data_) {
+    if (protocol_data == nullptr) {
+      AERROR << 'Invalid protocol data.';
     } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
+      protocol_data->Reset();
     }
-    
-    
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, sigin);
-    secp256k1_ecdsa_signature_save(sig, &r, &s);
-    return 1;
+  }
 }
     
-    #include <bech32.h>
-#include <test/test_bitcoin.h>
     
-    BOOST_AUTO_TEST_CASE(univalue_set)
-{
-    UniValue v(UniValue::VSTR, 'foo');
-    v.clear();
-    BOOST_CHECK(v.isNull());
-    BOOST_CHECK_EQUAL(v.getValStr(), '');
-    }
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
-}
-    
-    namespace aria2 {
-    }
-    
-      void setNodes(const std::vector<std::shared_ptr<DHTNode>>& nodes);
-    
-    #include 'common.h'
-    
-      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() = 0;
-    
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
-}
-    
-      std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port,
-                            const unsigned char* secret) const;
-    
-    DNSCache::AddrEntry::AddrEntry(const AddrEntry& c) = default;
-    
-        static BOOST_FORCEINLINE storage_type load(storage_type const volatile& storage, memory_order order) BOOST_NOEXCEPT
     {
-        storage_type v = BOOST_ATOMIC_DETAIL_ARM_LOAD8(&storage);
-        base_type::fence_after_load(order);
-        return v;
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    using ::apollo::canbus::ChassisDetail;
+    
+    /**
+ * @class Byte
+ * @brief The class of one byte, which is 8 bits.
+ *        It includes some operations on one byte.
+ */
+class Byte {
+ public:
+  /**
+   * @brief Constructor which takes a pointer to a one-byte unsigned integer.
+   * @param value The pointer to a one-byte unsigned integer for construction.
+   */
+  explicit Byte(const uint8_t *value);
+    }
+    
+    #include 'gtest/gtest.h'
+    
+    #include <cassert>
+#include <climits>
+    
+      explicit VirtualExecutor(Executor& executor)
+      : VirtualExecutor(getKeepAliveToken(executor)) {}
+    
+    template <typename T>
+typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
+prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  prefix = Endian::little(prefix);
+  std::string result;
+  result.resize(n);
+  memcpy(&result[0], &prefix, n);
+  return result;
+}
+    
+      // Check pointer equality considering wrapped aliased pointers.
+  bool owners_eq(PackedPtr& p1, BasePtr* p2) {
+    bool aliased1 = p1.extra() & ALIASED_PTR;
+    if (aliased1) {
+      auto p1a = CountedDetail::template get_shared_ptr_from_counted_base<T>(
+          p1.get(), false);
+      return CountedDetail::get_counted_base(p1a) == p2;
+    }
+    return p1.get() == p2;
+  }
+    
+    template <class T, size_t kNumSlots = 64>
+class CoreCachedWeakPtr {
+ public:
+  explicit CoreCachedWeakPtr(const CoreCachedSharedPtr<T, kNumSlots>& p) {
+    for (auto slot : folly::enumerate(slots_)) {
+      *slot = p.slots_[slot.index];
+    }
+  }
     }
