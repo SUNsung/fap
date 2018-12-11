@@ -1,355 +1,299 @@
 
         
-        bool CacheImpl::remove(const void *Key) {
-  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
-  return Ret == 0;
+        TegraBinaryOp_Invoker(cmpEQ, cmpEQ)
+TegraBinaryOp_Invoker(cmpNE, cmpNE)
+TegraBinaryOp_Invoker(cmpGT, cmpGT)
+TegraBinaryOp_Invoker(cmpGE, cmpGE)
+TegraGenOp_Invoker(cmpLT, cmpGT, 2, 1, 0, RANGE_DATA(ST, src2_data, src2_step), src2_step, \
+                                          RANGE_DATA(ST, src1_data, src1_step), src1_step, \
+                                          RANGE_DATA(DT, dst1_data, dst1_step), dst1_step)
+TegraGenOp_Invoker(cmpLE, cmpGE, 2, 1, 0, RANGE_DATA(ST, src2_data, src2_step), src2_step, \
+                                          RANGE_DATA(ST, src1_data, src1_step), src1_step, \
+                                          RANGE_DATA(DT, dst1_data, dst1_step), dst1_step)
+#define TEGRA_CMP(type, src1, sz1, src2, sz2, dst, sz, w, h, op) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+        ((op) == cv::CMP_EQ) ? \
+        parallel_for_(Range(0, h), \
+        TegraGenOp_cmpEQ_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
+        (w * h) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        ((op) == cv::CMP_NE) ? \
+        parallel_for_(Range(0, h), \
+        TegraGenOp_cmpNE_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
+        (w * h) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        ((op) == cv::CMP_GT) ? \
+        parallel_for_(Range(0, h), \
+        TegraGenOp_cmpGT_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
+        (w * h) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        ((op) == cv::CMP_GE) ? \
+        parallel_for_(Range(0, h), \
+        TegraGenOp_cmpGE_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
+        (w * h) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        ((op) == cv::CMP_LT) ? \
+        parallel_for_(Range(0, h), \
+        TegraGenOp_cmpLT_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
+        (w * h) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        ((op) == cv::CMP_LE) ? \
+        parallel_for_(Range(0, h), \
+        TegraGenOp_cmpLE_Invoker<const type, CAROTENE_NS::u8>(src1, sz1, src2, sz2, dst, sz, w, h), \
+        (w * h) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
+    
+        void convertScale(const Size2D &_size,
+                      const f32 * srcBase, ptrdiff_t srcStride,
+                      u16 * dstBase, ptrdiff_t dstStride,
+                      f64 alpha, f64 beta);
+    
+        enum FLIP_MODE
+    {
+        FLIP_HORIZONTAL_MODE = 1,
+        FLIP_VERTICAL_MODE = 2,
+        FLIP_BOTH_MODE = FLIP_HORIZONTAL_MODE | FLIP_VERTICAL_MODE
+    };
+    
+    void absDiff(const Size2D &size,
+             const f32 * src0Base, ptrdiff_t src0Stride,
+             const f32 * src1Base, ptrdiff_t src1Stride,
+             f32 * dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<f32>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-        // We can match a prefix so long as everything following the match is
-    // a number.
-    if (typeWord.startswith_lower(nameWord)) {
-      for (unsigned i = nameWord.size(), n = typeWord.size(); i != n; ++i) {
-        if (!clang::isDigit(typeWord[i])) return false;
+                int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
+            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst0))),
+                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst0))));
+    
+        uint16x8_t tprev = vdupq_n_u16(0x0);
+    uint16x8_t tcurr = tprev;
+    uint16x8_t tnext = tprev;
+    uint16x8_t t0, t1, t2;
+    if(cn == 1)
+    {
+        for( size_t y = 0; y < size.height; y++ )
+        {
+            const u8* srow0;
+            const u8* srow1 = internal::getRowPtr(srcBase, srcStride, y);
+            const u8* srow2;
+            u8* drow = internal::getRowPtr(dstBase, dstStride, y);
+            if (borderType == BORDER_MODE_REFLECT101) {
+                srow0 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 1);
+                srow2 = internal::getRowPtr(srcBase, srcStride, y < size.height-1 ? y+1 : size.height-2);
+            } else  if (borderType == BORDER_MODE_CONSTANT) {
+                srow0 = y > 0 ? internal::getRowPtr(srcBase, srcStride, y-1) : tmp;
+                srow2 =  y < size.height-1 ? internal::getRowPtr(srcBase, srcStride, y+1) : tmp;
+            } else { // BORDER_MODE_REFLECT || BORDER_MODE_REPLICATE
+                srow0 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 0);
+                srow2 = internal::getRowPtr(srcBase, srcStride, y < size.height-1 ? y+1 : size.height-1);
+            }
+    }
+    }
+    
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+                // calculate values for plain CPU part below if needed
+            if (x + 8 >= bwidth)
+            {
+                ptrdiff_t x3 = x == width ? width - 1 : x;
+                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
+    }
+    
+    // Values() allows generating tests from explicitly specified list of
+// parameters.
+//
+// Synopsis:
+// Values(T v1, T v2, ..., T vN)
+//   - returns a generator producing sequences with elements v1, v2, ..., vN.
+//
+// For example, this instantiates tests from test case BarTest each
+// with values 'one', 'two', and 'three':
+//
+// INSTANTIATE_TEST_CASE_P(NumSequence, BarTest, Values('one', 'two', 'three'));
+//
+// This instantiates tests from test case BazTest each with values 1, 2, 3.5.
+// The exact type of values will depend on the type of parameter in BazTest.
+//
+// INSTANTIATE_TEST_CASE_P(FloatingNumbers, BazTest, Values(1, 2, 3.5));
+//
+// Currently, Values() supports from 1 to $n parameters.
+//
+$range i 1..n
+$for i [[
+$range j 1..i
+    
+    
+    {  // The name of the source file where the test part took place, or
+  // '' if the source file is unknown.
+  std::string file_name_;
+  // The line in the source file where the test part took place, or -1
+  // if the line number is unknown.
+  int line_number_;
+  std::string summary_;  // The test failure summary.
+  std::string message_;  // The test failure message.
+};
+    
+    // Ternary predicate assertion macros.
+#define EXPECT_PRED_FORMAT3(pred_format, v1, v2, v3) \
+  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED3(pred, v1, v2, v3) \
+  GTEST_PRED3_(pred, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT3(pred_format, v1, v2, v3) \
+  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED3(pred, v1, v2, v3) \
+  GTEST_PRED3_(pred, v1, v2, v3, GTEST_FATAL_FAILURE_)
+    
+      // Trivial case 2: even numbers
+  if (n % 2 == 0) return n == 2;
+    
+      void operator delete(void* block, size_t /* allocation_size */) {
+    allocated_--;
+    free(block);
+  }
+    
+    
+#endif  // GTEST_SAMPLES_SAMPLE2_H_
+
+    
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
+    
+      // Clears the queue.
+  void Clear() {
+    if (size_ > 0) {
+      // 1. Deletes every node.
+      QueueNode<E>* node = head_;
+      QueueNode<E>* next = node->next();
+      for (; ;) {
+        delete node;
+        node = next;
+        if (node == NULL) break;
+        next = node->next();
       }
     }
-    
-    
-    {    return name;
-  }
-    
-      bool isGetter() const {
-    return accessorKind == IAMAccessorKind::Getter;
-  }
-    
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
-}
-    
-    // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    
-    {}
-    
-    void MenuItem::SetTooltip(const std::string& tooltip) {
-  is_modified_ = true;
-  tooltip_ = base::UTF8ToUTF16(tooltip);
-  if (menu_)
-    menu_->UpdateStates();
-}
-    
-      private:
-    bool ReadText(ClipboardData& data) {
-      DCHECK(data.type == TYPE_TEXT);
-      base::string16 text;
-      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
-      return true;
     }
     
-        LearnerAdam::LearnerAdam(const vector<Parameter>& parameters,
-        const LearningRateSchedule& learningRateSchedule,
-        const MomentumSchedule& momentumSchedule,
-        bool unitGain,
-        const MomentumSchedule& varianceMomentumSchedule,
-        double epsilon,
-        bool adamax,
-        AdditionalLearningOptions additionalOptions)
-        : LearnerMomentumSGD(parameters, learningRateSchedule, momentumSchedule,
-            unitGain, additionalOptions, 2),
-          m_varianceMomentumSchedule(varianceMomentumSchedule), m_epsilon(epsilon),
-          m_adamax(adamax)
-    {
-    }
-    
-    
-    {        memcpy(colStarts.data(), rawColStarts, numOfColsInMatrix * sizeof(SparseIndexType));
-        memcpy(nonZeroValues.data(), rawNonZeroValues, numNonZeroValues * sizeof(ElementType));
-        memcpy(rowIndices.data(), rawRowIndices, numNonZeroValues * sizeof(SparseIndexType));
-    }
-    
-            NDMaskPtr Mask() const override
-        {
-            Unpack();
-            return Value::Mask();
-        }
-    
-                if (m_varKind == VariableKind::Input)
-            {
-                for (auto dim : m_shape.Dimensions())
-                {
-                    if (dim == 0)
-                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
-                }
-            }
-    
-    public:
-    CrossProcessMutex(const std::string& name)
-        : m_handle(NULL),
-          m_name('Global\\' + name)
-    {
-    }
-    
-            // replacements may point to nodes that are replacements themselves
-        // This really can only happen if a replacement itself is an old node.
-        for (auto& iter : replacements)
-            while (replacements.find(iter.second) != replacements.end())
-                iter.second = replacements.find(iter.second)->second;
-    
-        virtual void /*ComputationNode::*/ BackpropTo(const size_t inputIndex, const FrameRange& fr) override
-    {
-        if (inputIndex == 0) // left derivative
-        {
-            Matrix<ElemType> sliceOutputGrad = MaskedGradientFor(fr); // use Masked- version since this is reducing over frames
-            Matrix<ElemType> sliceInput1Value = Input(1)->MaskedValueFor(fr);
-            m_innerproduct->AssignInnerProductOf(sliceOutputGrad, sliceInput1Value, false);
-            InputRef(0).GradientAsMatrix() += *m_innerproduct;
-        }
-        else // right derivative
-        {
-            Matrix<ElemType> sliceOutputGrad = GradientFor(fr);
-            Matrix<ElemType> sliceInput1Grad = Input(1)->GradientFor(fr);
-            m_rightGradient->SetValue(sliceOutputGrad);
-            m_rightGradient->ColumnElementMultiplyWith(InputRef(0).ValueAsMatrix());
-            sliceInput1Grad += *m_rightGradient;
-        }
-    }
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
-
-    
-    namespace osquery {
-    }
-    
-    #include <iostream>
-    
-      const auto& views = data_.doc()['views'];
+    #include 'collision_object_bullet.h'
     
     /**
- * @brief Compute a hash digest from the file content at a path.
- *
- * @param hash_type The osquery-supported hash algorithm.
- * @param path Filesystem path (the hash target).
- * @return A string (hex) representation of the hash digest.
+	@author AndreaCatania
+*/
+    
+    class RigidBodyBullet;
+class btTypedConstraint;
+    
+    #include 'dvector.h'
+    
+    /*
+ * Before using the parallel module, you can configure these to change
+ * how much parallelism is used.
  */
-std::string hashFromFile(HashType hash_type, const std::string& path);
+extern size_t num_threads;
+extern size_t work_chunk;
     
-      if (WIFEXITED(process_status)) {
-    status = WEXITSTATUS(process_status);
-    return PROCESS_EXITED;
-  }
     
-      if (!::GetExitCodeProcess(process.nativeHandle(), &code)) {
-    return false;
-  }
+    {private:
+  APCHandle m_handle;
+  APCHandle* m_arrayHandle;
+  CollectionType m_colType;
+};
     
-    FLAG(bool,
-     disable_distributed,
-     true,
-     'Disable distributed queries (default true)');
-    
-      void RemoveAll(std::shared_ptr<INotifyEventPublisher>& pub) {
-    pub->subscriptions_.clear();
-    // Reset monitors.
-    std::vector<int> wds;
-    for (const auto& path : pub->descriptor_inosubctx_) {
-      wds.push_back(path.first);
-    }
-    for (const auto& wd : wds) {
-      pub->removeMonitor(wd, true);
-    }
-  }
-    
-      // This class is different but also uses different types!
-  auto fake_pub = std::make_shared<FakeEventPublisher>();
-  status = EventFactory::registerEventPublisher(fake_pub);
-  EXPECT_TRUE(status.ok());
-    
-    #ifdef BENCHMARK_HAS_CXX11
-template <class Lambda>
-internal::Benchmark* RegisterBenchmark(const char* name, Lambda&& fn) {
-  using BenchType =
-      internal::LambdaBenchmark<typename std::decay<Lambda>::type>;
-  return internal::RegisterBenchmarkInternal(
-      ::new BenchType(name, std::forward<Lambda>(fn)));
+    template<class T> static T variant_init(T v) {
+    return v;
 }
-#endif
-    
-    // Find the coefficient for the high-order term in the running time, by
-// minimizing the sum of squares of relative error, for the fitting curve
-// given by the lambda expresion.
-//   - n             : Vector containing the size of the benchmark tests.
-//   - time          : Vector containing the times for the benchmark tests.
-//   - fitting_curve : lambda expresion (e.g. [](int n) {return n; };).
-    
-      // Format items per second
-  std::string items;
-  if (result.items_per_second > 0) {
-    items =
-        StrCat(' ', HumanReadableNumber(result.items_per_second), ' items/s');
-  }
-    
-    void Increment(UserCounters *l, UserCounters const& r) {
-  // add counters present in both or just in *l
-  for (auto &c : *l) {
-    auto it = r.find(c.first);
-    if (it != r.end()) {
-      c.second.value = c.second + it->second;
-    }
-  }
-  // add counters present in r, but not in *l
-  for (auto const &tc : r) {
-    auto it = l->find(tc.first);
-    if (it == l->end()) {
-      (*l)[tc.first] = tc.second;
-    }
-  }
+static int64_t variant_init(uint32_t v) {
+    return v;
 }
+    
+    struct FileStreamWrapper final : Stream::Wrapper {
+  static req::ptr<MemFile> openFromCache(const String& filename,
+                                         const String& mode);
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  int access(const String& path, int mode) override {
+    return ::access(File::TranslatePath(path).data(), mode);
+  }
+  int stat(const String& path, struct stat* buf) override {
+    return ::stat(File::TranslatePath(path).data(), buf);
+  }
+  int lstat(const String& path, struct stat* buf) override {
+    return ::lstat(File::TranslatePath(path).data(), buf);
+  }
+  int unlink(const String& path) override;
+  int rename(const String& oldname, const String& newname) override;
+  int mkdir(const String& path, int mode, int options) override;
+  int rmdir(const String& path, int /*options*/) override {
+    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
+    return ret;
+  }
+  bool isNormalFileStream() const override { return true; }
+    }
     
     
     {
-    {
-    {  // Native Client does not provide any API to access cycle counter.
-  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
-  // because is provides nanosecond resolution (which is noticable at
-  // least for PNaCl modules running on x86 Mac & Linux).
-  // Initialize to always return 0 if clock_gettime fails.
-  struct timespec ts = { 0, 0 };
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
-#elif defined(__aarch64__)
-  // System timer of ARMv8 runs at a different frequency than the CPU's.
-  // The frequency is fixed, typically in the range 1-50MHz.  It can be
-  // read at CNTFRQ special register.  We assume the OS has set up
-  // the virtual timer properly.
-  int64_t virtual_timer_value;
-  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
-  return virtual_timer_value;
-#elif defined(__ARM_ARCH)
-  // V6 is the earliest arch that has a standard cyclecount
-  // Native Client validator doesn't allow MRC instructions.
-#if (__ARM_ARCH >= 6)
-  uint32_t pmccntr;
-  uint32_t pmuseren;
-  uint32_t pmcntenset;
-  // Read the user mode perf monitor counter access permissions.
-  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
-  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
-    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
-    if (pmcntenset & 0x80000000ul) {  // Is it counting?
-      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
-      // The counter is set up to count every 64th cycle
-      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+    {///////////////////////////////////////////////////////////////////////////////
+}
+}
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    void logAHMSubMapWarning(folly::StringPiece mapName) {
+  StackTrace st;
+  logPerfWarning(
+    'AtomicHashMap overflow',
+    [&](StructuredLogEntry& cols) {
+      cols.setStr('map_name', mapName);
+      cols.setStackTrace('stack', st);
     }
-  }
-#endif
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
-  // mips apparently only allows rdtsc for superusers, so we fall
-  // back to gettimeofday.  It's possible clock_gettime would be better.
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#else
-// The soft failover to a generic implementation is automatic only for ARM.
-// For other platforms the developer is expected to make an attempt to create
-// a fast implementation and use generic version if nothing better is available.
-#error You need to define CycleTimer for your OS and CPU
-#endif
+  );
 }
-}  // end namespace cycleclock
-}  // end namespace benchmark
-    
-    template <class Tp>
-LogType& operator<<(LogType& log, Tp const& value) {
-  if (log.out_) {
-    *log.out_ << value;
-  }
-  return log;
-}
-    
-    #define REQUIRES(...) \
-  THREAD_ANNOTATION_ATTRIBUTE__(requires_capability(__VA_ARGS__))
-    
-    #include 'internal_macros.h'
-    
-    BenchmarkReporter::~BenchmarkReporter() {}
-    
-    #include <atomic>
-    
-    BENCHMARK_RELATIVE(sformat_long_string_unsafe, iters) {
-  BenchmarkSuspender suspender;
-  auto const& longString = getLongString();
-  while (iters--) {
-    std::string out;
-    suspender.dismissing([&] { out = sformat(longString); });
-  }
-}
-    
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
-}
-    
-    static void branchTestFunc() {
-  uint32_t a = folly::Random::rand32();
-  uint32_t b = std::max(1u, folly::Random::rand32());
-  if (a > b) {
-    FOLLY_SDT(folly, test_static_tracepoint_branch_1, a / b);
-  } else {
-    FOLLY_SDT(folly, test_static_tracepoint_branch_2, double(a) / double(b));
-  }
-}
-    
-        template <
-        typename OtherExecutor,
-        typename = typename std::enable_if<
-            std::is_convertible<OtherExecutor*, ExecutorT*>::value>::type>
-    KeepAlive& operator=(KeepAlive<OtherExecutor>&& other) {
-      return *this = KeepAlive(std::move(other));
-    }
-    
-    
-    {} // namespace folly
-
-    
-    #include <string>
