@@ -1,129 +1,174 @@
 
         
-                  def value_came_from_user?
-            method_name = '#{@method_name}_came_from_user?'
-            !object.respond_to?(method_name) || object.public_send(method_name)
-          end
+        FORWARD_SLASH = '/'.freeze
     
-        # Controls whether an action should be rendered using a layout.
-    # If you want to disable any <tt>layout</tt> settings for the
-    # current action so that it is rendered without a layout then
-    # either override this method in your controller to return false
-    # for that action or set the <tt>action_has_layout</tt> attribute
-    # to false before rendering.
-    def action_has_layout?
-      @_action_has_layout
+    STDOUT.sync = true
+    
+                  Jekyll.logger.info 'LiveReload address:',
+                                 'http://#{opts['host']}:#{opts['livereload_port']}'
+            end
+          end
+          @thread.abort_on_exception = true
+        end
+    
+            # Mounts a shared folder.
+        #
+        # This method should create, mount, and properly set permissions
+        # on the shared folder. This method should also properly
+        # adhere to any configuration values such as `shared_folder_uid`
+        # on `config.vm`.
+        #
+        # @param [String] name The name of the shared folder.
+        # @param [String] guestpath The path on the machine which the user
+        #   wants the folder mounted.
+        # @param [Hash] options Additional options for the shared folder
+        #   which can be honored.
+        def mount_shared_folder(name, guestpath, options)
+          raise BaseError, _key: :unsupported_shared_folder
+        end
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+            # This contains all the guests and their parents.
+        #
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :guests
+    
+            # This returns any automatically detected errors.
+        #
+        # @return [Array<String>]
+        def _detected_errors
+          return [] if !@__invalid_methods || @__invalid_methods.empty?
+          return [I18n.t('vagrant.config.common.bad_field',
+                         fields: @__invalid_methods.to_a.sort.join(', '))]
+        end
+    
+        if self.junk_headers
+      while str.length < 4096
+        if self.fold
+          str << 'X-#{Rex::Text.rand_text_alphanumeric(rand(30) + 5)}:\r\n\t#{Rex::Text.rand_text_alphanumeric(rand(1024) + 1)}\r\n'
+        else
+          str << 'X-#{Rex::Text.rand_text_alphanumeric(rand(30) + 5)}: #{Rex::Text.rand_text_alphanumeric(rand(1024) + 1)}\r\n'
+        end
+      end
     end
     
-        def find_all_with_query(query) # :nodoc:
-      paths.each do |resolver|
-        templates = resolver.find_all_with_query(query)
-        return templates unless templates.empty?
-      end
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
     
-    # See chcase for an example
-class ScriptFileFormula < Formula
-  def install
-    bin.install Dir['*']
-  end
-end
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+          end
     
-        # Symbol for the current platform
-    attr_accessor :current_platform
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
     
-            is_swift = FastlaneCore::FastlaneFolder.swift?
-        fastlane_client_language = is_swift ? :swift : :ruby
-        action_launch_context = FastlaneCore::ActionLaunchContext.context_for_action_name(@program[:name], fastlane_client_language: fastlane_client_language, args: ARGV)
-        FastlaneCore.session.action_launched(launch_context: action_launch_context)
-    
-            result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            message: '#{message}'
-          })
-        end').runner.execute(:test)
-    
-          it 'handles the extensions parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
-      end
-    
-          it 'generates the correct git command with a shell-escaped message' do
-        message = 'message with 'quotes' (and parens)'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: \'#{message}\')
-        end').runner.execute(:test)
-        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
+              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
+          def decode_asn1_req_body(input)
+            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
+          end
+        end
       end
     end
   end
 end
 
     
-            keychain_path = File.expand_path(File.join('~', 'Library', 'Keychains', keychain))
-        expected_command = 'security import #{cert_name} -k '#{keychain_path}' -P #{password} -T /usr/bin/codesign -T /usr/bin/security &> /dev/null'
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
     
-          context 'with valid path to compile_commands.json' do
-        context 'with no path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
-    
-              expect(result).to eq('#{CUSTOM_EXECUTABLE_NAME} lint --strict')
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @short_output = argv.flag?('short')
+          super
         end
-      end
     
-            it 'returns Array input values correctly' do
-          config_item = FastlaneCore::ConfigItem.new(key: :foo,
-                                                     description: 'foo',
-                                                     type: Array)
-          config = FastlaneCore::Configuration.create([config_item], { foo: ['5', '4', '3', '2', '1'] })
+    Given(/^I make (\d+) deployments$/) do |count|
+  step 'all linked files exists in shared path'
     
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
+  end
 end
     
-      it 'creates an agent' do
-    visit '/'
-    page.find('a', text: 'Agents').trigger(:mouseover)
-    click_on('New Agent')
-    
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
-    
-    describe LiquidMigrator do
-  describe 'converting JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('$.data', true)).to eq('{{data}}')
-      expect(LiquidMigrator.convert_string('$.data.test', true)).to eq('{{data.test}}')
-      expect(LiquidMigrator.convert_string('$first_title', true)).to eq('{{first_title}}')
+        def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
     end
     
-        # Get a all top-level selectors (with {)
-    def get_css_selectors(css, opts = {})
-      s         = CharStringScanner.new(css)
-      selectors = []
-      while s.scan_next(RULE_OPEN_BRACE_RE)
-        brace_pos = s.pos
-        def_pos   = css_def_pos(css, brace_pos+1, -1)
-        sel       = css[def_pos.begin..brace_pos - 1].dup
-        sel.strip! if opts[:strip]
-        selectors << sel
-        sel.dup.strip
-        s.pos = close_brace_pos(css, brace_pos, 1) + 1
+            def set(key, value)
+          pval = @properties[key]
+          if pval.is_a?(Hash) && value.is_a?(Hash)
+            pval.merge!(value)
+          elsif pval.is_a?(Set) && value.is_a?(Set)
+            pval.merge(value)
+          elsif pval.is_a?(Array) && value.is_a?(Array)
+            pval.concat value
+          else
+            @properties[key] = value
+          end
+        end
+    
+          def remember_location(key)
+        location = caller.find do |line|
+          IGNORED_LOCATIONS.none? { |i| line.include?(i) }
+        end
+        (locations[key] ||= []) << location
       end
-      selectors
-    end
-    }
     
-      def prefix_from_bin(bin_name)
-    unless (path = `which #{bin_name}`.strip).empty?
-      File.dirname(File.dirname(path))
-    end
-  end
+            def show
+          authorize! :read, @order, order_token
+          @address = find_address
+          respond_with(@address)
+        end
+    
+            def new; end
+    
+            def find_property
+          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
+        end
+    
+            def create
+          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
+          authorize! :read, @order
+          authorize! :create, Shipment
+          quantity = params[:quantity].to_i
+          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
