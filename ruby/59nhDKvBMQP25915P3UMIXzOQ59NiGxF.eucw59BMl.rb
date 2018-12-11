@@ -1,187 +1,205 @@
 
         
-        def envygeeks(url)
-  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
-    
-    def native_relative
-  DOC_PATH.sub('#{COL_PATH}/', '')
+            it 'does not send previously configured receivers when the current agent does not support them' do
+      select_agent_type('Website Agent scrapes')
+      sleep 0.5
+      select2('ZKCD', from: 'Receivers')
+      select_agent_type('Email Agent')
+      fill_in(:agent_name, with: 'No receivers')
+      click_on 'Save'
+      expect(page).to have_content('No receivers')
+      agent = Agent.find_by(name: 'No receivers')
+      expect(agent.receivers).to eq([])
+    end
+  end
 end
+
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
     
-            def convert(content)
-          document = Kramdown::Document.new(content, @config)
-          html_output = document.to_html
-          if @config['show_warnings']
-            document.warnings.each do |warning|
-              Jekyll.logger.warn 'Kramdown warning:', warning
-            end
+              expect(Scenario.where(guid: guid).count).to eq(2)
+    
+        context 'running workers' do
+      before do
+        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
+        stub.instance_of(HuginnScheduler).setup
+        stub.instance_of(DelayedJobWorker).setup
+      end
+    
+          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
+    end
+    
+      before_action :authenticate_user!
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+          # Configure default email options
+      def devise_mail(record, action, opts = {}, &block)
+        initialize_from_record(record)
+        mail headers_for(action, opts), &block
+      end
+    
+            log_action :change_email, @user
+    
+          @email_domain_block = EmailDomainBlock.new(resource_params)
+    
+        private
+    
+      def status_finder
+    StatusFinder.new(params[:url])
+  end
+    
+      def verified_domain
+    return signed_request_account.domain if signed_request_account
+  end
+    
+      private
+    
+      it 'no raises error on fixnum values' do
+    [1].each do |v|
+      lambda { v.taint }.should_not raise_error(RuntimeError)
+      v.tainted?.should == false
+    end
+  end
+end
+
+    
+      it 'raises ArgumentError if 3 or more arguments provided' do
+    lambda {
+      catch :blah do
+        throw :blah, :return_value, 2
+      end
+    }.should raise_error(ArgumentError)
+    
+          ruby_bug '#14846', '2.5'...'2.6' do
+        it 'does not prepend caller information if line number is too big' do
+          w = KernelSpecs::WarnInNestedCall.new
+          -> { w.f4('foo', 100) }.should output(nil, 'warning: foo\n')
+        end
+      end
+    
+          def before
+        @versions[0][0..6]
+      end
+    
+          def formats
+        super(:markdown)
+      end
+    
+          def footer
+        if @footer.nil?
+          if page = @page.footer
+            @footer = page.text_data
+          else
+            @footer = false
           end
-          html_output
         end
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
-    end
-    
-          it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
+        @footer
       end
     
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
-    
-        it 'respects an environment variable that specifies a path or URL to a different scenario' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
-    end
-    
-          context '#run_workers' do
-        it 'runs all the workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-        end
-    
-      describe '#interpolate_jsonpaths' do
-    let(:payload) { { :there => { :world => 'WORLD' }, :works => 'should work' } }
-    
-      let :reverted_extract do
-    old_extract
-  end
-    
-    describe AgentLog do
-  describe 'validations' do
-    before do
-      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
-      expect(@log).to be_valid
-    end
-    
-        $?.should be_an_instance_of Process::Status
-    $?.success?.should == false
-    $?.exitstatus.should == 1
-  end
-    
-    describe 'Kernel#test' do
-  before :all do
-    @file = File.dirname(__FILE__) + '/fixtures/classes.rb'
-    @dir = File.dirname(__FILE__) + '/fixtures'
-  end
-    
-      it 'transfers control to the innermost catch block waiting for the same sympol' do
-    one = two = three = 0
-    catch :duplicate do
-      catch :duplicate do
-        catch :duplicate do
-          one = 1
-          throw :duplicate
-        end
-        two = 2
-        throw :duplicate
-      end
-      three = 3
-      throw :duplicate
-    end
-    [one, two, three].should == [1, 2, 3]
-  end
-    
-      it 'is a private method' do
-    Kernel.should have_private_instance_method(:trace_var)
-  end
-    
-            -> { w.f4('', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
-        -> { w.f4(nil, 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
+          def escaped_name
+        CGI.escape(@name)
       end
     
-    task :date_file do
-  File.open(scope('VERSION_DATE'), 'w') do |f|
-    f.puts Time.now.utc.strftime('%d %B %Y %T %Z')
+    def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
   end
+  cloned
 end
     
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+    
+    context 'Unicode Support' do
+  setup do
+    @path = cloned_testpath('examples/revert.git')
+    @wiki = Gollum::Wiki.new(@path)
   end
     
-        # Parse all the selectors in the document and assign them to
-    # {Sass::Tree::RuleNode#parsed_rules}.
-    #
-    # @param root [Tree::Node] The parent node
-    def parse_selectors(root)
-      root.children.each do |child|
-        next parse_selectors(child) if child.is_a?(Tree::DirectiveNode)
-        next unless child.is_a?(Tree::RuleNode)
-        parser = Sass::SCSS::CssParser.new(child.rule.first, child.filename, nil, child.line)
-        child.parsed_rules = parser.parse_selector
       end
-    end
-    
-            line_num = e.sass_line + 1 - line_offset
-        min = [line_num - 6, 0].max
-        section = e.sass_template.rstrip.split('\n')[min...line_num + 5]
-        return e.sass_backtrace_str if section.nil? || section.empty?
-    
-    # define charCodeAt on String
-class String
-  def charCodeAt(k)
-    # use scan, nil check, and unpack instead of ord for 1.8
-    # 1.9 can simply use self[k].ord
-    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
-    c = self.scan(/./mu)[k]
-    return nil if c.nil?
-    c.unpack('U')[0]
-  end
 end
+
     
-          def has_sidebar
-        @sidebar = (@page.sidebar || false) if @sidebar.nil? && @page
-        !!@sidebar
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
+          end
+        end
       end
-    
-          def css # custom css
-        @css
-      end
-    
-        follow_redirect!
-    assert_equal '/C', last_request.fullpath
-    assert last_response.ok?
-    
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
-      end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
     end
     
-    # internal
-require File.expand_path('../gollum/uri_encode_component', __FILE__)
+          def prepend(klass, *args)
+        remove(klass) if exists?(klass)
+        entries.insert(0, Entry.new(klass, *args))
+      end
+    
+    if defined?(::Rails) && Rails.respond_to?(:env) && !Rails.env.test?
+  puts('**************************************************')
+  puts('⛔️ WARNING: Sidekiq testing API enabled, but this is not the test environment.  Your jobs will not go to Redis.')
+  puts('**************************************************')
+end
+
+    
+        def logger
+      Sidekiq.logger
+    end
+    
+          def enable(*opts)
+        opts.each {|key| set(key, true) }
+      end
+    
+        def erb(content, options = {})
+      if content.kind_of? Symbol
+        unless respond_to?(:'_erb_#{content}')
+          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
+          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
+        end
+      end
+    
+        NAMED_SEGMENTS_PATTERN = /\/([^\/]*):([^\.:$\/]+)/
