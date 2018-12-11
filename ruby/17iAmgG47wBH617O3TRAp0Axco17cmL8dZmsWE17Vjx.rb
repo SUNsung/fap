@@ -1,102 +1,129 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
-      #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
-      #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
-    
-              def instantiate_builder(builder_class, item, value, text, html_options)
-            builder_class.new(@template_object, @object_name, @method_name, item,
-                              sanitize_attribute_name(value), text, value, html_options)
-          end
-    
-        delegate :[], :include?, :pop, :size, :each, to: :paths
-    
-      def fixopt(f)
-    path = if f.linked_keg.directory? && f.linked_keg.symlink?
-      f.linked_keg.resolved_path
-    elsif f.prefix.directory?
-      f.prefix
-    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
-      kids.first
-    else
-      raise
-    end
-    Keg.new(path).optlink
-  rescue StandardError
-    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
+        describe 'Kernel.srand' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:srand)
   end
-end
     
-        keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+          ruby_bug '#14846', '2.5'...'2.6' do
+        it 'does not prepend caller information if line number is too big' do
+          w = KernelSpecs::WarnInNestedCall.new
+          -> { w.f4('foo', 100) }.should output(nil, 'warning: foo\n')
+        end
       end
-      f.puts s
+    
+      it 'creates a public method in script binding' do
+    eval @code, script_binding
+    Object.should have_method :boom
+  end
+    
+    namespace :doc do
+  task :readmes do
+    Dir.glob 'lib/rack/protection/*.rb' do |file|
+      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
+      next if excluded_files.include?(file)
+      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
+      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
+      Dir.mkdir 'doc' unless File.directory? 'doc'
+      puts 'writing #{file}'
+      File.open(file, 'w') { |f| f << doc }
     end
+  end
+    
+          def bad_cookies
+        @bad_cookies ||= []
+      end
+    
+      it 'accepts post requests with correct X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
+    expect(last_response).to be_ok
+  end
+    
+          def remove_page_extentions(page_path)
+        Gollum::Markup.formats.values.each do |format|
+          page_path = page_path.gsub(/\.#{format[:regexp]}$/, '')
+        end
+        return page_path
+      end
+    
+        end
   end
 end
 
     
-        option_names.any? do |name|
-      if option_defined? 'with-#{name}'
-        include? 'with-#{name}'
-      elsif option_defined? 'without-#{name}'
-        !include? 'without-#{name}'
+    dir = File.dirname(File.expand_path(__FILE__))
+$LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
+$LOAD_PATH.unshift(dir)
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  end
+    
+    desc 'Update version number and gemspec'
+task :bump do
+  puts 'Updated version to #{bump_version}'
+  # Execute does not invoke dependencies.
+  # Manually invoke gemspec then validate.
+  Rake::Task[:gemspec].execute
+  Rake::Task[:validate].execute
+end
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
       else
-        false
+        '#{quote}<footer>#{author}</footer>'
       end
+      '<blockquote>#{blockquote}</blockquote>'
     end
-  end
     
-      def internal_development_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
-  end
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
+    end
     
-      def hardware
-    'CPU: #{Hardware.cores_as_words}-core #{Hardware::CPU.bits}-bit #{Hardware::CPU.family}'
-  end
+        def html_output_for(script_url, code)
+      code = CGI.escapeHTML code
+      <<-HTML
+<div><script src='#{script_url}'></script>
+<noscript><pre><code>#{code}</code></pre></noscript></div>
+      HTML
+    end
     
-    module Homebrew
-  def list
-    # Use of exec means we don't explicitly exit
-    list_unbrewed if ARGV.flag? '--unbrewed'
-    
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-        def handle_unknown_error!(e)
-      # Some spaceship exception classes implement #preferred_error_info in order to share error info
-      # that we'd rather display instead of crashing with a stack trace. However, fastlane_core and
-      # spaceship can not know about each other's classes! To make this information passing work, we
-      # use a bit of Ruby duck-typing to check whether the unknown exception type implements the right
-      # method. If so, we'll present any returned error info in the manner of a user_error!
-      error_info = e.respond_to?(:preferred_error_info) ? e.preferred_error_info : nil
-      should_show_github_issues = e.respond_to?(:show_github_issues) ? e.show_github_issues : true
-    
-          it 'adds warnings param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            warnings: '--warn-missing-output-path --warn-missing-company-id --warn-undocumented-object'
-          )
-        end').runner.execute(:test)
-    
-            Match::Utils.import('item.path', 'login.keychain')
-      end
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
