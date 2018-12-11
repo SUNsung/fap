@@ -1,165 +1,163 @@
 
         
-        # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-          @launch_event_sent = true
-      builder = AnalyticsEventBuilder.new(
-        p_hash: launch_context.p_hash,
-        session_id: session_id,
-        action_name: nil,
-        fastlane_client_language: launch_context.fastlane_client_language
-      )
-    
-            tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
-        message = options[:message] || '#{tag} (fastlane)'
-    
-          before :each do
-        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER] = build_number
+        module ActionView #:nodoc:
+  # = Action View Raw Output Helper
+  module Helpers #:nodoc:
+    module OutputSafetyHelper
+      # This method outputs without escaping a string. Since escaping tags is
+      # now default, this can be used when you don't want Rails to automatically
+      # escape tags. This is not recommended if the data is coming from the user's
+      # input.
+      #
+      # For example:
+      #
+      #  raw @user.name
+      #  # => 'Jimmy <alert>Tables</alert>'
+      def raw(stringish)
+        stringish.to_s.html_safe
       end
     
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        # this is not really the command that would have been executed, but a 'fabricated' representation for tests (by Actions.sh) that includes both command that would have been run
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
-      end
+            def render
+          options = @options.stringify_keys
+          options['type']     = 'checkbox'
+          options['value']    = @checked_value
+          options['checked'] = 'checked' if input_checked?(options)
     
-    describe Fastlane::Actions do
-  describe '#sh' do
-    before do
-      allow(FastlaneCore::Helper).to receive(:sh_enabled?).and_return(true)
+            def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
+    
+        def to_ary
+      paths.dup
     end
     
-        # [Boolean] Set if the variable is sensitive, such as a password or API token, to prevent echoing when prompted for the parameter
-    # If a default value exists, it won't be used during code generation as default values can read from environment variables.
-    attr_accessor :sensitive
+        # Direct access to partial rendering.
+    def render_partial(context, options, &block) #:nodoc:
+      PartialRenderer.new(@lookup_context).render(context, options, block)
+    end
     
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+    # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
     
-          it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
+          #
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
-    
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
-    
-      context '#set_traps' do
-    it 'sets traps for INT TERM and QUIT' do
-      agent_runner = AgentRunner.new
-      mock(Signal).trap('INT')
-      mock(Signal).trap('TERM')
-      mock(Signal).trap('QUIT')
-      agent_runner.set_traps
-    
-      it 'truncates message to a reasonable length' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
-    log.message = 'a' * 11_000
-    log.save!
-    expect(log.message.length).to eq(10_000)
-  end
-    
-          it 'validates keep_events_for' do
-        agent = Agents::SomethingSource.new(:name => 'something')
-        agent.user = users(:bob)
-        expect(agent).to be_valid
-        agent.keep_events_for = nil
-        expect(agent).to have(1).errors_on(:keep_events_for)
-        agent.keep_events_for = 1000
-        expect(agent).to have(1).errors_on(:keep_events_for)
-        agent.keep_events_for = ''
-        expect(agent).to have(1).errors_on(:keep_events_for)
-        agent.keep_events_for = 5.days.to_i
-        expect(agent).to be_valid
-        agent.keep_events_for = 0
-        expect(agent).to be_valid
-        agent.keep_events_for = 365.days.to_i
-        expect(agent).to be_valid
-    
-    class ActivityPub::OutboxesController < Api::BaseController
-  LIMIT = 20
-    
-          if new_email != @user.email
-        @user.update!(
-          unconfirmed_email: new_email,
-          # Regenerate the confirmation token:
-          confirmation_token: nil
-        )
-    
-        def create
-      authorize @user, :confirm?
-      @user.confirm!
-      log_action :confirm, @user
-      redirect_to admin_accounts_path
     end
     
-        def index
-      authorize :custom_emoji, :index?
-      @custom_emojis = filtered_custom_emojis.eager_load(:local_counterpart).page(params[:page])
+          open_dry_run_modal(agent)
+      find('.dry-run-event-sample').click
+      within(:css, '.modal .builder') do
+        expect(page).to have_text('http://xkcd.com/')
+      end
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
     end
     
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
+        it 'for the afternoon' do
+      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
+    end
   end
     
-    class Api::SalmonController < Api::BaseController
-  include SignatureVerification
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
+  end
     
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+        def fonts_path
+      File.join assets_path, 'fonts'
+    end
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
+    
+    class PolymorphicMentions < ActiveRecord::Migration[4.2]
+  def change
+    remove_index :mentions, column: %i(post_id)
+    remove_index :mentions, column: %i(person_id post_id), unique: true
+    rename_column :mentions, :post_id, :mentions_container_id
+    add_column :mentions, :mentions_container_type, :string
+    add_index :mentions,
+              %i(mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_mc_id_and_mc_type',
+              length: {mentions_container_type: 191}
+    add_index :mentions,
+              %i(person_id mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
+              length: {mentions_container_type: 191},
+              unique: true
+    
+    When /^I fill in the new user form/ do
+  fill_in_new_user_form
+end
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+        it 'returns a 404 for a post not visible to the user' do
+      sign_in eve
+      expect {
+        get :index, params: {post_id: @message.id}
+      }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+    
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
+    end
+  end
+end
 
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
+          attr_reader :key, :default, :options
     
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
+            # Skip validation behavior if no validators are registered for this key
+        return super unless validators.key?(key)
+    
+          def trusted_keys
+        @trusted_keys.dup
       end
-    end
-  end
-end
+    
+          NO_ARG_DIRECTIVES = %i(block_all_mixed_content disown_opener
+                             upgrade_insecure_requests).freeze
+    
+            close_body(body) if reaction
