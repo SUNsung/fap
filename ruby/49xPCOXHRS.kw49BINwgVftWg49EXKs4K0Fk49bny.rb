@@ -1,111 +1,157 @@
 
         
-          def all_signed_out?
-    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+                  def initialize(template_object, object_name, method_name, object,
+                         sanitized_attribute_name, text, value, input_html_options)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @sanitized_attribute_name = sanitized_attribute_name
+            @text = text
+            @value = value
+            @input_html_options = input_html_options
+          end
     
-      # Helper for use in before_actions where no authentication is required.
+            private
+    
+    module ActionView
+  # This is the main entry point for rendering. It basically delegates
+  # to other objects like TemplateRenderer and PartialRenderer which
+  # actually renders the template.
   #
-  # Example:
-  #   before_action :require_no_authentication, only: :new
-  def require_no_authentication
-    assert_is_devise_resource!
-    return unless is_navigational_format?
-    no_input = devise_mapping.no_input_strategies
+  # The Renderer will parse the options from the +render+ or +render_body+
+  # method and render a partial or a template based on the options. The
+  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
+  # the setup and logic necessary to render a view and a new object is created
+  # each time +render+ is called.
+  class Renderer
+    attr_accessor :lookup_context
     
-          # Sign in a user that already was authenticated. This helper is useful for logging
-      # users in after sign up. All options given to sign_in is passed forward
-      # to the set_user method in warden.
-      # If you are using a custom warden strategy and the timeoutable module, you have to
-      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
-      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
-      #
-      # Examples:
-      #
-      #   sign_in :user, @user                      # sign_in(scope, resource)
-      #   sign_in @user                             # sign_in(resource)
-      #   sign_in @user, event: :authentication     # sign_in(resource, options)
-      #   sign_in @user, store: false               # sign_in(resource, options)
-      #
-      def sign_in(resource_or_scope, *args)
-        options  = args.extract_options!
-        scope    = Devise::Mapping.find_scope!(resource_or_scope)
-        resource = args.last || resource_or_scope
+    def version
+  Jekyll::VERSION
+end
     
-            if uri 
-          path = remove_domain_from_uri(uri)
-          path = add_fragment_back_to_path(uri, path)
+            def make_accessible(hash = @config)
+          hash.keys.each do |key|
+            hash[key.to_sym] = hash[key]
+            make_accessible(hash[key]) if hash[key].is_a?(Hash)
+          end
+        end
     
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
+      after :each do
+    untrace_var :$Kernel_trace_var_global
+    
+          it 'converts value to Integer' do
+        w = KernelSpecs::WarnInNestedCall.new
+    
+    
+IAX_SUBTYPE_NEW     = 1
+IAX_SUBTYPE_PING    = 2
+IAX_SUBTYPE_PONG    = 3
+IAX_SUBTYPE_ANSWER  = 4
+IAX_SUBTYPE_ACK     = 4
+IAX_SUBTYPE_HANGUP  = 5
+IAX_SUBTYPE_REJECT  = 6
+IAX_SUBTYPE_ACCEPT  = 7
+IAX_SUBTYPE_AUTHREQ = 8
+IAX_SUBTYPE_AUTHREP = 9
+IAX_SUBTYPE_INVAL   = 10
+IAX_SUBTYPE_LAGRQ   = 11
+IAX_SUBTYPE_LAGRP   = 12
+IAX_SUBTYPE_REGREQ  = 13
+IAX_SUBTYPE_REGAUTH = 14
+IAX_SUBTYPE_REGACK  = 15
+IAX_SUBTYPE_REGREJ  = 16
+IAX_SUBTYPE_REGREL  = 17
+IAX_SUBTYPE_VNAK    = 18
+    
+                encoded
+          end
+    
+                res = checksum + encrypted
+            res
           end
         end
       end
-    
-        def destroy
-      authorize @account_moderation_note, :destroy?
-      @account_moderation_note.destroy!
-      redirect_to admin_account_path(@account_moderation_note.target_account_id), notice: I18n.t('admin.account_moderation_notes.destroyed_msg')
-    end
-    
-          @user.resend_confirmation_instructions
-    
-    class Api::OEmbedController < Api::BaseController
-  respond_to :json
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
     end
   end
+end
+    
+              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
+    
+              # Decodes the last_req from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Rex::Proto::Kerberos::Model::LastRequest>]
+          def decode_last_req(input)
+            last_requests = []
+            input.value[0].value.each do |last_request|
+              last_requests << Rex::Proto::Kerberos::Model::LastRequest.decode(last_request)
+            end
+    
+        def check_encoding!
+      return if @checked_encoding
+      @checked_encoding = true
+      @template, @original_encoding = Sass::Util.check_sass_encoding(@template)
+    end
+    
+      gem 'rb-fsevent'
+  gem 'kicker'
+  gem 'awesome_print'
+  gem 'ruby-prof', :platforms => [:ruby]
 end
 
     
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    (allow file-write*
+  (literal
+    '/dev/dtracehelper'
+    '/dev/null'
+  )
+  (regex
+    #'^<%= Pod::Config.instance.project_root %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
+    #'^/dev/tty'
+    #'^/private/var'
+  )
+)
+    
+        def validate_plugins!
+      @plugins_to_package.each do |plugin_name|
+        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
+          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
+        end
+      end
+    end
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+          options = {:debug => ENV['LS_QA_DEBUG']}
+      puts 'Destroying #{machines}'
+      LogStash::VagrantHelpers.destroy(machines, options)
+      puts 'Bootstrapping #{machines}'
+      LogStash::VagrantHelpers.bootstrap(machines, options)
+    end
+    
+    Given 'I allow the attachment to be submitted' do
+  cd('.') do
+    transform_file('app/controllers/users_controller.rb') do |content|
+      content.gsub('params.require(:user).permit(:name)',
+                   'params.require(:user).permit!')
     end
   end
 end
-
     
-    When /^I toggle nsfw posts$/ do
-  find('.toggle_nsfw_state', match: :first).click
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
-    end
-  end
-end
-
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
-    end
-  end
-end
+    # The base module that gets included in ActiveRecord::Base. See the
+# documentation for Paperclip::ClassMethods for more useful information.
+module Paperclip
+  extend Helpers
+  extend Logger
+  extend ProcessorHelpers
