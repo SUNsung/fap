@@ -1,60 +1,77 @@
 
         
-        
-def load_json_preserve_order(s):
-    return json.loads(s, object_pairs_hook=OrderedDict)
+        '''
+    The approach taken is explained below. I decided to do it simply.
+    Initially I was considering parsing the data into some sort of
+    structure and then generating an appropriate README. I am still
+    considering doing it - but for now this should work. The only issue
+    I see is that it only sorts the entries at the lowest level, and that
+    the order of the top-level contents do not match the order of the actual
+    entries.
     
-    from httpie import ExitStatus
-from httpie.core import main
+        return inner
     
+        def _handle_requests(self):
+        for _ in range(self.requests_to_handle):
+            sock = self._accept_connection()
+            if not sock:
+                break
     
-def test_unicode_raw_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+       >>> payload = dict(key1='value1', key2='value2')
+   >>> r = requests.post('https://httpbin.org/post', data=payload)
+   >>> print(r.text)
+   {
+     ...
+     'form': {
+       'key2': 'value2',
+       'key1': 'value1'
+     },
+     ...
+   }
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+        def get_policy(self):
+        '''Return the CookiePolicy instance used.'''
+        return self._policy
     
+        @pytest.mark.parametrize(
+        'value, expected', (
+            ([('key', 'val')], [('key', 'val')]),
+            ((('key', 'val'), ), [('key', 'val')]),
+            ({'key': 'val'}, [('key', 'val')]),
+            (None, None)
+        ))
+    def test_valid(self, value, expected):
+        assert to_key_val_list(value) == expected
     
-# Expand paths beginning with '~' or '~user'.
-# '~' means $HOME; '~user' means that user's home directory.
-# If the path doesn't begin with '~', or if the user or $HOME is unknown,
-# the path is returned unchanged (leaving error reporting to whatever
-# function is called with the expanded path as argument).
-# See also module 'glob' for expansion of *, ? and [...] in pathnames.
-# (A function should also be defined to do full *sh-style environment
-# variable expansion.)
+    def _init():
+    for code, titles in _codes.items():
+        for title in titles:
+            setattr(codes, title, code)
+            if not title.startswith(('\\', '/')):
+                setattr(codes, title.upper(), code)
     
-        def testPeek(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            pdata = bz2f.peek()
-            self.assertNotEqual(len(pdata), 0)
-            self.assertTrue(self.TEXT.startswith(pdata))
-            self.assertEqual(bz2f.read(), self.TEXT)
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
     
-        print('-' * 20)
+        mime, ext, size = url_info(real_url)
     
-        # Sparkle the eyes
-    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
-    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
+        elif 'subject' in url:
+        titles = re.findall(r'data-title='([^']*)'>', html)
+        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
+        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
+        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
     
-    # Load some images to compare against
-known_obama_image = face_recognition.load_image_file('obama.jpg')
-known_biden_image = face_recognition.load_image_file('biden.jpg')
+        service = url.split('/')[2].split('.')[0]
     
-        for file in image_files_in_folder(known_people_folder):
-        basename = os.path.splitext(os.path.basename(file))[0]
-        img = face_recognition.load_image_file(file)
-        encodings = face_recognition.face_encodings(img)
+        #Unless specified otherwise by the user, this is the default colorscheme
+    colorscheme = 'basic'
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
+    
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
