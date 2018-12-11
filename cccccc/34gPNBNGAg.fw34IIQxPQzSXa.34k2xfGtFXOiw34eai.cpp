@@ -1,149 +1,197 @@
 
         
-            void cmpEQ(const Size2D &size,
-               const u16 *src0Base, ptrdiff_t src0Stride,
-               const u16 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride);
+        
+    {  DISALLOW_COPY_AND_ASSIGN(Base);
+};
     
-    void add(const Size2D &size,
-         const s8 * src0Base, ptrdiff_t src0Stride,
-         const s8 * src1Base, ptrdiff_t src1Stride,
-         s8 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<s8, s16>());
-    }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<s8, s16>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-    
-    {
-    {        for (; j < size.width; j++)
-        {
-            dst[j] = ~src[j];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-                s32 m = _mag[j];
-    
-    u8 cornerScore(const u8* ptr, const ptrdiff_t pixel[])
-{
-    const s32 K = 8, N = 16 + K + 1;
-    s32 k, v = ptr[0];
-    s16 d[(N + 7) & ~7];
-    for( k = 0; k < N; k++ )
-        d[k] = (s16)(v - ptr[pixel[k]]);
-    }
-    
-    
-    {} // namespace
-    
-            prev = v_zero;
-        j = 0u;
-    
-    #endif
-
-    
-                // calculate values for plain CPU part below if needed
-            if (x + 8 >= bwidth)
-            {
-                ptrdiff_t x3 = x == width ? width - 1 : x;
-                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
-    }
-    
-    #include <condition_variable>
-#include <mutex>
-#include <string>
-#include <system_error>
-#include <vector>
-    
-    
-    {} // namespace caffe2
-
-    
-    template <>
-template <typename T>
-bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
-  EnforceOnCPU<T>(Input(0));
-  return true;
-}
-    
-    OpSchema::Cost CostInferenceForFC(
-    const OperatorDef& def,
-    const vector<TensorShape>& in) {
-  CAFFE_ENFORCE_EQ(in.size(), 3, 'FC requires three inputs');
-  struct OpSchema::Cost c;
-  ArgumentHelper helper(def);
-    }
-    
-    #endif // CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
-
-    
-    workspace.FeedBlob('X', (np.random.uniform(-10, 10, (5,5))).astype(np.float32))
-print('X before running op:', workspace.FetchBlob('X'))
-workspace.RunOperatorOnce(op)
-print('X after running op:', workspace.FetchBlob('X'))
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    #undef BODY_ARG
-#undef BODY_NONE
-    
-    Variant PlainDirectory::read() {
-  struct dirent entry;
-  struct dirent *result;
-  int ret = readdir_r(m_dir, &entry, &result);
-  if (ret != 0 || !result) {
-    return false;
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
   }
-  return String(entry.d_name, CopyString);
 }
     
-        private:
-        void ValidateInput(const std::vector<Parameter>& parameters, const std::vector<Variable>& gradients, FunctionPtr updateFunc);
+        std::string tooltip;
+    if (option.GetString('tooltip', &tooltip))
+      SetTooltip(tooltip);
     
-    class CrossProcessMutex
-{
-    // no-copying
-    CrossProcessMutex(const CrossProcessMutex&);
-    void operator=(const CrossProcessMutex&);
+    
+    
+    NwClipboardClearSyncFunction::~NwClipboardClearSyncFunction() {
     }
     
-            if (isFinalValidationPass)
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    class NwObjCreateFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjCreateFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+      NwScreenDisplayObserver::NwScreenDisplayObserver() {
+    display::Screen* screen = display::Screen::GetScreen();
+    if (screen) {
+      screen->AddObserver(this);
+    }
+  }
+    
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+}
+    
+    const ViewDescriptor& ClientReceivedMessagesPerRpcCumulative() {
+  const static ViewDescriptor descriptor =
+      ViewDescriptor()
+          .set_name('grpc.io/client/sent_messages_per_rpc/cumulative')
+          .set_measure(kRpcClientReceivedMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ClientMethodTagKey());
+  return descriptor;
+}
+    
+    Status ProtoServerReflection::GetFileByName(
+    ServerContext* context, const grpc::string& filename,
+    ServerReflectionResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
+    }
+    
+     private:
+  Status ListService(ServerContext* context,
+                     reflection::v1alpha::ListServiceResponse* response);
+    
+    void InitProtoReflectionServerBuilderPlugin() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
+  ::grpc::ServerBuilder::InternalAddPluginFactory(&CreateProtoReflection);
+}
+    
+    CreateThreadPoolFunc g_ctp_impl = CreateDefaultThreadPoolImpl;
+    
+            void CopyFrom(const Value& /*source*/) override
         {
-            if (!Input(0)->GetSampleLayout().IsElementwiseCompatibleWith(Input(1)->GetSampleLayout()) || !Input(0)->GetSampleLayout().IsElementwiseCompatibleWith(Input(2)->GetSampleLayout()))
-                InvalidArgument('PerDimMeanVarNormalizationNode: All inputs should have same sample layout.');
+            LogicError('Value::CopyFrom is currently unsupported for PackedValue objects');
         }
+    
+    // ---------------------------------------------------------------------------
+// RandomOrdering -- class to help manage randomization of input data
+// ---------------------------------------------------------------------------
+    
+        // compute backward algorithm
+    static void BackwardCompute(
+        Matrix<ElemType>& decodedpath,
+        const Matrix<ElemType>& backtrace, const size_t stp)
+    {
+        int iNumPos = backtrace.GetNumCols();
+        int iNumLab = backtrace.GetNumRows();
+    }
+    
+      /*
+   * @brief Helper function to POST a carve to the graph endpoint.
+   *
+   * Once all of the files have been carved and the tgz has been
+   * created, we POST the carved file to an endpoint specified by the
+   * carver_start_endpoint and carver_continue_endpoint
+   */
+  Status postCarve(const boost::filesystem::path& path);
+    
+      // Mimic the schedule's execution.
+  FLAGS_disable_decorators = false;
+  runDecorators(DECORATE_INTERVAL, 60);
+    
+    TEST_F(OptionsConfigParserPluginTests, test_json_option) {
+  Config c;
+  std::map<std::string, std::string> update;
+    }
+    
+    #include <osquery/core.h>
+    
+            auto name = std::string(query_entry.name.GetString());
+        auto query = std::string(query_entry.value.GetString());
+        if (query.empty() || name.empty()) {
+          return Status(1, 'Distributed discovery query is not a string');
+        }
+    
+     private:
+  std::shared_ptr<Cache> cache_;
+  uint32_t num_threads_;
+    
+    #if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_AIX)
+size_t PosixRandomAccessFile::GetUniqueId(char* id, size_t max_size) const {
+  return PosixHelper::GetUniqueIdFromFile(fd_, id, max_size);
+}
+#endif
+    
+      bool FilterMergeOperand(int level, const rocksdb::Slice& key,
+                          const rocksdb::Slice& existing_value) const override {
+    fprintf(stderr, 'FilterMerge(%s)\n', key.ToString().c_str());
+    ++merge_count_;
+    return existing_value == 'bad';
+  }
+    
+    int main() {
+  DB* db;
+  Options options;
+  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+  options.IncreaseParallelism();
+  options.OptimizeLevelStyleCompaction();
+  // create the DB if it's not already present
+  options.create_if_missing = true;
+    }
+    
+    #pragma once
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+    
+    // FlushBlockPolicy provides a configurable way to determine when to flush a
+// block in the block based tables,
+class FlushBlockPolicy {
+ public:
+  // Keep track of the key/value sequences and return the boolean value to
+  // determine if table builder should flush current data block.
+  virtual bool Update(const Slice& key,
+                      const Slice& value) = 0;
+    }
+    
+    
+    {  // time spent in open() and fopen().
+  uint64_t open_nanos;
+  // time spent in fallocate().
+  uint64_t allocate_nanos;
+  // time spent in write() and pwrite().
+  uint64_t write_nanos;
+  // time spent in read() and pread()
+  uint64_t read_nanos;
+  // time spent in sync_file_range().
+  uint64_t range_sync_nanos;
+  // time spent in fsync
+  uint64_t fsync_nanos;
+  // time spent in preparing write (fallocate etc).
+  uint64_t prepare_write_nanos;
+  // time spent in Logger::Logv().
+  uint64_t logger_nanos;
+};
+    
+      // Return stats as map of {string, double} per-tier
+  //
+  // Persistent cache can be initialized as a tier of caches. The stats are per
+  // tire top-down
+  virtual StatsType Stats() = 0;
+    
+    namespace rocksdb {
+    }
