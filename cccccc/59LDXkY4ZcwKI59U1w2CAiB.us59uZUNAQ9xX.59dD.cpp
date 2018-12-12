@@ -1,212 +1,256 @@
 
         
-        
-struct MorphCtx
+        namespace CNTK
 {
-    int operation;
-    int channels;
-    CAROTENE_NS::Size2D ksize;
-    int anchor_x, anchor_y;
-    CAROTENE_NS::BORDER_MODE border;
-    uchar borderValues[4];
-};
-inline int TEGRA_MORPHINIT(cvhalFilter2D **context, int operation, int src_type, int dst_type, int, int,
-                           int kernel_type, uchar *kernel_data, size_t kernel_step, int kernel_width, int kernel_height, int anchor_x, int anchor_y,
-                           int borderType, const double borderValue[4], int iterations, bool allowSubmatrix, bool allowInplace)
-{
-    if(!context || !kernel_data || src_type != dst_type ||
-       CV_MAT_DEPTH(src_type) != CV_8U || src_type < 0 || (src_type >> CV_CN_SHIFT) > 3 ||
+    class CompositeMinibatchSource final : public MinibatchSource
+    {
+        static const std::wstring PositionAttributeName;
+        static const std::wstring DistributedAfterSampleCountAttributeName;
     }
-    
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
     }
     
     
-    {    if (!parametersSupported) {
-        std::cerr << 'internal error: attempted to use a function with unsupported parameters' << std::endl;
-        std::abort();
-    }
+    {
+    {    private:
+        static bool IsNativeUDF(const Dictionary& dict);
+    };
 }
+
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC1(f32, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vadd.f32 q6, q4, q1                                     \n\t'
-            'vadd.f32 q7, q5, q1                                     \n\t'
-            'vst1.32 {d12-d13}, [%[dst1]]                            \n\t'
-            'vst1.32 {d14-d15}, [%[dst2]]                            \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst1] 'r' (_dst + i + 0),
-              [dst2] 'r' (_dst + i + 4),
-              'w' (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
-        );
-    }
-})
-#else
-CVTS_FUNC1(f32, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vst1q_f32(_dst + i + 0, vline1_f32);
-        vst1q_f32(_dst + i + 4, vline2_f32);
-    }
-})
-#endif
-    
-                    uint8x16_t c0 = vmovq_n_u8(0);
-                uint8x16_t c1 = vmovq_n_u8(0);
-                uint8x16_t max0 = vmovq_n_u8(0);
-                uint8x16_t max1 = vmovq_n_u8(0);
-                for( k = 0; k < N; k++ )
+                if (m_varKind == VariableKind::Input)
+            {
+                for (auto dim : m_shape.Dimensions())
                 {
-                    int8x16_t x = vreinterpretq_s8_u8(veorq_u8(vld1q_u8(ptr + pixel[k]), delta));
-                    m0 = vcgtq_s8(x, v2);
-                    m1 = vcgtq_s8(v1, x);
-    }
+                    if (dim == 0)
+                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
+                }
+            }
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        //vertical convolution
-        ptrdiff_t idx_rm2 = internal::borderInterpolate(i - 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-    }
+    #include <string>
     
-        // the others
-    for (size_t i = 1; i < size.height ; ++i)
-    {
-        src = internal::getRowPtr(srcBase, srcStride, i);
-        f64 * prevSqSum = internal::getRowPtr(sqsumBase, sqsumStride, i - 1);
-        sqsum = internal::getRowPtr(sqsumBase, sqsumStride, i);
-    }
-    
-    inline float32x4_t vrsqrtq_f32(float32x4_t val)
-{
-    float32x4_t e = vrsqrteq_f32(val);
-    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
-    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
-    return e;
+    // Fills in block[kBlockEdgeHalf..(kBlockHalf+kBlockEdgeHalf)], and leaves the
+// rest unmodified.
+void ButteraugliFFTSquared(double block[kBlockSize]) {
+  double global_mul = 0.000064;
+  Complex block_c[kBlockSize];
+  assert(kBlockEdge == 8);
+  for (int y = 0; y < kBlockEdge; ++y) {
+    RealFFT8(block + y * kBlockEdge, block_c + y * kBlockEdge);
+  }
+  TransposeBlock(block_c);
+  double r0[kBlockEdge];
+  double r1[kBlockEdge];
+  for (int x = 0; x < kBlockEdge; ++x) {
+    r0[x] = block_c[x].real;
+    r1[x] = block_c[kBlockHalf + x].real;
+  }
+  RealFFT8(r0, block_c);
+  RealFFT8(r1, block_c + kBlockHalf);
+  for (int y = 1; y < kBlockEdgeHalf; ++y) {
+    FFT8(block_c + y * kBlockEdge);
+  }
+  for (int i = kBlockEdgeHalf; i < kBlockHalf + kBlockEdgeHalf + 1; ++i) {
+    block[i] = abssq(block_c[i]);
+    block[i] *= global_mul;
+  }
 }
     
-      // The c'tor sets this object as the test part result reporter used
-  // by Google Test.  The 'result' parameter specifies where to report the
-  // results. This reporter will only catch failures generated in the current
-  // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
-    
-    
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
+    static const int kCbToBlueTable[256] = {
+  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
+  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
+  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
+  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
+  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
+  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
+   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
+   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
+   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
+   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
+   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
+     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
+    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
+    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
+    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
+    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
+   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
+   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
+   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
+   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
+   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
+   220,  222,  223,  225,
 };
     
-    // Forward declarations of ValuesIn(), which is implemented in
-// include/gtest/gtest-param-test.h.
-template <typename ForwardIterator>
-internal::ParamGenerator<
-  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
-ValuesIn(ForwardIterator begin, ForwardIterator end);
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
-    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
-    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41>
-struct Templates41 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates40<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> Tail;
+    
+    {}  // namespace guetzli
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+      std::istringstream memstream(data, std::ios::in | std::ios::binary);
+  png_set_read_fn(png_ptr, static_cast<void*>(&memstream), [](png_structp png_ptr, png_bytep outBytes, png_size_t byteCountToRead) {
+    std::istringstream& memstream = *static_cast<std::istringstream*>(png_get_io_ptr(png_ptr));
+    
+    memstream.read(reinterpret_cast<char*>(outBytes), byteCountToRead);
+    }
+    
+    // kIDCTMatrix[8*x+u] = alpha(u)*cos((2*x+1)*u*M_PI/16)*sqrt(2), with fixed 13
+// bit precision, where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+// Some coefficients are off by +-1 to mimick libjpeg's behaviour.
+static const int kIDCTMatrix[kDCTBlockSize] = {
+  8192,  11363,  10703,   9633,   8192,   6437,   4433,   2260,
+  8192,   9633,   4433,  -2259,  -8192, -11362, -10704,  -6436,
+  8192,   6437,  -4433, -11362,  -8192,   2261,  10704,   9633,
+  8192,   2260, -10703,  -6436,   8192,   9633,  -4433, -11363,
+  8192,  -2260, -10703,   6436,   8192,  -9633,  -4433,  11363,
+  8192,  -6437,  -4433,  11362,  -8192,  -2261,  10704,  -9633,
+  8192,  -9633,   4433,   2259,  -8192,  11362, -10704,   6436,
+  8192, -11363,  10703,  -9633,   8192,  -6437,   4433,  -2260,
 };
     
-      // Now, we have that n is odd and n >= 3.
+    const int kJPEGNaturalOrder[80] = {
+  0,   1,  8, 16,  9,  2,  3, 10,
+  17, 24, 32, 25, 18, 11,  4,  5,
+  12, 19, 26, 33, 40, 48, 41, 34,
+  27, 20, 13,  6,  7, 14, 21, 28,
+  35, 42, 49, 56, 57, 50, 43, 36,
+  29, 22, 15, 23, 30, 37, 44, 51,
+  58, 59, 52, 45, 38, 31, 39, 46,
+  53, 60, 61, 54, 47, 55, 62, 63,
+  // extra entries for safety in decoder
+  63, 63, 63, 63, 63, 63, 63, 63,
+  63, 63, 63, 63, 63, 63, 63, 63
+};
     
-    typedef void (*Transform1d)(const double* in, int stride, double* out);
+    // Library to decode jpeg coefficients into an RGB image.
     
     
-// these are the macro required by COLUMN_*
-#define LOAD_CST(dst, src) (dst) = (src)
-#define LOAD(dst, src) (dst) = (src)
-#define MULT(a, b)  (a) = (((a) * (b)) >> 16)
-#define ADD(a, b)   (a) = (a) + (b)
-#define SUB(a, b)   (a) = (a) - (b)
-#define LSHIFT(a, n) (a) = ((a) << (n))
-#define STORE16(a, b) (a) = (b)
-#define CORRECT_LSB(a) (a) += 1
+    {}  // namespace guetzli
     
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
+    bool RefineDCTBlock(const HuffmanTableEntry* ac_huff,
+                    int Ss, int Se, int Al,
+                    int* eobrun,
+                    BitReaderState* br,
+                    JPEGData* jpg,
+                    coeff_t* coeffs) {
+  bool eobrun_allowed = Ss > 0;
+  if (Ss == 0) {
+    int s = br->ReadBits(1);
+    coeff_t dc_coeff = coeffs[0];
+    dc_coeff |= s << Al;
+    coeffs[0] = dc_coeff;
+    ++Ss;
+  }
+  if (Ss > Se) {
+    return true;
+  }
+  int p1 = 1 << Al;
+  int m1 = -(1 << Al);
+  int k = Ss;
+  int r;
+  int s;
+  bool in_zero_run = false;
+  if (*eobrun <= 0) {
+    for (; k <= Se; k++) {
+      s = ReadSymbol(ac_huff, br);
+      if (s >= kJpegHuffmanAlphabetSize) {
+        fprintf(stderr, 'Invalid Huffman symbol %d for AC coefficient %d\n',
+                s, k);
+        jpg->error = JPEG_INVALID_SYMBOL;
+        return false;
+      }
+      r = s >> 4;
+      s &= 15;
+      if (s) {
+        if (s != 1) {
+          fprintf(stderr, 'Invalid Huffman symbol %d for AC coefficient %d\n',
+                  s, k);
+          jpg->error = JPEG_INVALID_SYMBOL;
+          return false;
+        }
+        s = br->ReadBits(1) ? p1 : m1;
+        in_zero_run = false;
+      } else {
+        if (r != 15) {
+          *eobrun = 1 << r;
+          if (r > 0) {
+            if (!eobrun_allowed) {
+              fprintf(stderr, 'End-of-block run crossing DC coeff.\n');
+              jpg->error = JPEG_EOB_RUN_TOO_LONG;
+              return false;
+            }
+            *eobrun += br->ReadBits(r);
+          }
+          break;
+        }
+        in_zero_run = true;
+      }
+      do {
+        coeff_t thiscoef = coeffs[kJPEGNaturalOrder[k]];
+        if (thiscoef != 0) {
+          if (br->ReadBits(1)) {
+            if ((thiscoef & p1) == 0) {
+              if (thiscoef >= 0) {
+                thiscoef += p1;
+              } else {
+                thiscoef += m1;
+              }
+            }
+          }
+          coeffs[kJPEGNaturalOrder[k]] = thiscoef;
+        } else {
+          if (--r < 0) {
+            break;
+          }
+        }
+        k++;
+      } while (k <= Se);
+      if (s) {
+        if (k > Se) {
+          fprintf(stderr, 'Out-of-band coefficient %d band was %d-%d\n',
+                  k, Ss, Se);
+          jpg->error = JPEG_OUT_OF_BAND_COEFF;
+          return false;
+        }
+        coeffs[kJPEGNaturalOrder[k]] = s;
+      }
     }
   }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
+  if (in_zero_run) {
+    fprintf(stderr, 'Extra zero run before end-of-block.\n');
+    jpg->error = JPEG_EXTRA_ZERO_RUN;
+    return false;
   }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+  if (*eobrun > 0) {
+    for (; k <= Se; k++) {
+      coeff_t thiscoef = coeffs[kJPEGNaturalOrder[k]];
+      if (thiscoef != 0) {
+        if (br->ReadBits(1)) {
+          if ((thiscoef & p1) == 0) {
+            if (thiscoef >= 0) {
+              thiscoef += p1;
+            } else {
+              thiscoef += m1;
+            }
+          }
+        }
+        coeffs[kJPEGNaturalOrder[k]] = thiscoef;
+      }
+    }
+  }
+  --(*eobrun);
+  return true;
 }
     
-    #include <stdint.h>
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg);
-    
-    inline int ReadUint16(const uint8_t* data, size_t* pos) {
-  int v = (data[*pos] << 8) + data[*pos + 1];
-  *pos += 2;
-  return v;
+    void BuildSequentialHuffmanCodes(
+    const JPEGData& jpg,
+    std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
+    std::vector<HuffmanCodeTable>* ac_huffman_code_tables) {
+  JPEGOutput out(NullOut, nullptr);
+  BuildAndEncodeHuffmanCodes(jpg, out, dc_huffman_code_tables,
+                             ac_huffman_code_tables);
 }
