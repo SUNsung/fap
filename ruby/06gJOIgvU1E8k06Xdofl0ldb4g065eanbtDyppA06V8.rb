@@ -1,64 +1,59 @@
 
         
-            open_dry_run_modal(agent)
-    click_on('Dry Run')
-    expect(page).to have_text('Dry Run started')
-    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
-  end
+            group.default_notification_level = 1
+    group.save
+    
+      describe 'data' do
+    let(:notification) { Fabricate.build(:notification) }
+    
+                checksum = OpenSSL::HMAC.digest('MD5', k1, data_encrypt)
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Retrieves the element instance fields
+          #
+          # @return [Array]
+          def attributes
+            self.class.attributes
+          end
+    
+              # Decodes the crealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_crealm(input)
+            input.value[0].value
+          end
+    
+    # Declares a dependency to the git repo of CocoaPods gem. This declaration is
+# compatible with the local git repos feature of Bundler.
+#
+def cp_gem(name, repo_name, branch = 'master', path: false)
+  return gem name if SKIP_UNRELEASED_VERSIONS
+  opts = if path
+           { :path => '../#{repo_name}' }
+         else
+           url = 'https://github.com/CocoaPods/#{repo_name}.git'
+           { :git => url, :branch => branch }
+         end
+  gem name, opts
+end
+    
+          def plugins_string
+        UI::ErrorReport.plugins_string
+      end
+    
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
 end
 
     
-      it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
+          warn_local_gems(plugins_with_path) if plugins_with_path.size > 0
+    end
+    update_gems!
   end
-end
-
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-      it 'provides hash-style access to its properties with both symbol and string keys' do
-    expect(location[:lat]).to be_a Float
-    expect(location[:lat]).to eq 2.0
-    expect(location['lat']).to be_a Float
-    expect(location['lat']).to eq 2.0
-  end
-    
-        it 'sorts tuples like arrays by default' do
-      expected = tuples.values_at(4, 2, 3, 0, 6, 5, 1)
-    
-    module LogStash module PluginManager module PackFetchStrategy
-  class Repository
-    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
-    PACK_EXTENSION = 'zip'
-    
-        def user_feedback_string_for(action, platform, machines, options={})
-      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
-      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
-      '#{message} for #{platform}: #{machines}' if !platform.nil?
-    end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
-        end
-      end
-    end
-    
-          # A shorthand for getting the last argument of the node.
-      # Equivalent to `arguments.last`.
-      #
-      # @return [Node, nil] the last argument of the node,
-      #                     or `nil` if there are no arguments
-      def last_argument
-        arguments[-1]
-      end
