@@ -1,188 +1,247 @@
 
         
-        // Two overloaded helpers for checking at compile time whether an
-// expression is a null pointer literal (i.e. NULL or any 0-valued
-// compile-time integral constant).  Their return values have
-// different sizes, so we can use sizeof() to test which version is
-// picked by the compiler.  These helpers have no implementations, as
-// we only need their signatures.
-//
-// Given IsNullLiteralHelper(x), the compiler will pick the first
-// version if x can be implicitly converted to Secret*, and pick the
-// second version otherwise.  Since Secret is a secret and incomplete
-// type, the only expression a user can write that has type Secret* is
-// a null pointer literal.  Therefore, we know that x is a null
-// pointer literal if and only if the first version is picked by the
-// compiler.
-char IsNullLiteralHelper(Secret* p);
-char (&IsNullLiteralHelper(...))[2];  // NOLINT
+            Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged USER true)
     
-      // Take over ownership of a raw pointer.  This should happen as soon as
-  // possible after the object is created.
-  explicit linked_ptr(T* ptr = NULL) { capture(ptr); }
-  ~linked_ptr() { depart(); }
+    #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41>
-struct Types41 {
-  typedef T1 Head;
-  typedef Types40<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> Tail;
-};
     
-      ////////////////////////////////////////////////////////////
-  //
-  // C'tors
-    
-    MAKE_TYPE_INFO(bool, Variant::BOOL)
-MAKE_TYPE_INFO(uint8_t, Variant::INT)
-MAKE_TYPE_INFO(int8_t, Variant::INT)
-MAKE_TYPE_INFO(uint16_t, Variant::INT)
-MAKE_TYPE_INFO(int16_t, Variant::INT)
-MAKE_TYPE_INFO(uint32_t, Variant::INT)
-MAKE_TYPE_INFO(int32_t, Variant::INT)
-MAKE_TYPE_INFO(int64_t, Variant::INT)
-MAKE_TYPE_INFO(uint64_t, Variant::INT)
-MAKE_TYPE_INFO(wchar_t, Variant::INT)
-MAKE_TYPE_INFO(float, Variant::REAL)
-MAKE_TYPE_INFO(double, Variant::REAL)
-    
-    class JointBullet : public ConstraintBullet {
+    {    secp256k1_fe_sqr(&z12, &a->z);
+    u1 = a->x; secp256k1_fe_normalize_weak(&u1);
+    secp256k1_fe_mul(&u2, &b->x, &z12);
+    s1 = a->y; secp256k1_fe_normalize_weak(&s1);
+    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
+    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
+    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
+    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
+        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
+            secp256k1_gej_double_var(r, a, rzr);
+        } else {
+            if (rzr != NULL) {
+                secp256k1_fe_set_int(rzr, 0);
+            }
+            r->infinity = 1;
+        }
+        return;
     }
+    secp256k1_fe_sqr(&i2, &i);
+    secp256k1_fe_sqr(&h2, &h);
+    secp256k1_fe_mul(&h3, &h, &h2);
+    if (rzr != NULL) {
+        *rzr = h;
+    }
+    secp256k1_fe_mul(&r->z, &a->z, &h);
+    secp256k1_fe_mul(&t, &u1, &h2);
+    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
+    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
+    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
+    secp256k1_fe_add(&r->y, &h3);
+}
+    
+    #ifndef SECP256K1_MODULE_ECDH_TESTS_H
+#define SECP256K1_MODULE_ECDH_TESTS_H
+    
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+    }
+}
+    
+    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
+{
+    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
+    auto ret = SplitTorReplyLine(input);
+    BOOST_CHECK_EQUAL(ret.first, command);
+    BOOST_CHECK_EQUAL(ret.second, args);
+}
+    
+    namespace
+{
+static bool ParsePrechecks(const std::string& str)
+{
+    if (str.empty()) // No empty string allowed
+        return false;
+    if (str.size() >= 1 && (json_isspace(str[0]) || json_isspace(str[str.size()-1]))) // No padding allowed
+        return false;
+    if (str.size() != strlen(str.c_str())) // No embedded NUL characters allowed
+        return false;
+    return true;
+}
+    }
+    
+        BOOST_CHECK(v.setArray());
+    BOOST_CHECK(v.isArray());
+    BOOST_CHECK_EQUAL(v.size(), 0);
+    
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+    
+    // A CodeGenerator that captures the FileDescriptor it's passed as a
+// FileDescriptorProto.
+class DescriptorCapturingGenerator : public CodeGenerator {
+ public:
+  // Does not own file; file must outlive the Generator.
+  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
+      : file_(file) {}
+    }
+    
+    
+    {  for (int i = 0; i < parts.size(); i++) {
+    string::size_type equals_pos = parts[i].find_first_of('=');
+    std::pair<string, string> value;
+    if (equals_pos == string::npos) {
+      value.first = parts[i];
+      value.second = '';
+    } else {
+      value.first = parts[i].substr(0, equals_pos);
+      value.second = parts[i].substr(equals_pos + 1);
+    }
+    output->push_back(value);
+  }
+}
+    
+    string ClassNameResolver::GetClassName(const EnumDescriptor* descriptor,
+                                       bool immutable) {
+  return GetClassFullName(ClassNameWithoutPackage(descriptor, immutable),
+                          descriptor->file(), immutable,
+                          MultipleJavaFiles(descriptor->file(), immutable));
+}
+    
+      for (int i = 0; i < dependencies.size(); i++) {
+    const string& dependency = dependencies[i].second;
+    printer->Print(
+        '      $dependency$.getDescriptor(),\n',
+        'dependency', dependency);
+  }
+    
+    MeasureDouble RpcClientReceivedBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientReceivedBytesPerRpcMeasureName,
+      'Total bytes received across all response messages per RPC', kUnitBytes);
+  return measure;
+}
+    
+    
+    {}  // namespace grpc
+
+    
+    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
+    : reflection_service_(new grpc::ProtoServerReflection()) {}
+    
+    
+    {  if ((pool_->shutdown_) && (pool_->nthreads_ == 0)) {
+    pool_->shutdown_cv_.notify_one();
+  }
+}
+    
+    template <typename T>
+inline StringName __constant_get_enum_name(T param, const String &p_constant) {
+	if (GetTypeInfo<T>::VARIANT_TYPE == Variant::NIL)
+		ERR_PRINTS('Missing VARIANT_ENUM_CAST for constant's enum: ' + p_constant);
+	return GetTypeInfo<T>::get_class_info().class_name;
+}
+    
+    #include 'collision_object_bullet.h'
     
     #include 'csg_gizmos.h'
 #include 'csg_shape.h'
     
-    JNIEnv *GDAPI godot_android_get_env() {
-#ifdef __ANDROID__
-	return ThreadAndroid::get_env();
-#else
-	return NULL;
-#endif
+    Shell::~Shell() {
 }
     
-    		char filename_inzip[256];
+    void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
+                                               UBool /*isIncremental*/) const {
+    // Our caller (filteredTransliterate) has already narrowed us
+    // to an unfiltered run.  Delete it.
+    UnicodeString empty;
+    text.handleReplaceBetween(index.start, index.limit, empty);
+    int32_t len = index.limit - index.start;
+    index.contextLimit -= len;
+    index.limit -= len;
+}
+U_NAMESPACE_END
     
-    class DBImpl;
-    
-    // A helper class useful for DBImpl::Get()
-class LookupKey {
- public:
-  // Initialize *this for looking up user_key at a snapshot with
-  // the specified sequence number.
-  LookupKey(const Slice& user_key, SequenceNumber sequence);
+    ScientificNumberFormatter::ScientificNumberFormatter(
+        DecimalFormat *fmtToAdopt, Style *styleToAdopt, UErrorCode &status)
+        : fPreExponent(),
+          fDecimalFormat(fmtToAdopt),
+          fStyle(styleToAdopt),
+          fStaticSets(NULL) {
+    if (U_FAILURE(status)) {
+        return;
     }
-    
-    class Env;
-    
-    class MemTable {
- public:
-  // MemTables are reference counted.  The initial reference count
-  // is zero and the caller must call Ref() at least once.
-  explicit MemTable(const InternalKeyComparator& comparator);
+    if (fDecimalFormat == NULL || fStyle == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
-    
-      void DeleteManifestFile() {
-    ASSERT_OK(env_->DeleteFile(ManifestFileName()));
-  }
-    
-      // Simple iterator tests
-  {
-    SkipList<Key, Comparator>::Iterator iter(&list);
-    ASSERT_TRUE(!iter.Valid());
+    const DecimalFormatSymbols *sym = fDecimalFormat->getDecimalFormatSymbols();
+    if (sym == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
+    getPreExponent(*sym, fPreExponent);
+    fStaticSets = DecimalFormatStaticSets::getStaticSets(status);
+}
     
-    #ifndef STORAGE_LEVELDB_DB_SNAPSHOT_H_
-#define STORAGE_LEVELDB_DB_SNAPSHOT_H_
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
     
-       static const char* separator() { return _fi_sep; }
+        float x = _eye.x - _center.x;
+    float y = _eye.y - _center.y;
+    float z = _eye.z - _center.z;
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_recursion()
-{
-   BOOST_ASSERT(pstate->type == syntax_element_recurse);
-   //
-   // Set new call stack:
-   //
-   if(recursion_stack.capacity() == 0)
-   {
-      recursion_stack.reserve(50);
-   }
-   recursion_stack.push_back(recursion_info<results_type>());
-   recursion_stack.back().preturn_address = pstate->next.p;
-   recursion_stack.back().results = *m_presult;
-   recursion_stack.back().repeater_stack = next_count;
-   pstate = static_cast<const re_jump*>(pstate)->alt.p;
-   recursion_stack.back().idx = static_cast<const re_brace*>(pstate)->index;
-    }
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
     
+        /** Gets the total Delay units of the Animation. 
+     *
+     * @return The total Delay units of the Animation.
+     */
+    float getTotalDelayUnits() const { return _totalDelayUnits; };
     
+    /** Sets the delay in seconds of the 'delay unit'.
+     *
+     * @param delayPerUnit The delay in seconds of the 'delay unit'.
+     */
+    void setDelayPerUnit(float delayPerUnit) { _delayPerUnit = delayPerUnit; };
     
-    class BOOST_REGEX_DECL abstract_protected_call
-{
-public:
-   bool BOOST_REGEX_CALL execute()const;
-   // this stops gcc-4 from complaining:
-   virtual ~abstract_protected_call(){}
-private:
-   virtual bool call()const = 0;
-};
+    /** Gets the delay in seconds of the 'delay unit'.
+     * 
+     * @return The delay in seconds of the 'delay unit'.
+     */
+    float getDelayPerUnit() const { return _delayPerUnit; };
     
-    
-namespace boost{
-#ifdef BOOST_REGEX_NO_FWD
-typedef basic_regex<char, regex_traits<char> > regex;
-#ifndef BOOST_NO_WREGEX
-typedef basic_regex<wchar_t, regex_traits<wchar_t> > wregex;
-#endif
-#endif
-    }
-    
-    
-    
-       raw_storage();
-   raw_storage(size_type n);
-    
-    
-namespace boost{
-    }
-    
-    using namespace folly;
-    
-    namespace folly {
-    }
-    
-      uint8_t getNumPriorities() const override {
-    return executor_->getNumPriorities();
-  }
-    
-      std::shared_ptr<T> get() const {
-    folly::hazptr_local<1> hazptr;
-    auto slots = hazptr[0].get_protected(slots_);
-    if (!slots) {
-      return nullptr;
-    }
-    return (slots->slots_)[AccessSpreader<>::current(kNumSlots)];
-  }
-    
-    struct counted_shared_tag {};
-template <template <typename> class Atom = std::atomic>
-struct intrusive_shared_count {
-  intrusive_shared_count() {
-    counts.store(0);
-  }
-  void add_ref(uint64_t count = 1) {
-    counts.fetch_add(count);
-  }
-    }
-    
-    using namespace std;
-using namespace folly;
+        /** Returns a Animation that was previously added.
+     * If the name is not found it will return nil.
+     * You should retain the returned copy if you are going to use it.
+     *
+     * @return A Animation that was previously added. If the name is not found it will return nil.
+     */
+    Animation* getAnimation(const std::string& name);
+    /**
+     * @deprecated. Use getAnimation() instead
+     * @js NA
+     * @lua NA
+     */
+    CC_DEPRECATED_ATTRIBUTE Animation* animationByName(const std::string& name){ return getAnimation(name); }
