@@ -1,53 +1,79 @@
 
         
-          def internal_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
-  end
+                def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
     
-              if File.extname(file) == '.rb'
-            tree[subtree] ||= []
-            tree[subtree] << file
-          end
+        initializer 'action_view.caching' do |app|
+      ActiveSupport.on_load(:action_view) do
+        if app.config.action_view.cache_template_loading.nil?
+          ActionView::Resolver.caching = app.config.cache_classes
         end
       end
-    
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
-      end
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
-        end
-      end
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
     end
     
-          subject do
-        plugin_class.new(
-          'oneString' => '${FunString:foo}',
-          'oneBoolean' => '${FunBool:false}',
-          'oneArray' => [ 'first array value', '${FunString:foo}' ],
-          'oneHash' => { 'key1' => '${FunString:foo}', 'key2' => '${FunString} is ${FunBool}', 'key3' => '${FunBool:false} or ${funbool:false}' },
-          'nestedHash' => { 'level1' => { 'key1' => 'http://${FunString}:8080/blah.txt' } },
-          'nestedArray' => { 'level1' => [{ 'key1' => 'http://${FunString}:8080/blah.txt' }, { 'key2' => 'http://${FunString}:8080/foo.txt' }] },
-          'deepHash' => { 'level1' => { 'level2' => {'level3' => { 'key1' => 'http://${FunString}:8080/blah.txt' } } } }
-        )
-      end
+        # Direct access to template rendering.
+    def render_template(context, options) #:nodoc:
+      TemplateRenderer.new(@lookup_context).render(context, options)
+    end
     
-              it 'successfully install the plugin when verification is disabled' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
           end
+        end
+    
+              # Register a new communicator class only if a name was given.
+          data[:communicator].register(name.to_sym, &block) if name != UNSET_VALUE
+    
+            # Parses the options given an OptionParser instance.
+        #
+        # This is a convenience method that properly handles duping the
+        # originally argv array so that it is not destroyed.
+        #
+        # This method will also automatically detect '-h' and '--help'
+        # and print help. And if any invalid options are detected, the help
+        # will be printed, as well.
+        #
+        # If this method returns `nil`, then you should assume that help
+        # was printed and parsing failed.
+        def parse_options(opts=nil)
+          # make sure optparse doesn't use POSIXLY_CORRECT parsing
+          ENV['POSIXLY_CORRECT'] = nil
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+      context 'when arguments to a method' do
+    let(:prefix) { 'bar(' }
+    let(:suffix) { ')' }
+    let(:source) { construct(false, true) }
+    
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
