@@ -1,109 +1,70 @@
 
         
-                  def initialize(template_object, object_name, method_name, object, tag_value)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @tag_value = tag_value
-          end
-    
-    module ActionView
-  # This class defines the interface for a renderer. Each class that
-  # subclasses +AbstractRenderer+ is used by the base +Renderer+ class to
-  # render a specific type of object.
-  #
-  # The base +Renderer+ class uses its +render+ method to delegate to the
-  # renderers. These currently consist of
-  #
-  #   PartialRenderer - Used for rendering partials
-  #   TemplateRenderer - Used for rendering other types of templates
-  #   StreamingTemplateRenderer - Used for streaming
-  #
-  # Whenever the +render+ method is called on the base +Renderer+ class, a new
-  # renderer object of the correct type is created, and the +render+ method on
-  # that new object is called in turn. This abstracts the setup and rendering
-  # into a separate classes for partials and templates.
-  class AbstractRenderer #:nodoc:
-    delegate :find_template, :find_file, :template_exists?, :any_templates?, :with_fallbacks, :with_layout_format, :formats, to: :@lookup_context
-    
-    UserEmail.seed do |ue|
-  ue.id = -1
-  ue.email = 'no_email'
-  ue.primary = true
-  ue.user_id = -1
+            def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
+  end
 end
+
     
-            lounge.topic_id = post.topic.id
-        unless lounge.save
-          puts lounge.errors.full_messages
-          puts 'Failed to set the lounge description topic!'
-        end
-    
-        t.wakeup
-    t.value.should == 5
+      def index
+    render plain: 'Home'
   end
 end
     
-        s = mock('seed')
-    s.should_receive(:to_int).and_return 0
-    srand(s)
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      end
+    
+          def template_paths
+        template_path = _prefixes.dup
+        template_path.unshift '#{@devise_mapping.scoped_path}/mailer' if self.class.scoped_views?
+        template_path
+      end
+    
+        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
+    expect(last_response).to be_ok
   end
     
-      it 'accepts a proc argument instead of a block' do
-    captured = nil
-    
-        # Returns the standard exception backtrace,
-    # including the Sass backtrace.
-    #
-    # @return [Array<String>]
-    def backtrace
-      return nil if super.nil?
-      return super if sass_backtrace.all? {|h| h.empty?}
-      sass_backtrace.map do |h|
-        '#{h[:filename] || '(sass)'}:#{h[:line]}' +
-          (h[:mixin] ? ':in `#{h[:mixin]}'' : '')
-      end + super
-    end
-    
-          if examples
-        title 'Running examples'
-        Rake::Task['examples:build'].invoke
-      end
-    
-          def report
-        <<-EOS
-    
-      <a href='/'>Refresh page</a>
-    
-        def retrieve_work
-      work = Sidekiq.redis { |conn| conn.brpop(*queues_cmd) }
-      UnitOfWork.new(*work) if work
-    end
-    
-          ObjectSpace.each_object(File) do |fp|
-        begin
-          if !fp.closed? && fp.stat.file? && fp.sync && (fp.fcntl(Fcntl::F_GETFL) & append_flags) == append_flags
-            to_reopen << fp
-          end
-        rescue IOError, Errno::EBADF
+            def void
+          perform_payment_action(:void_transaction)
         end
-      end
     
-          def __set_test_mode(mode)
-        if block_given?
-          current_mode = self.__test_mode
-          begin
-            self.__test_mode = mode
-            yield
-          ensure
-            self.__test_mode = current_mode
+            def destroy
+          if @property
+            authorize! :destroy, @property
+            @property.destroy
+            respond_with(@property, status: 204)
+          else
+            invalid_resource!(@property)
           end
-        else
-          self.__test_mode = mode
         end
-      end
     
-        def app
-      @app ||= build
-    end
+            def order
+          @order ||= Spree::Order.find_by!(number: order_id)
+          authorize! :read, @order
+        end
+    
+              if error
+            unprocessable_entity('#{Spree.t(:shipment_transfer_errors_occured, scope: 'api')} \n#{error}')
+          else
+            @original_shipment.transfer_to_shipment(@variant, @quantity, @target_shipment)
+            render json: { success: true, message: Spree.t(:shipment_transfer_success) }, status: 201
+          end
+        end
+    
+            def destroy
+          authorize! :destroy, taxonomy
+          taxonomy.destroy
+          respond_with(taxonomy, status: 204)
+        end
+    
+            def taxonomy
+          if params[:taxonomy_id].present?
+            @taxonomy ||= Spree::Taxonomy.accessible_by(current_ability, :read).find(params[:taxonomy_id])
+          end
+        end
