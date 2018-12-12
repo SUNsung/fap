@@ -1,163 +1,143 @@
 
         
-                  def add_default_name_and_id_for_value(tag_value, options)
-            if tag_value.nil?
-              add_default_name_and_id(options)
-            else
-              specified_id = options['id']
-              add_default_name_and_id(options)
+        module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
     
-              def render_collection_for(builder_class, &block)
-            options = @options.stringify_keys
-            rendered_collection = render_collection do |item, value, text, default_html_options|
-              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
-    
-        delegate :[], :include?, :pop, :size, :each, to: :paths
-    
-        # Render but returns a valid Rack body. If fibers are defined, we return
-    # a streaming body that renders the template piece by piece.
-    #
-    # Note that partials are not supported to be rendered with streaming,
-    # so in such cases, we just wrap them in an array.
-    def render_body(context, options)
-      if options.key?(:partial)
-        [render_partial(context, options)]
-      else
-        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
+              lfs_objects.each do |object|
+            yield object
+          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
+        end
       end
     end
-    
-          select_agent_type('Scheduler Agent')
-      fill_in(:agent_name, with: 'Test Scheduler Agent')
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-      it 'provides hash-style access to its properties with both symbol and string keys' do
-    expect(location[:lat]).to be_a Float
-    expect(location[:lat]).to eq 2.0
-    expect(location['lat']).to be_a Float
-    expect(location['lat']).to eq 2.0
   end
-    
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
 end
-puts '==================================================='
 
     
-      # More readable inspect that only shows the url and resources
-  # @return [String]
-  def inspect
-    resources_str = resources.keys.map{|r| r.inspect }.join ', '
-    
+          # Returns the identifier to use for cache keys.
       #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
+      # For issues and pull requests this will be 'Issue' or 'MergeRequest'
+      # respectively. For diff notes this will return 'MergeRequest', for
+      # regular notes it will either return 'Issue' or 'MergeRequest' depending
+      # on what type of object the note belongs to.
+      def cache_key_type
+        if object.respond_to?(:issuable_type)
+          object.issuable_type
+        elsif object.respond_to?(:noteable_type)
+          object.noteable_type
+        else
+          raise(
+            TypeError,
+            'Instances of #{object.class} are not supported'
+          )
+        end
+      end
     
-            # Creates a connection through a Rex socket
+            # Executes a command on the remote machine with administrative
+        # privileges. See {#execute} for documentation, as the API is the
+        # same.
         #
-        # @return [Rex::Socket::Tcp]
-        # @raise [RuntimeError] if the connection can not be created
-        def connect
-          return connection if connection
+        # @see #execute
+        def sudo(command, opts=nil)
+        end
     
-                data_encrypt = Rex::Text::rand_text(8) + data
+            # Helper method that will set a value if a value is given, or otherwise
+        # return the already set value.
+        #
+        # @param [Symbol] key Key for the data
+        # @param [Object] value Value to store.
+        # @return [Object] Stored value.
+        def self.get_or_set(key, value=UNSET_VALUE)
+          # If no value is to be set, then return the value we have already set
+          return data[key] if value.eql?(UNSET_VALUE)
     
-                int
-          end
+            # This contains all the guests and their parents.
+        #
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :guests
     
-              # Decodes the flags field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_flags(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KrbError
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 0
-                self.pvno = decode_pvno(val)
-              when 1
-                self.msg_type = decode_msg_type(val)
-              when 2
-                self.ctime = decode_ctime(val)
-              when 3
-                self.cusec = decode_cusec(val)
-              when 4
-                self.stime = decode_stime(val)
-              when 5
-                self.susec = decode_susec(val)
-              when 6
-                self.error_code = decode_error_code(val)
-              when 7
-                self.crealm = decode_crealm(val)
-              when 8
-                self.cname = decode_cname(val)
-              when 9
-                self.realm = decode_realm(val)
-              when 10
-                self.sname = decode_sname(val)
-              when 12
-                self.e_data = decode_e_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
-              end
+              @registered.each do |plugin|
+            plugin.components.host_capabilities.each do |host, caps|
+              results[host].merge!(caps)
             end
           end
     
-          def upload_dest
-        @upload_dest
-      end
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
     
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
-      end
+          * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.
+      * Neither the name of Google Inc. nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
     
-        end
+          def default_markup
+        Precious::App.settings.default_markup
+      end
+    end
   end
 end
 
     
-        assert_match /Delete this Page/, last_response.body, ''Delete this Page' link is blocked in page template'
-    assert_match /New/,              last_response.body, ''New' button is blocked in page template'
-    assert_match /Upload/,           last_response.body, ''Upload' link is blocked in page template'
-    assert_match /Rename/,           last_response.body, ''Rename' link is blocked in page template'
-    assert_match /Edit/,             last_response.body, ''Edit' link is blocked in page template'
+        get page
+    assert_no_match /custom.js/, last_response.body
+  end
     
-        @wiki.clear_cache
-    page2 = @wiki.page(page1.name)
+      teardown do
+    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+  end
     
-      test 'displays_latest_changes' do
-    get('/latest_changes')
-    body = last_response.body
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
+    end
+    
+      s.add_dependency 'gollum-lib', '~> 4.2', '>= 4.2.10'
+  s.add_dependency 'kramdown', '~> 1.9.0'
+  s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
+  s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
+  s.add_dependency 'useragent', '~> 0.16.2'
+  s.add_dependency 'gemojione', '~> 3.2'
+    
+            expect(new_source)
+          .to eq('#{prefix}#{open}#{a}, # a\n#{b}#{close} # b\n#{suffix}')
+      end
+    
+          DOUBLE_SPLAT = '**'.freeze
+    
+            def image_params
+          params.require(:image).permit(permitted_image_attributes)
+        end
     
             def destroy
           @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
@@ -166,98 +146,78 @@ end
         end
     
             def create
-          authorize! :create, Spree::OptionValue
-          @option_value = scope.new(option_value_params)
-          if @option_value.save
-            render :show, status: 201
+          @order.validate_payments_attributes([payment_params])
+          @payment = @order.payments.build(payment_params)
+          if @payment.save
+            respond_with(@payment, status: 201, default_template: :show)
           else
-            invalid_resource!(@option_value)
+            invalid_resource!(@payment)
           end
         end
     
-            def update
-          @shipment = Spree::Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
-          @shipment.update_attributes_and_order(shipment_params)
+            private
     
-            def destroy
-          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
-          @stock_item.destroy
-          respond_with(@stock_item, status: 204)
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
         end
     
-            def update
-          authorize! :update, @store
-          if @store.update_attributes(store_params)
-            respond_with(@store, status: 200, default_template: :show)
-          else
-            invalid_resource!(@store)
+            def zone_params
+          attrs = params.require(:zone).permit!
+          if attrs[:zone_members]
+            attrs[:zone_members_attributes] = attrs.delete(:zone_members)
           end
+          attrs
         end
     
-            def taxonomy_params
-          if params[:taxonomy] && !params[:taxonomy].empty?
-            params.require(:taxonomy).permit(permitted_taxonomy_attributes)
-          else
-            {}
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-              @users = @users.result.page(params[:page]).per(params[:per_page])
-          expires_in 15.minutes, public: true
-          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
-          respond_with(@users)
-        end
-    
-            def update
-          authorize! :update, zone
-          if zone.update_attributes(zone_params)
-            respond_with(zone, status: 200, default_template: :show)
-          else
-            invalid_resource!(zone)
-          end
-        end
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
-    end
-  end
-end
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
+    desc 'Test the paperclip plugin under all supported Rails versions.'
+task :all do |t|
+  if ENV['BUNDLE_GEMFILE']
+    exec('rake spec && cucumber')
   else
-    output += ' data-value='#{config[key]}''
+    exec('rm -f gemfiles/*.lock')
+    Rake::Task['appraisal:gemfiles'].execute
+    Rake::Task['appraisal:install'].execute
+    exec('rake appraisal')
   end
-  output += '></#{tag}>'
 end
     
-      class ImageTag < Liquid::Tag
-    @img = nil
+    ENV['RAILS_ENV'] = 'test'
     
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
+    require 'erb'
+require 'digest'
+require 'tempfile'
+require 'paperclip/version'
+require 'paperclip/geometry_parser_factory'
+require 'paperclip/geometry_detector_factory'
+require 'paperclip/geometry'
+require 'paperclip/processor'
+require 'paperclip/processor_helpers'
+require 'paperclip/tempfile'
+require 'paperclip/thumbnail'
+require 'paperclip/interpolations/plural_cache'
+require 'paperclip/interpolations'
+require 'paperclip/tempfile_factory'
+require 'paperclip/style'
+require 'paperclip/attachment'
+require 'paperclip/storage'
+require 'paperclip/callbacks'
+require 'paperclip/file_command_content_type_detector'
+require 'paperclip/media_type_spoof_detector'
+require 'paperclip/content_type_detector'
+require 'paperclip/glue'
+require 'paperclip/errors'
+require 'paperclip/missing_attachment_styles'
+require 'paperclip/validators'
+require 'paperclip/logger'
+require 'paperclip/helpers'
+require 'paperclip/has_attached_file'
+require 'paperclip/attachment_registry'
+require 'paperclip/filename_cleaner'
+require 'paperclip/rails_environment'
     
-        def sizes
-      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
-      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
-      attrs
+        # Returns a sorted list of all interpolations.
+    def self.all
+      self.instance_methods(false).sort!
     end
-  end
-end
