@@ -1,108 +1,120 @@
 
         
-        '''Eval pre-trained 1 billion word language model.
-'''
-import os
-import sys
+            @abstractmethod
+    def escalate_call(self):
+        pass
     
-      Raises:
-    ValueError: if batch_size or num_steps are too high.
-  '''
-  raw_data = np.array(raw_data, dtype=np.int32)
-    
-        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd'):
-      dis_fwd_variable_maps = variable_mapping.dis_fwd_bidirectional(hparams)
-      dis_bwd_variable_maps = variable_mapping.dis_bwd_bidirectional(hparams)
-      # Savers for the forward/backward Discriminator components.
-      dis_fwd_init_saver = tf.train.Saver(var_list=dis_fwd_variable_maps)
-      dis_bwd_init_saver = tf.train.Saver(var_list=dis_bwd_variable_maps)
-      init_savers['dis_fwd_init_saver'] = dis_fwd_init_saver
-      init_savers['dis_bwd_init_saver'] = dis_bwd_init_saver
-    
-      # Output variables only for the Generator.  Discriminator output weights
-  # and biases will begin randomly initialized.
-  if model == 'gen':
-    softmax_w = [
-        v for v in tf.trainable_variables() if v.op.name == 'gen/rnn/softmax_w'
-    ][0]
-    softmax_b = [
-        v for v in tf.trainable_variables() if v.op.name == 'gen/rnn/softmax_b'
-    ][0]
-    
-      Args:
-    name: to label variables.
-    num_units: hidden state dimension.
-    attention_score_fn: to compute similarity between key and target states.
-    reuse: whether to reuse variable scope.
-    
-    from test.helper import gettestcases
-from youtube_dl.utils import compat_urllib_parse_urlparse
-from youtube_dl.utils import compat_urllib_request
-    
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
-    
-    import io
-import optparse
-import os.path
-import re
-    
-    
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
+        def reducer(self, key, values):
+        '''Sum values for each key.
     
     
 if __name__ == '__main__':
-    unittest.main()
+    HitCounts.run()
 
     
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
+
     
-        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', httpbin.url + '/get', env=env)
-        assert 'HTTP/' not in r
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
     
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
+        return (x_train, y_train), (x_test, y_test)
+
     
-    from ..common import *
+        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
+                      output_shape=x.shape[1:])(inputs)
+    model1 = Model(inputs, outputs1)
+    out1 = model1.predict(x)
+    x2 = np.transpose(x, (0, 3, 1, 2))
+    inputs2 = Input(shape=x2.shape[1:])
+    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
+                      output_shape=x2.shape[1:])(inputs2)
+    model2 = Model(inputs2, outputs2)
+    out2 = model2.predict(x2)
+    assert_allclose(out1, out2.transpose(0, 2, 3, 1))
+    
+    
+def test_sparse_categorical_crossentropy_4d():
+    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
+                                    [0.0, 0.3, 0.7],
+                                    [0.1, 0.1, 0.8]],
+                                   [[0.3, 0.7, 0.0],
+                                    [0.3, 0.4, 0.3],
+                                    [0.2, 0.5, 0.3]],
+                                   [[0.8, 0.1, 0.1],
+                                    [1.0, 0.0, 0.0],
+                                    [0.4, 0.3, 0.3]]]]))
+    y_true = K.variable(np.array([[[0, 1, 0],
+                                   [2, 1, 0],
+                                   [2, 2, 1]]]))
+    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
+                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
+                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
+    
+        # Arguments
+        y: class vector to be converted into a matrix
+            (integers from 0 to num_classes).
+        num_classes: total number of classes.
+        dtype: The data type expected by the input, as a string
+            (`float32`, `float64`, `int32`...)
+    
+        available_devices = _get_available_devices()
+    available_devices = [_normalize_device_name(name)
+                         for name in available_devices]
+    if not gpus:
+        # Using all visible GPUs when not specifying `gpus`
+        # e.g. CUDA_VISIBLE_DEVICES=0,2 python keras_mgpu.py
+        gpus = len([x for x in available_devices if 'gpu' in x])
+    
+            self.kernel_z = self.kernel[:, :self.units]
+        self.recurrent_kernel_z = self.recurrent_kernel[:, :self.units]
+        self.kernel_r = self.kernel[:, self.units: self.units * 2]
+        self.recurrent_kernel_r = self.recurrent_kernel[:,
+                                                        self.units:
+                                                        self.units * 2]
+        self.kernel_h = self.kernel[:, self.units * 2:]
+        self.recurrent_kernel_h = self.recurrent_kernel[:, self.units * 2:]
+    
+    
+def fit_loop(model, fit_function, fit_inputs,
+             out_labels=None,
+             batch_size=None,
+             epochs=100,
+             verbose=1,
+             callbacks=None,
+             val_function=None,
+             val_inputs=None,
+             shuffle=True,
+             callback_metrics=None,
+             initial_epoch=0,
+             steps_per_epoch=None,
+             validation_steps=None):
+    '''Abstract fit function for `fit_function(fit_inputs)`.
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
