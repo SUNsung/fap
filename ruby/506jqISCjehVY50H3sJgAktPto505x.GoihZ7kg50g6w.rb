@@ -1,39 +1,56 @@
 
         
-                  # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                result.instance_variable_set(key, obj.instance_variable_get(key))
-              end
-            end
-          end
+            def assets_path
+      @assets_path ||= File.join gem_path, 'assets'
+    end
     
-            def initialize
-          @logger = Log4r::Logger.new('vagrant::plugin::v1::manager')
-          @registered = []
+          spec['version'] = Bootstrap::VERSION
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+      # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
+    
+            if specs.size > 0
+          specs
+        else
+          raise LogStash::PluginManager::PluginNotFoundError, 'Cannot find plugins matching: `#{plugin_pattern}`'
         end
+      end.flatten
+    end
     
-    desc 'Start an IRB session with all necessary files required.'
-task :shell do |t|
-  chdir File.dirname(__FILE__)
-  exec 'irb -I lib/ -I lib/paperclip -r rubygems -r active_record -r tempfile -r init'
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+    
+      private
+    
+        desc 'Run one single machine acceptance test'
+    task :single, :machine do |t, args|
+      ENV['LS_VAGRANT_HOST']  = args[:machine]
+      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
+    end
+  end
 end
+
     
-      FileUtils.chdir('tmp/aruba/testapp/')
-    
-        # Perform the actual interpolation. Takes the pattern to interpolate
-    # and the arguments to pass, which are the attachment and style name.
-    # You can pass a method name on your record as a symbol, which should turn
-    # an interpolation pattern for Paperclip to use.
-    def self.interpolate pattern, *args
-      pattern = args.first.instance.send(pattern) if pattern.kind_of? Symbol
-      result = pattern.dup
-      interpolators_cache.each do |method, token|
-        result.gsub!(token) { send(method, *args) } if result.include?(token)
-      end
-      result
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
