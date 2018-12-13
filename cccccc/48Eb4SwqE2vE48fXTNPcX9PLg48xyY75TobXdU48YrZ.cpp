@@ -1,166 +1,236 @@
 
         
-        #include 'tensorflow/python/lib/core/py_exception_registry.h'
+          // Add info about requested inputs.
+  CppShapeInferenceInputsNeeded needed;
+  for (int i = 0; i < c.num_inputs(); ++i) {
+    if (c.requested_input_tensor(i)) {
+      needed.add_input_tensors_needed(i);
+    }
+    if (c.requested_input_tensor_as_partial_shape(i)) {
+      needed.add_input_tensors_as_shapes_needed(i);
+    }
+  }
+  *input_tensors_needed_out = needed.SerializeAsString();
     
-     private:
-  static PyExceptionRegistry* singleton_;
-  PyExceptionRegistry() = default;
     
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
+    { private:
+  // Original parameter name.
+  string name_;
+  // API name for this parameter.
+  string rename_to_;
+};
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include <iomanip>
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/grappler/costs/graph_properties.h'
+#include 'tensorflow/core/grappler/grappler_item.h'
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
+  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
+  singleton_ = new PyExceptionRegistry;
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    CUDAExecutor *cuda_exec):
+      driver_scoped_activate_context_(
+          new ScopedActivateContext{ExtractCudaContext(cuda_exec)}) { }
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+      // Deletes the current owned object, if any.
+  // Then takes ownership of a new object without incrementing the reference
+  // count.
+  // This function must be called with a reference that you own.
+  //   this->reset(this->get()) is wrong!
+  //   this->reset(this->release()) is OK.
+  PyObjectStruct* reset(PyObjectStruct* p = NULL) {
+    Py_XDECREF(ptr_);
+    ptr_ = p;
+    return ptr_;
+  }
+    
+    // Functions to create C# XML documentation comments.
+// Currently this only includes documentation comments containing text specified as comments
+// in the .proto file; documentation comments generated just from field/message/enum/proto names
+// is inlined in the relevant code. If more control is required, that code can be moved here.
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+      // write children: Messages
+  if (file_->message_type_count() > 0) {
+    printer->Print('#region Messages\n');
+    for (int i = 0; i < file_->message_type_count(); i++) {
+      MessageGenerator messageGenerator(file_->message_type(i), this->options());
+      messageGenerator.Generate(printer);
+    }
+    printer->Print('#endregion\n');
+    printer->Print('\n');
+  }
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_doc_comment.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/stubs/strutil.h>
     
     ChannelCredentials::~ChannelCredentials() {}
     
-    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
-  if (!ctx_) return false;
-  return grpc_auth_context_set_peer_identity_property_name(ctx_,
-                                                           name.c_str()) != 0;
-}
     
-      std::vector<grpc::string_ref> FindPropertyValues(
-      const grpc::string& name) const override;
+    {}  // namespace grpc
+
     
-    MeasureDouble RpcServerReceivedBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcServerReceivedBytesPerRpcMeasureName,
-      'Total bytes received across all messages per RPC', kUnitBytes);
-  return measure;
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
 }
     
     namespace grpc {
     }
     
-    grpc::string ProtoServerReflectionPlugin::name() {
-  return 'proto_server_reflection';
+    constexpr uint32_t CensusClientCallData::kMaxTraceContextLen;
+constexpr uint32_t CensusClientCallData::kMaxTagsLen;
+    
+    MeasureDouble RpcClientRoundtripLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientRoundtripLatencyMeasureName,
+      'Time between first byte of request sent to last byte of response '
+      'received, or terminal error',
+      kUnitMilliseconds);
+  return measure;
 }
     
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
+    
+    {}  // namespace grpc
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #include 'texture_loader_dds.h'
+    
+    void register_etc_types() {
     }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
     
-    // Bullet to Godot
-extern void B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void INVERT_B_TO_G(btVector3 const &inVal, Vector3 &outVal);
-extern void B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void INVERT_B_TO_G(btMatrix3x3 const &inVal, Basis &outVal);
-extern void B_TO_G(btTransform const &inVal, Transform &outVal);
+    #include '2d/CCAction.h'
+#include '2d/CCActionInterval.h'
+#include '2d/CCNode.h'
+#include 'base/CCDirector.h'
+#include 'base/ccUTF8.h'
     
-    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsCollision(body0, body1);
+    
+    {    _radZ = (float)CC_DEGREES_TO_RADIANS(_angleZ);
+    _radX = (float)CC_DEGREES_TO_RADIANS(_angleX);
 }
     
-    public:
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
+        // 1st element (which should be 0,0) should be here too
     
-    public:
-	JointBullet();
-	virtual ~JointBullet();
+        /** Returns the numbers of actions that are running in a certain target. 
+     * Composable actions are counted as 1 action. Example:
+     * - If you are running 1 Sequence of 7 actions, it will return 1.
+     * - If you are running 7 Sequences of 2 actions, it will return 7.
+     *
+     * @param target    A certain target.
+     * @return  The numbers of actions that are running in a certain target.
+     * @js NA
+     */
+    virtual ssize_t getNumberOfRunningActionsInTarget(const Node *target) const;
     
-    	real_t getSoftnessDirLin() const;
-	real_t getRestitutionDirLin() const;
-	real_t getDampingDirLin() const;
-	real_t getSoftnessDirAng() const;
-	real_t getRestitutionDirAng() const;
-	real_t getDampingDirAng() const;
-	real_t getSoftnessLimLin() const;
-	real_t getRestitutionLimLin() const;
-	real_t getDampingLimLin() const;
-	real_t getSoftnessLimAng() const;
-	real_t getRestitutionLimAng() const;
-	real_t getDampingLimAng() const;
-	real_t getSoftnessOrthoLin() const;
-	real_t getRestitutionOrthoLin() const;
-	real_t getDampingOrthoLin() const;
-	real_t getSoftnessOrthoAng() const;
-	real_t getRestitutionOrthoAng() const;
-	real_t getDampingOrthoAng() const;
-	void setSoftnessDirLin(real_t softnessDirLin);
-	void setRestitutionDirLin(real_t restitutionDirLin);
-	void setDampingDirLin(real_t dampingDirLin);
-	void setSoftnessDirAng(real_t softnessDirAng);
-	void setRestitutionDirAng(real_t restitutionDirAng);
-	void setDampingDirAng(real_t dampingDirAng);
-	void setSoftnessLimLin(real_t softnessLimLin);
-	void setRestitutionLimLin(real_t restitutionLimLin);
-	void setDampingLimLin(real_t dampingLimLin);
-	void setSoftnessLimAng(real_t softnessLimAng);
-	void setRestitutionLimAng(real_t restitutionLimAng);
-	void setDampingLimAng(real_t dampingLimAng);
-	void setSoftnessOrthoLin(real_t softnessOrthoLin);
-	void setRestitutionOrthoLin(real_t restitutionOrthoLin);
-	void setDampingOrthoLin(real_t dampingOrthoLin);
-	void setSoftnessOrthoAng(real_t softnessOrthoAng);
-	void setRestitutionOrthoAng(real_t restitutionOrthoAng);
-	void setDampingOrthoAng(real_t dampingOrthoAng);
-	void setPoweredLinMotor(bool onOff);
-	bool getPoweredLinMotor();
-	void setTargetLinMotorVelocity(real_t targetLinMotorVelocity);
-	real_t getTargetLinMotorVelocity();
-	void setMaxLinMotorForce(real_t maxLinMotorForce);
-	real_t getMaxLinMotorForce();
-	void setPoweredAngMotor(bool onOff);
-	bool getPoweredAngMotor();
-	void setTargetAngMotorVelocity(real_t targetAngMotorVelocity);
-	real_t getTargetAngMotorVelocity();
-	void setMaxAngMotorForce(real_t maxAngMotorForce);
-	real_t getMaxAngMotorForce();
-	real_t getLinearPos();
+    /** Returns the numbers of actions that are running in all targets.
+     * @return  The numbers of actions that are running in all target.
+     * @js NA
+     */
+    virtual ssize_t getNumberOfRunningActions() const;
     
-    MemoryPool::Alloc *MemoryPool::allocs = NULL;
-MemoryPool::Alloc *MemoryPool::free_list = NULL;
-uint32_t MemoryPool::alloc_count = 0;
-uint32_t MemoryPool::allocs_used = 0;
-Mutex *MemoryPool::alloc_mutex = NULL;
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
     
+    /**
+@brief SplitCols action.
+@details Split the target node in many columns.
+        Then move out some columns from top, move out the other columns from bottom.
+*/
+class CC_DLL SplitCols : public TiledGrid3DAction
+{
+public:
     
-    {		String path;
-		String src_path;
-		int size;
-		uint64_t offset_offset;
-	};
-	Vector<File> files;
-    
-        protected:
-        bool m_needAveMultiplier;
-    
-        // Make sure that the dictionary contains all required keys, and if it does, return version value
-    // from the dictionary.
-    template <typename T>
-    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
-    { 
-        const auto& version = GetVersion(dict);
+    /** 
+     * @brief Create the action with the number of columns and the duration.
+     * @param duration Specify the duration of the SplitCols action. It's a value in seconds.
+     * @param cols Specify the columns count should be split.
+     * @return If the creation success, return a pointer of SplitCols action; otherwise, return nil.
+     */
+    static SplitCols* create(float duration, unsigned int cols);
     }
     
-        // Releases the mutex
-    void Release()
-    {
-        assert(m_fd != -1);
-        // removing file
-        unlink(m_fileName.c_str());
-        // Note: file is intentionally removed *before* releasing the lock
-        // to ensure that locked file isn't deleted by the non-owner of the lock
-        m_lock.l_type = F_UNLCK;
-        // Now removing the lock and closing the file descriptor
-        // waiting processes will be notified
-        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
-        if (rc == FCNTL_ERROR)
-        {
-            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
-        }
-        close(m_fd);
-        m_fd = -1;
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    AnimationFrame::~AnimationFrame()
+{    
+    CCLOGINFO( 'deallocing AnimationFrame: %p', this);
     }
     
-    
-    {protected:
-    std::string m_callStack;
-};
+        this->calculateMaxItems();
