@@ -1,12 +1,48 @@
 
         
-                # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
+          smoke_user = User.seed do |u|
+    u.id = 0
+    u.name = 'smoke_user'
+    u.username = 'smoke_user'
+    u.username_lower = 'smoke_user'
+    u.password = 'P4ssw0rd'
+    u.active = true
+    u.approved = true
+    u.approved_at = Time.now
+    u.trust_level = TrustLevel[3]
+  end.first
+    
+        Category.transaction do
+      lounge.group_names = ['trust_level_3']
+      unless lounge.save
+        puts lounge.errors.full_messages
+        raise 'Failed to set permissions on trust level 3 lounge category!'
+      end
+    
+            # Yields a VM for each target VM for the command.
         #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
+        # This is a convenience method for easily implementing methods that
+        # take a target VM (in the case of multi-VM) or every VM if no
+        # specific VM name is specified.
+        #
+        # @param [String] name The name of the VM. Nil if every VM.
+        # @param [Hash] options Additional tweakable settings.
+        # @option options [Symbol] :provider The provider to back the
+        #   machines with. All machines will be backed with this
+        #   provider. If none is given, a sensible default is chosen.
+        # @option options [Boolean] :reverse If true, the resulting order
+        #   of machines is reversed.
+        # @option options [Boolean] :single_target If true, then an
+        #   exception will be raised if more than one target is found.
+        def with_target_vms(names=nil, options=nil)
+          @logger.debug('Getting target VMs for command. Arguments:')
+          @logger.debug(' -- names: #{names.inspect}')
+          @logger.debug(' -- options: #{options.inspect}')
+    
+            # This contains all the registered guest capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :guest_capabilities
     
             # Returns the instance variables as a hash of key-value pairs.
         def instance_variables_hash
@@ -16,102 +52,62 @@
           end
         end
     
-            # Registers additional synced folder implementations.
+            # This returns all the registered commands.
         #
-        # @param [String] name Name of the implementation.
-        # @param [Integer] priority The priority of the implementation,
-        # higher (big) numbers are tried before lower (small) numbers.
-        def self.synced_folder(name, priority=10, &block)
-          components.synced_folders.register(name.to_sym) do
-            [block.call, priority]
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        def commands
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.commands)
+            end
           end
-    
-            # This is an internal initialize function that should never be
-        # overridden. It is used to initialize some common internal state
-        # that is used in a provider.
-        def _initialize(name, machine)
-          initialize_capabilities!(
-            name.to_sym,
-            { name.to_sym => [Class.new, nil] },
-            Vagrant.plugin('2').manager.provider_capabilities,
-            machine,
-          )
         end
+    
+            # This method is called if the underlying machine ID changes. Providers
+        # can use this method to load in new data for the actual backing
+        # machine or to realize that the machine is now gone (the ID can
+        # become `nil`). No parameters are given, since the underlying machine
+        # is simply the machine instance given to this object. And no
+        # return value is necessary.
+        def machine_id_changed
+        end
+    
+        INVALID_PLUGINS_TO_EXPLICIT_PACK = IGNORE_GEMS_IN_PACK.collect { |name| /^#{name}/ } + [
+      /mixin/
+    ]
+    
+        puts('Generated at #{target_file}')
+  end
+    
+            return nil
+      end
+    end
+  end
+end end end
+
+    
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+    
+      def validate_cache_location
+    cache_location = LogStash::Environment::CACHE_PATH
+    if File.exist?(cache_location)
+      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
+      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
+      if override
+        FileUtils.rm_rf(cache_location)
+      else
+        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
+        exit
       end
     end
   end
 end
 
     
-        desc 'Commits the version to github repository'
-    task :commit_version do
-      sh <<-SH
-        sed -i 's/.*VERSION.*/  VERSION = '#{source_version}'/' lib/sinatra/version.rb
-        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' sinatra-contrib/lib/sinatra/contrib/version.rb
-        sed -i 's/.*VERSION.*/    VERSION = '#{source_version}'/' rack-protection/lib/rack/protection/version.rb
-      SH
-    
-      // writing
-  $('form').on('submit',function(e) {
-    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
-    $('#msg').val(''); $('#msg').focus();
-    e.preventDefault();
-  });
-</script>
-    
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
+      it 'returns the config_hash' do
+    expect(subject.config_hash).not_to be_nil
   end
-    
-          def initialize(app, options = {})
-        @app, @options = app, default_options.merge(options)
-      end
-    
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
-    
-      it 'denies post form requests with wrong authenticity_token field' do
-    post('/', {'authenticity_token' => bad_token}, 'rack.session' => session)
-    expect(last_response).not_to be_ok
-  end
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
-  end
-end
-
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-    
-    
-    module Jekyll
-    
-    Liquid::Template.register_tag('video', Jekyll::VideoTag)
