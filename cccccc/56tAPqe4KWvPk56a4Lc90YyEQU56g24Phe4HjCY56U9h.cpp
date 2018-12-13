@@ -1,158 +1,203 @@
 
         
-        // Whether the op should be prefixed with underscore.
-bool IsOpWithUnderscorePrefix(const string& s);
+        
+    {  for (int i = 0; i < parts.size(); i++) {
+    string::size_type equals_pos = parts[i].find_first_of('=');
+    std::pair<string, string> value;
+    if (equals_pos == string::npos) {
+      value.first = parts[i];
+      value.second = '';
+    } else {
+      value.first = parts[i].substr(0, equals_pos);
+      value.second = parts[i].substr(equals_pos + 1);
+    }
+    output->push_back(value);
+  }
+}
     
-    void CostAnalyzer::PrintAnalysis(std::ostream& os, bool per_node_report,
-                                 bool verbose) const {
-  os << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time measured in ns (serialized): ' << std::right
-     << std::setw(20) << total_time_measured_serialized_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time measured in ns (actual): ' << std::right << std::setw(20)
-     << total_time_measured_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time analytical in ns (upper bound): ' << std::right
-     << std::setw(20) << total_time_analytical_upper_ << std::endl;
-  os << std::left << std::setw(50)
-     << 'Total time analytical in ns (lower bound): ' << std::right
-     << std::setw(20) << total_time_analytical_lower_ << std::endl;
-  double efficiency_upper = static_cast<double>(total_time_analytical_upper_) /
-                            static_cast<double>(total_time_measured_);
-  os << std::left << std::setw(50)
-     << 'Overall efficiency (analytical upper/actual): ' << std::right
-     << std::setw(20) << efficiency_upper << std::endl;
-  double efficiency_lower = static_cast<double>(total_time_analytical_lower_) /
-                            static_cast<double>(total_time_measured_);
-  os << std::left << std::setw(50)
-     << 'Overall efficiency (analytical lower/actual): ' << std::right
-     << std::setw(20) << efficiency_lower << std::endl;
-  os << std::endl;
+    TEST(MovableMessageTest, SelfMoveAssignment) {
+  // The `self` reference is necessary to defeat -Wself-move.
+  protobuf_unittest::TestAllTypes message, &self = message;
+  TestUtil::SetAllFields(&message);
+  message = std::move(self);
+  TestUtil::ExpectAllFieldsSet(message);
+}
+    
+    FileGenerator::FileGenerator(const FileDescriptor *file, const Options& options)
+    : file_(file),
+      root_class_name_(FileClassName(file)),
+      is_bundled_proto_(IsProtobufLibraryBundledProtoFile(file)),
+      options_(options) {
+  for (int i = 0; i < file_->enum_type_count(); i++) {
+    EnumGenerator *generator = new EnumGenerator(file_->enum_type(i));
+    enum_generators_.push_back(generator);
+  }
+  for (int i = 0; i < file_->message_type_count(); i++) {
+    MessageGenerator *generator =
+        new MessageGenerator(root_class_name_, file_->message_type(i), options_);
+    message_generators_.push_back(generator);
+  }
+  for (int i = 0; i < file_->extension_count(); i++) {
+    ExtensionGenerator *generator =
+        new ExtensionGenerator(root_class_name_, file_->extension(i));
+    extension_generators_.push_back(generator);
+  }
+}
+    
+      EXPECT_EQ(5, decode_data.num_entries());
+    
+    #include <iostream>
+#include <set>
+    
+    
+    {    output.WriteLittleEndian32(0x02014b50);  // magic
+    WriteShort(&output, 10);  // version made by
+    WriteShort(&output, 10);  // version needed to extract
+    WriteShort(&output, 0);  // flags
+    WriteShort(&output, 0);  // compression method: stored
+    WriteShort(&output, 0);  // last modified time
+    WriteShort(&output, kDosEpoch);  // last modified date
+    output.WriteLittleEndian32(crc32);  // crc-32
+    output.WriteLittleEndian32(size);  // compressed size
+    output.WriteLittleEndian32(size);  // uncompressed size
+    WriteShort(&output, filename_size);  // file name length
+    WriteShort(&output, 0);   // extra field length
+    WriteShort(&output, 0);   // file comment length
+    WriteShort(&output, 0);   // starting disk number
+    WriteShort(&output, 0);   // internal file attributes
+    output.WriteLittleEndian32(0);  // external file attributes
+    output.WriteLittleEndian32(offset);  // local header offset
+    output.WriteString(filename);  // file name
+  }
+  uint32 dir_len = output.ByteCount();
+    
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
     }
     
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct TreeUpdaterReg
+    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
+                                        std::function<TreeUpdater* ()> > {
+};
     
-    {}  // namespace tensorflow
-
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
-    }
-    
-        // Check crc
-    if (checksum_) {
-      uint32_t expected_crc = crc32c::Unmask(DecodeFixed32(header));
-      uint32_t actual_crc = crc32c::Value(header + 6, 1 + length);
-      if (actual_crc != expected_crc) {
-        // Drop the rest of the buffer since 'length' itself may have
-        // been corrupted and if we trust it, we could find some
-        // fragment of a real log record that just happens to look
-        // like a valid log record.
-        size_t drop_size = buffer_.size();
-        buffer_.clear();
-        ReportCorruption(drop_size, 'checksum mismatch');
-        return kBadRecord;
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
       }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+    /**
+ * Common abstraction for subscribing to versioned config updates. This may be implemented via bidi
+ * gRPC streams, periodic/long polling REST or inotify filesystem updates. ResourceType is expected
+ * to be a protobuf serializable object.
+ */
+template <class ResourceType> class Subscription {
+public:
+  virtual ~Subscription() {}
     }
     
     /**
- * @class CanClientFactory
- * @brief CanClientFactory inherites apollo::common::util::Facotory.
+ * Callback invoked when a signal event fires.
  */
-class CanClientFactory
-    : public apollo::common::util::Factory<CANCardParameter::CANCardBrand,
-                                           CanClient> {
- public:
-  /**
-   * @brief Register the CAN clients of all brands. This function call the
-   *        Function apollo::common::util::Factory::Register() for all of the
-   *        CAN clients.
-   */
-  void RegisterCanClients();
-    }
-    
-      // 2. set baudrate to 500k
-  ret = canSetBaudrate(dev_handler_, NTCAN_BAUD_500);
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'set baudrate error code: ' << ret << ', ' << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-    
-    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
-    
-    
-    {  if (static_cast<size_t>(*frame_num) != frames.size()) {
-    AERROR << 'frame num is incorrect.';
-    return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
-  }
-  for (size_t i = 0; i < frames.size(); ++i) {
-    ADEBUG << 'send frame i:' << i;
-    ADEBUG << frames[i].CanFrameString();
-    frame_info_ << frames[i].CanFrameString();
-  }
-  ++send_counter_;
-  return ErrorCode::OK;
-}
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
+typedef std::function<void()> SignalCb;
     
       /**
-   * @brief destruct protocol data.
+   * Close the stream locally and send an empty DATA frame to the remote. No further methods may be
+   * invoked on the stream object, but callbacks may still be received until the stream is closed
+   * remotely.
    */
-  virtual ~ProtocolData() = default;
+  virtual void closeStream() PURE;
     
-    TEST(ByteTest, GetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  EXPECT_EQ(0x05, value.get_byte(1, 3));
-  EXPECT_EQ(0x01, value.get_byte(1, 1));
-  EXPECT_EQ(0x00, value.get_byte(8, 1));
-  EXPECT_EQ(0x00, value.get_byte(-1, 1));
-  EXPECT_EQ(0x1A, value.get_byte(0, 10));
-}
+    /**
+ * A manager for all server-side singletons.
+ */
+class Manager {
+public:
+  virtual ~Manager() {}
+    }
+    
+    void AddressJson::translateAddress(const std::string& json_address, bool url, bool resolved,
+                                   envoy::api::v2::core::Address& address) {
+  if (resolved) {
+    Network::Address::InstanceConstSharedPtr instance =
+        url ? Network::Utility::resolveUrl(json_address)
+            : Network::Utility::parseInternetAddressAndPort(json_address);
+    if (instance->type() == Network::Address::Type::Ip) {
+      address.mutable_socket_address()->set_address(instance->ip()->addressAsString());
+      address.mutable_socket_address()->set_port_value(instance->ip()->port());
+    } else {
+      ASSERT(instance->type() == Network::Address::Type::Pipe);
+      address.mutable_pipe()->set_path(instance->asString());
+    }
+    return;
+  }
+    }
