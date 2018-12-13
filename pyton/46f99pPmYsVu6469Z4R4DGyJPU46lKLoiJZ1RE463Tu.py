@@ -1,111 +1,94 @@
 
         
-            if K.image_data_format() == 'channels_last':
-        x_train = x_train.transpose(0, 2, 3, 1)
-        x_test = x_test.transpose(0, 2, 3, 1)
-    
-        def print_row(fields, positions):
-        line = ''
-        for i in range(len(fields)):
-            if i > 0:
-                line = line[:-1] + ' '
-            line += str(fields[i])
-            line = line[:positions[i]]
-            line += ' ' * (positions[i] - len(line))
-        print_fn(line)
+        
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
     
     
-def test_boston_housing():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
+    proc.sendline(u'fish')
+    return proc
     
-        def predict_proba(self, x, batch_size=32, verbose=0):
-        '''Generates class probability predictions for the input samples.
     
-    from __future__ import print_function
-import numpy as np
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
-    
-        process_this_frame = not process_this_frame
-    
-        for unknown_encoding in unknown_encodings:
-        distances = face_recognition.face_distance(known_face_encodings, unknown_encoding)
-        result = list(distances <= tolerance)
-    
-    # You can change this to any folder on your system
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    
-        def assert_failure(self, res, code=None):
-        self.assertEqual(res.status, 200)
-        body = res.body
-        body = json.loads(body)
-        self.assertTrue('json' in body)
-        errors = body['json'].get('errors')
-        self.assertTrue(code in [x[0] for x in errors])
-        data = body['json'].get('data')
-        self.assertFalse(bool(data))
-    
-    import mock
-    
-        def test_no_upgrade_gets(self):
-        request.method = 'GET'
-        self._setSessionCookie(days_old=60)
-        upgrade_cookie_security()
-        self.assertFalse(c.cookies[g.login_cookie].dirty)
-    
-        def test_invalid_function_prelude(self):
-        testcase = u'*[foo=expression(alert(1))]{color:red;}'
-        self.assertInvalid(testcase)
-    
-        def test_returning(self):
-        request = MagicMock()
-        context = MagicMock()
-        request.cookies = {LOID_COOKIE: 'foo', LOID_CREATED_COOKIE: 'bar'}
-        loid = LoId.load(request, context, create=False)
-        self.assertEqual(loid.loid, 'foo')
-        self.assertNotEqual(loid.created, 'bar')
-        self.assertFalse(loid.new)
-        self.assertTrue(loid.serializable)
-        loid.save()
-        self.assertFalse(bool(context.cookies.add.called))
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS}
 
     
+        def test_repr(self):
+        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
+                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
     
-class TestImgixResizer(RedditTestCase):
+        def test_decode_bad(self):
+        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
+    
+    # If true, the current module name will be prepended to all description
+# unit titles (such as .. function::).
+#add_module_names = True
+    
+    csr = OpenSSL.crypto.load_certificate_request(
+    OpenSSL.crypto.FILETYPE_ASN1, pkg_resources.resource_string(
+        'acme', os.path.join('testdata', 'csr.der')))
+try:
+    acme.request_issuance(jose.util.ComparableX509(csr), (authzr,))
+except messages.Error as error:
+    print ('This script is doomed to fail as no authorization '
+           'challenges are ever solved. Error from server: {0}'.format(error))
+
+    
+        .. note:: This does not need to be accurate in order for the client to
+        run.  This simply keeps things clean if the user decides to revert
+        changes.
+    .. warning:: If all deps are not included, it may cause incorrect parsing
+        behavior, due to enable_mod's shortcut for updating the parser's
+        currently defined modules (`.ApacheParser.add_mod`)
+        This would only present a major problem in extremely atypical
+        configs that use ifmod for the missing deps.
+    
+        def ensure_augeas_state(self):
+        '''Makes sure that all Augeas dom changes are written to files to avoid
+        loss of configuration directives when doing additional augeas parsing,
+        causing a possible augeas.load() resulting dom reset
+        '''
+    
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS,
+               'Upgrade-Insecure-Requests': UIR_ARGS}
+    
+        '''
+    # ?: is used for not returning enclosed characters
+    strip_name = re.compile(r'^(?:.+://)?([^ :$]*)')
+    
+        def test_bad_save_finalize_checkpoint(self):
+        self.config.reverter.finalize_checkpoint = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.config.parser.add_dir(
+            self.vh_truth[0].path, 'Test', 'bad_save_ckpt')
+        self.assertRaises(errors.PluginError, self.config.save, 'Title')
+    
+        def test_nonexistent_like(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                for like in entrypoint.OVERRIDE_CLASSES.keys():
+                    mock_like.return_value = [like]
+                    self.assertEqual(entrypoint.get_configurator(),
+                                     entrypoint.OVERRIDE_CLASSES[like])
+    
+    
+class AddrTest(unittest.TestCase):
+    '''Test obj.Addr.'''
     def setUp(self):
-        self.provider = ImgixImageResizingProvider()
-        self.patch_g(
-            imgix_domain='example.com',
-            imgix_signing=False,
-        )
-    
-            for width in (108, 216, 320, 640, 960, 1080):
-            url = self.provider.resize_image(image, width)
-            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
-                width*2))
-
-    
-        def test_tag_xmlns(self):
-        self.assertFragmentRaises('<xml:div></xml:div>',
-                                  SoupUnsupportedTagError)
-        self.assertFragmentRaises('<div xmlns='http://zombo.com/foo'></div>',
-                                  SoupError)
-    
-        def test_decrypt(self):
-        from r2.lib.tracking import _decrypt
-        decrypted = _decrypt(ENCRYPTED, SECRET)
-        self.assertEquals(MESSAGE, decrypted)
+        from certbot_apache.obj import Addr
+        self.addr = Addr.fromstring('*:443')
