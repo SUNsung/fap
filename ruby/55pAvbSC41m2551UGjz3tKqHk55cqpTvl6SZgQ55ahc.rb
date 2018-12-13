@@ -1,87 +1,127 @@
 
         
-          namespace :install do
-    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-      desc 'Build and install #{gem} as local gem'
-      task gem => package(gem, '.gem') do
-        sh 'gem install #{package(gem, '.gem')}'
-      end
-    end
+                  # We split the arguments into two: One set containing any
+          # flags before a word, and then the rest. The rest are what
+          # get actually sent on to the subcommand.
+          argv.each_index do |i|
+            if !argv[i].start_with?('-')
+              # We found the beginning of the sub command. Split the
+              # args up.
+              main_args   = argv[0, i]
+              sub_command = argv[i]
+              sub_args    = argv[i + 1, argv.length - i + 1]
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-          def drop_session(env)
-        session(env).clear if session? env
-      end
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
           end
         end
     
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
+            # This contains all the push implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Hash>>]
+        attr_reader :pushes
+    
+            # This returns all synced folder implementations.
+        #
+        # @return [Registry]
+        def synced_folders
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.synced_folders)
+            end
+          end
+        end
+    
+        # Merge one registry with another and return a completely new
+    # registry. Note that the result cache is completely busted, so
+    # any gets on the new registry will result in a cache miss.
+    def merge(other)
+      self.class.new.tap do |result|
+        result.merge!(self)
+        result.merge!(other)
       end
+    end
     
-    # Lazily initialized.
-    @@hexCharCodeArray = 0;
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+    end
     
-          def after
-        @versions[1][0..6]
-      end
-    
-          # return path set in app.rb not @page.path
-      def path
-        @path
-      end
-    
-    def cloned_testpath(path)
-  repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+      #
+  # Allow 100 Continues to be ignored by the caller
+  #
+  def check_100
+    # If this was a 100 continue with no data, reset
+    if self.code == 100 and (self.body_bytes_left == -1 or self.body_bytes_left == 0) and self.count_100 < 5
+      self.reset_except_queue
+      self.count_100 += 1
+    end
   end
-  cloned
-end
     
-        assert_no_match /Edit/, last_response.body, ''Edit' link not blocked in history template'
     
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  #
+  # Payload types were copied from xCAT-server source code (IPMI.pm)
+  #
+  RMCP_ERRORS = {
+    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
+    2 => 'Invalid Session ID', #this shouldn't occur...
+    3 => 'Invalid payload type',#shouldn't occur..
+    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
+    5 => 'Invalid integrity algorithm', #same as above
+    6 => 'No matching authentication payload',
+    7 => 'No matching integrity payload',
+    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
+    9 => 'Invalid role',
+    0xa => 'Unauthorised role or privilege level requested',
+    0xb => 'Insufficient resources to create a session at the requested role',
+    0xc => 'Invalid username length',
+    0xd => 'Unauthorized name',
+    0xe => 'Unauthorized GUID',
+    0xf => 'Invalid integrity check value',
+    0x10 => 'Invalid confidentiality algorithm',
+    0x11 => 'No cipher suite match with proposed security algorithms',
+    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
+  }
+    
+        head + [data.length].pack('v') + data
   end
     
-    def bump_version
-  old_file = File.read('lib/#{name}.rb')
-  old_version_line = old_file[/^\s*VERSION\s*=\s*.*/]
-  new_version = next_version
-  # replace first match of old vesion with new version
-  old_file.sub!(old_version_line, '  VERSION = '#{new_version}'')
+            # Sends a kerberos request through the connection
+        #
+        # @param req [Rex::Proto::Kerberos::Model::KdcRequest] the request to send
+        # @return [Integer] the number of bytes sent
+        # @raise [RuntimeError] if the transport protocol is unknown
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def send_request(req)
+          connect
     
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
+              private
+    
+                res
+          end
+    
+              # Encodes the value field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_value
+            OpenSSL::ASN1::OctetString.new(value)
+          end
+        end
+      end
     end
   end
 end
+    
+                self
+          end
