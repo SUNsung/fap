@@ -1,240 +1,175 @@
 
         
-                  @object_name.sub!(/\[\]$/, '') || @object_name.sub!(/\[\]\]$/, ']')
-          @object = retrieve_object(options.delete(:object))
-          @skip_default_ids = options.delete(:skip_default_ids)
-          @allow_method_names_outside_object = options.delete(:allow_method_names_outside_object)
-          @options = options
-    
-              def initialize(template_object, object_name, method_name, object, tag_value)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @tag_value = tag_value
-          end
-    
-          []
-    end
-    
-        def initialize(lookup_context)
-      @lookup_context = lookup_context
-    end
-    
-        group.add(moderator)
-    group.save
-    
-    gem 'rails', '~> 5.2'
-gem 'omniauth', '~> 1.3'
-gem 'oauth2'
-gem 'omniauth-oauth2'
-gem 'rdoc'
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-        if last_request_at.is_a? Integer
-      last_request_at = Time.at(last_request_at).utc
-    elsif last_request_at.is_a? String
-      last_request_at = Time.parse(last_request_at)
-    end
-    
-              # Otherwise add the block to the list of hooks for this action.
-          hooks << block
+                # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
         end
     
-              @__invalid_methods ||= Set.new
-          @__invalid_methods.add(name)
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
+        end
     
-            protected
+            # This contains all the push implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Hash>>]
+        attr_reader :pushes
     
-    describe 'Kernel.sleep' do
-  it 'needs to be reviewed for spec completeness'
+        # Checks if this registry has any items.
+    #
+    # @return [Boolean]
+    def empty?
+      @items.keys.empty?
+    end
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+        def silence_log
+      @silence = true
+      yield
+    ensure
+      @silence = false
+    end
+  end
 end
 
     
-        lambda {
-      catch :blah do
-        throw :blah, :return_value, 2, 3, 4, 5
-      end
-    }.should raise_error(ArgumentError)
-  end
+      # Use a different logger for distributed setups.
+  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
     
-        $Kernel_trace_var_global = 'foo'
-    captured.should == 'foo'
-  end
-    
-      it 'does not call #write on $stderr if $VERBOSE is nil' do
-    lambda {
-      $VERBOSE = nil
-      warn('this is some simple text')
-    }.should output(nil, '')
-  end
-    
-    When /^I have user with username '([^']*)' in an aspect called '([^']*)'$/ do |username, aspect|
-  user = User.find_by_username(username)
-  contact = @me.reload.contact_for(user.person)
-  contact.aspects << @me.aspects.find_by_name(aspect)
-end
-    
-    # Ensure we know the appservers port
-Capybara.server_port = AppConfig.pod_uri.port
-Rails.application.routes.default_url_options[:host] = AppConfig.pod_uri.host
-Rails.application.routes.default_url_options[:port] = AppConfig.pod_uri.port
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        it 'returns a 404 for a post not visible to the user' do
-      sign_in eve
-      expect {
-        get :index, params: {post_id: @message.id}
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
     end
-    
-    # Declares a dependency to the git repo of CocoaPods gem. This declaration is
-# compatible with the local git repos feature of Bundler.
-#
-def cp_gem(name, repo_name, branch = 'master', path: false)
-  return gem name if SKIP_UNRELEASED_VERSIONS
-  opts = if path
-           { :path => '../#{repo_name}' }
-         else
-           url = 'https://github.com/CocoaPods/#{repo_name}.git'
-           { :git => url, :branch => branch }
-         end
-  gem name, opts
-end
-    
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
-    
-        # Returns a new {Gem::Version} based on the systems `git` version.
-    #
-    # @return [Gem::Version]
-    #
-    def self.git_version
-      raw_version = Executable.capture_command('git', ['--version']).first
-      unless match = raw_version.scan(/\d+\.\d+\.\d+/).first
-        raise 'Failed to extract git version from `git --version` (#{raw_version.inspect})'
-      end
-      Gem::Version.new(match)
-    end
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-    Then(/^it creates the file with the remote_task prerequisite$/) do
-  TestApp.linked_files.each do |file|
-    run_vagrant_command(test_file_exists(TestApp.shared_path.join(file)))
   end
 end
     
-            if Rake::Task.task_defined?('deploy:set_current_revision')
-          before 'deploy:set_current_revision',
-                 '#{scm_name}:set_current_revision'
-        end
-      end
-      # rubocop:enable Style/GuardClause
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
     
-            def fetch(key)
-          @properties[key]
-        end
-    
-          # Keys that have been set, but which have never been fetched.
-      def unused_keys
-        keys - fetched_keys
-      end
-    
-        def html_output_for(script_url, code)
-      code = CGI.escapeHTML code
-      <<-HTML
-<div><script src='#{script_url}'></script>
-<noscript><pre><code>#{code}</code></pre></noscript></div>
-      HTML
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
     end
     
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
-          end
-        end
-      end
-      rtn
+    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
+  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+end
+    
+    Given /^I did request my photos$/ do
+  @me.perform_export_photos!
+end
+    
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
     end
   end
     
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
+    end
     
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
+    Then(/^the default stage files are created$/) do
+  staging = TestApp.test_app_path.join('config/deploy/staging.rb')
+  production = TestApp.test_app_path.join('config/deploy/production.rb')
+  expect(File.exist?(staging)).to be true
+  expect(File.exist?(production)).to be true
+end
     
-            def show
-          authorize! :read, @order, order_token
-          @address = find_address
-          respond_with(@address)
-        end
+      def test_file_exists(path)
+    exists?('f', path)
+  end
     
-            def fire
-          inventory_unit.send('#{@event}!') if @event
-        end
+      at_exit do
+    if ENV['KEEP_RUNNING']
+      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
+      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+    else
+      vagrant_cli_command('destroy -f')
+    end
+  end
     
-            def update
-          if @property
-            authorize! :update, @property
-            @property.update_attributes(property_params)
-            respond_with(@property, status: 200, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
-        end
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
     
-            def update
-          @shipment = Spree::Shipment.accessible_by(current_ability, :update).readonly(false).find_by!(number: params[:id])
-          @shipment.update_attributes_and_order(shipment_params)
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
+          # Returns the keyword of the `if` statement as a string. Returns an empty
+      # string for ternary operators.
+      #
+      # @return [String] the keyword of the `if` statement
+      def keyword
+        ternary? ? '' : loc.keyword.source
+      end
