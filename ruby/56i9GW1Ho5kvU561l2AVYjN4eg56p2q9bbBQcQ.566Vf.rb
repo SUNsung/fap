@@ -1,61 +1,81 @@
 
         
-        module Commander
-  # This class override the run method with our custom stack trace handling
-  # In particular we want to distinguish between user_error! and crash! (one with, one without stack trace)
-  class Runner
-    # Code taken from https://github.com/commander-rb/commander/blob/master/lib/commander/runner.rb#L50
-    
-          it 'allows you to specify your own message' do
-        tag = '2.0.0'
-        message = 'message'
-    
-          it 'Does not include merge commits in the list of commits' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(include_merges: false)
-        end').runner.execute(:test)
-    
-    # remove (double and single) quote pairs
-# un-double-double quote resulting string
-def simulate_windows_shell_unwrapping(string)
-  regex = /^('|')(([^'])(\S*)([^']))('|')$/
-  unless string.to_s.match(regex).nil?
-    string = string.to_s.match(regex)[2] # get only part in quotes
-    string.to_s.gsub!('''', ''') # remove double double quotes
-  end
-  return string
-end
-    
-    # Show a warning for PRs that are Work In Progress
-if (github.pr_body + github.pr_title).include?('WIP')
-  warn('Pull Request is Work in Progress')
-end
-    
-    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
-  class Photo < ApplicationRecord
-  end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
+            def self.rm_DS_Store
+      paths = Queue.new
+      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
+        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
+      workers = (0...Hardware::CPU.cores).map do
+        Thread.new do
+          begin
+            while p = paths.pop(true)
+              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
+            end
+          rescue ThreadError # ignore empty queue error
+          end
+        end
+      end
+      workers.map(&:join)
     end
-  end
-end
-
     
-          it 'should not create the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).not_to exist
-        expect(response.code).to eq('403')
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
+    
+              # Encodes a Rex::Proto::Kerberos::Model::AuthorizationData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            seqs = []
+            elements.each do |elem|
+              elems = []
+              type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type(elem[:type])], 0, :CONTEXT_SPECIFIC)
+              elems << type_asn1
+              data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_data(elem[:data])], 1, :CONTEXT_SPECIFIC)
+              elems << data_asn1
+              seqs << OpenSSL::ASN1::Sequence.new(elems)
+            end
+    
+              # @!attribute key
+          #   @return [Integer] The type of encryption key
+          attr_accessor :type
+          # @!attribute value
+          #   @return [String] the key itself
+          attr_accessor :value
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 1
+                self.pvno = decode_asn1_pvno(val)
+              when 2
+                self.msg_type = decode_asn1_msg_type(val)
+              when 3
+                self.pa_data  = decode_asn1_pa_data(val)
+              when 4
+                self.req_body = decode_asn1_req_body(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
+              end
+            end
+          end
+    
+              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_e_data(input)
+            input.value[0].value
+          end
+        end
       end
     end
   end
+end
