@@ -1,91 +1,251 @@
 
         
-        #ifndef BITCOIN_QT_NETWORKSTYLE_H
-#define BITCOIN_QT_NETWORKSTYLE_H
+          XGBOOST_DEVICE GradientPairInternal() : grad_(0), hess_(0) {}
     
-    #endif // BITCOIN_QT_QVALUECOMBOBOX_H
-
+    /*!
+ * \brief Registry entry for linear updater.
+ */
+struct LinearUpdaterReg
+    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
+                                        std::function<LinearUpdater*()> > {};
     
-    class SignVerifyMessageDialog : public QDialog
-{
-    Q_OBJECT
+    // Forward declarations
+namespace xgboost {
+class TreeUpdater;
+}
+    
+    #include <dmlc/registry.h>
+#include <functional>
+#include <vector>
+#include <utility>
+#include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
     }
     
-    /** Check bounds on a command line confirm target */
-unsigned int ParseConfirmTarget(const UniValue& value);
+    namespace xgboost {
+namespace gbm {
+/*! \brief model parameters */
+struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
+  /*! \brief number of trees */
+  int num_trees;
+  /*! \brief number of roots */
+  int num_roots;
+  /*! \brief number of features to be used by trees */
+  int num_feature;
+  /*! \brief pad this space, for backward compatibility reason.*/
+  int pad_32bit;
+  /*! \brief deprecated padding space. */
+  int64_t num_pbuffer_deprecated;
+  /*!
+   * \brief how many output group a single instance can produce
+   *  this affects the behavior of number of output we have:
+   *    suppose we have n instance and k group, output will be k * n
+   */
+  int num_output_group;
+  /*! \brief size of leaf vector needed in tree */
+  int size_leaf_vector;
+  /*! \brief reserved parameters */
+  int reserved[32];
+  /*! \brief constructor */
+  GBTreeModelParam() {
+    std::memset(this, 0, sizeof(GBTreeModelParam));
+    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
+                  '64/32 bit compatibility issue');
+  }
+  // declare parameters, only declare those that need to be set.
+  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
+    DMLC_DECLARE_FIELD(num_output_group)
+        .set_lower_bound(1)
+        .set_default(1)
+        .describe(
+            'Number of output groups to be predicted,'
+            ' used for multi-class classification.');
+    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
+        'Tree updater sequence.');
+    DMLC_DECLARE_FIELD(num_feature)
+        .set_lower_bound(0)
+        .describe('Number of features used for training and prediction.');
+    DMLC_DECLARE_FIELD(size_leaf_vector)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('Reserved option for vector tree.');
+  }
+};
+    }
+    }
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
+    }
+    }
     
     
-    {    /* Serialize/parse compact and verify/recover. */
-    extra[0] = 0;
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[0], message, privkey, NULL, NULL) == 1);
-    CHECK(secp256k1_ecdsa_sign(ctx, &signature[0], message, privkey, NULL, NULL) == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[4], message, privkey, NULL, NULL) == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[1], message, privkey, NULL, extra) == 1);
-    extra[31] = 1;
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[2], message, privkey, NULL, extra) == 1);
-    extra[31] = 0;
-    extra[0] = 1;
-    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[3], message, privkey, NULL, extra) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
-    CHECK(memcmp(&signature[4], &signature[0], 64) == 0);
-    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
-    memset(&rsignature[4], 0, sizeof(rsignature[4]));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
-    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
-    /* Parse compact (with recovery id) and recover. */
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
-    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 1);
-    CHECK(memcmp(&pubkey, &recpubkey, sizeof(pubkey)) == 0);
-    /* Serialize/destroy/parse signature and verify again. */
-    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
-    sig[secp256k1_rand_bits(6)] += 1 + secp256k1_rand_int(255);
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
-    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
-    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 0);
-    /* Recover again */
-    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 0 ||
-          memcmp(&pubkey, &recpubkey, sizeof(pubkey)) != 0);
+    {
+    {// use R's PRNG to replacd
+CustomGlobalRandomEngine::result_type
+CustomGlobalRandomEngine::operator()() {
+  return static_cast<result_type>(
+      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+}
+}  // namespace common
+}  // namespace xgboost
+
+    
+    
+    {
+    {    // Eject all bytes
+    int tmp_bytes =
+        static_cast<int>(std::ceil(static_cast<float>(stored_bits) / 8));
+    for (int j = 0; j < tmp_bytes; j++) {
+      int shift_bits = static_cast<int>(stored_bits) - (j + 1) * 8;
+      if (shift_bits >= 0) {
+        buffer[buffer_position] =
+            static_cast<CompressedByteT>(tmp >> shift_bits);
+      } else {
+        buffer[buffer_position] =
+            static_cast<CompressedByteT>(tmp << std::abs(shift_bits));
+      }
+      buffer_position++;
+    }
+  }
+};
+    
+    /**
+ * @class CanClientFactory
+ * @brief CanClientFactory inherites apollo::common::util::Facotory.
+ */
+class CanClientFactory
+    : public apollo::common::util::Factory<CANCardParameter::CANCardBrand,
+                                           CanClient> {
+ public:
+  /**
+   * @brief Register the CAN clients of all brands. This function call the
+   *        Function apollo::common::util::Factory::Register() for all of the
+   *        CAN clients.
+   */
+  void RegisterCanClients();
+    }
+    
+      void RecvThreadFunc() {
+    using common::time::Clock;
+    using common::time::AsInt64;
+    using common::time::micros;
+    using common::ErrorCode;
+    AINFO << 'Receive thread starting...';
+    TestCanParam *param = param_ptr();
+    CanClient *client = param->can_client;
+    int64_t start = 0;
+    std::vector<CanFrame> buf;
+    }
+    
+    /**
+ * @class EsdCanClient
+ * @brief The class which defines a ESD CAN client which inherits CanClient.
+ */
+class EsdCanClient : public CanClient {
+ public:
+  /**
+   * @brief Initialize the ESD CAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   * @return If the initialization is successful.
+   */
+  bool Init(const CANCardParameter &parameter) override;
+    }
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    /**
+ * @class FakeCanClient
+ * @brief The class which defines a fake CAN client which inherits CanClient.
+ *        This fake CAN client is used for testing.
+ */
+class FakeCanClient : public CanClient {
+ public:
+  /// Interval of sleeping
+  static const int32_t USLEEP_INTERVAL = 10000;
+    }
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+      AINFO << 'The canbus conf file is loaded: ' << FLAGS_sensor_conf_file;
+  ADEBUG << 'Canbus_conf:' << canbus_conf_.ShortDebugString();
+    
+    
+    {  std::atomic<int> refCount{0};
+};
+    
+    namespace folly {
+    }
+    
+    
+    {  std::string arguments;
+  ASSERT_TRUE(getTracepointArguments(
+      'folly', 'test_static_tracepoint_many_arg_types', 0, arguments));
+  std::array<int, 8> expected{{
+      sizeof(uint32_t),
+      sizeof(uint32_t),
+      sizeof(bool),
+      sizeof(char),
+      sizeof(short),
+      sizeof(long),
+      sizeof(float),
+      sizeof(double),
+  }};
+  checkTracepointArguments(arguments, expected);
 }
     
     
-    {          return out;
-        });
-OPERATOR_SCHEMA(Float16ConstantFill)
-    .NumInputs(0)
-    .NumOutputs(1)
-    .TensorInferenceFunction(Float16FillerTensorInference)
-    .Arg('value', 'The value for the elements of the output tensor.')
-    .Arg('shape', 'The shape of the output tensor.')
-    .Output(
-        0,
-        'output',
-        'Output tensor of constant values specified by 'value'');
+    {void Executor::keepAliveRelease() {
+  LOG(FATAL) << __func__ << '() should not be called for folly::Executor types '
+             << 'which do not override keepAliveAcquire()';
+}
+} // namespace folly
+
     
-            coords.bl.y += direction * _winSize.height * time;
-        coords.br.y += direction * _winSize.height * time;
-        coords.tl.y += direction * _winSize.height * time;
-        coords.tr.y += direction * _winSize.height * time;
-    
-    bool Animation::initWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
-{
-    _delayPerUnit = delay;
-    _loops = loops;
+    namespace folly {
     }
     
-        /** Adds an animation from a plist file.
-     * Make sure that the frames were previously loaded in the SpriteFrameCache.
-     * @since v1.1
-     * @js addAnimations
-     * @lua addAnimations
-     * @param plist An animation from a plist file.
-     */
-    void addAnimationsWithFile(const std::string& plist);
+      // Test for overflow.
+  if (std::numeric_limits<decltype(tv.tv_sec)>::max() >=
+      std::numeric_limits<int64_t>::max()) {
+    // Use our own type alias here rather than std::chrono::nanoseconds
+    // to ensure we have 64-bit rep type.
+    using nsec_i64 = std::chrono::duration<int64_t, std::nano>;
+    tv.tv_sec = std::numeric_limits<decltype(tv.tv_sec)>::max();
+    tv.tv_usec = std::numeric_limits<decltype(tv.tv_usec)>::max();
+    EXPECT_THROW(to<nsec_i64>(tv), std::range_error);
+    }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    using namespace std;
+using namespace folly;
