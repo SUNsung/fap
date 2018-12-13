@@ -1,122 +1,141 @@
 
         
-        
-@pytest.fixture(autouse=True)
-def shell(mocker):
-    shell = mocker.patch('thefuck.entrypoints.not_configured.shell',
-                         new_callable=MagicMock)
-    shell.get_history.return_value = []
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=True)
-    return shell
+            # close and remove the temporary database
+    os.close(db_fd)
+    os.unlink(db_path)
+    
+    import pytest
+from flaskr.db import get_db
+    
+            for deferred in self.deferred_functions:
+            deferred(state)
     
     
-@pytest.mark.parametrize('script, output, help_text, result', [
-    ('apt-get isntall vim', invalid_operation('isntall'),
-     apt_get_help, 'apt-get install vim'),
-    ('apt saerch vim', invalid_operation('saerch'),
-     apt_help, 'apt search vim'),
-])
-def test_get_new_command(set_help, output, script, help_text, result):
-    set_help(help_text)
-    assert get_new_command(Command(script, output))[0] == result
+@implements_to_string
+class DebugFilesKeyError(KeyError, AssertionError):
+    '''Raised from request.files during debugging.  The idea is that it can
+    provide a better error message than just a generic KeyError/BadRequest.
+    '''
+    
+            for blueprint in self.app.iter_blueprints():
+            loader = blueprint.jinja_loader
+            if loader is not None:
+                for template in loader.list_templates():
+                    result.add(template)
+    
+                try:
+                environ = builder.get_environ()
+            finally:
+                builder.close()
+    
+        @property
+    def content_type(self):
+        '''Return the message content type.'''
+        ct = self._orig.headers.get('Content-Type', '')
+        if not isinstance(ct, str):
+            ct = ct.decode('utf8')
+        return ct
+    
+    
+def load_json_preserve_order(s):
+    return json.loads(s, object_pairs_hook=OrderedDict)
+    
+        def test_print_overridable_when_stdout_redirected(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
+        assert HTTP_OK in r
+
+    
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
 
     
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
     
+    # def test_unicode_url_verbose(self):
+#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
+#     assert HTTP_OK in r
     
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_get_new_command(brew_no_available_formula):
-    assert get_new_command(Command('brew install elsticsearch',
-                                   brew_no_available_formula))\
-        == 'brew install elasticsearch'
+    The JWS implementation in josepy only implements the base JOSE standard. In
+order to support the new header fields defined in ACME, this module defines some
+ACME-specific classes that layer on top of josepy.
+'''
+import josepy as jose
     
-    \tDid you mean `build`?
+        def unsaved_files(self):
+        '''Lists files that have modified Augeas DOM but the changes have not
+        been written to the filesystem yet, used by `self.save()` and
+        ApacheConfigurator to check the file state.
+    
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS,
+               'Upgrade-Insecure-Requests': UIR_ARGS}
+    
+        def test_bad_save_checkpoint(self):
+        self.config.reverter.add_to_checkpoint = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.config.parser.add_dir(
+            self.vh_truth[0].path, 'Test', 'bad_save_ckpt')
+        self.assertRaises(errors.PluginError, self.config.save)
+    
+            # This is in an IfDefine
+        self.assertTrue('ssl_module' in self.parser.modules)
+        self.assertTrue('mod_ssl.c' in self.parser.modules)
+    
+        @certbot_util.patch_get_utility()
+    def test_successful_choice(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 3)
+        self.assertEqual(self.vhosts[3], self._call(self.vhosts))
+    
+            with mock.patch('certbot.util.get_os_info') as mock_info:
+            for distro in entrypoint.OVERRIDE_CLASSES.keys():
+                mock_info.return_value = (distro, 'whatever')
+                self.assertEqual(entrypoint.get_configurator(),
+                                 entrypoint.OVERRIDE_CLASSES[distro])
+    
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
+    
+    *TL;DR80
+Allows object composition to achieve the same code reuse as inheritance.
 '''
     
-    site_info = 'baomihua.com'
-download = baomihua_download
-download_playlist = playlist_not_supported('baomihua')
-
     
-    #----------------------------------------------------------------------
-def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
-    if is_xml:  #URL is XML URL
-        try:
-            title = kwargs['title']
-        except:
-            title = ''
-        try:
-            headers = kwargs['headers']  #headers provided
-            ckinfo = get_content(url, headers = headers)
-        except NameError:
-            ckinfo = get_content(url)
-        
-        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
-                                info_only, title = title)
+# Makes templates
+def make_template(skeleton, getter, action):
+    '''Instantiate a template method with getter and action'''
     
+        def __str__(self):
+        return 'Cat'
     
-'''
-http://open.iqiyi.com/lib/player.html
-'''
-iqiyi_patterns = [r'(?:\'|\')(https?://dispatcher\.video\.qiyi\.com\/disp\/shareplayer\.swf\?.+?)(?:\'|\')',
-                  r'(?:\'|\')(https?://open\.iqiyi\.com\/developer\/player_js\/coopPlayerIndex\.html\?.+?)(?:\'|\')']
+    *What does this example do?
+In this example queue.Queue is used to create the pool (wrapped in a
+custom ObjectPool object to use with the with statement), and it is
+populated with strings.
+As we can see, the first string object put in 'yam' is USED by the
+with statement. But because it is released back into the pool
+afterwards it is reused by the explicit call to sample_queue.get().
+Same thing happens with 'sam', when the ObjectPool created insided the
+function is deleted (by the GC) and the object is returned.
     
-            coeff = [0, 0, 0, 0]
-        for num_pair in no_dup:
-            idx = int(num_pair[-1])
-            val = int(num_pair[:-1], 16)
-            coeff[idx] = val
-    
-        pil_image.show()
-
-    
-    # See how far apart the test image is from the known faces
-face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    app = Flask(__name__)
+        def set_time_provider(self, time_provider):
+        self.time_provider = time_provider
     
     
-def process_images_in_process_pool(images_to_check, number_of_cpus, model):
-    if number_of_cpus == -1:
-        processes = None
-    else:
-        processes = number_of_cpus
-    
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
-    
-                for face_location in face_locations:
-                # Print the location of each face in this frame
-                top, right, bottom, left = face_location
-                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
-    else:
-        print('{},{}'.format(filename, name))
-    
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+class Active(Inservice):
+    def __init__(self, HierachicalStateMachine):
+        self._hsm = HierachicalStateMachine
