@@ -1,219 +1,259 @@
 
         
-         private:
-  // A string containing a description of the outcome of the last death test.
-  static std::string last_death_test_message_;
-    
-      // Smart pointer members.
-  void reset(T* ptr = NULL) {
-    depart();
-    capture(ptr);
-  }
-  T* get() const { return value_; }
-  T* operator->() const { return value_; }
-  T& operator*() const { return *value_; }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6>
-class ValueArray6 {
- public:
-  ValueArray6(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6) : v1_(v1), v2_(v2),
-      v3_(v3), v4_(v4), v5_(v5), v6_(v6) {}
-    }
-    
-      // Creates a UTF-16 wide string from the given ANSI string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the wide string, or NULL if the
-  // input is NULL.
-  //
-  // The wide string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static LPCWSTR AnsiToUtf16(const char* c_str);
-    
-    namespace internal {
-    }
+        
+    {
+    {  explicit DefaultCache(CacheImpl::CallBacks CBs) : CBs(std::move(CBs)) { }
+};
+} // end anonymous namespace
     
     
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
+    {    RawText = RawText.drop_front(Pos);
+    unsigned NewlineBytes = measureNewline(RawText);
+    RawText = RawText.drop_front(NewlineBytes);
   }
     
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
+      ::UUID uuid;
+  RPC_STATUS status = UuidFromStringA(t, &uuid);
+  if (status == RPC_S_INVALID_STRING_UUID) {
+    return None;
+  }
     
-      if (comma != data) {
-    // we have meta
-    ssize_t meta_len = comma - data;
-    data_len -= meta_len;
-    char* semi = (char*)memchr(data, ';', meta_len);
-    char* slash = (char*)memchr(data, '/', meta_len);
-    }
+    #include 'ClangDiagnosticConsumer.h'
+#include 'ImporterImpl.h'
+#include 'swift/AST/ASTContext.h'
+#include 'swift/AST/DiagnosticEngine.h'
+#include 'swift/AST/DiagnosticsClangImporter.h'
+#include 'clang/AST/ASTContext.h'
+#include 'clang/Frontend/DiagnosticRenderer.h'
+#include 'clang/Frontend/FrontendDiagnostic.h'
+#include 'clang/Lex/LexDiagnostic.h'
+#include 'llvm/ADT/STLExtras.h'
     
     
-    { private:
-  int mkdir_recursive(const String& path, int mode);
-};
-    
-    template<typename F>
-void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 0, rate, fillCols);
+    {  return encodePunycode(InputCodePoints, OutPunycode);
 }
     
-    /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
- */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-    }
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+    #endif // BITCOIN_QT_OPENURIDIALOG_H
 
     
-    namespace osquery {
-    }
+    QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
     
-    #include <osquery/config.h>
-#include <osquery/database.h>
-#include <osquery/registry.h>
+    #endif /* SECP256K1_GROUP_IMPL_H */
+
+    
+        // Special handling for null case
+    // (needed because string comparison reads the null as end-of-string)
+    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(Null=\'\\0\')'));
+    auto ret = ParseTorReplyMapping('Null=\'\\0\'');
+    BOOST_CHECK_EQUAL(ret.size(), 1U);
+    auto r_it = ret.begin();
+    BOOST_CHECK_EQUAL(r_it->first, 'Null');
+    BOOST_CHECK_EQUAL(r_it->second.size(), 1U);
+    BOOST_CHECK_EQUAL(r_it->second[0], '\0');
+    
+    /// Reference to type-opaque format list for passing to vformat()
+typedef const FormatList& FormatListRef;
     
     
-    {  if (handle) {
-    ::CloseHandle(handle);
-  }
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
 }
-#else
-TEST_F(ProcessTests, test_constructorPosix) {
-  auto p = PlatformProcess(getpid());
-  EXPECT_TRUE(p.isValid());
-  EXPECT_EQ(p.nativeHandle(), getpid());
 }
-#endif
     
-    #include <Objbase.h>
-#include <Windows.h>
+      // Compact the in-memory write buffer to disk.  Switches to a new
+  // log-file/memtable and writes a new descriptor iff successful.
+  // Errors are recorded in bg_error_.
+  void CompactMemTable() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
     
-    Status serializeDistributedQueryRequestJSON(const DistributedQueryRequest& r,
-                                            std::string& json) {
-  auto doc = JSON::newObject();
-  auto s = serializeDistributedQueryRequest(r, doc, doc.doc());
-  if (!s.ok()) {
-    return s;
-  }
+    namespace leveldb {
     }
     
-      /**
-   * @brief Helper method to map a string action to `inotify` action mask bit.
-   *
-   * This helper method will set the `mask` value for this SubscriptionContext.
-   *
-   * @param action The string action, a value in kMaskAction%s.
-   */
-  void requireAction(const std::string& action) {
-    for (const auto& bit : kMaskActions) {
-      if (action == bit.second) {
-        mask = mask | bit.first;
-      }
-    }
-  }
+    TEST(DBTest, ReadWrite) {
+  do {
+    ASSERT_OK(Put('foo', 'v1'));
+    ASSERT_EQ('v1', Get('foo'));
+    ASSERT_OK(Put('bar', 'v2'));
+    ASSERT_OK(Put('foo', 'v3'));
+    ASSERT_EQ('v3', Get('foo'));
+    ASSERT_EQ('v2', Get('bar'));
+  } while (ChangeOptions());
+}
     
-    class ExampleTable : public TablePlugin {
+    // A comparator for internal keys that uses a specified comparator for
+// the user key portion and breaks ties by decreasing sequence number.
+class InternalKeyComparator : public Comparator {
  private:
-  TableColumns columns() const {
-    return {
-        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
-        std::make_tuple(
-            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
-    };
-  }
+  const Comparator* user_comparator_;
+ public:
+  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
+  virtual const char* Name() const;
+  virtual int Compare(const Slice& a, const Slice& b) const;
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const;
+  virtual void FindShortSuccessor(std::string* key) const;
     }
     
-      ColumnFamilyData* GetDefault() const;
-  // GetColumnFamily() calls return nullptr if column family is not found
-  ColumnFamilyData* GetColumnFamily(uint32_t id) const;
-  ColumnFamilyData* GetColumnFamily(const std::string& name) const;
-  // this call will return the next available column family ID. it guarantees
-  // that there is no column family with id greater than or equal to the
-  // returned value in the current running instance or anytime in RocksDB
-  // instance history.
-  uint32_t GetNextColumnFamilyID();
-  uint32_t GetMaxColumnFamily();
-  void UpdateMaxColumnFamily(uint32_t new_max_column_family);
-  size_t NumberOfColumnFamilies() const;
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+std::string SSTTableFileName(const std::string& dbname, uint64_t number);
     
-    Status WriteBatchBase::Put(const SliceParts& key, const SliceParts& value) {
-  std::string key_buf, value_buf;
-  Slice key_slice(key, &key_buf);
-  Slice value_slice(value, &value_buf);
-    }
-    
-    Status PosixRandomRWFile::Close() {
-  if (close(fd_) < 0) {
-    return IOError('While close random read/write file', filename_, errno);
-  }
-  fd_ = -1;
-  return Status::OK();
+    Reader::Reader(SequentialFile* file, Reporter* reporter, bool checksum,
+               uint64_t initial_offset)
+    : file_(file),
+      reporter_(reporter),
+      checksum_(checksum),
+      backing_store_(new char[kBlockSize]),
+      buffer_(),
+      eof_(false),
+      last_record_offset_(0),
+      end_of_buffer_offset_(0),
+      initial_offset_(initial_offset),
+      resyncing_(initial_offset > 0) {
 }
     
-    // A simple compaction algorithm that always compacts everything
-// to the highest level whenever possible.
-class FullCompactor : public Compactor {
- public:
-  explicit FullCompactor(const Options options) : options_(options) {
-    compact_options_.compression = options_.compression;
-    compact_options_.output_file_size_limit =
-        options_.target_file_size_base;
+      std::string Get(const std::string& k, const Snapshot* snapshot = nullptr) {
+    std::string result;
+    Status s = db_->Get(ReadOptions(), k, &result);
+    if (s.IsNotFound()) {
+      result = 'NOT_FOUND';
+    } else if (!s.ok()) {
+      result = s.ToString();
+    }
+    return result;
   }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////////////////////////
+    
+         // GP Register cannot be greater than 31
+     assert(static_cast<uint32_t>(rb) < 32);
+     assert(static_cast<uint32_t>(ra) < 32);
+     assert(static_cast<uint32_t>(rt) < 32);
+    
+        /* Sets the Eye value of the Camera. 
+     * 
+     * @param eye The Eye value of the Camera.
+     * @js NA
+     */
+    void setEye(const Vec3 &eye);
+    void setEye(float x, float y, float z);
+    /* Returns the Eye value of the Camera. 
+     *
+     * @return The Eye value of the Camera.
+     * @js NA
+     */
+    const Vec3& getEye() const { return _eye; }
+    /* Sets the Center value of the Camera. 
+     *
+     * @param center The Center value of the Camera.
+     * @js NA
+     */
+    void setCenter(const Vec3 &center);
+    /* Returns the Center value of the Camera. 
+     *
+     * @return The Center value of the Camera.
+     * @js NA
+     */
+    const Vec3& getCenter() const { return _center; }
+    /* Sets the Up value of the Camera. 
+     *
+     * @param up The Up value of the Camera.
+     * @js NA
+     */
+    void setUp(const Vec3 &up);
+    /* Returns the Up value of the Camera. 
+     *
+     * @return The Up value of the Camera.
+     * @js NA
+     */
+    const Vec3& getUp() const { return _up; }
+    
+        /** Creates an action with a Cardinal Spline array of points and tension.
+     * @param duration In seconds.
+     * @param points An PointArray.
+     * @param tension Goodness of fit.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * In js: var create(var t,var table)
+     * In lua: local create(local t, local table)
+     * @endcode
+     */
+    static CardinalSplineTo* create(float duration, PointArray* points, float tension);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~CardinalSplineTo();
+    /**
+     * @js ctor
+     * @lua NA
+     */
+    CardinalSplineTo();
+    
+    Show* Show::create() 
+{
+    Show* ret = new (std::nothrow) Show();
     }
     
-      // Write a key in this transaction
-  s = txn->Put('abc', 'def');
-  assert(s.ok());
+    protected:
+    bool _isNeedCleanUp;
     
-    #pragma once
-#include <stddef.h>
-#include <stdint.h>
-#include <string>
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
+{
+public:
+    /**
+     * @js NA 
+     */
+    virtual GridBase* getGrid() override;
+    }
     
-    // Create a RateLimiter object, which can be shared among RocksDB instances to
-// control write rate of flush and compaction.
-// @rate_bytes_per_sec: this is the only parameter you want to set most of the
-// time. It controls the total write rate of compaction and flush in bytes per
-// second. Currently, RocksDB does not enforce rate limit for anything other
-// than flush and compaction, e.g. write to WAL.
-// @refill_period_us: this controls how often tokens are refilled. For example,
-// when rate_bytes_per_sec is set to 10MB/s and refill_period_us is set to
-// 100ms, then 1MB is refilled every 100ms internally. Larger value can lead to
-// burstier writes while smaller value introduces more CPU overhead.
-// The default should work for most cases.
-// @fairness: RateLimiter accepts high-pri requests and low-pri requests.
-// A low-pri request is usually blocked in favor of hi-pri request. Currently,
-// RocksDB assigns low-pri to request from compaction and high-pri to request
-// from flush. Low-pri requests can get blocked if flush requests come in
-// continuously. This fairness parameter grants low-pri requests permission by
-// 1/fairness chance even though high-pri requests exist to avoid starvation.
-// You should be good by leaving it at default 10.
-// @mode: Mode indicates which types of operations count against the limit.
-// @auto_tuned: Enables dynamic adjustment of rate limit within the range
-//              `[rate_bytes_per_sec / 20, rate_bytes_per_sec]`, according to
-//              the recent demand for background I/O.
-extern RateLimiter* NewGenericRateLimiter(
-    int64_t rate_bytes_per_sec, int64_t refill_period_us = 100 * 1000,
-    int32_t fairness = 10,
-    RateLimiter::Mode mode = RateLimiter::Mode::kWritesOnly,
-    bool auto_tuned = false);
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
+    
+    
+    {    // Triangles should really use std::vector and not arrays for verts and indices. 
+    // Then the above memcpy would not be necessary
+    TrianglesCommand::Triangles triangles = { vertsBuf, indicesBuf, static_cast<int>(verts.size()), static_cast<int>(indices.size()) };
+    return triangles;
+}
+    
+        /** @deprecated Use method getTrianglesCount() instead */
+    CC_DEPRECATED_ATTRIBUTE unsigned int getTriaglesCount() const;
+    
+    /**
+     * get sum of all triangle area size
+     * @return sum of all triangle area size
+     */
+    float getArea() const;
