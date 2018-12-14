@@ -1,77 +1,75 @@
 
         
-        '''
-    The approach taken is explained below. I decided to do it simply.
-    Initially I was considering parsing the data into some sort of
-    structure and then generating an appropriate README. I am still
-    considering doing it - but for now this should work. The only issue
-    I see is that it only sorts the entries at the lowest level, and that
-    the order of the top-level contents do not match the order of the actual
-    entries.
+        
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
-        return inner
+        def __init__(self, keys, strict=False, messages=None):
+        self.keys = set(keys)
+        self.strict = strict
+        if messages is not None:
+            self.messages = {**self.messages, **messages}
     
-        def _handle_requests(self):
-        for _ in range(self.requests_to_handle):
-            sock = self._accept_connection()
-            if not sock:
-                break
+        def __init__(self, session_key=None):
+        self._cache = caches[settings.SESSION_CACHE_ALIAS]
+        super().__init__(session_key)
     
-       >>> payload = dict(key1='value1', key2='value2')
-   >>> r = requests.post('https://httpbin.org/post', data=payload)
-   >>> print(r.text)
-   {
-     ...
-     'form': {
-       'key2': 'value2',
-       'key1': 'value1'
-     },
-     ...
-   }
+    from django.contrib.sessions.backends.base import (
+    CreateError, SessionBase, UpdateError,
+)
+from django.core.exceptions import SuspiciousOperation
+from django.db import DatabaseError, IntegrityError, router, transaction
+from django.utils import timezone
+from django.utils.functional import cached_property
     
-        def get_policy(self):
-        '''Return the CookiePolicy instance used.'''
-        return self._policy
+        if K.image_data_format() == 'channels_last':
+        x_train = x_train.transpose(0, 2, 3, 1)
+        x_test = x_test.transpose(0, 2, 3, 1)
     
-        @pytest.mark.parametrize(
-        'value, expected', (
-            ([('key', 'val')], [('key', 'val')]),
-            ((('key', 'val'), ), [('key', 'val')]),
-            ({'key': 'val'}, [('key', 'val')]),
-            (None, None)
-        ))
-    def test_valid(self, value, expected):
-        assert to_key_val_list(value) == expected
+        return (x_train, y_train), (x_test, y_test)
+
     
-    def _init():
-    for code, titles in _codes.items():
-        for title in titles:
-            setattr(codes, title, code)
-            if not title.startswith(('\\', '/')):
-                setattr(codes, title.upper(), code)
+    print('Build model...')
+model = Sequential()
     
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+        print('20 newsgroups')
+    print('=============')
+    print('X_train.shape = {0}'.format(X_train.shape))
+    print('X_train.format = {0}'.format(X_train.format))
+    print('X_train.dtype = {0}'.format(X_train.dtype))
+    print('X_train density = {0}'
+          ''.format(X_train.nnz / np.product(X_train.shape)))
+    print('y_train {0}'.format(y_train.shape))
+    print('X_test {0}'.format(X_test.shape))
+    print('X_test.format = {0}'.format(X_test.format))
+    print('X_test.dtype = {0}'.format(X_test.dtype))
+    print('y_test {0}'.format(y_test.shape))
+    print()
     
-        mime, ext, size = url_info(real_url)
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
-        elif 'subject' in url:
-        titles = re.findall(r'data-title='([^']*)'>', html)
-        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
-        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
-        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
+        if dataset_name == 'SA':
+        lb = LabelBinarizer()
+        x1 = lb.fit_transform(X[:, 1].astype(str))
+        x2 = lb.fit_transform(X[:, 2].astype(str))
+        x3 = lb.fit_transform(X[:, 3].astype(str))
+        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
+        y = (y != b'normal.').astype(int)
     
-        service = url.split('/')[2].split('.')[0]
+    from distutils.version import LooseVersion
     
-        #Unless specified otherwise by the user, this is the default colorscheme
-    colorscheme = 'basic'
-    
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
-    
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
+        target = utils.unescape(target).strip()
+    title = utils.unescape(title).strip()
+    config = inliner.document.settings.env.app.config
+    if config.issues_user_uri:
+        ref = config.issues_user_uri.format(user=target)
+    else:
+        ref = 'https://github.com/{0}'.format(target)
+    if has_explicit_title:
+        text = title
+    else:
+        text = '@{0}'.format(target)
