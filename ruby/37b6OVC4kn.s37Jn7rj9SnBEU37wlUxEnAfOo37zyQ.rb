@@ -1,91 +1,92 @@
 
         
-              unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+        require 'global'
+require 'build_options'
+require 'cxxstdlib'
+require 'keg'
+require 'extend/ENV'
+require 'debrew'
+require 'fcntl'
+require 'socket'
+    
+    module Homebrew
+  module Cleanup
+    @@disk_cleanup_size = 0
+    
+      def xcode
+    if instance_variable_defined?(:@xcode)
+      @xcode
+    elsif MacOS::Xcode.installed?
+      @xcode = MacOS::Xcode.version
+      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
+      @xcode
     end
+  end
     
-        delegate :empty?, :blank?, to: :pages
+      attr_reader :tap, :initial_revision, :current_revision
     
-        def self.subscribe_to(notifier)
-      attach_to(namespace, new, notifier)
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
     end
-    
-          if dest.end_with? '/'
-        dest_dir.relative_path_from(base_dir).to_s.tap do |result|
-          result << '/' if result != '.'
-        end
-      else
-        dest_dir.parent.relative_path_from(base_dir).join(dest.split('/').last).to_s
-      end
-    end
-    
-            title = at_css('h1').content.strip
-        if root_page?
-          at_css('h1').content = 'Angular 2 Documentation'
-        elsif title == 'Index'
-          at_css('h1').content = result[:entries].first.name
-        elsif title == 'Angular'
-          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
-        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
-          at_css('h1').content = result[:entries].first.name
-        end
-    
-            name.prepend '#{breadcrumbs.join('.')}#' if breadcrumbs.present? && breadcrumbs[0] != name
-        name << '()' if %w(Function Method Constructor).include?(subtitle)
-        name
-      end
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
   end
 end
+
     
-      it 'does not raise an error on a tainted, frozen object' do
-    o = Object.new.taint.freeze
-    o.taint.should equal(o)
-  end
-    
-    describe 'Kernel#trace_var' do
-  before :each do
-    $Kernel_trace_var_global = nil
-  end
-    
-        def pos
-      byte_to_str_pos @s.pos
-    end
-    
-          less.gsub /&:extend\((#{SELECTOR_RE})(?: all)?\)/ do
-        selector = $1
-        selector =~ /\.([\w-]+)/
-        mixin    = $1
-        if mixin && mixin_names.include?(mixin)
-          '@include #{mixin}'
+            if is_navigational_format?
+          session.delete(session_key)
         else
-          '@extend #{selector}'
+          session[session_key]
+        end
+      end
+    
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
+        end
+      end
+    
+            # Upload a file to the remote machine.
+        #
+        # @param [String] from Path of the file locally to upload.
+        # @param [String] to Path of where to save the file on the remote
+        #   machine.
+        def upload(from, to)
+        end
+    
+              # Otherwise add the block to the list of hooks for this action.
+          hooks << block
+        end
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
+          end
         end
       end
     end
-    
-      it 'ignores single-line arrays' do
-    expect_no_offenses('[a, b, c]')
   end
+end
+
     
-          # Returns the keyword of the `if` statement as a string. Returns an empty
-      # string for ternary operators.
-      #
-      # @return [String] the keyword of the `if` statement
-      def keyword
-        ternary? ? '' : loc.keyword.source
-      end
+            def void
+          perform_payment_action(:void_transaction)
+        end
     
-          # A shorthand for getting the last argument of the node.
-      # Equivalent to `arguments.last`.
-      #
-      # @return [Node, nil] the last argument of the node,
-      #                     or `nil` if there are no arguments
-      def last_argument
-        arguments[-1]
-      end
+            def destroy
+          authorize! :destroy, zone
+          zone.destroy
+          respond_with(zone, status: 204)
+        end
