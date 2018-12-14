@@ -1,56 +1,61 @@
 
         
-        module ActionView #:nodoc:
-  # = Action View Raw Output Helper
-  module Helpers #:nodoc:
-    module OutputSafetyHelper
-      # This method outputs without escaping a string. Since escaping tags is
-      # now default, this can be used when you don't want Rails to automatically
-      # escape tags. This is not recommended if the data is coming from the user's
-      # input.
-      #
-      # For example:
-      #
-      #  raw @user.name
-      #  # => 'Jimmy <alert>Tables</alert>'
-      def raw(stringish)
-        stringish.to_s.html_safe
+                  def render_component(builder)
+            builder.radio_button + builder.label
+          end
       end
+    end
+  end
+end
+
     
-            def render
-          options = @options.stringify_keys
-          options['type']     = 'checkbox'
-          options['value']    = @checked_value
-          options['checked'] = 'checked' if input_checked?(options)
+              def default_datetime(options)
+            return if options[:include_blank] || options[:prompt]
     
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
+              super(object_name, method_name, template_object, options)
         end
     
-        def to_ary
-      paths.dup
+                conditions = _layout_conditions
+    
+        initializer 'action_view.form_with_generates_remote_forms' do |app|
+      ActiveSupport.on_load(:action_view) do
+        form_with_generates_remote_forms = app.config.action_view.delete(:form_with_generates_remote_forms)
+        ActionView::Helpers::FormHelper.form_with_generates_remote_forms = form_with_generates_remote_forms
+      end
     end
     
-        # Direct access to partial rendering.
-    def render_partial(context, options, &block) #:nodoc:
-      PartialRenderer.new(@lookup_context).render(context, options, block)
-    end
+    DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
     
-    # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-          #
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    #
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
     
         def no_subcommand(args)
       unless args.empty? ||
@@ -61,103 +66,70 @@ end
       end
     end
     
-          open_dry_run_modal(agent)
-      find('.dry-run-event-sample').click
-      within(:css, '.modal .builder') do
-        expect(page).to have_text('http://xkcd.com/')
+        it 'does not send previously configured control targets when the current agent does not support them' do
+      select_agent_type('Commander Agent')
+      select2('SF Weather', from: 'Control targets')
+      select_agent_type('Webhook Agent')
+      fill_in(:agent_name, with: 'No control targets')
+      click_on 'Save'
+      expect(page).to have_content('No control targets')
+      agent = Agent.find_by(name: 'No control targets')
+      expect(agent.control_targets).to eq([])
+    end
+    
+            it 'does not change Jane's scenario' do
+          expect {
+            scenario_import.import(:skip_agents => true)
+          }.not_to change { users(:jane).scenarios }
+          expect(users(:jane).scenarios.find_by(guid: guid)).to eq(existing_scenario)
+        end
       end
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
     end
     
-        it 'for the afternoon' do
-      expect(@scheduler.send(:hour_to_schedule_name, 17)).to eq('5pm')
+          expect(exporter.as_json[:control_links]).to eq([{ :controller => guid_order(agent_list, :jane_rain_notifier_agent), :control_target => guid_order(agent_list, :jane_weather_agent) }])
     end
   end
     
-      describe 'up' do
-    it 'should update extract and template options for an existing WebsiteAgent' do
-      expect(agent.options).to include('extract' => old_extract,
-                                       'template' => old_template)
-      ConvertWebsiteAgentTemplateForMerge.new.up
-      agent.reload
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-    end
-  end
+        stub.any_instance_of(Agents::SchedulerAgent).second_precision_enabled { true }
     
-        def fonts_path
-      File.join assets_path, 'fonts'
+          Utils.sort_tuples!(tuples)
+      expect(tuples).to eq expected
     end
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
+    end
     
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
+      namespace :release do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Release #{gem} as a package'
+      task gem => 'package:#{gem}' do
+        sh <<-SH
+          gem install #{package(gem, '.gem')} --local &&
+          gem push #{package(gem, '.gem')}
+        SH
+      end
+    end
     
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    When /^I fill in the new user form/ do
-  fill_in_new_user_form
+      File.open('rack-protection.gemspec', 'w') { |f| f << content }
 end
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
+        end
     
-        it 'returns a 404 for a post not visible to the user' do
-      sign_in eve
-      expect {
-        get :index, params: {post_id: @message.id}
-      }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-    
-        def print_config_variables
-      ['--print-config-variables', '-p',
-       'Display the defined config variables before starting the deployment tasks.',
-       lambda do |_value|
-         Configuration.env.set(:print_config_variables, true)
-       end]
-    end
-  end
-end
-
-    
-          attr_reader :key, :default, :options
-    
-            # Skip validation behavior if no validators are registered for this key
-        return super unless validators.key?(key)
-    
-          def trusted_keys
-        @trusted_keys.dup
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
       end
-    
-          NO_ARG_DIRECTIVES = %i(block_all_mixed_content disown_opener
-                             upgrade_insecure_requests).freeze
-    
-            close_body(body) if reaction
