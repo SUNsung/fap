@@ -1,138 +1,211 @@
 
         
-          /**
-   * @brief Specifies whether the layer should compute gradients w.r.t. a
-   *        parameter at a particular index given by param_id.
-   *
-   * You can safely ignore false values and always compute gradients
-   * for all parameters, but possibly with wasteful computation.
-   */
-  inline bool param_propagate_down(const int param_id) {
-    return (param_propagate_down_.size() > param_id) ?
-        param_propagate_down_[param_id] : false;
-  }
-  /**
-   * @brief Sets whether the layer should compute gradients w.r.t. a
-   *        parameter at a particular index given by param_id.
-   */
-  inline void set_param_propagate_down(const int param_id, const bool value) {
-    if (param_propagate_down_.size() <= param_id) {
-      param_propagate_down_.resize(param_id + 1, true);
-    }
-    param_propagate_down_[param_id] = value;
-  }
+        using namespace swift;
     
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    
-    {  Blob<Dtype> col_buffer_;
-  Blob<Dtype> bias_multiplier_;
-};
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_BNLL_LAYER_HPP_
-
-    
-    /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
- */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
- public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    class SubstitutionMap::Storage final
+  : public llvm::FoldingSetNode,
+    llvm::TrailingObjects<Storage, Type, ProtocolConformanceRef>
+{
+  friend TrailingObjects;
     }
     
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    void CacheImpl::removeAll() {
+  cache_remove_all(static_cast<cache_t*>(Impl));
+}
+    
+    DIRECTIONAL_PREPOSITION(above)
+DIRECTIONAL_PREPOSITION(after)
+DIRECTIONAL_PREPOSITION(along)
+DIRECTIONAL_PREPOSITION(alongside)
+DIRECTIONAL_PREPOSITION(as)
+DIRECTIONAL_PREPOSITION(at)
+DIRECTIONAL_PREPOSITION(before)
+DIRECTIONAL_PREPOSITION(below)
+DIRECTIONAL_PREPOSITION(by)
+DIRECTIONAL_PREPOSITION(following)
+DIRECTIONAL_PREPOSITION(for)
+DIRECTIONAL_PREPOSITION(from)
+DIRECTIONAL_PREPOSITION(given)
+DIRECTIONAL_PREPOSITION(in)
+DIRECTIONAL_PREPOSITION(including)
+DIRECTIONAL_PREPOSITION(inside)
+DIRECTIONAL_PREPOSITION(into)
+DIRECTIONAL_PREPOSITION(matching)
+DIRECTIONAL_PREPOSITION(of)
+DIRECTIONAL_PREPOSITION(on)
+DIRECTIONAL_PREPOSITION(passing)
+DIRECTIONAL_PREPOSITION(preceding)
+DIRECTIONAL_PREPOSITION(since)
+DIRECTIONAL_PREPOSITION(to)
+DIRECTIONAL_PREPOSITION(until)
+DIRECTIONAL_PREPOSITION(using)
+DIRECTIONAL_PREPOSITION(via)
+DIRECTIONAL_PREPOSITION(when)
+PREPOSITION(with)
+DIRECTIONAL_PREPOSITION(within)
+    
+    
+    {  // Lowercase the first letter, append the rest.
+  scratch.clear();
+  scratch.push_back(clang::toLowercase(string[0]));
+  scratch.append(string.begin() + 1, string.end());
+  return StringRef(scratch.data(), scratch.size());
+}
+    
+    /// Maintain a set of known CF types.
+static bool isKnownCFTypeName(StringRef name) {
+  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
+                            name, SortByLengthComparator());
+}
+    
+      bool isGetter() const {
+    return accessorKind == IAMAccessorKind::Getter;
+  }
+    
+    #include 'swift/Demangling/Demangle.h'
+#include 'swift/Demangling/Demangler.h'
+#include <cstdio>
+    
+            if (policy == CONVERT_POLICY_SATURATE)
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src0 + j);
+                internal::prefetch(src1 + j);
+                uint8x16_t v_src0 = vld1q_u8(src0 + j);
+                int16x8_t v_src00 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src0)));
+                int16x8_t v_src01 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src0)));
+                int16x8_t v_src10 = vld1q_s16(src1 + j), v_src11 = vld1q_s16(src1 + j + 8);
+                int16x8_t v_dst0 = vqaddq_s16(v_src00, v_src10);
+                int16x8_t v_dst1 = vqaddq_s16(v_src01, v_src11);
+                vst1q_s16(dst + j, v_dst0);
+                vst1q_s16(dst + j + 8, v_dst1);
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src0 + j)));
+                int16x8_t v_src1 = vld1q_s16(src1 + j);
+                int16x8_t v_dst = vqaddq_s16(v_src0, v_src1);
+                vst1q_s16(dst + j, v_dst);
+            }
+    }
+    
+        void operator() (const uint8x8_t & v_src0, const uint8x8_t & v_src1,
+                     uint8x8_t & v_dst) const
+    {
+        v_dst = vand_u8(v_src0, v_src1);
+    }
+    
+                float32x4_t va = vaddq_f32(lane0a, lane2a);
+            float32x4_t vb = vaddq_f32(lane0b, lane2b);
+            float32x4_t vc = vaddq_f32(lane0c, lane2c);
+            float32x4_t wa = vaddq_f32(va, lane1a);
+            float32x4_t wb = vaddq_f32(vb, lane1b);
+            float32x4_t wc = vaddq_f32(vc, lane1c);
+    
+        for (size_t y = 0; y < size.height; ++y)
+    {
+        const type * src0 = internal::getRowPtr(src0Base, src0Stride, y);
+        const type * src1 = internal::getRowPtr(src1Base, src1Stride, y);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, y);
+        size_t x = 0;
+    }
     
     
     {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
+    {
+    {                for (; j < size.width; j++)
+                {
+                    dst[j] = src[j] >= 0 ? 0 : 255;
+                }
+            }
+        }
+        else
+        {
+            for (size_t i = 0; i < size.height; ++i)
+            {
+                u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+                std::memset(dst, 0, sizeof(u8) * size.width);
+            }
+        }
+        return;
+    }
+    
+    inline float32x2_t vrecp_f32(float32x2_t val)
+{
+    float32x2_t reciprocal = vrecpe_f32(val);
+    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
+    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
+    return reciprocal;
+}
+    
+        UnicodeString &displayScripts(UnicodeString &dest) const; // append script names to dest string.
+    ScriptSet & parseScripts(const UnicodeString &scriptsString, UErrorCode &status);  // Replaces ScriptSet contents.
+    
+    #include 'utypeinfo.h'  // for 'typeid' to work
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
 };
-}  // namespace caffe
     
-      bool handles_setup_;
-  cudnnHandle_t* handle_;
-  cudaStream_t*  stream_;
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
+    /**
+ * Decode the end rule and validate the parameters.  This method is exactly
+ * analogous to decodeStartRule().
+ * @see decodeStartRule
  */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
+void 
+SimpleTimeZone::decodeEndRule(UErrorCode& status) 
+{
+    if(U_FAILURE(status)) return;
     }
     
-    #include <condition_variable>
-#include <mutex>
-#include <string>
-#include <system_error>
-#include <vector>
     
-    Github Links:
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
     
-                if (smoothedGradientValue->GetDataType() != checkpointedValue.GetDataType())
-                LogicError('DataType of the smoothed gradient value restored from checkpoint for the parameter '%S' (uid = %ls) does not match the expected value.',
-                            parameter.AsString().c_str(), uid.c_str());
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+    U_NAMESPACE_BEGIN
+    
+    /**
+ * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
+ * and return the pointer.
+ */
+UnicodeReplacer* StringMatcher::toReplacer() const {
+  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
+  UnicodeReplacer *nonconst_base = static_cast<UnicodeReplacer *>(nonconst_this);
+  
+  return nonconst_base;
+}
+    
+    #include <folly/GLog.h>
     
     
-    {        return CreateMask(sequenceLengths, sequenceStartFlags, device);
-    }
+    {} // namespace folly
+
     
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
+      bool hasImplementation() {
+    performLazyInit();
+    return static_cast<bool>(increment_);
+  }
