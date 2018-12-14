@@ -1,114 +1,101 @@
 
         
-        #include <QComboBox>
-#include <QVariant>
-    
-    #ifndef BITCOIN_REVERSELOCK_H
-#define BITCOIN_REVERSELOCK_H
-    
-    #include <script/script.h>
-    
-        Round(a, b, c, d, e, f, g, h, 0x27b70a85, w0 += sigma1(w14) + w9 + sigma0(w1));
-    Round(h, a, b, c, d, e, f, g, 0x2e1b2138, w1 += sigma1(w15) + w10 + sigma0(w2));
-    Round(g, h, a, b, c, d, e, f, 0x4d2c6dfc, w2 += sigma1(w0) + w11 + sigma0(w3));
-    Round(f, g, h, a, b, c, d, e, 0x53380d13, w3 += sigma1(w1) + w12 + sigma0(w4));
-    Round(e, f, g, h, a, b, c, d, 0x650a7354, w4 += sigma1(w2) + w13 + sigma0(w5));
-    Round(d, e, f, g, h, a, b, c, 0x766a0abb, w5 += sigma1(w3) + w14 + sigma0(w6));
-    Round(c, d, e, f, g, h, a, b, 0x81c2c92e, w6 += sigma1(w4) + w15 + sigma0(w7));
-    Round(b, c, d, e, f, g, h, a, 0x92722c85, w7 += sigma1(w5) + w0 + sigma0(w8));
-    Round(a, b, c, d, e, f, g, h, 0xa2bfe8a1, w8 += sigma1(w6) + w1 + sigma0(w9));
-    Round(h, a, b, c, d, e, f, g, 0xa81a664b, w9 += sigma1(w7) + w2 + sigma0(w10));
-    Round(g, h, a, b, c, d, e, f, 0xc24b8b70, w10 += sigma1(w8) + w3 + sigma0(w11));
-    Round(f, g, h, a, b, c, d, e, 0xc76c51a3, w11 += sigma1(w9) + w4 + sigma0(w12));
-    Round(e, f, g, h, a, b, c, d, 0xd192e819, w12 += sigma1(w10) + w5 + sigma0(w13));
-    Round(d, e, f, g, h, a, b, c, 0xd6990624, w13 += sigma1(w11) + w6 + sigma0(w14));
-    Round(c, d, e, f, g, h, a, b, 0xf40e3585, w14 += sigma1(w12) + w7 + sigma0(w15));
-    Round(b, c, d, e, f, g, h, a, 0x106aa070, w15 += sigma1(w13) + w8 + sigma0(w0));
-    
-        void operator() (const typename VecTraits<T>::vec64 & v_src0,
-                     const typename VecTraits<T>::vec64 & v_src1,
-                     typename VecTraits<T>::vec64 & v_dst) const
-    {
-        typename VecTraits<wtype>::vec128 vr;
-        wideAdd(vmovl(v_src0), vmovl(v_src1), vr);
+        void add(const Size2D &size,
+         const u8 * src0Base, ptrdiff_t src0Stride,
+         const u8 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    
+        // now track the edges (hysteresis thresholding)
+    while (stack_top > stack_bottom)
     {
-    {
-    {            // make shift
-            prevx = currx;
-            currx = nextx;
+        u8* m;
+        if ((size_t)(stack_top - stack_bottom) + 8u > maxsize)
+        {
+            ptrdiff_t sz = (ptrdiff_t)(stack_top - stack_bottom);
+            maxsize = maxsize * 3/2;
+            stack.resize(maxsize);
+            stack_bottom = &stack[0];
+            stack_top = stack_bottom + sz;
         }
     }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)border;
-    (void)borderValue;
-#endif
+    
+    #define COMBINE64(sgn,n) void combine##n(const Size2D &_size                                                \
+                                               FILL_LINES##n(FARG, sgn##64),                                \
+                                               sgn##64 * dstBase, ptrdiff_t dstStride)                      \
+{                                                                                                           \
+    internal::assertSupportedConfiguration();                                                               \
+    Size2D size(_size);                                                                                     \
+    if (CONTSRC##n                                                                                          \
+        dstStride == (ptrdiff_t)(size.width))                                                               \
+    {                                                                                                       \
+        size.width *= size.height;                                                                          \
+        size.height = 1;                                                                                    \
+    }                                                                                                       \
+    typedef internal::VecTraits<sgn##64, n>::vec64 vec64;                                                   \
+                                                                                                            \
+    for (size_t i = 0u; i < size.height; ++i)                                                               \
+    {                                                                                                       \
+        FILL_LINES##n(VROW, sgn##64)                                                                        \
+        sgn##64 * dst = internal::getRowPtr(dstBase, dstStride, i);                                         \
+        size_t sj = 0u, dj = 0u;                                                                            \
+                                                                                                            \
+        for (; sj < size.width; ++sj, dj += n)                                                              \
+        {                                                                                                   \
+            vec64 v_dst;                                                                                    \
+            FILL_LINES##n(VLD1, sgn##64)                                                                    \
+            vst##n##_##sgn##64(dst + dj, v_dst);                                                            \
+            /*FILL_LINES##n(SLD, sgn##64)*/                                                                 \
+        }                                                                                                   \
+    }                                                                                                       \
 }
     
+                    uint8x16_t v0 = vld1q_u8(ptr);
+                int8x16_t v1 = vreinterpretq_s8_u8(veorq_u8(vqsubq_u8(v0, t), delta));
+                int8x16_t v2 = vreinterpretq_s8_u8(veorq_u8(vqaddq_u8(v0, t), delta));
     
-    {
-    {} // namespace internal
-} // namespace CAROTENE_NS
-
-    
-            uint16x8_t el8shr0 = vmull_u8(vsrc, vsrc);
-        uint16x8_t el8shr1 = vextq_u16(v_zero8, el8shr0, 7);
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+    inline float32x2_t vrsqrt_f32(float32x2_t val)
+{
+    float32x2_t e = vrsqrte_f32(val);
+    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
+    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
+    return e;
 }
     
-    // Common functions and classes from std that caffe often uses.
-using std::fstream;
-using std::ios;
-using std::isnan;
-using std::isinf;
-using std::iterator;
-using std::make_pair;
-using std::map;
-using std::ostringstream;
-using std::pair;
-using std::set;
-using std::string;
-using std::stringstream;
-using std::vector;
+    // Convert macro to string
+#define STRINGIFY(m) #m
+#define AS_STRING(m) STRINGIFY(m)
     
-      /** Will not return until the internal thread has exited. */
-  void StopInternalThread();
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
     
-    namespace caffe {
-    }
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #endif  // CAFFE_BATCHREINDEX_LAYER_HPP_
-
-    
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    /**
+ Forward declare boost::thread instead of including boost/thread.hpp
+ to avoid a boost/NVCC issues (#1009, #1010) on OSX.
+ */
+namespace boost { class thread; }
     
     #include <vector>
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
      protected:
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -116,89 +103,129 @@ using std::vector;
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-      // Fill database
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
-    
-    
-    {
-    {    fprintf(stdout, '%-12s : %11.3f micros/op;%s%s\n',
-            name.ToString().c_str(),
-            seconds_ * 1e6 / done_,
-            (extra.empty() ? '' : ' '),
-            extra.c_str());
-    if (FLAGS_histogram) {
-      fprintf(stdout, 'Microseconds per op:\n%s\n', hist_.ToString().c_str());
-    }
-    fflush(stdout);
-  }
-};
-    
-      // Constant after construction
-  Env* const env_;
-  const InternalKeyComparator internal_comparator_;
-  const InternalFilterPolicy internal_filter_policy_;
-  const Options options_;  // options_.comparator == &internal_comparator_
-  const bool owns_info_log_;
-  const bool owns_cache_;
-  const std::string dbname_;
-    
-    
-    {}  // namespace leveldb
-    
-    #include <ctype.h>
-#include <stdio.h>
-#include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-    
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-    const std::string kPrometheusParserRootKey('prometheus_targets');
-    
-      // Send our synthetic config.
-  s = c.update(config);
-  EXPECT_TRUE(s.ok());
-  EXPECT_EQ(s.toString(), 'OK');
-    
-    
-    {  c.reset();
-}
-    
-    
-    {/**
- * @brief Compute a hash digest from the contents of a buffer.
- *
- * @param hash_type The osquery-supported hash algorithm.
- * @param buffer A caller-controlled buffer (already allocated).
- * @param size The length of buffer in bytes.
- * @return A string (hex) representation of the hash digest.
- */
-std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
-} // namespace osquery
+    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
 
     
-    TEST_F(QueryTests, test_get_stored_query_names) {
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('foobar', query);
-  auto encoded_qd = getSerializedQueryDataJSON();
-  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
-  EXPECT_TRUE(status.ok());
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace mxnet {
+/*! \brief namespace of arguments */
+namespace op {
+/*! \brief super class of all gradient function argument */
+struct GradFunctionArgument {
+  /*! \brief The real data */
+  TBlob data;
+};
     }
+    }
+    
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
+    
+     protected:
+  /**
+   * \struct  PredictionCacheEntry
+   *
+   * \brief Contains pointer to input matrix and associated cached predictions.
+   */
+  struct PredictionCacheEntry {
+    std::shared_ptr<DMatrix> data;
+    HostDeviceVector<bst_float> predictions;
+  };
+    
+    /*!
+ * \brief Macro to register tree updater.
+ *
+ * \code
+ * // example of registering a objective ndcg@k
+ * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
+ * .describe('Column based tree maker.')
+ * .set_body([]() {
+ *     return new ColMaker<TStats>();
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
+  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
+      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
+    
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
+  }
+}
+    
+    namespace xgboost {
+namespace gbm {
+/*! \brief model parameters */
+struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
+  /*! \brief number of trees */
+  int num_trees;
+  /*! \brief number of roots */
+  int num_roots;
+  /*! \brief number of features to be used by trees */
+  int num_feature;
+  /*! \brief pad this space, for backward compatibility reason.*/
+  int pad_32bit;
+  /*! \brief deprecated padding space. */
+  int64_t num_pbuffer_deprecated;
+  /*!
+   * \brief how many output group a single instance can produce
+   *  this affects the behavior of number of output we have:
+   *    suppose we have n instance and k group, output will be k * n
+   */
+  int num_output_group;
+  /*! \brief size of leaf vector needed in tree */
+  int size_leaf_vector;
+  /*! \brief reserved parameters */
+  int reserved[32];
+  /*! \brief constructor */
+  GBTreeModelParam() {
+    std::memset(this, 0, sizeof(GBTreeModelParam));
+    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
+                  '64/32 bit compatibility issue');
+  }
+  // declare parameters, only declare those that need to be set.
+  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
+    DMLC_DECLARE_FIELD(num_output_group)
+        .set_lower_bound(1)
+        .set_default(1)
+        .describe(
+            'Number of output groups to be predicted,'
+            ' used for multi-class classification.');
+    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
+        'Tree updater sequence.');
+    DMLC_DECLARE_FIELD(num_feature)
+        .set_lower_bound(0)
+        .describe('Number of features used for training and prediction.');
+    DMLC_DECLARE_FIELD(size_leaf_vector)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('Reserved option for vector tree.');
+  }
+};
+    }
+    }
+    
+          cbw.Write(buffer.data(), input.begin(), input.end());
+    
+      // Used to initialise any regularisation hyperparameters provided by the user
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args);
