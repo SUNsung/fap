@@ -1,267 +1,194 @@
 
         
-            # Define the loss function and the optimization algorithm
-    self.cross_entropies = tf.nn.sparse_softmax_cross_entropy_with_logits(
-        logits=self.scores, labels=self.labels)
-    self.cost = tf.reduce_sum(self.cross_entropies, name='cost')
-    self.global_step = tf.Variable(0, name='global_step', trainable=False)
-    self.optimizer = tf.train.AdamOptimizer()
-    self.train_op = self.optimizer.minimize(
-        self.cost, global_step=self.global_step)
-    
-      plt.plot(vals_txn[:,0:n_to_plot] + scale*np.array(range(n_to_plot)),
-           color=color, lw=1.0)
-  plt.axis('tight')
-  if title:
-    plt.title(title)
-    
-    
-# If there are observed inputs, there are two ways to add that observed
-# input to the model.  The first is by treating as something to be
-# inferred, and thus encoding the observed input via the encoders, and then
-# input to the generator via the 'inferred inputs' channel.  Second, one
-# can input the input directly into the generator.  This has the downside
-# of making the generation process strictly dependent on knowing the
-# observed input for any generated trial.
-flags.DEFINE_boolean('inject_ext_input_to_gen',
-                     INJECT_EXT_INPUT_TO_GEN,
-                     'Should observed inputs be input to model via encoders, \
-                     or injected directly into generator?')
-    
-      def get_batch(self, batch_size, num_steps, pad=False, forever=True):
-    return get_batch(self._get_sentence(forever), batch_size, num_steps,
-                     self.vocab.max_word_length, pad=pad)
-    
-          # if time > maxlen, return all true vector
-      done = tf.cond(
-          tf.greater(time, maximum_length),
-          lambda: tf.ones([
-              batch_size,], dtype=tf.bool), lambda: done)
-      return (done, cell_state, next_input, cell_output, context_state)
+        
+@classmethod
+def get_args(cls, dist, header=None):
+    '''
+    Yield write_script() argument tuples for a distribution's
+    console_scripts and gui_scripts entry points.
+    '''
+    if header is None:
+        header = cls.get_header()
+    spec = str(dist.as_requirement())
+    for type_ in 'console', 'gui':
+        group = type_ + '_scripts'
+        for name, ep in dist.get_entry_map(group).items():
+            # ensure_safe_name
+            if re.search(r'[\\/]', name):
+                raise ValueError('Path separators not allowed in script names')
+            script_text = TEMPLATE.format(
+                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
+                          spec, group, name)
+            args = cls._get_script_args(type_, name, header, script_text)
+            for res in args:
+                yield res
     
     
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
-@login_required
-def update(id):
-    '''Update a post if the current user is the author.'''
-    post = get_post(id)
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_bashrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'bash')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
     
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('', '', b'Username is required.'),
-    ('a', '', b'Password is required.'),
-    ('test', 'test', b'already registered'),
-))
-def test_register_validate_input(client, username, password, message):
-    response = client.post(
-        '/auth/register',
-        data={'username': username, 'password': password}
-    )
-    assert message in response.data
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
+    proc.sendline(u'fish')
+    return proc
     
     
-def test_delete(client, auth, app):
-    auth.login()
-    response = client.post('/1/delete')
-    assert response.headers['Location'] == 'http://localhost/'
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'echo test')
     
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
+    \tDid you mean `build`?
+'''
     
-    import matplotlib.pyplot as plt
+        def test_list(self):
+        assert list(self.case_insensitive_dict) == ['Accept']
     
-            plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 1]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 1]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 1]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 1]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('Time [sec]')
-        plt.title('Training time - %d features' % list_n_features[j])
-        i += 1
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
-    print('='*80 + '\n#' + '    Text vectorizers benchmark' + '\n' + '='*80 + '\n')
-print('Using a subset of the 20 newsrgoups dataset ({} documents).'
-      .format(len(text)))
-print('This benchmarks runs in ~20 min ...')
+            self.cert_verify(conn, request.url, verify, cert)
+        url = self.request_url(request, proxies)
+        self.add_headers(request, stream=stream, timeout=timeout, verify=verify, cert=cert, proxies=proxies)
     
+        if implementation == 'CPython':
+        implementation_version = platform.python_version()
+    elif implementation == 'PyPy':
+        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
+                                               sys.pypy_version_info.minor,
+                                               sys.pypy_version_info.micro)
+        if sys.pypy_version_info.releaselevel != 'final':
+            implementation_version = ''.join([
+                implementation_version, sys.pypy_version_info.releaselevel
+            ])
+    elif implementation == 'Jython':
+        implementation_version = platform.python_version()  # Complete Guess
+    elif implementation == 'IronPython':
+        implementation_version = platform.python_version()  # Complete Guess
+    else:
+        implementation_version = 'Unknown'
     
-def run_cmds(cmds):
-    log = Log()
-    cmd_pl = cmds.split('\n')
-    outs = []
-    for cmd in cmd_pl:
-        if not cmd:
-            continue
+        @pytest.mark.parametrize(
+        'url', (
+            'http://192.168.0.1:5000/',
+            'http://192.168.0.1/',
+            'http://172.16.1.1/',
+            'http://172.16.1.1:5000/',
+            'http://localhost.localdomain:5000/v1.0/',
+        ))
+    def test_not_bypass_no_proxy_keyword(self, url, monkeypatch):
+        # This is testing that the 'no_proxy' argument overrides the
+        # environment variable 'no_proxy'
+        monkeypatch.setenv('http_proxy', 'http://proxy.example.com:3128/')
+        no_proxy = '192.168.1.1,requests.com'
+        assert get_environ_proxies(url, no_proxy=no_proxy) != {}
     
-            fn = os.path.join(current_path, 'sni_slice.txt')
-        self.slice = RandomGetSlice(fn, 20, '|')
+    _init()
+
     
-                    if self.eot[s] >= 0:
-                    #print 'EOT to %d' % self.eot[s]
-                    
-                    s = self.eot[s]
-                    input.consume()
-                    continue
+    # Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, 'Requests', u'Requests Documentation',
+     author, 'Requests', 'One line description of project.',
+     'Miscellaneous'),
+]
     
-        def getUnexpectedToken(self):
-        return self.token
+            return new_proxies
     
-    def _check_arg_types(funcname, *args):
-    hasstr = hasbytes = False
-    for s in args:
-        if isinstance(s, str):
-            hasstr = True
-        elif isinstance(s, bytes):
-            hasbytes = True
+        :rtype: str
+    '''
+    warnings.warn((
+        'In requests 3.0, get_unicode_from_response will be removed. For '
+        'more information, please see the discussion on issue #2266. (This'
+        ' warning should only appear once.)'),
+        DeprecationWarning)
+    
+                appid = random.choice(self.working_appid_list)
+            return str(appid)
         else:
-            raise TypeError('%s() argument must be str or bytes, not %r' %
-                            (funcname, s.__class__.__name__)) from None
-    if hasstr and hasbytes:
-        raise TypeError('Can't mix strings and bytes in path components') from None
+            for _ in xrange(0, 10):
+                appid = self.public_appid.get()
+                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
+                    continue
+                else:
+                    return appid
+            return None
+    
+            name = p.join(ws)
+        name += '.' + random.choice(self.end)
+    
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = __short_version__
+# The full version, including alpha/beta/rc tags.
+release = __version__
+    
+    DEVICESTATUSSET = ['features', 'maxMsgChar', 'darkWake', 'fmlyShare',
+                   'deviceStatus', 'remoteLock', 'activationLocked',
+                   'deviceClass', 'id', 'deviceModel', 'rawDeviceModel',
+                   'passcodeLength', 'canWipeAfterLock', 'trackingInfo',
+                   'location', 'msg', 'batteryLevel', 'remoteWipe',
+                   'thisDevice', 'snd', 'prsId', 'wipeInProgress',
+                   'lowPowerMode', 'lostModeEnabled', 'isLocating',
+                   'lostModeCapable', 'mesg', 'name', 'batteryStatus',
+                   'lockedTimestamp', 'lostTimestamp', 'locationCapable',
+                   'deviceDisplayName', 'lostDevice', 'deviceColor',
+                   'wipedTimestamp', 'modelDisplayName', 'locationEnabled',
+                   'isMac', 'locFoundEnabled']
+    
+        def scan_devices(self):
+        '''Scan for new devices and return a list with device IDs (MACs).'''
+        self._update_info()
+    
+    import asyncio
+import aiohttp
+import async_timeout
+import voluptuous as vol
+    
+    
+@Throttle(MIN_TIME_BETWEEN_UPDATES)
+def send_data(name, msg):
+    '''Send the collected data to Dweet.io.'''
+    import dweepy
+    try:
+        dweepy.dweet_for(name, msg)
+    except dweepy.DweepyError:
+        _LOGGER.error('Error saving data to Dweet.io: %s', msg)
 
     
-        colon = _get_colon(s)
-    
-        The decoding-related arguments have the same semantics as those of
-    bytes.decode().
-    '''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    with open_text(package, resource, encoding, errors) as fp:
-        return fp.read()
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
-    else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
-    
-        counter = 1
-    for part in msg.walk():
-        # multipart/* are just containers
-        if part.get_content_maintype() == 'multipart':
-            continue
-        # Applications should really sanitize the given filename so that an
-        # email message can't be used to overwrite important files
-        filename = part.get_filename()
-        if not filename:
-            ext = mimetypes.guess_extension(part.get_content_type())
-            if not ext:
-                # Use a generic bag-of-bits extension
-                ext = '.bin'
-            filename = 'part-%03d%s' % (counter, ext)
-        counter += 1
-        with open(os.path.join(args.directory, filename), 'wb') as fp:
-            fp.write(part.get_payload(decode=True))
-    
-        # Create queues
-    task_queue = Queue()
-    done_queue = Queue()
-    
-        logger.info('Computing bounding-box regression targets...')
-    add_bbox_regression_targets(roidb)
-    logger.info('done')
-    
-    
-def build_data_parallel_model(model, single_gpu_build_func):
-    '''Build a data parallel model given a function that builds the model on a
-    single GPU.
-    '''
-    if model.only_build_forward_pass:
-        single_gpu_build_func(model)
-    elif model.train:
-        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
-        # Add backward pass on all GPUs
-        model.AddGradientOperators(all_loss_gradients)
-        if cfg.NUM_GPUS > 1:
-            _add_allreduce_graph(model)
-        for gpu_id in range(cfg.NUM_GPUS):
-            # After allreduce, all GPUs perform SGD updates on their identical
-            # params and gradients in parallel
-            with c2_utils.NamedCudaScope(gpu_id):
-                add_single_gpu_param_update_ops(model, gpu_id)
-    else:
-        # Test-time network operates on single GPU
-        # Test-time parallelism is implemented through multiprocessing
-        with c2_utils.NamedCudaScope(model.target_gpu_id):
-            single_gpu_build_func(model)
-    
-    from detectron.core.config import cfg
-from detectron.modeling.generate_anchors import generate_anchors
-from detectron.utils.c2 import const_fill
-from detectron.utils.c2 import gauss_fill
-import detectron.modeling.FPN as FPN
-import detectron.utils.blob as blob_utils
-    
-    
-class CollectAndDistributeFpnRpnProposalsOp(object):
-    def __init__(self, train):
-        self._train = train
-    
-        bbox_targets, bbox_inside_weights = _expand_bbox_targets(
-        roidb['bbox_targets'][keep_inds, :]
-    )
-    bbox_outside_weights = np.array(
-        bbox_inside_weights > 0, dtype=bbox_inside_weights.dtype
-    )
-    
-    from detectron.core.config import cfg
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-import detectron.roi_data.retinanet as retinanet_roi_data
-import detectron.roi_data.rpn as rpn_roi_data
-import detectron.utils.blob as blob_utils
-    
-    
-if __name__ == '__main__':
-    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
-    logger = setup_logging(__name__)
-    logger.setLevel(logging.DEBUG)
-    logging.getLogger('detectron.roi_data.loader').setLevel(logging.INFO)
-    np.random.seed(cfg.RNG_SEED)
-    args = parse_args()
-    logger.info('Called with args:')
-    logger.info(args)
-    if args.cfg_file is not None:
-        merge_cfg_from_file(args.cfg_file)
-    if args.opts is not None:
-        merge_cfg_from_list(args.opts)
-    assert_and_infer_cfg()
-    logger.info('Running with config:')
-    logger.info(pprint.pformat(cfg))
-    main(args)
-
-    
-    
-class TestMergeSort(object):
+        @property
+    def state_attributes(self):
+        '''Return the state attributes.'''
+        attrs = {
+            ATTR_HOURS_TO_SHOW: self._hours,
+            ATTR_REFRESH: self._refresh,
+            ATTR_ENTITY_ID: self._entities,
+        }
+        return attrs
