@@ -1,31 +1,31 @@
 
         
-            def find_local(username)
-      find_remote(username, nil)
-    end
+              expect(value_for(user.id, dt)).to eq(0)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
     
-    def codepoints_to_filename(codepoints)
-  codepoints.downcase.gsub(/\A[0]+/, '').tr(' ', '-')
+      def show
+    render json: outbox_presenter, serializer: ActivityPub::OutboxSerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
+  end
+    
+        def update
+      authorize @user, :change_email?
+    
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
 end
+
     
-    res = ''
-doc = Hpricot(File.open(input))
-doc.search('//form').each do |form|
+              if params[:page] || params[:per_page]
+            @states = @states.page(params[:page]).per(params[:per_page])
+          end
     
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
+            def new; end
     
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
+            def zone_params
+          attrs = params.require(:zone).permit!
+          if attrs[:zone_members]
+            attrs[:zone_members_attributes] = attrs.delete(:zone_members)
+          end
+          attrs
+        end
