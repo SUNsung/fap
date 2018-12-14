@@ -1,150 +1,115 @@
 
         
-        Then(%r!^I should see exactly '(.*)' in '(.*)'$!) do |text, file|
-  step %(the '#{file}' file should exist)
-  expect(file_contents(file).strip).to eq text
-end
+            def execute(command: nil, target_object: nil)
+      action_name = command.method_name
+      action_class_ref = class_ref_for_action(named: action_name)
+      parameter_map = {}
+      closure_argument_value = nil
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+          begin
+        if xcode_outdated
+          # We have to raise that error within this `begin` block to show a nice user error without a stack trace
+          FastlaneCore::UI.user_error!('fastlane requires a minimum version of Xcode #{Fastlane::MINIMUM_XCODE_RELEASE}, please upgrade and make sure to use `sudo xcode-select -s /Applications/Xcode.app`')
         end
-        # rubocop:enable Metrics/AbcSize
+    
+            expect(FastlaneCore::CertChecker.install_wwdr_certificate).to be(true)
       end
     end
   end
 end
 
     
-    module Jekyll
-  module Converters
-    class Markdown
-      class KramdownParser
-        CODERAY_DEFAULTS = {
-          'css'               => 'style',
-          'bold_every'        => 10,
-          'line_numbers'      => 'inline',
-          'line_number_start' => 1,
-          'tab_width'         => 4,
-          'wrap'              => 'div',
-        }.freeze
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
+              @machine_locks[uuid] = lock_file
+        end
+      end
     
-            context 'when command is bootstrap' do
-          let(:command) { 'bootstrap' }
-    
-          it 'works with single quote in rule name' do
-        rule = 'CoveredSwitchStatementsDon'tNeedDefault'
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              enable_rules: [\'#{rule}\'],
-              disable_rules: [\'#{rule}\']
-            )
-          end').runner.execute(:test)
-    
-              # Override the already overridden swiftlint_version method to check
-          # that the correct exectuable is being passed in as a parameter.
-          allow(Fastlane::Actions::SwiftlintAction).to receive(:swiftlint_version) { |params|
-            expect(params[:executable]).to eq(CUSTOM_EXECUTABLE_NAME)
-            swiftlint_gem_version
-          }
-    
-              expect(value).to eq(nil)
+            # Mounts a shared folder via NFS. This assumes that the exports
+        # via the host are already done.
+        def mount_nfs(ip, folders)
+          raise BaseError, _key: :unsupported_nfs
         end
     
-    shelljoin_testcases = [
-  {
-    'it' => '(#1) on array with entry with space',
-    'it_result' => {
-      'windows' => 'wraps this entry in double quotes',
-      'other'   => 'escapes the space in this entry'
-    },
-    'input' => ['a', 'b c', 'd'],
-    'expect' => {
-      'windows' => 'a 'b c' d',
-      'other'   => 'a b\ c d'
-    }
-  },
-  {
-    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
-    'it_result' => {
-      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
-      'other'   => 'escapes the double quotes and escapes the space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a '''b'' c' d',
-      'other'   => 'a \'b\'\ c d'
-    }
-  },
-  {
-    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
-    'it_result' => {
-      'windows' => 'no changes',
-      'other'   => 'escapes the single quotes and space'
-    },
-    'input' => ['a', ''b' c', 'd'],
-    'expect' => {
-      'windows' => 'a \''b' c\' d',
-      'other'   => 'a \\'b\\'\\ c d'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
-  {
-    'it' => '(#4) on array with entry that is `$$`',
-    'it_result' => {
-      'windows' => 'the result includes the process id',
-      'other'   => 'the result includes the process id'
-    },
-    'input' => ['ps', '-p', $$],
-    'expect' => {
-      'windows' => 'ps -p #{$$}',
-      'other'   => 'ps -p #{$$}'
-    }
-  }
-]
+    module Vagrant
+  module Plugin
+    module V1
+      # This is the superclass for all V1 plugins.
+      class Plugin
+        # Special marker that can be used for action hooks that matches
+        # all action sequences.
+        ALL_ACTIONS = :__all_actions__
     
-      def_delegators :@resource, :stage, :fetch, :verify_download_integrity, :source_modified_time
-  def_delegators :@resource, :download_name, :cached_download, :clear_cache
-  def_delegators :@resource, :checksum, :mirrors, :specs, :using
-  def_delegators :@resource, :version, :mirror, *Checksum::TYPES
-  def_delegators :@resource, :downloader
+            # This should return a hash of information that explains how to
+        # SSH into the machine. If the machine is not at a point where
+        # SSH is even possible, then `nil` should be returned.
+        #
+        # The general structure of this returned hash should be the
+        # following:
+        #
+        #     {
+        #       host: '1.2.3.4',
+        #       port: '22',
+        #       username: 'mitchellh',
+        #       private_key_path: '/path/to/my/key'
+        #     }
+        #
+        # **Note:** Vagrant only supports private key based authentication,
+        # mainly for the reason that there is no easy way to exec into an
+        # `ssh` prompt with a password, whereas we can pass a private key
+        # via commandline.
+        #
+        # @return [Hash] SSH information. For the structure of this hash
+        #   read the accompanying documentation for this method.
+        def ssh_info
+          nil
+        end
     
-      config.around(:each) do |example|
-    def find_files
-      Find.find(TEST_TMPDIR)
-          .reject { |f| File.basename(f) == '.DS_Store' }
-          .map { |f| f.sub(TEST_TMPDIR, '') }
+      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
+  # see https://github.com/Homebrew/homebrew-cask/pull/8887
+  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
+    
+        def pos=(i)
+      @s.pos = str_to_byte_pos i
+      i
     end
     
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
+      config.active_support.test_order = :random
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
+    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
+  class Photo < ApplicationRecord
+  end
     
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
+    dir = File.dirname(File.expand_path(__FILE__))
+$LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
+$LOAD_PATH.unshift(dir)
     
-          delete :destroy, params: {post_id: @message.id, id: @like.id}, format: :json
-      expect(response.status).to eq(204)
-    end
+      test 'clean path with leading slash' do
+    assert_equal '/Mordor', clean_path('/Mordor')
+  end
     
-          expect(Notification.where(unread: true).count).to eq(2)
-      get :read_all
-      expect(Notification.where(unread: true).count).to eq(0)
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
+  end
+end
