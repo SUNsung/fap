@@ -1,101 +1,138 @@
 
         
-            def make_null_session(self, app):
-        '''Creates a null session which acts as a replacement object if the
-        real session support could not be loaded due to a configuration
-        error.  This mainly aids the user experience because the job of the
-        null session is to still support lookup without complaining but
-        modifications are answered with a helpful error message of what
-        failed.
+            def __init__(self, session_key=None):
+        self._cache = caches[settings.SESSION_CACHE_ALIAS]
+        super().__init__(session_key)
     
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-            is_proxied_http_request = (proxy and scheme != 'https')
-        using_socks_proxy = False
-        if proxy:
-            proxy_scheme = urlparse(proxy).scheme.lower()
-            using_socks_proxy = proxy_scheme.startswith('socks')
-    
-        def list_domains(self):
-        '''Utility method to list all the domains in the jar.'''
-        domains = []
-        for cookie in iter(self):
-            if cookie.domain not in domains:
-                domains.append(cookie.domain)
-        return domains
+    KEY_PREFIX = 'django.contrib.sessions.cached_db'
     
     
-# -- Options for manual page output ---------------------------------------
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
     
-    from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
+    DEFAULT_DB_ALIAS = 'default'
+DJANGO_VERSION_PICKLE_KEY = '_django_version'
     
-    
-def test_preprocess_input():
-    # Test image batch with float and int image input
-    x = np.random.uniform(0, 255, (2, 10, 10, 3))
-    xint = x.astype('int32')
-    assert utils.preprocess_input(x).shape == x.shape
-    assert utils.preprocess_input(xint).shape == xint.shape
+        return out
     
     
-def test_imdb():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = imdb.load_data()
-        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = imdb.get_word_index()
-        assert isinstance(word_index, dict)
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-        def call(self, inputs, mask=None, training=None, initial_state=None):
-        self.cell._dropout_mask = None
-        self.cell._recurrent_dropout_mask = None
-        return super(LSTM, self).call(inputs,
-                                      mask=mask,
-                                      training=training,
-                                      initial_state=initial_state)
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import boto3_conn, ec2_argument_spec, get_aws_connection_info
-from ansible.module_utils.aws.waf import list_web_acls, get_web_acl
+        # Check chardet for compatibility.
+    major, minor, patch = chardet_version.split('.')[:3]
+    major, minor, patch = int(major), int(minor), int(patch)
+    # chardet >= 3.0.2, < 3.1.0
+    assert major == 3
+    assert minor < 1
+    assert patch >= 2
     
-    - cloudformation_facts:
-    stack_name: '{{ stack_name }}'
-  register: my_stack
+    from requests.help import info
     
-        def update_origin_access_identity(self, caller_reference, comment, origin_access_identity_id, e_tag):
-        changed = False
-        new_config = {
-            'CallerReference': caller_reference,
-            'Comment': comment
-        }
+    >>> requests.codes['temporary_redirect']
+307
+>>> requests.codes.teapot
+418
+>>> requests.codes['\o/']
+200
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import (boto3_conn, AWSRetry, camel_dict_to_snake_dict,
-                                      ec2_argument_spec, get_aws_connection_info)
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'Requests.tex', u'Requests Documentation',
+     u'Kenneth Reitz', 'manual'),
+]
     
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+    if __name__ == '__main__':
     
-        module = AnsibleAWSModule(argument_spec=argument_spec, supports_check_mode=True)
+    faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
+# limit dataset to 5000 people (don't care who they are!)
+X = faces.data[:5000]
+n_samples, h, w = faces.images.shape
+n_features = X.shape[1]
     
-        return node_value
+    
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+    
+    from sklearn.cluster import AgglomerativeClustering
+    
+    
+def setup(app):
+    # Format template for issues URI
+    # e.g. 'https://github.com/sloria/marshmallow/issues/{issue}
+    app.add_config_value('issues_uri', default=None, rebuild='html')
+    # Shortcut for GitHub, e.g. 'sloria/marshmallow'
+    app.add_config_value('issues_github_path', default=None, rebuild='html')
+    # Format template for user profile URI
+    # e.g. 'https://github.com/{user}'
+    app.add_config_value('issues_user_uri', default=None, rebuild='html')
+    app.add_role('issue', issue_role)
+    app.add_role('user', user_role)
+
+    
+        # decode the payload explicitly as UTF-8 since lxml is confused for some
+    # reason
+    with codecs.open(html_filename,'r','utf-8') as html_file:
+        html_content = html_file.read()
+    tree = ElementTree(lxml.html.document_fromstring(html_content))
+    i = 0
+    j = 0
+    for p in tree.findall('//p'):
+        content = p.text_content()
+        if len(content) < 100:
+            # skip paragraphs that are too short - probably too noisy and not
+            # representative of the actual language
+            continue
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
+        out, unused_err = process.communicate()
+        retcode = process.poll()
+        if retcode:
+            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
+    except Exception as e:
+        out = 'Exception:%r' % e
+    
+        if __hostsdeny__ and netloc.endswith(__hostsdeny__):
+        start_response('403 Forbidden', [('Content-Type', 'text/html')])
+        yield message_html('403 Hosts Deny', 'Hosts Deny(%r)' % netloc, detail='共用appid因为资源有限，限制观看视频和文件下载等消耗资源过多的访问，请使用自己的appid <a href=' https://github.com/XX-net/XX-Net/wiki/Register-Google-appid' target='_blank'>帮助</a> ')
+        raise StopIteration
+    
+    @section recognizers Recognizers
+    
+            raise NotImplementedError
+    
+    def setLine(self, line):
+        '''@brief Set the line number on which this token was matched
