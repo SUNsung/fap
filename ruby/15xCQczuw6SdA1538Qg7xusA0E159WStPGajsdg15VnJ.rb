@@ -1,108 +1,71 @@
 
         
-                  <<-SQL.strip_heredoc
-            (CASE
-              WHEN (#{builds}) = (#{skipped}) AND (#{warnings}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{skipped}) THEN #{STATUSES[:skipped]}
-              WHEN (#{builds}) = (#{success}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{created}) THEN #{STATUSES[:created]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) + (#{canceled}) THEN #{STATUSES[:canceled]}
-              WHEN (#{builds}) = (#{created}) + (#{skipped}) + (#{pending}) THEN #{STATUSES[:pending]}
-              WHEN (#{running}) + (#{pending}) > 0 THEN #{STATUSES[:running]}
-              WHEN (#{manual}) > 0 THEN #{STATUSES[:manual]}
-              WHEN (#{created}) > 0 THEN #{STATUSES[:running]}
-              ELSE #{STATUSES[:failed]}
-            END)
-          SQL
+              redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.change_email.changed_msg')
+    end
+    
+              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
+          return
         end
+    
+        def form_status_batch_params
+      params.require(:form_status_batch).permit(status_ids: [])
+    end
+    
+      private
+    
+          def has_header
+        @header = (@page.header || false) if @header.nil? && @page
+        !!@header
       end
     
-              pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift(int, shift)
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+          def noindex
+        @version ? true : false
+      end
+    
+      s.executables = ['gollum']
+    
+      desc 'Install all spree gems'
+  task install: :build do
+    for_each_gem do |gem_path|
+      Bundler.with_clean_env do
+        sh 'gem install #{gem_path}'
+      end
+    end
+  end
+    
+            def show
+          @option_value = scope.find(params[:id])
+          respond_with(@option_value)
+        end
+    
+            def create
+          authorize! :create, Property
+          @property = Spree::Property.new(property_params)
+          if @property.save
+            respond_with(@property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@property)
           end
         end
     
-            def representation_class
-          Representation::Note
+            def index
+          @stock_items = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_items)
         end
     
-            def issuable_type
-          pull_request? ? 'MergeRequest' : 'Issue'
-        end
-      end
-    end
-  end
-end
-
-    
-    module Gitlab
-  module GithubImport
-    module Representation
-      class User
-        include ToHash
-        include ExposeAttribute
-    
-          it 'creates a new user' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: '12345678'
-        click_on 'Create User'
-        expect(page).to have_text('User 'usertest' was successfully created.')
-        expect(page).to have_text('test@test.com')
-      end
-    
-        describe 'with block' do
-      it 'returns a nav link with menu' do
-        stub(self).current_page?('/things') { false }
-        stub(self).current_page?('/things/stuff') { false }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
-      end
-    
-      it 'converts values to Float' do
-    expect(location.lat).to be_a Float
-    expect(location.lat).to eq 2.0
-    expect(location.lng).to be_a Float
-    expect(location.lng).to eq 3.0
-    expect(location.radius).to be_a Float
-    expect(location.radius).to eq 300.0
-    expect(location.speed).to be_a Float
-    expect(location.speed).to eq 2.0
-    expect(location.course).to be_a Float
-    expect(location.course).to eq 30.0
-  end
-    
-          expect(Utils.unindent(<<-MD)).to eq('Hello World\nThis is\nnot indented')
-        Hello World
-        This is
-        not indented
-      MD
-    
-              results
-        end
-    
-        if GitHub.api_credentials_type == :none
-      puts <<~EOS
-        You can create a new personal access token:
-          #{GitHub::ALL_SCOPES_URL}
-        #{Utils::Shell.set_variable_in_profile('HOMEBREW_GITHUB_API_TOKEN', 'your_token_here')}
-    
-        if other.respond_to?(:to_str)
-      return true if to_str == other.to_str
-    end
-    
-    module Homebrew
-  module_function
+            def new; end
