@@ -1,320 +1,188 @@
 
         
-          inline int offset(const vector<int>& indices) const {
-    CHECK_LE(indices.size(), num_axes());
-    int offset = 0;
-    for (int i = 0; i < num_axes(); ++i) {
-      offset *= shape(i);
-      if (indices.size() > i) {
-        CHECK_GE(indices[i], 0);
-        CHECK_LT(indices[i], shape(i));
-        offset += indices[i];
-      }
-    }
-    return offset;
-  }
-  /**
-   * @brief Copy from a source Blob.
-   *
-   * @param source the Blob to copy from
-   * @param copy_diff if false, copy the data; if true, copy the diff
-   * @param reshape if false, require this Blob to be pre-shaped to the shape
-   *        of other (and die otherwise); if true, Reshape this Blob to other's
-   *        shape if necessary
-   */
-  void CopyFrom(const Blob<Dtype>& source, bool copy_diff = false,
-      bool reshape = false);
-    
-    #define INSTANTIATE_LAYER_GPU_BACKWARD(classname) \
-  template void classname<float>::Backward_gpu( \
-      const std::vector<Blob<float>*>& top, \
-      const std::vector<bool>& propagate_down, \
-      const std::vector<Blob<float>*>& bottom); \
-  template void classname<double>::Backward_gpu( \
-      const std::vector<Blob<double>*>& top, \
-      const std::vector<bool>& propagate_down, \
-      const std::vector<Blob<double>*>& bottom)
-    
-      /** Will not return until the internal thread has exited. */
-  void StopInternalThread();
-    
-    // Forward and backward wrappers. You should implement the cpu and
-// gpu specific implementations instead, and should not change these
-// functions.
-template <typename Dtype>
-inline Dtype Layer<Dtype>::Forward(const vector<Blob<Dtype>*>& bottom,
-    const vector<Blob<Dtype>*>& top) {
-  Dtype loss = 0;
-  Reshape(bottom, top);
-  switch (Caffe::mode()) {
-  case Caffe::CPU:
-    Forward_cpu(bottom, top);
-    for (int top_id = 0; top_id < top.size(); ++top_id) {
-      if (!this->loss(top_id)) { continue; }
-      const int count = top[top_id]->count();
-      const Dtype* data = top[top_id]->cpu_data();
-      const Dtype* loss_weights = top[top_id]->cpu_diff();
-      loss += caffe_cpu_dot(count, data, loss_weights);
-    }
-    break;
-  case Caffe::GPU:
-    Forward_gpu(bottom, top);
-#ifndef CPU_ONLY
-    for (int top_id = 0; top_id < top.size(); ++top_id) {
-      if (!this->loss(top_id)) { continue; }
-      const int count = top[top_id]->count();
-      const Dtype* data = top[top_id]->gpu_data();
-      const Dtype* loss_weights = top[top_id]->gpu_diff();
-      Dtype blob_loss = 0;
-      caffe_gpu_dot(count, data, loss_weights, &blob_loss);
-      loss += blob_loss;
-    }
-#endif
-    break;
-  default:
-    LOG(FATAL) << 'Unknown caffe mode.';
-  }
-  return loss;
-}
-    
-      int num_kernels_im2col_;
-  int num_kernels_col2im_;
-  int conv_out_channels_;
-  int conv_in_channels_;
-  int conv_out_spatial_dim_;
-  int kernel_dim_;
-  int col_offset_;
-  int output_offset_;
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
-    }
-  }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
-    
-    
-    {  /**
-   * Execute a debugger action.
-   */
-  virtual String debuggerVerb(const std::string& /*verb*/,
-                              const std::vector<std::string>& /*args*/) {
-    return String();
-  }
-};
-    
-    #ifndef incl_HPHP_PERF_EVENT_H_
-#define incl_HPHP_PERF_EVENT_H_
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+        #endif // BITCOIN_QT_NETWORKSTYLE_H
 
     
-      // Generate content to update/add to the config.
-  std::string content;
-  auto s = readFile(kTestDataPath + 'test_parse_items.conf', content);
-  EXPECT_TRUE(s.ok());
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
     
-      EXPECT_TRUE(setEnvVar('GTEST_OSQUERY', 'true'));
+    {private:
+    Ui::OpenURIDialog *ui;
+};
     
-    
-    {  // Use the Query retrieval API to check the now 'previous' result.
-  QueryDataSet previous_qd;
-  auto cf = Query('foobar', query);
-  status = cf.getPreviousQueryResults(previous_qd);
-  EXPECT_TRUE(status.ok());
-}
-    
-    /**
- * @brief Subscription details for INotifyEventPublisher events.
- *
- * This context is specific to INotifyEventPublisher. It allows the
- * subscribing EventSubscriber to set a path (file or directory) and a
- * limited action mask.
- * Events are passed to the EventSubscriber if they match the context
- * path (or anything within a directory if the path is a directory) and if the
- * event action is part of the mask. If the mask is 0 then all actions are
- * passed to the EventSubscriber.
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
  */
-struct INotifySubscriptionContext : public SubscriptionContext {
-  /// Subscription the following filesystem path.
-  std::string path;
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
     
-    #if USE_ESD_CAN
-  CANCardParameter can_card_parameter;
-  can_card_parameter.set_brand(CANCardParameter::ESD_CAN);
-  can_card_parameter.set_type(CANCardParameter::PCI_CARD);
-  can_card_parameter.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
     
-      static const struct ERR2STR err2str[] = {
-      {NTCAN_SUCCESS, 'NTCAN_SUCCESS'},
-      {NTCAN_RX_TIMEOUT, 'NTCAN_RX_TIMEOUT'},
-      {NTCAN_TX_TIMEOUT, 'NTCAN_TX_TIMEOUT'},
-      {NTCAN_TX_ERROR, 'NTCAN_TX_ERROR'},
-      {NTCAN_CONTR_OFF_BUS, 'NTCAN_CONTR_OFF_BUS'},
-      {NTCAN_CONTR_BUSY, 'NTCAN_CONTR_BUSY'},
-      {NTCAN_CONTR_WARN, 'NTCAN_CONTR_WARN'},
-      {NTCAN_NO_ID_ENABLED, 'NTCAN_NO_ID_ENABLED'},
-      {NTCAN_ID_ALREADY_ENABLED, 'NTCAN_ID_ALREADY_ENABLED'},
-      {NTCAN_ID_NOT_ENABLED, 'NTCAN_ID_NOT_ENABLED'},
-      {NTCAN_INVALID_FIRMWARE, 'NTCAN_INVALID_FIRMWARE'},
-      {NTCAN_MESSAGE_LOST, 'NTCAN_MESSAGE_LOST'},
-      {NTCAN_INVALID_PARAMETER, 'NTCAN_INVALID_PARAMETER'},
-      {NTCAN_INVALID_HANDLE, 'NTCAN_INVALID_HANDLE'},
-      {NTCAN_NET_NOT_FOUND, 'NTCAN_NET_NOT_FOUND'},
-#ifdef NTCAN_IO_INCOMPLETE
-      {NTCAN_IO_INCOMPLETE, 'NTCAN_IO_INCOMPLETE'},
-#endif
-#ifdef NTCAN_IO_PENDING
-      {NTCAN_IO_PENDING, 'NTCAN_IO_PENDING'},
-#endif
-#ifdef NTCAN_INVALID_HARDWARE
-      {NTCAN_INVALID_HARDWARE, 'NTCAN_INVALID_HARDWARE'},
-#endif
-#ifdef NTCAN_PENDING_WRITE
-      {NTCAN_PENDING_WRITE, 'NTCAN_PENDING_WRITE'},
-#endif
-#ifdef NTCAN_PENDING_READ
-      {NTCAN_PENDING_READ, 'NTCAN_PENDING_READ'},
-#endif
-#ifdef NTCAN_INVALID_DRIVER
-      {NTCAN_INVALID_DRIVER, 'NTCAN_INVALID_DRIVER'},
-#endif
-#ifdef NTCAN_OPERATION_ABORTED
-      {NTCAN_OPERATION_ABORTED, 'NTCAN_OPERATION_ABORTED'},
-#endif
-#ifdef NTCAN_WRONG_DEVICE_STATE
-      {NTCAN_WRONG_DEVICE_STATE, 'NTCAN_WRONG_DEVICE_STATE'},
-#endif
-      {NTCAN_INSUFFICIENT_RESOURCES, 'NTCAN_INSUFFICIENT_RESOURCES'},
-#ifdef NTCAN_HANDLE_FORCED_CLOSE
-      {NTCAN_HANDLE_FORCED_CLOSE, 'NTCAN_HANDLE_FORCED_CLOSE'},
-#endif
-#ifdef NTCAN_NOT_IMPLEMENTED
-      {NTCAN_NOT_IMPLEMENTED, 'NTCAN_NOT_IMPLEMENTED'},
-#endif
-#ifdef NTCAN_NOT_SUPPORTED
-      {NTCAN_NOT_SUPPORTED, 'NTCAN_NOT_SUPPORTED'},
-#endif
-#ifdef NTCAN_SOCK_CONN_TIMEOUT
-      {NTCAN_SOCK_CONN_TIMEOUT, 'NTCAN_SOCK_CONN_TIMEOUT'},
-#endif
-#ifdef NTCAN_SOCK_CMD_TIMEOUT
-      {NTCAN_SOCK_CMD_TIMEOUT, 'NTCAN_SOCK_CMD_TIMEOUT'},
-#endif
-#ifdef NTCAN_SOCK_HOST_NOT_FOUND
-      {NTCAN_SOCK_HOST_NOT_FOUND, 'NTCAN_SOCK_HOST_NOT_FOUND'},
-#endif
-#ifdef NTCAN_CONTR_ERR_PASSIVE
-      {NTCAN_CONTR_ERR_PASSIVE, 'NTCAN_CONTR_ERR_PASSIVE'},
-#endif
-#ifdef NTCAN_ERROR_NO_BAUDRATE
-      {NTCAN_ERROR_NO_BAUDRATE, 'NTCAN_ERROR_NO_BAUDRATE'},
-#endif
-#ifdef NTCAN_ERROR_LOM
-      {NTCAN_ERROR_LOM, 'NTCAN_ERROR_LOM'},
-#endif
-      {(NTCAN_RESULT)0xffffffff, 'NTCAN_UNKNOWN'} /* stop-mark */
-  };
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
+    {    /* Serialize/parse compact and verify/recover. */
+    extra[0] = 0;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign(ctx, &signature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[4], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[1], message, privkey, NULL, extra) == 1);
+    extra[31] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[2], message, privkey, NULL, extra) == 1);
+    extra[31] = 0;
+    extra[0] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[3], message, privkey, NULL, extra) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(memcmp(&signature[4], &signature[0], 64) == 0);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    memset(&rsignature[4], 0, sizeof(rsignature[4]));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    /* Parse compact (with recovery id) and recover. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 1);
+    CHECK(memcmp(&pubkey, &recpubkey, sizeof(pubkey)) == 0);
+    /* Serialize/destroy/parse signature and verify again. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    sig[secp256k1_rand_bits(6)] += 1 + secp256k1_rand_int(255);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 0);
+    /* Recover again */
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 0 ||
+          memcmp(&pubkey, &recpubkey, sizeof(pubkey)) != 0);
 }
     
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
+}
+    
+    #endif
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+
+    
+    void ImGui_ImplDX11_NewFrame()
+{
+    if (!g_pFontSampler)
+        ImGui_ImplDX11_CreateDeviceObjects();
+}
+
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
+ public:
+  static const int32_t ID = 0x111;
+  MockProtocolData() {}
+};
+    
+    #include 'glog/logging.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    void ObjectGeneralInfo60B::Parse(const std::uint8_t* bytes, int32_t length,
+                                 ContiRadar* conti_radar) const {
+  int obj_id = object_id(bytes, length);
+  auto conti_obs = conti_radar->add_contiobs();
+  conti_obs->set_clusterortrack(false);
+  conti_obs->set_obstacle_id(obj_id);
+  conti_obs->set_longitude_dist(longitude_dist(bytes, length));
+  conti_obs->set_lateral_dist(lateral_dist(bytes, length));
+  conti_obs->set_longitude_vel(longitude_vel(bytes, length));
+  conti_obs->set_lateral_vel(lateral_vel(bytes, length));
+  conti_obs->set_rcs(rcs(bytes, length));
+  conti_obs->set_dynprop(dynprop(bytes, length));
+  double timestamp = apollo::common::time::Clock::NowInSeconds();
+  auto header = conti_obs->mutable_header();
+  header->CopyFrom(conti_radar->header());
+  header->set_timestamp_sec(timestamp);
+}
+    
+    OutputType RadarState201::output_type(const std::uint8_t* bytes,
+                                      int32_t length) const {
+  Byte t0(bytes + 5);
+  uint32_t x = t0.get_byte(2, 2);
+    }
+    
+    Status HeaderXmlParser::Parse(const tinyxml2::XMLElement& xml_node,
+                              PbHeader* header) {
+  auto header_node = xml_node.FirstChildElement('header');
+  if (!header_node) {
+    std::string err_msg = 'xml data missing header';
+    return Status(apollo::common::ErrorCode::HDMAP_DATA_ERROR, err_msg);
+  }
+  std::string rev_major;
+  std::string rev_minor;
+  std::string database_name;
+  std::string version;
+  std::string date;
+  double north = 0.0;
+  double south = 0.0;
+  double west = 0.0;
+  double east = 0.0;
+  std::string vendor;
+  int checker = UtilXmlParser::QueryStringAttribute(
+                            *header_node, 'revMajor', &rev_major);
+  checker += UtilXmlParser::QueryStringAttribute(
+                            *header_node, 'revMinor', &rev_minor);
+  checker += UtilXmlParser::QueryStringAttribute(
+                            *header_node, 'name', &database_name);
+  checker += UtilXmlParser::QueryStringAttribute(
+                            *header_node, 'version', &version);
+  checker += UtilXmlParser::QueryStringAttribute(
+                            *header_node, 'date', &date);
+  checker += header_node->QueryDoubleAttribute('north', &north);
+  checker += header_node->QueryDoubleAttribute('south', &south);
+  checker += header_node->QueryDoubleAttribute('east', &east);
+  checker += header_node->QueryDoubleAttribute('west', &west);
+  checker +=
+      UtilXmlParser::QueryStringAttribute(*header_node, 'vendor', &vendor);
+    }
+    
     
     {
     {
-    {
-    {
-    {  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  CanFrame frame;
-  // frame.id = 0x60;
-  // frame.len = 8;
-  // frame.data[0] = 0;
-  // frames.push_back(frame);
-  // num = 1;
-  EXPECT_EQ(hermes_can.Start(), ErrorCode::OK);
-  EXPECT_EQ(hermes_can.Receive(&frames, &num), ErrorCode::OK);
-}
-*/
-}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
+    {}  // namespace adapter
+}  // namespace hdmap
 }  // namespace apollo
+
     
-    std::string Byte::byte_to_hex(const uint8_t value) {
-  uint8_t high = value >> 4;
-  uint8_t low = value & 0x0F;
-  std::string result = '';
-  result += HEX[high];
-  result += HEX[low];
-  return result;
-}
+        double s_param = s - s0;
+    // linear extrapolation is handled internally in LatticeTrajectory1d;
+    // no worry about s_param > lat_trajectory.ParamLength() situation
+    double d = lat_trajectory.Evaluate(0, s_param);
+    double d_prime = lat_trajectory.Evaluate(1, s_param);
+    double d_pprime = lat_trajectory.Evaluate(2, s_param);
     
-    #ifndef MODULES_DRIVERS_CANBUS_COMMON_BYTE_H_
-#define MODULES_DRIVERS_CANBUS_COMMON_BYTE_H_
+      const auto mat = kernel.kernel_matrix();
+  const auto offset = kernel.offset_matrix();
