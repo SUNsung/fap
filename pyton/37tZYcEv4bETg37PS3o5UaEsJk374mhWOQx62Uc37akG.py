@@ -1,9 +1,19 @@
 
         
         
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
+easy_install.ScriptWriter.get_args = get_args
+    
+        proc.sendline(u'ehco test')
+    
+    
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
+    proc.sendline(u'fish')
+    return proc
     
     
 @pytest.mark.functional
@@ -12,48 +22,180 @@ def test_how_to_configure_alias(proc, TIMEOUT):
     how_to_configure(proc, TIMEOUT)
 
     
-    
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+        new_command = get_new_command(Command('apt update', match_output))
+    assert new_command == 'apt list --upgradable'
+
     
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+class Formatting(object):
+    '''A delegate class that invokes the actual processors.'''
+    
+        name = 'Basic HTTP auth'
+    auth_type = 'basic'
+    
+        def __iter__(self):
+        return iter(self._plugins)
     
     
-@pytest.mark.parametrize('command', [
-    Command('cargo buid', no_such_subcommand_old),
-    Command('cargo buils', no_such_subcommand)])
-def test_match(command):
-    assert match(command)
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
     
-        platforms = 'any',
-    zip_safe = True,
-    include_package_data = True,
+    import pytest
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
+    # Apply monkey patches to fix issues in external libraries
+from . import _monkeypatches
+del _monkeypatches
     
-    __all__ = ['fc2video_download']
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.utils.versions import scrapy_components_versions
     
-    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    
+    
+    
+def main():
+    parser = ArgumentParser(description='''\
+Send the contents of a directory as a MIME message.
+Unless the -o option is given, the email is sent by forwarding to your local
+SMTP server, which then does the normal delivery process.  Your local machine
+must be running an SMTP server.
+''')
+    parser.add_argument('-d', '--directory',
+                        help='''Mail the contents of the specified directory,
+                        otherwise use the current directory.  Only the regular
+                        files in the directory are sent, and we don't recurse to
+                        subdirectories.''')
+    parser.add_argument('-o', '--output',
+                        metavar='FILE',
+                        help='''Print the composed message to FILE instead of
+                        sending the message to the SMTP server.''')
+    parser.add_argument('-s', '--sender', required=True,
+                        help='The value of the From: header (required)')
+    parser.add_argument('-r', '--recipient', required=True,
+                        action='append', metavar='RECIPIENT',
+                        default=[], dest='recipients',
+                        help='A To: header value (at least one required)')
+    args = parser.parse_args()
+    directory = args.directory
+    if not directory:
+        directory = '.'
+    # Create the message
+    msg = EmailMessage()
+    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
+    msg['To'] = ', '.join(args.recipients)
+    msg['From'] = args.sender
+    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
+    
+    # We can extract the richest alternative in order to display it:
+richest = msg.get_body()
+partfiles = {}
+if richest['content-type'].maintype == 'text':
+    if richest['content-type'].subtype == 'plain':
+        for line in richest.get_content().splitlines():
+            print(line)
+        sys.exit()
+    elif richest['content-type'].subtype == 'html':
+        body = richest
+    else:
+        print('Don't know how to display {}'.format(richest.get_content_type()))
+        sys.exit()
+elif richest['content-type'].content_type == 'multipart/related':
+    body = richest.get_body(preferencelist=('html'))
+    for part in richest.iter_attachments():
+        fn = part.get_filename()
+        if fn:
+            extension = os.path.splitext(part.get_filename())[1]
+        else:
+            extension = mimetypes.guess_extension(part.get_content_type())
+        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
+            f.write(part.get_content())
+            # again strip the <> to go from email form of cid to html form.
+            partfiles[part['content-id'][1:-1]] = f.name
+else:
+    print('Don't know how to display {}'.format(richest.get_content_type()))
+    sys.exit()
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    # The magic_html_parser has to rewrite the href='cid:....' attributes to
+    # point to the filenames in partfiles.  It also has to do a safety-sanitize
+    # of the html.  It could be written using html.parser.
+    f.write(magic_html_parser(body.get_content(), partfiles))
+webbrowser.open(f.name)
+os.remove(f.name)
+for fn in partfiles.values():
+    os.remove(fn)
+    
+    def pow3(x):
+    return x ** 3
+    
+    class Point:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+    
+    DB_FILE = 'mydb'
+    
+            html = get_content(endpoint, headers= fake_header_id)
+        html_json = json.loads(html)
+    
+    from .theplatform import theplatform_download_by_pid
+    
+    
+'''
+http://open.iqiyi.com/lib/player.html
+'''
+iqiyi_patterns = [r'(?:\'|\')(https?://dispatcher\.video\.qiyi\.com\/disp\/shareplayer\.swf\?.+?)(?:\'|\')',
+                  r'(?:\'|\')(https?://open\.iqiyi\.com\/developer\/player_js\/coopPlayerIndex\.html\?.+?)(?:\'|\')']
+    
+        if 'tvId' not in q or 'channelId' not in q:
+        raise Exception('No enough arguments!')
+    
+    ATTR_URL = 'url'
+ATTR_URL_DEFAULT = 'https://www.google.com'
+    
+                    _LOGGER.debug('Device %s is connected', mac)
+                self.last_results[mac] = name
+        except (KeyError, IndexError):
+            _LOGGER.exception('Router returned unexpected response')
+            return False
+        return True
+    
+            Returns boolean if scanning successful.
+        '''
+        _LOGGER.debug('Requesting Tado')
+    
+            result = self._retrieve_list_with_retry()
+        if result:
+            self._store_result(result)
+            return True
+        return False
+    
+                            final_path = os.path.join(subdir_path, filename)
+    
+        update_emoncms(dt_util.utcnow())
+    return True
+
+    
+    
+def update_version(release, sentry_models):
+    old_version = release.version
+    try:
+        project_slug = release.projects.values_list('slug', flat=True)[0]
+    except IndexError:
+        # delete releases if they have no projects
+        release.delete()
+        return
+    new_version = ('%s-%s' % (project_slug, old_version))[:64]
+    sentry_models.Release.objects.filter(id=release.id).update(version=new_version)
+    sentry_models.TagValue.objects.filter(
+        project__in=release.projects.all(), key='sentry:release', value=old_version
+    ).update(value=new_version)
     
         models = {
         'sentry.activity': {
@@ -354,7 +496,7 @@ def test_match(command):
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 2, 2, 0, 0)',
+                    'default': 'datetime.datetime(2017, 2, 22, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -622,7 +764,38 @@ def test_match(command):
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '64'
             }),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
+            'organization_id':
+            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
+                'null': 'True'
+            }),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'projects': (
+                'django.db.models.fields.related.ManyToManyField', [], {
+                    'to': 'orm['sentry.Project']',
+                    'through': 'orm['sentry.EnvironmentProject']',
+                    'symmetrical': 'False'
+                }
+            )
+        },
+        'sentry.environmentproject': {
+            'Meta': {
+                'unique_together': '(('project', 'environment'),)',
+                'object_name': 'EnvironmentProject'
+            },
+            'environment': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.Environment']'
+                }
+            ),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'project': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.Project']'
+                }
+            )
         },
         'sentry.event': {
             'Meta': {
@@ -1079,6 +1252,24 @@ def test_match(command):
                     'to': 'orm['sentry.User']'
                 }
             )
+        },
+        'sentry.groupcommitresolution': {
+            'Meta': {
+                'unique_together': '(('group_id', 'commit_id'),)',
+                'object_name': 'GroupCommitResolution'
+            },
+            'commit_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'datetime': (
+                'django.db.models.fields.DateTimeField', [], {
+                    'default': 'datetime.datetime.now',
+                    'db_index': 'True'
+                }
+            ),
+            'group_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            })
         },
         'sentry.groupemailthread': {
             'Meta': {
@@ -1923,7 +2114,7 @@ def test_match(command):
         },
         'sentry.release': {
             'Meta': {
-                'unique_together': '(('project_id', 'version'),)',
+                'unique_together': '(('organization', 'version'),)',
                 'object_name': 'Release'
             },
             'data': ('jsonfield.fields.JSONField', [], {
@@ -2486,7 +2677,7 @@ def test_match(command):
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'eoUxyDO82qJrLEXmZNPgefpGSvdT4CsY'',
+                    'default': 'u'XnI3ECLgvAVynoWYFA2CIBagIDOTjKdA'',
                     'max_length': '32'
                 }
             )
@@ -2554,155 +2745,85 @@ def test_match(command):
         }
     }
     
-            # Deleting model 'GroupCommitResolution'
-        db.delete_table('sentry_groupcommitresolution')
+            # Deleting model 'ProcessingIssue'
+        db.delete_table('sentry_processingissue')
     
-            for name, organization_id in dupe_envs:
-            envs = list(
-                orm.Environment.objects.filter(
-                    name=name,
-                    organization_id=organization_id,
-                ).order_by('date_added')
-            )
-            to_env = envs[0]
-            from_envs = envs[1:]
-    
-            db.start_transaction()
-    
-            # Adding unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
-        db.create_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
-    
-        complete_apps = ['sentry']
-    symmetrical = True
-
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'CommitAuthor.external_id'
-        db.add_column(
-            'sentry_commitauthor',
-            'external_id',
-            self.gf('django.db.models.fields.CharField')(max_length=164, null=True),
-            keep_default=False
+            # The following code is provided here to aid in writing a correct migration
+        # Changing field 'ReleaseEnvironment.project_id'
+        db.alter_column(
+            'sentry_environmentrelease', 'project_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
         )
     
+            for release_project in RangeQuerySetWrapperWithProgressBar(
+            orm.ReleaseProject.objects.all()
+        ):
+            orm.ReleaseProject.objects.filter(id=release_project.id).update(
+                new_groups=orm.Group.objects.filter(
+                    project_id=release_project.project_id,
+                    first_release_id=release_project.release_id,
+                ).count()
+            )
     
-class Delegator(object):
+            # Removing unique constraint on 'VersionDSymFile', fields ['dsym_file', 'version', 'build']
+        db.delete_unique('sentry_versiondsymfile', ['dsym_file_id', 'version', 'build'])
+    
+            # Deleting model 'Distribution'
+        db.delete_table('sentry_distribution')
+    
+        '''A simple localizer a la gettext'''
+    
+        graphic = CompositeGraphic()
+    
+    
+class RadioTest(unittest.TestCase):
     '''
-    >>> delegator = Delegator(Delegate())
-    >>> delegator.p1
-    123
-    >>> delegator.p2
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'p2'
-    >>> delegator.do_something('nothing')
-    'Doing nothing'
-    >>> delegator.do_anything()
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'do_anything'
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
     '''
     
-            depending on self.param value
-        '''
-        self._class_method_choices[self.param].__get__(None, self.__class__)()
+        test = Catalog('param_value_2')
+    test.main_method()
     
     
-class SuperUserSpecification(CompositeSpecification):
-    def is_satisfied_by(self, candidate):
-        return getattr(candidate, 'super_user', False)
+# Example usage
+class Data(Subject):
+    def __init__(self, name=''):
+        Subject.__init__(self)
+        self.name = name
+        self._data = 0
     
-    In Python, the interface we use is simply a callable, which is 'builtin' interface
-in Python, and in normal circumstances we can simply use the class itself as
-that callable, because classes are first class objects in Python.
+    
+class BaseRegisteredClass(object):
+    __metaclass__ = RegistryHolder
+    '''
+        Any class that will inherits from BaseRegisteredClass will be included
+        inside the dict RegistryHolder.REGISTRY, the key being the name of the
+        class and the associated value, the class itself.
+    '''
+    pass
+    
+    
+class Dog(object):
+    def speak(self):
+        return 'woof'
+    
+    ### OUTPUT ###
+# Name: Jhon    Occupation: Coder
+# Before we access `relatives`:
+# {'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
+# Jhon's relatives: Many relatives.
+# After we've accessed `relatives`:
+# {'relatives': 'Many relatives.', 'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
+# Father and mother
+# {'_lazy__parents': 'Father and mother', 'relatives': 'Many relatives.', 'call_count2': 1, 'name': 'Jhon', 'occupation': 'Coder'}  # noqa flake8
+# Father and mother
+# 1
+
     
     '''
-*What is this pattern about?
-It decouples the creation of a complex object and its representation,
-so that the same process can be reused to build objects from the same
-family.
-This is useful when you must separate the specification of an object
-from its actual representation (generally for abstraction).
-    
-    *References:
-bottle
-https://github.com/bottlepy/bottle/blob/cafc15419cbb4a6cb748e6ecdccf92893bb25ce5/bottle.py#L270
-django
-https://github.com/django/django/blob/ffd18732f3ee9e6f0374aff9ccf350d85187fac2/django/utils/functional.py#L19
-pip
-https://github.com/pypa/pip/blob/cb75cca785629e15efb46c35903827b3eae13481/pip/utils/__init__.py#L821
-pyramimd
-https://github.com/Pylons/pyramid/blob/7909e9503cdfc6f6e84d2c7ace1d3c03ca1d8b73/pyramid/decorator.py#L4
-werkzeug
-https://github.com/pallets/werkzeug/blob/5a2bf35441006d832ab1ed5a31963cbc366c99ac/werkzeug/utils.py#L35
-    
-    
-class TimeDisplay(object):
-    def __init__(self):
-        pass
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-        def run_loop(self):
-        while self.blackboard.common_state['progress'] < 100:
-            for expert in self.blackboard.experts:
-                if expert.is_eager_to_contribute:
-                    expert.contribute()
-        return self.blackboard.common_state['contributions']
-    
-    
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
-    
-    
-def ConvertVimDataToCompletionData( vim_data ):
-  # see :h complete-items for a description of the dictionary fields
-  completion_data = {}
-    
-    
-# This class can be used to keep the ycmd server alive for the duration of the
-# life of the client. By default, ycmd shuts down if it doesn't see a request in
-# a while.
-class YcmdKeepalive( object ):
-  def __init__( self, ping_interval_seconds = 60 * 10 ):
-    self._keepalive_thread = Thread( target = self._ThreadMain )
-    self._keepalive_thread.daemon = True
-    self._ping_interval_seconds = ping_interval_seconds
-    
-      # We don't want the requests to actually be sent to the server, just have it
-  # return success.
-  with patch( 'ycm.client.completer_available_request.'
-              'CompleterAvailableRequest.PostDataToHandler',
-              return_value = True ):
-    with patch( 'ycm.client.completion_request.CompletionRequest.'
-                'PostDataToHandlerAsync',
-                return_value = MagicMock( return_value=True ) ):
-    
-    
-def ExtractKeywordsFromGroup_WithLinksTo_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'zoo goo',
-                   'links to Statement'
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-    
-def ParseArguments():
-  parser = argparse.ArgumentParser()
-  parser.add_argument( '--skip-build', action = 'store_true',
-                       help = 'Do not build ycmd before testing' )
-  parser.add_argument( '--coverage', action = 'store_true',
-                       help = 'Enable coverage report' )
-  parser.add_argument( '--no-flake8', action = 'store_true',
-                       help = 'Do not run flake8' )
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
