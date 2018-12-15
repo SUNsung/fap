@@ -1,108 +1,105 @@
 
         
-        /**
- * \class Predictor
- *
- * \brief Performs prediction on individual training instances or batches of
- * instances for GBTree. The predictor also manages a prediction cache
- * associated with input matrices. If possible, it will use previously
- * calculated predictions instead of calculating new predictions.
- *        Prediction functions all take a GBTreeModel and a DMatrix as input and
- * output a vector of predictions. The predictor does not modify any state of
- * the model itself.
- */
-    
-     private:
-  StreamBufferReader reader_;
-  int tmp_ch;
-  int num_prev;
-  unsigned char buf_prev[2];
-  // whether we need to do strict check
-  static const bool kStrictCheck = false;
-};
-/*! \brief the stream that write to base64, note we take from file pointers */
-class Base64OutStream: public dmlc::Stream {
- public:
-  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
-    buf_top = 0;
+        template <>
+struct Converter<base::trace_event::TraceConfig> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     base::trace_event::TraceConfig* out) {
+    Dictionary options;
+    if (!ConvertFromV8(isolate, val, &options))
+      return false;
+    std::string category_filter, trace_options;
+    if (!options.Get('categoryFilter', &category_filter) ||
+        !options.Get('traceOptions', &trace_options))
+      return false;
+    *out = base::trace_event::TraceConfig(category_filter, trace_options);
+    return true;
   }
-  virtual void Write(const void *ptr, size_t size) {
-    using base64::EncodeTable;
-    size_t tlen = size;
-    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
-    while (tlen) {
-      while (buf_top < 3  && tlen != 0) {
-        buf[++buf_top] = *cptr++; --tlen;
-      }
-      if (buf_top == 3) {
-        // flush 4 bytes out
-        PutChar(EncodeTable[buf[1] >> 2]);
-        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
-        PutChar(EncodeTable[buf[3] & 0x3F]);
-        buf_top = 0;
-      }
-    }
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64OutStream do not support read';
-    return 0;
-  }
-  /*!
-   * \brief finish writing of all current base64 stream, do some post processing
-   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
-   */
-  inline void Finish(char endch = EOF) {
-    using base64::EncodeTable;
-    if (buf_top == 1) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
-      PutChar('=');
-      PutChar('=');
-    }
-    if (buf_top == 2) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
-      PutChar('=');
-    }
-    buf_top = 0;
-    if (endch != EOF) PutChar(endch);
-    this->Flush();
-  }
-    
-    /*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
 };
     
-      void SendThreadFunc() {
-    using common::time::Clock;
-    using common::time::AsInt64;
-    using common::time::micros;
-    using common::ErrorCode;
-    AINFO << 'Send thread starting...';
-    TestCanParam *param = param_ptr();
-    CanClient *client = param->can_client;
-    std::vector<CanFrame> frames;
-    frames.resize(MAX_CAN_SEND_FRAME_LEN);
-    }
+    namespace mate {
+class Arguments;
+class Dictionary;
+}  // namespace mate
     
-    
-    {  int32_t frame_num = FRAME_LEN;
-  auto ret = send_client_->Send(frames, &frame_num);
-  EXPECT_EQ(ret, ErrorCode::OK);
-  EXPECT_EQ(send_client_->GetErrorString(0), '');
-  send_client_->Stop();
+    namespace base {
+class FilePath;
 }
     
-    #include 'gflags/gflags.h'
-#include 'modules/drivers/canbus/can_client/can_client.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
     
-    #include 'gtest/gtest.h'
+    {  api::WebContents* api_web_contents_;
+  std::map<std::string, int> origin_counts_;
+};
+    
+    #include 'common.hpp'
+#include 'vtransform.hpp'
+    
+                uint8x16x4_t v_src = vld4q_u8(src + sj);
+            vst1q_u8(dst + dj, v_src.val[coi]);
+    
+    void assertSupportedConfiguration(bool parametersSupported)
+{
+    if (!isSupportedConfiguration()) {
+        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
+        std::abort();
+    }
+    }
+    
+                uint32x4_t v_mask0 = vorrq_u32(vceqq_u32(v_src0, v_maxval4), vceqq_u32(v_src0, v_minval4));
+            uint32x4_t v_mask1 = vorrq_u32(vceqq_u32(v_src1, v_maxval4), vceqq_u32(v_src1, v_minval4));
+    
+    #endif
+    
+    INRANGEFUNC(u8)
+INRANGEFUNC(s8)
+INRANGEFUNC(u16)
+INRANGEFUNC(s16)
+INRANGEFUNC(s32)
+INRANGEFUNC(f32)
+    
+    #ifndef CAROTENE_INTRINSICS_HPP
+#define CAROTENE_INTRINSICS_HPP
+    
+      // Returns the number of TestPartResult objects in the array.
+  int size() const;
+    
+    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_DEATH_TEST_INTERNAL_H_
+#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_DEATH_TEST_INTERNAL_H_
+    
+        void ComputeCurrentValue() {
+      if (!AtEnd())
+        current_value_ = ParamType(*current1_, *current2_, *current3_,
+            *current4_, *current5_);
+    }
+    bool AtEnd() const {
+      // We must report iterator past the end of the range when either of the
+      // component iterators has reached the end of its range.
+      return
+          current1_ == end1_ ||
+          current2_ == end2_ ||
+          current3_ == end3_ ||
+          current4_ == end4_ ||
+          current5_ == end5_;
+    }
+    
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
+    
+    template <GTEST_2_TYPENAMES_(T)>
+struct tuple_size<GTEST_2_TUPLE_(T) > {
+  static const int value = 2;
+};
+    
+      // Try to divide n by every odd number i, starting from 3
+  for (int i = 3; ; i += 2) {
+    // We only have to try i up to the squre root of n
+    if (i > n/i) break;
+    }
+    
+    // This should fail when the --check_for_leaks command line flag is
+// specified.
+TEST(ListenersTest, LeaksWater) {
+  Water* water = new Water;
+  EXPECT_TRUE(water != NULL);
+}
