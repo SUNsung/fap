@@ -1,120 +1,173 @@
 
         
-                if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-        elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
-            error = 'User {0} is already registered.'.format(username)
+        
+def with_confirmation(proc, TIMEOUT):
+    '''Ensures that command can be fixed when confirmation enabled.'''
+    _set_confirmation(proc, True)
     
-        assert 'closed' in str(e)
     
-        iterkeys = lambda d: d.iterkeys()
-    itervalues = lambda d: d.itervalues()
-    iteritems = lambda d: d.iteritems()
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-        .. versionchanged:: 0.9
-        `category_filter` parameter added.
     
-    # You can now launch tensorboard with `tensorboard --logdir=./logs` on your
-# command line and then go to http://localhost:6006/#projector to view the
-# embeddings
+@pytest.mark.parametrize('command', [
+    Command('apt list --upgradable', no_match_output),
+    Command('sudo apt list --upgradable', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+    
+def _is_not_okay_to_test():
+    return 'elasticsearch' not in _get_formulas()
+    
+        # Input shape
+        2D tensor of shape (samples, n)
+    
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+    from ..utils.data_utils import get_file
+import numpy as np
+    
+    
+def get(identifier):
+    if identifier is None:
+        return None
+    if isinstance(identifier, dict):
+        return deserialize(identifier)
+    elif isinstance(identifier, six.string_types):
+        config = {'class_name': str(identifier), 'config': {}}
+        return deserialize(config)
+    elif callable(identifier):
+        return identifier
+    else:
+        raise ValueError('Could not interpret regularizer identifier: ' +
+                         str(identifier))
 
     
-        x_train = np.empty((num_train_samples, 3, 32, 32), dtype='uint8')
-    y_train = np.empty((num_train_samples,), dtype='uint8')
     
+def test_imdb():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = imdb.load_data()
+        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = imdb.get_word_index()
+        assert isinstance(word_index, dict)
     
-def deserialize(config, custom_objects=None):
-    return deserialize_keras_object(config,
-                                    module_objects=globals(),
-                                    custom_objects=custom_objects,
-                                    printable_module_name='regularizer')
+            # Save model via the template model (which shares the same weights):
+        model.save('my_model.h5')
+    ```
     
-        model = create_multi_input_model_from(*models)
-    model.compile(loss='categorical_crossentropy', optimizer='sgd')
-    assert len(model.losses) == 8
+            params = self._canonical_to_params(
+            weights=[
+                self.kernel_r,
+                self.kernel_z,
+                self.kernel_h,
+                self.recurrent_kernel_r,
+                self.recurrent_kernel_z,
+                self.recurrent_kernel_h,
+            ],
+            biases=[
+                self.bias_r_i,
+                self.bias_z_i,
+                self.bias_h_i,
+                self.bias_r,
+                self.bias_z,
+                self.bias_h,
+            ],
+        )
+        outputs, h = self._cudnn_gru(
+            inputs,
+            input_h=input_h,
+            params=params,
+            is_training=True)
     
-        E.g. if your `batch_size` is 64 and you use `gpus=2`,
-    then we will divide the input into 2 sub-batches of 32 samples,
-    process each sub-batch on one GPU, then return the full
-    batch of 64 processed samples.
+        # Arguments
+      rotation: A float, the degree range for rotation (0 <= rotation < 180),
+          e.g. 3 for random image rotation between (-3.0, 3.0).
+      horizontal_flip: A boolean, whether to allow random horizontal flip,
+          e.g. true for 50% possibility to flip image horizontally.
+      vertical_flip: A boolean, whether to allow random vertical flip,
+          e.g. true for 50% possibility to flip image vertically.
     
-        # And to the following:
-    model = Sequential()
-    model.add(Dense(32, batch_input_shape=(None, 500)))
-    
-        plt.imshow(toplot)
-    ax = fig.add_subplot(122)
-    plt.text(1, 3, 'Ground truth', fontsize=20)
-    
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
-    
-    _help = '''Usage: {} [OPTION]... [URL]...
-TODO
-'''.format(script_name)
-    
-    def youku_acfun_proxy(vid, sign, ref):
-    endpoint = 'http://player.acfun.cn/flash_data?vid={}&ct=85&ev=3&sign={}&time={}'
-    url = endpoint.format(vid, sign, str(int(time.time() * 1000)))
-    json_data = json.loads(get_content(url, headers=dict(referer=ref)))['data']
-    enc_text = base64.b64decode(json_data)
-    dec_text = rc4(b'8bdc7e1a', enc_text).decode('utf8')
-    youku_json = json.loads(dec_text)
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
+    _options = [
+    'help',
+    'version',
+    'gui',
+    'force',
+    'playlists',
+]
+_short_options = 'hVgfl'
     
             if self.tree.find('result').text != '1':
             log.wtf('API result says failed!')
             raise 
     
     
-def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % name) or os.path.exists('%s_privkey.txt' % name):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \n'
-              'Use a different name or delete these files and re-run this program.' %
-              (name, name))
-        sys.exit()
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
     
-        def hash_function(self, key):
-        return key % self.size_table
+        try:
+        json_data = get_coub_data(html)
+        title, video_url, audio_url = get_title_and_urls(json_data)
+        video_file_name, video_file_path = get_file_path(merge, output_dir, title, video_url)
+        audio_file_name, audio_file_path = get_file_path(merge, output_dir, title, audio_url)
+        download_url(audio_url, merge, output_dir, title, info_only)
+        download_url(video_url, merge, output_dir, title, info_only)
+        if not info_only:
+            try:
+                fix_coub_video_file(video_file_path)
+                audio_duration = float(ffmpeg.ffprobe_get_media_duration(audio_file_path))
+                video_duration = float(ffmpeg.ffprobe_get_media_duration(video_file_path))
+                loop_file_path = get_loop_file_path(title, output_dir)
+                single_file_path = audio_file_path
+                if audio_duration > video_duration:
+                    write_loop_file(int(audio_duration / video_duration), loop_file_path, video_file_name)
+                else:
+                    single_file_path = audio_file_path
+                    write_loop_file(int(video_duration / audio_duration), loop_file_path, audio_file_name)
     
-    The problem is  :
-Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
-Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+    site_info = 'Douban.com'
+download = douban_download
+download_playlist = playlist_not_supported('douban')
+
+    
+    
 '''
-from __future__ import print_function
-    
-    Usage:
-  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
-  
-  2. create initial_centroids,
-        initial_centroids = get_initial_centroids(
-            X, 
-            k, 
-            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
-            )
-    
-    
+http://open.iqiyi.com/lib/player.html
 '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
-* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a * b
-* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
-*
-* As far as the modulo is concerned,
-* the fact : (a+b) % c = ((a%c) + (b%c)) % c
-* Now apply RULE 1 OR 2, whichever is required.
-'''
+iqiyi_patterns = [r'(?:\'|\')(https?://dispatcher\.video\.qiyi\.com\/disp\/shareplayer\.swf\?.+?)(?:\'|\')',
+                  r'(?:\'|\')(https?://open\.iqiyi\.com\/developer\/player_js\/coopPlayerIndex\.html\?.+?)(?:\'|\')']
+    
+        print('Done!')
+    if failures:
+        print('Some downloads have failed:')
+        for fail in failures:
+            print('> ' + fail)
