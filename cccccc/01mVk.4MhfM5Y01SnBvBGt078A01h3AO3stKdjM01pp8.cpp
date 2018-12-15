@@ -1,175 +1,103 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
-  const base::CommandLine::StringType dashdash(2, '-');
-  bool block_args = false;
-  for (int i = 0; i < argc; ++i) {
-    if (argv[i] == dashdash)
-      break;
-    if (block_args) {
-      return false;
-    } else if (IsUrlArg(argv[i])) {
-      block_args = true;
+        public:
+    explicit TransactionDescDialog(const QModelIndex &idx, QWidget *parent = 0);
+    ~TransactionDescDialog();
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
     }
+    return true;
+}
+    
+        BOOST_CHECK(v.setBool(false));
+    BOOST_CHECK_EQUAL(v.isBool(), true);
+    BOOST_CHECK_EQUAL(v.isTrue(), false);
+    BOOST_CHECK_EQUAL(v.isFalse(), true);
+    BOOST_CHECK_EQUAL(v.getBool(), false);
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    static void FrameRender(ImGui_ImplVulkanH_WindowData* wd)
+{
+	VkResult err;
+    }
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+    int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX12 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    Benchmark* Benchmark::ThreadRange(int min_threads, int max_threads) {
+  CHECK_GT(min_threads, 0);
+  CHECK_GE(max_threads, min_threads);
+    }
+    
+      int32_t result = default_value;
+  if (!ParseInt32(std::string('Environment variable ') + env_var, string_value,
+                  &result)) {
+    std::cout << 'The default value ' << default_value << ' is used.\n';
+    return default_value;
   }
-  return true;
-}
     
-    void AutoUpdater::OnUpdateDownloaded(const std::string& release_notes,
-                                     const std::string& release_name,
-                                     const base::Time& release_date,
-                                     const std::string& url) {
-  Emit('update-downloaded', release_notes, release_name, release_date, url,
-       // Keep compatibility with old APIs.
-       base::Bind(&AutoUpdater::QuitAndInstall, base::Unretained(this)));
-}
+    #endif  // COMPLEXITY_H_
+
     
-    namespace atom {
-    }
+      const double real_time = result.GetAdjustedRealTime();
+  const double cpu_time = result.GetAdjustedCPUTime();
     
-      // TrayIconObserver:
-  void OnClicked(const gfx::Rect& bounds,
-                 const gfx::Point& location,
-                 int modifiers) override;
-  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnBalloonShow() override;
-  void OnBalloonClicked() override;
-  void OnBalloonClosed() override;
-  void OnDrop() override;
-  void OnDropFiles(const std::vector<std::string>& files) override;
-  void OnDropText(const std::string& text) override;
-  void OnDragEntered() override;
-  void OnDragExited() override;
-  void OnDragEnded() override;
-  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
-  void OnMouseExited(const gfx::Point& location, int modifiers) override;
-  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
+      // FIXME: Add locking to output.
+  template <class Tp>
+  friend LogType& operator<<(LogType&, Tp const&);
+  friend LogType& operator<<(LogType&, EndLType*);
     
-    class WebRequest : public mate::TrackableObject<WebRequest> {
- public:
-  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
-                                         AtomBrowserContext* browser_context);
-    }
-    
-    
-    {}  // namespace
-    
-      // this.emit(name, event, args...);
-  template <typename... Args>
-  bool EmitCustomEvent(const base::StringPiece& name,
-                       v8::Local<v8::Object> event,
-                       const Args&... args) {
-    return EmitWithEvent(
-        name, internal::CreateCustomEvent(isolate(), GetWrapper(), event),
-        args...);
-  }
-    
-    bool SavePageHandler::Handle(const base::FilePath& full_path,
-                             const content::SavePageType& save_type) {
-  auto* download_manager = content::BrowserContext::GetDownloadManager(
-      web_contents_->GetBrowserContext());
-  download_manager->AddObserver(this);
-  // Chromium will create a 'foo_files' directory under the directory of saving
-  // page 'foo.html' for holding other resource files of 'foo.html'.
-  base::FilePath saved_main_directory_path = full_path.DirName().Append(
-      full_path.RemoveExtension().BaseName().value() +
-      FILE_PATH_LITERAL('_files'));
-  bool result =
-      web_contents_->SavePage(full_path, saved_main_directory_path, save_type);
-  download_manager->RemoveObserver(this);
-  // If initialization fails which means fail to create |DownloadItem|, we need
-  // to delete the |SavePageHandler| instance to avoid memory-leak.
-  if (!result)
-    delete this;
-  return result;
-}
-    
-    namespace api {
-class WebContents;
-}
-    
-    
-    {	return userOnly;
-}
-    
-        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                       bot_.begin(),
-                                       in_data.begin(),
-                                       param_.num_data);
-    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                       top_.begin(),
-                                       out_data.begin(),
-                                       param_.num_out);
-    CaffeOpSetup();
-    // Init caffe's weight pointer
-    if (!init_w_) {
-      init_w_ = true;
-      caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                         wei_.begin(),
-                                         in_data.begin() + param_.num_data,
-                                         param_.num_weight);
-      caffe::SetOpBlobs(caffeOp_, wei_);
-    }
-    if (ctx.is_train)
-      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
-    else
-      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
-    caffeOp_->Forward(bot_, top_);
-    
-      /*
-   * @brief a variable to keep track of the temp fs used in carving
-   *
-   * This variable represents the location in which we store all of our carved
-   * files. When a carve has completed all of the desired files, as well
-   * as the tar archive should reside in this directory
-   */
-  boost::filesystem::path carveDir_;
-    
-    std::vector<std::string> PrometheusMetricsConfigParserPlugin::keys() const {
-  return {kPrometheusParserRootKey};
-}
-    
-    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
-  Config c;
-  auto s = c.update(getTestConfigMap());
-  EXPECT_TRUE(s.ok());
-    }
-    
-    
-    {  expected = {'select pid from processes where name = 'foobar';'};
-  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
-  EXPECT_EQ(fpack.getDiscoveryQueries(), expected);
-}
-    
-     private:
-  /// The hashing algorithm which is used to compute the hash
-  HashType algorithm_;
-    
-    TEST_F(QueryTests, test_is_query_name_in_database) {
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('foobar', query);
-  auto encoded_qd = getSerializedQueryDataJSON();
-  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
-  EXPECT_TRUE(status.ok());
-  // Now test that the query name exists.
-  EXPECT_TRUE(cf.isQueryNameInDatabase());
-}
-    
-      auto constraint = Constraint(EQUALS);
-  constraint.expr = 'some';
-    
-    void Initializer::platformSetup() {
-  // Initialize the COM libraries utilized by Windows WMI calls.
-  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
-  if (ret != S_OK) {
-    ::CoUninitialize();
-  }
-}
-    
-    TEST_F(EventsTests, test_fire_event) {
-  auto pub = std::make_shared<BasicEventPublisher>();
-  pub->setName('BasicPublisher');
-  auto status = EventFactory::registerEventPublisher(pub);
-  ASSERT_TRUE(status.ok());
-    }
+      Out << LocalDateTimeString() << '\n';
