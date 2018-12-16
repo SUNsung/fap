@@ -1,531 +1,307 @@
 
         
-        // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#include 'tensorflow/core/platform/macros.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    ChannelArguments::~ChannelArguments() {
+  grpc_core::ExecCtx exec_ctx;
+  for (auto it = args_.begin(); it != args_.end(); ++it) {
+    if (it->type == GRPC_ARG_POINTER) {
+      it->value.pointer.vtable->destroy(it->value.pointer.p);
     }
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
   }
 }
     
-    #include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'gdk/gdkkeysyms.h'//to get keyval from name
-    
-          scw_->WriteImage(*bitmap);
-    
-    namespace extensions {
-    }
-    
-        struct Size2D {
-        Size2D() : width(0), height(0) {}
-        Size2D(size_t width_, size_t height_) : width(width_), height(height_) {}
-    }
-    
-    void absDiff(const Size2D &size,
-             const f32 * src0Base, ptrdiff_t src0Stride,
-             const f32 * src1Base, ptrdiff_t src1Stride,
-             f32 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<f32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+    grpc_error* CensusClientCallData::Init(grpc_call_element* elem,
+                                       const grpc_call_element_args* args) {
+  path_ = grpc_slice_ref_internal(args->path);
+  start_time_ = absl::Now();
+  method_ = GetMethod(&path_);
+  qualified_method_ = absl::StrCat('Sent.', method_);
+  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  GRPC_CLOSURE_INIT(&on_done_recv_trailing_metadata_,
+                    OnDoneRecvTrailingMetadataCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  return GRPC_ERROR_NONE;
 }
     
-        f32 alpha, beta, gamma;
-    typedef typename TypeTraits<T>::wide wtype;
-    wAdd<wtype> wideAdd;
-    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
-        alpha(_alpha), beta(_beta), gamma(_gamma),
-        wideAdd(_alpha, _beta, _gamma) {}
-    
-    void bitwiseXor(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseXor());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+    MeasureDouble RpcServerServerLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerServerLatencyMeasureName,
+      'Time between first byte of request received to last byte of response '
+      'sent, or terminal error',
+      kUnitMilliseconds);
+  return measure;
 }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(s32, u8, 8,
-,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.32 {d0-d1}, [%[src1]]                              \n\t'
-             'vld1.32 {d2-d3}, [%[src2]]                              \n\t'
-             'vqmovun.s32 d4, q0                                      \n\t'
-             'vqmovun.s32 d5, q1                                      \n\t'
-             'vqmovn.u16  d6, q2                                      \n\t'
-             'vst1.8 {d6}, [%[dst]]                                   \n\t'
-             : /*no output*/
-             : [src1] 'r' (_src + i + 0),
-               [src2] 'r' (_src + i + 4),
-               [dst] 'r' (_dst + i)
-             : 'd0','d1','d2','d3','d4','d5','d6'
-         );
-     }
-})
-#else
-CVT_FUNC(s32, u8, 8,
-,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         int32x4_t vline1_s32 = vld1q_s32(_src + i);
-         int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+    
+    {}  // namespace grpc
+    
+    #ifndef MXNET_RTC_H_
+#define MXNET_RTC_H_
+#include './base.h'
+#if MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
+#include <nvrtc.h>
+#include <cuda.h>
+    
+    template<>
+void SetDataGradToBlob<mshadow::gpu, double>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<double>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_gpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, double)->set_gpu_diff(data_ptr);
+}
+    
+    MXNET_REGISTER_IO_ITER(CaffeDataIter)
+.describe('Create MxNet iterator for a Caffe data layer.')
+.add_arguments(CaffeDataParam::__FIELDS__())
+.add_arguments(PrefetcherParam::__FIELDS__())
+.set_body([]() {
+    return new CaffeDataIterWrapper();
+});
+    
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+}
+    
+      virtual void Forward(const OpContext &ctx,
+                       const std::vector<TBlob> &in_data,
+                       const std::vector<OpReqType> &req,
+                       const std::vector<TBlob> &out_data,
+                       const std::vector<TBlob> &aux_args) {
+    // Set mode before forward
+    caffe::CaffeMode::SetMode<xpu>();
+    using ::caffe::Blob;
+    using std::vector;
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    for (uint32_t i = 0; i < req.size(); ++i)
+      CHECK_EQ(req[i], kWriteTo);
+    int expected_num_data = param_.num_weight + param_.num_data;
+    CHECK_EQ(in_data.size(), expected_num_data);
+    CHECK_EQ(out_data.size(), param_.num_out);
     }
+    
+    bool get_png_size(const unsigned char* data, mx_uint data_size, mx_uint *width, mx_uint *height) {
+  if (data[0] == 0x89 && data[1] == 0x50 && data[2] ==0x4E && data[3] == 0x47) {
+    unsigned char const* p = data + 16;
+    *width = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
+    p += 4;
+    *height = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
+    return true;
+  } else {
+    return false;
+  }
+}
+    
+    Graph DetectInplaceAddTo(Graph g) {
+  nnvm::StorageVector storage_id =
+      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
+  std::vector<int> storage_inplace_index =
+      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
+  static const Op* ewise_plus_op = Op::Get('_grad_add');
+  auto& idx = g.indexed_graph();
+  // reference cont.
+  std::vector<int> ref_count(idx.num_node_entries(), 0);
+  std::vector<int> addto_entry(idx.num_node_entries(), 0);
+  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
     }
     
     
-    {            vs1 = vqadd_s32(vs1, vnz1);
-            vs2 = vqadd_s32(vs2, vnz2);
-            vs3 = vqadd_s32(vs3, vnz3);
-            vs4 = vqadd_s32(vs4, vnz4);
-        }
-    
-                for (; j < size.width; j++)
-            {
-                dst[j] = src1[j] ? src0[j] / src1[j] : 0.0f;
-            }
-        }
-    }
-    else
     {
-        for (size_t i = 0; i < size.height; ++i)
-        {
-            const f32 * src0 = internal::getRowPtr(src0Base, src0Stride, i);
-            const f32 * src1 = internal::getRowPtr(src1Base, src1Stride, i);
-            f32 * dst = internal::getRowPtr(dstBase, dstStride, i);
-            size_t j = 0;
+    {}  // namespace io
+}  // namespace mxnet
+
     
-    /*
-The references are:
- * Machine learning for high-speed corner detection,
-   E. Rosten and T. Drummond, ECCV 2006
- * Faster and better: A machine learning approach to corner detection
-   E. Rosten, R. Porter and T. Drummond, PAMI, 2009
-*/
     
-                    int32x4_t ln04 = vaddq_s32(lane0, lane4);
-                int32x4_t ln13 = vaddq_s32(lane1, lane3);
-    
-    namespace tesseract {
-    }
-    
-      // Find possible equation partitions from part_grid. Should be called
-  // after the special_text_type of blobs are set.
-  // It returns 0 upon success.
-  int FindEquationParts(ColPartitionGrid* part_grid,
-                        ColPartitionSet** best_columns);
+    {}  // namespace detail
     
       /**
-   * Returns an image of the current object at the given level in greyscale
-   * if available in the input. To guarantee a binary image use BinaryImage.
-   * NOTE that in order to give the best possible image, the bounds are
-   * expanded slightly over the binary connected component, by the supplied
-   * padding, so the top-left position of the returned image is returned
-   * in (left,top). These will most likely not match the coordinates
-   * returned by BoundingBox.
-   * If you do not supply an original image, you will get a binary one.
-   * Use pixDestroy to delete the image after use.
+   * \fn  static Predictor* Predictor::Create(std::string name);
+   *
+   * \brief Creates a new Predictor*.
+   *
    */
-  Pix* GetImage(PageIteratorLevel level, int padding, Pix* original_img,
-                int* left, int* top) const;
     
-    // Compare two VC objects by their name.
-int ParamContent::Compare(const void* v1, const void* v2) {
-  const ParamContent* one = *static_cast<const ParamContent* const*>(v1);
-  const ParamContent* two = *static_cast<const ParamContent* const*>(v2);
-  return strcmp(one->GetName(), two->GetName());
+    #include <xgboost/logging.h>
+#include <cctype>
+#include <cstdio>
+#include <string>
+#include './io.h'
+    
+    // logistic loss, but predict un-transformed margin
+struct LogisticRaw : public LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    predt = common::Sigmoid(predt);
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+    static T PredTransform(T x) { return x; }
+  template <typename T>
+    static T FirstOrderGradient(T predt, T label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  template <typename T>
+    static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    predt = common::Sigmoid(predt);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static const char* DefaultEvalMetric() { return 'auc'; }
+};
+    
+    SEXP XGBoosterUpdateOneIter_R(SEXP handle, SEXP iter, SEXP dtrain) {
+  R_API_BEGIN();
+  CHECK_CALL(XGBoosterUpdateOneIter(R_ExternalPtrAddr(handle),
+                                  asInteger(iter),
+                                  R_ExternalPtrAddr(dtrain)));
+  R_API_END();
+  return R_NilValue;
 }
     
+      virtual bst_float ComputeSplitScore(bst_uint nodeid,
+                                      bst_uint featureid,
+                                      const GradStats& left_stats,
+                                      const GradStats& right_stats) const;
     
-    {
-/**
- * @name tess_add_doc_word
- *
- * Add the given word to the document dictionary
+    /*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
  */
-void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
-  getDict().add_document_word(*word_choice);
-}
-}  // namespace tesseract
-
+template<typename DType, typename RType = unsigned>
+class WQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+};
     
-    struct Options;
-struct FileMetaData;
+      virtual void PredictInteractionContributions(DMatrix* dmat,
+                           std::vector<bst_float>* out_contribs,
+                           unsigned ntree_limit, bool approximate) = 0;
     
-    TEST(CorruptionTest, CorruptedDescriptor) {
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-  dbi->TEST_CompactMemTable();
-  dbi->TEST_CompactRange(0, nullptr, nullptr);
-    }
+      MergeOutputIterator merge_out_iter_;
+  // PinnedIteratorsManager used to pin input_ Iterator blocks while reading
+  // merge operands and then releasing them after consuming them.
+  PinnedIteratorsManager pinned_iters_mgr_;
+  std::string compaction_filter_value_;
+  InternalKey compaction_filter_skip_until_;
+  // 'level_ptrs' holds indices that remember which file of an associated
+  // level we were last checking during the last call to compaction->
+  // KeyNotExistsBeyondOutputLevel(). This allows future calls to the function
+  // to pick off where it left off since each subcompaction's key range is
+  // increasing so a later call to the function must be looking for a key that
+  // is in or beyond the last file checked during the previous call
+  std::vector<size_t> level_ptrs_;
+  CompactionIterationStats iter_stats_;
     
-    class Benchmark {
- private:
-  Cache* cache_;
-  const FilterPolicy* filter_policy_;
-  DB* db_;
-  int num_;
-  int value_size_;
-  int entries_per_batch_;
-  WriteOptions write_options_;
-  int reads_;
-  int heap_counter_;
-    }
-    
-      if (versions_->LastSequence() < max_sequence) {
-    versions_->SetLastSequence(max_sequence);
-  }
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-Iterator* NewDBIterator(DBImpl* db,
-                        const Comparator* user_key_comparator,
-                        Iterator* internal_iter,
-                        SequenceNumber sequence,
-                        uint32_t seed);
-    
-    
-    {
-    {    if (rnd.OneIn(2)) {
-      // Write values of the form <key, my id, counter>.
-      // We add some padding for force compactions.
-      snprintf(valbuf, sizeof(valbuf), '%d.%d.%-1000d',
-               key, id, static_cast<int>(counter));
-      ASSERT_OK(db->Put(WriteOptions(), Slice(keybuf), Slice(valbuf)));
+      uint64_t sleep_debt = 0;
+  uint64_t time_since_last_refill = 0;
+  if (last_refill_time_ != 0) {
+    if (last_refill_time_ > time_now) {
+      sleep_debt = last_refill_time_ - time_now;
     } else {
-      // Read a value and verify that it matches the pattern written above.
-      Status s = db->Get(ReadOptions(), Slice(keybuf), &value);
-      if (s.IsNotFound()) {
-        // Key has not yet been written
-      } else {
-        // Check that the writer thread counter is >= the counter in the value
-        ASSERT_OK(s);
-        int k, w, c;
-        ASSERT_EQ(3, sscanf(value.c_str(), '%d.%d.%d', &k, &w, &c)) << value;
-        ASSERT_EQ(k, key);
-        ASSERT_GE(w, 0);
-        ASSERT_LT(w, kNumThreads);
-        ASSERT_LE(static_cast<uintptr_t>(c), reinterpret_cast<uintptr_t>(
-            t->state->counter[w].Acquire_Load()));
+      time_since_last_refill = time_now - last_refill_time_;
+      bytes_left_ +=
+          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
+                                kMicrosPerSecond * delayed_write_rate_);
+      if (time_since_last_refill >= kRefillInterval &&
+          bytes_left_ > num_bytes) {
+        // If refill interval already passed and we have enough bytes
+        // return without extra sleeping.
+        last_refill_time_ = time_now;
+        bytes_left_ -= num_bytes;
+        return 0;
       }
     }
-    counter++;
   }
-  t->state->thread_done[id].Release_Store(t);
-  fprintf(stderr, '... stopping thread %d after %d ops\n', id, int(counter));
-}
     
-    std::string ParsedInternalKey::DebugString() const {
-  char buf[50];
-  snprintf(buf, sizeof(buf), '' @ %llu : %d',
-           (unsigned long long) sequence,
-           int(type));
-  std::string result = ''';
-  result += EscapeString(user_key.ToString());
-  result += buf;
-  return result;
-}
-    
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    static void Usage() {
-  fprintf(
-      stderr,
-      'Usage: leveldbutil command...\n'
-      '   dump files...         -- dump contents of specified files\n'
-      );
-}
+    #include 'rocksdb/env.h'
+#include 'util/testharness.h'
     
     
-    {  return true;
-}
-    
-    
-    {
-    {      return Status::OK();
-    }
-  };
-    
-      Status EmitPhysicalRecord(RecordType type, const char* ptr, size_t length);
-    
-    #endif  // STORAGE_LEVELDB_DB_SNAPSHOT_H_
-
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    
-    {    // FIXME: Using the AdditionalTransform is a complete hack.
-    // This should be done by multiplying the lookup-Matrix with the Node's MV matrix
-    // And then setting the result as the new MV matrix
-    // But that operation needs to be done after all the 'updates'.
-    // So the Director should emit an 'director_after_update' event.
-    // And this object should listen to it
-    _target->setAdditionalTransform(&mv);
-}
-    
-        /* Sets the Eye value of the Camera. 
-     * 
-     * @param eye The Eye value of the Camera.
-     * @js NA
-     */
-    void setEye(const Vec3 &eye);
-    void setEye(float x, float y, float z);
-    /* Returns the Eye value of the Camera. 
-     *
-     * @return The Eye value of the Camera.
-     * @js NA
-     */
-    const Vec3& getEye() const { return _eye; }
-    /* Sets the Center value of the Camera. 
-     *
-     * @param center The Center value of the Camera.
-     * @js NA
-     */
-    void setCenter(const Vec3 &center);
-    /* Returns the Center value of the Camera. 
-     *
-     * @return The Center value of the Camera.
-     * @js NA
-     */
-    const Vec3& getCenter() const { return _center; }
-    /* Sets the Up value of the Camera. 
-     *
-     * @param up The Up value of the Camera.
-     * @js NA
-     */
-    void setUp(const Vec3 &up);
-    /* Returns the Up value of the Camera. 
-     *
-     * @return The Up value of the Camera.
-     * @js NA
-     */
-    const Vec3& getUp() const { return _up; }
-    
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Liquid);
+    { private:
+  const std::string filename_;
+  int fd_;
 };
     
-    Place * Place::reverse() const
-{
-    // no reverse, just clone
-    return this->clone();
-}
+      // close DB
+  delete cf;
+  delete db;
     
-    //
-// SkewBy
-//
-SkewBy* SkewBy::create(float t, float sx, float sy)
-{
-    SkewBy *skewBy = new (std::nothrow) SkewBy();
-    if (skewBy && skewBy->initWithDuration(t, sx, sy))
-    {
-        skewBy->autorelease();
-        return  skewBy;
-    }
-    }
+    using namespace rocksdb;
     
+      ////////////////////////////////////////////////////////
+  //
+  // 'Read Committed' (Monotonic Atomic Views) Example
+  //   --Using multiple Snapshots
+  //
+  ////////////////////////////////////////////////////////
     
-    {    if (element->actions->num == 0)
-    {
-        if (_currentTarget == element)
-        {
-            _currentTargetSalvaged = true;
-        }
-        else
-        {
-            deleteHashElement(element);
-        }
-    }
-}
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-                AnimationFrame *animFrame = AnimationFrame::create(spriteFrame, delayUnits, userInfo.getType() == Value::Type::MAP ? userInfo.asValueMap() : ValueMapNull);
-    
-    void ButteraugliComparator::SwitchBlock(int block_x, int block_y,
-                                        int factor_x, int factor_y) {
-  block_x_ = block_x;
-  block_y_ = block_y;
-  factor_x_ = factor_x;
-  factor_y_ = factor_y;
-  per_block_pregamma_.resize(factor_x_ * factor_y_);
-  const double* lut = Srgb8ToLinearTable();
-  for (int off_y = 0, bx = 0; off_y < factor_y_; ++off_y) {
-    for (int off_x = 0; off_x < factor_x_; ++off_x, ++bx) {
-      per_block_pregamma_[bx].resize(3, std::vector<float>(kDCTBlockSize));
-      int block_xx = block_x_ * factor_x_ + off_x;
-      int block_yy = block_y_ * factor_y_ + off_y;
-      for (int iy = 0, i = 0; iy < 8; ++iy) {
-        for (int ix = 0; ix < 8; ++ix, ++i) {
-          int x = std::min(8 * block_xx + ix, width_ - 1);
-          int y = std::min(8 * block_yy + iy, height_ - 1);
-          int px = y * width_ + x;
-          for (int c = 0; c < 3; ++c) {
-            per_block_pregamma_[bx][c][i] = lut[rgb_orig_[3 * px + c]];
-          }
-        }
-      }
-      per_block_pregamma_[bx] =
-          ::butteraugli::PackedFromPlanes(::butteraugli::OpsinDynamicsImage(
-              ::butteraugli::PlanesFromPacked(8, 8, per_block_pregamma_[bx])));
-    }
-  }
-}
-    
-    static const int kCbToBlueTable[256] = {
-  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
-  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
-  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
-  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
-  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
-  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
-   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
-   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
-   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
-   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
-   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
-     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
-    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
-    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
-    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
-    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
-   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
-   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
-   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
-   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
-   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
-   220,  222,  223,  225,
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
 };
     
+      // number of bytes that has been written.
+  uint64_t bytes_written;
+  // number of bytes that has been read.
+  uint64_t bytes_read;
     
-    {}  // namespace guetzli
+      // Is cache storing uncompressed data ?
+  //
+  // True if the cache is configured to store uncompressed data else false
+  virtual bool IsCompressed() = 0;
     
-    void WriteFileOrDie(const char* filename, const std::string& contents) {
-  bool write_to_stdout = strncmp(filename, '-', 2) == 0;
-    }
-    
-    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
-  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
-  jpg->quant.clear();
-  int num_tables = 0;
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    JPEGComponent* comp = &jpg->components[i];
-    // Check if we have this quant table already.
-    bool found = false;
-    for (int j = 0; j < num_tables; ++j) {
-      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
-        comp->quant_idx = j;
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      JPEGQuantTable table;
-      memcpy(&table.values[0], &q[i][0], kTableSize);
-      table.precision = 0;
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        assert(table.values[k] >= 0);
-        assert(table.values[k] < (1 << 16));
-        if (table.values[k] > 0xff) {
-          table.precision = 1;
-        }
-      }
-      table.index = num_tables;
-      comp->quant_idx = num_tables;
-      jpg->quant.push_back(table);
-      ++num_tables;
-    }
-  }
-}
-    
-    
-    {}  // namespace guetzli
-    
-    // Helper structure to read bits from the entropy coded data segment.
-struct BitReaderState {
-  BitReaderState(const uint8_t* data, const size_t len, size_t pos)
-      : data_(data), len_(len) {
-    Reset(pos);
-  }
+    // Simple RAII wrapper class for Snapshot.
+// Constructing this object will create a snapshot.  Destructing will
+// release the snapshot.
+class ManagedSnapshot {
+ public:
+  explicit ManagedSnapshot(DB* db);
     }
