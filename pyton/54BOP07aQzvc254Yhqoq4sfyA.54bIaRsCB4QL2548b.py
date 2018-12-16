@@ -1,155 +1,130 @@
 
         
-            def test_distant_exception(self):
-        def f():
-            1/0
-        def g():
-            f()
-        def h():
-            g()
-        def i():
-            h()
-        def j(p):
-            i()
-        f_ident = ident(f)
-        g_ident = ident(g)
-        h_ident = ident(h)
-        i_ident = ident(i)
-        j_ident = ident(j)
-        self.check_events(j, [(1, 'call', j_ident),
-                              (2, 'call', i_ident),
-                              (3, 'call', h_ident),
-                              (4, 'call', g_ident),
-                              (5, 'call', f_ident),
-                              (5, 'return', f_ident),
-                              (4, 'return', g_ident),
-                              (3, 'return', h_ident),
-                              (2, 'return', i_ident),
-                              (1, 'return', j_ident),
-                              ])
+            def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
     
-# Does a path exist?
-# This is false for dangling symbolic links on systems that support them.
-def exists(path):
-    '''Test whether a path exists.  Returns False for broken symbolic links'''
-    try:
-        os.stat(path)
-    except (OSError, ValueError):
-        return False
-    return True
-    
-        def test_path_commonprefix(self):
-        self.assertEqual(os.path.commonprefix([self.file_path, self.file_name]),
-                         self.file_name)
-    
-    # Add the html version.  This converts the message into a multipart/alternative
-# container, with the original text message as the first part and the new html
-# message as the second part.
-asparagus_cid = make_msgid()
-msg.add_alternative('''\
-<html>
-  <head></head>
-  <body>
-    <p>Salut!</p>
-    <p>Cela ressemble à un excellent
-        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
-            recipie
-        </a> déjeuner.
-    </p>
-    <img src='cid:{asparagus_cid}' />
-  </body>
-</html>
-'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
-# note that we needed to peel the <> off the msgid for use in the html.
-    
-    p = Point(4.0, -3.2)
-    
-    class _FunctionState(object):
-  '''Tracks current function name and the number of lines in its body.'''
-    
-            if time_diff > self._timeout:
-            _LOGGER.warning(
-                'Queued %s dropped for %s. Time in queue was %s',
-                click_type, self.address, time_string)
-            return True
-        _LOGGER.info(
-            'Queued %s allowed for %s. Time in queue was %s',
-            click_type, self.address, time_string)
-        return False
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'echo test')
     
     
-def setup_scanner(hass, config, see, discovery_info=None):
-    '''Set up the demo tracker.'''
-    def offset():
-        '''Return random offset.'''
-        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
-    
-            self.success_init = self._update_info()
-        _LOGGER.info('Scanner initialized')
-    
-        def keep_alive(self, now):
-        '''Keep the API alive.'''
-        if self.api is None:
-            self.reset_account_icloud()
-    
-            Return boolean if scanning successful.
-        '''
-        if not self.success_init:
-            return False
-    
-        async def async_get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        filter_named = [result.name for result in self.last_results
-                        if result.mac == device]
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = {}
-    
-                        with open(final_path, 'wb') as fil:
-                        for chunk in req.iter_content(1024):
-                            fil.write(chunk)
-    
-        def __init__(self, path, patterns, hass):
-        '''Initialise the watchdog observer.'''
-        from watchdog.observers import Observer
-        self._observer = Observer()
-        self._observer.schedule(
-            create_event_handler(patterns, hass),
-            path,
-            recursive=True)
-        hass.bus.listen_once(EVENT_HOMEASSISTANT_START, self.startup)
-        hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP, self.shutdown)
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
     
-if __name__ == '__main__':
-    import doctest
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
-        def amount(self, val):
-        print(val, end=' ')
-        return self
+        assert match(command)
     
-        def __get__(self, obj, T):
-        def transaction(*args, **kwargs):
-            state = memento(obj)
-            try:
-                return self.method(obj, *args, **kwargs)
-            except Exception as e:
-                state()
-                raise e
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
     
-        root_specification = UserSpecification().and_specification(SuperUserSpecification())
+        if K.image_data_format() == 'channels_last':
+        x_train = x_train.transpose(0, 2, 3, 1)
+        x_test = x_test.transpose(0, 2, 3, 1)
     
-    ingredients = 'spam eggs apple'
-line = '-' * 10
     
-        def build_floor(self):
-        raise NotImplementedError
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
     
-        sample_queue.put('sam')
-    test_object(sample_queue)
-    print('Outside func: {}'.format(sample_queue.get()))
+    import numpy as np
+    
+            if hasattr(self.cell.state_size, '__len__'):
+            return [initial_state for _ in self.cell.state_size]
+        else:
+            return [initial_state]
+    
+            self.kernel_regularizer = regularizers.get(kernel_regularizer)
+        self.recurrent_regularizer = regularizers.get(recurrent_regularizer)
+        self.bias_regularizer = regularizers.get(bias_regularizer)
+        self.activity_regularizer = regularizers.get(activity_regularizer)
+    
+            if self.inputs:
+            self._init_graph_network(self.inputs,
+                                     self.outputs,
+                                     name=self.name)
+            self.built = True
+    
+    model.add(Conv2D(64, (3, 3), padding='same'))
+model.add(Activation('relu'))
+model.add(Conv2D(64, (3, 3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+    
+        plt.imshow(toplot)
+    ax = fig.add_subplot(122)
+    plt.text(1, 3, 'Ground truth', fontsize=20)
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+            self.lock = threading.Lock()
+    
+        def close(self):
+        self.fd.close()
+    
+        if 'Content-Encoding' in headers:
+        if headers['Content-Encoding'] == 'deflate':
+            payload = zlib.decompress(payload, -zlib.MAX_WBITS)
+            headers['Content-Length'] = str(len(payload))
+            del headers['Content-Encoding']
+    
+    And tree.TreeParser finally fetches its input from a tree.TreeNodeStream:
+    
+                # The char position into the input buffer where this token starts
+            self.start = start
