@@ -1,102 +1,168 @@
 
         
-                unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
+          protected
     
-            if params[:create_and_unresolve]
-          @report.unresolve!
-          log_action :reopen, @report
-        end
+      # Defines which strategy can be used to lock an account.
+  # Values: :failed_attempts, :none
+  mattr_accessor :lock_strategy
+  @@lock_strategy = :failed_attempts
     
-      def maxwidth_or_default
-    (params[:maxwidth].presence || 400).to_i
-  end
-    
-      def local_domain?
-    TagManager.instance.web_domain?(hub_topic_domain)
-  end
-    
-      class OfflinePluginPackager
-    LOGSTASH_DIR = 'logstash'
-    DEPENDENCIES_DIR = ::File.join(LOGSTASH_DIR, 'dependencies')
-    
-        validate_target_file
-    LogStash::Bundler.invoke!({:package => true, :all => true})
-    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
-    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
-    
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
-  end
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
-        end
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
-    end
-    
-      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
-    
-          it 'allows closing brace on separate line from last multiline element' do
-        expect_no_offenses(construct(true, a, make_multi(multi), true))
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `case` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `case` nodes within RuboCop.
-    class CaseNode < Node
-      include ConditionalNode
-    
-          # Returns the branch of the `if` node that gets evaluated when its
-      # condition is falsey.
+          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
+      # based on the current mapping:
       #
-      # @note This is normalized for `unless` nodes.
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           user_subject: '...'
       #
-      # @return [Node] the falsey branch node of the `if` node
-      # @return [nil] when there is no else branch
-      def else_branch
-        node_parts[2]
-      end
-    
-          # Whether the last argument of the node is a block pass,
-      # i.e. `&block`.
+      # If one does not exist, it fallbacks to ActionMailer default:
       #
-      # @return [Boolean] whether the last argument of the node is a block pass
-      def block_argument?
-        arguments? &&
-          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           subject: '...'
+      #
+      def subject_for(key)
+        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
+          default: [:subject, key.to_s.humanize])
       end
     end
   end
 end
+
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+      if config.log_to.include? 'file'
+    # Configure an appender that will write log events to a file.
+    if AppConfig.environment.logging.logrotate.enable?
+      # The file will be rolled on a daily basis, and the rolled files will be kept
+      # the configured number of days. Older files will be deleted. The default pattern
+      # layout is used when formatting log events into strings.
+      Logging.appenders.rolling_file('file',
+                                     filename:      config.paths['log'].first,
+                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
+                                     age:           'daily',
+                                     truncate:      false,
+                                     auto_flushing: true,
+                                     layout:        layout
+                                    )
+    else
+      # No file rolling, use logrotate to roll the logfile.
+      Logging.appenders.file('file',
+                             filename:      config.paths['log'].first,
+                             truncate:      false,
+                             auto_flushing: true,
+                             layout:        layout
+                            )
+    end
+  end
+    
+    When /^I submit the password reset form$/ do
+  submit_password_reset_form
+end
+    
+      people.each do |person|
+    contacts << Contact.new(:person_id => person.id, :user_id => @me.id, :sharing => true, :receiving => true)
+  end
+  Contact.import(contacts)
+  contacts = @me.contacts.limit(n.to_i)
+    
+    def await_condition &condition
+  start_time = Time.zone.now
+  until condition.call
+    return false if (Time.zone.now - start_time) > Capybara.default_max_wait_time
+    sleep 0.05
+  end
+  true
+end
+
+    
+      def navigate_to(page_name)
+    path = path_to(page_name)
+    if path.is_a?(Hash)
+      visit(path[:path])
+      await_elem = path[:special_elem]
+      find(await_elem.delete(:selector), await_elem)
+    else
+      visit(path)
+    end
+  end
+    
+    describe ConversationsController, :type => :controller do
+  describe '#index' do
+    before do
+      @person = alice.contacts.first.person
+      hash = {
+        :author => @person,
+        :participant_ids => [alice.person.id, @person.id],
+        :subject => 'not spam',
+        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
+      }
+      @conv1 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+    
+        def prepare_package(explicit_plugins, temp_path)
+      FileUtils.mkdir_p(::File.join(temp_path, LOGSTASH_DIR))
+      FileUtils.mkdir_p(::File.join(temp_path, DEPENDENCIES_DIR))
+    
+      describe 'on #{logstash.hostname}' do
+    context 'with a direct internet connection' do
+      context 'when the plugin exist' do
+        context 'from a local `.GEM` file' do
+          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
+          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
+          before(:each) do
+            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
+          end
+    
+          rescue_from ActionController::ParameterMissing, with: :error_during_processing
+      rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
+      rescue_from ActiveRecord::RecordNotFound, with: :not_found
+      rescue_from CanCan::AccessDenied, with: :unauthorized
+      rescue_from Spree::Core::GatewayError, with: :gateway_error
+    
+            private
+    
+            def create
+          authorize! :create, Property
+          @property = Spree::Property.new(property_params)
+          if @property.save
+            respond_with(@property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@property)
+          end
+        end
+    
+              if @shipment.inventory_units.any?
+            @shipment.reload
+          else
+            @shipment.destroy!
+          end
+    
+            def destroy
+          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
+          @stock_item.destroy
+          respond_with(@stock_item, status: 204)
+        end
+    
+            def destroy
+          authorize! :destroy, @store
+          @store.destroy
+          respond_with(@store, status: 204)
+        end
+    
+            def update
+          authorize! :update, taxon
+          if taxon.update_attributes(taxon_params)
+            respond_with(taxon, status: 200, default_template: :show)
+          else
+            invalid_resource!(taxon)
+          end
+        end
