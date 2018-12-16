@@ -1,270 +1,301 @@
 
         
-        #ifndef ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
-#define ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
-    
-    using atom::api::Net;
-using atom::api::URLRequest;
-    
-    void PowerMonitor::QuerySystemIdleTime(const ui::IdleTimeCallback& callback) {
-  ui::CalculateIdleTime(callback);
+        bool UvTaskRunner::PostNonNestableDelayedTask(const base::Location& from_here,
+                                              base::OnceClosure task,
+                                              base::TimeDelta delay) {
+  return PostDelayedTask(from_here, std::move(task), delay);
 }
     
-    namespace atom {
-    }
+      std::map<uv_timer_t*, base::OnceClosure> tasks_;
     
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
+    #include 'atom/browser/native_window_views.h'
     
-    
-    bool isGaussianPyramidDownS16Supported(const Size2D &srcSize, const Size2D &dstSize, u8 cn);
-    void gaussianPyramidDown(const Size2D &srcSize,
-                             const s16 *srcBase, ptrdiff_t srcStride,
-                             const Size2D &dstSize,
-                             s16 *dstBase, ptrdiff_t dstStride, u8 cn);
-    
-    
-    {} //namespace CAROTENE_NS
-
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(s8, s16, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
-             'vmovl.s8 q1, d0                                       \n\t'
-             'vmovl.s8 q2, d1                                       \n\t'
-             'vst1.16 {d2-d3}, [%[dst1]]                            \n\t'
-             'vst1.16 {d4-d5}, [%[dst2]]                            \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 8)
-             : 'd0','d1','d2','d3','d4','d5'
-         );
-     }
-})
-#else
-CVT_FUNC(s8, s16, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         int8x16_t vline_s8 = vld1q_s8(_src + i);
-    }
-    }
-    
-    #define DOT_FLOAT_BLOCKSIZE (1 << 13)
-    f64 result = 0.0;
-    for (size_t row = 0; row < size.height; ++row)
-    {
-        const f32 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
-        const f32 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
-    }
-    
-    
-    {            if (mask[0])
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-    #include 'constraint_bullet.h'
-    
-    	resource_loader_pkm = memnew(ResourceFormatPKM);
-	ResourceLoader::add_resource_format_loader(resource_loader_pkm);
-    
-    	jclass activityThread = env->FindClass('android/app/ActivityThread');
-	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
-	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
-	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
-	jobject context = env->CallObjectMethod(at, getApplication);
-    
-    	if (instance == NULL) {
-		instance = memnew(ZipArchive);
-	};
-    
-    
-    {	return false;
-}
-    
-    /*! \brief gradient statistics pair usually needed in gradient boosting */
-using GradientPair = detail::GradientPairInternal<float>;
-    
-      /*!
-   * \brief determines whether updater has enough knowledge about a given dataset
-   *        to quickly update prediction cache its training data and performs the
-   *        update if possible.
-   * \param data: data matrix
-   * \param out_preds: prediction cache to be updated
-   * \return boolean indicating whether updater has capability to update
-   *         the prediction cache. If true, the prediction cache will have been
-   *         updated by the time this function returns.
-   */
-  virtual bool UpdatePredictionCache(const DMatrix* data,
-                                     HostDeviceVector<bst_float>* out_preds) {
-    return false;
-  }
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
-}
-}  // namespace data
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
+    template <>
+struct Converter<in_app_purchase::Transaction> {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
+                                   const in_app_purchase::Transaction& val) {
+    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
+    dict.SetHidden('simple', true);
+    dict.Set('transactionIdentifier', val.transactionIdentifier);
+    dict.Set('transactionDate', val.transactionDate);
+    dict.Set('originalTransactionIdentifier',
+             val.originalTransactionIdentifier);
+    dict.Set('transactionState', val.transactionState);
+    dict.Set('errorCode', val.errorCode);
+    dict.Set('errorMessage', val.errorMessage);
+    dict.Set('payment', val.payment);
+    return dict.GetHandle();
   }
 };
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
+};
+    
+    
+    {}  // namespace mate
+    
+    // A self-destroyed class for handling save page request.
+class SavePageHandler : public content::DownloadManager::Observer,
+                        public download::DownloadItem::Observer {
+ public:
+  using SavePageCallback = base::Callback<void(v8::Local<v8::Value>)>;
+    }
+    
+      // There is a new update which has been downloaded.
+  virtual void OnUpdateDownloaded(const std::string& release_notes,
+                                  const std::string& release_name,
+                                  const base::Time& release_date,
+                                  const std::string& update_url) {}
+    
+    PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
+  if (LangOpts.Target.isMacOSX()) {
+    return (LangOpts.EnableAppExtensionRestrictions
+                ? PlatformKind::OSXApplicationExtension
+                : PlatformKind::OSX);
+  }
+    }
+    
+    
+    {    return GenericTypeParamType::get(genericParam->getDepth(),
+                                     genericParam->getIndex(), ctx);
+  };
+  auto conformanceToSyntheticConformanceFn =
+      MakeAbstractConformanceForGenericType();
+    
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
+    
+    #if !defined(PREPOSITION) && !defined(VERB)
+#  error define one or more of PREPOSITION, VERB
+#endif
+    
+    #include 'swift/AST/Identifier.h'
+    
+    #include 'remtrans.h'
+#include 'unicode/unifilt.h'
+    
+        /**
+     * Implements {@link Transliterator#handleTransliterate}.
+     * @param text          the buffer holding transliterated and
+     *                      untransliterated text
+     * @param offset        the start and limit of the text, the position
+     *                      of the cursor, and the start and limit of transliteration.
+     * @param incremental   if true, assume more text may be coming after
+     *                      pos.contextLimit. Otherwise, assume the text is complete.
+     */
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+                                     UBool isIncremental) const;
+    
+    #endif
 
     
-    namespace xgboost {
-namespace gbm {
-/*! \brief model parameters */
-struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
-  /*! \brief number of trees */
-  int num_trees;
-  /*! \brief number of roots */
-  int num_roots;
-  /*! \brief number of features to be used by trees */
-  int num_feature;
-  /*! \brief pad this space, for backward compatibility reason.*/
-  int pad_32bit;
-  /*! \brief deprecated padding space. */
-  int64_t num_pbuffer_deprecated;
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+#include 'unicode/dtfmtsym.h'
+    
+    void
+SimpleTimeZone::initTransitionRules(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (transitionRulesInitialized) {
+        return;
+    }
+    deleteTransitionRules();
+    UnicodeString tzid;
+    getID(tzid);
+    }
+    
+    U_NAMESPACE_END
+    
+    #include <dmlc/registry.h>
+#include <functional>
+#include <vector>
+#include <utility>
+#include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
   /*!
-   * \brief how many output group a single instance can produce
-   *  this affects the behavior of number of output we have:
-   *    suppose we have n instance and k group, output will be k * n
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
    */
-  int num_output_group;
-  /*! \brief size of leaf vector needed in tree */
-  int size_leaf_vector;
-  /*! \brief reserved parameters */
-  int reserved[32];
-  /*! \brief constructor */
-  GBTreeModelParam() {
-    std::memset(this, 0, sizeof(GBTreeModelParam));
-    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
-                  '64/32 bit compatibility issue');
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
   }
-  // declare parameters, only declare those that need to be set.
-  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
-    DMLC_DECLARE_FIELD(num_output_group)
-        .set_lower_bound(1)
-        .set_default(1)
-        .describe(
-            'Number of output groups to be predicted,'
-            ' used for multi-class classification.');
-    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
-        'Tree updater sequence.');
-    DMLC_DECLARE_FIELD(num_feature)
-        .set_lower_bound(0)
-        .describe('Number of features used for training and prediction.');
-    DMLC_DECLARE_FIELD(size_leaf_vector)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('Reserved option for vector tree.');
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
   }
-};
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
     }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
     }
-    
-    SEXP XGDMatrixSaveBinary_R(SEXP handle, SEXP fname, SEXP silent) {
-  R_API_BEGIN();
-  CHECK_CALL(XGDMatrixSaveBinary(R_ExternalPtrAddr(handle),
-                                 CHAR(asChar(fname)),
-                                 asInteger(silent)));
-  R_API_END();
-  return R_NilValue;
-}
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    void ImGui_ImplDX10_NewFrame()
-{
-    if (!g_pFontSampler)
-        ImGui_ImplDX10_CreateDeviceObjects();
-}
-
-    
-    namespace {
-const int MAX_RETRY = 2;
-} // namespace
-    
-    #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    
-    {} // namespace aria2
-    
-    class DHTTask {
-public:
-  virtual ~DHTTask() = default;
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
     }
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
-    }
+    return size - tlen;
   }
-  return false;
-}
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
+    }
+    
+    /*!
+ * \brief Macro to register sparse page format.
+ *
+ * \code
+ * // example of registering a objective
+ * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
+ * .describe('Raw binary data format.')
+ * .set_body([]() {
+ *     return new RawFormat();
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
+  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
+    
+      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
+     to determine type of bin id's */
+  inline Column GetColumn(unsigned fid) const {
+    Column c(type_[fid], &index_[boundary_[fid].index_begin], index_base_[fid],
+             &row_ind_[boundary_[fid].row_ind_begin],
+             boundary_[fid].index_end - boundary_[fid].index_begin);
+    return c;
+  }
+    
+        // Create texture
+    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
+    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
+    atlas->TexPixelsAlpha8 = (unsigned char*)ImGui::MemAlloc(atlas->TexWidth * atlas->TexHeight);
+    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
+    
+    #include 'imgui.h'
+#include 'imgui_stdlib.h'
+    
+    //---- Don't define obsolete functions/enums names. Consider enabling from time to time after updating to avoid using soon-to-be obsolete function/names.
+//#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+        bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
