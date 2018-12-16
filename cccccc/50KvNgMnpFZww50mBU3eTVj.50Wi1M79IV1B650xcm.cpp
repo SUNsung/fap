@@ -1,131 +1,131 @@
 
         
-            private:
-        bool m_isReadOnly;
-        NDShape m_sampleShape;
-        std::vector<Axis> m_sampleDynamicAxes;
-        NDShape m_unpackedShape;
-    
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
-    
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Start();
-        }
-    }
-    
-    
-    {    // Render command lists
-    int vtx_offset = 0;
-    int idx_offset = 0;
-    ImVec2 pos = draw_data->DisplayPos;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                const D3D12_RECT r = { (LONG)(pcmd->ClipRect.x - pos.x), (LONG)(pcmd->ClipRect.y - pos.y), (LONG)(pcmd->ClipRect.z - pos.x), (LONG)(pcmd->ClipRect.w - pos.y) };
-                ctx->SetGraphicsRootDescriptorTable(1, *(D3D12_GPU_DESCRIPTOR_HANDLE*)&pcmd->TextureId);
-                ctx->RSSetScissorRects(1, &r);
-                ctx->DrawIndexedInstanced(pcmd->ElemCount, 1, idx_offset, vtx_offset, 0);
-            }
-            idx_offset += pcmd->ElemCount;
-        }
-        vtx_offset += cmd_list->VtxBuffer.Size;
-    }
+        
+    {  return TracingController::CreateFileEndpoint(
+      result_file_path, base::Bind(callback, result_file_path));
 }
     
-        // Setup display size (every frame to accommodate for window resizing)
-    int w = IwGxGetScreenWidth(), h = IwGxGetScreenHeight();
-    io.DisplaySize = ImVec2((float)w, (float)h);
-     // For retina display or other situations where window coordinates are different from framebuffer coordinates. User storage only, presently not used by ImGui.
-    io.DisplayFramebufferScale = g_scale;
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-        al_get_mouse_state(&mouse);
-    io.MouseDown[0] = mouse.buttons & (1 << 0);
-    io.MouseDown[1] = mouse.buttons & (1 << 1);
-    io.MouseDown[2] = mouse.buttons & (1 << 2);
-    
-    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
-//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
-//#define IMGUI_DISABLE_DEMO_WINDOWS
-    
-        bool value_changed = false;
-    if ((extra_flags & (ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsScientific)) == 0)
-        extra_flags |= ImGuiInputTextFlags_CharsDecimal;
-    extra_flags |= ImGuiInputTextFlags_AutoSelectAll;
-    
-    ImGui_ImplVulkanH_WindowData::ImGui_ImplVulkanH_WindowData()
-{
-    Width = Height = 0;
-    Swapchain = VK_NULL_HANDLE;
-    Surface = VK_NULL_HANDLE;
-    memset(&SurfaceFormat, 0, sizeof(SurfaceFormat));
-    PresentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
-    RenderPass = VK_NULL_HANDLE;
-    ClearEnable = true;
-    memset(&ClearValue, 0, sizeof(ClearValue));
-    BackBufferCount = 0;
-    memset(&BackBuffer, 0, sizeof(BackBuffer));
-    memset(&BackBufferView, 0, sizeof(BackBufferView));
-    memset(&Framebuffer, 0, sizeof(Framebuffer));
-    FrameIndex = 0;
+    display::Display Screen::GetDisplayMatching(const gfx::Rect& match_rect) {
+  return screen_->GetDisplayMatching(match_rect);
 }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {#ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
+    void SavePageHandler::Destroy(download::DownloadItem* item) {
+  item->RemoveObserver(this);
+  delete this;
 }
-#endif
     
-    		ref=tmp;
-    
-    #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
-namespace antlr {
-#endif
+      Status status;
+  if (c == nullptr) {
+    // Nothing to do
+  } else if (!is_manual && c->IsTrivialMove()) {
+    // Move file to next level
+    assert(c->num_input_files(0) == 1);
+    FileMetaData* f = c->input(0, 0);
+    c->edit()->DeleteFile(c->level(), f->number);
+    c->edit()->AddFile(c->level() + 1, f->number, f->file_size,
+                       f->smallest, f->largest);
+    status = versions_->LogAndApply(c->edit(), &mutex_);
+    if (!status.ok()) {
+      RecordBackgroundError(status);
     }
+    VersionSet::LevelSummaryStorage tmp;
+    Log(options_.info_log, 'Moved #%lld to level-%d %lld bytes %s: %s\n',
+        static_cast<unsigned long long>(f->number),
+        c->level() + 1,
+        static_cast<unsigned long long>(f->file_size),
+        status.ToString().c_str(),
+        versions_->LevelSummary(&tmp));
+  } else {
+    CompactionState* compact = new CompactionState(c);
+    status = DoCompactionWork(compact);
+    if (!status.ok()) {
+      RecordBackgroundError(status);
+    }
+    CleanupCompaction(compact);
+    c->ReleaseInputs();
+    DeleteObsoleteFiles();
+  }
+  delete c;
     
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/CircularQueue.hpp#2 $
- */
+        CompactionStats() : micros(0), bytes_read(0), bytes_written(0) { }
     
-    #include <antlr/config.hpp>
-#include <antlr/CommonAST.hpp>
-    
-    
-    {	IOException( ANTLR_USE_NAMESPACE(std)exception& e )
-		: ANTLRException(e.what())
-	{
-	}
-	IOException( const ANTLR_USE_NAMESPACE(std)string& mesg )
-		: ANTLRException(mesg)
-	{
-	}
-	virtual ~IOException() throw()
-	{
-	}
+    // Called on every item found in a WriteBatch.
+class WriteBatchItemPrinter : public WriteBatch::Handler {
+ public:
+  WritableFile* dst_;
+  virtual void Put(const Slice& key, const Slice& value) {
+    std::string r = '  put '';
+    AppendEscapedStringTo(&r, key);
+    r += '' '';
+    AppendEscapedStringTo(&r, value);
+    r += ''\n';
+    dst_->Append(r);
+  }
+  virtual void Delete(const Slice& key) {
+    std::string r = '  del '';
+    AppendEscapedStringTo(&r, key);
+    r += ''\n';
+    dst_->Append(r);
+  }
 };
+    
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+      // Read the next record into *record.  Returns true if read
+  // successfully, false if we hit end of the input.  May use
+  // '*scratch' as temporary storage.  The contents filled in *record
+  // will only be valid until the next mutating operation on this
+  // reader or the next mutation to *scratch.
+  bool ReadRecord(Slice* record, std::string* scratch);
+    
+    
+    {    virtual Status Close() { return Status::OK(); }
+    virtual Status Flush() { return Status::OK(); }
+    virtual Status Sync() { return Status::OK(); }
+    virtual Status Append(const Slice& slice) {
+      contents_.append(slice.data(), slice.size());
+      return Status::OK();
+    }
+  };
+    
+        // Open the log file
+    std::string logname = LogFileName(dbname_, log);
+    SequentialFile* lfile;
+    Status status = env_->NewSequentialFile(logname, &lfile);
+    if (!status.ok()) {
+      return status;
+    }
+    
+    namespace leveldb {
+    }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    using LineNumber = uint32_t;
+using ColNumber  = uint32_t;
+using LineRange  = std::tuple<LineNumber,LineNumber>;
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    #include <string>
+#include <utility>
+#include <vector>
+    
+    inline void ExecutionContext::setVirtualHost(const VirtualHost* vhost) {
+  m_vhost = vhost;
+}
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include <folly/String.h>
+#include <folly/portability/SysStat.h>
+#include <folly/portability/Unistd.h>
+    
+      bool valid() const { return !isClosed(); }
