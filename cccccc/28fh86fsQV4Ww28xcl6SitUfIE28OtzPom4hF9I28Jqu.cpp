@@ -1,359 +1,417 @@
 
         
-        Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
+            (void)ctx;
+    ARG_CHECK(sig != NULL);
+    ARG_CHECK(input64 != NULL);
+    ARG_CHECK(recid >= 0 && recid <= 3);
+    
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+    }
 }
     
-    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
-
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
+    /* Given a BlockIndex with the provided nbits,
+ * verify that the expected difficulty results.
+ */
+static void TestDifficulty(uint32_t nbits, double expected_difficulty)
+{
+    CBlockIndex* block_index = CreateBlockIndexWithNbits(nbits);
+    double difficulty = GetDifficulty(block_index);
+    delete block_index;
     }
     
-      // Ignore first non-switch arg if it's not a standalone package.
-  bool ignore_arg = !package->self_extract();
-  for (unsigned i = 1; i < argv.size(); ++i) {
-    if (ignore_arg && args.size() && argv[i] == args[0]) {
-      ignore_arg = false;
-      continue;
-    }
-    }
+        UniValue obj = v[1];
+    BOOST_CHECK(obj.isObject());
+    BOOST_CHECK_EQUAL(obj.size(), 3);
     
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
     
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
-      // implement nw.Screen.stopMonitor()
-  class NwScreenStopMonitorFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenStopMonitorFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+    #endif  // CAFFE_BIAS_LAYER_HPP_
+
     
-    #include 'gtest/internal/gtest-death-test-internal.h'
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #if GTEST_OS_SYMBIAN
-  // These are needed as the Nokia Symbian Compiler cannot decide between
-  // const T& and const T* in a function template. The Nokia compiler _can_
-  // decide between class template specializations for T and T*, so a
-  // tr1::type_traits-like is_pointer works, and we can overload on that.
-  template <typename T>
-  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    // The Message class works like an ostream repeater.
+//
+// Typical usage:
+//
+//   1. You stream a bunch of values to a Message object.
+//      It will remember the text in a stringstream.
+//   2. Then you stream the Message object to an ostream.
+//      This causes the text in the Message to be streamed
+//      to the ostream.
+//
+// For example;
+//
+//   testing::Message foo;
+//   foo << 1 << ' != ' << 2;
+//   std::cout << foo;
+//
+// will print '1 != 2'.
+//
+// Message is not intended to be inherited from.  In particular, its
+// destructor is not virtual.
+//
+// Note that stringstream behaves differently in gcc and in MSVC.  You
+// can stream a NULL char pointer to it in the former, but not in the
+// latter (it causes an access violation if you do).  The Message
+// class hides this difference by treating a NULL char pointer as
+// '(null)'.
+class GTEST_API_ Message {
+ private:
+  // The type of basic IO manipulators (endl, ends, and flush) for
+  // narrow streams.
+  typedef std::ostream& (*BasicNarrowIoManip)(std::ostream&);
     }
-  }
-  template <typename T>
-  inline void StreamHelper(internal::false_type /*is_pointer*/,
-                           const T& value) {
-    // See the comments in Message& operator <<(const T&) above for why
-    // we need this using statement.
-    using ::operator <<;
-    *ss_ << value;
-  }
-#endif  // GTEST_OS_SYMBIAN
     
     template <typename T1, typename T2, typename T3, typename T4, typename T5,
     typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12>
-internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-    T12> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11, T12 v12) {
-  return internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28>
+internal::ValueArray28<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27,
+    T28> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+    T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+    T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+    T26 v26, T27 v27, T28 v28) {
+  return internal::ValueArray28<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
+      v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27,
+      v28);
 }
     
-    template <>
-class UniversalTersePrinter<wchar_t*> {
- public:
-  static void Print(wchar_t* str, ::std::ostream* os) {
-    UniversalTersePrinter<const wchar_t*>::Print(str, os);
-  }
+    class BaseTest : public ::testing::Test {
+  // You can inherit all the usual members for a non-parameterized test
+  // fixture here.
 };
     
+      // Gets the outcome of the test part.
+  Type type() const { return type_; }
     
-    {}  // namespace internal
+      // Take over ownership of a raw pointer.  This should happen as soon as
+  // possible after the object is created.
+  explicit linked_ptr(T* ptr = NULL) { capture(ptr); }
+  ~linked_ptr() { depart(); }
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
+        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
+        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
+        static_cast<T>(v30_), static_cast<T>(v31_), static_cast<T>(v32_),
+        static_cast<T>(v33_), static_cast<T>(v34_), static_cast<T>(v35_)};
+    return ValuesIn(array);
+  }
+    
+    # define GTEST_BIND_(TmplSel, T) \
+  TmplSel::template Bind<T>::type
+    
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
     
       // Trivial case 2: even numbers
   if (n % 2 == 0) return n == 2;
     
-      static int allocated() { return allocated_; }
-    
-    /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
- */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
-    
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
-     */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
+    // Tests the Set method.
+TEST(MyString, Set) {
+  MyString s;
     }
     
-    template<>
-void SetDataGradToBlob<mshadow::gpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_gpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_gpu_diff(data_ptr);
+    #endif
+
+    
+        dword(vx_formater.instruction);
+  }
+  //TODO(rcardoso): Unimplemented instruction formaters
+  void EmitXSForm(const uint8_t op,
+                  const RegNumber rt,
+                  const RegNumber ra,
+                  const uint8_t sh,
+                  const uint16_t xop,
+                  const bool rc = 0){
+    
+      /**
+   * Master Get Methods to get values associated with an ini or hdf setting.
+   * These methods just get the value. They do not bind to a variable for
+   * enabling ini_get()
+   */
+  static bool GetBool(const IniSettingMap &ini, const Hdf& config,
+                      const std::string& name = '',
+                      const bool defValue = false,
+                      const bool prepend_hhvm = true);
+  static const char *Get(const IniSettingMap &ini, const Hdf& config,
+                         const std::string& name = '',
+                         const char *defValue = nullptr,
+                         const bool prepend_hhvm = true);
+  static std::string GetString(const IniSettingMap &ini, const Hdf& config,
+                               const std::string& name = '',
+                               const std::string defValue = '',
+                               const bool prepend_hhvm = true);
+  static char GetByte(const IniSettingMap &ini, const Hdf& config,
+                      const std::string& name = '', const char defValue = 0,
+                      const bool prepend_hhvm = true);
+  static unsigned char GetUByte(const IniSettingMap &ini, const Hdf& config,
+                                const std::string& name = '',
+                                const unsigned char defValue = 0,
+                                const bool prepend_hhvm = true);
+  static int16_t GetInt16(const IniSettingMap &ini, const Hdf& config,
+                          const std::string& name = '',
+                          const int16_t defValue = 0,
+                          const bool prepend_hhvm = true);
+  static uint16_t GetUInt16(const IniSettingMap &ini, const Hdf& config,
+                            const std::string& name = '',
+                            const uint16_t defValue = 0,
+                            const bool prepend_hhvm = true);
+  static int32_t GetInt32(const IniSettingMap &ini, const Hdf& config,
+                          const std::string& name = '',
+                          const int32_t defValue = 0,
+                          const bool prepend_hhvm = true);
+  static uint32_t GetUInt32(const IniSettingMap &ini, const Hdf& config,
+                            const std::string& name = '',
+                            const uint32_t defValue = 0,
+                            const bool prepend_hhvm = true);
+  static int64_t GetInt64(const IniSettingMap &ini, const Hdf& config,
+                          const std::string& name = '',
+                          const int64_t defValue = 0,
+                          const bool prepend_hhvm = true);
+  static uint64_t GetUInt64(const IniSettingMap &ini, const Hdf& config,
+                            const std::string& name = '',
+                            const uint64_t defValue = 0,
+                            const bool prepend_hhvm = true);
+  static double GetDouble(const IniSettingMap &ini, const Hdf& config,
+                          const std::string& name = '',
+                          const double defValue = 0,
+                          const bool prepend_hhvm = true);
+  static std::vector<uint32_t>
+  GetUInt32Vector(const IniSettingMap& ini, const Hdf& config,
+                  const std::string& name = '',
+                  const std::vector<uint32_t>& def = std::vector<uint32_t>{},
+                  const bool prepend_hhvm = true);
+  static std::vector<std::string>
+  GetStrVector(const IniSettingMap& ini, const Hdf& config,
+               const std::string& name = '',
+               const std::vector<std::string>& def = std::vector<std::string>{},
+               const bool prepend_hhvm = true);
+  static std::unordered_map<std::string, int>
+  GetIntMap(const IniSettingMap& ini, const Hdf& config,
+            const std::string& name = '',
+            const std::unordered_map<std::string, int>& defValue =
+              std::unordered_map<std::string, int>{},
+            const bool prepend_hhvm = true);
+  static ConfigMap GetMap(const IniSettingMap& ini, const Hdf& config,
+                          const std::string& name = '',
+                          const ConfigMap& defValue = ConfigMap(),
+                          const bool prepend_hhvm = true);
+  static ConfigMapC GetMapC(const IniSettingMap& ini, const Hdf& config,
+                          const std::string& name = '',
+                          const ConfigMapC& defValue = ConfigMapC(),
+                          const bool prepend_hhvm = true);
+  static ConfigSet GetSet(const IniSettingMap& ini, const Hdf& config,
+                          const std::string& name = '',
+                          const ConfigSet& defValue = ConfigSet(),
+                          const bool prepend_hhvm = true);
+  static ConfigSetC GetSetC(const IniSettingMap& ini, const Hdf& config,
+                            const std::string& name = '',
+                            const ConfigSetC& defValue = ConfigSetC(),
+                            const bool prepend_hhvm = true);
+  static ConfigIMap GetIMap(const IniSettingMap& ini, const Hdf& config,
+                            const std::string& name = '',
+                            const ConfigIMap& defValue = ConfigIMap(),
+                            const bool prepend_hhvm = true);
+  static ConfigFlatSet GetFlatSet(const IniSettingMap& ini, const Hdf& config,
+                                  const std::string& name = '',
+                                  const ConfigFlatSet& defValue
+                                    = ConfigFlatSet(),
+                                  const bool prepend_hhvm = true);
+    
+        // skipping .  .. hidden files
+    if (ename[0] == '.' || !*ename) {
+      continue;
+    }
+    auto fe = fullPath + ename;
+    struct stat se;
+    if (stat(fe.c_str(), &se)) {
+      Logger::Error('FileUtil::find(): unable to stat %s', fe.c_str());
+      continue;
+    }
+    
+    RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
+                                     const RuleBasedCollator *base, UErrorCode &errorCode)
+        : data(NULL),
+          settings(NULL),
+          tailoring(NULL),
+          cacheEntry(NULL),
+          validLocale(''),
+          explicitlySetAttributes(0),
+          actualLocaleIsSameAsValid(FALSE) {
+    if(U_FAILURE(errorCode)) { return; }
+    if(bin == NULL || length == 0 || base == NULL) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    const CollationTailoring *root = CollationRoot::getRoot(errorCode);
+    if(U_FAILURE(errorCode)) { return; }
+    if(base->tailoring != root) {
+        errorCode = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    LocalPointer<CollationTailoring> t(new CollationTailoring(base->tailoring->settings));
+    if(t.isNull() || t->isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    CollationDataReader::read(base->tailoring, bin, length, *t, errorCode);
+    if(U_FAILURE(errorCode)) { return; }
+    t->actualLocale.setToBogus();
+    adoptTailoring(t.orphan(), errorCode);
 }
     
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
     
-    {  /*! \brief milliseconds spent in Next() */
-  std::atomic<uint64_t> next_time_;
-};  // class CaffeDataIterWrapper
-    
-    bool get_png_size(const unsigned char* data, mx_uint data_size, mx_uint *width, mx_uint *height) {
-  if (data[0] == 0x89 && data[1] == 0x50 && data[2] ==0x4E && data[3] == 0x47) {
-    unsigned char const* p = data + 16;
-    *width = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
-    p += 4;
-    *height = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
-    return true;
-  } else {
-    return false;
-  }
-}
-    
-    /*!
- * \brief Thread pool.
- */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
-    }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
-  };
-    }
-    
-      void StopNoWait() {
-    streams_->Finalize();
-    task_queue_->SignalForKill();
-    io_task_queue_->SignalForKill();
-    task_queue_ = nullptr;
-    io_task_queue_ = nullptr;
-    thread_pool_ = nullptr;
-    io_thread_pool_ = nullptr;
-    streams_ = nullptr;
-  }
-    
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file image_augmenter.h
- * \brief Interface of opencv based image augmenter
- */
-#ifndef MXNET_IO_IMAGE_AUGMENTER_H_
-#define MXNET_IO_IMAGE_AUGMENTER_H_
-    
-    /*! \brief create a batch iterator from single instance iterator */
-class BatchLoader : public IIterator<TBlobBatch> {
- public:
-  explicit BatchLoader(IIterator<DataInst> *base):
-    head_(1), num_overflow_(0), base_(base) {
-  }
-    }
-    
-    void DHTReplaceNodeTask::onTimeout(const std::shared_ptr<DHTNode>& node)
+    void 
+SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, 
+                           int32_t time, TimeMode mode, UErrorCode& status)
 {
-  ++numRetry_;
-  if (numRetry_ >= MAX_RETRY) {
-    A2_LOG_INFO(fmt('ReplaceNode: Ping failed %d times. Replace %s with %s.',
-                    numRetry_, node->toString().c_str(),
-                    newNode_->toString().c_str()));
-    node->markBad();
-    bucket_->addNode(newNode_);
-    setFinished(true);
-  }
-  else {
-    A2_LOG_INFO(fmt('ReplaceNode: Ping reply timeout from %s. Try once more.',
-                    node->toString().c_str()));
-    sendMessage();
-  }
+    setEndRule(month, dayOfMonth, 0, time, mode, status);
 }
     
-    void DHTRoutingTableDeserializer::deserialize(const std::string& filename)
-{
-  A2_LOG_INFO(fmt('Loading DHT routing table from %s.', filename.c_str()));
-  BufferedFile fp(filename.c_str(), BufferedFile::READ);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to load DHT routing table from %s', filename.c_str()));
-  }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
-    }
+        // There may be multiple strings in the data[] array which begin with
+    // the same prefix (e.g., Cerven and Cervenec (June and July) in Czech).
+    // We keep track of the longest match, and return that.  Note that this
+    // unfortunately requires us to test all array elements.
+    int32_t bestMatchLength = 0, bestMatch = -1;
+    UnicodeString bestMatchName;
+    int32_t isLeapMonth = 0;
     
-      std::vector<std::shared_ptr<DHTNode>> nodes_;
+    
+    {    return result;
+}
+#endif
+    
+        /**
+     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
+     *
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword
+     */
+    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
+    
+    
+    {};
+    
+    #include 'DHTAbstractTask.h'
+#include 'a2time.h'
     
     
     {} // namespace aria2
-
     
+    void DHTTaskFactoryImpl::setTaskQueue(DHTTaskQueue* taskQueue)
+{
+  taskQueue_ = taskQueue;
+}
     
-    {  virtual bool finished() = 0;
-};
-    
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) = 0;
+      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() CXX11_OVERRIDE;
     
     #include 'common.h'
     
-      DHTTaskExecutor periodicTaskQueue2_;
+    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
     
-      bool validateToken(const std::string& token, const unsigned char* infoHash,
-                     const std::string& ipaddr, uint16_t port) const;
+    bool DHTUnknownMessage::isReply() const { return false; }
     
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
+    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
     
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-    ErrorCode FakeCanClient::Send(const std::vector<CanFrame> &frames,
-                              int32_t *const frame_num) {
-  if (frame_num == nullptr) {
-    AERROR << 'frame_num pointer is null';
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-    }
-    
-      if (!_is_init) {
-    AERROR << 'Hermes can client is not init! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
-  }
-  //    if (*frame_num > MAX_CAN_SEND_FRAME_LEN || *frame_num < 0) {
-  //       AERROR << 'send can frame num not in range[0, '
-  //         << MAX_CAN_SEND_FRAME_LEN << '], frame_num:' << *frame_num;
-  //       return ErrorCode::CAN_CLIENT_ERROR_FRAME_NUM;
-  //    }
-  for (int i = 0; i < *frame_num; ++i) {
-    _send_frames[i].bcan_msg_id = frames[i].id;
-    _send_frames[i].bcan_msg_datalen = frames[i].len;
-    memcpy(_send_frames[i].bcan_msg_data, frames[i].data, frames[i].len);
-  }
-    
-    using ::apollo::canbus::ChassisDetail;
+      ForEach<int> fe{s.begin(), s.end()};
     
       /**
-   * @brief Check if the bit on a specified position is one.
-   * @param pos The position of the bit to check.
-   * @return If the bit on a specified position is one.
+   * Create a new RNG, seeded with a good seed.
+   *
+   * Note that you should usually use ThreadLocalPRNG unless you need
+   * reproducibility (such as during a test), in which case you'd want
+   * to create a RNG with a good seed in production, and seed it yourself
+   * in test.
    */
-  bool is_bit_1(const int32_t pos) const;
+  template <class RNG = DefaultGenerator, class /* EnableIf */ = ValidRNG<RNG>>
+  static RNG create();
     
-    // data file
-DECLARE_string(sensor_conf_file);
-    
-    #endif  // GUETZLI_ENTROPY_ENCODE_H_
-
-    
-    std::string ReadFileOrDie(const char* filename) {
-  bool read_from_stdin = strncmp(filename, '-', 2) == 0;
-    }
-    
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg) {
-  static const int quant[3 * kDCTBlockSize] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  };
-  return EncodeRGBToJpeg(rgb, w, h, quant, jpg);
-}
+      explicit Options(
+      Format format_ = Format::ZLIB,
+      int windowSize_ = 15,
+      int memLevel_ = 8,
+      int strategy_ = Z_DEFAULT_STRATEGY)
+      : format(format_),
+        windowSize(windowSize_),
+        memLevel(memLevel_),
+        strategy(strategy_) {}
