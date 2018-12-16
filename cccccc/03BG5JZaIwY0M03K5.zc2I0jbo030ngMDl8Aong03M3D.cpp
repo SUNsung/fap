@@ -1,218 +1,193 @@
 
         
-        #ifndef ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
-#define ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
-    
-      // The window used for processing events.
-  HWND window_;
-#endif
-    
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_common_screen, Initialize)
-
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-      // Finds out the TrackableObject from the class it wraps.
-  static T* FromWrappedClass(v8::Isolate* isolate,
-                             base::SupportsUserData* wrapped) {
-    int32_t id = GetIDFromWrappedClass(wrapped);
-    if (!id)
-      return nullptr;
-    return FromWeakMapID(isolate, id);
+        
+  // Note that if file_size is zero, the file has been deleted and
+  // should not be added to the manifest.
+  int level = 0;
+  if (s.ok() && meta.file_size > 0) {
+    const Slice min_user_key = meta.smallest.user_key();
+    const Slice max_user_key = meta.largest.user_key();
+    if (base != nullptr) {
+      level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
+    }
+    edit->AddFile(level, meta.number, meta.file_size,
+                  meta.smallest, meta.largest);
   }
     
-      // This is a substitution function from the generic parameters of the
-  // conforming type to the synthetic environment.
-  //
-  // For structs, enums and protocols, this is a 1:1 mapping; for classes,
-  // we increase the depth of each generic parameter by 1 so that we can
-  // introduce a class-bound 'Self' parameter.
-  //
-  // This is a raw function rather than a substitution map because we need to
-  // keep generic parameters as generic, even if the conformanceSig (the best
-  // way to create the substitution map) equates them to concrete types.
-  auto conformanceToSyntheticTypeFn = [&](SubstitutableType *type) {
-    auto *genericParam = cast<GenericTypeParamType>(type);
-    if (covariantSelf) {
-      return GenericTypeParamType::get(genericParam->getDepth() + 1,
-                                       genericParam->getIndex(), ctx);
+    TEST(DBTest, ComparatorCheck) {
+  class NewComparator : public Comparator {
+   public:
+    virtual const char* Name() const { return 'leveldb.NewComparator'; }
+    virtual int Compare(const Slice& a, const Slice& b) const {
+      return BytewiseComparator()->Compare(a, b);
     }
+    virtual void FindShortestSeparator(std::string* s, const Slice& l) const {
+      BytewiseComparator()->FindShortestSeparator(s, l);
     }
-    
-    bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
+    virtual void FindShortSuccessor(std::string* key) const {
+      BytewiseComparator()->FindShortSuccessor(key);
     }
-    
-      auto mirrorIter = mirroredBuffers.find(buffer);
-  if (mirrorIter != mirroredBuffers.end()) {
-    mirrorID = mirrorIter->second;
-  } else {
-    std::unique_ptr<llvm::MemoryBuffer> mirrorBuffer{
-      llvm::MemoryBuffer::getMemBuffer(buffer->getBuffer(),
-                                       buffer->getBufferIdentifier(),
-                                       /*RequiresNullTerminator=*/true)
-    };
-    mirrorID = swiftSrcMgr.addNewSourceBuffer(std::move(mirrorBuffer));
-    mirroredBuffers[buffer] = mirrorID;
-  }
-  loc = swiftSrcMgr.getLocForOffset(mirrorID, decomposedLoc.second);
-    
-    
-    {  // Moving messages on two different arenas should lead to a copy.
-  *message2_on_arena = std::move(*message1_on_arena);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+  };
+  NewComparator cmp;
+  Options new_options = CurrentOptions();
+  new_options.comparator = &cmp;
+  Status s = TryReopen(&new_options);
+  ASSERT_TRUE(!s.ok());
+  ASSERT_TRUE(s.ToString().find('comparator') != std::string::npos)
+      << s.ToString();
 }
     
-    void SourceGeneratorBase::WriteGeneratedCodeAttributes(io::Printer* printer) {
-  printer->Print('[global::System.Diagnostics.DebuggerNonUserCodeAttribute]\n');
-}
-    
-    static void WriteDocCommentBodyForLocation(
-    io::Printer* printer, const SourceLocation& location) {
-  string comments = location.leading_comments.empty() ?
-      location.trailing_comments : location.leading_comments;
-  if (!comments.empty()) {
-    // TODO(kenton):  Ideally we should parse the comment text as Markdown and
-    //   write it back as HTML, but this requires a Markdown parser.  For now
-    //   we just use <pre> to get fixed-width text formatting.
-    }
-    }
-    
-    void ImmutableMapFieldGenerator::
-GenerateHashCode(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      'if (!internalGet$capitalized_name$().getMap().isEmpty()) {\n'
-      '  hash = (37 * hash) + $constant_name$;\n'
-      '  hash = (53 * hash) + internalGet$capitalized_name$().hashCode();\n'
-      '}\n');
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    #include <iostream>
-#include <set>
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-    
-    {  ~TemporaryFile() {
-    unlink(path.c_str());
-  }
+    enum FileType {
+  kLogFile,
+  kDBLockFile,
+  kTableFile,
+  kDescriptorFile,
+  kCurrentFile,
+  kTempFile,
+  kInfoLogFile  // Either the current one, or an old one
 };
     
-    Status DBImpl::NewDB() {
-  VersionEdit new_db;
-  new_db.SetComparatorName(user_comparator()->Name());
-  new_db.SetLogNumber(0);
-  new_db.SetNextFile(2);
-  new_db.SetLastSequence(0);
-    }
-    
-    static void TestKey(const std::string& key,
-                    uint64_t seq,
-                    ValueType vt) {
-  std::string encoded = IKey(key, seq, vt);
-    }
-    
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
- public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
-  }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
-  }
-};
-    
-    class SequentialFile;
-    
-    
-    {  ASSERT_EQ('correct', Read());
+    TEST(LogTest, UnexpectedLastType) {
+  Write('foo');
+  SetByte(6, kLastType);
+  FixChecksum(0, 3);
   ASSERT_EQ('EOF', Read());
-  const size_t dropped = DroppedBytes();
-  ASSERT_LE(dropped, 2*kBlockSize + 100);
-  ASSERT_GE(dropped, 2*kBlockSize);
+  ASSERT_EQ(3, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('missing start'));
 }
     
     
-    {  // No copying allowed
-  MemTableIterator(const MemTableIterator&);
-  void operator=(const MemTableIterator&);
-};
+    {  SkipList<Key, Comparator>::Iterator iter(&list);
+  ASSERT_TRUE(!iter.Valid());
+  iter.SeekToFirst();
+  ASSERT_TRUE(!iter.Valid());
+  iter.Seek(100);
+  ASSERT_TRUE(!iter.Valid());
+  iter.SeekToLast();
+  ASSERT_TRUE(!iter.Valid());
+}
     
-      int NumLogs() {
-    return GetFiles(kLogFile).size();
+      std::string uploadHash =
+      (uploadFile.size() > FLAGS_read_max)
+          ? '-1'
+          : hashFromFile(HashType::HASH_TYPE_SHA256, uploadPath.string());
+  if (uploadHash == '-1') {
+    VLOG(1)
+        << 'Archive file size exceeds read max, skipping integrity computation';
+  }
+  updateCarveValue(carveGuid_, 'sha256', uploadHash);
+    
+    class CarverTests : public testing::Test {
+ public:
+  CarverTests() {
+    fs::create_directories(fs::temp_directory_path() / 'files_to_carve/');
+    writeTextFile(fs::temp_directory_path() / 'files_to_carve/secrets.txt',
+                  'This is a message I'd rather no one saw.');
+    writeTextFile(fs::temp_directory_path() / 'files_to_carve/evil.exe',
+                  'MZP\x00\x02\x00\x00\x00\x04\x00\x0f\x00\xff\xff');
+    }
+    }
+    
+      /// Update the set of decorators for a given source.
+  void updateDecorations(const std::string& source, const JSON& doc);
+    
+    namespace osquery {
+    }
+    
+    /// Root key to retrieve Kafka topic configurations.
+const std::string kKafkaTopicParserRootKey('kafka_topics');
+    
+    
+    {REGISTER_INTERNAL(OptionsConfigParserPlugin, 'config_parser', 'options');
+}
+
+    
+    int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  int ret = RUN_ALL_TESTS();
+  return ret;
+}
+
+    
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(4, 4);
+    
+    double ObjectExtendedInfo60D::object_length(const std::uint8_t* bytes,
+                                            int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    
+    {
+    {
+    {}  // namespace conti_radar
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    namespace apollo {
+namespace planning {
+    }
+    }
+    
+    TEST(TestPiecewiseLinearConstraint, add_derivative_boundary) {
+  PiecewiseLinearConstraint constraint(10, 0.1);
+  std::vector<uint32_t> index_list;
+  std::vector<double> lower_bound;
+  std::vector<double> upper_bound;
+  for (uint32_t i = 0; i < 10; ++i) {
+    index_list.push_back(i);
+    lower_bound.push_back(1.0);
+    upper_bound.push_back(100.0);
+  }
+    }
+    
+    
+    {    auto ka2 = std::move(ka);
+    EXPECT_FALSE(ka);
+    EXPECT_TRUE(ka2);
+    EXPECT_EQ(&exec, ka2.get());
+    EXPECT_EQ(1, exec.refCount);
   }
     
-    #endif  // STORAGE_LEVELDB_DB_SKIPLIST_H_
+    #include <stdexcept>
+    
+      virtual uint8_t getNumPriorities() const {
+    return 1;
+  }
+    
+    TEST(Conv, timespecToStdChrono) {
+  struct timespec ts;
+    }
+    
+    /// Wrapper around the makeCompressionCounterHandler() extension point.
+class CompressionCounter {
+ public:
+  CompressionCounter() {}
+  CompressionCounter(
+      folly::io::CodecType codecType,
+      folly::StringPiece codecName,
+      folly::Optional<int> level,
+      CompressionCounterKey key,
+      CompressionCounterType counterType) {
+    initialize_ = [=]() {
+      return makeCompressionCounterHandler(
+          codecType, codecName, level, key, counterType);
+    };
+    DCHECK(!initialize_.hasAllocatedMemory());
+  }
+    }
+    
+    #include <zlib.h>
+    
+    
+    {      if (equiv == cpu) {
+        // we only want to count the equiv classes once, so we do it when
+        // we first encounter them
+        while (numCachesByLevel.size() <= level) {
+          numCachesByLevel.push_back(0);
+        }
+        numCachesByLevel[level]++;
+      }
+    }
