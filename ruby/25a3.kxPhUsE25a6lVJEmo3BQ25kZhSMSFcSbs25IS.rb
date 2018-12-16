@@ -1,86 +1,127 @@
 
         
-          private
+        WITH_JUST_LIQUID_VAR = <<-LIQUID.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. et metus fermentum, eu cursus lorem, ac dictum enim.
+mattis. Curabitur vel dui et lacus rutrum suscipit et {{ title }} neque.
     
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
-    
-        @web_subscription.update!(data: data_params)
-    
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
-    end
+    Then(%r!^I should (not )?see '(.*)' in '(.*)'$!) do |negative, text, file|
+  step %(the '#{file}' file should exist)
+  regexp = Regexp.new(text, Regexp::MULTILINE)
+  if negative.nil? || negative.empty?
+    expect(file_contents(file)).to match regexp
+  else
+    expect(file_contents(file)).not_to match regexp
   end
 end
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
+          #
     
-      YARD::Rake::YardocTask.new do |t|
-    t.files = FileList.new(scope('lib/**/*.rb')) do |list|
-      list.exclude('lib/sass/plugin/merb.rb')
-      list.exclude('lib/sass/plugin/rails.rb')
-    end.to_a
-    t.options << '--incremental' if Rake.application.top_level_tasks.include?('redoc')
-    t.options += FileList.new(scope('yard/*.rb')).to_a.map {|f| ['-e', f]}.flatten
-    files = FileList.new(scope('doc-src/*')).to_a.sort_by {|s| s.size} + %w[MIT-LICENSE VERSION]
-    t.options << '--files' << files.join(',')
-    t.options << '--template-path' << scope('yard')
-    t.options << '--title' << ENV['YARD_TITLE'] if ENV['YARD_TITLE']
-    
-          private
-    
-          if @fake_update && !dirs.empty?
-        # Issue 1602.
-        Sass::Util.sass_warn <<WARNING.strip
-DEPRECATION WARNING: Compiling directories without --update or --watch is
-deprecated and won't work in future versions of Sass. Instead use:
-  #{@default_syntax} --update #{@args}
-WARNING
-      end
-    
-    (allow file-ioctl)
-(allow sysctl-read)
-(allow mach-lookup)
-(allow ipc-posix-shm)
-(allow process-fork)
-(allow system-socket)
-    
-          def self.options
-        options = []
-        options.concat(super.reject { |option, _| option == '--silent' })
-      end
-    
-    post '/msg' do
-  SinatraWorker.perform_async params[:msg]
-  redirect to('/')
-end
-    
-          Sidekiq.redis do |conn|
-        conn.pipelined do
-          jobs_to_requeue.each do |queue, jobs|
-            conn.rpush('queue:#{queue}', jobs)
-          end
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
         end
+        # rubocop:enable Metrics/AbcSize
       end
-      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
-    rescue => ex
-      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+    end
+  end
+end
+
+    
+        def deprecation_message(message)
+      Jekyll.logger.warn 'Deprecation:', message
     end
     
-          def initialize
-        @entries = []
-        yield self if block_given?
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
+    
+      def navigate_to(page_name)
+    path = path_to(page_name)
+    if path.is_a?(Hash)
+      visit(path[:path])
+      await_elem = path[:special_elem]
+      find(await_elem.delete(:selector), await_elem)
+    else
+      visit(path)
+    end
+  end
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
+    end
+  end
+end
+
+    
+        sign_in(alice, scope: :user)
+  end
+    
+        it 'does redirect if there are no invites available with this code' do
+      code = InvitationCode.create(user: bob)
+      code.update_attributes(count: 0)
+    
+          def allow_uploads
+        @allow_uploads
+      end
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
+      end
+    end
+  end
+end
+
+    
+          # Returns the iteration variable of the `for` loop.
+      #
+      # @return [Node] The iteration variable of the `for` loop
+      def variable
+        node_parts[0]
+      end
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that can be used as hash elements:
+    # `pair`, `kwsplat`
+    module HashElementNode
+      # Returns the key of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the key of the hash element
+      def key
+        node_parts[0]
       end
