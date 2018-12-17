@@ -1,164 +1,169 @@
 
         
-          context 'with a user' do
-    let(:user) { Fabricate(:user) }
-    
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
-      end
-    end
-  end
+        Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
 end
 
     
-      context 'clearing unsupported fields of agents' do
-    before do
-      visit new_agent_path
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    require 'jekyll'
+require 'mercenary'
+    
+          def comment_line(comment_line); end
+    
+      matter = matter.join.chomp
+  content = \
+    if !input_hash['input'] || !input_hash['filter']
+      then input_hash['content']
+    else '{{ #{input_hash['input']} | ' \
+        '#{input_hash['filter']} }}'
     end
     
-              expect(weather_agent_diff.schedule.updated).to eq('6pm')
-          expect(weather_agent_diff.keep_events_for.current).to eq(45.days)
-          expect(weather_agent_diff.keep_events_for.updated).to eq(2.days.to_s)
-          expect(weather_agent_diff.disabled.updated).to eq('true')
-          expect(weather_agent_diff.options.updated).to eq(weather_agent_options.merge('api_key' => 'foo'))
-        end
-    
-          it 'sets expires_at on created events' do
-        event = agents(:jane_weather_agent).create_event :payload => { 'hi' => 'there' }
-        expect(event.expires_at.to_i).to be_within(5).of(agents(:jane_weather_agent).keep_events_for.seconds.from_now.to_i)
-      end
-    end
-    
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-  end
-end
-
-    
-          def fetch_internal_urls
-        result = []
-        build_pages do |page|
-          result << page[:subpath] if page[:entries].present?
-        end
-        result
-      end
-    
-            css('code code').each do |node|
-          node.before(node.children).remove
-        end
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-          # Initializes an entry.
-      #
-      # The parameter given should be nil if this is being created
-      # publicly.
-      def initialize(id=nil, raw=nil)
-        @extra_data = {}
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
-    
-            # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
-        end
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-              # Register a new communicator class only if a name was given.
-          data[:communicator].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-        def __internal_state
-      {
-        items: @items,
-        results_cache: @results_cache
-      }
-    end
-  end
-end
-
-    
-        def display_error_message(ex)
-      unless options.backtrace
-        Rake.application.options.suppress_backtrace_pattern = backtrace_pattern if backtrace_pattern
-        trace '(Backtrace restricted to imported tasks)'
-      end
-    
-        def configure_scm
-      Capistrano::Configuration::SCMResolver.new.resolve
-    end
-    
-            if Rake::Task.task_defined?('deploy:set_current_revision')
-          before 'deploy:set_current_revision',
-                 '#{scm_name}:set_current_revision'
-        end
-      end
-      # rubocop:enable Style/GuardClause
-    
-            def set(key, value)
-          pval = @properties[key]
-          if pval.is_a?(Hash) && value.is_a?(Hash)
-            pval.merge!(value)
-          elsif pval.is_a?(Set) && value.is_a?(Set)
-            pval.merge(value)
-          elsif pval.is_a?(Array) && value.is_a?(Array)
-            pval.concat value
-          else
-            @properties[key] = value
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
           end
-        end
     
-            names.inject(Object) do |constant, name|
-          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
-        end
-      rescue NameError
-        super
+            def strip_coderay_prefix(hash)
+          hash.each_with_object({}) do |(key, val), hsh|
+            cleaned_key = key.to_s.gsub(%r!\Acoderay_!, '')
+    
+        def handle_tls_error!(e)
+      # Apple has upgraded its App Store Connect servers to require TLS 1.2, but
+      # system Ruby 2.0 does not support it. We want to suggest that users upgrade
+      # their Ruby version
+      suggest_ruby_reinstall(e)
+      display_user_error!(e, e.to_s)
+    end
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            message: '#{message}',
+            sign: true
+          })
+        end').runner.execute(:test)
+    
+          it 'handles no extension or extensions parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
       end
+    
+          it 'generates the correct git command with an array of paths and/or pathspecs' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+          it 'yields command output' do
+        expect_command('ls', '-la', exitstatus: 1, output: 'Heeeelp! Something went wrong.')
+        Fastlane::Actions.sh('ls', '-la') do |status, result|
+          expect(status.exitstatus).to eq(1)
+          expect(result).to eq('Heeeelp! Something went wrong.')
+        end
+      end
+    
+        it 'returns an active nav link' do
+      stub(self).current_page?('/things') { true }
+      nav = nav_link('Things', '/things')
+      expect(nav).to be_html_safe
+      a = Nokogiri(nav).at('li.active > a[href='/things']')
+      expect(a).to be_a Nokogiri::XML::Element
+      expect(a.text.strip).to eq('Things')
+    end
+    
+      it 'converts values to Float' do
+    expect(location.lat).to be_a Float
+    expect(location.lat).to eq 2.0
+    expect(location.lng).to be_a Float
+    expect(location.lng).to eq 3.0
+    expect(location.radius).to be_a Float
+    expect(location.radius).to eq 300.0
+    expect(location.speed).to be_a Float
+    expect(location.speed).to eq 2.0
+    expect(location.course).to be_a Float
+    expect(location.course).to eq 30.0
+  end
+    
+      describe '#log_length' do
+    it 'defaults to 200' do
+      expect(AgentLog.log_length).to eq(200)
     end
   end
 end
+
     
-          def prepend(klass, *args)
-        remove(klass) if exists?(klass)
-        entries.insert(0, Entry.new(klass, *args))
+      # Setup a color scheme called 'bright' than can be used to add color codes
+  # to the pattern layout. Color schemes should only be used with appenders
+  # that write to STDOUT or STDERR; inserting terminal color codes into a file
+  # is generally considered bad form.
+  Logging.color_scheme('bright',
+                       levels:  {
+                         info:  :green,
+                         warn:  :yellow,
+                         error: :red,
+                         fatal: %i(white on_red)
+                       },
+                       date:    :blue,
+                       logger:  :cyan,
+                       message: :magenta
+                      )
+    
+    class PolymorphicMentions < ActiveRecord::Migration[4.2]
+  def change
+    remove_index :mentions, column: %i(post_id)
+    remove_index :mentions, column: %i(person_id post_id), unique: true
+    rename_column :mentions, :post_id, :mentions_container_id
+    add_column :mentions, :mentions_container_type, :string
+    add_index :mentions,
+              %i(mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_mc_id_and_mc_type',
+              length: {mentions_container_type: 191}
+    add_index :mentions,
+              %i(person_id mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
+              length: {mentions_container_type: 191},
+              unique: true
+    
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
+    
+          it 'should not be catched when it is unexpected' do
+        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
+        allow(alice).to receive(:like!).and_raise('something')
+        allow(@controller).to receive(:current_user).and_return(alice)
+        expect { post :create, params: like_hash, format: :json }.to raise_error('something')
+      end
+    end
+  end
+    
+        context 'on my own post' do
+      before do
+        aspect_to_post = alice.aspects.where(:name => 'generic').first
+        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
       end
     
-        def fire_event(event, options={})
-      reverse = options[:reverse]
-      reraise = options[:reraise]
-    
-        def delete(path, &block)
-      route(DELETE, path, &block)
-    end
+          # An array containing the arguments of the method definition.
+      #
+      # @return [Array<Node>] the arguments of the method definition
+      def arguments
+        node_parts[1]
+      end
