@@ -1,239 +1,194 @@
 
         
-        
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(AtomContentClient);
-};
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
+        #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
 
     
+    private:
+    void paintPath(QPainterPath &path, QQueue<float> &samples);
     
-    {  DISALLOW_COPY_AND_ASSIGN(Screen);
+    #ifndef BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+#define BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+    
+    
+    {        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, y, sizeof(y));
+        secp256k1_sha256_write(&sha, x, sizeof(x));
+        secp256k1_sha256_finalize(&sha, result);
+        ret = 1;
+    }
+    
+        uv.setInt(43);
+    obj.pushKV('age', uv);
+    BOOST_CHECK_EQUAL(obj.size(), 1);
+    BOOST_CHECK_EQUAL(obj['age'].getValStr(), '43');
+    
+    
+    {}  // namespace grpc
+    
+    Status ProtoServerReflection::GetAllExtensionNumbers(
+    ServerContext* context, const grpc::string& type,
+    ExtensionNumberResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
+  }
+    }
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
+    }
+    
+    
+    {  void ThreadFunc();
+  static void ReapThreads(std::list<DynamicThread*>* tlist);
 };
     
+    /*!
+* \brief Maximum ndim supported for special operators like broadcasting with non contiguous lhs/rhs
+*/
+#define MXNET_SPECIAL_MAX_NDIM 5
     
-    {  // Produce the generic signature and environment.
-  // FIXME: Pass in a source location for the conformance, perhaps? It seems
-  // like this could fail.
-  syntheticSignature =
-    std::move(builder).computeGenericSignature(SourceLoc());
-  syntheticEnvironment = syntheticSignature->createGenericEnvironment();
-}
+    #endif  // MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
+#endif  // MXNET_RTC_H_
 
     
-        llvm::errs() << '\n=====================================================\n';
-    SyntaxNode->dump(llvm::errs());
-    llvm::errs() << '\n\n---- Maps to semantic node: ----\n\n';
-    
-      // An AST section consists of one or more AST modules, optionally with
-  // headers. Iterate over all AST modules.
-  while (!buf.empty()) {
-    auto info = serialization::validateSerializedAST(buf);
-    }
-    
-    
-    {  ChunkType pattern = (addOnes ? ~ChunkType(0) : ChunkType(0));
-  appendReserved(numBits, [=](size_t numBitsWanted) -> ChunkType {
-    return (pattern >> (ChunkSizeInBits - numBitsWanted));
-  });
-}
-    
-    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
-  llvm::SmallString<32> NameBuf(Name);
-  cache_attributes_t Attrs = {
-    CACHE_ATTRIBUTES_VERSION_2,
-    CBs.keyHashCB,
-    CBs.keyIsEqualCB,
-    nullptr,
-    CBs.keyDestroyCB,
-    CBs.valueReleaseCB,
-    nullptr,
-    nullptr,
-    CBs.UserData,
-    CBs.valueRetainCB,
-  };
-    }
-    
-    class TreePrinter {
-  llvm::raw_ostream &Out;
-  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
-  SmallString<40> Indent;
-public:
-  TreePrinter(llvm::raw_ostream &out,
-              void (&printNodeData)(llvm::raw_ostream &out, void *node))
-    : Out(out), PrintNodeData(printNodeData) {}
-    }
-    
-      if (clangDiag.getID() == clang::diag::err_module_not_built &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    SourceLoc loc = DiagLoc;
-    if (clangDiag.getLocation().isValid())
-      loc = resolveSourceLocation(clangDiag.getSourceManager(),
-                                  clangDiag.getLocation());
-    }
-    
-        template <typename ElementType>
-    void LearnerSGD::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
-                            const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const
-    {
-        UNUSED(smoothedGradientValue);
-        const auto& gradientMatrix = GetWritableMatrix<ElementType>(gradientValue);
-        const auto& parameterMatrix = GetWritableMatrix<ElementType>(parameter.Value());
-        const auto learningRate = ElementType(LearningRate(trainingSampleCount));
-    }
-    
-        template CNTK_API std::tuple<const float*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<float>() const;
-    template CNTK_API std::tuple<const double*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<double>() const;
-    template CNTK_API std::tuple<const float16*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<float16>() const;
-    template CNTK_API std::tuple<const int8_t*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<int8_t>() const;
-    template CNTK_API std::tuple<const int16_t*, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers<int16_t>() const;
-    
-    
-    {        bool isImage = configp->Get(L'isImage');
-        if (!isImage)
-            Init(configp->Get(L'shape'), isSparse, axisName);
-        else
-            Init(ImageDimensions::AsTensorShape(configp->Get(L'imageWidth'), configp->Get(L'imageHeight'), configp->Get(L'imageChannels'), ImageLayoutKindFrom(configp->Get(L'imageLayout'))), isSparse, axisName);
-    }
-    
-      /*
-   * @brief a helper variable for keeping track of the posix tar archive.
-   *
-   * This variable is the absolute location of the tar archive created from
-   * tar'ing all of the carved files from the carve temp dir.
-   */
-  boost::filesystem::path archivePath_;
-    
-      update['awesome'] = R'raw({
-    'options': {
-      'custom_nested_json': 
-        {'foo':1,'bar':'baz'}
-    }
-  })raw';
-  auto s = c.update(update);
-  EXPECT_TRUE(s.ok());
-  EXPECT_EQ(s.toString(), 'OK');
-    
-    
-    {/**
- * @brief Compute a hash digest from the contents of a buffer.
- *
- * @param hash_type The osquery-supported hash algorithm.
- * @param buffer A caller-controlled buffer (already allocated).
- * @param size The length of buffer in bytes.
- * @return A string (hex) representation of the hash digest.
+    /**
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
  */
-std::string hashFromBuffer(HashType hash_type, const void* buffer, size_t size);
-} // namespace osquery
+class CaffeMode {
+ public:
+  template<typename xpu> static void SetMode();
+};
+    
+    template<>
+Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeOp<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeOp<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
 
     
-    #ifndef WIN32
-#include <sys/wait.h>
-#endif
+      Byte t1(bytes + 2);
+  int32_t t = t1.get_byte(6, 2);
     
-        if (descriptor_inosubctx_.find(watch) != descriptor_inosubctx_.end()) {
-      auto ino_sc = descriptor_inosubctx_.at(watch);
-      if (inotify_sanity_check) {
-        std::string watched_path = ino_sc->descriptor_paths_[watch];
-        path_descriptors_.erase(watched_path);
-      }
-      ino_sc->descriptor_paths_.erase(watch);
-      descriptor_inosubctx_.erase(watch);
+    bool RadarState201::send_ext_info(const std::uint8_t* bytes,
+                                  int32_t length) const {
+  Byte t0(bytes + 5);
+  uint32_t x = t0.get_byte(5, 1);
     }
     
-    TEST_F(AuditTests, test_parse_sock_addr) {
-  Row r;
-  std::string msg = '02001F907F0000010000000000000000';
-  bool unix_socket;
-  parseSockAddr(msg, r, unix_socket);
-  ASSERT_FALSE(r['remote_address'].empty());
-  EXPECT_EQ(r['remote_address'], '127.0.0.1');
-  EXPECT_EQ(r['family'], '2');
-  EXPECT_EQ(r['remote_port'], '8080');
+    namespace apollo {
+namespace hdmap {
+namespace adapter {
+    }
+    }
     }
     
-    int main(int, char**)
-{
-    IwGxInit();
+    #include 'modules/planning/common/speed/st_point.h'
+    
+    using apollo::common::PathPoint;
+using State = std::array<double, 3>;
+    
+    DiscretizedTrajectory TrajectoryCombiner::Combine(
+    const std::vector<PathPoint>& reference_line, const Curve1d& lon_trajectory,
+    const Curve1d& lat_trajectory, const double init_relative_time) {
+  DiscretizedTrajectory combined_trajectory;
     }
     
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX10 sample code but remove this dependency you can: 
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
-    
-    static void ImGui_ImplDX11_CreateFontsTexture()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    BENCHMARK(dev_null_log_overhead, iter) {
+  auto prev = FLAGS_minloglevel;
+  FLAGS_minloglevel = 2;
     }
     
-        if (pEvent->m_Pressed == 1)
-    {
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
-            g_MousePressed[0] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
-            g_MousePressed[1] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
-            g_MousePressed[2] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
-            io.MouseWheel += pEvent->m_y;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
-            io.MouseWheel += pEvent->m_y;
-    }
     
-    // About OpenGL function loaders: 
-// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+    {} // namespace folly
     
-    // Gamma Correct Blending:
-//  FreeType assumes blending in linear space rather than gamma space.
-//  See https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html#FT_Render_Glyph
-//  For correct results you need to be using sRGB and convert to linear space in the pixel shader output.
-//  The default imgui styles will be impacted by this change (alpha values will need tweaking).
+        int probeEnd = getNextZero(note, pos, pos + remaining - 1);
+    CHECK_GE(probeEnd, 0);
+    size_t probeLen = probeEnd - pos + 1;
+    std::string probe = getStr(note, pos, probeLen);
+    remaining -= probeLen;
     
-    #ifndef SKIP_RESERVE
-void BENCHFUN(reserve)(int iters, int size) {
-  auto const obj = randomObject<VECTOR::value_type>();
-  FOR_EACH_RANGE (i, 0, iters) {
-    VECTOR v(random(0U, 1U), obj);
-    v.reserve(size);
+    exception_wrapper exception_wrapper::from_exception_ptr(
+    std::exception_ptr const& ptr) noexcept {
+  if (!ptr) {
+    return exception_wrapper();
+  }
+  try {
+    std::rethrow_exception(ptr);
+  } catch (std::exception& e) {
+    return exception_wrapper(std::current_exception(), e);
+  } catch (...) {
+    return exception_wrapper(std::current_exception());
   }
 }
-BENCHMARK_PARAM(BENCHFUN(reserve), 16)
-BENCHMARK_PARAM(BENCHFUN(reserve), 128)
-BENCHMARK_PARAM(BENCHFUN(reserve), 1024)
-#endif
     
-    inline UriTuple as_tuple(const folly::Uri& k) {
-  return UriTuple(
-      k.scheme(),
-      k.username(),
-      k.password(),
-      k.host(),
-      k.port(),
-      k.path(),
-      k.query(),
-      k.fragment());
-}
-    
-    namespace folly {
+    /// An Executor accepts units of work with add(), which should be
+/// threadsafe.
+class Executor {
+ public:
+  // Workaround for a linkage problem with explicitly defaulted dtor t22914621
+  virtual ~Executor() {}
     }
     
-    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
-    _mm_pause();
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-    __asm__ __volatile__('pause;');
-#endif
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
+    
+      /**
+   * 'The memLevel parameter specifies how much memory should be allocated for
+   * the internal compression state. memLevel=1 uses minimum memory but is slow
+   * and reduces compression ratio; memLevel=9 uses maximum memory for optimal
+   * speed. The default value is 8.'
+   */
+  int memLevel;
+    
+      void store(
+      SharedPtr n,
+      std::memory_order order = std::memory_order_seq_cst) /* noexcept */ {
+    auto newptr = get_newptr(std::move(n));
+    auto old = ptr_.exchange(newptr, order);
+    release_external(old);
+  }
+    
+    TEST_F(SparseByteSetTest, each_random) {
+  mt19937 rng;
+  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
+  set<uint8_t> added;
+  while (added.size() <= lims::max()) {
+    auto c = uint8_t(dist(rng));
+    EXPECT_EQ(added.count(c), s.contains(c));
+    EXPECT_EQ(!added.count(c), s.add(c));
+    added.insert(c);
+    EXPECT_TRUE(added.count(c)); // sanity
+    EXPECT_TRUE(s.contains(c));
+  }
 }
