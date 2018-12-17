@@ -1,538 +1,297 @@
 
         
-          if (!wasInline) delete[] oldBegin;
-    
-    #ifndef PREPOSITION
-#  define PREPOSITION(Word)
-#endif
-    
-    /// Classify a potential CF typedef.
-CFPointeeInfo
-CFPointeeInfo::classifyTypedef(const clang::TypedefNameDecl *typedefDecl) {
-  clang::QualType type = typedefDecl->getUnderlyingType();
-    }
-    
-      // FIXME: Map over source ranges in the diagnostic.
-  auto emitDiag = [&ctx, this](clang::FullSourceLoc clangNoteLoc,
-                      clang::DiagnosticsEngine::Level clangDiagLevel,
-                      StringRef message) {
-    decltype(diag::error_from_clang) diagKind;
-    switch (clangDiagLevel) {
-    case clang::DiagnosticsEngine::Ignored:
-      return;
-    case clang::DiagnosticsEngine::Note:
-      diagKind = diag::note_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Remark:
-      // FIXME: We don't handle remarks yet.
-      return;
-    case clang::DiagnosticsEngine::Warning:
-      diagKind = diag::warning_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Error:
-    case clang::DiagnosticsEngine::Fatal:
-      // FIXME: What happens after a fatal error in the importer?
-      diagKind = diag::error_from_clang;
-      break;
-    }
-    }
-    
-    // Objective-C types.
-MAP_TYPE('BOOL', ObjCBool, 8, 'ObjectiveC', 'ObjCBool', false, DoNothing)
-MAP_TYPE('SEL',  ObjCSel, 0, 'ObjectiveC', 'Selector', false, DoNothing)
-MAP_STDLIB_TYPE('Class', ObjCClass, 0, 'AnyClass', false, DoNothing)
-MAP_STDLIB_TYPE(
-  Impl.SwiftContext.getSwiftName(KnownFoundationEntity::NSInteger),
-  SignedWord, 0, 'Int', false, DefineOnly)
-    
-           allowSubmatrix || allowInplace || iterations != 1 ||
-       !CAROTENE_NS::isSupportedConfiguration())
-        return CV_HAL_ERROR_NOT_IMPLEMENTED;
-    
-    
-    {        inline size_t total() const
-        {
-            return width * height;
-        }
-    };
-    
-            vst1q_s16(dsty + j, dy);
-        vst1q_s16(dstx + j, dx);
-        vst1q_s32(mag + j + 4, normh);
-        vst1q_s32(mag + j, norml);
-    }
-    if (j != width)
-    {
-        j = width - 8;
-        goto ColFilter3x3CannyL1Loop;
-    }
-}
-template <>
-inline void ColFilter3x3Canny<true>(const s16* src0, const s16* src1, const s16* src2, s16* dstx, s16* dsty, s32* mag, ptrdiff_t width)
-{
-    ptrdiff_t j = 0;
-    for (; j <= width - 8; j += 8)
-    {
-        ColFilter3x3CannyL2Loop:
-        int16x8_t line0x = vld1q_s16(src0 + j);
-        int16x8_t line1x = vld1q_s16(src1 + j);
-        int16x8_t line2x = vld1q_s16(src2 + j);
-        int16x8_t line0y = vld1q_s16(src0 + j + width);
-        int16x8_t line2y = vld1q_s16(src2 + j + width);
-    
-                uint8x16x4_t v_src = vld4q_u8(src + sj);
-            vst1q_u8(dst + dj, v_src.val[coi]);
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, s8, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vcvt.f32.s32 q4, q2                                     \n\t'
-            'vcvt.f32.s32 q5, q3                                     \n\t'
-            'vmul.f32 q6, q4, q0                                     \n\t'
-            'vmul.f32 q7, q5, q0                                     \n\t'
-            'vadd.f32 q8, q6, q1                                     \n\t'
-            'vadd.f32 q9, q7, q1                                     \n\t'
-            'vcvt.s32.f32 q10, q8                                    \n\t'
-            'vcvt.s32.f32 q11, q9                                    \n\t'
-            'vqmovn.s32 d24, q10                                     \n\t'
-            'vqmovn.s32 d25, q11                                     \n\t'
-            'vqmovn.s16  d26, q12                                    \n\t'
-            'vst1.8 {d26}, [%[dst]]                                  \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26'
-        );
-    }
-})
-#else
-CVTS_FUNC(s32, s8, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        int8x8_t vRes = vqmovn_s16(vcombine_s16(vRes1, vRes2));
-        vst1_s8(_dst + i, vRes);
-    }
-})
-#endif
-    
-            for ( ; x < width; ++x)
-        {
-            // make extrapolation for the last elements
-            if (x + 1 >= width)
-            {
-                if (border == BORDER_MODE_CONSTANT)
-                {
-                    nextx[0] = borderValue;
-                    nextx[1] = borderValue;
-                    nextx[2] = borderValue;
-                }
-                else if (border == BORDER_MODE_REPLICATE)
-                {
-                    nextx[0] = srow0[x];
-                    nextx[1] = srow1[x];
-                    nextx[2] = srow2[x];
-                }
-            }
-            else
-            {
-                nextx[0] = srow0 ? srow0[x + 1] : borderValue;
-                nextx[1] =         srow1[x + 1]              ;
-                nextx[2] = srow2 ? srow2[x + 1] : borderValue;
-            }
-    }
-    
-    s32 countNonZero(const Size2D &_size,
-                 const s32 * srcBase, ptrdiff_t srcStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    size_t roiw4 = size.width & ~3u;
-    s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
-    {
-        const u32* src = (const u32*)internal::getRowPtr( srcBase,  srcStride, k);
-        u32 i = 0;
-    }
-    }
-    
-            uint32x4_t el4h = vaddq_u32(el8shr01l, el8shr01h);
-    
-    // calculate reciprocal value
-    
-    // ValuesIn() function allows generation of tests with parameters coming from
-// a container.
-//
-// Synopsis:
-// ValuesIn(const T (&array)[N])
-//   - returns a generator producing sequences with elements from
-//     a C-style array.
-// ValuesIn(const Container& container)
-//   - returns a generator producing sequences with elements from
-//     an STL-style container.
-// ValuesIn(Iterator begin, Iterator end)
-//   - returns a generator producing sequences with elements from
-//     a range [begin, end) defined by a pair of STL-style iterators. These
-//     iterators can also be plain C pointers.
-//
-// Please note that ValuesIn copies the values from the containers
-// passed in and keeps them to generate tests in RUN_ALL_TESTS().
-//
-// Examples:
-//
-// This instantiates tests from test case StringTest
-// each with C-string values of 'foo', 'bar', and 'baz':
-//
-// const char* strings[] = {'foo', 'bar', 'baz'};
-// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
-//
-// This instantiates tests from test case StlStringTest
-// each with STL strings with values 'a' and 'b':
-//
-// ::std::vector< ::std::string> GetParameterStrings() {
-//   ::std::vector< ::std::string> v;
-//   v.push_back('a');
-//   v.push_back('b');
-//   return v;
-// }
-//
-// INSTANTIATE_TEST_CASE_P(CharSequence,
-//                         StlStringTest,
-//                         ValuesIn(GetParameterStrings()));
-//
-//
-// This will also instantiate tests from CharTest
-// each with parameter values 'a' and 'b':
-//
-// ::std::list<char> GetParameterChars() {
-//   ::std::list<char> list;
-//   list.push_back('a');
-//   list.push_back('b');
-//   return list;
-// }
-// ::std::list<char> l = GetParameterChars();
-// INSTANTIATE_TEST_CASE_P(CharSequence2,
-//                         CharTest,
-//                         ValuesIn(l.begin(), l.end()));
-//
-template <typename ForwardIterator>
-internal::ParamGenerator<
-  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
-ValuesIn(ForwardIterator begin, ForwardIterator end) {
-  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
-      ::value_type ParamType;
-  return internal::ParamGenerator<ParamType>(
-      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
-}
-    
-    // A unique type used as the default value for the arguments of class
-// template Types.  This allows us to simulate variadic templates
-// (e.g. Types<int>, Type<int, double>, and etc), which C++ doesn't
-// support directly.
-struct None {};
-    
-    
-    {    // You can generate a failure in any event handler except
-    // OnTestPartResult. Just use an appropriate Google Test assertion to do
-    // it.
-    EXPECT_LE(difference, 0) << 'Leaked ' << difference << ' unit(s) of Water!';
-  }
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    #include 'sample2.h'
-    
-            for (auto i = 0; i < parameters.size(); i++)
-        {
-            const auto& parameter = parameters.at(i);
-            const auto& uid = parameter.Uid();
-            const NDArrayView& checkpointedValue = getSmoothedGradValue(i, parameter).Value<NDArrayView>();
-    }
-    
-    namespace CNTK
-{
-    class ProgressWriter::Impl
-    {
-    public:
-        Impl(size_t updateWriteFrequency, size_t firstUpdatesToWrite)
-            : m_frequency(updateWriteFrequency), m_firstN(firstUpdatesToWrite),
-            m_totalUpdates(0), m_totalSummaries(0)
-        {
-            Reset();
-        }
-    }
-    }
-    
-                m_trainingSampleCountVar = findTrainingSampleCountVarRetVal.first;
-            if (GetTraceLevel() >= TraceLevel::Info)
-                fprintf(stderr, 'Info: Trainer loss Function '%S' output does not have a batch axis; the first Variable '%S' with a batch axis found in the graph underlying the scalar '
-                                'loss Function will be used to determine minibatch training sample count.\n', m_lossFunction->AsString().c_str(), m_trainingSampleCountVar.AsString().c_str());
-    
-    public:
-    // this constructor is always run (all other constructors call this one)
-    LearnableParameter(DEVICEID_TYPE deviceId, const wstring& name) :
-        Base(deviceId, name)
-    {
-        SetLearningRateMultiplier(1.0f); // enable normal learning by default
-        MarkValueNonSharable();
-        m_initString = L'fromValue'; // default init is with 0; typically overwritten
-        m_initValue = 0;
-        m_regMultiplier = 1.0f; // enable reg in update by default
-    }
-    LearnableParameter(DEVICEID_TYPE deviceId, const wstring& name, const TensorShape& shape) :
-        LearnableParameter(deviceId, name)
-    {
-        InitShape(shape);
-        LazyInitParameters();
-    }
-    LearnableParameter(DEVICEID_TYPE deviceId, const wstring& name, size_t rows, size_t cols) :
-        LearnableParameter(deviceId, name, TensorShape(rows, cols))
-    {
-    }
-    LearnableParameter(const ScriptableObjects::IConfigRecordPtr configp);
-    
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-        // Create and grow vertex/index buffers if needed
-    if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
-    {
-        if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
-        g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
-        D3D12_HEAP_PROPERTIES props;
-        memset(&props, 0, sizeof(D3D12_HEAP_PROPERTIES));
-        props.Type = D3D12_HEAP_TYPE_UPLOAD;
-        props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-        props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-        D3D12_RESOURCE_DESC desc;
-        memset(&desc, 0, sizeof(D3D12_RESOURCE_DESC));
-        desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        desc.Width = g_VertexBufferSize * sizeof(ImDrawVert);
-        desc.Height = 1;
-        desc.DepthOrArraySize = 1;
-        desc.MipLevels = 1;
-        desc.Format = DXGI_FORMAT_UNKNOWN;
-        desc.SampleDesc.Count = 1;
-        desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-        if (g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&g_pVB)) < 0)
-            return;
-        frameResources->VB = g_pVB;
-        frameResources->VertexBufferSize = g_VertexBufferSize;
-    }
-    if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
-    {
-        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
-        D3D12_HEAP_PROPERTIES props;
-        memset(&props, 0, sizeof(D3D12_HEAP_PROPERTIES));
-        props.Type = D3D12_HEAP_TYPE_UPLOAD;
-        props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-        props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-        D3D12_RESOURCE_DESC desc;
-        memset(&desc, 0, sizeof(D3D12_RESOURCE_DESC));
-        desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        desc.Width = g_IndexBufferSize * sizeof(ImDrawIdx);
-        desc.Height = 1;
-        desc.DepthOrArraySize = 1;
-        desc.MipLevels = 1;
-        desc.Format = DXGI_FORMAT_UNKNOWN;
-        desc.SampleDesc.Count = 1;
-        desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-        if (g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&g_pIB)) < 0)
-            return;
-        frameResources->IB = g_pIB;
-        frameResources->IndexBufferSize = g_IndexBufferSize;
-    }
-    
-    int32 ImGui_Marmalade_KeyCallback(void* system_data, void* user_data)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    s3eKeyboardEvent* e = (s3eKeyboardEvent*)system_data;
-    if (e->m_Pressed == 1)
-        io.KeysDown[e->m_Key] = true;
-    if (e->m_Pressed == 0)
-        io.KeysDown[e->m_Key] = false;
-    }
-    
-        // Read keyboard modifiers inputs
-    io.KeyCtrl = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
-    io.KeyShift = (::GetKeyState(VK_SHIFT) & 0x8000) != 0;
-    io.KeyAlt = (::GetKeyState(VK_MENU) & 0x8000) != 0;
-    io.KeySuper = false;
-    // io.KeysDown[], io.MousePos, io.MouseDown[], io.MouseWheel: filled by the WndProc handler below.
-    
-    // About OpenGL function loaders: 
-// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-    
-    bool ImGui::InputDouble(const char* label, double* v, double step, double step_fast, const char* format, ImGuiInputTextFlags extra_flags)
-{
-    extra_flags |= ImGuiInputTextFlags_CharsScientific;
-    return InputScalar(label, ImGuiDataType_Double, (void*)v, (void*)(step>0.0 ? &step : NULL), (void*)(step_fast>0.0 ? &step_fast : NULL), format, extra_flags);
-}
-    
-    int main(int argc, char** argv)
-{ 
-    // Create GLUT window
-    glutInit(&argc, argv);
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
-    glutInitWindowSize(1280, 720);
-    glutCreateWindow('Dear ImGui FreeGLUT+OpenGL2 Example');
-    }
-    
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-    #include <string>
-#include <vector>
-#include 'esd_can/include/ntcan.h'
-#include 'gflags/gflags.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/can_client.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
-    
-    #include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-    
-      /**
-   * @brief get mutable protocol data by message id
-   * @param message_id the id of the message
-   * @return a pointer to the protocol data
-   */
-  ProtocolData<SensorType> *GetMutableProtocolDataById(
-      const uint32_t message_id);
-    
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
+        // TaskRunner implementation that posts tasks into libuv's default loop.
+class UvTaskRunner : public base::SingleThreadTaskRunner {
  public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
-  }
+  explicit UvTaskRunner(uv_loop_t* loop);
+    }
+    
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary dict(isolate, exports);
+  dict.Set('autoUpdater', AutoUpdater::Create(isolate));
+  dict.Set('AutoUpdater', AutoUpdater::GetConstructor(isolate)->GetFunction());
+}
+    
+    
+    {}  // namespace
+    
+    #include 'atom/browser/api/atom_api_net.h'
+#include 'atom/browser/api/atom_api_url_request.h'
+#include 'atom/common/node_includes.h'
+#include 'native_mate/dictionary.h'
+    
+    class Screen : public mate::EventEmitter<Screen>,
+               public display::DisplayObserver {
+ public:
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
+    }
+    
+      // TrayIconObserver:
+  void OnClicked(const gfx::Rect& bounds,
+                 const gfx::Point& location,
+                 int modifiers) override;
+  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
+  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
+  void OnBalloonShow() override;
+  void OnBalloonClicked() override;
+  void OnBalloonClosed() override;
+  void OnDrop() override;
+  void OnDropFiles(const std::vector<std::string>& files) override;
+  void OnDropText(const std::string& text) override;
+  void OnDragEntered() override;
+  void OnDragExited() override;
+  void OnDragEnded() override;
+  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
+  void OnMouseExited(const gfx::Point& location, int modifiers) override;
+  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
+    
+    namespace atom {
+    }
+    
+    
+    {}  // namespace atom
+    
+    template <typename T>
+struct GetTypeInfo<T *, typename EnableIf<TypeInherits<Object, T>::value>::type> {
+	static const Variant::Type VARIANT_TYPE = Variant::OBJECT;
+	static inline PropertyInfo get_class_info() {
+		return PropertyInfo(StringName(T::get_class_static()));
+	}
 };
     
-      /**
-   * @brief Reset the lower 4 bits as the lower 4 bits of a specified one-byte
-   *        unsigned integer.
-   * @param value The one-byte unsigned integer whose lower 4 bits are used to
-   *        set this Byte's lower 4 bits.
-   */
-  void set_value_low_4_bits(const uint8_t value);
+    void register_csg_types() {
+    }
     
-    /**
- * @file
+    	FileAccess *file;
+	int alignment;
+    
+    
+    {	return singleton;
+}
+    
+    static int InputTextCallback(ImGuiInputTextCallbackData* data)
+{
+    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
+    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+    {
+        // Resize string callback
+        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
+        std::string* str = user_data->Str;
+        IM_ASSERT(data->Buf == str->c_str());
+        str->resize(data->BufTextLen);
+        data->Buf = (char*)str->c_str();
+    }
+    else if (user_data->ChainCallback)
+    {
+        // Forward to user callback, if any
+        data->UserData = user_data->ChainCallbackUserData;
+        return user_data->ChainCallback(data);
+    }
+    return 0;
+}
+    
+    
+    {        // If a number >1 of GPUs got reported, you should find the best fit GPU for your purpose
+        // e.g. VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU if available, or with the greatest memory available, etc.
+        // for sake of simplicity we'll just take the first one, assuming it has a graphics queue family.
+        g_PhysicalDevice = gpus[0];
+        free(gpus);
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+    // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
+// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma. 
+// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
+#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
+#pragma comment(lib, 'legacy_stdio_definitions')
+#endif
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
+// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
+// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>    // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>    // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#endif
+    
+            // Rendering
+        ImGui::Render();
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCGRID3D_ACTION_H__
+#define __ACTION_CCGRID3D_ACTION_H__
+    
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(FlipY);
+};
+    
+    
+    {    tHashElement *element = nullptr;
+    Ref *target = action->getOriginalTarget();
+    HASH_FIND_PTR(_targets, &target, element);
+    if (element)
+    {
+        auto i = ccArrayGetIndexOfObject(element->actions, action);
+        if (i != CC_INVALID_INDEX)
+        {
+            removeActionAtIndex(i, element);
+        }
+    }
+}
+    
+    struct Tile;
+/**
+@brief ShuffleTiles action.
+@details This action make the target node shuffle with many tiles in random order.
+        You can create the action by these parameters:
+        duration, grid size, the random seed.
+*/
+class CC_DLL ShuffleTiles : public TiledGrid3DAction
+{
+public:
+    /** 
+    * @brief Create the action with grid size, random seed and duration.
+    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @param seed Specify the random seed.
+    * @return If the creation success, return a pointer of ShuffleTiles action; otherwise, return nil.
+    */
+    static ShuffleTiles* create(float duration, const Size& gridSize, unsigned int seed);
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+      FunctionRef<int(int)> fref = funcptr;
+  EXPECT_EQ(100, fref(10));
+  EXPECT_EQ(121, fref(11));
+    
+    
+    {  FLAGS_minloglevel = prev;
+}
+    
+    namespace folly {
+    }
+    
+    static std::vector<uint8_t> readNote(const std::string& fileName) {
+  std::vector<uint8_t> res;
+  std::string rawContent = getNoteRawContent(fileName);
+  CHECK(!rawContent.empty());
+  // Strip out the part of output containing raw content, and split by line.
+  std::string contentStart =
+      'Contents of section .note.' + kUSDTSubsectionName + ':';
+  auto pos = rawContent.find(contentStart);
+  CHECK_NE(pos, std::string::npos);
+  pos = rawContent.find('\n', pos + 1);
+  CHECK_NE(pos, std::string::npos);
+  rawContent = rawContent.substr(pos + 1);
+  std::vector<std::string> lines;
+  folly::split('\n', rawContent, lines, true);
+  CHECK_GT(lines.size(), 0);
+  // Parse each line.
+  for (auto line : lines) {
+    // Empty segments or ASCIIified content after two spaces.
+    auto endPos = line.find('  ');
+    CHECK_NE(endPos, std::string::npos);
+    line = line.substr(0, endPos);
+    std::vector<std::string> segments;
+    folly::split(' ', line, segments, true);
+    CHECK_GE(segments.size(), 2);
+    // First segment is address offset.
+    for (size_t i = 1; i < segments.size(); i++) {
+      CHECK_EQ(8, segments[i].size());
+      for (size_t j = 0; j < 8; j += 2) {
+        std::string hex = segments[i].substr(j, 2);
+        res.push_back(hexToInt(hex));
+      }
+    }
+  }
+  CHECK_EQ(0, res.size() % 4);
+  return res;
+}
+    
+    exception_wrapper exception_wrapper::from_exception_ptr(
+    std::exception_ptr const& ptr) noexcept {
+  if (!ptr) {
+    return exception_wrapper();
+  }
+  try {
+    std::rethrow_exception(ptr);
+  } catch (std::exception& e) {
+    return exception_wrapper(std::current_exception(), e);
+  } catch (...) {
+    return exception_wrapper(std::current_exception());
+  }
+}
+    
+    /*
+ * Return a good seed for a random number generator.
+ * Note that this is a legacy function, as it returns a 32-bit value, which
+ * is too small to be useful as a 'real' RNG seed. Use the functions in class
+ * Random instead.
  */
-    
-    #include 'modules/common/adapters/adapter_manager.h'
-#include 'modules/common/adapters/proto/adapter_config.pb.h'
-#include 'modules/common/apollo_app.h'
-#include 'modules/common/macro.h'
-#include 'modules/common/monitor_log/monitor_log_buffer.h'
-#include 'modules/common/time/time.h'
-#include 'modules/common/util/util.h'
-#include 'modules/control/proto/control_cmd.pb.h'
-#include 'modules/drivers/canbus/can_client/can_client.h'
-#include 'modules/drivers/canbus/can_client/can_client_factory.h'
-#include 'modules/drivers/canbus/can_comm/can_receiver.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
-#include 'modules/drivers/canbus/sensor_gflags.h'
-#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
-#include 'modules/drivers/canbus/proto/sensor_canbus_conf.pb.h'
-    
-    DECLARE_string(adapter_config_filename);
-    
-    #ifndef GUETZLI_DCT_DOUBLE_H_
-#define GUETZLI_DCT_DOUBLE_H_
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-    inline int Log2Floor(uint32_t n) {
-  return n == 0 ? -1 : Log2FloorNonZero(n);
-}
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    
-    {  tmp0 = in[7 * stride];
-  tmp1 = kIDCTMatrix[ 7] * tmp0;
-  tmp2 = kIDCTMatrix[15] * tmp0;
-  tmp3 = kIDCTMatrix[23] * tmp0;
-  tmp4 = kIDCTMatrix[31] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
-}
-    
-    namespace guetzli {
-    }
-    
-    namespace guetzli {
-    }
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg);
-    
-    namespace {
-    }
-    
-    bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg) {
-  return ReadJpeg(reinterpret_cast<const uint8_t*>(data.data()),
-                  static_cast<const size_t>(data.size()),
-                  mode, jpg);
+inline uint32_t randomNumberSeed() {
+  return Random::rand32();
 }
