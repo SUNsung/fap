@@ -1,86 +1,104 @@
 
         
-        template <>
-struct Converter<in_app_purchase::Payment> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const in_app_purchase::Payment& payment) {
-    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
-    dict.SetHidden('simple', true);
-    dict.Set('productIdentifier', payment.productIdentifier);
-    dict.Set('quantity', payment.quantity);
-    return dict.GetHandle();
-  }
-};
-    
-    
-    {  AtomFrameHostMsg_Message_Sync::WriteReplyParams(message_, result);
-  bool success = sender_->Send(message_);
-  message_ = nullptr;
-  sender_ = nullptr;
-  return success;
+        
+//--------------------------------------------------------------------------
+//
+//   Clone
+//
+//--------------------------------------------------------------------------
+RegexPattern  *RegexPattern::clone() const {
+    RegexPattern  *copy = new RegexPattern(*this);
+    return copy;
 }
     
-    bool SavePageHandler::Handle(const base::FilePath& full_path,
-                             const content::SavePageType& save_type) {
-  auto* download_manager = content::BrowserContext::GetDownloadManager(
-      web_contents_->GetBrowserContext());
-  download_manager->AddObserver(this);
-  // Chromium will create a 'foo_files' directory under the directory of saving
-  // page 'foo.html' for holding other resource files of 'foo.html'.
-  base::FilePath saved_main_directory_path = full_path.DirName().Append(
-      full_path.RemoveExtension().BaseName().value() +
-      FILE_PATH_LITERAL('_files'));
-  bool result =
-      web_contents_->SavePage(full_path, saved_main_directory_path, save_type);
-  download_manager->RemoveObserver(this);
-  // If initialization fails which means fail to create |DownloadItem|, we need
-  // to delete the |SavePageHandler| instance to avoid memory-leak.
-  if (!result)
-    delete this;
-  return result;
+    
+#ifndef SELFMTIMPL
+#define SELFMTIMPL
+    
+    // Called by TimeZone::createDefault(), then clone() inside a Mutex - be careful.
+SimpleTimeZone &
+SimpleTimeZone::operator=(const SimpleTimeZone &right)
+{
+    if (this != &right)
+    {
+        TimeZone::operator=(right);
+        rawOffset      = right.rawOffset;
+        startMonth     = right.startMonth;
+        startDay       = right.startDay;
+        startDayOfWeek = right.startDayOfWeek;
+        startTime      = right.startTime;
+        startTimeMode  = right.startTimeMode;
+        startMode      = right.startMode;
+        endMonth       = right.endMonth;
+        endDay         = right.endDay;
+        endDayOfWeek   = right.endDayOfWeek;
+        endTime        = right.endTime;
+        endTimeMode    = right.endTimeMode;
+        endMode        = right.endMode;
+        startYear      = right.startYear;
+        dstSavings     = right.dstSavings;
+        useDaylight    = right.useDaylight;
+        clearTransitionRules();
+    }
+    return *this;
 }
     
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+    SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode &status)
+: fDateIgnorables(NULL),
+  fTimeIgnorables(NULL),
+  fOtherIgnorables(NULL)
+{
+    fDateIgnorables  = new UnicodeSet(UNICODE_STRING('[-,./[:whitespace:]]', 20), status);
+    fTimeIgnorables  = new UnicodeSet(UNICODE_STRING('[-.:[:whitespace:]]', 19),  status);
+    fOtherIgnorables = new UnicodeSet(UNICODE_STRING('[:whitespace:]', 14),       status);
     }
     
-    class DHTMessageCallback;
+    /**
+ * An object that matches a fixed input string, implementing the
+ * UnicodeMatcher API.  This object also implements the
+ * UnicodeReplacer API, allowing it to emit the matched text as
+ * output.  Since the match text may contain flexible match elements,
+ * such as UnicodeSets, the emitted text is not the match pattern, but
+ * instead a substring of the actual matched text.  Following
+ * convention, the output text is the leftmost match seen up to this
+ * point.
+ *
+ * A StringMatcher may represent a segment, in which case it has a
+ * positive segment number.  This affects how the matcher converts
+ * itself to a pattern but does not otherwise affect its function.
+ *
+ * A StringMatcher that is not a segment should not be used as a
+ * UnicodeReplacer.
+ */
+class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public UnicodeReplacer {
+    }
     
-    std::shared_ptr<DHTNode> DHTRoutingTable::getNode(const unsigned char* nodeID,
-                                                  const std::string& ipaddr,
-                                                  uint16_t port) const
-{
-  std::shared_ptr<DHTBucket> bucket = getBucketFor(nodeID);
-  return bucket->getNode(nodeID, ipaddr, port);
-}
-    
-    
-    {} // namespace aria2
-
-    
-      DHTTaskExecutor immediateTaskQueue_;
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
-  }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
-}
-    
-    
-    {} // namespace aria2
+        if (hasCursor) {
+        // Adjust the cursor for positions outside the key.  These
+        // refer to code points rather than code units.  If cursorPos
+        // is within the output string, then use newStart, which has
+        // already been set above.
+        if (cursorPos < 0) {
+            newStart = start;
+            int32_t n = cursorPos;
+            // Outside the output string, cursorPos counts code points
+            while (n < 0 && newStart > 0) {
+                newStart -= U16_LENGTH(text.char32At(newStart-1));
+                ++n;
+            }
+            newStart += n;
+        } else if (cursorPos > output.length()) {
+            newStart = start + outLen;
+            int32_t n = cursorPos - output.length();
+            // Outside the output string, cursorPos counts code points
+            while (n > 0 && newStart < text.length()) {
+                newStart += U16_LENGTH(text.char32At(newStart));
+                --n;
+            }
+            newStart += n;
+        } else {
+            // Cursor is within output string.  It has been set up above
+            // to be relative to start.
+            newStart += start;
+        }
+    }
