@@ -1,125 +1,137 @@
 
         
-        #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
+        namespace tensorflow {
+    }
     
-    #pragma once
+        http://www.apache.org/licenses/LICENSE-2.0
     
+    namespace tensorflow {
+    }
     
-    {            // ExecuteForwardBackward updates m_prevMinibatchNumSamples to the local value.
-            ExecuteForwardBackward(arguments, outputsToFetch, computeDevice, parameterGradients);
-            for (const auto& parameter : m_learnerParameters)
-                gradients[parameter] = parameterGradients[parameter]->Data();
-            trainingLoss = m_prevMinibatchAggregateTrainingLossValue->Data();
-            evalCriterion = m_prevMinibatchAggregateEvalCriterionValue->Data();
-        }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
+      // Form that takes a pImpl executor and extracts a CUDA implementation --
+  // fatal failure if it is not CUDA inside.
+  explicit ScopedActivateExecutorContext(StreamExecutor* stream_exec);
     
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
-    
-    template <class ElemType>
-class PerDimMeanVarNormalizationNode : public ComputationNode<ElemType>, public NumInputs<3>
+    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
+                                       const std::shared_ptr<DHTNode>& newNode)
+    : bucket_(bucket),
+      newNode_(newNode),
+      numRetry_(0),
+      timeout_(DHT_MESSAGE_TIMEOUT)
 {
-    typedef ComputationNode<ElemType> Base;
-    UsingComputationNodeMembersBoilerplate;
-    static const std::wstring TypeName()
-    {
-        return L'PerDimMeanVarNormalization';
-    }
-    }
-    
-    CC_CONSTRUCTOR_ACCESS:
-    Action();
-    virtual ~Action();
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-        GridBase *targetGrid = _gridNodeTarget->getGrid();
-    
-        if (action && action->initWithDuration(duration, gridSize))
-    {
-        action->autorelease();
-        return action;
-    }
-    
-    NS_CC_BEGIN
-    
-    const BlendFunc& AtlasNode::getBlendFunc() const
-{
-    return _blendFunc;
 }
     
-    /**
- * PolygonInfo is an object holding the required data to display Sprites.
- * It can be a simple as a triangle, or as complex as a whole 3D mesh
- */
-class CC_DLL PolygonInfo
-{
+      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
+    
+      void getBuckets(std::vector<std::shared_ptr<DHTBucket>>& buckets) const;
+    
+    class DHTSetup {
 public:
-    /// @name Creators
-    /// @{
-    /**
-     * Creates an empty Polygon info
-     * @memberof PolygonInfo
-     * @return PolygonInfo object
-     */
-    PolygonInfo();
-    }
+  DHTSetup();
     }
     
-    Benchmark* Benchmark::ThreadRange(int min_threads, int max_threads) {
-  CHECK_GT(min_threads, 0);
-  CHECK_GE(max_threads, min_threads);
+      virtual void startup() = 0;
+    
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+    #include 'common.h'
+    
+      virtual std::shared_ptr<DHTTask>
+  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                 int numRetry = 0) = 0;
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createBucketRefreshTask()
+{
+  auto task = std::make_shared<DHTBucketRefreshTask>();
+  setCommonProperty(task);
+  return task;
+}
+    
+    class DHTTokenTracker;
+    
+      double ScoreOutputSize(int size) const override;
+    
+    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
+    
+    
+    {}  // namespace guetzli
+    
+          // The sentinel node becomes the parent node.
+      size_t j_end = 2 * n - k;
+      tree[j_end].total_count_ =
+          tree[left].total_count_ + tree[right].total_count_;
+      tree[j_end].index_left_ = static_cast<int16_t>(left);
+      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
+    
+    namespace guetzli {
     }
     
-    
-    {
-    {}  // end namespace internal
-}  // end namespace benchmark
-    
-    
-    {  fflush(stdout);
-  // Restores the text color.
-  SetConsoleTextAttribute(stdout_handle, old_color_attrs);
+    inline int Log2FloorNonZero(uint32_t n) {
+#ifdef __GNUC__
+  return 31 ^ __builtin_clz(n);
 #else
-  const char* color_code = GetPlatformColorCode(color);
-  if (color_code) out << FormatString('\033[0;3%sm', color_code);
-  out << FormatString(fmt, args) << '\033[m';
+  unsigned int result = 0;
+  while (n >>= 1) result++;
+  return result;
 #endif
 }
     
-      // Populate the accumulators.
-  for (const Run& run : reports) {
-    CHECK_GT(run.complexity_n, 0) << 'Did you forget to call SetComplexityN?';
-    n.push_back(run.complexity_n);
-    real_time.push_back(run.real_accumulated_time / run.iterations);
-    cpu_time.push_back(run.cpu_accumulated_time / run.iterations);
+    ///////////////////////////////////////////////////////////////////////////////
+// Cosine table: C(k) = cos(k.pi/16)/sqrt(2), k = 1..7 using 15 bits signed
+const coeff_t kTable04[7] = { 22725, 21407, 19266, 16384, 12873,  8867, 4520 };
+// rows #1 and #7 are pre-multiplied by 2.C(1) before the 2nd pass.
+// This multiply is merged in the table of constants used during 1st pass:
+const coeff_t kTable17[7] = { 31521, 29692, 26722, 22725, 17855, 12299, 6270 };
+// rows #2 and #6 are pre-multiplied by 2.C(2):
+const coeff_t kTable26[7] = { 29692, 27969, 25172, 21407, 16819, 11585, 5906 };
+// rows #3 and #5 are pre-multiplied by 2.C(3):
+const coeff_t kTable35[7] = { 26722, 25172, 22654, 19266, 15137, 10426, 5315 };
+    
+      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
+  void EmitByte(int byte) {
+    if (pos < len) {
+      data[pos++] = byte;
+    } else {
+      overflow = true;
+    }
+    if (byte == 0xff) {
+      EmitByte(0);
+    }
   }
     
-    // Return a vector containing the bigO and RMS information for the specified
-// list of reports. If 'reports.size() < 2' an empty vector is returned.
-std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports);
     
-    bool JSONReporter::ReportContext(const Context& context) {
-  std::ostream& out = GetOutputStream();
-    }
+    {}  // namespace guetzli
+
     
-    #define RETURN_CAPABILITY(x) THREAD_ANNOTATION_ATTRIBUTE__(lock_returned(x))
+    // Creates a JPEG from the rgb pixel data. Returns true on success.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg);
+    
+    // Reads the DRI marker and saved the restart interval into *jpg.
+bool ProcessDRI(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  if (jpg->restart_interval > 0) {
+    fprintf(stderr, 'Duplicate DRI marker.\n');
+    jpg->error = JPEG_DUPLICATE_DRI;
+    return false;
+  }
+  const size_t start_pos = *pos;
+  VERIFY_LEN(4);
+  size_t marker_len = ReadUint16(data, pos);
+  int restart_interval = ReadUint16(data, pos);
+  jpg->restart_interval = restart_interval;
+  VERIFY_MARKER_END();
+  return true;
+}
+    
+    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo);
+void BuildACHistograms(const JPEGData& jpg, JpegHistogram* histo);
+size_t JpegHeaderSize(const JPEGData& jpg, bool strip_metadata);
+size_t EstimateJpegDataSize(const int num_components,
+                            const std::vector<JpegHistogram>& histograms);
