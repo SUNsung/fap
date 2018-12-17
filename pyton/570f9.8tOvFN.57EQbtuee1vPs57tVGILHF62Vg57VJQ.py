@@ -1,140 +1,304 @@
 
         
-            Returns:
-      The test predictions along with their scores.
-    '''
-    test_pred = [0] * len(inputs)
+            # By default the `-a` argument is parsed for `username:password`.
+    # Set this to `False` to disable the parsing and error handling.
+    auth_parse = True
     
-    def plot_time_series(vals_bxtxn, bidx=None, n_to_plot=np.inf, scale=1.0,
-                     color='r', title=None):
+    import requests.auth
     
-    # Pull out some commonly used parameters.
-# These are user parameters (configuration)
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-S = FLAGS.S
-input_magnitude = FLAGS.input_magnitude
-nreplications = FLAGS.nreplications
-E = nreplications * C         # total number of trials
-# S is the number of measurements in each datasets, w/ each
-# dataset having a different set of observations.
-ndatasets = N/S                 # ok if rounded down
-train_percentage = FLAGS.train_percentage
-ntime_steps = int(T / FLAGS.dt)
-# End of user parameters
-    
-      if do_bias:
-    return tf.matmul(x, W) + b
-  else:
-    return tf.matmul(x, W)
-    
-      sess, t = _LoadModel(FLAGS.pbtxt, FLAGS.ckpt)
-    
-    EOS_INDEX = 88892
-    
-      word_to_id = build_vocab(train_path)
-  train_data = _file_to_word_ids(train_path, word_to_id)
-  valid_data = _file_to_word_ids(valid_path, word_to_id)
-  test_data = _file_to_word_ids(test_path, word_to_id)
-  vocabulary = len(word_to_id)
-  return train_data, valid_data, test_data, vocabulary
-    
-          for n in xrange(FLAGS.number_epochs):
-        print('Epoch number: %d' % n)
-        # print('Percent done: %.2f' % float(n) / float(FLAGS.number_epochs))
-        iterator = get_iterator(data)
-        for x, y, _ in iterator:
-          if FLAGS.eval_language_model:
-            is_present_rate = 0.
-          else:
-            is_present_rate = FLAGS.is_present_rate
-          tf.logging.info(
-              'Evaluating on is_present_rate=%.3f.' % is_present_rate)
-    
-            headers = dict(self._orig.headers)
-        if 'Host' not in self._orig.headers:
-            headers['Host'] = url.netloc.split('@')[-1]
-    
-    from httpie.plugins import plugin_manager
-from httpie.context import Environment
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-    
-def long_description():
-    with codecs.open('README.rst', encoding='utf8') as f:
-        return f.read()
-    
-    
-@mock.patch('httpie.input.AuthCredentials._getpass',
-            new=lambda self, prompt: 'password')
-def test_password_prompt(httpbin):
-    r = http('--auth', 'user',
-             'GET', httpbin.url + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-        def test_POST_with_data_auto_JSON_headers(self, httpbin):
-        r = http('POST', httpbin.url + '/post', 'a=b')
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            BASIC_AUTH_HEADER_VALUE,
+        )
         assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == JSON_ACCEPT
-        assert r.json['headers']['Content-Type'] == 'application/json'
-    
-        @pytest.mark.parametrize('header, expected_filename', [
-        ('attachment; filename=hello-WORLD_123.txt', 'hello-WORLD_123.txt'),
-        ('attachment; filename='.hello-WORLD_123.txt'', 'hello-WORLD_123.txt'),
-        ('attachment; filename='white space.txt'', 'white space.txt'),
-        (r'attachment; filename='\'quotes\'.txt'', ''quotes'.txt'),
-        ('attachment; filename=/etc/hosts', 'hosts'),
-        ('attachment; filename=', None)
-    ])
-    def test_Content_Disposition_parsing(self, header, expected_filename):
-        assert filename_from_content_disposition(header) == expected_filename
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
     
-class TestLineEndings:
-    '''
-    Test that CRLF is properly used in headers
-    and as the headers/body separator.
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
-    def _print_commands(settings, inproject):
-    _print_header(settings, inproject)
-    print('Usage:')
-    print('  scrapy <command> [options] [args]\n')
-    print('Available commands:')
+        def __init__(self, directory=DEFAULT_CONFIG_DIR):
+        super(Config, self).__init__()
+        self.update(self.DEFAULTS)
+        self.directory = directory
+    
+    RETURN = '''
+gateway.customer_gateways:
+    description: details about the gateway that was created.
+    returned: success
+    type: complex
+    contains:
+        bgp_asn:
+            description: The Border Gateway Autonomous System Number.
+            returned: when exists and gateway is available.
+            sample: 65123
+            type: string
+        customer_gateway_id:
+            description: gateway id assigned by amazon.
+            returned: when exists and gateway is available.
+            sample: cgw-cb6386a2
+            type: string
+        ip_address:
+            description: ip address of your gateway device.
+            returned: when exists and gateway is available.
+            sample: 1.2.3.4
+            type: string
+        state:
+            description: state of gateway.
+            returned: when gateway exists and is available.
+            state: available
+            type: string
+        tags:
+            description: any tags on the gateway.
+            returned: when gateway exists and is available, and when tags exist.
+            state: available
+            type: string
+        type:
+            description: encryption type.
+            returned: when gateway exists and is available.
+            sample: ipsec.1
+            type: string
+'''
+    
+    RETURN = '''
+block_device_mapping:
+    description: Block device mapping for the instances of launch configuration
+    type: list
+    returned: always
+    sample: '[{
+        'device_name': '/dev/xvda':,
+        'ebs': {
+            'delete_on_termination': true,
+            'volume_size': 8,
+            'volume_type': 'gp2'
+    }]'
+classic_link_vpc_security_groups:
+    description: IDs of one or more security groups for the VPC specified in classic_link_vpc_id
+    type: string
+    returned: always
+    sample:
+created_time:
+    description: The creation date and time for the launch configuration
+    type: string
+    returned: always
+    sample: '2016-05-27T13:47:44.216000+00:00'
+ebs_optimized:
+    description: EBS I/O optimized (true ) or not (false )
+    type: bool
+    returned: always
+    sample: true,
+image_id:
+    description: ID of the Amazon Machine Image (AMI)
+    type: string
+    returned: always
+    sample: 'ami-12345678'
+instance_monitoring:
+    description: Launched with detailed monitoring or not
+    type: dict
+    returned: always
+    sample: '{
+        'enabled': true
+    }'
+instance_type:
+    description: Instance type
+    type: string
+    returned: always
+    sample: 't2.micro'
+kernel_id:
+    description: ID of the kernel associated with the AMI
+    type: string
+    returned: always
+    sample:
+key_name:
+    description: Name of the key pair
+    type: string
+    returned: always
+    sample: 'user_app'
+launch_configuration_arn:
+    description: Amazon Resource Name (ARN) of the launch configuration
+    type: string
+    returned: always
+    sample: 'arn:aws:autoscaling:us-east-1:666612345678:launchConfiguration:ba785e3a-dd42-6f02-4585-ea1a2b458b3d:launchConfigurationName/lc-app'
+launch_configuration_name:
+    description: Name of the launch configuration
+    type: string
+    returned: always
+    sample: 'lc-app'
+ramdisk_id:
+    description: ID of the RAM disk associated with the AMI
+    type: string
+    returned: always
+    sample:
+security_groups:
+    description: Security groups to associated
+    type: list
+    returned: always
+    sample: '[
+        'web'
+    ]'
+user_data:
+    description: User data available
+    type: string
+    returned: always
+    sample:
+'''
+    }
+    
+    
+DOCUMENTATION = '''
+---
+module: ec2_snapshot
+short_description: creates a snapshot from an existing volume
+description:
+    - creates an EC2 snapshot from an existing EBS volume
+version_added: '1.5'
+options:
+  volume_id:
+    description:
+      - volume from which to take the snapshot
+    required: false
+  description:
+    description:
+      - description to be applied to the snapshot
+    required: false
+  instance_id:
+    description:
+    - instance that has the required volume to snapshot mounted
+    required: false
+  device_name:
+    description:
+    - device name of a mounted volume to be snapshotted
+    required: false
+  snapshot_tags:
+    description:
+      - a hash/dictionary of tags to add to the snapshot
+    required: false
+    version_added: '1.6'
+  wait:
+    description:
+      - wait for the snapshot to be ready
+    type: bool
+    required: false
+    default: yes
+    version_added: '1.5.1'
+  wait_timeout:
+    description:
+      - how long before wait gives up, in seconds
+      - specify 0 to wait forever
+    required: false
+    default: 0
+    version_added: '1.5.1'
+  state:
+    description:
+      - whether to add or create a snapshot
+    required: false
+    default: present
+    choices: ['absent', 'present']
+    version_added: '1.9'
+  snapshot_id:
+    description:
+      - snapshot id to remove
+    required: false
+    version_added: '1.9'
+  last_snapshot_min_age:
+    description:
+      - If the volume's most recent snapshot has started less than `last_snapshot_min_age' minutes ago, a new snapshot will not be created.
+    required: false
+    default: 0
+    version_added: '2.0'
+    
+    
+try:
+    import botocore
+except ImportError:
+    pass  # handled by AnsibleAWSModule
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True, type='str'),
+            state=dict(required=True, type='str', choices=['present', 'absent', 'copy']),
+            replication_id=dict(type='str'),
+            cluster_id=dict(type='str'),
+            target=dict(type='str'),
+            bucket=dict(type='str'),
+        )
+    )
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+            for server_cert in server_certs:
+            if not name:
+                server_cert = iam.get_server_certificate(ServerCertificateName=server_cert['ServerCertificateName'])['ServerCertificate']
+            cert_md = server_cert['ServerCertificateMetadata']
+            results[cert_md['ServerCertificateName']] = {
+                'certificate_body': server_cert['CertificateBody'],
+                'server_certificate_id': cert_md['ServerCertificateId'],
+                'server_certificate_name': cert_md['ServerCertificateName'],
+                'arn': cert_md['Arn'],
+                'path': cert_md['Path'],
+                'expiration': cert_md['Expiration'].isoformat(),
+                'upload_date': cert_md['UploadDate'].isoformat(),
+            }
+    
+        function_name = module.params.get('function_name')
+    if function_name:
+        try:
+            # get_policy returns a JSON string so must convert to dict before reassigning to its key
+            lambda_facts.update(policy=json.loads(client.get_policy(FunctionName=function_name)['Policy']))
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                lambda_facts.update(policy={})
+            else:
+                module.fail_json_aws(e, msg='Trying to get {0} policy'.format(function_name))
+    else:
+        module.fail_json(msg='Parameter function_name required for query=policy.')
+    
+        creds, params = get_google_cloud_credentials(module)
+    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
+    pubsub_client.user_agent = 'ansible-pubsub-0.1'
+    
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+    
+                # Perform any configuration updates
+            self._config()
+    
+    
+def commit_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/commit/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'commit ' + text, refuri=ref, **options)
+    return [node], []
+    
+        inproject = inside_project()
     cmds = _get_commands_dict(settings, inproject)
-    for cmdname, cmdclass in sorted(cmds.items()):
-        print('  %-13s %s' % (cmdname, cmdclass.short_desc()))
-    if not inproject:
-        print()
-        print('  [ more ]      More commands available when run from project directory')
-    print()
-    print('Use 'scrapy <command> -h' to see more info about a command')
+    cmdname = _pop_command_name(argv)
+    parser = optparse.OptionParser(formatter=optparse.TitledHelpFormatter(), \
+        conflict_handler='resolve')
+    if not cmdname:
+        _print_commands(settings, inproject)
+        sys.exit(0)
+    elif cmdname not in cmds:
+        _print_unknown_command(settings, cmdname, inproject)
+        sys.exit(2)
     
         def help(self):
         '''An extensive help for the command. It will be shown when using the
@@ -149,82 +313,22 @@ from scrapy.exceptions import UsageError
 from scrapy.utils.datatypes import SequenceExclude
 from scrapy.utils.spider import spidercls_for_request, DefaultSpider
     
-        def run(self, args, opts):
-        settings = self.crawler_process.settings
-        if opts.get:
-            s = settings.get(opts.get)
-            if isinstance(s, BaseSettings):
-                print(json.dumps(s.copy_to_dict()))
-            else:
-                print(s)
-        elif opts.getbool:
-            print(settings.getbool(opts.getbool))
-        elif opts.getint:
-            print(settings.getint(opts.getint))
-        elif opts.getfloat:
-            print(settings.getfloat(opts.getfloat))
-        elif opts.getlist:
-            print(settings.getlist(opts.getlist))
-
+            # Request requires callback argument as callable or None, not string
+        request = Request(url, None)
+        _start_requests = lambda s: [self.prepare_request(s, request, opts)]
+        self.spidercls.start_requests = _start_requests
     
-        def download_request(self, request, spider):
-        scheme = urlparse_cached(request).scheme
-        handler = self._get_handler(scheme)
-        if not handler:
-            raise NotSupported('Unsupported URL scheme '%s': %s' %
-                               (scheme, self._notconfigured[scheme]))
-        return handler.download_request(request, spider)
+        requires_project = False
+    default_settings = {'SPIDER_LOADER_WARN_ONLY': True}
     
-        # TODO: decoder/encoder should accept cls? Otherwise, subclassing
-    # JSONObjectWithFields is tricky...
-    header_cls = Header
-    header = jose.Field(
-        'header', omitempty=True, default=header_cls(),
-        decoder=header_cls.from_json)
-    
-        def check_parsing_errors(self, lens):
-        '''Verify Augeas can parse all of the lens files.
-    
-    AUGEAS_LENS_DIR = pkg_resources.resource_filename(
-    'certbot_apache', 'augeas_lens')
-'''Path to the Augeas lens directory'''
-    
-            self.assertEqual(len(self.parser.filter_args_num(matches, 1)), 3)
-        self.assertEqual(len(self.parser.filter_args_num(matches, 2)), 2)
-        self.assertEqual(len(self.parser.filter_args_num(matches, 3)), 1)
-    
-    from certbot_apache import configurator
-from certbot_apache import entrypoint
-    
-    
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
-    # Check if a valid image file was uploaded
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
-    
-        :param known_face_encodings: A list of known face encodings
-    :param face_encoding_to_check: A single face encoding to compare against the list
-    :param tolerance: How much distance between faces to consider it a match. Lower is more strict. 0.6 is typical best performance.
-    :return: A list of True/False values indicating which known_face_encodings match the face encoding to check
-    '''
-    return list(face_distance(known_face_encodings, face_encoding_to_check) <= tolerance)
-
-    
-        for face_location in face_locations:
-        print_result(image_to_check, face_location)
-    
-            # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-    
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-    
-        # Every 128 frames (the default batch size), batch process the list of frames to find faces
-    if len(frames) == 128:
-        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
-    
-    print('I found {} face(s) in this photograph.'.format(len(face_landmarks_list)))
+        def _get_handler(self, scheme):
+        '''Lazy-load the downloadhandler for a scheme
+        only on the first request for that scheme.
+        '''
+        if scheme in self._handlers:
+            return self._handlers[scheme]
+        if scheme in self._notconfigured:
+            return None
+        if scheme not in self._schemes:
+            self._notconfigured[scheme] = 'no handler available for that scheme'
+            return None
