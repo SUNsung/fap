@@ -1,271 +1,333 @@
 
         
-        // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
+        #include <unordered_map>
     
-        // If the comment itself contains block comment start or end markers,
-    // HTML-escape them so that they don't accidentally close the doc comment.
-    comments = EscapeJavadoc(comments);
+    Status CostAnalyzer::GenerateReport(std::ostream& os, bool per_node_report,
+                                    bool verbose) {
+  GatherCosts();
+  PreprocessCosts();
+  AnalyzeCosts();
+  PrintAnalysis(os, per_node_report, verbose);
+  return Status::OK();
+}
+    
+    namespace tensorflow {
+    }
     
     
-    {  printer->Print(
-      'NS_ASSUME_NONNULL_END\n'
-      '\n'
-      'CF_EXTERN_C_END\n'
-      '\n'
-      '#pragma clang diagnostic pop\n'
-      '\n'
-      '// @@protoc_insertion_point(global_scope)\n');
+    {  PyObject* np_array =
+      PyArray_SimpleNewFromData(dim_size, dims, type_num, data);
+  if (PyType_Ready(&TensorReleaserType) == -1) {
+    return errors::Unknown('Python type initialization failed.');
+  }
+  TensorReleaser* releaser = reinterpret_cast<TensorReleaser*>(
+      TensorReleaserType.tp_alloc(&TensorReleaserType, 0));
+  releaser->destructor = new std::function<void()>(std::move(destructor));
+  if (PyArray_SetBaseObject(reinterpret_cast<PyArrayObject*>(np_array),
+                            reinterpret_cast<PyObject*>(releaser)) == -1) {
+    Py_DECREF(releaser);
+    return errors::Unknown('Python array refused to use memory.');
+  }
+  *result = PyArray_Return(reinterpret_cast<PyArrayObject*>(np_array));
+  return Status::OK();
 }
     
     
-    {  EXPECT_EQ(expected, decode_data.Data());
+    {
+    {}  // namespace cuda
+}  // namespace stream_executor
+
+    
+    class StreamExecutor;
+    
+    void AutoUpdater::OnError(const std::string& message,
+                          const int code,
+                          const std::string& domain) {
+  v8::Locker locker(isolate());
+  v8::HandleScope handle_scope(isolate());
+  auto error = v8::Exception::Error(mate::StringToV8(isolate(), message));
+  auto errorObject =
+      error->ToObject(isolate()->GetCurrentContext()).ToLocalChecked();
+    }
+    
+    
+    {}  // namespace api
+    
+      void PurchaseProduct(const std::string& product_id, mate::Arguments* args);
+    
+    #include 'atom/browser/atom_quota_permission_context.h'
+    
+    void CensusClientCallData::Destroy(grpc_call_element* elem,
+                                   const grpc_call_final_info* final_info,
+                                   grpc_closure* then_call_closure) {
+  const uint64_t request_size = GetOutgoingDataSize(final_info);
+  const uint64_t response_size = GetIncomingDataSize(final_info);
+  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
+  ::opencensus::stats::Record(
+      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
+       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
+       {RpcClientRoundtripLatency(), latency_ms},
+       {RpcClientServerLatency(),
+        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
+       {RpcClientSentMessagesPerRpc(), sent_message_count_},
+       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
+      {{ClientMethodTagKey(), method_},
+       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
+  grpc_slice_unref_internal(path_);
+  context_.EndSpan();
 }
     
-    #if defined(_WIN32)
-// DO NOT include <io.h>, instead create functions in io_win32.{h,cc} and import
-// them like we do below.
-using google::protobuf::internal::win32::setmode;
-#endif
     
-     protected:
-  // Function to compute part of a matrix.vector multiplication. The weights
-  // are in a very specific order (see above) in w, which is multiplied by
-  // u of length num_in, to produce output v after scaling the integer results
-  // by the corresponding member of scales.
-  // The amount of w and scales consumed is fixed and not available to the
-  // caller. The number of outputs written to v will be at most num_out.
-  typedef void (*PartialFunc)(const int8_t* w, const double* scales,
-                              const int8_t* u, int num_in, int num_out,
-                              double* v);
+    {}  // namespace grpc
+
     
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
     
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
+    {}  // namespace grpc
+    
+    // Force InitProtoReflectionServerBuilderPlugin() to be called at static
+// initialization time.
+struct StaticProtoReflectionPluginInitializer {
+  StaticProtoReflectionPluginInitializer() {
+    InitProtoReflectionServerBuilderPlugin();
+  }
+} static_proto_reflection_plugin_initializer;
+    
+    class DynamicThreadPool final : public ThreadPoolInterface {
+ public:
+  explicit DynamicThreadPool(int reserve_threads);
+  ~DynamicThreadPool();
+    }
+    
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+    }
+    
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta);
+    
+      // Make multiple inputs so we need to compact.
+  for (int i = 0; i < 2; i++) {
+    Build(10);
+    dbi->TEST_CompactMemTable();
+    Corrupt(kTableFile, 100, 1);
+    env_.SleepForMicroseconds(100000);
+  }
+  dbi->CompactRange(nullptr, nullptr);
+    
+    #include <algorithm>
+#include <set>
+#include <string>
+#include <vector>
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
+    
+      // Return the user key
+  Slice user_key() const { return Slice(kstart_, end_ - kstart_ - 8); }
+    
+    static std::string MakeFileName(const std::string& dbname, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return dbname + buf;
+}
+    
+    
+    {
+    {
+    {      default: {
+        char buf[40];
+        snprintf(buf, sizeof(buf), 'unknown record type %u', record_type);
+        ReportCorruption(
+            (fragment.size() + (in_fragmented_record ? scratch->size() : 0)),
+            buf);
+        in_fragmented_record = false;
+        scratch->clear();
+        break;
+      }
+    }
+  }
+  return false;
+}
+    
+    size_t MemTable::ApproximateMemoryUsage() { return arena_.MemoryUsage(); }
+    
+    #include <string>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
+#include 'db/skiplist.h'
+#include 'util/arena.h'
+    
+      std::string Get(const std::string& k, const Snapshot* snapshot = nullptr) {
+    std::string result;
+    Status s = db_->Get(ReadOptions(), k, &result);
+    if (s.IsNotFound()) {
+      result = 'NOT_FOUND';
+    } else if (!s.ok()) {
+      result = s.ToString();
+    }
+    return result;
+  }
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+      /**
+   * @brief Map a function across the set of configured files
+   *
+   * @param predicate is a function which accepts two parameters, the name of
+   * the file category and a vector of files in that category. predicate will be
+   * called on each pair in files_
+   *
+   * @code{.cpp}
+   *   std::map<std::string, std::vector<std::string>> file_map;
+   *   Config::get().files(
+   *      ([&file_map](const std::string& category,
+   *                   const std::vector<std::string>& files) {
+   *        file_map[category] = files;
+   *      }));
+   * @endcode
+   */
+  void files(std::function<void(const std::string& category,
+                                const std::vector<std::string>& files)>
+                 predicate) const;
+    
+    #include <osquery/config/config.h>
+#include <osquery/config/parsers/prometheus_targets.h>
+#include <osquery/logger.h>
+#include <osquery/registry_factory.h>
+    
+    
+    {
+    {      // View has been updated
+      osquery::query('DROP VIEW ' + name, r);
+      auto s = osquery::query('CREATE VIEW ' + name + ' AS ' + query, r);
+      if (s.ok()) {
+        setDatabaseValue(kQueries, kConfigViews + name, query);
+      } else {
+        LOG(INFO) << 'Error creating view (' << name << '): ' << s.getMessage();
+      }
     }
   }
     
-    data:
- [8. 2. 1. 1. 7. 8. 1.]
-indices:
- [3 5 6]
+    Follow* Follow::createWithOffset(Node* followedNode,float xOffset,float yOffset,const Rect& rect/*= Rect::ZERO*/){
     
     
-    {} // namespace caffe2
+    Follow *follow = new (std::nothrow) Follow();
     
-    OPERATOR_SCHEMA(GivenTensorDoubleFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(
-        FillerTensorInference<TensorProto_DataType_DOUBLE>);
+    bool valid;
     
-    #if 0
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7, typename T8>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
-}
-    
-    // A helper class for implementing EXPECT_FATAL_FAILURE() and
-// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
-// TestPartResultArray contains exactly one failure that has the given
-// type and contains the given substring.  If that's not the case, a
-// non-fatal failure will be generated.
-class GTEST_API_ SingleFailureChecker {
- public:
-  // The constructor remembers the arguments.
-  SingleFailureChecker(const TestPartResultArray* results,
-                       TestPartResult::Type type,
-                       const string& substr);
-  ~SingleFailureChecker();
- private:
-  const TestPartResultArray* const results_;
-  const TestPartResult::Type type_;
-  const string substr_;
+    if(follow)
+        valid = follow->initWithTargetAndOffset(followedNode, xOffset, yOffset,rect);
     }
     
-      // Returns true iff the test part non-fatally failed.
-  bool nonfatally_failed() const { return type_ == kNonFatalFailure; }
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-    // The helper function for {ASSERT|EXPECT}_EQ.
-template <typename T1, typename T2>
-AssertionResult CmpHelperEQ(const char* expected_expression,
-                            const char* actual_expression,
-                            const T1& expected,
-                            const T2& actual) {
-#ifdef _MSC_VER
-# pragma warning(push)          // Saves the current warning state.
-# pragma warning(disable:4389)  // Temporarily disables warning on
-                                // signed/unsigned mismatch.
-#endif
-    }
-    
-    // In describing the results of death tests, these terms are used with
-// the corresponding definitions:
-//
-// exit status:  The integer exit information in the format specified
-//               by wait(2)
-// exit code:    The integer code passed to exit(3), _exit(2), or
-//               returned from main()
-class GTEST_API_ DeathTest {
- public:
-  // Create returns false if there was an error determining the
-  // appropriate action to take for the current death test; for example,
-  // if the gtest_death_test_style flag is set to an invalid value.
-  // The LastMessage method will return a more detailed message in that
-  // case.  Otherwise, the DeathTest pointer pointed to by the 'test'
-  // argument is set.  If the death test should be skipped, the pointer
-  // is set to NULL; otherwise, it is set to the address of a new concrete
-  // DeathTest object that controls the execution of the current test.
-  static bool Create(const char* statement, const RE* regex,
-                     const char* file, int line, DeathTest** test);
-  DeathTest();
-  virtual ~DeathTest() { }
-    }
-    
-      // Returns a pointer to the last occurence of a valid path separator in
-  // the FilePath. On Windows, for example, both '/' and '\' are valid path
-  // separators. Returns NULL if no path separator was found.
-  const char* FindLastPathSeparator() const;
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_)};
-    return ValuesIn(array);
-  }
-    
-     private:
-  void CalculatePrimesUpTo(int max) {
-    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
-    is_prime_[0] = is_prime_[1] = false;
-    }
-    
-    
-    {  return result;
-}
-    
-    	SetEnvironmentVariable(L'CMDER_ROOT', exeDir);
-	if (wcscmp(userConfigDirPath, configDirPath) != 0)
-	{
-		SetEnvironmentVariable(L'CMDER_USER_CONFIG', userConfigDirPath);
-		SetEnvironmentVariable(L'CMDER_USER_BIN', userBinDirPath);
-	}
-    
-        fPattern          = NULL; // will be set later
-    fPatternString    = NULL; // may be set later
-    fCompiledPat      = new UVector64(fDeferredStatus);
-    fGroupMap         = new UVector32(fDeferredStatus);
-    fSets             = new UVector(fDeferredStatus);
-    fInitialChars     = new UnicodeSet;
-    fInitialChars8    = new Regex8BitSet;
-    fNamedCaptureMap  = uhash_open(uhash_hashUnicodeString,     // Key hash function
-                                   uhash_compareUnicodeString,  // Key comparator function
-                                   uhash_compareLong,           // Value comparator function
-                                   &fDeferredStatus);
-    if (U_FAILURE(fDeferredStatus)) {
-        return;
-    }
-    if (fCompiledPat == NULL  || fGroupMap == NULL || fSets == NULL ||
-            fInitialChars == NULL || fInitialChars8 == NULL || fNamedCaptureMap == NULL) {
-        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    
-    UnicodeString&
-SelectFormat::format(const Formattable& obj,
-                   UnicodeString& appendTo,
-                   FieldPosition& pos,
-                   UErrorCode& status) const
+    CatmullRomTo* CatmullRomTo::clone() const
 {
-    if (U_FAILURE(status)) {
-        return appendTo;
+    // no copy constructor
+    auto a = new (std::nothrow) CatmullRomTo();
+    a->initWithDuration(this->_duration, this->_points->clone());
+    a->autorelease();
+    return a;
+}
+    
+    void ActionEase::startWithTarget(Node *target)
+{
+    if (target && _inner)
+    {
+        ActionInterval::startWithTarget(target);
+        _inner->startWithTarget(_target);
     }
-    if (obj.getType() == Formattable::kString) {
-        return format(obj.getString(status), appendTo, pos, status);
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return appendTo;
+    else
+    {
+        log('ActionEase::startWithTarget error: target or _inner is nullptr!');
     }
 }
     
-    U_NAMESPACE_END
     
-    U_NAMESPACE_END
+// implementation of Lens3D
     
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(Lens3D);
 };
     
-    int32_t 
-SmallIntFormatter::estimateDigitCount(
-        int32_t positiveValue, const IntDigitCountRange &range) {
-    if (positiveValue >= gMaxFastInt) {
-        return range.getMax();
-    }
-    return range.pin(gDigitCount[positiveValue]);
-}
+        // actions
     
-        /**
-     * Returns a string representation of this replacer.  If the
-     * result of calling this function is passed to the appropriate
-     * parser, typically TransliteratorParser, it will produce another
-     * replacer that is equal to this one.
-     * @param result the string to receive the pattern.  Previous
-     * contents will be deleted.
-     * @param escapeUnprintable if TRUE then convert unprintable
-     * character to their hex escape representations, \\uxxxx or
-     * \\Uxxxxxxxx.  Unprintable characters are defined by
-     * Utility.isUnprintable().
-     * @return a reference to 'result'.
+    /** Adds an action with a target. 
+     If the target is already present, then the action will be added to the existing target.
+     If the target is not present, a new instance of this target will be created either paused or not, and the action will be added to the newly created target.
+     When the target is paused, the queued actions won't be 'ticked'.
+     *
+     * @param action    A certain action.
+     * @param target    The target which need to be added an action.
+     * @param paused    Is the target paused or not.
      */
-    virtual UnicodeString& toReplacerPattern(UnicodeString& result,
-                                             UBool escapeUnprintable) const;
+    virtual void addAction(Action *action, Node *target, bool paused);
+    
+    /**
+@brief ShakyTiles3D action.
+@details This action is make the target node shake with many tiles.
+        You can create the action by these parameters:
+        duration, grid size, range, whether shake on the z axis.
+ */
+class CC_DLL ShakyTiles3D : public TiledGrid3DAction
+{
+public:
+    /** 
+    @brief Create the action with a range, shake Z vertices, a grid and duration.
+    @param duration Specify the duration of the ShakyTiles3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param range Specify the range of the shaky effect.
+    @param shakeZ Specify whether shake on the z axis.
+    @return If the creation success, return a pointer of ShakyTiles3D action; otherwise, return nil.
+    */
+    static ShakyTiles3D* create(float duration, const Size& gridSize, int range, bool shakeZ);
+    }
+    
+    #include 'platform/CCPlatformConfig.h'
+#include 'base/CCRef.h'
+#include 'base/CCValue.h'
+#include 'base/CCVector.h'
+#include '2d/CCSpriteFrame.h'
+    
+        /** Chars per row. */
+    int    _itemsPerRow;
+    /** Chars per column. */
+    int    _itemsPerColumn;
