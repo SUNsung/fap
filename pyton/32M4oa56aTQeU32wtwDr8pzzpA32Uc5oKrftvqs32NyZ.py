@@ -1,216 +1,219 @@
-    def __init__(self):
-        self.users_by_id = {}  # key: user id, value: User
+
+        
+        
+rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
+u_rng = np.random.RandomState(seed=FLAGS.synth_data_seed+1)
+T = FLAGS.T
+C = FLAGS.C
+N = FLAGS.N  # must be same N as in trained model (provided example is N = 50)
+nreplications = FLAGS.nreplications
+E = nreplications * C  # total number of trials
+train_percentage = FLAGS.train_percentage
+ntimesteps = int(T / FLAGS.dt)
+batch_size = 1  # gives one example per ntrial
     
-        def can_fit_vehicle(self, vehicle):
-        if self.vehicle is not None:
-            return False
-        return vehicle.can_fit_in_spot(self)
+    flags = tf.app.flags
+flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
+                    'Directory for saving data.')
+flags.DEFINE_string('datafile_name', 'conditioned_rnn_data',
+                    'Name of data file for input case.')
+flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
+flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
+flags.DEFINE_integer('C', 400, 'Number of conditions')
+flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
+flags.DEFINE_float('train_percentage', 4.0/5.0,
+                   'Percentage of train vs validation trials')
+flags.DEFINE_integer('nreplications', 10,
+                     'Number of spikifications of the same underlying rates.')
+flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
+flags.DEFINE_float('x0_std', 1.0,
+                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
+flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
+flags.DEFINE_float('dt', 0.010, 'Time bin')
+flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
+FLAGS = flags.FLAGS
     
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
+        if FLAGS.prefix_label and use_prefix:
+      label = sequence_example.context.feature['class'].int64_list.value[0]
+      review_words = [EOS_INDEX + 1 + label]
+    else:
+      review_words = []
+    review_words.extend([
+        f.int64_list.value[0]
+        for f in sequence_example.feature_lists.feature_list['token_id'].feature
+    ])
+    all_words.append(review_words)
+  return all_words
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+    FLAGS = tf.app.flags.FLAGS
     
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
-    
-    
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
-        title_re_match = link_re.match(raw_title)
-        if title_re_match:
-            sections[category].append(title_re_match.group(1).upper())
-    
-            # Keyword arguments > stream.encoding > default utf8
-        if self.stdin_encoding is None:
-            self.stdin_encoding = getattr(
-                self.stdin, 'encoding', None) or 'utf8'
-        if self.stdout_encoding is None:
-            actual_stdout = self.stdout
-            if is_windows:
-                # noinspection PyUnresolvedReferences
-                from colorama import AnsiToWin32
-                if isinstance(self.stdout, AnsiToWin32):
-                    actual_stdout = self.stdout.wrapped
-            self.stdout_encoding = getattr(
-                actual_stdout, 'encoding', None) or 'utf8'
+          for s in xrange(t, FLAGS.sequence_length):
+        cum_advantage += missing_list[s] * np.power(gamma,
+                                                    (s - t)) * rewards_list[s]
+      cum_advantage -= baselines[t]
+      # Clip advantages.
+      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
+                                       FLAGS.advantage_clipping)
+      advantages.append(missing_list[t] * cum_advantage)
+      final_gen_objective += tf.multiply(
+          log_probability, missing_list[t] * tf.stop_gradient(cum_advantage))
     
     
-class Formatting(object):
-    '''A delegate class that invokes the actual processors.'''
-    
-        if n == 1:
-        return '1 B'
-    
-    
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+def attention_decoder_fn_train(encoder_state,
+                               attention_keys,
+                               attention_values,
+                               attention_score_fn,
+                               attention_construct_fn,
+                               name=None):
+  '''Attentional decoder function for `dynamic_rnn_decoder` during training.
     
     
-@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
-def test_digest_auth(httpbin_both, argument_name):
-    r = http(argument_name + '=digest', '--auth=user:password',
-             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
     
-def test_auth_plugin_require_auth_false(httpbin):
+@pytest.mark.parametrize('command', [
+    Command('aws dynamdb scan', misspelled_command),
+    Command('aws dynamodb scn', misspelled_subcommand),
+    Command('aws dynamodb t-item',
+            misspelled_subcommand_with_multiple_options)])
+def test_match(command):
+    assert match(command)
     
     
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
-    
-        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', httpbin.url + '/get', env=env)
-        assert 'HTTP/' not in r
-    
-        def test_download_with_Content_Length(self, httpbin_both):
-        devnull = open(os.devnull, 'w')
-        downloader = Downloader(output_file=devnull, progress_file=devnull)
-        downloader.start(Response(
-            url=httpbin_both.url + '/',
-            headers={'Content-Length': 10}
-        ))
-        time.sleep(1.1)
-        downloader.chunk_downloaded(b'12345')
-        time.sleep(1.1)
-        downloader.chunk_downloaded(b'12345')
-        downloader.finish()
-        assert not downloader.interrupted
+output = '''sshfs: OsxfuseRequirement unsatisfied!
     
     
-class SessionStore(SessionBase):
-    '''
-    A cache-based session store.
-    '''
-    cache_key_prefix = KEY_PREFIX
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
     
-        def __init__(self, session_key=None):
-        self._cache = caches[settings.SESSION_CACHE_ALIAS]
-        super().__init__(session_key)
+    from setuptools import setup, find_packages
+setup(
+    name = proj_info['name'],
+    version = VERSION,
     
-    def _check_arg_types(funcname, *args):
-    hasstr = hasbytes = False
-    for s in args:
-        if isinstance(s, str):
-            hasstr = True
-        elif isinstance(s, bytes):
-            hasbytes = True
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
+    else:
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
+    
+    
+def cntv_download_by_id(rid, **kwargs):
+    CNTV().download_by_vid(rid, **kwargs)
+    
+    __all__ = ['dilidili_download']
+    
+        type, ext, size = url_info(urls[0], True)
+    size = urls_size(urls)
+    
+            for p in js_path:
+            if 'mtool' in p or 'mcore' in p:
+                js_text = get_content(p)
+                hit = re.search(r'\(\'(.+?)\',(\d+),(\d+),\'(.+?)\'\.split\(\'\|\'\),\d+,\{\}\)', js_text)
+    
+        type, ext, size = url_info(url[0], True)
+    size = urls_size(url)
+    
+            real_url = 'https://docs.google.com/uc?export=download&confirm=no_antivirus&id=%s' % docid
+        redirected_url = get_location(real_url)
+        if real_url != redirected_url:
+# tiny file - get real url here
+            type, ext, size = url_info(redirected_url)
+            real_url = redirected_url
         else:
-            raise TypeError('%s() argument must be str or bytes, not %r' %
-                            (funcname, s.__class__.__name__)) from None
-    if hasstr and hasbytes:
-        raise TypeError('Can't mix strings and bytes in path components') from None
+# huge file - the real_url is a confirm page and real url is in it
+            confirm_page = get_content(real_url)
+            hrefs = re.findall(r'href='(.+?)'', confirm_page)
+            for u in hrefs:
+                if u.startswith('/uc?export=download'):
+                    rel = unescape_html(u)
+            confirm_url = 'https://docs.google.com' + rel
+            real_url = get_location(confirm_url)
+            _, ext, size = url_info(real_url, headers=fake_headers)
+            if size is None:
+                size = 0
+    
+    
+# -- Options for HTML output ----------------------------------------------
+    
+    For more details about this component, please refer to the documentation at
+https://home-assistant.io/components/browser/
+'''
+import voluptuous as vol
+    
+            devices = {}
+        for lease in leases_result:
+            match = _LEASES_REGEX.search(lease.decode('utf-8'))
+            if match is not None:
+                devices[match.group('ip')] = {
+                    'ip': match.group('ip'),
+                    'mac': match.group('mac').upper(),
+                    'timevalid': int(match.group('timevalid'))
+                    }
+        return devices
 
     
-        def test_open_common(self):
-        p = self.cls(BASE)
-        with (p / 'fileA').open('r') as f:
-            self.assertIsInstance(f, io.TextIOBase)
-            self.assertEqual(f.read(), 'this is file A\n')
-        with (p / 'fileA').open('rb') as f:
-            self.assertIsInstance(f, io.BufferedIOBase)
-            self.assertEqual(f.read().strip(), b'this is file A')
-        with (p / 'fileA').open('rb', buffering=0) as f:
-            self.assertIsInstance(f, io.RawIOBase)
-            self.assertEqual(f.read().strip(), b'this is file A')
     
-    from . import abc as resources_abc
-from contextlib import contextmanager, suppress
-from importlib import import_module
-from importlib.abc import ResourceLoader
-from io import BytesIO, TextIOWrapper
-from pathlib import Path
-from types import ModuleType
-from typing import Iterable, Iterator, Optional, Set, Union   # noqa: F401
-from typing import cast
-from typing.io import BinaryIO, TextIO
-from zipimport import ZipImportError
+def setup_scanner(hass, config, see, discovery_info=None):
+    '''Set up the demo tracker.'''
+    def offset():
+        '''Return random offset.'''
+        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
     
-        def test_showrefcount(self):
-        def run_python(*args):
-            # this is similar to assert_python_ok but doesn't strip
-            # the refcount from stderr.  It can be replaced once
-            # assert_python_ok stops doing that.
-            cmd = [sys.executable]
-            cmd.extend(args)
-            PIPE = subprocess.PIPE
-            p = subprocess.Popen(cmd, stdout=PIPE, stderr=PIPE)
-            out, err = p.communicate()
-            p.stdout.close()
-            p.stderr.close()
-            rc = p.returncode
-            self.assertEqual(rc, 0)
-            return rc, out, err
-        code = 'import sys; print(sys._xoptions)'
-        # normally the refcount is hidden
-        rc, out, err = run_python('-c', code)
-        self.assertEqual(out.rstrip(), b'{}')
-        self.assertEqual(err, b'')
-        # '-X showrefcount' shows the refcount, but only in debug builds
-        rc, out, err = run_python('-X', 'showrefcount', '-c', code)
-        self.assertEqual(out.rstrip(), b'{'showrefcount': True}')
-        if Py_DEBUG:
-            self.assertRegex(err, br'^\[\d+ refs, \d+ blocks\]')
-        else:
-            self.assertEqual(err, b'')
+            _LOGGER.info('Request successful')
+        return True
+
     
-        def testPeekBytesIO(self):
-        with BytesIO(self.DATA) as bio:
-            with BZ2File(bio) as bz2f:
-                pdata = bz2f.peek()
-                self.assertNotEqual(len(pdata), 0)
-                self.assertTrue(self.TEXT.startswith(pdata))
-                self.assertEqual(bz2f.read(), self.TEXT)
+        def get_extra_attributes(self, device):
+        '''Return the IP of the given device.'''
+        filter_ip = next((
+            result.ip for result in self.last_results
+            if result.mac == device), None)
+        return {'ip': filter_ip}
     
-    # Create the base text message.
-msg = EmailMessage()
-msg['Subject'] = 'Ayons asperges pour le déjeuner'
-msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
-msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
-             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
-msg.set_content('''\
-Salut!
+        async def async_scan_devices(self):
+        '''Scan for devices and return a list containing found device ids.'''
+        await self._async_update_info()
+        return [device.mac for device in self.last_results]
     
-    from argparse import ArgumentParser
+                    subdir = service.data.get(ATTR_SUBDIR)
     
-    # Now the header items can be accessed as a dictionary, and any non-ASCII will
-# be converted to unicode:
-print('To:', msg['to'])
-print('From:', msg['from'])
-print('Subject:', msg['subject'])
+    
+def setup(hass, config):
+    '''Set up the Hive Component.'''
+    from pyhiveapi import Pyhiveapi
+    
+    '''
+A class that uses different static function depending of a parameter passed in
+init. Note the use of a single dictionary instead of multiple conditions
+'''
+    
+        def prepare(self):
+        print('Reporter Class is preparing to report the results')
+        time.sleep(0.1)
+    
+    from __future__ import print_function
+    
+        '''A radio.     It has a scan button, and an AM/FM toggle switch.'''
+    
+    '''
+http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
