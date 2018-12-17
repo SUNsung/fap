@@ -1,230 +1,214 @@
 
         
-        
-    {}  // namespace mate
+            http://www.apache.org/licenses/LICENSE-2.0
     
-    namespace api {
-    }
     
-    scoped_refptr<TracingController::TraceDataEndpoint> GetTraceDataEndpoint(
-    const base::FilePath& path,
-    const CompletionCallback& callback) {
-  base::FilePath result_file_path = path;
-  if (result_file_path.empty() && !base::CreateTemporaryFile(&result_file_path))
-    LOG(ERROR) << 'Creating temporary file failed';
-    }
-    
-    void InAppPurchase::OnTransactionsUpdated(
-    const std::vector<in_app_purchase::Transaction>& transactions) {
-  Emit('transactions-updated', transactions);
-}
-#endif
-    
-    // static
-void Net::BuildPrototype(v8::Isolate* isolate,
-                         v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'Net'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetProperty('URLRequest', &Net::URLRequest);
+    {  return Status::OK();
 }
     
-    Screen::~Screen() {
-  screen_->RemoveObserver(this);
-}
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
     
     
-    {}  // namespace api
-    
-    #ifndef ATOM_BROWSER_API_EVENT_H_
-#define ATOM_BROWSER_API_EVENT_H_
-    
-    void SavePageHandler::Destroy(download::DownloadItem* item) {
-  item->RemoveObserver(this);
-  delete this;
-}
-    
-    
-    {  // We need to handle SIGTERM, because that is how many POSIX-based distros ask
-  // processes to quit gracefully at shutdown time.
-  struct sigaction action;
-  memset(&action, 0, sizeof(action));
-  action.sa_handler = SIGTERMHandler;
-  CHECK_EQ(sigaction(SIGTERM, &action, nullptr), 0);
-  // Also handle SIGINT - when the user terminates the browser via Ctrl+C. If
-  // the browser process is being debugged, GDB will catch the SIGINT first.
-  action.sa_handler = SIGINTHandler;
-  CHECK_EQ(sigaction(SIGINT, &action, nullptr), 0);
-  // And SIGHUP, for when the terminal disappears. On shutdown, many Linux
-  // distros send SIGHUP, SIGTERM, and then SIGKILL.
-  action.sa_handler = SIGHUPHandler;
-  CHECK_EQ(sigaction(SIGHUP, &action, nullptr), 0);
-}
-    
-    AtomQuotaPermissionContext::AtomQuotaPermissionContext() {}
-    
-    CC_CONSTRUCTOR_ACCESS:
-    Action();
-    virtual ~Action();
-    
-    void Waves3D::update(float time)
-{
-    int i, j;
-    for (i = 0; i < _gridSize.width + 1; ++i)
-    {
-        for (j = 0; j < _gridSize.height + 1; ++j)
-        {
-            Vec3 v = getOriginalVertex(Vec2(i ,j));
-            v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * 0.01f) * _amplitude * _amplitudeRate);
-            //CCLOG('v.z offset is %f\n', (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude * _amplitudeRate));
-            setVertex(Vec2(i, j), v);
-        }
-    }
-}
-    
-                // We scale z here to avoid the animation being
-            // too much bigger than the screen due to perspective transform
-    
-    #include '2d/CCActionGrid3D.h'
-    
-    bool SplitRows::initWithDuration(float duration, unsigned int rows)
-{
-    _rows = rows;
-    }
-    
-    
-    {  // Single-Delete diagnostics for exceptional situations
-  uint64_t num_single_del_fallthru = 0;
-  uint64_t num_single_del_mismatch = 0;
+    {    nullptr,            // nb_floor_divide
+    PyBfloat16_Divide,  // nb_true_divide
+    nullptr,            // nb_inplace_floor_divide
+    nullptr,            // nb_inplace_true_divide
+    nullptr,            // nb_index
 };
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
 
     
-    class DB;
+    #include 'tensorflow/stream_executor/lib/statusor.h'
+#include 'tensorflow/stream_executor/platform/port.h'
     
-    int main() {
-  // open DB
-  Options options;
-  options.create_if_missing = true;
-  DB* db;
-  Status s = DB::Open(options, kDBPath, &db);
-  assert(s.ok());
+    #include 'tensorflow/stream_executor/cuda/cuda_event.h'
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n) {
+  int max_offset = n - 2;
+  int offset = 0;
+  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
+  // v, and multiplying them together in parallel.
+  __m128d sum = _mm_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 2;
+    // Aligned load is reputedly faster but requires 16 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
+      // Use aligned load.
+      sum = _mm_load_pd(u);
+      __m128d floats2 = _mm_load_pd(v);
+      // Multiply.
+      sum = _mm_mul_pd(sum, floats2);
+      while (offset <= max_offset) {
+        __m128d floats1 = _mm_load_pd(u + offset);
+        floats2 = _mm_load_pd(v + offset);
+        offset += 2;
+        floats1 = _mm_mul_pd(floats1, floats2);
+        sum = _mm_add_pd(sum, floats1);
+      }
+    } else {
+      // Use unaligned load.
+      sum = _mm_loadu_pd(u);
+      __m128d floats2 = _mm_loadu_pd(v);
+      // Multiply.
+      sum = _mm_mul_pd(sum, floats2);
+      while (offset <= max_offset) {
+        __m128d floats1 = _mm_loadu_pd(u + offset);
+        floats2 = _mm_loadu_pd(v + offset);
+        offset += 2;
+        floats1 = _mm_mul_pd(floats1, floats2);
+        sum = _mm_add_pd(sum, floats1);
+      }
+    }
+  }
+  // Add the 2 sums in sum horizontally.
+  sum = _mm_hadd_pd(sum, sum);
+  // Extract the low result.
+  double result = _mm_cvtsd_f64(sum);
+  // Add on any left-over products.
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
+    
+    namespace tesseract {
     }
     
-    class MyFilter : public rocksdb::CompactionFilter {
+      // For a given seed partition, we search the part_grid_ and see if there is
+  // any partition can be merged with it. It returns true if the seed has been
+  // expanded.
+  bool ExpandSeed(ColPartition* seed);
+    
+    class OrientationDetector {
  public:
-  bool Filter(int level, const rocksdb::Slice& key,
-              const rocksdb::Slice& existing_value, std::string* new_value,
-              bool* value_changed) const override {
-    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
-    ++count_;
-    assert(*value_changed == false);
-    return false;
-  }
-    }
-    
-    
-    {// Factor method to create a new persistent cache
-Status NewPersistentCache(Env* const env, const std::string& path,
-                          const uint64_t size,
-                          const std::shared_ptr<Logger>& log,
-                          const bool optimized_for_nvm,
-                          std::shared_ptr<PersistentCache>* cache);
-}  // namespace rocksdb
-
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  virtual apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                         int32_t *const frame_num) = 0;
-    
-    TEST(SocketCanClientRawTest, simple_test) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-    }
-    
-      /**
-   * @brief Transform an integer with the size of one byte to its binary
-   *        represented by a string.
-   * @param value The target integer to transform.
-   * @return Binary representing the target integer.
-   */
-  static std::string byte_to_binary(const uint8_t value);
-    
-    /**
- * @file
- */
-    
-      if (can_receiver_.Init(can_client_.get(), sensor_message_manager_.get(),
-                         canbus_conf_.enable_receiver_log()) != ErrorCode::OK) {
-    return OnError('Failed to init can receiver.');
-  }
-  AINFO << 'The can receiver is successfully initialized.';
-    
-    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
-              'The adapter config file');
-    
-      t6 = t1 - t4;
-  t8 = kSqrtHalf;
-  t6 *= t8;
-  a[5].real = a[4].real - t6;
-  t1 += t4;
-  t1 *= t8;
-  a[5].imag = a[4].imag - t1;
-  t6 += a[4].real;
-  a[4].real = t6;
-  t1 += a[4].imag;
-  a[4].imag = t1;
-    
-      // Compares the 8x8 block with offsets (off_x, off_y) within the current
-  // macro-block of the baseline image with the same block of img and returns
-  // the resulting per-block distance. The interpretation of the returned
-  // distance depends on the comparator used.
-  virtual double CompareBlock(const OutputImage& img,
-                              int off_x, int off_y) const = 0;
-    
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-    
-    {}  // namespace guetzli
-
-    
-    #include <algorithm>
-#include <cstdio>
-#include <cstdlib>
-#include <exception>
-#include <memory>
-#include <string>
-#include <sstream>
-#include <string.h>
-#include 'png.h'
-#include 'guetzli/jpeg_data.h'
-#include 'guetzli/jpeg_data_reader.h'
-#include 'guetzli/processor.h'
-#include 'guetzli/quality.h'
-#include 'guetzli/stats.h'
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
-    
-    void BuildHuffmanCodeTable(const int* counts, const int* values,
-                           HuffmanCodeTable* table) {
-  int huffcode[256];
-  int huffsize[256];
-  int p = 0;
-  for (int l = 1; l <= kJpegHuffmanMaxBitLength; ++l) {
-    int i = counts[l];
-    while (i--) huffsize[p++] = l;
-  }
-    }
-    
-    
-    {  uint32_t counts[kSize];
+  OrientationDetector(const GenericVector<int>* allowed_scripts,
+                      OSResults* results);
+  bool detect_blob(BLOB_CHOICE_LIST* scores);
+  int get_orientation();
+ private:
+  OSResults* osr_;
+  const GenericVector<int>* allowed_scripts_;
 };
+    
+    
+    {  switch (level) {
+    case RIL_BLOCK:
+      it_->forward_block();
+      break;
+    case RIL_PARA:
+      it_->forward_paragraph();
+      break;
+    case RIL_TEXTLINE:
+      for (it_->forward_with_empties(); it_->row() == it_->prev_row();
+           it_->forward_with_empties());
+      break;
+    case RIL_WORD:
+      it_->forward_with_empties();
+      break;
+    case RIL_SYMBOL:
+      if (cblob_it_ != nullptr)
+        cblob_it_->forward();
+      ++blob_index_;
+      if (blob_index_ >= word_length_)
+        it_->forward_with_empties();
+      else
+        return true;
+      break;
+  }
+  BeginWord(0);
+  return it_->block() != nullptr;
+}
+    
+      // Event listener. Waits for SVET_POPUP events and processes them.
+  void Notify(const SVEvent* sve);
+    
+      /// SetImage makes a copy of all the image data, so it may be deleted
+  /// immediately after this call.
+  /// Greyscale of 8 and color of 24 or 32 bits per pixel may be given.
+  /// Palette color images will not work properly and must be converted to
+  /// 24 bit.
+  /// Binary images of 1 bit per pixel may also be given but they must be
+  /// byte packed with the MSB of the first byte being the first pixel, and a
+  /// one pixel is WHITE. For binary images set bytes_per_pixel=0.
+  void SetImage(const unsigned char* imagedata, int width, int height,
+                int bytes_per_pixel, int bytes_per_line);
+    
+    // This and other putatively are the same, so call the (permanent) callback
+// for each blob index where the bounding boxes match.
+// The callback is deleted on completion.
+void BoxWord::ProcessMatchedBlobs(const TWERD& other,
+                                  TessCallback1<int>* cb) const {
+  for (int i = 0; i < length_ && i < other.NumBlobs(); ++i) {
+    TBOX blob_box = other.blobs[i]->bounding_box();
+    if (blob_box == boxes_[i])
+      cb->Run(i);
+  }
+  delete cb;
+}
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    VMTOC& VMTOC::getInstance() {
+  static VMTOC instance;
+  return instance;
+}
+    
+    #endif
+
+    
+    PlainDirectory::PlainDirectory(int fd) {
+  m_dir = ::fdopendir(fd);
+}
+    
+    #ifndef HPHP_FILE_STREAM_WRAPPER_H
+#define HPHP_FILE_STREAM_WRAPPER_H
+    
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
+};
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/radar_state_201.h'
+    
+      header->set_version(version);
+  header->set_date(date);
+  header->mutable_projection()->set_proj(to_coordinate);
+  header->set_district(database_name);
+  header->set_rev_major(rev_major);
+  header->set_rev_minor(rev_minor);
+  header->set_left(west);
+  header->set_right(east);
+  header->set_top(north);
+  header->set_bottom(south);
+  header->set_vendor(vendor);
+    
+    #include 'modules/common/util/file.h'
+#include 'modules/common/util/string_util.h'
+#include 'modules/map/hdmap/hdmap.h'
+#include 'modules/map/hdmap/hdmap_util.h'
+#include 'modules/routing/proto/routing.pb.h'
+    
+    std::string STPoint::DebugString() const {
+  return StringPrintf('{ \'s\' : %.6f, \'t\' : %.6f }', s(), t());
+}
+    
+    TEST(TestPiecewiseLinearConstraint, add_derivative_boundary) {
+  PiecewiseLinearConstraint constraint(10, 0.1);
+  std::vector<uint32_t> index_list;
+  std::vector<double> lower_bound;
+  std::vector<double> upper_bound;
+  for (uint32_t i = 0; i < 10; ++i) {
+    index_list.push_back(i);
+    lower_bound.push_back(1.0);
+    upper_bound.push_back(100.0);
+  }
+    }
