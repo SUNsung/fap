@@ -1,194 +1,91 @@
 
         
-                  def label(label_html_options = {}, &block)
-            html_options = @input_html_options.slice(:index, :namespace).merge(label_html_options)
-            html_options[:for] ||= @input_html_options[:id] if @input_html_options[:id]
+        def custom_release_header_anchors(markdown)
+  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
+  section_regexp = %r!^### \w+ \w+$!
+  markdown.split(%r!^##\s!).map do |release_notes|
+    _, major, minor, patch = *release_notes.match(header_regexp)
+    release_notes
+      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
+      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
+  end.join('\n## ')
+end
     
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class CollectionRadioButtons < Base # :nodoc:
-        include CollectionHelpers
+    # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-              def field_type
-            self.class.field_type
-          end
+    # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
+    
+    def run_jekyll(args)
+  args = args.strip.split(' ') # Shellwords?
+  process = run_in_shell('ruby', Paths.jekyll_bin.to_s, *args, '--trace')
+  process.exitstatus.zero?
+end
+    
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
+                  # Notify blocked threads that EventMachine has started or shutdown
+              EM.schedule { @started_event.set }
+              EM.add_shutdown_hook { @stopped_event.set }
     
-        def to_a
-      @filters.dup
+      class Mention < ApplicationRecord
+  end
+    
+          delete :destroy, params: {post_id: @message.id, id: @like.id}, format: :json
+      expect(response.status).to eq(204)
     end
     
-        attr_accessor :name, :type, :path
-    
-        def initialize
-      @pages = {}
-    end
-    
-        def document?
-      @content =~ DOCUMENT_RGX
-    end
-    
-        def request_one(url)
-      Response.new read_file(file_path_for(url)), URL.parse(url)
-    end
-    
-        def origin
-      if scheme && host
-        origin = '#{scheme}://#{host}'
-        origin.downcase!
-        origin << ':#{port}' if port
-        origin
-      else
-        nil
+        context 'on a post from a contact' do
+      before do
+        aspect_to_post = bob.aspects.where(:name => 'generic').first
+        @post = bob.post :status_message, :text => 'something', :to => aspect_to_post
       end
-    end
     
-            css('.filetree').each do |node|
-          node.content = node.css('.file').map(&:inner_html).join('\n')
-          node.name = 'pre'
-          node.remove_attribute('class')
-        end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
+          def create_test_file
+        if defined?(RSpec)
+          create_worker_spec
         else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+          create_worker_test
         end
       end
     
-      describe 'float formats' do
-    it 'converts argument into Float' do
-      obj = mock('float')
-      obj.should_receive(:to_f).and_return(9.6)
-      format('%f', obj).should == '9.600000'
+        module PsychAutoload
+      def resolve_class(klass_name)
+        return nil if !klass_name || klass_name.empty?
+        # constantize
+        names = klass_name.split('::')
+        names.shift if names.empty? || names.first.empty?
+    
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
+        end
+      end
     end
     
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
-  end
+        def self.with_job_hash_context(job_hash, &block)
+      with_context(job_hash_context(job_hash), &block)
+    end
     
-      #
-  # Parses a header from a string.
-  #
-  # XXX - Putting : in a header value breaks this badly
-  def from_s(header)
-    reset
-    
-    
-  def self.create_rakp_hmac_sha1_salt(con_sid, bmc_sid, con_rid, bmc_rid, bmc_gid, auth_level, username)
-    con_sid +
-    bmc_sid +
-    con_rid +
-    bmc_rid +
-    bmc_gid +
-    [ auth_level ].pack('C') +
-    [ username.length ].pack('C') +
-    username
-  end
-    
-            # UDP isn't supported
-        #
-        # @raise [NotImplementedError]
-        def send_request_udp(req)
-          raise ::NotImplementedError, 'Kerberos Client: UDP unsupported'
-        end
-    
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos AuthorizationData data
-        # definition.
-        class AuthorizationData < Element
-          # @!attribute elements
-          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
-          #   @option [Integer] :type
-          #   @option [String] :data
-          attr_accessor :elements
-    
-                self
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-                decode_asn1(asn1)
-          end
-    
-      class VagrantSSHCommandError < RuntimeError; end
-    
-        require 'capistrano/scm/#{scm_name}'
-    install_plugin #{built_in_scm_plugin_class_name}
-    
-          ServerKey = Struct.new(:hostname, :port)
-    
-    LogStash::Bundler.setup!
-    
-                try += 1
-            $stderr.puts('Error #{e.class}, retrying #{try}/#{options[:max_tries]}')
-            $stderr.puts(e.message)
-            sleep(0.5)
-          end
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
         end
       end
-      raise exception if exception
-    
-    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
-# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
-# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
-# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
-if $0 == __FILE__
-  LogStash::Bundler.setup!({:without => [:build, :development]})
-  require_relative 'patches/jar_dependencies'
-    
-      def update_gems!
-    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
-    previous_gem_specs_map = find_latest_gem_specs
-    
-          after do
-        ENV.delete('FunString')
-        ENV.delete('FunBool')
-        ENV.delete('SERVER_LS_TEST_ADDRESS')
-      end
-    
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
-    
-      # for now
-  worker_count = 1
-    
-    $redis = Redis.new
-    
-        EXPIRY = 60 * 60 * 24
+    end
+  end
