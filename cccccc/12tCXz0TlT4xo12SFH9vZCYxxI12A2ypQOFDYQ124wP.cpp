@@ -1,121 +1,369 @@
 
         
-        void absDiff(const Size2D &size,
-             const u8 *src0Base, ptrdiff_t src0Stride,
-             const u8 *src1Base, ptrdiff_t src1Stride,
-             u8 *dstBase, ptrdiff_t dstStride)
+        /* Coin network-specific GUI style information */
+class NetworkStyle
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<u8>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
+    }
+    
+    #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+
+    
+    #endif // BITCOIN_REVERSELOCK_H
+
+    
+    #ifndef BITCOIN_RPC_MINING_H
+#define BITCOIN_RPC_MINING_H
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
 }
     
-    #include <cstring>
-    
-    void Canny3x3L2(const Size2D &size,
-                const u8 * srcBase, ptrdiff_t srcStride,
-                u8 * dstBase, ptrdiff_t dstStride,
-                f64 low_thresh, f64 high_thresh,
-                Margin borderMargin)
+    /* Given a BlockIndex with the provided nbits,
+ * verify that the expected difficulty results.
+ */
+static void TestDifficulty(uint32_t nbits, double expected_difficulty)
 {
-    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
-#ifdef CAROTENE_NEON
-    Canny3x3<true, false>(size, 1,
-                          srcBase, srcStride,
-                          dstBase, dstStride,
-                          NULL, 0,
-                          NULL, 0,
-                          low_thresh, high_thresh,
-                          borderMargin);
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)low_thresh;
-    (void)high_thresh;
-    (void)borderMargin;
-#endif
+    CBlockIndex* block_index = CreateBlockIndexWithNbits(nbits);
+    double difficulty = GetDifficulty(block_index);
+    delete block_index;
+    }
+    
+      // After identify the math blocks, we do one more scanning on all text
+  // partitions, and check if any of them is the satellite of:
+  // math blocks: here a p is the satellite of q if:
+  // 1. q is the nearest vertical neighbor of p, and
+  // 2. y_gap(p, q) is less than a threshold, and
+  // 3. x_overlap(p, q) is over a threshold.
+  // Note that p can be the satellites of two blocks: its top neighbor and
+  // bottom neighbor.
+  void ProcessMathBlockSatelliteParts();
+    
+    
+    {  /** Pointer to the page_res owned by the API. */
+  PAGE_RES* page_res_;
+  /** Pointer to the Tesseract object owned by the API. */
+  Tesseract* tesseract_;
+  /**
+   * The iterator to the page_res_. Owned by this ResultIterator.
+   * A pointer just to avoid dragging in Tesseract includes.
+   */
+  PAGE_RES_IT* it_;
+  /**
+   * The current input WERD being iterated. If there is an output from OCR,
+   * then word_ is nullptr. Owned by the API
+   */
+  WERD* word_;
+  /** The length of the current word_. */
+  int word_length_;
+  /** The current blob index within the word. */
+  int blob_index_;
+  /**
+   * Iterator to the blobs within the word. If nullptr, then we are iterating
+   * OCR results in the box_word.
+   * Owned by this ResultIterator.
+   */
+  C_BLOB_IT* cblob_it_;
+  /** Control over what to include in bounding boxes. */
+  bool include_upper_dots_;
+  bool include_lower_dots_;
+  /** Parameters saved from the Thresholder. Needed to rebuild coordinates.*/
+  int scale_;
+  int scaled_yres_;
+  int rect_left_;
+  int rect_top_;
+  int rect_width_;
+  int rect_height_;
+};
+    
+     private:
+  // Gets the up to the first 3 prefixes from s (split by _).
+  // For example, tesseract_foo_bar will be split into tesseract,foo and bar.
+  void GetPrefixes(const char* s, STRING* level_one,
+                   STRING* level_two, STRING* level_three);
+    
+    namespace tesseract {
+    }
+    
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
 }
     
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0, const typename internal::VecTraits<T>::vec128 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec128 & v_dst) const
+    namespace grpc {
+    }
+    
+    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
+                                                        grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  GPR_ASSERT(calld != nullptr);
+  if (error == GRPC_ERROR_NONE) {
+    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
+    FilterTrailingMetadata(calld->recv_trailing_metadata_,
+                           &calld->elapsed_time_);
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
+                   GRPC_ERROR_REF(error));
+}
+    
+    #include 'absl/strings/string_view.h'
+#include 'absl/time/time.h'
+#include 'src/cpp/ext/filters/census/channel_filter.h'
+#include 'src/cpp/ext/filters/census/context.h'
+    
+    // These helper functions return the SpanContext and Span, respectively
+// associated with the census_context* stored by grpc. The user will need to
+// call this for manual propagation of tracing data.
+::opencensus::trace::SpanContext SpanContextFromCensusContext(
+    const census_context* ctxt);
+::opencensus::trace::Span SpanFromCensusContext(const census_context* ctxt);
+    
+    // TODO: This may not be needed. Check to see if opencensus requires
+// a trailing server response.
+// RpcServerStatsEncoding encapsulates the logic for encoding and decoding of
+// rpc server stats messages. Rpc server stats consists of a uint64_t time
+// value (server latency in nanoseconds).
+class RpcServerStatsEncoding {
+ public:
+  // Size of encoded RPC server stats.
+  static constexpr size_t kRpcServerStatsSize = 10;
+  // Error value.
+  static constexpr size_t kEncodeDecodeFailure = 0;
+    }
+    
+     private:
+  Status ListService(ServerContext* context,
+                     reflection::v1alpha::ListServiceResponse* response);
+    
+        static AGInfo& Get(const nnvm::NodePtr& node) {
+      return dmlc::get<AGInfo>(node->info);
+    }
+    
+    #include 'caffe_common.h'
+#include 'caffe_stream.h'
+#include 'caffe_fieldentry.h'
+#include 'caffe_blob.h'
+#include '../../src/io/inst_vector.h'
+#include '../../src/io/iter_prefetcher.h'
+    
+        caffeOp_->Backward(top_, flags_, bot_);
+    
+    
+    { private:
+  /*! \brief Concurrency for thread pool */
+  static constexpr std::size_t kNumWorkingThreads = 16;
+  /*! \brief Maximum number of GPUs */
+  static constexpr std::size_t kMaxNumGpus = 16;
+  /*!\brief number of streams allocated for each GPU */
+  static constexpr std::size_t kNumStreamsPerGpu = 16;
+  /*!
+   * \brief Streams.
+   */
+  std::unique_ptr<StreamManager<kMaxNumGpus, kNumStreamsPerGpu>> streams_;
+  /*!
+   * \brief Task queues.
+   */
+  std::shared_ptr<dmlc::ConcurrentBlockingQueue<OprBlock*>> task_queue_;
+  std::shared_ptr<dmlc::ConcurrentBlockingQueue<OprBlock*>> io_task_queue_;
+  /*!
+   * \brief Thread pools.
+   */
+  std::unique_ptr<ThreadPool> thread_pool_;
+  std::unique_ptr<ThreadPool> io_thread_pool_;
+  /*!
+   * \brief Worker.
+   * \param task_queue Queue to work on.
+   *
+   * The method to pass to thread pool to parallelize.
+   */
+  void ThreadWorker(std::shared_ptr<dmlc::ConcurrentBlockingQueue<OprBlock*>> task_queue,
+                    const std::shared_ptr<dmlc::ManualEvent>& ready_event) {
+    OprBlock* opr_block;
+    ready_event->signal();
+    while (task_queue->Pop(&opr_block)) {
+      DoExecute(opr_block);
+    }
+  }
+  /*!
+   * \brief Execute an operation.
+   * \param opr_block The operator block.
+   */
+  void DoExecute(OprBlock* opr_block) {
+    assert(opr_block->wait.load() == 0);
+    if (opr_block->ctx.dev_mask() == gpu::kDevMask) {
+      #if MXNET_USE_CUDA
+      CUDA_CALL(cudaSetDevice(opr_block->ctx.dev_id));
+      #else   // MXNET_USE_CUDA
+      LOG(FATAL) << 'Please compile with CUDA enabled';
+      #endif  // MXNET_USE_CUDA
+    }
+    bool is_copy = (opr_block->opr->prop == FnProperty::kCopyFromGPU ||
+                    opr_block->opr->prop == FnProperty::kCopyToGPU);
+    auto&& rctx = is_copy
+        ? streams_->GetIORunContext(opr_block->ctx)
+        : streams_->GetRunContext(opr_block->ctx);
+    this->ExecuteOprBlock(rctx, opr_block);
+  }
+  /*!
+   * \brief Push the operation to the queue.
+   * \param opr_block The operator block.
+   */
+  void DoPushToQueue(OprBlock* opr_block) {
+    switch (opr_block->opr->prop) {
+      case FnProperty::kCopyFromGPU:
+      case FnProperty::kCopyToGPU: {
+        io_task_queue_->Push(opr_block);
+        break;
+      }
+      default: {
+        task_queue_->Push(opr_block);
+        break;
+      }
+    }
+  }
+};
+    
+    
+    {    while (base_->Next()) {
+      const DataInst& d = base_->Value();
+      out_.inst_index[top] = d.index;
+      if (data_.size() == 0) {
+        this->InitData(d);
+      }
+      for (size_t i = 0; i < d.data.size(); ++i) {
+        CHECK_EQ(unit_size_[i], d.data[i].Size());
+        MSHADOW_TYPE_SWITCH(data_[i].type_flag_, DType, {
+            mshadow::Copy(
+              data_[i].get<cpu, 1, DType>().Slice(top * unit_size_[i],
+                                                  (top + 1) * unit_size_[i]),
+              d.data[i].get_with_shape<cpu, 1, DType>(mshadow::Shape1(unit_size_[i])));
+          });
+      }
+      if (++top >= param_.batch_size) {
+        return true;
+      }
+    }
+    if (top != 0) {
+      if (param_.round_batch != 0) {
+        num_overflow_ = 0;
+        base_->BeforeFirst();
+        for (; top < param_.batch_size; ++top, ++num_overflow_) {
+          CHECK(base_->Next()) << 'number of input must be bigger than batch size';
+          const DataInst& d = base_->Value();
+          out_.inst_index[top] = d.index;
+          // copy data
+          for (size_t i = 0; i < d.data.size(); ++i) {
+            CHECK_EQ(unit_size_[i], d.data[i].Size());
+            MSHADOW_TYPE_SWITCH(data_[i].type_flag_, DType, {
+                mshadow::Copy(
+                  data_[i].get<cpu, 1, DType>().Slice(top * unit_size_[i],
+                                                      (top + 1) * unit_size_[i]),
+                  d.data[i].get_with_shape<cpu, 1, DType>(mshadow::Shape1(unit_size_[i])));
+              });
+          }
+        }
+        out_.num_batch_padd = num_overflow_;
+      } else {
+        out_.num_batch_padd = param_.batch_size - top;
+      }
+      return true;
+    }
+    return false;
+  }
+  virtual const TBlobBatch &Value(void) const {
+    return out_;
+  }
+    
+            static bool IsUDF(const FunctionPtr& f);
+    
+        Variable Variable::NonCompositePreservingCopy() const
     {
-        v_dst = internal::vmvnq(internal::vceqq(v_src0, v_src1));
+        Variable copy = *this;
+        copy.m_outputComposite = nullptr;
+        return copy;
     }
     
-        v1k0 = vextq_s16(d0_7, d8_15, 6);
-    ak0 = vminq_s16(ak0, v1k0);
-    bk0 = vmaxq_s16(bk0, v1k0);
+    // ===================================================================
+// CloneFunctionConfigLambda -- lambda to produce a clone of a network
+//  - creates a BrainScript function that carbon-copies a subsection of an existing network
+//  - the copy can be shallow or deep, where a deep copy gets its own copy of LearnableParameters
+//     - a shallow copy (parameters='shared') is a copy of all nodes that depend on the specified input(s),
+//       while all other nodes are shared from the original network section
+//     - a deep copy (parameters='lernable' or 'constant') also copies all reachable LearnableParameters and their dependents
+//     - Input() nodes not listed as `inputNodes` are always shared
+//  - the source network may be a different network, e.g. loaded with BS.Network.Load()
+//  - a deep copy can be read-only (parameters='constant')
+//     - Note: multiple uses of the lambda will not share read-only parameters. This is trickier to implement that one might expect.
+//  - example use cases:
+//     - adaptation (KL): a frozen read-only copy of the starting model is used as a KL-regularizer
+//     - adaptation (DLR): an injected input transform is trained while the network is fixed
+//     - image: lower layers of ImageNet networks serve as immutable feature extractors for another image task
+//     - DSSM: applying the same network subsection to two inputs
+// Usage:
+//    f = CloneFunction (inputNodes, outputNodes, parameters='lernable' /*|'constant'|'shared'*/)
+// Parameters:
+//  - inputNodes:  single node or array of nodes that will become parameters of the function.
+//                 Commonly, this list will include all Input()s that the outputNode(s) depend on.
+//  - outputNodes: single node or dictionary of nodes that the function will emit
+// Example:
+//    # create a BS function by copying a piece of network
+//    net = CloneFunction (network.features, network.logP)
+//    # apply the copy to a new input
+//    out = net (myFeatures)
+//    # This will create a copy of the subsection from network.features to network.logP
+//    # where all links to network.features get replaced by links to myFeatures.
+// Example with multiple input and output nodes:
+//    # create a BS function by copying a piece of network
+//    # This specific example converts a network back into a BrainScript function.
+//    # It passes two input nodes --> the BS function will have 2 inputs;
+//    # and it passes a record of output nodes --> the BS function will return a record with the same member names
+//    network = BS.Network.Load ('some.dnn')
+//    net = CloneFunction ((network.features:network.labels), [ ce = network.ce ; errs = network.errs ])
+//    # create a network from the BS function
+//    features = Input (13)
+//    labels = Input (42)
+//    out = net (features, labels)
+//    criterionNodes = (out.ce)
+//    evaluationNodes = (out.errs)
+// A specific example: Adapting a network, while using the original network as a regularizer (KLD)
+//    # load network
+//    network = BS.Network.Load ('some.dnn')
+//    # create a trainable clone and a read-only reference clone
+//    adaptNet = CloneFunction (network.features, [ z = network.z ], readOnly=false)
+//    # create a read-only clone
+//    refNet = CloneFunction (network.features, [ z = network.z ], readOnly=true)
+//    # create the main network
+//    features = Input (42)
+//    labels = Input (9000)
+//    z = adaptNet (features).z
+//    zRef = refNet (features).z
+//    # training criterion
+//    refWeight = 0.9
+//    kldLabels = labels * (1-refWeight) + Softmax (zRef) * refWeight  # interpolate with ref output
+//    ce = CrossEntropyWithSoftmax (z, kldLabels)
+//    errs = ClassificationError (z, labels)
+//    criterionNodes = (ce)
+//    evaluationNodes = (errs)
+// ===================================================================
     
-                uint8x8_t el8shr0 = vld1_u8(src + j);
-            uint8x8_t el8shr1 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 8));
-            uint8x8_t el8shr2 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 16));
-            uint8x8_t el8shr3 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 24));
-    
-    
-    {}  // namespace tesseract.
-    
-    #include <cstdint>  // for int16_t
-    
-    const PageIterator& PageIterator::operator=(const PageIterator& src) {
-  page_res_ = src.page_res_;
-  tesseract_ = src.tesseract_;
-  include_upper_dots_ = src.include_upper_dots_;
-  include_lower_dots_ = src.include_lower_dots_;
-  scale_ = src.scale_;
-  scaled_yres_ = src.scaled_yres_;
-  rect_left_ = src.rect_left_;
-  rect_top_ = src.rect_top_;
-  rect_width_ = src.rect_width_;
-  rect_height_ = src.rect_height_;
-  delete it_;
-  it_ = new PAGE_RES_IT(*src.it_);
-  BeginWord(src.blob_index_);
-  return *this;
-}
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
-    
-      const UNICHARSET &unicharset = *word->uch_set;
-  word->ClearResults();
-  word2->ClearResults();
-  word->chopped_word = chopped;
-  word2->chopped_word = chopped2;
-  word->SetupBasicsFromChoppedWord(unicharset);
-  word2->SetupBasicsFromChoppedWord(unicharset);
-    
-    /// Base class for all tesseract image thresholding classes.
-/// Specific classes can add new thresholding methods by
-/// overriding ThresholdToPix.
-/// Each instance deals with a single image, but the design is intended to
-/// be useful for multiple calls to SetRectangle and ThresholdTo* if
-/// desired.
-class TESS_API ImageThresholder {
- public:
-  ImageThresholder();
-  virtual ~ImageThresholder();
-    }
+    private:
+    // init parameters for deferred initialization (which happens in Validate())
+    std::wstring m_initString; // if non-empty then deferred initialization is needed. Gets cleared upon completion of deferred init.
+    unsigned long m_randomSeed;
+    ElemType m_initValueScale;
+    size_t m_initFilterRank;
+    int m_initOutputRank;
+    bool m_initOnCPUOnly;
+    ElemType m_initValue;
