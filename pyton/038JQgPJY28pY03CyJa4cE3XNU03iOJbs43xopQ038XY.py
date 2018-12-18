@@ -1,49 +1,127 @@
 
         
         
-def get_db():
-    '''Connect to the application's configured database. The connection
-    is unique for each request and will be reused if this is called
-    again.
+class Bus(Vehicle):
+    
+    
+if __name__ == '__main__':
+    SalesRanker.run()
+
+    
+        def mapper(self, _, line):
+        yield line, 1
+    
+    
+class Person(object):
+    
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+
+    
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+    
+        module.exit_json(changed=False, ansible_facts=ecs_facts, **ecs_facts)
+    
+    
+DOCUMENTATION = '''
+---
+module: elasticache_subnet_group
+version_added: '2.0'
+short_description: manage Elasticache subnet groups
+description:
+     - Creates, modifies, and deletes Elasticache subnet groups. This module has a dependency on python-boto >= 2.5.
+options:
+  state:
+    description:
+      - Specifies whether the subnet should be present or absent.
+    required: true
+    default: present
+    choices: [ 'present' , 'absent' ]
+  name:
+    description:
+      - Database subnet group identifier.
+    required: true
+  description:
+    description:
+      - Elasticache subnet group description. Only set when a new group is added.
+  subnets:
+    description:
+      - List of subnet IDs that make up the Elasticache subnet group.
+author: 'Tim Mahoney (@timmahoney)'
+extends_documentation_fragment:
+    - aws
+    - ec2
+'''
+    
+    
+def all_details(client, module):
     '''
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
+    Returns all lambda related facts.
     
-        def reraise(tp, value, tb=None):
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
+        try:
+        resource = redshift.describe_clusters(identifier)['DescribeClustersResponse']['DescribeClustersResult']['Clusters'][0]
+    except boto.exception.JSONResponseError as e:
+        module.fail_json(msg=str(e))
     
-            app.config.from_envvar('YOURAPPLICATION_SETTINGS')
-    
-            buf.append('  Make sure to directly send your %s-request to this URL '
-                   'since we can\'t make browsers or HTTP clients redirect '
-                   'with form data reliably or without user interaction.' %
-                   request.method)
-        buf.append('\n\nNote: this exception is only raised in debug mode')
-        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
-    
-        if args and kwargs:
-        raise TypeError('jsonify() behavior undefined when passed both args and kwargs')
-    elif len(args) == 1:  # single args are passed directly to dumps()
-        data = args[0]
-    else:
-        data = args or kwargs
-    
-    
-class TaggedJSONSerializer(object):
-    '''Serializer that uses a tag system to compactly represent objects that
-    are not JSON types. Passed as the intermediate serializer to
-    :class:`itsdangerous.Serializer`.
-    
-        if not has_level_handler(logger):
-        logger.addHandler(default_handler)
-    
-      if message:
-    sys.exit('\nFATAL ERROR: ' + message)
-  else:
-    sys.exit(0)
+    RETURN = '''
+index_document:
+    description: index document
+    type: complex
+    returned: always
+    contains:
+        suffix:
+            description: suffix that is appended to a request that is for a directory on the website endpoint
+            returned: success
+            type: string
+            sample: index.html
+error_document:
+    description: error document
+    type: complex
+    returned: always
+    contains:
+        key:
+            description:  object key name to use when a 4XX class error occurs
+            returned: when error_document parameter set
+            type: string
+            sample: error.html
+redirect_all_requests_to:
+    description: where to redirect requests
+    type: complex
+    returned: always
+    contains:
+        host_name:
+            description: name of the host where requests will be redirected.
+            returned: when redirect all requests parameter set
+            type: string
+            sample: ansible.com
+routing_rules:
+    description: routing rules
+    type: complex
+    returned: always
+    contains:
+        routing_rule:
+            host_name:
+                description: name of the host where requests will be redirected.
+                returned: when host name set as part of redirect rule
+                type: string
+                sample: ansible.com
+        condition:
+            key_prefix_equals:
+            description: object key name prefix when the redirect is applied. For example, to redirect requests for ExamplePage.html, the key prefix will be
+                     ExamplePage.html
+            returned: when routing rule present
+            type: string
+            sample: docs/
+        redirect:
+            replace_key_prefix_with:
+                description: object key prefix to use in the redirect request
+                returned: when routing rule present
+                type: string
+                sample: documents/
+'''
