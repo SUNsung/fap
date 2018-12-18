@@ -1,154 +1,111 @@
 
         
-        def liquid_escape(markdown)
-  markdown.gsub(%r!(`{[{%].+[}%]}`)!, '{% raw %}\\1{% endraw %}')
+        User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
 end
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+        def ==(other)
+      other.is_a?(self.class) && filters == other.filters
+    end
     
-    Then(%r!^I should (not )?see '(.*)' in '(.*)'$!) do |negative, text, file|
-  step %(the '#{file}' file should exist)
-  regexp = Regexp.new(text, Regexp::MULTILINE)
-  if negative.nil? || negative.empty?
-    expect(file_contents(file)).to match regexp
-  else
-    expect(file_contents(file)).not_to match regexp
-  end
-end
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+            if at_css('.api-type-label.module')
+          at_css('h1').content = subpath.remove('api/')
         end
-        # rubocop:enable Metrics/AbcSize
+    
+            name = name.split(':').first
+    
+          if emoji.save
+        log_action :create, emoji
+        flash[:notice] = I18n.t('admin.custom_emojis.copied_msg')
+      else
+        flash[:alert] = I18n.t('admin.custom_emojis.copy_failed_msg')
+      end
+    
+      def account_from_topic
+    if hub_topic.present? && local_domain? && account_feed_path?
+      Account.find_local(hub_topic_params[:username])
+    end
+  end
+    
+      def show
+    render_cached_json('api:v1:instances:activity:show', expires_in: 1.day) { activity }
+  end
+    
+            expect(cop.offenses.size).to eq(1)
+        expect(cop.highlights).to eq([close])
+        expect(cop.messages).to eq([described_class::ALWAYS_NEW_LINE_MESSAGE])
+      end
+    
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
+      end
+    
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+    Given(/^I add a '(.*?)' processor in '(.*?)'$/) do |processor, directory|
+  filename = '#{directory}/#{processor}.rb'
+  cd('.') do
+    FileUtils.mkdir_p directory
+    File.open(filename, 'w') do |f|
+      f.write(<<-CLASS)
+        module Paperclip
+          class #{processor.capitalize} < Processor
+            def make
+              basename = File.basename(file.path, File.extname(file.path))
+              dst_format = options[:format] ? '.\#{options[:format]}' : ''
+    
+      # Provides configurability to Paperclip. The options available are:
+  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
+  #   an uploaded image. Defaults to true.
+  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
+  #   log levels, etc. Defaults to true.
+  # * command_path: Defines the path at which to find the command line
+  #   programs if they are not visible to Rails the system's search path. Defaults to
+  #   nil, which uses the first executable found in the user's search path.
+  # * use_exif_orientation: Whether to inspect EXIF data to determine an
+  #   image's orientation. Defaults to true.
+  def self.options
+    @options ||= {
+      command_path: nil,
+      content_type_mappings: {},
+      log: true,
+      log_command: true,
+      read_timeout: nil,
+      swallow_stderr: true,
+      use_exif_orientation: true,
+      whiny: true,
+      is_windows: Gem.win_platform?
+    }
+  end
+    
+        def raise_if_blank_file
+      if path.blank?
+        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
       end
     end
-  end
-end
-
     
-            def print_message(json_message)
-          msg = JSON.parse(json_message)
-          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
-          # on its purpose.
-          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
-        end
-    
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
-    end
-    
-        # Description formatted to work well as page title when viewing gist
-    if f.core_formula?
-      descr = '#{f.name} on #{OS_VERSION} - Homebrew build logs'
-    else
-      descr = '#{f.name} (#{f.full_name}) on #{OS_VERSION} - Homebrew build logs'
-    end
-    url = create_gist(files, descr)
-    
-      def insert(index, *paths)
-    @paths = parse(*@paths.insert(index, *paths))
-    self
-  end
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      0x01, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # HMAC-SHA1
-      0x01, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # AES Encryption
-      0x01, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-              # Encodes the name_type field
-          #
-          # @return [String]
-          def encode_name_type
-            [name_type].pack('N')
-          end
-    
-              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new(elems)
-    
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
-          end
-    
-              include Rex::Proto::Kerberos::Crypto
-          include Rex::Proto::Kerberos::Model
-    
-              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_asn1_msg_type(input)
-            input.value[0].value.to_i
-          end
-    
-              # Makes a checksum from the Rex::Proto::Kerberos::Model::KdcRequestBody
-          #
-          # @param etype [Integer] the crypto schema to checksum
-          # @return [String] the checksum
-          # @raise [NotImplementedError] if the encryption schema isn't supported
-          def checksum(etype)
-            data = self.encode
-    
-            def update
-          authorize! :update, @order, order_token
-          @address = find_address
-    
-            def update
-          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
-          if @option_type.update_attributes(option_type_params)
-            render :show
-          else
-            invalid_resource!(@option_type)
-          end
-        end
+        private
