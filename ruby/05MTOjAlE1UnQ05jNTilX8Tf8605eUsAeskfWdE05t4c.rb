@@ -1,26 +1,64 @@
 
         
-          def after_omniauth_failure_path_for(scope)
-    new_session_path(scope)
+            DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+    
+        def effective_url
+      @effective_url ||= URL.parse super
+    end
+    
+          def additional_options
+        super.merge! redirections: self.class.redirections
+      end
+    end
+    
+        def origin
+      if scheme && host
+        origin = '#{scheme}://#{host}'
+        origin.downcase!
+        origin << ':#{port}' if port
+        origin
+      else
+        nil
+      end
+    end
+    
+    module Vagrant
+  module Plugin
+    module V1
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
+    
+          context 'applies to gG' do
+        it 'does not remove trailing zeros' do
+          format('%#g', 123.4).should == '123.400'
+          format('%#g', 123.4).should == '123.400'
+        end
+      end
+    end
+    
+      it 'raises an ArgumentError when passed a negative duration' do
+    lambda { sleep(-0.1) }.should raise_error(ArgumentError)
+    lambda { sleep(-1) }.should raise_error(ArgumentError)
   end
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-          private
-    
-            @email = headers[:to]
-        headers
+            -> { w.f4('', 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
+        -> { w.f4(nil, 0) }.should output(nil, %r|core/kernel/fixtures/classes.rb:#{w.warn_call_lineno}: warning: \n$|)
       end
     
-        def default_used_route(options)
-      singularizer = lambda { |s| s.to_s.singularize.to_sym }
-    
-        def dry_run
-      ['--dry-run', '-n',
-       'Do a dry run without executing actions',
-       lambda do |_value|
-         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
-       end]
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
+      end
     end
+  end
+end
+
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
+    
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
