@@ -1,173 +1,199 @@
 
         
-                return view(**kwargs)
+            # Create the MLP
+    self.__mlp__()
     
-            You should not use this function to load the actual configuration but
-        rather configuration defaults.  The actual config should be loaded
-        with :meth:`from_pyfile` and ideally from a location not within the
-        package because the package might be installed system wide.
+      plt.subplot(nrows,2,7+subplot_cidx)
+  plot_time_series(model_vals['factors'], bidx, n_to_plot=n_to_plot, color='b',
+                   scale=2.0, title=col_title + ' Factors')
+    
+    # General note about helping ascribe controller inputs vs dynamics:
+#
+# If controller is heavily penalized, then it won't have any output.
+# If dynamics are heavily penalized, then generator won't make
+# dynamics.  Note this l2 penalty is only on the recurrent portion of
+# the RNNs, as dropout is also available, penalizing the feed-forward
+# connections.
+flags.DEFINE_float('l2_gen_scale', L2_GEN_SCALE,
+                   'L2 regularization cost for the generator only.')
+flags.DEFINE_float('l2_con_scale', L2_CON_SCALE,
+                   'L2 regularization cost for the controller only.')
+flags.DEFINE_float('co_mean_corr_scale', CO_MEAN_CORR_SCALE,
+                   'Cost of correlation (thru time)in the means of \
+                   controller output.')
+    
+    # Check to make sure the RNN is the one we used in the paper.
+if N == 50:
+  assert abs(rnn['W'][0,0] - 0.06239899) < 1e-8, 'Error in random seed?'
+  rem_check = nreplications * train_percentage
+  assert  abs(rem_check - int(rem_check)) < 1e-8, \
+    'Train percentage  * nreplications should be integral number.'
+    
+    def get_data_batch(batch_size, T, rng, u_std):
+  u_bxt = rng.randn(batch_size, T) * u_std
+  running_sum_b = np.zeros([batch_size])
+  labels_bxt = np.zeros([batch_size, T])
+  for t in xrange(T):
+    running_sum_b += u_bxt[:, t]
+    labels_bxt[:, t] += running_sum_b
+  labels_bxt = np.clip(labels_bxt, -1, 1)
+  return u_bxt, labels_bxt
+    
+      Args:
+    in_size: The integer size of the non-batc input dimension. [(x),y]
+    out_size: The integer size of non-batch output dimension. [x,(y)]
+    do_bias (optional): Add a (learnable) bias vector to the operation,
+      if false, b will be None
+    mat_init_value (optional): numpy constant for matrix initialization, if None
+      , do random, with additional parameters.
+    alpha (optional): A multiplicative scaling for the weight initialization
+      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
+    identity_if_possible (optional): just return identity,
+      if x.shape[1] == out_size.
+    normalized (optional): Option to divide out by the norms of the rows of W.
+    name (optional): The name prefix to add to variables.
+    collections (optional): List of additional collections. (Placed in
+      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
+    
+      return sess, t
+    
+      words, _ = list(zip(*count_pairs))
+  word_to_id = dict(zip(words, range(len(words))))
+  print('<eos>:', word_to_id['<eos>'])
+  global EOS_INDEX
+  EOS_INDEX = word_to_id['<eos>']
     
     
-def _dump_loader_info(loader):
-    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
-    for key, value in sorted(loader.__dict__.items()):
-        if key.startswith('_'):
-            continue
-        if isinstance(value, (tuple, list)):
-            if not all(isinstance(x, (str, text_type)) for x in value):
-                continue
-            yield '%s:' % key
-            for item in value:
-                yield '  - %s' % item
-            continue
-        elif not isinstance(value, (str, text_type, int, float, bool)):
-            continue
-        yield '%s: %r' % (key, value)
+def wasserstein_generator_loss(gen_logits, gen_labels, dis_values,
+                               is_real_input):
+  '''Computes the masked-loss for G.  This will be a blend of cross-entropy
+  loss where the true label is known and GAN loss where the true label is
+  missing.
+    
+      # Split the batch into half.  Use half for MC estimates for REINFORCE.
+  # Use the other half to establish a baseline.
+  elif FLAGS.baseline_method == 'dis_batch':
+    # TODO(liamfedus):  Recheck.
+    [rewards_half, baseline_half] = tf.split(
+        rewards, num_or_size_splits=2, axis=0)
+    [log_probs_half, _] = tf.split(log_probs, num_or_size_splits=2, axis=0)
+    [reward_present_half, baseline_present_half] = tf.split(
+        present, num_or_size_splits=2, axis=0)
+    
+          else:
+        raise NotImplementedError
     
     
-_request_ctx_err_msg = '''\
-Working outside of request context.
+def _create_attention_score_fn(name,
+                               num_units,
+                               attention_option,
+                               reuse,
+                               dtype=tf.float32):
+  '''Different ways to compute attention scores.
     
-        -   if no arguments are passed, it creates a new response argument
-    -   if one argument is passed, :meth:`flask.Flask.make_response`
-        is invoked with it.
-    -   if more than one argument is passed, the arguments are passed
-        to the :meth:`flask.Flask.make_response` function as tuple.
-    
-    
-#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
-#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
-default_handler = logging.StreamHandler(wsgi_errors_stream)
-default_handler.setFormatter(logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-))
+    short_description: create, update and delete origin access identities for a
+                   cloudfront distribution.
     
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
-    
-    
-class HTTPRequest(HTTPMessage):
-    '''A :class:`requests.models.Request` wrapper.'''
-    
-        def __init__(self, **kwargs):
-        '''
-        :param env: an class:`Environment` instance
-        :param kwargs: additional keyword argument that some
-                       processor might require.
-    
-    
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            bgp_asn=dict(required=False, type='int'),
+            ip_address=dict(required=True),
+            name=dict(required=True),
+            routing=dict(default='dynamic', choices=['dynamic', 'static']),
+            state=dict(default='present', choices=['present', 'absent']),
+        )
     )
     
+                results.append(data)
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+        if state == 'present' and not eigw_id:
+        changed, result['gateway_id'] = create_eigw(module, connection, vpc_id)
+    elif state == 'absent' and eigw_id:
+        changed = delete_eigw(module, connection, eigw_id)
     
-    from httpie.compat import urlopen
-from httpie.downloads import (
-    parse_content_range, filename_from_content_disposition, filename_from_url,
-    get_unique_filename, ContentRangeError, Downloader,
-)
-from utils import http, MockEnvironment
+            for server_cert in server_certs:
+            if not name:
+                server_cert = iam.get_server_certificate(ServerCertificateName=server_cert['ServerCertificateName'])['ServerCertificate']
+            cert_md = server_cert['ServerCertificateMetadata']
+            results[cert_md['ServerCertificateName']] = {
+                'certificate_body': server_cert['CertificateBody'],
+                'server_certificate_id': cert_md['ServerCertificateId'],
+                'server_certificate_name': cert_md['ServerCertificateName'],
+                'arn': cert_md['Arn'],
+                'path': cert_md['Path'],
+                'expiration': cert_md['Expiration'].isoformat(),
+                'upload_date': cert_md['UploadDate'].isoformat(),
+            }
     
-        r = http('--output', output_filename, url,
-             env=MockEnvironment(stdout_isatty=stdout_isatty))
-    assert r == ''
-    
-            if response.status not in self.config.check_ip_accept_status:
-            return False
-    
-            name = p.join(ws)
-        name += '.' + random.choice(self.end)
-    
-                    if self.accept[s] >= 1:
-                    #print 'accept state for alt %d' % self.accept[s]
-                    return self.accept[s]
-    
-    
-@contextmanager
-def suppress_stdout():
-    try:
-        stdout, sys.stdout = sys.stdout, open(os.devnull, 'w')
-        yield
-    finally:
-        sys.stdout = stdout
-    
-    
-def count_to(count):
-    '''Counts by word numbers, up to a maximum of five'''
-    numbers = ['one', 'two', 'three', 'four', 'five']
-    for number in numbers[:count]:
-        yield number
-    
-    
-class A(Node):
-    pass
-    
-    *What does this example do?
-This particular implementation abstracts the creation of a pet and
-does so depending on the factory we chose (Dog or Cat, or random_animal)
-This works because both Dog/Cat and random_animal respect a common
-interface (callable for creation and .speak()).
-Now my application can create pets abstractly and decide later,
-based on my own criteria, dogs over cats.
-    
-        def _send_operator_inservice_response(self):
-        return 'send operator inservice response'
-    
-    from ycm.client.base_request import BaseRequest, BuildRequestData
-from ycm.vimsupport import PostVimMessage
-    
-    
-  def Response( self ):
-    return {
-      'completions': self._results,
-      'completion_start_column': self.request_data[ 'start_column' ]
-    }
-    
-      return request
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def _assert_accepts( filter, text ):
-  _assert_accept_equals( filter, text, True )
-    
-        server_message = {
-      'message': 'this message came from the server'
-    }
-    
-        try:
-      result = self.fn( *self.args, **self.kwargs )
-    except BaseException:
-      e = sys.exc_info()[ 1 ]
-      self.future.set_exception( e )
+        #  if parameter 'function_version' is zero, set it to $LATEST, else convert it to a string
+    if module.params['function_version'] == 0:
+        module.params['function_version'] = '$LATEST'
     else:
-      self.future.set_result( result )
+        module.params['function_version'] = str(module.params['function_version'])
+    
+        module.exit_json(changed=changed, group=group)
+    
+    
+logging.basicConfig(level=logging.DEBUG)
+    
+    ALL_SSL_OPTIONS_HASHES = [
+    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
+    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
+    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
+    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
+    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
+    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
+    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
+    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
+]
+'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
+    
+        def __hash_function_2(self, value, data):
+    
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+    Usage:
+  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
+  
+  2. create initial_centroids,
+        initial_centroids = get_initial_centroids(
+            X, 
+            k, 
+            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
+            )
+    
+    ''' Here I implemented the scoring functions.
+    MAE, MSE, RMSE, RMSLE are included.
+    
+            a += a
+        b >>= 1
+    
+    # Load some images to compare against
+known_obama_image = face_recognition.load_image_file('obama.jpg')
+known_biden_image = face_recognition.load_image_file('biden.jpg')
+    
+    1. Prepare a set of images of the known people you want to recognize. Organize the images in a single directory
+   with a sub-directory for each known person.
+    
+    # This is a demo of running face recognition on a video file and saving the results to a new video file.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+            # If a match was found in known_face_encodings, just use the first one.
+        if True in matches:
+            first_match_index = matches.index(True)
+            name = known_face_names[first_match_index]
+    
+                # If a match was found in known_face_encodings, just use the first one.
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = known_face_names[first_match_index]
