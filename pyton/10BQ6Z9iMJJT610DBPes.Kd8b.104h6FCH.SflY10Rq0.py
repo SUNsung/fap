@@ -1,138 +1,232 @@
 
         
-            def __init__(self, session_key=None):
-        self._cache = caches[settings.SESSION_CACHE_ALIAS]
-        super().__init__(session_key)
-    
-    KEY_PREFIX = 'django.contrib.sessions.cached_db'
-    
-    
-class SessionManager(BaseSessionManager):
-    use_in_migrations = True
-    
-    DEFAULT_DB_ALIAS = 'default'
-DJANGO_VERSION_PICKLE_KEY = '_django_version'
-    
-        return out
-    
-    
-@pytest.fixture
-def httpbin(httpbin):
-    return prepare_url(httpbin)
-    
-            # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
-    
-        # Check chardet for compatibility.
-    major, minor, patch = chardet_version.split('.')[:3]
-    major, minor, patch = int(major), int(minor), int(patch)
-    # chardet >= 3.0.2, < 3.1.0
-    assert major == 3
-    assert minor < 1
-    assert patch >= 2
-    
-    from requests.help import info
-    
-    >>> requests.codes['temporary_redirect']
-307
->>> requests.codes.teapot
-418
->>> requests.codes['\o/']
-200
-    
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'Requests.tex', u'Requests Documentation',
-     u'Kenneth Reitz', 'manual'),
-]
-    
-    if __name__ == '__main__':
-    
-    faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
-# limit dataset to 5000 people (don't care who they are!)
-X = faces.data[:5000]
-n_samples, h, w = faces.images.shape
-n_features = X.shape[1]
+        
+@classmethod
+def get_args(cls, dist, header=None):
+    '''
+    Yield write_script() argument tuples for a distribution's
+    console_scripts and gui_scripts entry points.
+    '''
+    if header is None:
+        header = cls.get_header()
+    spec = str(dist.as_requirement())
+    for type_ in 'console', 'gui':
+        group = type_ + '_scripts'
+        for name, ep in dist.get_entry_map(group).items():
+            # ensure_safe_name
+            if re.search(r'[\\/]', name):
+                raise ValueError('Path separators not allowed in script names')
+            script_text = TEMPLATE.format(
+                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
+                          spec, group, name)
+            args = cls._get_script_args(type_, name, header, script_text)
+            for res in args:
+                yield res
     
     
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
-    from sklearn.cluster import AgglomerativeClustering
+    match_output = '''
+Listing... Done
+heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
+resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
+squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
+unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
+'''
     
     
-def setup(app):
-    # Format template for issues URI
-    # e.g. 'https://github.com/sloria/marshmallow/issues/{issue}
-    app.add_config_value('issues_uri', default=None, rebuild='html')
-    # Shortcut for GitHub, e.g. 'sloria/marshmallow'
-    app.add_config_value('issues_github_path', default=None, rebuild='html')
-    # Format template for user profile URI
-    # e.g. 'https://github.com/{user}'
-    app.add_config_value('issues_user_uri', default=None, rebuild='html')
-    app.add_role('issue', issue_role)
-    app.add_role('user', user_role)
-
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
     
-        # decode the payload explicitly as UTF-8 since lxml is confused for some
-    # reason
-    with codecs.open(html_filename,'r','utf-8') as html_file:
-        html_content = html_file.read()
-    tree = ElementTree(lxml.html.document_fromstring(html_content))
-    i = 0
-    j = 0
-    for p in tree.findall('//p'):
-        content = p.text_content()
-        if len(content) < 100:
-            # skip paragraphs that are too short - probably too noisy and not
-            # representative of the actual language
+    no_such_subcommand = '''error: no such subcommand
+    
+      * glmnet-python
+  * scikit-learn (of course)
+    
+        for i, kk in enumerate(krange):
+        print('k = %i (%i out of %i)' % (kk, i + 1, len(krange)))
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=kk,
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
+    
+                gc.collect()
+            print('benchmarking orthogonal_mp (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=True,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp_gram[i_f, i_s] = delta
+    
+        results = defaultdict(lambda: [])
+    
+        ###########################################################################
+    # Perform benchmark
+    ###########################################################################
+    time_fit = collections.defaultdict(list)
+    time_transform = collections.defaultdict(list)
+    
+        target = utils.unescape(target).strip()
+    title = utils.unescape(title).strip()
+    config = inliner.document.settings.env.app.config
+    if config.issues_user_uri:
+        ref = config.issues_user_uri.format(user=target)
+    else:
+        ref = 'https://github.com/{0}'.format(target)
+    if has_explicit_title:
+        text = title
+    else:
+        text = '@{0}'.format(target)
+    
+    
+def _do_python_eval(json_dataset, salt, output_dir='output'):
+    info = voc_info(json_dataset)
+    year = info['year']
+    anno_path = info['anno_path']
+    image_set_path = info['image_set_path']
+    devkit_path = info['devkit_path']
+    cachedir = os.path.join(devkit_path, 'annotations_cache')
+    aps = []
+    # The PASCAL VOC metric changed in 2010
+    use_07_metric = True if int(year) < 2010 else False
+    logger.info('VOC07 metric? ' + ('Yes' if use_07_metric else 'No'))
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+    for _, cls in enumerate(json_dataset.classes):
+        if cls == '__background__':
             continue
+        filename = _get_voc_results_file_template(
+            json_dataset, salt).format(cls)
+        rec, prec, ap = voc_eval(
+            filename, anno_path, image_set_path, cls, cachedir, ovthresh=0.5,
+            use_07_metric=use_07_metric)
+        aps += [ap]
+        logger.info('AP for {} = {:.4f}'.format(cls, ap))
+        res_file = os.path.join(output_dir, cls + '_pr.pkl')
+        save_object({'rec': rec, 'prec': prec, 'ap': ap}, res_file)
+    logger.info('Mean AP = {:.4f}'.format(np.mean(aps)))
+    logger.info('~~~~~~~~')
+    logger.info('Results:')
+    for ap in aps:
+        logger.info('{:.3f}'.format(ap))
+    logger.info('{:.3f}'.format(np.mean(aps)))
+    logger.info('~~~~~~~~')
+    logger.info('')
+    logger.info('----------------------------------------------------------')
+    logger.info('Results computed with the **unofficial** Python eval code.')
+    logger.info('Results should be very close to the official MATLAB code.')
+    logger.info('Use `./tools/reval.py --matlab ...` for your paper.')
+    logger.info('-- Thanks, The Management')
+    logger.info('----------------------------------------------------------')
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+        # ==========================================================================
+    # classification tower with logits and prob prediction
+    # ==========================================================================
+    for lvl in range(k_min, k_max + 1):
+        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
+        # classification tower stack convolution starts
+        for nconv in range(cfg.RETINANET.NUM_CONVS):
+            suffix = 'n{}_fpn{}'.format(nconv, lvl)
+            dim_in, dim_out = dim_in, dim_in
+            if lvl == k_min:
+                bl_out = model.Conv(
+                    bl_in,
+                    'retnet_cls_conv_' + suffix,
+                    dim_in,
+                    dim_out,
+                    3,
+                    stride=1,
+                    pad=1,
+                    weight_init=('GaussianFill', {
+                        'std': 0.01
+                    }),
+                    bias_init=('ConstantFill', {
+                        'value': 0.
+                    })
+                )
+            else:
+                bl_out = model.ConvShared(
+                    bl_in,
+                    'retnet_cls_conv_' + suffix,
+                    dim_in,
+                    dim_out,
+                    3,
+                    stride=1,
+                    pad=1,
+                    weight='retnet_cls_conv_n{}_fpn{}_w'.format(nconv, k_min),
+                    bias='retnet_cls_conv_n{}_fpn{}_b'.format(nconv, k_min)
+                )
+            bl_in = model.Relu(bl_out, bl_out)
+            bl_feat = bl_in
+        # cls tower stack convolution ends. Add the logits layer now
+        if lvl == k_min:
+            retnet_cls_pred = model.Conv(
+                bl_feat,
+                'retnet_cls_pred_fpn{}'.format(lvl),
+                dim_in,
+                cls_pred_dim * A,
+                3,
+                pad=1,
+                stride=1,
+                weight_init=('GaussianFill', {
+                    'std': 0.01
+                }),
+                bias_init=bias_init
+            )
+        else:
+            retnet_cls_pred = model.ConvShared(
+                bl_feat,
+                'retnet_cls_pred_fpn{}'.format(lvl),
+                dim_in,
+                cls_pred_dim * A,
+                3,
+                pad=1,
+                stride=1,
+                weight='retnet_cls_pred_fpn{}_w'.format(k_min),
+                bias='retnet_cls_pred_fpn{}_b'.format(k_min)
+            )
+        if not model.train:
+            if cfg.RETINANET.SOFTMAX:
+                model.net.GroupSpatialSoftmax(
+                    retnet_cls_pred,
+                    'retnet_cls_prob_fpn{}'.format(lvl),
+                    num_classes=cls_pred_dim
+                )
+            else:
+                model.net.Sigmoid(
+                    retnet_cls_pred, 'retnet_cls_prob_fpn{}'.format(lvl)
+                )
+        if cfg.RETINANET.SHARE_CLS_BBOX_TOWER:
+            bbox_feat_list.append(bl_feat)
     
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
-    
-        if __hostsdeny__ and netloc.endswith(__hostsdeny__):
-        start_response('403 Forbidden', [('Content-Type', 'text/html')])
-        yield message_html('403 Hosts Deny', 'Hosts Deny(%r)' % netloc, detail='共用appid因为资源有限，限制观看视频和文件下载等消耗资源过多的访问，请使用自己的appid <a href=' https://github.com/XX-net/XX-Net/wiki/Register-Google-appid' target='_blank'>帮助</a> ')
-        raise StopIteration
-    
-    @section recognizers Recognizers
-    
-            raise NotImplementedError
-    
-    def setLine(self, line):
-        '''@brief Set the line number on which this token was matched
+        if opts.profiler:
+        import cProfile
+        cProfile.runctx(
+            'loader_loop(roi_data_loader)', globals(), locals(),
+            sort='cumulative')
+    else:
+        loader_loop(roi_data_loader)
