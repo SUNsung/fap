@@ -1,164 +1,314 @@
 
         
-        
-class Operator(Employee):
-    
-        def add_friend_request(self, from_user_id, to_user_id):
-        pass
-    
-        HOUSING = 0
-    FOOD = 1
-    GAS = 2
-    SHOPPING = 3
-    # ...
-    
-            Emit key value pairs of the form:
-    
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
-    
-    
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
-    
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        def __str__(self):
-        '''Identify each test with the `add_ie` attribute, if available.'''
-    
-        def _targets_request(self, targets):
-        '''Formats each target for the request'''
-        targets_request = []
-        for target in targets:
-            target_request = {
-                'Id': target['id'],
-                'Arn': target['arn']
+            Returns:
+        List
+        [
+            {
+                'auto_scaling_group_arn': (
+                    'arn:aws:autoscaling:us-west-2:275977225706:autoScalingGroup:58abc686-9783-4528-b338-3ad6f1cbbbaf:'
+                    'autoScalingGroupName/public-webapp-production'
+                ),
+                'auto_scaling_group_name': 'public-webapp-production',
+                'availability_zones': ['us-west-2c', 'us-west-2b', 'us-west-2a'],
+                'created_time': '2016-02-02T23:28:42.481000+00:00',
+                'default_cooldown': 300,
+                'desired_capacity': 2,
+                'enabled_metrics': [],
+                'health_check_grace_period': 300,
+                'health_check_type': 'ELB',
+                'instances':
+                [
+                    {
+                        'availability_zone': 'us-west-2c',
+                        'health_status': 'Healthy',
+                        'instance_id': 'i-047a12cb',
+                        'launch_configuration_name': 'public-webapp-production-1',
+                        'lifecycle_state': 'InService',
+                        'protected_from_scale_in': false
+                    },
+                    {
+                        'availability_zone': 'us-west-2a',
+                        'health_status': 'Healthy',
+                        'instance_id': 'i-7a29df2c',
+                        'launch_configuration_name': 'public-webapp-production-1',
+                        'lifecycle_state': 'InService',
+                        'protected_from_scale_in': false
+                    }
+                ],
+                'launch_config_name': 'public-webapp-production-1',
+                'launch_configuration_name': 'public-webapp-production-1',
+                'load_balancer_names': ['public-webapp-production-lb'],
+                'max_size': 4,
+                'min_size': 2,
+                'new_instances_protected_from_scale_in': false,
+                'placement_group': None,
+                'status': None,
+                'suspended_processes': [],
+                'tags':
+                [
+                    {
+                        'key': 'Name',
+                        'propagate_at_launch': true,
+                        'resource_id': 'public-webapp-production',
+                        'resource_type': 'auto-scaling-group',
+                        'value': 'public-webapp-production'
+                    },
+                    {
+                        'key': 'env',
+                        'propagate_at_launch': true,
+                        'resource_id': 'public-webapp-production',
+                        'resource_type': 'auto-scaling-group',
+                        'value': 'production'
+                    }
+                ],
+                'target_group_names': [],
+                'target_group_arns': [],
+                'termination_policies':
+                [
+                    'Default'
+                ],
+                'vpc_zone_identifier':
+                [
+                    'subnet-a1b1c1d1',
+                    'subnet-a2b2c2d2',
+                    'subnet-a3b3c3d3'
+                ]
             }
-            if 'input' in target:
-                target_request['Input'] = target['input']
-            if 'input_path' in target:
-                target_request['InputPath'] = target['input_path']
-            if 'role_arn' in target:
-                target_request['RoleArn'] = target['role_arn']
-            if 'ecs_parameters' in target:
-                target_request['EcsParameters'] = {}
-                ecs_parameters = target['ecs_parameters']
-                if 'task_definition_arn' in target['ecs_parameters']:
-                    target_request['EcsParameters']['TaskDefinitionArn'] = ecs_parameters['task_definition_arn']
-                if 'task_count' in target['ecs_parameters']:
-                    target_request['EcsParameters']['TaskCount'] = ecs_parameters['task_count']
-            targets_request.append(target_request)
-        return targets_request
-    
-            last_snapshot_min_age = last_snapshot_min_age * 60  # Convert to seconds
-        snapshot = _get_most_recent_snapshot(current_snapshots,
-                                             max_snapshot_age_secs=last_snapshot_min_age)
-    try:
-        # Create a new snapshot if we didn't find an existing one to use
-        if snapshot is None:
-            snapshot = ec2.create_snapshot(volume_id, description=description)
-            changed = True
-        if wait:
-            if not _create_with_wait(snapshot, wait_timeout):
-                module.fail_json(msg='Timed out while creating snapshot.')
-        if snapshot_tags:
-            for k, v in snapshot_tags.items():
-                snapshot.add_tag(k, v)
-    except boto.exception.BotoServerError as e:
-        module.fail_json(msg='%s: %s' % (e.error_code, e.error_message))
+        ]
+    '''
     
     
-@AWSRetry.exponential_backoff()
-def describe_cache_clusters_with_backoff(client, cluster_id=None):
-    paginator = client.get_paginator('describe_cache_clusters')
-    params = dict(ShowCacheNodeInfo=True)
-    if cluster_id:
-        params['CacheClusterId'] = cluster_id
-    try:
-        response = paginator.paginate(**params).build_full_result()
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == 'CacheClusterNotFound':
-            return []
-        raise
-    except botocore.exceptions.BotoCoreError:
-        raise
-    return response['CacheClusters']
+DOCUMENTATION = '''
+---
+module: ec2_eip_facts
+short_description: List EC2 EIP details
+description:
+    - List details of EC2 Elastic IP addresses.
+version_added: '2.6'
+author: 'Brad Macpherson (@iiibrad)'
+options:
+  filters:
+    description:
+      - A set of filters to use. Each filter is a name:value pair. The value
+        may be a list or a single element.
+    required: false
+    default: {}
+extends_documentation_fragment:
+    - aws
+    - ec2
+'''
+    
+        module.exit_json(launch_configurations=snaked_launch_configs)
+    
+        return youngest_snapshot
+    
+        region, ec2_url, aws_connect_params = get_aws_connection_info(module, boto3=True)
+    connection = boto3_conn(module, conn_type='client', resource='ec2', region=region, endpoint=ec2_url, **aws_connect_params)
+    
+        for param in module_params:
+        module_param = module.params.get(param, None)
+        if module_param:
+            api_params[pc(param)] = module_param
+    
+        private_zone = bool(vpc_id and vpc_region)
+    
+        if state == 'present':
+        enable_or_update_bucket_as_website(client_connection, resource_connection, module)
+    elif state == 'absent':
+        disable_bucket_as_website(client_connection, module)
     
     
-@AWSRetry.exponential_backoff()
-def list_iam_roles_with_backoff(client, **kwargs):
-    paginator = client.get_paginator('list_roles')
-    return paginator.paginate(**kwargs).build_full_result()
+def main():
+    module = AnsibleModule(argument_spec=dict(
+        view=dict(choices=['topics', 'subscriptions'], default='topics'),
+        topic=dict(required=False),
+        state=dict(choices=['list'], default='list'),
+        service_account_email=dict(),
+        credentials_file=dict(),
+        project_id=dict(), ),)
     
-    # Configure an s3 bucket to redirect all requests to example.com
-- s3_website:
-    name: mybucket.com
-    redirect_all_requests: example.com
-    state: present
+            if state == 'absent' and user in heroku_collaborator_list:
+            if not module.check_mode:
+                heroku_app.remove_collaborator(user)
+            affected_apps += [app]
+            result_state = True
+        elif state == 'present' and user not in heroku_collaborator_list:
+            if not module.check_mode:
+                heroku_app.add_collaborator(user_id_or_email=user, silent=module.params['suppress_invitation'])
+            affected_apps += [app]
+            result_state = True
     
+        platforms = 'any',
+    zip_safe = True,
+    include_package_data = True,
     
-class AzureRMManagedClusterFacts(AzureRMModuleBase):
-    '''Utility class to get Azure Kubernetes Service facts'''
+    import urllib
     
+    from xml.etree import cElementTree as ET
+from copy import copy
+from ..common import *
+#----------------------------------------------------------------------
+def ckplayer_get_info_by_xml(ckinfo):
+    '''str->dict
+    Information for CKPlayer API content.'''
+    e = ET.XML(ckinfo)
+    video_dict = {'title': '',
+                  #'duration': 0,
+                  'links': [],
+                  'size': 0,
+                  'flashvars': '',}
+    dictified = dictify(e)['ckplayer']
+    if 'info' in dictified:
+        if '_text' in dictified['info'][0]['title'][0]:  #title
+            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+                    ffmpeg.ffmpeg_concat_audio_and_video([loop_file_path, single_file_path], title + '_full', 'mp4')
+                cleanup_files([video_file_path, audio_file_path, loop_file_path])
+            except EnvironmentError as err:
+                print('Error preparing full coub video. {}'.format(err))
+    except Exception as err:
+        print('Error while downloading files. {}'.format(err))
     
-            print('Training %s ... ' % name, end='')
-        t0 = time()
-        clf.fit(X_train, y_train)
-        train_time[name] = time() - t0
-        t0 = time()
-        y_pred = clf.predict(X_test)
-        test_time[name] = time() - t0
-        accuracy[name] = accuracy_score(y_test, y_pred)
-        print('done')
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
     
-        i = 0
-    for c, (label, timings) in zip('br',
-                                   sorted(six.iteritems(results_2))):
-        i += 1
-        ax = fig.add_subplot(2, 2, i + 2)
-        y = np.asarray(timings)
-        ax.plot(chunks, y, color=c, alpha=0.8)
-        ax.set_xlabel('Chunks')
-        ax.set_ylabel(label)
+    '''
+refer to http://open.youku.com/tools
+'''
+youku_embed_patterns = [ 'youku\.com/v_show/id_([a-zA-Z0-9=]+)',
+                         'player\.youku\.com/player\.php/sid/([a-zA-Z0-9=]+)/v\.swf',
+                         'loader\.swf\?VideoIDS=([a-zA-Z0-9=]+)',
+                         'player\.youku\.com/embed/([a-zA-Z0-9=]+)',
+                         'YKU.Player\(\'[a-zA-Z0-9]+\',{ client_id: \'[a-zA-Z0-9]+\', vid: \'([a-zA-Z0-9]+)\''
+                       ]
+    }
     
-        #------------------------------------------------------------
-    # varying N
-    N_results_build = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
-    N_results_query = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
+        fc2video_download_by_upid(upid, output_dir, merge, info_only)
     
-        ax.set_xlabel('n_samples')
-    ax.set_ylabel('n_features')
-    ax.set_zlabel('Time (s)')
-    ax.legend()
-    plt.show()
+    def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
+        sys.exit()
+    
+            return new_key
 
     
-    ROOT_URL = 'https://api.github.com/repos/scikit-learn/scikit-learn.github.io/contents/'  # noqa
-RAW_FMT = 'https://raw.githubusercontent.com/scikit-learn/scikit-learn.github.io/master/%s/documentation.html'  # noqa
-VERSION_RE = re.compile(r'\bVERSION:\s*'([^']+)'')
-NAMED_DIRS = ['dev', 'stable']
+        def __prepare__(self, N = 0, M = 0):
+        self.dp = [[-1 for y in range(0,M)] for x in range(0,N)]
+    
+    	if len(sys.argv) == 1:
+		try:
+			n = int(raw_input('Enter a number: '))
+			print(partition(n))
+		except ValueError:
+			print('Please enter a number.')
+	else:
+		try:
+			n = int(sys.argv[1])
+			print(partition(n))
+		except ValueError:
+			print('Please pass a number.')
+    
+    	s = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22, \
+		5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20, \
+		4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23, \
+		6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21 ]
+    
+        def train(self, X, y):
+        '''
+        train:
+        @param X: a one dimensional numpy array
+        @param y: a one dimensional numpy array. 
+        The contents of y are the labels for the corresponding X values
+    
+        score = np.sqrt(mean_square_diff)
+    
+            a += a
+        b >>= 1
+    
+        @unittest.skip('registration captcha is unfinished')
+    def test_captcha_blocking(self):
+        with contextlib.nested(
+            self.mock_register(),
+            self.failed_captcha()
+        ):
+            res = self.do_register()
+            self.assert_failure(res, 'BAD_CAPTCHA')
+    
+        def test_admin_enabled(self):
+        cfg = {'admin': True}
+        self.world.is_admin = mock.Mock(return_value=True)
+        feature_state = self.world._make_state(cfg)
+        self.assertTrue(feature_state.is_enabled(user=gary))
+    
+        def test_tuple_of(self):
+        self.assertEquals((), ConfigValue.tuple_of(str)(''))
+        self.assertEquals(('a', 'b'), ConfigValue.tuple_of(str)('a, b'))
+        self.assertEquals(('a', 'b'),
+                          ConfigValue.tuple_of(str, delim=':')('a : b'))
+    
+            self.amqp.assert_event_item(
+            {
+                'event_type': event_type,
+                'event_topic': 'quarantine',
+                'payload': {
+                    'domain': request.host,
+                    'referrer_domain': self.domain_mock(),
+                    'verified_email': context.user.email_verified,
+                    'user_id': context.user._id,
+                    'sr_name': subreddit.name,
+                    'referrer_url': request.headers.get(),
+                    'user_agent': request.user_agent,
+                    'user_agent_parsed': request.parsed_agent.to_dict(),
+                    'sr_id': subreddit._id,
+                    'user_name': context.user.name,
+                    'oauth2_client_id': context.oauth2_client._id,
+                    'oauth2_client_app_type': context.oauth2_client.app_type,
+                    'oauth2_client_name': context.oauth2_client.name,
+                    'geoip_country': context.location,
+                    'obfuscated_data': {
+                        'client_ip': request.ip,
+                        'client_ipv4_24': '1.2.3',
+                        'client_ipv4_16': '1.2',
+                    }
+                }
+            }
+        )
+    
+            perm_set = TestPermissionSet()
+        perm_set['x'] = True
+        self.assertTrue(perm_set['x'])
+        self.assertFalse(perm_set['y'])
+        perm_set['x'] = False
+        self.assertFalse(perm_set['x'])
+        perm_set[perm_set.ALL] = True
+        self.assertTrue(perm_set['x'])
+        self.assertTrue(perm_set['y'])
+        self.assertFalse(perm_set['z'])
+        self.assertTrue(perm_set.get('x', False))
+        self.assertFalse(perm_set.get('z', False))
+        self.assertTrue(perm_set.get('z', True))
+    
+            for width in (108, 216, 320, 640, 960, 1080):
+            url = self.provider.resize_image(image, width)
+            self.assertEqual(url, 'https://unsplash.it/%d/%d' % (width,
+                width*2))
+
+    
+        def _get_limit(self, interval):
+        return self.limit[interval]
+    
+        This function is really really bad, and should be rewritten
+    as soon as possible.
+    '''
