@@ -1,132 +1,51 @@
 
         
-        
-class Deck(object):
-    
-        UNREAD = 0
-    READ = 1
-    ACCEPTED = 2
-    REJECTED = 3
+            print()
 
     
-        def __init__(self, person_ids, lookup):
-        self.lookup = lookup
-        self.person_ids = person_ids
-        self.visited_ids = set()
     
-        if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.update(test_config)
+def plot_results(X, y, label):
+    plt.plot(X, y, label=label, marker='o')
     
-    from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
-)
-from werkzeug.security import check_password_hash, generate_password_hash
+        plt.subplots_adjust(0.1, 0.08, 0.96, 0.98, 0.4, 0.63)
+    ax = plt.axes([0.1, 0.08, 0.8, 0.06])
+    plt.colorbar(cax=ax, orientation='horizontal')
+    plt.show()
+
     
-    import click
-from flask import current_app, g
-from flask.cli import with_appcontext
+    Does two benchmarks
     
-        def implements_to_string(cls):
-        cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
-        return cls
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+TRAIN_FOLDER = '20news-bydate-train'
+TEST_FOLDER = '20news-bydate-test'
     
-        #: Tag classes to bind when creating the serializer. Other tags can be
-    #: added later using :meth:`~register`.
-    default_tags = [
-        TagDict, PassDict, TagTuple, PassList, TagBytes, TagMarkup, TagUUID,
-        TagDateTime,
-    ]
+    from importlib import import_module
+from os.path import join, dirname, abspath, exists, splitext
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+        def _build_response(self, result, request, protocol):
+        self.result = result
+        respcls = responsetypes.from_args(url=request.url)
+        protocol.close()
+        body = protocol.filename or protocol.body.read()
+        headers = {'local filename': protocol.filename or '', 'size': protocol.size}
+        return respcls(url=request.url, status=200, body=to_bytes(body), headers=headers)
     
-        def get_source(self, environment, template):
-        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
-            return self._get_source_explained(environment, template)
-        return self._get_source_fast(environment, template)
     
-        preserve_context = False
-    
-    Linkfix - a companion to sphinx's linkcheck builder.
-    
+class QuadraticProbing(HashTable):
     '''
+        Basic Hash Table example with open addressing using Quadratic Probing 
+    '''
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
+        for j in range(int(s/2), -1, -1):
+        if dp[n][j] == True:
+            diff = s-2*j
+            break;
     
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
-        else:
-            request.meta['handle_httpstatus_all'] = True
+    word_bysig = collections.defaultdict(list)
+for word in word_list:
+    word_bysig[signature(word)].append(word)
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-            help='List available templates')
-        parser.add_option('-e', '--edit', dest='edit', action='store_true',
-            help='Edit spider after creating it')
-        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
-            help='Dump template to standard output')
-        parser.add_option('-t', '--template', dest='template', default='basic',
-            help='Uses a custom template.')
-        parser.add_option('--force', dest='force', action='store_true',
-            help='If the spider already exists, overwrite it with the template')
-    
-    
-def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)  # select large prime number.
-    e_1 = primitiveRoot(p)  # one primitive root on modulo p.
-    d = random.randrange(3, p)  # private_key -> have to be greater than 2 for safety.
-    e_2 = cryptoMath.findModInverse(pow(e_1, d, p), p)
-    
-    The problem is  :
-Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
-Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
-'''
-from __future__ import print_function
-    
-    
-    
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
-    
-    Inputs:
-  - X , a 2D numpy array of features.
-  - k , number of clusters to create.
-  - initial_centroids , initial centroid values generated by utility function(mentioned in usage).
-  - maxiter , maximum number of iterations to process.
-  - heterogeneity , empty list that will be filled with hetrogeneity values if passed to kmeans func.
-    
-        if possibleWords == []:
-        return 0.0
+            a += a
+        b >>= 1
