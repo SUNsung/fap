@@ -1,249 +1,79 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
-    
-    
-class VehicleSize(Enum):
-    
-    
-class HitCounts(MRJob):
-    
-    
-class RemoveDuplicateUrls(MRJob):
-    
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-        def __init__(self, url, contents, child_urls):
-        self.url = url
-        self.contents = contents
-        self.child_urls = child_urls
-        self.signature = self.create_signature()
-    
-        try:
-        oids, array_oids = get_hstore_oids(connection.alias)
-        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
-    except ProgrammingError:
-        # Hstore is not available on the database.
-        #
-        # If someone tries to create an hstore field it will error there.
-        # This is necessary as someone may be using PSQL without extensions
-        # installed but be using other features of contrib.postgres.
-        #
-        # This is also needed in order to create the connection in order to
-        # install the hstore extension.
-        pass
-    
-    
-class RangeMinValueValidator(MinValueValidator):
-    def compare(self, a, b):
-        return a.lower is None or a.lower < b
-    message = _('Ensure that this range is completely greater than or equal to %(limit_value)s.')
-
-    
-        def load(self):
         '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
-        try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
+requests._internal_utils
+~~~~~~~~~~~~~~
+    
+        return inner
+    
+                if self.wait_to_close_event:
+                self.wait_to_close_event.wait(self.WAIT_EVENT_TIMEOUT)
+        finally:
+            self.ready_event.set() # just in case of exception
+            self._close_server_sock_ignore_errors()
+            self.stop_event.set()
+    
+    # TODO: response is the only one
+    
+            # Verify we haven't overwritten the location with our previous fragment.
+        assert r.history[1].request.url == 'http://{}:{}/get#relevant-section'.format(host, port)
+        # Verify previous fragment is used and not the original.
+        assert r.url == 'http://{}:{}/final-url/#relevant-section'.format(host, port)
+    
+    from .__version__ import __version__
+from . import certs
+# to_native_string is unused here, but imported here for backwards compatibility
+from ._internal_utils import to_native_string
+from .compat import parse_http_list as _parse_list_header
+from .compat import (
+    quote, urlparse, bytes, str, OrderedDict, unquote, getproxies,
+    proxy_bypass, urlunparse, basestring, integer_types, is_py3,
+    proxy_bypass_environment, getproxies_environment, Mapping)
+from .cookies import cookiejar_from_dict
+from .structures import CaseInsensitiveDict
+from .exceptions import (
+    InvalidURL, InvalidHeader, FileModeWarning, UnrewindableBodyError)
     
     
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
+MOD_SSL_CONF_DEST = 'options-ssl-nginx.conf'
+'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
+    REWRITE_HTTPS_ARGS_WITH_END = [
+    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[END,NE,R=permanent]']
+'''Apache version >= 2.3.9 rewrite rule arguments used for redirections to
+    https vhost'''
     
-        sites = []  # all sections' sitemap URLs
-    for section, site in sitemaps.items():
-        # For each section label, add links of all pages of its sitemap
-        # (usually generated by the `sitemap` view).
-        if callable(site):
-            site = site()
-        protocol = req_protocol if site.protocol is None else site.protocol
-        sitemap_url = reverse(sitemap_url_name, kwargs={'section': section})
-        absolute_url = '%s://%s%s' % (protocol, req_site.domain, sitemap_url)
-        sites.append(absolute_url)
-        # Add links to all pages of the sitemap.
-        for page in range(2, site.paginator.num_pages + 1):
-            sites.append('%s?p=%s' % (absolute_url, page))
+            self.assertEqual(len(self.parser.filter_args_num(matches, 1)), 3)
+        self.assertEqual(len(self.parser.filter_args_num(matches, 2)), 2)
+        self.assertEqual(len(self.parser.filter_args_num(matches, 3)), 1)
     
+            :param .KeyAuthorizationAnnotatedChallenge achall: Annotated
+            TLS-SNI-01 challenge.
     
-def load_backend(backend_name):
-    '''
-    Return a database backend's 'base' module given a fully qualified database
-    backend name, or raise an error if it doesn't exist.
-    '''
-    # This backend was renamed in Django 1.9.
-    if backend_name == 'django.db.backends.postgresql_psycopg2':
-        backend_name = 'django.db.backends.postgresql'
+    # Language to be used for generating the HTML full-text search index.
+# Sphinx supports the following languages:
+#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
+#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
+#html_search_language = 'en'
     
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
+        observe()
     
+        def get_swisscom_data(self):
+        '''Retrieve data from Swisscom and return parsed result.'''
+        url = 'http://{}/ws'.format(self.host)
+        headers = {CONTENT_TYPE: 'application/x-sah-ws-4-call+json'}
+        data = '''
+        {'service':'Devices', 'method':'get',
+        'parameters':{'expression':'lan and not self'}}'''
     
-def merge(to_release, from_releases, sentry_models):
-    # The following models reference release:
-    # ReleaseCommit.release
-    # ReleaseEnvironment.release_id
-    # ReleaseProject.release
-    # GroupRelease.release_id
-    # GroupResolution.release
-    # Group.first_release
-    # ReleaseFile.release
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.components.device_tracker import (
+    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
-        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
+                    final_path = None
     
-            # Changing field 'ReleaseEnvironment.project_id'
-        if is_postgres():
-            db.execute(
-                'ALTER TABLE sentry_environmentrelease ALTER COLUMN project_id DROP NOT NULL'
-            )
-        else:
-            db.alter_column(
-                'sentry_environmentrelease',
-                'project_id',
-                self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
-            )
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'CommitAuthor.external_id'
-        db.add_column(
-            'sentry_commitauthor',
-            'external_id',
-            self.gf('django.db.models.fields.CharField')(max_length=164, null=True),
-            keep_default=False
-        )
-    
-            # Deleting model 'Distribution'
-        db.delete_table('sentry_distribution')
-    
-    
-# I have written my code naively same as definition of primitive root
-# however every time I run this program, memory exceeded...
-# so I used 4.80 Algorithm in Handbook of Applied Cryptography(CRC Press, ISBN : 0-8493-8523-7, October 1996)
-# and it seems to run nicely!
-def primitiveRoot(p_val):
-    print('Generating primitive root of p')
-    while True:
-        g = random.randrange(3,p_val)
-        if pow(g, 2, p_val) == 1:
-            continue
-        if pow(g, p_val, p_val) == 1:
-            continue
-        return g
-    
-    def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
-        sys.exit()
-    
-        def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
-    
-        return diff
-
-    
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
-    
-    
-import doctest
-doctest.testmod()
-
-    
-    '''
-Reference: https://en.wikipedia.org/wiki/Delegation_pattern
-Author: https://github.com/IuryAlves
-    
-            # they can be executed later on
-        for cmd in command_stack:
-            cmd.execute()
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        def __init__(self, one, other):
-        self._one = one
-        self._other = other
-    
-    In other programming languages, a more complex arrangement is sometimes
-necessary. In particular, you cannot have polymorphic behaviour in a constructor in C++ -
-see https://stackoverflow.com/questions/1453131/how-can-i-get-polymorphic-behavior-in-a-c-constructor
-- which means this Python technique will not work. The polymorphism
-required has to be provided by an external, already constructed
-instance of a different class.
-    
-        def _abort_diagnostics(self):
-        return 'abort diagnostics'
+                if 'M-SEARCH' in data.decode('utf-8', errors='ignore'):
+                # SSDP M-SEARCH method received, respond to it with our info
+                resp_socket = socket.socket(
+                    socket.AF_INET, socket.SOCK_DGRAM)
