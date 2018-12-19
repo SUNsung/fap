@@ -1,213 +1,189 @@
-#include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
+
+        
+        private:
+    void paintPath(QPainterPath &path, QQueue<float> &samples);
     
-    
-    {  return 0;
-}
-    
-    static int adapt(int delta, int numpoints, bool firsttime) {
-  if (firsttime)
-    delta = delta / damp;
-  else
-    delta = delta / 2;
-  
-  delta += delta / numpoints;
-  int k = 0;
-  while (delta > ((base - tmin) * tmax) / 2) {
-    delta /= base - tmin;
-    k += base;
-  }
-  return k + (((base - tmin + 1) * delta) / (delta + skew));
-}
-    
-    namespace tesseract {
+        if (len > 0) {
+        /* The z of the final point gives us the 'global Z' for the table. */
+        r[i].x = a[i].x;
+        r[i].y = a[i].y;
+        *globalz = a[i].z;
+        r[i].infinity = 0;
+        zs = zr[i];
     }
     
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
+            secp256k1_ecmult_const(&res, &pt, &s);
+        secp256k1_ge_set_gej(&pt, &res);
+        /* Compute a hash of the point in compressed form
+         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
+         * expect its output to be secret and has a timing sidechannel. */
+        secp256k1_fe_normalize(&pt.x);
+        secp256k1_fe_normalize(&pt.y);
+        secp256k1_fe_get_b32(x, &pt.x);
+        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
+    
+    
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, sigin);
+    secp256k1_ecdsa_signature_save(sig, &r, &s);
+    return 1;
+}
+    
+    BOOST_FIXTURE_TEST_SUITE(bech32_tests, BasicTestingSetup)
+    
+    BOOST_AUTO_TEST_CASE(get_difficulty_for_very_low_target)
+{
+    TestDifficulty(0x1f111111, 0.000001);
+}
+    
+    #ifndef BITCOIN_BECH32_H
+#define BITCOIN_BECH32_H
+    
+    
+    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
+  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
+  y_shape.resize(canonical_axis + 1);
+  y_shape[canonical_axis] = N;
+  out[0] = CreateTensorShape(y_shape, in[0].data_type());
+  return out;
+}
+    
+    
+    {  bool RunOnDevice() override {
+    for (Blob* output : OperatorBase::Outputs()) {
+      output->Reset();
+    }
+    return true;
   }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
+};
+    
+    OPERATOR_SCHEMA(GivenTensorIntFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
+    
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
+    
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
+    
+    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
+#define STORAGE_LEVELDB_DB_BUILDER_H_
+    
+    TEST(CorruptionTest, CorruptedDescriptor) {
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  dbi->TEST_CompactRange(0, nullptr, nullptr);
     }
     
-    // Ensures that there is at least one operator<< in the global namespace.
-// See Message& operator<<(...) below for why.
-void operator<<(const testing::internal::Secret&, int);
+    TEST(DBTest, Snapshot) {
+  do {
+    Put('foo', 'v1');
+    const Snapshot* s1 = db_->GetSnapshot();
+    Put('foo', 'v2');
+    const Snapshot* s2 = db_->GetSnapshot();
+    Put('foo', 'v3');
+    const Snapshot* s3 = db_->GetSnapshot();
+    }
+    }
     
-    // Copyright 2008, Google Inc.
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Authors: vladl@google.com (Vlad Losev)
-//
-// Macros and functions for implementing parameterized tests
-// in Google C++ Testing Framework (Google Test)
-//
-// This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
-//
-#ifndef GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
-#define GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
     
-    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
-          &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    TYPED_TEST_P(FooTest, HasPropertyA) { ... }
-    
-      // Returns a pathname for a file that does not currently exist. The pathname
-  // will be directory/base_name.extension or
-  // directory/base_name_<number>.extension if directory/base_name.extension
-  // already exists. The number will be incremented until a pathname is found
-  // that does not already exist.
-  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
-  // There could be a race condition if two or more processes are calling this
-  // function at the same time -- they could both pick the same filename.
-  static FilePath GenerateUniqueFileName(const FilePath& directory,
-                                         const FilePath& base_name,
-                                         const char* extension);
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
     
      private:
-  class Iterator : public ParamIteratorInterface<ParamType> {
-   public:
-    Iterator(const ParamGeneratorInterface<ParamType>* base,
-      const ParamGenerator<T1>& g1,
-      const typename ParamGenerator<T1>::iterator& current1,
-      const ParamGenerator<T2>& g2,
-      const typename ParamGenerator<T2>::iterator& current2,
-      const ParamGenerator<T3>& g3,
-      const typename ParamGenerator<T3>::iterator& current3,
-      const ParamGenerator<T4>& g4,
-      const typename ParamGenerator<T4>::iterator& current4,
-      const ParamGenerator<T5>& g5,
-      const typename ParamGenerator<T5>::iterator& current5,
-      const ParamGenerator<T6>& g6,
-      const typename ParamGenerator<T6>::iterator& current6)
-        : base_(base),
-          begin1_(g1.begin()), end1_(g1.end()), current1_(current1),
-          begin2_(g2.begin()), end2_(g2.end()), current2_(current2),
-          begin3_(g3.begin()), end3_(g3.end()), current3_(current3),
-          begin4_(g4.begin()), end4_(g4.end()), current4_(current4),
-          begin5_(g5.begin()), end5_(g5.end()), current5_(current5),
-          begin6_(g6.begin()), end6_(g6.end()), current6_(current6)    {
-      ComputeCurrentValue();
-    }
-    virtual ~Iterator() {}
-    }
+  WritableFile* dest_;
+  int block_offset_;       // Current offset in block
     
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
-}
-    
-      void Save(dmlc::Stream* fo) const {
-    CHECK_EQ(param.num_trees, static_cast<int>(trees.size()));
-    fo->Write(&param, sizeof(param));
-    for (const auto & tree : trees) {
-      tree->Save(fo);
-    }
-    if (tree_info.size() != 0) {
-      fo->Write(dmlc::BeginPtr(tree_info), sizeof(int) * tree_info.size());
-    }
-  }
-    
-    class DelayWriteToken : public WriteControllerToken {
+    class MemTable {
  public:
-  explicit DelayWriteToken(WriteController* controller)
-      : WriteControllerToken(controller) {}
-  virtual ~DelayWriteToken();
-};
+  // MemTables are reference counted.  The initial reference count
+  // is zero and the caller must call Ref() at least once.
+  explicit MemTable(const InternalKeyComparator& comparator);
+    }
     
-    Status PosixWritableFile::InvalidateCache(size_t offset, size_t length) {
-  if (use_direct_io()) {
-    return Status::OK();
+      // SnapshotImpl is kept in a doubly-linked circular list. The SnapshotList
+  // implementation operates on the next/previous fields direcly.
+  SnapshotImpl* prev_;
+  SnapshotImpl* next_;
+    
+    DHTTokenTracker::~DHTTokenTracker() = default;
+    
+    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
+    
+    #include 'DHTMessage.h'
+    
+    // Helpers for generating unique variable names
+#define BENCHMARK_PRIVATE_NAME(n) \
+  BENCHMARK_PRIVATE_CONCAT(_benchmark_, BENCHMARK_PRIVATE_UNIQUE_ID, n)
+#define BENCHMARK_PRIVATE_CONCAT(a, b, c) BENCHMARK_PRIVATE_CONCAT2(a, b, c)
+#define BENCHMARK_PRIVATE_CONCAT2(a, b, c) a##b##c
+    
+    // CheckHandler is the class constructed by failing CHECK macros. CheckHandler
+// will log information about the failures and abort when it is destructed.
+class CheckHandler {
+ public:
+  CheckHandler(const char* check, const char* file, const char* func, int line)
+      : log_(GetErrorLogInstance()) {
+    log_ << file << ':' << line << ': ' << func << ': Check `' << check
+         << '' failed. ';
   }
-#ifndef OS_LINUX
-  (void)offset;
-  (void)length;
-  return Status::OK();
-#else
-  // free OS pages
-  int ret = Fadvise(fd_, offset, length, POSIX_FADV_DONTNEED);
-  if (ret == 0) {
-    return Status::OK();
+    }
+    
+    #include 'check.h'
+#include 'colorprint.h'
+#include 'commandlineflags.h'
+#include 'internal_macros.h'
+#include 'string_util.h'
+#include 'timers.h'
+    
+      // Field with embedded double-quote characters must be doubled and the field
+  // delimited with double-quotes.
+  std::string name = run.benchmark_name;
+  ReplaceAll(&name, '\'', '\'\'');
+  Out << ''' << name << '\',';
+  if (run.error_occurred) {
+    Out << std::string(elements.size() - 3, ',');
+    Out << 'true,';
+    std::string msg = run.error_message;
+    ReplaceAll(&msg, '\'', '\'\'');
+    Out << ''' << msg << '\'\n';
+    return;
   }
-  return IOError('While fadvise NotNeeded', filename_, errno);
-#endif
-}
     
-    
-    { private:
-  const std::string filename_;
-  int fd_;
-};
-    
-      // create column family
-  ColumnFamilyHandle* cf;
-  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
-  assert(s.ok());
-    
-    Status GetBlockBasedTableOptionsFromString(
-    const BlockBasedTableOptions& table_options,
-    const std::string& opts_str,
-    BlockBasedTableOptions* new_table_options);
+    namespace benchmark {
+    }
