@@ -1,296 +1,428 @@
 
         
-          // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
-    }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
-  }
+        public:
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
     
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    #ifndef PIN_JOINT_BULLET_H
+#define PIN_JOINT_BULLET_H
+    
+    class SliderJointBullet : public JointBullet {
+	class btSliderConstraint *sliderConstraint;
     }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_BNLL_LAYER_HPP_
-
+    	for (uint32_t i = 0; i < alloc_count - 1; i++) {
+    }
     
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
+    {	PCKPacker();
+	~PCKPacker();
 };
     
-    #include <vector>
-    
-    	void set_param(PhysicsServer::HingeJointParam p_param, real_t p_value);
-	real_t get_param(PhysicsServer::HingeJointParam p_param) const;
-    
-    #ifndef SLIDER_JOINT_BULLET_H
-#define SLIDER_JOINT_BULLET_H
-    
-    	unz_global_info64 gi;
-	int err = unzGetGlobalInfo64(zfile, &gi);
-	ERR_FAIL_COND_V(err != UNZ_OK, false);
-    
-    	BIND_ENUM_CONSTANT(TRANSFER_MODE_UNRELIABLE);
-	BIND_ENUM_CONSTANT(TRANSFER_MODE_UNRELIABLE_ORDERED);
-	BIND_ENUM_CONSTANT(TRANSFER_MODE_RELIABLE);
-    
-    namespace php { struct Unit; struct Program; }
-    
-    void Config::SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                          const std::string &filename, bool constants_only,
-                          bool is_system) {
-  // if we are setting constants, we must be setting system settings
-  if (constants_only) {
-    assertx(is_system);
-  }
-  auto parsed_ini = IniSetting::FromStringAsMap(confStr, filename);
-  for (ArrayIter iter(parsed_ini.toArray()); iter; ++iter) {
-    // most likely a string, but just make sure that we are dealing
-    // with something that can be converted to a string
-    assertx(iter.first().isScalar());
-    ini.set(iter.first().toString(), iter.second());
-    if (constants_only) {
-      IniSetting::FillInConstant(iter.first().toString().toCppString(),
-                                 iter.second());
-    } else if (is_system) {
-      IniSetting::SetSystem(iter.first().toString().toCppString(),
-                            iter.second());
-    }
-  }
-}
+    	virtual float get_latency() { return 0; };
     
     
-    {}
-    
-    PlainDirectory::PlainDirectory(int fd) {
-  m_dir = ::fdopendir(fd);
-}
-    
-    inline TypedValue ExecutionContext::invokeFuncFew(
-  const CallCtx& ctx,
-  int argc,
-  const TypedValue* argv
-) {
-  auto const thisOrCls = [&] () -> void* {
-    if (ctx.this_) return (void*)(ctx.this_);
-    if (ctx.cls) return (void*)((char*)(ctx.cls) + 1);
-    return nullptr;
-  }();
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        }
     }
     
-    #include 'hphp/runtime/base/glob-stream-wrapper.h'
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
     
-    #include 'hphp/runtime/base/file.h'
-    
-      inline std::vector<Elem>::const_iterator end() const {  // NOLINT
-    return elem_of_each_node_.end();
-  }
-    
-    #if DMLC_ENABLE_STD_THREAD
-#include <dmlc/concurrency.h>
-#include <thread>
-#endif
-    
-    
+    namespace CNTK
+{
+    Value::Value(const NDArrayViewPtr& data)
+        : Value(data, nullptr)
     {
-    {}  // namespace common
-}  // namespace xgboost
-
-    
-    // customize random engine.
-void CustomGlobalRandomEngine::seed(CustomGlobalRandomEngine::result_type val) {
-  // ignore the seed
-}
-    
-      template <typename IterT>
-  void Write(CompressedByteT *buffer, IterT input_begin, IterT input_end) {
-    uint64_t tmp = 0;
-    size_t stored_bits = 0;
-    const size_t max_stored_bits = 64 - symbol_bits_;
-    size_t buffer_position = detail::kPadding;
-    const size_t num_symbols = input_end - input_begin;
-    for (size_t i = 0; i < num_symbols; i++) {
-      typename std::iterator_traits<IterT>::value_type symbol = input_begin[i];
-      if (stored_bits > max_stored_bits) {
-        // Eject only full bytes
-        size_t tmp_bytes = stored_bits / 8;
-        for (size_t j = 0; j < tmp_bytes; j++) {
-          buffer[buffer_position] = static_cast<CompressedByteT>(
-              tmp >> (stored_bits - (j + 1) * 8));
-          buffer_position++;
-        }
-        stored_bits -= tmp_bytes * 8;
-        tmp &= (1 << stored_bits) - 1;
-      }
-      // Store symbol
-      tmp <<= symbol_bits_;
-      tmp |= symbol;
-      stored_bits += symbol_bits_;
     }
     }
     
+            if (m_valueInitializer->Contains(RandomSeedAttributeName)) {
+            auto& seed = m_valueInitializer->operator[](RandomSeedAttributeName);
+            if ((unsigned long)seed.Value<size_t>() == SentinelValueForAutoSelectRandomSeed)
+                seed.Value<size_t>() = Internal::GenerateRandomSeed();
+        }
     
-    {    // loop over all rows and fill column entries
-    // num_nonzeros[fid] = how many nonzeros have this feature accumulated so far?
-    std::vector<size_t> num_nonzeros;
-    num_nonzeros.resize(nfeature);
-    std::fill(num_nonzeros.begin(), num_nonzeros.end(), 0);
-    for (size_t rid = 0; rid < nrow; ++rid) {
-      const size_t ibegin = gmat.row_ptr[rid];
-      const size_t iend = gmat.row_ptr[rid + 1];
-      size_t fid = 0;
-      for (size_t i = ibegin; i < iend; ++i) {
-        const uint32_t bin_id = gmat.index[i];
-        while (bin_id >= gmat.cut.row_ptr[fid + 1]) {
-          ++fid;
-        }
-        if (type_[fid] == kDenseColumn) {
-          uint32_t* begin = &index_[boundary_[fid].index_begin];
-          begin[rid] = bin_id - index_base_[fid];
-        } else {
-          uint32_t* begin = &index_[boundary_[fid].index_begin];
-          begin[num_nonzeros[fid]] = bin_id - index_base_[fid];
-          row_ind_[boundary_[fid].row_ind_begin + num_nonzeros[fid]] = rid;
-          ++num_nonzeros[fid];
-        }
-      }
+            Matrix<ElemType>::MultiplyAndAdd(inputFunctionValues, true, gradientValues, false, inputGradientValues);
+    
+    namespace detail {
+/*! \brief Implementation of gradient statistics pair. Template specialisation
+ * may be used to overload different gradients types e.g. low precision, high
+ * precision, integer, floating point. */
+template <typename T>
+class GradientPairInternal {
+  /*! \brief gradient statistics */
+  T grad_;
+  /*! \brief second order gradient statistics */
+  T hess_;
     }
-  }
+    }
     
-      /*
-   * @brief a unique ID identifying the 'carve'
-   *
-   * This unique generated GUID is used to identify the carve session from
-   * other carves. It is also used by our backend service to derive a
-   * session key for exfiltration.
-   */
-  std::string carveGuid_;
-    
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
-}
-    
-    #pragma once
-    
-    #include <osquery/config/parsers/logger.h>
-#include <osquery/registry_factory.h>
-    
-      QueryLogItem item;
-  item.epoch = 0L;
-  item.counter = 0L;
-  getDecorations(item.decorations);
-  ASSERT_EQ(item.decorations.size(), 2U);
-  EXPECT_EQ(item.decorations.at('internal_60_test'), 'test');
-    
-    /**
- * @brief Hash is a general utility class for hashing content
- *
- * @code{.cpp}
- *   Hash my_hash(HASH_TYPE_SHA256);
- *   my_hash.update(my_buffer, my_buffer_size);
- *   std::cout << my_hash.digest();
- * @endcode
- *
+    namespace xgboost {
+/*!
+ * \brief interface of tree update module, that performs update of a tree.
  */
-class Hash : private boost::noncopyable {
+class TreeUpdater {
  public:
-  /**
-   * @brief Hash constructor
-   *
-   * The hash class should be initialized with one of osquery::HashType as a
-   * constructor argument.
-   *
-   * @param algorithm The hashing algorithm which will be used to compute the
-   * hash
+  /*! \brief virtual destructor */
+  virtual ~TreeUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
    */
-  explicit Hash(HashType algorithm);
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
+  /*!
+   * \brief perform update to the tree models
+   * \param gpair the gradient pair statistics of the data
+   * \param data The data matrix passed to the updater.
+   * \param trees references the trees to be updated, updater will change the content of trees
+   *   note: all the trees in the vector are updated, with the same statistics,
+   *         but maybe different random seeds, usually one tree is passed in at a time,
+   *         there can be multiple trees when we train random forest style model
+   */
+  virtual void Update(HostDeviceVector<GradientPair>* gpair,
+                      DMatrix* data,
+                      const std::vector<RegTree*>& trees) = 0;
+    }
     }
     
-    TEST_F(TablesTests, test_constraint_map_cast) {
-  ConstraintMap cm;
+        if (row_indices_.empty()) {  // edge case: empty instance set
+      // assign arbitrary address here, to bypass nullptr check
+      // (nullptr usually indicates a nonexistent rowset, but we want to
+      //  indicate a valid rowset that happens to have zero length and occupies
+      //  the whole instance set)
+      // this is okay, as BuildHist will compute (end-begin) as the set size
+      const size_t* begin = reinterpret_cast<size_t*>(20);
+      const size_t* end = begin;
+      elem_of_each_node_.emplace_back(Elem(begin, end, 0));
+      return;
     }
     
-    
-    { protected:
-  Row row_;
+    /*! \brief try to do efficient pruning */
+template<typename DType, typename RType>
+struct WXQSummary : public WQSummary<DType, RType> {
+  // redefine entry type
+  using Entry = typename WQSummary<DType, RType>::Entry;
+  // constructor
+  WXQSummary(Entry *data, size_t size)
+      : WQSummary<DType, RType>(data, size) {}
+  // check if the block is large chunk
+  inline static bool CheckLarge(const Entry &e, RType chunk) {
+    return  e.RMinNext() > e.RMaxPrev() + chunk;
+  }
+  // set prune
+  inline void SetPrune(const WQSummary<DType, RType> &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    RType begin = src.data[0].rmax;
+    // n is number of points exclude the min/max points
+    size_t n = maxsize - 2, nbig = 0;
+    // these is the range of data exclude the min/max point
+    RType range = src.data[src.size - 1].rmin - begin;
+    // prune off zero weights
+    if (range == 0.0f || maxsize <= 2) {
+      // special case, contain only two effective data pts
+      this->data[0] = src.data[0];
+      this->data[1] = src.data[src.size - 1];
+      this->size = 2;
+      return;
+    } else {
+      range = std::max(range, static_cast<RType>(1e-3f));
+    }
+    // Get a big enough chunk size, bigger than range / n
+    // (multiply by 2 is a safe factor)
+    const RType chunk = 2 * range / n;
+    // minimized range
+    RType mrange = 0;
+    {
+      // first scan, grab all the big chunk
+      // moving block index, exclude the two ends.
+      size_t bid = 0;
+      for (size_t i = 1; i < src.size - 1; ++i) {
+        // detect big chunk data point in the middle
+        // always save these data points.
+        if (CheckLarge(src.data[i], chunk)) {
+          if (bid != i - 1) {
+            // accumulate the range of the rest points
+            mrange += src.data[i].RMaxPrev() - src.data[bid].RMinNext();
+          }
+          bid = i; ++nbig;
+        }
+      }
+      if (bid != src.size - 2) {
+        mrange += src.data[src.size-1].RMaxPrev() - src.data[bid].RMinNext();
+      }
+    }
+    // assert: there cannot be more than n big data points
+    if (nbig >= n) {
+      // see what was the case
+      LOG(INFO) << ' check quantile stats, nbig=' << nbig << ', n=' << n;
+      LOG(INFO) << ' srcsize=' << src.size << ', maxsize=' << maxsize
+                << ', range=' << range << ', chunk=' << chunk;
+      src.Print();
+      CHECK(nbig < n) << 'quantile: too many large chunk';
+    }
+    this->data[0] = src.data[0];
+    this->size = 1;
+    // The counter on the rest of points, to be selected equally from small chunks.
+    n = n - nbig;
+    // find the rest of point
+    size_t bid = 0, k = 1, lastidx = 0;
+    for (size_t end = 1; end < src.size; ++end) {
+      if (end == src.size - 1 || CheckLarge(src.data[end], chunk)) {
+        if (bid != end - 1) {
+          size_t i = bid;
+          RType maxdx2 = src.data[end].RMaxPrev() * 2;
+          for (; k < n; ++k) {
+            RType dx2 =  2 * ((k * mrange) / n + begin);
+            if (dx2 >= maxdx2) break;
+            while (i < end &&
+                   dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+            if (i == end) break;
+            if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+              if (i != lastidx) {
+                this->data[this->size++] = src.data[i]; lastidx = i;
+              }
+            } else {
+              if (i + 1 != lastidx) {
+                this->data[this->size++] = src.data[i + 1]; lastidx = i + 1;
+              }
+            }
+          }
+        }
+        if (lastidx != end) {
+          this->data[this->size++] = src.data[end];
+          lastidx = end;
+        }
+        bid = end;
+        // shift base by the gap
+        begin += src.data[bid].RMinNext() - src.data[bid].RMaxPrev();
+      }
+    }
+  }
+};
+/*!
+ * \brief traditional GK summary
+ */
+template<typename DType, typename RType>
+struct GKSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    Entry() = default;
+    // constructor
+    Entry(RType rmin, RType rmax, DType value)
+        : rmin(rmin), rmax(rmax), value(value) {}
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // the input queue
+    std::vector<DType> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      queue[qtail++] = x;
+    }
+    inline void MakeSummary(GKSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = qtail;
+      for (size_t i = 0; i < qtail; ++i) {
+        out->data[i] = Entry(i + 1, i + 1, queue[i]);
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  GKSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*! \brief the maximum error of the summary */
+  inline RType MaxError() const {
+    RType res = 0;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].rmax - data[i-1].rmin, res);
+    }
+    return res;
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const GKSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void CheckValid(RType eps) const {
+    // assume always valid
+  }
+  /*! \brief used for debug purpose, print the summary */
+  inline void Print() const {
+    for (size_t i = 0; i < size; ++i) {
+      LOG(CONSOLE) << 'x=' << data[i].value << '\t'
+                   << '[' << data[i].rmin << ',' << data[i].rmax << ']';
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+  inline void SetPrune(const GKSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType max_rank = src.MaxRank();
+    this->size = maxsize;
+    data[0] = src.data[0];
+    size_t n = maxsize - 1;
+    RType top = 1;
+    for (size_t i = 1; i < n; ++i) {
+      RType k = (i * max_rank) / n;
+      while (k > src.data[top + 1].rmax) ++top;
+      // assert src.data[top].rmin <= k
+      // because k > src.data[top].rmax >= src.data[top].rmin
+      if ((k - src.data[top].rmin) < (src.data[top+1].rmax - k)) {
+        data[i] = src.data[top];
+      } else {
+        data[i] = src.data[top + 1];
+      }
+    }
+    data[n] = src.data[src.size - 1];
+  }
+  inline void SetCombine(const GKSummary &sa,
+                         const GKSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0) << 'invalid input for merge';
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    this->size = sa.size + sb.size;
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      if (a->value < b->value) {
+        *dst = Entry(bprev_rmin + a->rmin,
+                     a->rmax + b->rmax - 1, a->value);
+        aprev_rmin = a->rmin;
+        ++dst; ++a;
+      } else {
+        *dst = Entry(aprev_rmin + b->rmin,
+                     b->rmax + a->rmax - 1, b->value);
+        bprev_rmin = b->rmin;
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType bprev_rmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(bprev_rmin + a->rmin, bprev_rmax + a->rmax, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType aprev_rmax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(aprev_rmin + b->rmin, aprev_rmax + b->rmax, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    CHECK(dst == data + size) << 'bug in combine';
+  }
 };
     
-    namespace benchmark {
-enum LogColor {
-  COLOR_DEFAULT,
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_YELLOW,
-  COLOR_BLUE,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  COLOR_WHITE
-};
-    }
+    #include <dmlc/registry.h>
+#include <vector>
+#include <utility>
+#include <string>
+#include <functional>
+#include <memory>
+#include './base.h'
+#include './data.h'
+#include './objective.h'
+#include './feature_map.h'
+#include '../../src/common/host_device_vector.h'
     
-    std::string FormatKV(std::string const& key, std::string const& value) {
-  return StringPrintF('\'%s\': \'%s\'', key.c_str(), value.c_str());
+    bool DHTResponseMessage::isReply() const { return true; }
+    
+      // If you change the code to read more than the size of buf, then
+  // expand the buf size here.
+  array_wrapper<unsigned char, 255> buf;
+    
+      ~DHTRoutingTableSerializer();
+    
+    #include 'LogFactory.h'
+#include 'Logger.h'
+#include 'util.h'
+#include 'DHTNode.h'
+#include 'DHTConnectionImpl.h'
+#include 'DHTRoutingTable.h'
+#include 'DHTMessageFactoryImpl.h'
+#include 'DHTMessageTracker.h'
+#include 'DHTMessageDispatcherImpl.h'
+#include 'DHTMessageReceiver.h'
+#include 'DHTTaskQueueImpl.h'
+#include 'DHTTaskFactoryImpl.h'
+#include 'DHTPeerAnnounceStorage.h'
+#include 'DHTTokenTracker.h'
+#include 'DHTInteractionCommand.h'
+#include 'DHTTokenUpdateCommand.h'
+#include 'DHTBucketRefreshCommand.h'
+#include 'DHTPeerAnnounceCommand.h'
+#include 'DHTEntryPointNameResolveCommand.h'
+#include 'DHTAutoSaveCommand.h'
+#include 'DHTTask.h'
+#include 'DHTRoutingTableDeserializer.h'
+#include 'DHTRegistry.h'
+#include 'DHTBucketRefreshTask.h'
+#include 'DHTMessageCallback.h'
+#include 'DHTMessageTrackerEntry.h'
+#include 'DHTMessageEntry.h'
+#include 'UDPTrackerClient.h'
+#include 'BtRegistry.h'
+#include 'prefs.h'
+#include 'Option.h'
+#include 'SocketCore.h'
+#include 'DlAbortEx.h'
+#include 'RecoverableException.h'
+#include 'a2functional.h'
+#include 'DownloadEngine.h'
+#include 'fmt.h'
+    
+    
+    {} // namespace aria2
+    
+    
+    {} // namespace aria2
+    
+      virtual void
+  addPeriodicTask1(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+    
+    bool DNSCache::CacheEntry::operator==(const CacheEntry& e) const
+{
+  return hostname_ == e.hostname_ && port_ == e.port_;
 }
     
-    #define RELEASE_SHARED(...) \
-  THREAD_ANNOTATION_ATTRIBUTE__(release_shared_capability(__VA_ARGS__))
-    
-    void SleepForMilliseconds(int milliseconds) {
-  SleepForMicroseconds(milliseconds * kNumMicrosPerMilli);
-}
+        CacheEntry& operator=(const CacheEntry& c);
