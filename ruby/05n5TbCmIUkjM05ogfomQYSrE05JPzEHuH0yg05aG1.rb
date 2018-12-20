@@ -1,60 +1,88 @@
 
         
-          it 'raises a TypeError when passed nil' do
-    lambda { srand(nil) }.should raise_error(TypeError)
-  end
+                  # Make sure we're only working with one VM if single target
+          if options[:single_target] && vms.length != 1
+            vm = @env.primary_vm
+            raise Errors::MultiVMTargetRequired if !vm
+            vms = [vm]
+          end
     
-    describe 'Kernel#trace_var' do
-  before :each do
-    $Kernel_trace_var_global = nil
-  end
-    
-      find_files = ->(path) {
-    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
-      path if File.file?(path)
-    end.compact
-  }
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-        # Processes the options set by the command-line arguments. In particular,
-    # sets `@options[:input]` and `@options[:output]` to appropriate IO streams.
-    #
-    # This is meant to be overridden by subclasses
-    # so they can run their respective programs.
-    def process_result
-      input, output = @options[:input], @options[:output]
-      args = @args.dup
-      input ||=
-        begin
-          filename = args.shift
-          @options[:filename] = filename
-          open_file(filename) || $stdin
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
+          end
         end
-      @options[:output_filename] = args.shift
-      output ||= @options[:output_filename] || $stdout
-      @options[:input], @options[:output] = input, output
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
+    
+          result
     end
     
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
+    end
+  end
+    
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
+    end
+    
+        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
+                   args: [
+                           '--mode=silent',
+                         ],
+                   sudo: true
+  end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
       end
     end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
+
+    
+    module Sinatra
+  class Application < Base
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
