@@ -1,231 +1,274 @@
 
         
-        void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+        namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-        // now track the edges (hysteresis thresholding)
-    while (stack_top > stack_bottom)
+      // If line ends in an opening brace, make it '{ ... }' so it looks nice.
+  if (!result.empty() && result[result.size() - 1] == '{') {
+    result.append(' ... }');
+  }
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    
     {
-        u8* m;
-        if ((size_t)(stack_top - stack_bottom) + 8u > maxsize)
-        {
-            ptrdiff_t sz = (ptrdiff_t)(stack_top - stack_bottom);
-            maxsize = maxsize * 3/2;
-            stack.resize(maxsize);
-            stack_bottom = &stack[0];
-            stack_top = stack_bottom + sz;
-        }
+    {    printer.reset();
+    output.reset();
+  }
+}
+    
+    // Death tests do not work on Windows as of yet.
+#ifdef PROTOBUF_HAS_DEATH_TEST
+TEST(ObjCHelperDeathTest, TextFormatDecodeData_DecodeDataForString_Failures) {
+  // Empty inputs.
     }
     
-    #define COMBINE64(sgn,n) void combine##n(const Size2D &_size                                                \
-                                               FILL_LINES##n(FARG, sgn##64),                                \
-                                               sgn##64 * dstBase, ptrdiff_t dstStride)                      \
-{                                                                                                           \
-    internal::assertSupportedConfiguration();                                                               \
-    Size2D size(_size);                                                                                     \
-    if (CONTSRC##n                                                                                          \
-        dstStride == (ptrdiff_t)(size.width))                                                               \
-    {                                                                                                       \
-        size.width *= size.height;                                                                          \
-        size.height = 1;                                                                                    \
-    }                                                                                                       \
-    typedef internal::VecTraits<sgn##64, n>::vec64 vec64;                                                   \
-                                                                                                            \
-    for (size_t i = 0u; i < size.height; ++i)                                                               \
-    {                                                                                                       \
-        FILL_LINES##n(VROW, sgn##64)                                                                        \
-        sgn##64 * dst = internal::getRowPtr(dstBase, dstStride, i);                                         \
-        size_t sj = 0u, dj = 0u;                                                                            \
-                                                                                                            \
-        for (; sj < size.width; ++sj, dj += n)                                                              \
-        {                                                                                                   \
-            vec64 v_dst;                                                                                    \
-            FILL_LINES##n(VLD1, sgn##64)                                                                    \
-            vst##n##_##sgn##64(dst + dj, v_dst);                                                            \
-            /*FILL_LINES##n(SLD, sgn##64)*/                                                                 \
-        }                                                                                                   \
-    }                                                                                                       \
-}
+      CodeGeneratorRequest request;
+  if (!request.ParseFromFileDescriptor(STDIN_FILENO)) {
+    std::cerr << argv[0] << ': protoc sent unparseable request to plugin.'
+              << std::endl;
+    return 1;
+  }
     
-                    uint8x16_t v0 = vld1q_u8(ptr);
-                int8x16_t v1 = vreinterpretq_s8_u8(veorq_u8(vqsubq_u8(v0, t), delta));
-                int8x16_t v2 = vreinterpretq_s8_u8(veorq_u8(vqaddq_u8(v0, t), delta));
+    // 4-ary predicate assertion macros.
+#define EXPECT_PRED_FORMAT4(pred_format, v1, v2, v3, v4) \
+  GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED4(pred, v1, v2, v3, v4) \
+  GTEST_PRED4_(pred, v1, v2, v3, v4, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT4(pred_format, v1, v2, v3, v4) \
+  GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED4(pred, v1, v2, v3, v4) \
+  GTEST_PRED4_(pred, v1, v2, v3, v4, GTEST_FATAL_FAILURE_)
     
-    inline float32x2_t vrsqrt_f32(float32x2_t val)
-{
-    float32x2_t e = vrsqrte_f32(val);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    return e;
-}
     
-    // Convert macro to string
-#define STRINGIFY(m) #m
-#define AS_STRING(m) STRINGIFY(m)
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    /**
- Forward declare boost::thread instead of including boost/thread.hpp
- to avoid a boost/NVCC issues (#1009, #1010) on OSX.
- */
-namespace boost { class thread; }
-    
-    #include <vector>
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace mxnet {
-/*! \brief namespace of arguments */
-namespace op {
-/*! \brief super class of all gradient function argument */
-struct GradFunctionArgument {
-  /*! \brief The real data */
-  TBlob data;
+    {  template <typename U> void copy(linked_ptr<U> const* ptr) {
+    value_ = ptr->get();
+    if (value_)
+      link_.join(&ptr->link_);
+    else
+      link_.join_new();
+  }
 };
-    }
-    }
     
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+    
+    #endif  // GTEST_SAMPLES_PRIME_TABLES_H_
 
     
-     protected:
-  /**
-   * \struct  PredictionCacheEntry
-   *
-   * \brief Contains pointer to input matrix and associated cached predictions.
-   */
-  struct PredictionCacheEntry {
-    std::shared_ptr<DMatrix> data;
-    HostDeviceVector<bst_float> predictions;
-  };
     
-    /*!
- * \brief Macro to register tree updater.
- *
- * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
- * .describe('Column based tree maker.')
- * .set_body([]() {
- *     return new ColMaker<TStats>();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
-  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
-      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
-    
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
 }
+    
+      ////////////////////////////////////////////////////////////
+  //
+  // D'tor.  MyString is intended to be a final class, so the d'tor
+  // doesn't need to be virtual.
+  ~MyString() { delete[] c_string_; }
+    
+    // Tests the Set method.
+TEST(MyString, Set) {
+  MyString s;
+    }
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
+};
     
     namespace xgboost {
-namespace gbm {
-/*! \brief model parameters */
-struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
-  /*! \brief number of trees */
-  int num_trees;
-  /*! \brief number of roots */
-  int num_roots;
-  /*! \brief number of features to be used by trees */
-  int num_feature;
-  /*! \brief pad this space, for backward compatibility reason.*/
-  int pad_32bit;
-  /*! \brief deprecated padding space. */
-  int64_t num_pbuffer_deprecated;
+namespace data {
+/*!
+ * \brief Format specification of SparsePage.
+ */
+class SparsePageFormat {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~SparsePageFormat() = default;
   /*!
-   * \brief how many output group a single instance can produce
-   *  this affects the behavior of number of output we have:
-   *    suppose we have n instance and k group, output will be k * n
+   * \brief Load all the segments into page, advance fi to end of the block.
+   * \param page The data to read page into.
+   * \param fi the input stream of the file
+   * \return true of the loading as successful, false if end of file was reached
    */
-  int num_output_group;
-  /*! \brief size of leaf vector needed in tree */
-  int size_leaf_vector;
-  /*! \brief reserved parameters */
-  int reserved[32];
-  /*! \brief constructor */
-  GBTreeModelParam() {
-    std::memset(this, 0, sizeof(GBTreeModelParam));
-    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
-                  '64/32 bit compatibility issue');
-  }
-  // declare parameters, only declare those that need to be set.
-  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
-    DMLC_DECLARE_FIELD(num_output_group)
-        .set_lower_bound(1)
-        .set_default(1)
-        .describe(
-            'Number of output groups to be predicted,'
-            ' used for multi-class classification.');
-    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
-        'Tree updater sequence.');
-    DMLC_DECLARE_FIELD(num_feature)
-        .set_lower_bound(0)
-        .describe('Number of features used for training and prediction.');
-    DMLC_DECLARE_FIELD(size_leaf_vector)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('Reserved option for vector tree.');
-  }
+  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
+  /*!
+   * \brief read only the segments we are interested in, advance fi to end of the block.
+   * \param page The page to load the data into.
+   * \param fi the input stream of the file
+   * \param sorted_index_set sorted index of segments we are interested in
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page,
+                    dmlc::SeekStream* fi,
+                    const std::vector<bst_uint>& sorted_index_set) = 0;
+  /*!
+   * \brief save the data to fo, when a page was written.
+   * \param fo output stream
+   */
+  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
+  /*!
+   * \brief Create sparse page of format.
+   * \return The created format functors.
+   */
+  static SparsePageFormat* Create(const std::string& name);
+  /*!
+   * \brief decide the format from cache prefix.
+   * \return pair of row format, column format type of the cache prefix.
+   */
+  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
 };
     }
     }
     
-          cbw.Write(buffer.data(), input.begin(), input.end());
+        index_.resize(boundary_[nfeature - 1].index_end);
+    row_ind_.resize(boundary_[nfeature - 1].row_ind_end);
     
-      // Used to initialise any regularisation hyperparameters provided by the user
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args);
+    
+    {  FunctionRef<int(int)> const cfref = funcptr;
+  EXPECT_EQ(100, cfref(10));
+  EXPECT_EQ(121, cfref(11));
+}
+    
+    int main(int argc, char** argv) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  folly::runBenchmarks();
+  return 0;
+}
+
+    
+    
+    {  std::string arguments;
+  ASSERT_TRUE(getTracepointArguments(
+      'folly', 'test_static_tracepoint_struct', 0, arguments));
+  std::array<int, 2> expected{{sizeof(testStruct), sizeof(testStruct)}};
+  checkTracepointArguments(arguments, expected);
+}
+    
+      /**
+   * Returns a secure double in [0, 1)
+   */
+  static double secureRandDouble01() {
+    SecureRNG<uint64_t> srng;
+    return randDouble01(srng);
+  }
+    
+      void add(Func f) override {
+    executor_->add(wrapFunc(std::move(f)));
+  }
+    
+        // Test the upper boundary of conversion to uint32_t hours
+    using hours_u32 = std::chrono::duration<uint32_t, std::ratio<3600>>;
+    ts.tv_sec = 15461882262000LL;
+    ts.tv_nsec = 0;
+    EXPECT_EQ(std::numeric_limits<uint32_t>::max(), to<hours_u32>(ts).count());
+    ts.tv_sec = 15461882265599LL;
+    EXPECT_EQ(std::numeric_limits<uint32_t>::max(), to<hours_u32>(ts).count());
+    ts.tv_sec = 15461882265600LL;
+    EXPECT_THROW(to<hours_u32>(ts), std::range_error);
+    
+     private:
+  void performLazyInit() {
+    if (!initialized_) {
+      initialized_ = true;
+      increment_ = initialize_();
+      initialize_ = {};
+    }
+  }
+    
+    #include <zlib.h>
+    
+        oldptr = takeOwnedBase(success);
+    if (!owners_eq(oldptr, CountedDetail::get_counted_base(expected))) {
+      expected = get_shared_ptr(oldptr, false);
+      release_external(newptr);
+      return false;
+    }
+    expectedptr = oldptr; // Need oldptr to release if failed
+    if (ptr_.compare_exchange_weak(expectedptr, newptr, success, failure)) {
+      if (oldptr.get()) {
+        release_external(oldptr, -1);
+      }
+      return true;
+    } else {
+      if (oldptr.get()) {
+        expected = get_shared_ptr(oldptr, false);
+      } else {
+        expected = SharedPtr(nullptr);
+      }
+      release_external(newptr);
+      return false;
+    }
+  }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      SharedPtr&& desired,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_weak(
+        expected, desired, mo, detail::default_failure_memory_order(mo));
+  }
+  bool compare_exchange_weak(
+      SharedPtr& expected,
+      SharedPtr&& desired,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    return compare_exchange_weak(expected, desired, success, failure);
+  }
+  bool compare_exchange_strong(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    return compare_exchange_strong(
+        expected, n, mo, detail::default_failure_memory_order(mo));
+  }
+  bool compare_exchange_strong(
+      SharedPtr& expected,
+      const SharedPtr& n,
+      std::memory_order success,
+      std::memory_order failure) /* noexcept */ {
+    auto local_expected = expected;
+    do {
+      if (compare_exchange_weak(expected, n, success, failure)) {
+        return true;
+      }
+    } while (local_expected == expected);
