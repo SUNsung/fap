@@ -1,305 +1,283 @@
 
         
-            typedef int8_t   s8;
-    typedef uint8_t  u8;
-    typedef int16_t  s16;
-    typedef uint16_t u16;
-    typedef int32_t  s32;
-    typedef uint32_t u32;
-    typedef float    f32;
-    typedef int64_t  s64;
-    typedef uint64_t u64;
-    typedef double   f64;
-    
-            //horizontal convolution (2 lines from previous iteration)
-        if (i > 0)
-        {
-            f32* dstb = internal::getRowPtr(dstBase, dstStride, i-1);
-            x = 0;
-            for (; x <= colsn - 4; x += 4)
-            {
-                internal::prefetch(laneA + x + cn);
-                internal::prefetch(laneB + x + cn);
-box3x3f32_horiz:
-                float32x4_t lane0a = vld1q_f32(laneA + x - cn);
-                float32x4_t lane2a = vld1q_f32(laneA + x + cn);
-                float32x4_t lane1a = vld1q_f32(laneA + x);
-    }
-    }
-    
-                v_src0 = internal::vld1q(src0 + x);
-            v_src1 = internal::vld1q(src1 + x);
-            op(v_src0, v_src1, v_dst);
-            internal::vst1(dst + x, internal::vmovn(v_dst));
-            x+=8;
-        }
-    }
-};
-template <typename Op> struct vtail<Op, 1>
-{
-    static inline void compare(const typename Op::type * src0, const typename Op::type * src1,
-                               u8 * dst, const Op & op,
-                               size_t &x, size_t width)
-    {
-        typedef typename Op::type type;
-        typedef typename internal::VecTraits<type>::vec128 vec128;
-        typedef typename internal::VecTraits<type>::unsign::vec128 uvec128;
-        typedef typename internal::VecTraits<type>::vec64 vec64;
-        typedef typename internal::VecTraits<type>::unsign::vec64 uvec64;
-        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
-        if( x + 16 < width)
-        {
-            vec128  v_src0, v_src1;
-            uvec128 v_dst;
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(f32, u8, 8,
-    register float32x4_t vmult asm ('q0') = vdupq_n_f32((float)(1 << 16));
-    register uint32x4_t  vmask asm ('q1') = vdupq_n_u32(1<<16);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vcvt.u32.f32 q6, q4                                     \n\t'
-            'vcvt.u32.f32 q7, q5                                     \n\t'
-            'vbic q8, q1, q6                                         \n\t'
-            'vbic q9, q1, q7                                         \n\t'
-            'vshr.u32 q10, q8, #16                                   \n\t'
-            'vshr.u32 q11, q9, #16                                   \n\t'
-            'vqsub.u32 q12, q6, q10                                  \n\t'
-            'vqsub.u32 q13, q7, q11                                  \n\t'
-            'vqrshrn.u32 d28, q12, #16                               \n\t'
-            'vqrshrn.u32 d29, q13, #16                               \n\t'
-            'vqmovn.u16 d30, q14                                     \n\t'
-            'vst1.8 {d30}, [%[dst]]                                  \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w' (vmult), 'w' (vmask)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30'
-        );
-     }
-})
-#else
-CVT_FUNC(f32, u8, 8,
-    float32x4_t vmult = vdupq_n_f32((float)(1 << 16));
-    uint32x4_t  vmask = vdupq_n_u32(1<<16);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-    }
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(u16, s16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.u16 q3, d4                                       \n\t'
-            'vmovl.u16 q4, d5                                       \n\t'
-            'vcvt.f32.u32 q5, q3                                    \n\t'
-            'vcvt.f32.u32 q6, q4                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vmul.f32 q8, q6, q0                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vadd.f32 q10, q8, q1                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vcvt.s32.f32 q12, q10                                  \n\t'
-            'vqmovn.s32 d26, q11                                    \n\t'
-            'vqmovn.s32 d27, q12                                    \n\t'
-            'vst1.16 {d26-d27}, [%[dst]]                            \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst] 'r' (_dst + i + 0),
-              'w' (vshift), 'w' (vscale)
-            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27'
-        );
-    }
-})
-#else
-CVTS_FUNC(u16, s16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        uint16x8_t vline = vld1q_u16(_src + i);
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
-#endif
-    
-    f64 dotProduct(const Size2D &_size,
-               const f32 * src0Base, ptrdiff_t src0Stride,
-               const f32 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width * sizeof(f32)))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    }
-    
-    namespace CAROTENE_NS {
-    }
-    
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
-    
-    #endif  // CAFFE_BATCHNORM_LAYER_HPP_
-
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-      void RecordBackgroundError(const Status& s);
-    
-    TEST(FormatTest, InternalKey_EncodeDecode) {
-  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
-  const uint64_t seq[] = {
-    1, 2, 3,
-    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
-    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
-    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
-  };
-  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
-    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
-      TestKey(keys[k], seq[s], kTypeValue);
-      TestKey('hello', 1, kTypeDeletion);
-    }
-  }
-}
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
+        int main(int argc, char** argv) {
+  if (argc != 4) {
+    printf('This script converts the MNIST dataset to the leveldb format used\n'
+           'by caffe to train a siamese network.\n'
+           'Usage:\n'
+           '    convert_mnist_data input_image_file input_label_file '
+           'output_db_file\n'
+           'The MNIST dataset could be downloaded at\n'
+           '    http://yann.lecun.com/exdb/mnist/\n'
+           'You should gunzip them after downloading.\n');
   } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(argv[1], argv[2], argv[3]);
   }
-  return (ok ? 0 : 1);
+  return 0;
 }
+#else
+int main(int argc, char** argv) {
+  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
+}
+#endif  // USE_LEVELDB
 
     
-      scratch->clear();
-  record->clear();
-  bool in_fragmented_record = false;
-  // Record offset of the logical record that we're reading
-  // 0 is a dummy value to make compilers happy
-  uint64_t prospective_record_offset = 0;
-    
-        // Advance to the first entry with a key >= target
-    void Seek(const Key& target);
-    
-    
-    {  SkipList<Key, Comparator>::Iterator iter(&list);
-  ASSERT_TRUE(!iter.Valid());
-  iter.SeekToFirst();
-  ASSERT_TRUE(!iter.Valid());
-  iter.Seek(100);
-  ASSERT_TRUE(!iter.Valid());
-  iter.SeekToLast();
-  ASSERT_TRUE(!iter.Valid());
-}
-    
-    DECLARE_bool(disable_decorators);
-DECLARE_bool(decorations_top_level);
-    
-      auto val2 = splayValue(100, 10);
-  EXPECT_GE(val2, 90U);
-  EXPECT_LE(val2, 110U);
-    
-      Row r3;
-  std::string msg2 = '0A001F9100000000FE80000000000000022522FFFEB03684000000';
-  parseSockAddr(msg2, r3, unix_socket);
-  ASSERT_FALSE(r3['remote_address'].empty());
-  EXPECT_EQ(r3['remote_address'], 'fe80:0000:0000:0000:0225:22ff:feb0:3684');
-  EXPECT_EQ(r3['remote_port'], '8081');
-    
-      void addMonitor(const std::string& path,
-                  uint32_t mask,
-                  bool recursive,
-                  bool add_watch) {
-    auto sc = event_pub_->createSubscriptionContext();
-    event_pub_->addMonitor(path, sc, mask, recursive, add_watch);
+    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
+template <typename Dtype>
+class GaussianFiller : public Filler<Dtype> {
+ public:
+  explicit GaussianFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    CHECK(blob->count());
+    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
+        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
+    int sparse = this->filler_param_.sparse();
+    CHECK_GE(sparse, -1);
+    if (sparse >= 0) {
+      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
+      // These have num == channels == 1; width is number of inputs; height is
+      // number of outputs.  The 'sparse' variable specifies the mean number
+      // of non-zero input weights for a given output.
+      CHECK_GE(blob->num_axes(), 1);
+      const int num_outputs = blob->shape(0);
+      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
+      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
+      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
+      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
+      for (int i = 0; i < blob->count(); ++i) {
+        data[i] *= mask[i];
+      }
+    }
   }
-    
-      EXPECT_TRUE(sub->contextBellHathTolled);
-    
-        for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
     }
     
-            D3D12_TEXTURE_COPY_LOCATION dstLocation = {};
-        dstLocation.pResource = pTexture;
-        dstLocation.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
-        dstLocation.SubresourceIndex = 0;
+      int label_axis_, outer_num_, inner_num_;
     
-    #include 'imgui.h'
-#include 'imgui_impl_dx9.h'
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
     
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {}  // namespace caffe
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
+    }
+    
+    #  define EXPECT_DEBUG_DEATH(statement, regex) \
+  EXPECT_DEATH(statement, regex)
+    
+    # if GTEST_HAS_COMBINE
+// Combine() allows the user to combine two or more sequences to produce
+// values of a Cartesian product of those sequences' elements.
+//
+// Synopsis:
+// Combine(gen1, gen2, ..., genN)
+//   - returns a generator producing sequences with elements coming from
+//     the Cartesian product of elements from the sequences generated by
+//     gen1, gen2, ..., genN. The sequence elements will have a type of
+//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
+//     of elements from sequences produces by gen1, gen2, ..., genN.
+//
+// Combine can have up to $maxtuple arguments. This number is currently limited
+// by the maximum number of elements in the tuple implementation used by Google
+// Test.
+//
+// Example:
+//
+// This will instantiate tests in test case AnimalTest each one with
+// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
+// tuple('dog', BLACK), and tuple('dog', WHITE):
+//
+// enum Color { BLACK, GRAY, WHITE };
+// class AnimalTest
+//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
+//
+// TEST_P(AnimalTest, AnimalLooksNice) {...}
+//
+// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
+//                         Combine(Values('cat', 'dog'),
+//                                 Values(BLACK, WHITE)));
+//
+// This will instantiate tests in FlagDependentTest with all variations of two
+// Boolean flags:
+//
+// class FlagDependentTest
+//     : public testing::TestWithParam<tuple<bool, bool> > {
+//   virtual void SetUp() {
+//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
+//     tie(external_flag_1, external_flag_2) = GetParam();
+//   }
+// };
+//
+// TEST_P(FlagDependentTest, TestFeature1) {
+//   // Test your code using external_flag_1 and external_flag_2 here.
+// }
+// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
+//                         Combine(Bool(), Bool()));
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+    
+    // Overload for std::pair.
+template <typename T1, typename T2>
+void PrintTo(const ::std::pair<T1, T2>& value, ::std::ostream* os) {
+  *os << '(';
+  // We cannot use UniversalPrint(value.first, os) here, as T1 may be
+  // a reference type.  The same for printing value.second.
+  UniversalPrinter<T1>::Print(value.first, os);
+  *os << ', ';
+  UniversalPrinter<T2>::Print(value.second, os);
+  *os << ')';
+}
+    
+    
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ', '
+                            << e3 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2
+                            << '\n' << e3 << ' evaluates to ' << v3;
+}
+    
+    #include 'gtest/internal/gtest-string.h'
+    
+      ~NativeArray() {
+    // Ensures that the user doesn't instantiate NativeArray with a
+    // const or reference type.
+    static_cast<void>(StaticAssertTypeEqHelper<Element,
+        GTEST_REMOVE_REFERENCE_AND_CONST_(Element)>());
+    if (relation_to_source_ == kCopy)
+      delete[] array_;
+  }
+    
+    template <GTEST_5_TYPENAMES_(T)>
+inline GTEST_5_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
+    const T3& f3, const T4& f4) {
+  return GTEST_5_TUPLE_(T)(f0, f1, f2, f3, f4);
+}
+    
+    namespace mxnet {
+    }
+    
+    // specialize define for Layer Parameter
+template<>
+class FieldEntry<caffe::LayerParameter>
+    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
+ public:
+  // parent class
+  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
+    }
+    
+    MXNET_REGISTER_OP_PROPERTY(CaffeOp, CaffeOpProp)
+.describe('Apply caffe operator')
+.add_argument('data', 'Symbol[]', 'List of tensors')
+.add_arguments(CaffeOpParam::__FIELDS__());
+    
+      inline void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    std::vector<std::pair<std::string, std::string> > kwargs_left;
+    // init batch param, it could have similar param with
+    kwargs_left = param_.InitAllowUnknown(kwargs);
+    // Init space for out
+    out_.inst_index = new unsigned[param_.batch_size];
+    out_.batch_size = param_.batch_size;
+    out_.data.clear();
+    // init base iterator
+    base_->Init(kwargs);
+  }
+    
+    
+    {        ImGui::Render();
+    }
+    
+    //---- Don't define obsolete functions/enums names. Consider enabling from time to time after updating to avoid using soon-to-be obsolete function/names.
+//#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    
+    void    ImGui_ImplDX11_InvalidateDeviceObjects()
+{
+    if (!g_pd3dDevice)
+        return;
+    }
+    
+    int main(int argc, char** argv)
+{ 
+    // Create GLUT window
+    glutInit(&argc, argv);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+    glutInitWindowSize(1280, 720);
+    glutCreateWindow('Dear ImGui FreeGLUT+OpenGL2 Example');
+    }
+    
+        bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    // FIXME: This function is a hack so that benchmark.cc can access
+// `BenchmarkFamilies`
+bool FindBenchmarksInternal(const std::string& re,
+                            std::vector<Benchmark::Instance>* benchmarks,
+                            std::ostream* Err) {
+  return BenchmarkFamilies::GetInstance()->FindBenchmarks(re, benchmarks, Err);
+}
+    
+      const char* const term = getenv('TERM');
+    
+    #include <cstdint>
+#include <string>
