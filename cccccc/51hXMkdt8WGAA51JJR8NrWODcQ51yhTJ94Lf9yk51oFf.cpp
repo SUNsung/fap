@@ -1,236 +1,118 @@
 
         
-        std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status) {
-  if (!PyList_Check(input_constant_tensor_values)) {
-    TF_SetStatus(out_status, TF_INVALID_ARGUMENT, 'Invalid python value');
-    return std::vector<string>();
-  }
+        SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    void CostAnalyzer::GatherCosts() {
-  CostGraphDef cost_graph_measured;
-  PredictCosts(&measure_estimator_, &cost_graph_measured,
-               &total_time_measured_);
-  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
-  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
-    }
-    
-    bool TfPyInt_Check(PyObject* object) {
-  if (!PyLong_Check(object)) {
-    return 0;
-  }
-  int overflow = 0;
-  PyLong_AsLongAndOverflow(object, &overflow);
-  return (overflow == 0);
+    static int secp256k1_ge_is_infinity(const secp256k1_ge *a) {
+    return a->infinity;
 }
     
-    Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result) {
-  int size = 1;
-  for (int i = 0; i < dim_size; ++i) {
-    size *= dims[i];
-  }
-  if (dtype == DT_STRING || dtype == DT_RESOURCE || size == 0) {
-    return errors::FailedPrecondition(
-        'Cannot convert strings, resources, or empty Tensors.');
-  }
+    void test_ecdh_api(void) {
+    /* Setup context that just counts errors */
+    secp256k1_context *tctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
+    secp256k1_pubkey point;
+    unsigned char res[32];
+    unsigned char s_one[32] = { 0 };
+    int32_t ecount = 0;
+    s_one[31] = 1;
     }
     
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
- public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
+    #include 'include/secp256k1_recovery.h'
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
     }
-    
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/c/eager/c_api.h'
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    ScopedActivateExecutorContext &&other)
-    : driver_scoped_activate_context_(other.driver_scoped_activate_context_) {
-  other.driver_scoped_activate_context_ = nullptr;
+    return true;
 }
     
-      ScopedActivateExecutorContext(ScopedActivateExecutorContext&& other);
+    #if defined(__GLIBCXX__) && __GLIBCXX__ < 20080201
+//  std::showpos is broken on old libstdc++ as provided with OSX.  See
+//  http://gcc.gnu.org/ml/libstdc++/2007-11/msg00075.html
+#   define TINYFORMAT_OLD_LIBSTDCPLUSPLUS_WORKAROUND
+#endif
     
-      HWND hWnd = getHWND(getAppWindow(this));
-  if (hWnd == NULL) {
-    error_ = kNoAssociatedAppWindow;
-    LOG(ERROR) << error_;
-    return RespondNow(Error(error_));
-  }
-  TBPFLAG tbpFlag = TBPF_NOPROGRESS;
+    void ChannelArguments::SetCompressionAlgorithm(
+    grpc_compression_algorithm algorithm) {
+  SetInt(GRPC_COMPRESSION_CHANNEL_DEFAULT_ALGORITHM, algorithm);
+}
+    
+    namespace grpc {
+    }
+    
+    grpc_error* CensusClientCallData::Init(grpc_call_element* elem,
+                                       const grpc_call_element_args* args) {
+  path_ = grpc_slice_ref_internal(args->path);
+  start_time_ = absl::Now();
+  method_ = GetMethod(&path_);
+  qualified_method_ = absl::StrCat('Sent.', method_);
+  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  GRPC_CLOSURE_INIT(&on_done_recv_trailing_metadata_,
+                    OnDoneRecvTrailingMetadataCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  return GRPC_ERROR_NONE;
+}
+    
+      explicit CensusContext(absl::string_view name)
+      : span_(::opencensus::trace::Span::StartSpan(name)) {}
+    
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H */
+
+    
+      protobuf::FileDescriptorProto file_desc_proto;
+  grpc::string data;
+  file_desc->CopyTo(&file_desc_proto);
+  file_desc_proto.SerializeToString(&data);
+  response->mutable_file_descriptor_response()->add_file_descriptor_proto(data);
     
     
-    {   // ExtensionFunction:
-   ResponseAction Run() override;
-   DECLARE_EXTENSION_FUNCTION('nw.currentWindowInternal.reloadIgnoringCache', UNKNOWN)
+    {  void ThreadFunc();
+  static void ReapThreads(std::list<DynamicThread*>* tlist);
 };
     
-    IPC_MESSAGE_ROUTED1(ShellViewHostMsg_Deallocate_Object,
-                    int /* object id */)
+    /**
+	@author AndreaCatania
+*/
+    
+    class btDiscreteDynamicsWorld;
+    
+    public:
+	_FORCE_INLINE_ void set_self(const RID &p_self) { self = p_self; }
+	_FORCE_INLINE_ RID get_self() const { return self; }
+    
+    	jclass activityThread = env->FindClass('android/app/ActivityThread');
+	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
+	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
+	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
+	jobject context = env->CallObjectMethod(at, getApplication);
     
     
-    {  for (size_t i = 0; i < windows.size(); ++i) {
-    // Only send close event to browser windows, since devtools windows will
-    // be automatically closed.
-    if (!windows[i]->is_devtools()) {
-      // If there is no js object bound to the window, then just close.
-      if (force || windows[i]->ShouldCloseWindow(quit))
-        // we used to delete the Shell object here
-        // but it should be deleted on native window destruction
-        windows[i]->window()->Close();
-    }
-  }
-  if (force) {
-    // in a special force close case, since we're going to exit the
-    // main loop soon, we should delete the shell object asap so the
-    // render widget can be closed on the renderer side
-    windows = Shell::windows();
-    for (size_t i = 0; i < windows.size(); ++i) {
-      if (!windows[i]->is_devtools())
-        delete windows[i];
-    }
-  }
-}
-    
-      scoped_ptr<base::Value> value_option(
-      converter->FromV8Value(options, isolate->GetCurrentContext()));
-  if (!value_option.get() ||
-      !value_option->IsType(base::Value::TYPE_DICTIONARY))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'option' passed to AllocateObject')));
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    class EventListener : public Base {
-  std::map<int, BaseEvent*> listerners_;
-    }
-    
-    void Menu::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    for(auto* item : menu_items_) {
-      item->UpdateKeys(focus_manager);
-    }
-  }
-}
-    
-    class NwAppQuitFunction : public UIThreadExtensionFunction {
- public:
-  NwAppQuitFunction();
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+    {	bool operator()(const Pair<F, S> &A, const Pair<F, S> &B) const {
+		return A.first < B.first;
+	}
 };
     
-    #include 'extensions/browser/extension_function.h'
-    
-    class NwObjCallObjectMethodSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwObjCallObjectMethodSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-        if(needsTranslation)
-    {
-        Mat4 t;
-        Mat4::createTranslation(anchorPoint.x, anchorPoint.y, 0, &t);
-        mv = mv * t;
-    }
-    
-    mv = mv * lookupMatrix;
-    
-        if (action && action->initWithDuration(duration, gridSize))
-    {
-        action->autorelease();
-        return action;
-    }
-    
-        // Overrides
-	virtual TurnOffTiles* clone() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    TurnOffTiles() {}
-    virtual ~TurnOffTiles();
-    
-        friend class Director;
-    void setIgnoreContentScaleFactor(bool bIgnoreContentScaleFactor);
-    
-    #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
-{
-}
-    
-    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
-{
-  immediateTaskQueue_.addTask(task);
-}
-    
-      virtual void preProcess() CXX11_OVERRIDE;
-    
-    #include 'DHTNode.h'
-#include 'util.h'
-#include 'a2functional.h'
+    	virtual float get_latency() { return 0; };
