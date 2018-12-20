@@ -1,34 +1,53 @@
 
         
-          private
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-      def std_cmake_parameters
-    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
     
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
+    $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+    
+                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
+            Jekyll.logger.debug '', json_message
+            @websockets.each { |ws| ws.send(json_message) }
+          end
         end
     
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
+          def perform(start_id, stop_id)
+        update = '
+          latest_merge_request_diff_id = (
+            SELECT MAX(id)
+            FROM merge_request_diffs
+            WHERE merge_requests.id = merge_request_diffs.merge_request_id
+          )'.squish
     
-      def test_symlink_exists(path)
-    exists?('L', path)
-  end
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
+        end
     
-          attr_reader :key, :default, :options
-    
-            def lvalue(key)
-          key.to_s.chomp('=').to_sym
+              lfs_objects.each do |object|
+            yield object
+          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
         end
       end
     end
@@ -36,52 +55,67 @@
 end
 
     
-          private
-    
-        puts('Packaging plugins for offline usage')
-    
-            return nil
+          # Returns the identifier to use for cache keys.
+      #
+      # For issues and pull requests this will be 'Issue' or 'MergeRequest'
+      # respectively. For diff notes this will return 'MergeRequest', for
+      # regular notes it will either return 'Issue' or 'MergeRequest' depending
+      # on what type of object the note belongs to.
+      def cache_key_type
+        if object.respond_to?(:issuable_type)
+          object.issuable_type
+        elsif object.respond_to?(:noteable_type)
+          object.noteable_type
+        else
+          raise(
+            TypeError,
+            'Instances of #{object.class} are not supported'
+          )
+        end
       end
+    
+            def line_code
+          diff_line = Gitlab::Diff::Parser.new.parse(diff_hunk.lines).to_a.last
+    
+              # Assignees are optional so we only convert it from a Hash if one was
+          # set.
+          hash[:assignee] &&= Representation::User
+            .from_json_hash(hash[:assignee])
+    
+        def initialize(machine, guests, capabilities)
+      @capabilities = capabilities
+      @guests       = guests
+      @machine      = machine
     end
-  end
-end end end
-
     
-      # create list of plugins to update
-  def plugins_to_update(previous_gem_specs_map)
-    if update_all?
-      previous_gem_specs_map.values.map{|spec| spec.name}
-    else
-      # If the plugins isn't available in the gemspec or in 
-      # the gemfile defined with a local path, we assume the plugins is not
-      # installed.
-      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
-      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
-      plugins_arg
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
+    
+    require 'vagrant/util/safe_puts'
+    
+        # Converts this registry to a hash
+    def to_hash
+      result = {}
+      self.each do |key, value|
+        result[key] = value
+      end
+    
+      def page_requested?
+    params[:page] == 'true'
+  end
+    
+        private
+    
+          redirect_to admin_report_path(@report)
     end
+    
+      def set_web_push_subscription
+    @web_subscription = ::Web::PushSubscription.find_by(access_token_id: doorkeeper_token.id)
   end
     
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
+        render json: web_subscription, serializer: REST::WebPushSubscriptionSerializer
   end
-    
-      class Blockquote < Liquid::Block
-    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
-    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
-    AuthorTitle = /([^,]+),([^,]+)/
-    Author =  /(.+)/
-    
-        def poster
-      'poster='#{@poster}'' if @poster
-    end
