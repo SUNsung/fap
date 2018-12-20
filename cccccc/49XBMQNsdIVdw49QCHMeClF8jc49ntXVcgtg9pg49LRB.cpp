@@ -1,292 +1,718 @@
 
         
-        // Generate param traits log methods.
-#include 'ipc/param_traits_log_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
 
     
-       bool GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const override;
-    
-    void MenuItem::Destroy() {
-  gtk_widget_destroy(menu_item_);
-  g_object_unref(G_OBJECT(menu_item_));
+    static void secp256k1_sha256_finalize(secp256k1_sha256_t *hash, unsigned char *out32) {
+    static const unsigned char pad[64] = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint32_t sizedesc[2];
+    uint32_t out[8];
+    int i = 0;
+    sizedesc[0] = BE32(hash->bytes >> 29);
+    sizedesc[1] = BE32(hash->bytes << 3);
+    secp256k1_sha256_write(hash, pad, 1 + ((119 - (hash->bytes % 64)) % 64));
+    secp256k1_sha256_write(hash, (const unsigned char*)sizedesc, 8);
+    for (i = 0; i < 8; i++) {
+        out[i] = BE32(hash->s[i]);
+        hash->s[i] = 0;
+    }
+    memcpy(out32, (const unsigned char*)out, 32);
 }
     
-        bool ReadImage(ClipboardData& data) {
-      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
-      std::vector<unsigned char> encoded_image;
-      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
+    int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *result, const secp256k1_pubkey *point, const unsigned char *scalar) {
+    int ret = 0;
+    int overflow = 0;
+    secp256k1_gej res;
+    secp256k1_ge pt;
+    secp256k1_scalar s;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(result != NULL);
+    ARG_CHECK(point != NULL);
+    ARG_CHECK(scalar != NULL);
     }
     
-     protected:
-  ~NwObjCallObjectMethodFunction() override;
+    // This is initialized with a default, stub implementation.
+// If python-google.protobuf.cc is loaded, the function pointer is overridden
+// with a full implementation.
+const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
+    GetCProtoInsidePyProtoStub;
+Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
+    MutableCProtoInsidePyProtoStub;
     
-      NwDesktopCaptureMonitor::NwDesktopCaptureMonitor()
-      : started_(false) {
-  }
-    
-      Fork() {
-    pid = fork();
-    if (pid < 0) {
-      throw std::system_error(errno, std::system_category(), 'fork');
+    template <typename DescriptorType>
+static void WriteDocCommentBody(
+    io::Printer* printer, const DescriptorType* descriptor) {
+    SourceLocation location;
+    if (descriptor->GetSourceLocation(&location)) {
+        WriteDocCommentBodyImpl(printer, location);
     }
-  }
-    
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    REGISTER_CPU_OPERATOR(
-    MergeMultiScalarFeatureTensorsGradient,
-    MergeMultiScalarFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiScalarFeatureTensorsGradient)
-    .SetDoc(
-        'Explode given multi-feature tensors with scalar features into many.' +
-        doc)
-    .NumInputs([](int n) { return n >= 2; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'out_values_grad', '.values_grad')
-    .Output(0, 'in1_values_grad', '.values_grad');
-REGISTER_GRADIENT(
-    MergeMultiScalarFeatureTensors,
-    GetMergeMultiScalarFeatureTensorsGradient);
-    
-    namespace caffe2 {
-namespace {
-REGISTER_CPU_OPERATOR(
-    FindDuplicateElements,
-    FindDuplicateElementsOp<CPUContext>);
-    }
-    }
-    
-    void ChannelArguments::SetLoadBalancingPolicyName(
-    const grpc::string& lb_policy_name) {
-  SetString(GRPC_ARG_LB_POLICY_NAME, lb_policy_name);
 }
     
-    #include <grpc/grpc_security.h>
-#include 'src/core/lib/channel/channel_args.h'
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/strutil.h>
     
-    class CensusChannelData : public ChannelData {
- public:
-  grpc_error* Init(grpc_channel_element* elem,
-                   grpc_channel_element_args* args) override;
-};
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
     
-    
-    {}  // namespace grpc
-    
-    // Serializes the outgoing trace context. Field IDs are 1 byte followed by
-// field data. A 1 byte version ID is always encoded first.
-size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
-                             char* tracing_buf, size_t tracing_buf_size);
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-    DynamicThreadPool::DynamicThreadPool(int reserve_threads)
-    : shutdown_(false),
-      reserve_threads_(reserve_threads),
-      nthreads_(0),
-      threads_waiting_(0) {
-  for (int i = 0; i < reserve_threads_; i++) {
-    std::lock_guard<std::mutex> lock(mu_);
-    nthreads_++;
-    new DynamicThread(this);
-  }
+    std::string SourceGeneratorBase::class_access_level() {
+  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
 }
     
-    class DynamicThreadPool final : public ThreadPoolInterface {
- public:
-  explicit DynamicThreadPool(int reserve_threads);
-  ~DynamicThreadPool();
-    }
+      printer->Print(
+    'com.google.protobuf.Descriptors.FileDescriptor.'
+    'InternalDescriptorAssigner assigner =\n'
+    '    new com.google.protobuf.Descriptors.FileDescriptor.'
+    '    InternalDescriptorAssigner() {\n'
+    '      public com.google.protobuf.ExtensionRegistry assignDescriptors(\n'
+    '          com.google.protobuf.Descriptors.FileDescriptor root) {\n'
+    '        descriptor = root;\n'
+    // Custom options will be handled when immutable messages' outer class is
+    // loaded. Here we just return null and let custom options be unknown
+    // fields.
+    '        return null;\n'
+    '      }\n'
+    '    };\n');
     
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
+      printer->Print(
+      '#else\n');
     
-      // Have we encountered a background error in paranoid mode?
-  Status bg_error_ GUARDED_BY(mutex_);
+      EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', ''),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: got empty string for making TextFormat data, input:');
+  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('a', ''),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: got empty string for making TextFormat data, input:');
+  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', 'a'),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: got empty string for making TextFormat data, input:');
     
-      // Does not exist, and create_if_missing == false: error
-  DB* db = nullptr;
-  Options opts;
-  opts.create_if_missing = false;
-  Status s = DB::Open(opts, dbname, &db);
-  ASSERT_TRUE(strstr(s.ToString().c_str(), 'does not exist') != nullptr);
-  ASSERT_TRUE(db == nullptr);
-    
-    TEST(FormatTest, InternalKeyShortSeparator) {
-  // When user keys are same
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 99, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 101, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeDeletion)));
-    }
-    
-    // Return the name of the sstable with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string TableFileName(const std::string& dbname, uint64_t number);
-    
-        RecordType type;
-    const bool end = (left == fragment_length);
-    if (begin && end) {
-      type = kFullType;
-    } else if (begin) {
-      type = kFirstType;
-    } else if (end) {
-      type = kLastType;
-    } else {
-      type = kMiddleType;
-    }
-    
-     public:
-  // Create a new SkipList object that will use 'cmp' for comparing keys,
-  // and will allocate memory using '*arena'.  Objects allocated in the arena
-  // must remain allocated for the lifetime of the skiplist object.
-  explicit SkipList(Comparator cmp, Arena* arena);
-    
-       format_perl = 0,                                  /* perl style replacement */
-   format_default = 0,                               /* ditto. */
-   format_sed = match_max << 1,                      /* sed style replacement. */
-   format_all = format_sed << 1,                     /* enable all extentions to sytax. */
-   format_no_copy = format_all << 1,                 /* don't copy non-matching segments. */
-   format_first_only = format_no_copy << 1,          /* Only replace first occurance. */
-   format_is_if = format_first_only << 1,            /* internal use only. */
-   format_literal = format_is_if << 1                /* treat string as a literal */
-    
-    #ifndef BOOST_REGEX_V4_MEM_BLOCK_CACHE_HPP
-#define BOOST_REGEX_V4_MEM_BLOCK_CACHE_HPP
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::find_restart_buf()
-{
-   if((position == base) && ((m_match_flags & match_not_bob) == 0))
-      return match_prefix();
-   return false;
-}
-    
-    //
-// regex_grep:
-// find all non-overlapping matches within the sequence first last:
+    // Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
 //
-template <class Predicate, class BidiIterator, class charT, class traits>
-inline unsigned int regex_grep(Predicate foo, 
-                               BidiIterator first, 
-                               BidiIterator last, 
-                               const basic_regex<charT, traits>& e, 
-                               match_flag_type flags = match_default)
-{
-   if(e.flags() & regex_constants::failbit)
-      return false;
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+    
+        case URX_SETREF:
+            if (fp->fInputIdx >= fActiveLimit) {
+                fHitEnd = TRUE;
+                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                break;
+            } else {
+                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
     }
     
-    template <class OutputIterator, class BidirectionalIterator, class traits, class charT, class Formatter>
-OutputIterator regex_replace(OutputIterator out,
-                         BidirectionalIterator first,
-                         BidirectionalIterator last,
-                         const basic_regex<charT, traits>& e, 
-                         Formatter fmt, 
-                         match_flag_type flags = match_default)
-{
-   regex_iterator<BidirectionalIterator, charT, traits> i(first, last, e, flags);
-   regex_iterator<BidirectionalIterator, charT, traits> j;
-   if(i == j)
-   {
-      if(!(flags & regex_constants::format_no_copy))
-         out = BOOST_REGEX_DETAIL_NS::copy(first, last, out);
-   }
-   else
-   {
-      BidirectionalIterator last_m(first);
-      while(i != j)
-      {
-         if(!(flags & regex_constants::format_no_copy))
-            out = BOOST_REGEX_DETAIL_NS::copy(i->prefix().first, i->prefix().second, out); 
-         out = i->format(out, fmt, flags, e);
-         last_m = (*i)[0].second;
-         if(flags & regex_constants::format_first_only)
-            break;
-         ++i;
-      }
-      if(!(flags & regex_constants::format_no_copy))
-         out = BOOST_REGEX_DETAIL_NS::copy(last_m, last, out);
-   }
-   return out;
-}
+    #if !UCONFIG_NO_FORMATTING
     
-    static const int kCbToBlueTable[256] = {
-  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
-  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
-  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
-  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
-  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
-  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
-   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
-   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
-   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
-   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
-   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
-     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
-    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
-    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
-    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
-    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
-   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
-   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
-   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
-   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
-   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
-   220,  222,  223,  225,
+    U_NAMESPACE_BEGIN
+    
+        static const int32_t gDigitCount[] = {
+        1,1,1,1,1,1,1,1,
+        1,1,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4};
+    
+    /**
+ * A representation an acceptable range of digit counts for integers.
+ */
+class U_I18N_API IntDigitCountRange : public UMemory {
+public:
+    /**
+     * No constraints: 0 up to INT32_MAX
+     */
+    IntDigitCountRange() : fMin(0), fMax(INT32_MAX) { }
+    IntDigitCountRange(int32_t min, int32_t max);
+    int32_t pin(int32_t digitCount) const;
+    int32_t getMax() const { return fMax; }
+    int32_t getMin() const { return fMin; }
+private:
+    int32_t fMin;
+    int32_t fMax;
 };
     
-      // Returns the combined score of the output image in the last Compare() call
-  // (or the baseline image, if Compare() was not called yet), based on output
-  // size and the similarity metric.
-  virtual double ScoreOutputSize(int size) const = 0;
     
-    #endif  // GUETZLI_ENTROPY_ENCODE_H_
-
-    
-    #include <math.h>
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    bool JPEGData::Is420() const {
-  return (components.size() == 3 &&
-          max_h_samp_factor == 2 &&
-          max_v_samp_factor == 2 &&
-          components[0].h_samp_factor == 2 &&
-          components[0].v_samp_factor == 2 &&
-          components[1].h_samp_factor == 1 &&
-          components[1].v_samp_factor == 1 &&
-          components[2].h_samp_factor == 1 &&
-          components[2].v_samp_factor == 1);
+//------------------------------------------------------------------------------
+//
+//   smpdtfmt_cleanup     Memory cleanup function, free/delete all
+//                      cached memory.  Called by ICU's u_cleanup() function.
+//
+//------------------------------------------------------------------------------
+UBool
+SimpleDateFormatStaticSets::cleanup(void)
+{
+    delete gStaticSets;
+    gStaticSets = NULL;
+    gSimpleDateFormatStaticSetsInitOnce.reset();
+    return TRUE;
 }
+    
+    class  UnicodeSet;
+    
+    U_NAMESPACE_END
+    
+    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
+static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
+static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
+static const UChar gFew[] = { 0x66, 0x65, 0x77 };
+static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
+static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
+    
+    // Timer management class
+class ThreadTimer {
+ public:
+  ThreadTimer() = default;
+    }
+    
+      const CPUInfo &info = context.cpu_info;
+  Out << 'Run on (' << info.num_cpus << ' X '
+      << (info.cycles_per_second / 1000000.0) << ' MHz CPU '
+      << ((info.num_cpus > 1) ? 's' : '') << ')\n';
+  if (info.caches.size() != 0) {
+    Out << 'CPU Caches:\n';
+    for (auto &CInfo : info.caches) {
+      Out << '  L' << CInfo.level << ' ' << CInfo.type << ' '
+          << (CInfo.size / 1000) << 'K';
+      if (CInfo.num_sharing != 0)
+        Out << ' (x' << (info.num_cpus / CInfo.num_sharing) << ')';
+      Out << '\n';
+    }
+  }
