@@ -1,369 +1,378 @@
 
         
-          // Try to close all windows (then will cause whole app to quit).
-  static void CloseAllWindows(bool force = false, bool quit = false);
-    
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
-        
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
-    }
-    }
-    
-          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
-      if (data.type == TYPE_PNG &&
-        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
-        error_ = 'Failed to decode as PNG';
-        return false;
-      } else if (data.type == TYPE_JPEG) {
-        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
-        if (tmp_bitmap == NULL) {
-          error_ = 'Failed to decode as JPEG';
-          return false;
-        }
-        bitmap = std::move(tmp_bitmap);
-      }
-    
-    NwObjCallObjectMethodAsyncFunction::NwObjCallObjectMethodAsyncFunction() {
-}
-    
-      void Check(int min_expected, int max_expected) {
-    int next_expected = 0;
-    int missed = 0;
-    int bad_keys = 0;
-    int bad_values = 0;
-    int correct = 0;
-    std::string value_space;
-    Iterator* iter = db_->NewIterator(ReadOptions());
-    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-      uint64_t key;
-      Slice in(iter->key());
-      if (in == '' || in == '~') {
-        // Ignore boundary keys.
-        continue;
-      }
-      if (!ConsumeDecimalNumber(&in, &key) ||
-          !in.empty() ||
-          key < next_expected) {
-        bad_keys++;
-        continue;
-      }
-      missed += (key - next_expected);
-      next_expected = key + 1;
-      if (iter->value() != Value(key, &value_space)) {
-        bad_values++;
-      } else {
-        correct++;
-      }
-    }
-    delete iter;
-    }
-    
-      // Unlock while reading from files and memtables
-  {
-    mutex_.Unlock();
-    // First look in the memtable, then in the immutable memtable (if any).
-    LookupKey lkey(key, snapshot);
-    if (mem->Get(lkey, value, &s)) {
-      // Done
-    } else if (imm != nullptr && imm->Get(lkey, value, &s)) {
-      // Done
-    } else {
-      s = current->Get(options, lkey, value, &stats);
-      have_stat_update = true;
-    }
-    mutex_.Lock();
-  }
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
-}
+        class TrayIcon;
     
     
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(filename);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-      fname = LockFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kDBLockFile, type);
-    
-    
-    {
-    {}  // namespace
-}  // namespace leveldb
-    
-    template<typename Key, class Comparator>
-inline void SkipList<Key,Comparator>::Iterator::Seek(const Key& target) {
-  node_ = list_->FindGreaterOrEqual(target, nullptr);
-}
-    
-      // REQUIRES: External synchronization
-  void WriteStep(Random* rnd) {
-    const uint32_t k = rnd->Next() % K;
-    const intptr_t g = current_.Get(k) + 1;
-    const Key key = MakeKey(k, g);
-    list_.Insert(key);
-    current_.Set(k, g);
-  }
-    
-            LearnerNesterov(const std::vector<Parameter>& parameters,
-                        const LearningRateSchedule& learningRateSchedule,
-                        const MomentumSchedule& momentumSchedule,
-                        bool unitGain,
-                        AdditionalLearningOptions additionalOptions)
-                        : LearnerMomentumSGD(parameters, learningRateSchedule, momentumSchedule, unitGain, additionalOptions, 1)
-        {}
-    
-        template <typename V1ElemType>
-    std::shared_ptr<Matrix<V1ElemType>> NDArrayView::GetWritableMatrix(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/)
-    {
-        return GetMatrixImpl<V1ElemType>(GetWritableTensorView<V1ElemType>(), rowColSplitPoint);
-    }
-    
-        NDMask::NDMask(const NDShape& shape, Matrix<char>* matrix)
-        : m_device(AsDeviceDescriptor(matrix->GetDeviceId())), m_maskShape(shape)
-    {
-        m_matrixView = std::shared_ptr<Matrix<char>>(matrix, [](Matrix<char>* ptr) { delete ptr; });
-    }
-    
-    #include <cassert>
-#include <string>
-    
-    
-    {private:
-    // parameters
-    vector<ComputationNodeBasePtr> inputNodes;
-    map<wstring, ComputationNodeBasePtr> outputNodes;
-    ParameterTreatment parameterTreatment;
-    // other
-    set<ComputationNodeBasePtr> dependentSet;                                     // set of nodes that outputNodes depend on
+    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
 };
     
-        virtual bool OutputUsedInComputingInputNodesGradients() const override
-    {
-        // The DiagTimesNode does not require its output value for computing
-        // the gradients of its input nodes
-        return false;
-    }
+    SavePageHandler::~SavePageHandler() {}
     
-    namespace benchmark {
-namespace internal {
-// The arraysize(arr) macro returns the # of elements in an array arr.
-// The expression is a compile-time constant, and therefore can be
-// used in defining new arrays, for example.  If you use arraysize on
-// a pointer by mistake, you will get a compile-time error.
-//
-    }
-    }
+      // Get the weak_map_id from SupportsUserData.
+  static int32_t GetIDFromWrappedClass(base::SupportsUserData* wrapped);
     
-    // Information kept per benchmark we may want to run
-struct Benchmark::Instance {
-  std::string name;
-  Benchmark* benchmark;
-  ReportMode report_mode;
-  std::vector<int> arg;
-  TimeUnit time_unit;
-  int range_multiplier;
-  bool use_real_time;
-  bool use_manual_time;
-  BigO complexity;
-  BigOFunc* complexity_lambda;
-  UserCounters counters;
-  const std::vector<Statistics>* statistics;
-  bool last_benchmark_instance;
-  int repetitions;
-  double min_time;
-  size_t iterations;
-  int threads;  // Number of concurrent threads to us
-};
-    
-    Benchmark* Benchmark::Unit(TimeUnit unit) {
-  time_unit_ = unit;
-  return this;
+    void AtomBrowserMainParts::HandleSIGCHLD() {
+  // We need to accept SIGCHLD, even though our handler is a no-op because
+  // otherwise we cannot wait on children. (According to POSIX 2001.)
+  struct sigaction action;
+  memset(&action, 0, sizeof(action));
+  action.sa_handler = SIGCHLDHandler;
+  CHECK_EQ(sigaction(SIGCHLD, &action, nullptr), 0);
 }
     
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
-  }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
+    namespace api {
+class WebContents;
 }
     
-    namespace benchmark {
-namespace internal {
-    }
+    namespace atom {
     }
     
+    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+
     
-    { private:
-  bool init_;
-// Underlying regular expression object
-#if defined(HAVE_STD_REGEX)
-  std::regex re_;
-#elif defined(HAVE_POSIX_REGEX) || defined(HAVE_GNU_POSIX_REGEX)
-  regex_t re_;
-#else
-#error No regular expression backend implementation available
+    SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
+{
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
 #endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
+  }
+}
+    
+    private:
+  unsigned getNumReplacementTypes() const {
+    return genericSig->getGenericParams().size();
+  }
+    
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
+    
+    enum class ChildKind { Left, Right, Further, Root };
+    
+    
+    {
+    {    return index;
+  }
+}
+    
+      auto mirrorIter = mirroredBuffers.find(buffer);
+  if (mirrorIter != mirroredBuffers.end()) {
+    mirrorID = mirrorIter->second;
+  } else {
+    std::unique_ptr<llvm::MemoryBuffer> mirrorBuffer{
+      llvm::MemoryBuffer::getMemBuffer(buffer->getBuffer(),
+                                       buffer->getBufferIdentifier(),
+                                       /*RequiresNullTerminator=*/true)
+    };
+    mirrorID = swiftSrcMgr.addNewSourceBuffer(std::move(mirrorBuffer));
+    mirroredBuffers[buffer] = mirrorID;
+  }
+  loc = swiftSrcMgr.getLocForOffset(mirrorID, decomposedLoc.second);
+    
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
+}
+    
+    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
+    
+    #if defined(OS_WIN)
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/files/file_path.h'
+#include 'base/files/file_util.h'
+#include 'base/win/shortcut.h'
+#include 'base/path_service.h'
+#include 'content/nw/src/common/shell_switches.h'
+#endif
+    
+    
+    {}  // namespace nwapi
+    
+    namespace nw {
+    }
+    
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    
+    class NwAppQuitFunction : public UIThreadExtensionFunction {
+ public:
+  NwAppQuitFunction();
+    }
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
 };
     
-      // Returns an aggregate distance or similarity value between the baseline
-  // image and the image in the last Compare() call (or the baseline image, if
-  // Compare() was not called yet).
-  // The interpretation of this aggregate value depends on the comparator used.
-  virtual float distmap_aggregate() const = 0;
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-    #define GUETZLI_LOG(stats, ...)                                    \
-  do {                                                             \
-    char debug_string[1024];                                       \
-    int res = snprintf(debug_string, sizeof(debug_string),         \
-                       __VA_ARGS__);                               \
-    assert(res > 0 && 'expected successful printing');             \
-    (void)res;                                                     \
-    debug_string[sizeof(debug_string) - 1] = '\0';                 \
-    ::guetzli::PrintDebug(                      \
-         stats, std::string(debug_string));        \
-  } while (0)
-#define GUETZLI_LOG_QUANT(stats, q)                    \
-  for (int y = 0; y < 8; ++y) {                        \
-    for (int c = 0; c < 3; ++c) {                      \
-      for (int x = 0; x < 8; ++x)                      \
-        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
-      GUETZLI_LOG(stats, '   ');                       \
-    }                                                  \
-    GUETZLI_LOG(stats, '\n');                          \
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+      // implement nw.Screen.stopMonitor()
+  class NwScreenStopMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStopMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+      bool AllDone() const {
+    return num_done_ >= num_threads_;
   }
     
-    #ifndef GUETZLI_FAST_LOG_H_
-#define GUETZLI_FAST_LOG_H_
+      // Input statistics
+  // TODO(noetzli): The stats are incomplete. They are lacking everything
+  // consumed by MergeHelper.
+  uint64_t num_input_records = 0;
+  uint64_t num_input_deletion_records = 0;
+  uint64_t num_input_corrupt_records = 0;
+  uint64_t total_input_raw_key_bytes = 0;
+  uint64_t total_input_raw_value_bytes = 0;
     
-    constexpr int kDefaultMemlimitMB = 6000; // in MB
+    #include <string>
     
-    // Changes the quant_idx field of the components to refer to the index of the
-// quant table in the jpg->quant array.
-bool FixupIndexes(JPEGData* jpg) {
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    JPEGComponent* c = &jpg->components[i];
-    bool found_index = false;
-    for (size_t j = 0; j < jpg->quant.size(); ++j) {
-      if (jpg->quant[j].index == c->quant_idx) {
-        c->quant_idx = j;
-        found_index = true;
-        break;
+      // Start a transaction
+  Transaction* txn = txn_db->BeginTransaction(write_options);
+  assert(txn);
+    
+    Status GetStringFromCompressionType(std::string* compression_str,
+                                    CompressionType compression_type);
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+    
+    {  // time spent in open() and fopen().
+  uint64_t open_nanos;
+  // time spent in fallocate().
+  uint64_t allocate_nanos;
+  // time spent in write() and pwrite().
+  uint64_t write_nanos;
+  // time spent in read() and pread()
+  uint64_t read_nanos;
+  // time spent in sync_file_range().
+  uint64_t range_sync_nanos;
+  // time spent in fsync
+  uint64_t fsync_nanos;
+  // time spent in preparing write (fallocate etc).
+  uint64_t prepare_write_nanos;
+  // time spent in Logger::Logv().
+  uint64_t logger_nanos;
+};
+    
+      // Obtain the name of an operation given its type.
+  static const std::string& GetOperationName(OperationType op_type);
+    
+    void compareBenchmarkResults(const std::string& base, const std::string& test) {
+  printResultComparison(resultsFromFile(base), resultsFromFile(test));
+}
+    
+      /**
+   * Returns a random uint32_t in [min, max). If min == max, returns 0.
+   */
+  static uint32_t rand32(uint32_t min, uint32_t max) {
+    return rand32(min, max, ThreadLocalPRNG());
+  }
+    
+    #include <string>
+    
+    
+    {  // Test for overflow.
+  // Use a custom hours type using time_t as the underlying storage type to
+  // guarantee that we can overflow.
+  using hours_timet = std::chrono::duration<time_t, std::ratio<3600>>;
+  EXPECT_THROW(
+      to<struct timespec>(hours_timet(std::numeric_limits<time_t>::max())),
+      std::range_error);
+}
+    
+      bool hasImplementation() {
+    performLazyInit();
+    return static_cast<bool>(increment_);
+  }
+    
+    CacheLocality CacheLocality::readFromSysfsTree(
+    const std::function<std::string(std::string)>& mapping) {
+  // number of equivalence classes per level
+  std::vector<size_t> numCachesByLevel;
+    }
+    
+     private:
+  using Holder = std::shared_ptr<T>;
+    
+    #include <math.h>
+    
+    
+    {  const int components = png_get_channels(png_ptr, info_ptr);
+  switch (components) {
+    case 1: {
+      // GRAYSCALE
+      for (int y = 0; y < *ysize; ++y) {
+        const uint8_t* row_in = row_pointers[y];
+        uint8_t* row_out = &(*rgb)[3 * y * (*xsize)];
+        for (int x = 0; x < *xsize; ++x) {
+          const uint8_t gray = row_in[x];
+          row_out[3 * x + 0] = gray;
+          row_out[3 * x + 1] = gray;
+          row_out[3 * x + 2] = gray;
+        }
       }
+      break;
     }
-    if (!found_index) {
-      fprintf(stderr, 'Quantization table with index %zd not found\n',
-              c->quant_idx);
-      jpg->error = JPEG_QUANT_TABLE_NOT_FOUND;
+    case 2: {
+      // GRAYSCALE + ALPHA
+      for (int y = 0; y < *ysize; ++y) {
+        const uint8_t* row_in = row_pointers[y];
+        uint8_t* row_out = &(*rgb)[3 * y * (*xsize)];
+        for (int x = 0; x < *xsize; ++x) {
+          const uint8_t gray = BlendOnBlack(row_in[2 * x], row_in[2 * x + 1]);
+          row_out[3 * x + 0] = gray;
+          row_out[3 * x + 1] = gray;
+          row_out[3 * x + 2] = gray;
+        }
+      }
+      break;
+    }
+    case 3: {
+      // RGB
+      for (int y = 0; y < *ysize; ++y) {
+        const uint8_t* row_in = row_pointers[y];
+        uint8_t* row_out = &(*rgb)[3 * y * (*xsize)];
+        memcpy(row_out, row_in, 3 * (*xsize));
+      }
+      break;
+    }
+    case 4: {
+      // RGBA
+      for (int y = 0; y < *ysize; ++y) {
+        const uint8_t* row_in = row_pointers[y];
+        uint8_t* row_out = &(*rgb)[3 * y * (*xsize)];
+        for (int x = 0; x < *xsize; ++x) {
+          const uint8_t alpha = row_in[4 * x + 3];
+          row_out[3 * x + 0] = BlendOnBlack(row_in[4 * x + 0], alpha);
+          row_out[3 * x + 1] = BlendOnBlack(row_in[4 * x + 1], alpha);
+          row_out[3 * x + 2] = BlendOnBlack(row_in[4 * x + 2], alpha);
+        }
+      }
+      break;
+    }
+    default:
+      png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
       return false;
-    }
   }
+  png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
   return true;
 }
     
-    // Writes len bytes from buf, using the out callback.
-inline bool JPEGWrite(JPEGOutput out, const uint8_t* buf, size_t len) {
-  static const size_t kBlockSize = 1u << 30;
-  size_t pos = 0;
-  while (len - pos > kBlockSize) {
-    if (!out.Write(buf + pos, kBlockSize)) {
-      return false;
+    #ifndef GUETZLI_JPEG_BIT_WRITER_H_
+#define GUETZLI_JPEG_BIT_WRITER_H_
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
-    pos += kBlockSize;
   }
-  return out.Write(buf + pos, len - pos);
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
 }
+    
+      int iquant[3 * kDCTBlockSize];
+  int idx = 0;
+  for (int i = 0; i < 3; ++i) {
+    for (int j = 0; j < kDCTBlockSize; ++j) {
+      int v = quant[idx];
+      jpg->quant[i].values[j] = v;
+      iquant[idx++] = ((1 << kIQuantBits) + 1) / v;
+    }
+  }
+    
+    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
+
+    
+    // Updates ac_histogram with the counts of the AC symbols that will be added by
+// a sequential jpeg encoder for this block. Every symbol is counted twice so
+// that we can add a fake symbol at the end with count 1 to be the last (least
+// frequent) symbol with the all 1 code.
+void UpdateACHistogramForDCTBlock(const coeff_t* coeffs,
+                                  JpegHistogram* ac_histogram) {
+  int r = 0;
+  for (int k = 1; k < 64; ++k) {
+    coeff_t coeff = coeffs[kJPEGNaturalOrder[k]];
+    if (coeff == 0) {
+      r++;
+      continue;
+    }
+    while (r > 15) {
+      ac_histogram->Add(0xf0);
+      r -= 16;
+    }
+    int nbits = Log2FloorNonZero(std::abs(coeff)) + 1;
+    int symbol = (r << 4) + nbits;
+    ac_histogram->Add(symbol);
+    r = 0;
+  }
+  if (r > 0) {
+    ac_histogram->Add(0);
+  }
+}
+    
+    #include 'guetzli/jpeg_data.h'
