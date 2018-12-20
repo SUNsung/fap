@@ -1,99 +1,192 @@
 
         
-            OPERATOR = 0
-    SUPERVISOR = 1
-    DIRECTOR = 2
+          def _load_random_shard(self):
+    '''Randomly select a file and read it.'''
+    return self._load_shard(random.choice(self._all_shards))
     
-        def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
+      def __init__(self, test_data_name='wsc273'):
+    vocab_file = os.path.join(FLAGS.data_dir, 'vocab.txt')
+    self.vocab = utils.CharsVocabulary(vocab_file, 50)
+    assert test_data_name in ['pdp60', 'wsc273'], (
+        'Test data must be pdp60 or wsc273, got {}'.format(test_data_name))
+    self.test_data_name = test_data_name
     
-        def add_link_to_crawl(self, url):
-        '''Add the given link to `links_to_crawl`.'''
-        pass
+      word_to_id = build_vocab(train_path)
+  train_data = _file_to_word_ids(train_path, word_to_id)
+  valid_data = _file_to_word_ids(valid_path, word_to_id)
+  test_data = _file_to_word_ids(test_path, word_to_id)
+  vocabulary = len(word_to_id)
+  return train_data, valid_data, test_data, vocabulary
     
-    
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
-    
-    from django.contrib.sessions.backends.base import (
-    CreateError, SessionBase, UpdateError,
-)
-from django.core.exceptions import SuspiciousOperation
-from django.db import DatabaseError, IntegrityError, router, transaction
-from django.utils import timezone
-from django.utils.functional import cached_property
+      Args:
+    gen_logits: Generator logits.
+    gen_labels:  Labels for the correct token.
+    dis_predictions:  Discriminator predictions.
+    is_real_input:  Tensor indicating whether the label is present.
     
     
-class InternalError(DatabaseError):
-    pass
+def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
+  '''Create a train op for pretraining.'''
+  with tf.name_scope('pretrain_generator'):
+    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
+    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+                                                  FLAGS.grad_clipping)
+    gen_pretrain_op = optimizer.apply_gradients(
+        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    return gen_pretrain_op
     
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
+    tensorboard = TensorBoard(batch_size=batch_size,
+                          embeddings_freq=1,
+                          embeddings_layer_names=['features'],
+                          embeddings_metadata='metadata.tsv',
+                          embeddings_data=x_test)
     
-        if dataset_name == 'http' or dataset_name == 'smtp':
-        y = (y != b'normal.').astype(int)
+        fpath = os.path.join(path, 'test')
+    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
     
-            # Create flat baselines to compare the variation over batch size
-        all_times['pca'].extend([results_dict['pca']['time']] *
-                                len(batch_sizes))
-        all_errors['pca'].extend([results_dict['pca']['error']] *
-                                 len(batch_sizes))
-        all_times['rpca'].extend([results_dict['rpca']['time']] *
-                                 len(batch_sizes))
-        all_errors['rpca'].extend([results_dict['rpca']['error']] *
-                                  len(batch_sizes))
-        for batch_size in batch_sizes:
-            ipca = IncrementalPCA(n_components=n_components,
-                                  batch_size=batch_size)
-            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
-                                                                   ipca)]}
-            all_times['ipca'].append(results_dict['ipca']['time'])
-            all_errors['ipca'].append(results_dict['ipca']['error'])
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = os.path.join('datasets', 'fashion-mnist')
+    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
+    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
+             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
     
-    from scipy.linalg import svd
-from sklearn.utils.extmath import randomized_svd
-from sklearn.datasets.samples_generator import make_low_rank_matrix
     
-    try:
-    from urllib.request import urlopen
-except ImportError:
-    # Python 2
-    from urllib import urlopen
+def test_preprocess_input_symbolic():
+    # Test image batch
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    inputs = Input(shape=x.shape[1:])
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape[1:])(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x).shape == x.shape
     
-        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
-                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
-                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
-                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
-                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
-                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
-                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
-                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
-                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
-                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
-                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
-                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
-                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
-                 971, 977, 983, 991, 997]
     
-    def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
-        sys.exit()
+def test_categorical_hinge():
+    y_pred = K.variable(np.array([[0.3, 0.2, 0.1],
+                                  [0.1, 0.2, 0.7]]))
+    y_true = K.variable(np.array([[0, 1, 0],
+                                  [1, 0, 0]]))
+    expected_loss = ((0.3 - 0.2 + 1) + (0.7 - 0.1 + 1)) / 2.0
+    loss = K.eval(losses.categorical_hinge(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
     
-        def _colision_resolution(self, key, data=None):
-        new_key = self.hash_function(key + 1)
+        # Arguments
+        units: Positive integer, dimensionality of the output space.
+        kernel_initializer: Initializer for the `kernel` weights matrix,
+            used for the linear transformation of the inputs.
+            (see [initializers](../initializers.md)).
+        unit_forget_bias: Boolean.
+            If True, add 1 to the bias of the forget gate at initialization.
+            Setting it to true will also force `bias_initializer='zeros'`.
+            This is recommended in [Jozefowicz et al. (2015)](
+            http://www.jmlr.org/proceedings/papers/v37/jozefowicz15.pdf).
+        recurrent_initializer: Initializer for the `recurrent_kernel`
+            weights matrix,
+            used for the linear transformation of the recurrent state.
+            (see [initializers](../initializers.md)).
+        bias_initializer: Initializer for the bias vector
+            (see [initializers](../initializers.md)).
+        kernel_regularizer: Regularizer function applied to
+            the `kernel` weights matrix
+            (see [regularizer](../regularizers.md)).
+        recurrent_regularizer: Regularizer function applied to
+            the `recurrent_kernel` weights matrix
+            (see [regularizer](../regularizers.md)).
+        bias_regularizer: Regularizer function applied to the bias vector
+            (see [regularizer](../regularizers.md)).
+        activity_regularizer: Regularizer function applied to
+            the output of the layer (its 'activation').
+            (see [regularizer](../regularizers.md)).
+        kernel_constraint: Constraint function applied to
+            the `kernel` weights matrix
+            (see [constraints](../constraints.md)).
+        recurrent_constraint: Constraint function applied to
+            the `recurrent_kernel` weights matrix
+            (see [constraints](../constraints.md)).
+        bias_constraint: Constraint function applied to the bias vector
+            (see [constraints](../constraints.md)).
+        return_sequences: Boolean. Whether to return the last output.
+            in the output sequence, or the full sequence.
+        return_state: Boolean. Whether to return the last state
+            in addition to the output.
+        stateful: Boolean (default False). If True, the last state
+            for each sample at index i in a batch will be used as initial
+            state for the sample of index i in the following batch.
+    '''
+    def __init__(self, units,
+                 kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal',
+                 bias_initializer='zeros',
+                 unit_forget_bias=True,
+                 kernel_regularizer=None,
+                 recurrent_regularizer=None,
+                 bias_regularizer=None,
+                 activity_regularizer=None,
+                 kernel_constraint=None,
+                 recurrent_constraint=None,
+                 bias_constraint=None,
+                 return_sequences=False,
+                 return_state=False,
+                 stateful=False,
+                 **kwargs):
+        self.units = units
+        super(CuDNNLSTM, self).__init__(
+            return_sequences=return_sequences,
+            return_state=return_state,
+            stateful=stateful,
+            **kwargs)
     
-        def __prepare__(self, N = 0, M = 0):
-        self.dp = [[-1 for y in range(0,M)] for x in range(0,N)]
+        # Whereas if you specify the input shape, the model gets built continuously
+    # as you are adding layers:
+    model = Sequential()
+    model.add(Dense(32, input_shape=(500,)))
+    model.add(Dense(32))
+    model.weights  # returns list of length 4
     
-        dp = [[False for x in range(s+1)]for y in range(n+1)]
     
-    TAG = 'K-MEANS-CLUST/ '
+max_features = 20000
+# cut texts after this number of words
+# (among top max_features most common words)
+maxlen = 100
+batch_size = 32
+    
+    @section recognizers Recognizers
+    
+            Upon erroneous input '[]', the call chain is
+    
+    ### OUTPUT ###
+# Ellipse: 1
+# Ellipse: 2
+# Ellipse: 3
+# Ellipse: 4
+
+    
+    *TL;DR80
+Allows object composition to achieve the same code reuse as inheritance.
+'''
+    
+            # and can also be undone at will
+        for cmd in reversed(command_stack):
+            cmd.undo()
+    finally:
+        os.unlink('foo.txt')
+    
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
+    
+        @property
+    def _lazy_property(self):
+        if not hasattr(self, attr):
+            setattr(self, attr, fn(self))
+        return getattr(self, attr)
