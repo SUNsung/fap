@@ -1,458 +1,276 @@
 
         
-        void CostAnalyzer::AnalyzeCosts() {
-  std::map<string, OpPerfSummary> ops;
-  for (const auto& op_perf : op_perf_.op_performance()) {
-    string op_name = op_perf.op().op();
-    ops[op_name].count++;
-    ops[op_name].time += op_perf.compute_cost();
-    ops[op_name].compute_time += op_perf.compute_time();
-    ops[op_name].memory_time += op_perf.memory_time();
-    ops[op_name].time_upper += op_perf.compute_time() + op_perf.memory_time();
-    ops[op_name].time_lower +=
-        std::max(op_perf.compute_time(), op_perf.memory_time());
-    ops[op_name].name = op_name;
-  }
-  SortOpsByTime(ops);
-    }
-    
-    #include 'tensorflow/python/grappler/model_analyzer.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL.
-void DelayedNumpyDecref(void* data, size_t len, void* obj) {
-  mutex_lock ml(*DelayedDecrefLock());
-  DecrefCache()->push_back(obj);
-}
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      const tensorflow::OpRegistrationData* op_reg_data;
-  auto status =
-      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
-  if (!status.ok()) {
-    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
-    return '';
-  }
-  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
-    
-    port::Status CUDAEvent::Record(CUDAStream* stream) {
-  return CUDADriver::RecordEvent(parent_->cuda_context(), cuda_event_,
-                                 stream->cuda_stream());
-}
-    
-    // static
-void App::Call(const std::string& method,
-               const base::ListValue& arguments) {
-  if (method == 'Quit') {
-    Quit();
-  } else if (method == 'CloseAllWindows') {
-    CloseAllWindows();
-  } else if (method == 'CrashBrowser') {
-    int* ptr = NULL;
-    *ptr = 1;
-  } else {
-    NOTREACHED() << 'Calling unknown method ' << method << ' of App.';
-  }
-}
-    
-    
-    {}  // namespace remote
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
- public:
-  MenuDelegate(ObjectManager* object_manager);
-  ~MenuDelegate() override;
-    }
-    
-    void MenuItem::OnClick() {
-  // Automatically flip checkbox.
-  if (type_ == 'checkbox')
-    is_checked_ = !is_checked_;
-    }
-    
-    bool NwAppSetProxyConfigFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  net::ProxyConfigWithAnnotation config;
-  std::unique_ptr<nwapi::nw__app::SetProxyConfig::Params> params(
-      nwapi::nw__app::SetProxyConfig::Params::Create(*args_));
-  EXTENSION_FUNCTION_VALIDATE(params.get());
-    }
-    
-    NwClipboardSetListSyncFunction::~NwClipboardSetListSyncFunction() {
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
-};
-    
-    bool PageIterator::BoundingBox(PageIteratorLevel level, const int padding,
-                               int* left, int* top,
-                               int* right, int* bottom) const {
-  if (!BoundingBoxInternal(level, left, top, right, bottom))
-    return false;
-  // Convert to the coordinate system of the original image.
-  *left = ClipToRange(*left / scale_ + rect_left_ - padding,
-                      rect_left_, rect_left_ + rect_width_);
-  *top = ClipToRange(*top / scale_ + rect_top_ - padding,
-                     rect_top_, rect_top_ + rect_height_);
-  *right = ClipToRange((*right + scale_ - 1) / scale_ + rect_left_ + padding,
-                       *left, rect_left_ + rect_width_);
-  *bottom = ClipToRange((*bottom + scale_ - 1) / scale_ + rect_top_ + padding,
-                        *top, rect_top_ + rect_height_);
-  return true;
-}
-    
-    namespace tesseract {
-    }
-    
-      // blow away the copied chopped_word, as we want to work with
-  // the blobs from the input chopped_word so seam_arrays can be merged.
-  TWERD *chopped = word->chopped_word;
-  TWERD *chopped2 = new TWERD;
-  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
-  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
-    chopped2->blobs.push_back(chopped->blobs[i]);
-  }
-  chopped->blobs.truncate(split_pt);
-  word->chopped_word = nullptr;
-  delete word2->chopped_word;
-  word2->chopped_word = nullptr;
-    
-    // ReadNextBox factors out the code to interpret a line of a box
-// file so that applybox and unicharset_extractor interpret the same way.
-// This function returns the next valid box file utf8 string and coords
-// and returns true, or false on eof (and closes the file).
-// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
-// for valid utf-8 and allows space or tab between fields.
-// utf8_str is set with the unichar string, and bounding box with the box.
-// If there are page numbers in the file, it reads them all.
-bool ReadNextBox(int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-// As ReadNextBox above, but get a specific page number. (0-based)
-// Use -1 to read any page number. Files without page number all
-// read as if they are page 0.
-bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-    
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
-    }
-    
-    // Deserialize the incoming SpanContext and generate a new server context based
-// on that. This new span will never be a root span. This should only be called
-// with a blank CensusContext as it overwrites it.
-void GenerateServerContext(absl::string_view tracing, absl::string_view stats,
-                           absl::string_view primary_role,
-                           absl::string_view method, CensusContext* context);
-    
-     private:
-  // Parses the next field from the incoming buffer and stores the parsed value
-  // in a GrpcTraceContext struct.  If it does not recognize the field ID it
-  // will return 0, otherwise it returns the number of bytes read.
-  static size_t ParseField(absl::string_view buf, GrpcTraceContext* tc) {
-    // TODO: Add support for multi-byte field IDs.
-    if (buf.empty()) {
-      return 0;
-    }
-    // Field ID is always the first byte in a field.
-    uint32_t field_id = buf[0];
-    size_t bytes_read = kFieldIdSize;
-    switch (field_id) {
-      case kTraceIdField:
-        bytes_read += kTraceIdSize;
-        if (bytes_read > buf.size()) {
-          return 0;
-        }
-        memcpy(tc->trace_id, &buf[kFieldIdSize],
-               opencensus::trace::TraceId::kSize);
-        break;
-      case kSpanIdField:
-        bytes_read += kSpanIdSize;
-        if (bytes_read > buf.size()) {
-          return 0;
-        }
-        memcpy(tc->span_id, &buf[kFieldIdSize],
-               opencensus::trace::SpanId::kSize);
-        break;
-      case kTraceOptionsField:
-        bytes_read += kTraceOptionsSize;
-        if (bytes_read > buf.size()) {
-          return 0;
-        }
-        memcpy(tc->trace_options, &buf[kFieldIdSize],
-               opencensus::trace::TraceOptions::kSize);
-        break;
-      default:  // Invalid field ID
-        return 0;
-    }
-    }
-    
-    
-    {   private:
-    DynamicThreadPool* pool_;
-    grpc_core::Thread thd_;
-    void ThreadFunc();
-  };
-  std::mutex mu_;
-  std::condition_variable cv_;
-  std::condition_variable shutdown_cv_;
-  bool shutdown_;
-  std::queue<std::function<void()>> callbacks_;
-  int reserve_threads_;
-  int nthreads_;
-  int threads_waiting_;
-  std::list<DynamicThread*> dead_threads_;
-    
-    size_t num_threads = 31;
-size_t work_chunk  = 120;
-    
-      std::vector<std::thread> workers;
-  for (auto worker = size_t{0}; worker < num_threads; ++worker) {
-    workers.push_back(std::thread([&] {
-      try {
-        hphp_thread_init();
-        hphp_session_init(Treadmill::SessionKind::HHBBC);
-        SCOPE_EXIT {
-          hphp_context_exit();
-          hphp_session_exit();
-          hphp_thread_exit();
-        };
-    }
-    }
-    }
-    
-    struct SrcLoc {
-  SrcLoc()
-    : start{0,0}
-    , past{0,0}
-  {}
-    }
-    
-        XFX_form_t xfx_formater {{
-      rsv,
-      xo,
-      static_cast<uint32_t>((mask) & 0x1f),
-      static_cast<uint32_t>(((mask) >> 5) & 0x1F),
-      static_cast<uint32_t>(rs),
-      op
-    }};
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-    CONTAINER_CONFIG_BODY(std::vector<uint32_t>, UInt32Vector)
-CONTAINER_CONFIG_BODY(std::vector<std::string>, StrVector)
-namespace { using simap = std::unordered_map<std::string, int>; }
-CONTAINER_CONFIG_BODY(simap, IntMap)
-CONTAINER_CONFIG_BODY(ConfigMap, Map)
-CONTAINER_CONFIG_BODY(ConfigMapC, MapC)
-CONTAINER_CONFIG_BODY(ConfigSet, Set)
-CONTAINER_CONFIG_BODY(ConfigSetC, SetC)
-CONTAINER_CONFIG_BODY(ConfigFlatSet, FlatSet)
-CONTAINER_CONFIG_BODY(ConfigIMap, IMap)
-    
-      if (comma != data) {
-    // we have meta
-    ssize_t meta_len = comma - data;
-    data_len -= meta_len;
-    char* semi = (char*)memchr(data, ';', meta_len);
-    char* slash = (char*)memchr(data, '/', meta_len);
-    }
-    
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
-    
-    #include 'hphp/runtime/base/stream-wrapper.h'
-#include 'hphp/runtime/base/runtime-error.h'
-    
-    #include <folly/String.h>
-    
-            bool needUpdateMasterParameter = !m_masterParameterUpdated;
-        for (const auto& parameter : Parameters())
-        {
-            const auto& smoothedGradientValue = m_smoothedGradientValues.at(parameter);
-            const auto& gradientValue = gradientValues.at(parameter);
-    }
-    
-    namespace CNTK
-{
-    class UDFUtils
-    {
-    public:
-    }
-    }
-    
-            void CopyFrom(const Value& /*source*/) override
-        {
-            LogicError('Value::CopyFrom is currently unsupported for PackedValue objects');
-        }
-    
-    
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
-}
-
-    
-            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
-        {
-            // failed to acquire
-            int rc = ::CloseHandle(m_handle);
-            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
-            {
-                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
-            }
-            m_handle = NULL;
-            return false;
-        }
-    
-        size_t CurrentSeed() const
-    {
-        return currentseed;
-    }
-    
-    #include <dmlc/registry.h>
-#include <functional>
-#include <vector>
-#include <utility>
-#include <string>
-#include './base.h'
-#include './data.h'
-#include './tree_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
     }
   }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
-    
-    /*!
- * \brief Registry entry for sparse page format.
- */
-struct SparsePageFormatReg
-    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
-                                        std::function<SparsePageFormat* ()> > {
-};
-    
-      // Computes the score (negative loss) resulting from performing this split
-  virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats,
-                                      bst_float left_weight,
-                                      bst_float right_weight) const = 0;
-    
-    #ifdef __CUDACC__
-#include 'device_helpers.cuh'
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
 #endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
     
-    // Information kept per benchmark we may want to run
-struct Benchmark::Instance {
-  std::string name;
-  Benchmark* benchmark;
-  ReportMode report_mode;
-  std::vector<int> arg;
-  TimeUnit time_unit;
-  int range_multiplier;
-  bool use_real_time;
-  bool use_manual_time;
-  BigO complexity;
-  BigOFunc* complexity_lambda;
-  UserCounters counters;
-  const std::vector<Statistics>* statistics;
-  bool last_benchmark_instance;
-  int repetitions;
-  double min_time;
-  size_t iterations;
-  int threads;  // Number of concurrent threads to us
-};
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  }
+}
     
-    LeastSq MinimalLeastSq(const std::vector<int>& n,
-                       const std::vector<double>& time,
-                       BigOFunc* fitting_curve) {
-  double sigma_gn = 0.0;
-  double sigma_gn_squared = 0.0;
-  double sigma_time = 0.0;
-  double sigma_time_gn = 0.0;
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
+    
+      // Try to adjust the blamer bundle.
+  if (orig_bb != nullptr) {
+    // TODO(rays) Looks like a leak to me.
+    // orig_bb should take, rather than copy.
+    word->blamer_bundle = new BlamerBundle();
+    word2->blamer_bundle = new BlamerBundle();
+    orig_bb->SplitBundle(chopped->blobs.back()->bounding_box().right(),
+                         word2->chopped_word->blobs[0]->bounding_box().left(),
+                         wordrec_debug_blamer,
+                         word->blamer_bundle, word2->blamer_bundle);
+  }
+    
+    // Creates a box file string from a unichar string, TBOX and page number.
+void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
+                    STRING* box_str);
+    
+    template <class A1> class TessCallback1;
+    
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    namespace grpc {
     }
     
-    namespace benchmark {
-namespace internal {
-    }
+    namespace grpc {
     }
     
-    #include <condition_variable>
-#include <mutex>
+      // Fixed Field ID values:
+  enum FieldIdValue {
+    kTraceIdField = 0,
+    kSpanIdField = 1,
+    kTraceOptionsField = 2,
+  };
     
-    void BenchmarkReporter::PrintBasicContext(std::ostream *out,
-                                          Context const &context) {
-  CHECK(out) << 'cannot be null';
-  auto &Out = *out;
+    const ViewDescriptor& ClientRoundtripLatencyMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/client/roundtrip_latency/minute')
+          .set_measure(kRpcClientRoundtripLatencyMeasureName)
+          .set_aggregation(MillisDistributionAggregation())
+          .add_column(ClientMethodTagKey());
+  return descriptor;
+}
+    
+    void ProtoServerReflection::FillErrorResponse(const Status& status,
+                                              ErrorResponse* error_response) {
+  error_response->set_error_code(status.error_code());
+  error_response->set_error_message(status.error_message());
+}
+    
+    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
+// The units of the stats should be the same.
+std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+    
+      void Corrupt(FileType filetype, int offset, int bytes_to_corrupt) {
+    // Pick file to corrupt
+    std::vector<std::string> filenames;
+    ASSERT_OK(env_.GetChildren(dbname_, &filenames));
+    uint64_t number;
+    FileType type;
+    std::string fname;
+    int picked_number = -1;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type) &&
+          type == filetype &&
+          int(number) > picked_number) {  // Pick latest file
+        fname = dbname_ + '/' + filenames[i];
+        picked_number = number;
+      }
     }
+    ASSERT_TRUE(!fname.empty()) << filetype;
+    }
+    
+    #include <deque>
+#include <set>
+#include 'db/dbformat.h'
+#include 'db/log_writer.h'
+#include 'db/snapshot.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'port/port.h'
+#include 'port/thread_annotations.h'
+    
+    namespace leveldb {
+    }
+    
+    // Return the name of the log file with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+std::string LogFileName(const std::string& dbname, uint64_t number);
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+    
+      // Reports dropped bytes to the reporter.
+  // buffer_ must be updated to remove the dropped bytes prior to invocation.
+  void ReportCorruption(uint64_t bytes, const char* reason);
+  void ReportDrop(uint64_t bytes, const Status& reason);
+    
+      Status OpenWithStatus(Options* options = nullptr) {
+    Close();
+    Options opts;
+    if (options != nullptr) {
+      opts = *options;
+    } else {
+      opts.reuse_logs = true;  // TODO(sanjay): test both ways
+      opts.create_if_missing = true;
+    }
+    if (opts.env == nullptr) {
+      opts.env = env_;
+    }
+    return DB::Open(opts, dbname_, &db_);
+  }
+    
+    namespace leveldb {
+    }
+    
+      /// Remove a pack, by name.
+  void remove(const std::string& pack);
+    
+    QueryData ATCPlugin::generate(QueryContext& context) {
+  QueryData qd;
+  std::vector<std::string> paths;
+  auto s = resolveFilePattern(path_, paths);
+  if (!s.ok()) {
+    LOG(WARNING) << 'Could not glob: ' << path_;
+  }
+  for (const auto& path : paths) {
+    s = genQueryDataForSqliteTable(path, sqlite_query_, qd, false);
+    if (!s.ok()) {
+      LOG(WARNING) << 'Error Code: ' << s.getCode()
+                   << ' Could not generate data: ' << s.getMessage();
+    }
+  }
+  return qd;
+}
+    
+    /**
+ * @brief Iterate the discovered decorators for a given point type.
+ *
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
+ */
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
+    
+    #include <gflags/gflags.h>
+#include <gtest/gtest.h>
+    
+    #include <vector>
