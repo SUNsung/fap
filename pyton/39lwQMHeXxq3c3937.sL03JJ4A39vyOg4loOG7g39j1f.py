@@ -1,208 +1,186 @@
 
         
-            def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
+        from ..utils.data_utils import get_file
+import numpy as np
     
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-        import sys
-    from mymodule import entry_function
-    sys.exit(entry_function())
-    
-    
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    
-    
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
-    
-      aws help
-  aws <command> help
-  aws <command> <subcommand> help
-aws: error: argument command: Invalid choice, valid choices are:
-    
-    
-@pytest.mark.parametrize('before, after', [
-    ('brew install sshfs',
-     'brew cask install osxfuse && brew install sshfs')])
-def test_get_new_command(before, after):
-    command = Command(before, output)
-    assert get_new_command(command) == after
-
-    
-    
-def _plot(results, metrics, formats, title, x_ticks, x_label,
-          format_markers=('x', '|', 'o', '+'),
-          metric_colors=('c', 'm', 'y', 'k', 'g', 'r', 'b')):
+        # Arguments
+        model: target model for the conversion.
     '''
-    Plot the results by metric, format and some other variable given by
-    x_label
-    '''
-    fig = plt.figure('scikit-learn multilabel metrics benchmarks')
-    plt.title(title)
-    ax = fig.add_subplot(111)
-    for i, metric in enumerate(metrics):
-        for j, format in enumerate(formats):
-            ax.plot(x_ticks, results[i, j].flat,
-                    label='{}, {}'.format(metric, format),
-                    marker=format_markers[j],
-                    color=metric_colors[i % len(metric_colors)])
-    ax.set_xlabel(x_label)
-    ax.set_ylabel('Time (s)')
-    ax.legend()
-    plt.show()
+    # Note: SeparableConvolution not included
+    # since only supported by TF.
+    conv_classes = {
+        'Conv1D',
+        'Conv2D',
+        'Conv3D',
+        'Conv2DTranspose',
+    }
+    to_assign = []
+    for layer in model.layers:
+        if layer.__class__.__name__ in conv_classes:
+            original_kernel = K.get_value(layer.kernel)
+            converted_kernel = convert_kernel(original_kernel)
+            to_assign.append((layer.kernel, converted_kernel))
+    K.batch_set_value(to_assign)
     
-                plt.text((i + 0.02) / len(algorithms), 0.98, alg,
-                     transform=ax.transAxes,
-                     ha='left',
-                     va='top',
-                     bbox=dict(facecolor='w', edgecolor='w', alpha=0.5))
+            if K.is_keras_tensor(additional_inputs[0]):
+            # Compute the full input spec, including state and constants
+            full_input = [inputs] + additional_inputs
+            full_input_spec = self.input_spec + additional_specs
+            # Perform the call with temporarily replaced input_spec
+            original_input_spec = self.input_spec
+            self.input_spec = full_input_spec
+            output = super(ConvRNN2D, self).__call__(full_input, **kwargs)
+            self.input_spec = original_input_spec
+            return output
+        else:
+            return super(ConvRNN2D, self).__call__(inputs, **kwargs)
     
-                gc.collect()
-            print('benchmarking orthogonal_mp (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            orthogonal_mp(X, y, precompute=True,
-                          n_nonzero_coefs=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            omp_gram[i_f, i_s] = delta
+    # The data, split between train and test sets:
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
-    plot(euclidean_distances)
-plot(rbf_kernels)
-plt.show()
-
+    # Train the network
+noisy_movies, shifted_movies = generate_movies(n_samples=1200)
+seq.fit(noisy_movies[:1000], shifted_movies[:1000], batch_size=10,
+        epochs=300, validation_split=0.05)
     
+        # Retrieve any AWS settings from the environment.
+    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    if not region:
+        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
     
-# Make some random data with uniformly located non zero entries with
-# Gaussian distributed values
-def make_sparse_random_data(n_samples, n_features, n_nonzeros,
-                            random_state=None):
-    rng = np.random.RandomState(random_state)
-    data_coo = sp.coo_matrix(
-        (rng.randn(n_nonzeros),
-        (rng.randint(n_samples, size=n_nonzeros),
-         rng.randint(n_features, size=n_nonzeros))),
-        shape=(n_samples, n_features))
-    return data_coo.toarray(), data_coo.tocsr()
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-import xml.etree.ElementTree as ET
-    
-    from ..common import *
-    
-        if '_text' in dictified['video'][0]['file'][0]:  #link exist
-        video_dict['links'] = [i['file'][0]['_text'].strip() for i in dictified['video']]
-    
-        def prepare(self, **kwargs):
-        self.api_data = json.loads(get_content(self.__class__.ep.format(self.vid)))
-        self.title = self.api_data['title']
-        for s in self.api_data['video']:
-            for st in self.__class__.stream_types:
-                if st['map_to'] == s:
-                    urls = self.api_data['video'][s]
-                    src = [u['url'] for u in urls]
-                    stream_data = dict(src=src, size=0, container='mp4', video_profile=st['video_profile'])
-                    self.streams[st['id']] = stream_data
-    
+        function_name = module.params.get('function_name')
+    if function_name:
         try:
-        json_data = get_coub_data(html)
-        title, video_url, audio_url = get_title_and_urls(json_data)
-        video_file_name, video_file_path = get_file_path(merge, output_dir, title, video_url)
-        audio_file_name, audio_file_path = get_file_path(merge, output_dir, title, audio_url)
-        download_url(audio_url, merge, output_dir, title, info_only)
-        download_url(video_url, merge, output_dir, title, info_only)
-        if not info_only:
-            try:
-                fix_coub_video_file(video_file_path)
-                audio_duration = float(ffmpeg.ffprobe_get_media_duration(audio_file_path))
-                video_duration = float(ffmpeg.ffprobe_get_media_duration(video_file_path))
-                loop_file_path = get_loop_file_path(title, output_dir)
-                single_file_path = audio_file_path
-                if audio_duration > video_duration:
-                    write_loop_file(int(audio_duration / video_duration), loop_file_path, video_file_name)
-                else:
-                    single_file_path = audio_file_path
-                    write_loop_file(int(video_duration / audio_duration), loop_file_path, audio_file_name)
+            # get_policy returns a JSON string so must convert to dict before reassigning to its key
+            lambda_facts.update(policy=json.loads(client.get_policy(FunctionName=function_name)['Policy']))
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                lambda_facts.update(policy={})
+            else:
+                module.fail_json_aws(e, msg='Trying to get {0} policy'.format(function_name))
+    else:
+        module.fail_json(msg='Parameter function_name required for query=policy.')
     
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
-    
-        urls = matchall(content, vimeo_embed_patters)
-    for url in urls:
-        found = True
-        vimeo_download_by_id(url, title=title, output_dir=output_dir, merge=merge, info_only=info_only, referer=url)
-    
-        title = r1(r'<title id='pageTitle'>(.+)</title>', html)
-    
-            # Adding model 'ApiAuthorization'
-        db.create_table(
-            'sentry_apiauthorization', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ApiApplication'], null=True
-                    )
-                ), (
-                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.User']
-                    )
-                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ApiAuthorization'])
-    
-            # Deleting field 'ApiKey.scope_list'
-        db.delete_column('sentry_apikey', 'scope_list')
+        if state == 'absent':
+        if not module.params.get('name'):
+            module.fail_json(
+                msg=''name' parameter is required to delete a monitoring policy.')
+        try:
+            (changed, monitoring_policy) = remove_monitoring_policy(module, oneandone_conn)
+        except Exception as ex:
+            module.fail_json(msg=str(ex))
+    elif state == 'update':
+        if not module.params.get('monitoring_policy'):
+            module.fail_json(
+                msg=''monitoring_policy' parameter is required to update a monitoring policy.')
+        try:
+            (changed, monitoring_policy) = update_monitoring_policy(module, oneandone_conn)
+        except Exception as ex:
+            module.fail_json(msg=str(ex))
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'Distribution'
-        db.create_table(
-            'sentry_distribution', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'organization_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        db_index=True
-                    )
-                ), (
-                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Release']
-                    )
-                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['Distribution'])
+def get_schema_facts(cursor, schema=''):
+    facts = {}
+    cursor.execute('''
+        select schema_name, schema_owner, create_time
+        from schemata
+        where not is_system_schema and schema_name not in ('public', 'TxtIndex')
+        and (? = '' or schema_name ilike ?)
+    ''', schema, schema)
+    while True:
+        rows = cursor.fetchmany(100)
+        if not rows:
+            break
+        for row in rows:
+            facts[row.schema_name.lower()] = {
+                'name': row.schema_name,
+                'owner': row.schema_owner,
+                'create_time': str(row.create_time),
+                'usage_roles': [],
+                'create_roles': []}
+    cursor.execute('''
+        select g.object_name as schema_name, r.name as role_name,
+        lower(g.privileges_description) privileges_description
+        from roles r join grants g
+        on g.grantee_id = r.role_id and g.object_type='SCHEMA'
+        and g.privileges_description like '%USAGE%'
+        and g.grantee not in ('public', 'dbadmin')
+        and (? = '' or g.object_name ilike ?)
+    ''', schema, schema)
+    while True:
+        rows = cursor.fetchmany(100)
+        if not rows:
+            break
+        for row in rows:
+            schema_key = row.schema_name.lower()
+            if 'create' in row.privileges_description:
+                facts[schema_key]['create_roles'].append(row.role_name)
+            else:
+                facts[schema_key]['usage_roles'].append(row.role_name)
+    return facts
+    
+        def role_add_member(self, name, item):
+        return self._post_json(method='role_add_member', name=name, item=item)
+    
+    # Create nested groups
+- group_by:
+    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
+    parents:
+      - el{{ ansible_distribution_major_version }}
+    
+    # Copyright 2013 Bruce Pennypacker <bruce@pennypacker.org>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+    
+    # If outside servers aren't reachable from your machine, use delegate_to and override hosts:
+- bigpanda:
+    component: myapp
+    version: '1.3'
+    token: '{{ bigpanda_token }}'
+    hosts: '{{ ansible_hostname }}'
+    state: started
+  delegate_to: localhost
+  register: deployment
+    
+    
+def follow_log(module, le_path, logs, name=None, logtype=None):
+    ''' Follows one or more logs if not already followed. '''
+    
+    The JWS implementation in josepy only implements the base JOSE standard. In
+order to support the new header fields defined in ACME, this module defines some
+ACME-specific classes that layer on top of josepy.
+'''
+import josepy as jose
+    
+        :param str vhost_path: Augeas virtual host path
+    
+            Examples:
+    
+        def test_nonexistent_like(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                for like in entrypoint.OVERRIDE_CLASSES.keys():
+                    mock_like.return_value = [like]
+                    self.assertEqual(entrypoint.get_configurator(),
+                                     entrypoint.OVERRIDE_CLASSES[like])
+    
+        def test_perform2(self):
+        # Avoid load module
+        self.sni.configurator.parser.modules.add('ssl_module')
+        self.sni.configurator.parser.modules.add('socache_shmcb_module')
+        acme_responses = []
+        for achall in self.achalls:
+            self.sni.add_chall(achall)
+            acme_responses.append(achall.response(self.auth_key))
+    
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
