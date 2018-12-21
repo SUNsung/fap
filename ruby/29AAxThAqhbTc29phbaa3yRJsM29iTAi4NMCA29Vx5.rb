@@ -1,83 +1,112 @@
 
         
-          it 'no errors without a user' do
-    expect(-> { GivenDailyLike.increment_for(nil) }).not_to raise_error
-    expect(-> { GivenDailyLike.decrement_for(nil) }).not_to raise_error
+        FORWARD_SLASH = '/'.freeze
+    
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+            # If our highlighter is CodeRay we go in to merge the CodeRay defaults
+        # with your 'coderay' key if it's there, deprecating it in the
+        # process of you using it.
+        def modernize_coderay_config
+          unless @config['coderay'].empty?
+            Jekyll::Deprecator.deprecation_message(
+              'You are using 'kramdown.coderay' in your configuration, ' \
+              'please use 'syntax_highlighter_opts' instead.'
+            )
+    
+        brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+    module BuildEnvironmentDSL
+  def env(*settings)
+    @env ||= BuildEnvironment.new
+    @env.merge(settings)
+  end
+end
+    
+        def self.prune?(path, options = {})
+      @time ||= Time.now
+    
+      def describe_python
+    python = which 'python'
+    return 'N/A' if python.nil?
+    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
+    python_binary = Pathname.new(python_binary).realpath
+    if python == python_binary
+      python
+    else
+      '#{python} => #{python_binary}'
+    end
   end
     
-        # Add permissions and a description to the Staff category.
-    
-                    raise Errors::VMNoMatchError if vms.empty?
-              else
-                # String name, just look for a specific VM
-                vms << @env.vms[name.to_sym]
-                raise Errors::VMNotFoundError, name: name if !vms[0]
-              end
-            end
+    class PrettyListing
+  def initialize(path)
+    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
+      case pn.basename.to_s
+      when 'bin', 'sbin'
+        pn.find { |pnn| puts pnn unless pnn.directory? }
+      when 'lib'
+        print_dir pn do |pnn|
+          # dylibs have multiple symlinks and we don't care about them
+          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
+        end
+      else
+        if pn.directory?
+          if pn.symlink?
+            puts '#{pn} -> #{pn.readlink}'
           else
-            vms = @env.vms_ordered
+            print_dir pn
           end
-    
-              # Return the registry
-          data[:command]
+        elsif Metafiles.list?(pn.basename.to_s)
+          puts pn
         end
-    
-            # Initialize the provider to represent the given machine.
-        #
-        # @param [Vagrant::Machine] machine The machine that this provider
-        #   is responsible for.
-        def initialize(machine)
-        end
-    
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
+      end
+    end
   end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
+end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+    task :gemspec => 'rack-protection.gemspec'
+task :default => :spec
+task :test    => :spec
+
+    
+    desc 'Run integration test'
+Cucumber::Rake::Task.new do |t|
+  t.cucumber_opts = %w{--format progress}
+end
+    
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
+    end
+    
+        def initialize(filepath)
+      @filepath = filepath
+    end
+    
+        # True if the dimensions represent a square
+    def square?
+      height == width
+    end
+    
+        def define_getters
+      define_instance_getter
+      define_class_getter
+    end
+    
+        # Returns the extension of the file. e.g. 'jpg' for 'file.jpg'
+    # If the style has a format defined, it will return the format instead
+    # of the actual extension.
+    def extension attachment, style_name
+      ((style = attachment.styles[style_name.to_s.to_sym]) && style[:format]) ||
+        File.extname(attachment.original_filename).sub(/\A\.+/, ''.freeze)
     end
