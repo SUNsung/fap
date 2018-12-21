@@ -1,168 +1,220 @@
-    data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
+
+        
+          Args:
+    records: a record list with TensorFlow examples.
     
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            X = make_low_rank_matrix(n_samples, n_features,
-                                  effective_rank=rank,
-                                  tail_strength=0.2)
-    
-        # Sort legend labels
-    handles, labels = ax.get_legend_handles_labels()
-    hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
-    handles2, labels2 = zip(*hl)
-    ax.legend(handles2, labels2, loc=0)
-    
-            plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 1]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 1]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 1]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 1]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('Time [sec]')
-        plt.title('Training time - %d features' % list_n_features[j])
-        i += 1
-    
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-DATA_FOLDER = 'txt_sentoken'
-    
-        def test_is_fifo_false(self):
-        P = self.cls(BASE)
-        self.assertFalse((P / 'fileA').is_fifo())
-        self.assertFalse((P / 'dirA').is_fifo())
-        self.assertFalse((P / 'non-existing').is_fifo())
-        self.assertFalse((P / 'fileA' / 'bah').is_fifo())
-        self.assertIs((P / 'fileA\udfff').is_fifo(), False)
-        self.assertIs((P / 'fileA\x00').is_fifo(), False)
-    
-        @unittest.skipIf(posix is None, 'Test requires posix module')
-    def test_ismount_different_device(self):
-        # Simulate the path being on a different device from its parent by
-        # mocking out st_dev.
-        save_lstat = os.lstat
-        def fake_lstat(path):
-            st_ino = 0
-            st_dev = 0
-            if path == ABSTFN:
-                st_dev = 1
-                st_ino = 1
-            return posix.stat_result((0, st_ino, st_dev, 0, 0, 0, 0, 0, 0, 0))
-        try:
-            os.lstat = fake_lstat
-            self.assertIs(posixpath.ismount(ABSTFN), True)
-        finally:
-            os.lstat = save_lstat
-    
-        def testSeekable(self):
-        bz2f = BZ2File(BytesIO(self.DATA))
-        try:
-            self.assertTrue(bz2f.seekable())
-            bz2f.read()
-            self.assertTrue(bz2f.seekable())
-        finally:
-            bz2f.close()
-        self.assertRaises(ValueError, bz2f.seekable)
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
-    else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
-    
-            TASKS = [(mul, (i, 7)) for i in range(10)] + \
-                [(plus, (i, 8)) for i in range(10)]
-    
-    import sqlite3
-    
-    for face_location in face_locations:
-    
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
-    
-    
-def detect_faces_in_image(file_stream):
-    # Pre-calculated face encoding of Obama generated with face_recognition.face_encodings(img)
-    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
-                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
-                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
-                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
-                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
-                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
-                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
-                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
-                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
-                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
-                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
-                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
-                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
-                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
-                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
-                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
-                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
-                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
-                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
-                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
-                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
-                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
-                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
-                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
-                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
-                            0.07417042,  0.07126575,  0.00209804]
-    
-        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
-    :param image_shape: numpy shape of the image array
-    :return: a trimmed plain tuple representation of the rect in (top, right, bottom, left) order
+        Returns:
+      The test predictions.
     '''
-    return max(css[0], 0), min(css[1], image_shape[1]), min(css[2], image_shape[0]), max(css[3], 0)
+    predictions, _ = zip(*self.predict_with_score(session, inputs))
+    return np.array(predictions)
     
-            # If you had more than 2 faces, you could make this logic a lot prettier
-        # but I kept it simple for the demo
-        name = None
-        if match[0]:
-            name = 'Lin-Manuel Miranda'
-        elif match[1]:
-            name = 'Alex Lacamoire'
+    # write out the dataset
+write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
+print ('Saved to ', os.path.join(FLAGS.save_dir,
+                                 FLAGS.datafile_name + '_' + dataset_name))
+
     
-            # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+      Args:
+    data_e: nexamples length list of NxT trials
+    dt: how often the data are sampled
+    max_firing_rate: the firing rate that is associated with a value of 1.0
+  Returns:
+    gauss_e: a list of length b of the data with noise.
+    '''
     
-    # Initialize some variables
-face_locations = []
-face_encodings = []
-face_names = []
-process_this_frame = True
+      Args:
+    in_size: The integer size of the non-batc input dimension. [(x),y]
+    out_size: The integer size of non-batch output dimension. [x,(y)]
+    do_bias (optional): Add a (learnable) bias vector to the operation,
+      if false, b will be None
+    mat_init_value (optional): numpy constant for matrix initialization, if None
+      , do random, with additional parameters.
+    alpha (optional): A multiplicative scaling for the weight initialization
+      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
+    identity_if_possible (optional): just return identity,
+      if x.shape[1] == out_size.
+    normalized (optional): Option to divide out by the norms of the rows of W.
+    name (optional): The name prefix to add to variables.
+    collections (optional): List of additional collections. (Placed in
+      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
+    
+    
+def ptb_iterator(raw_data, batch_size, num_steps, epoch_size_override=None):
+  '''Iterate on the raw PTB data.
+    
+        Args:
+      hparams:  Hyperparameters for the MaskGAN.
+      data: Data to evaluate.
+      id_to_word: Dictionary of indices to words.
+      log_dir: Log directory.
+      output_file:  Output file for the samples.
+  '''
+  # Boolean indicating operational mode.
+  is_training = False
+    
+    import tensorflow as tf
+    
+        for index, pred in zip(index_batch, pred_batch):
+      indices_predictions.append([str(id_to_word[index]), pred])
+    batch_of_indices_predictions.append(indices_predictions)
+  return batch_of_indices_predictions
+    
+    
+def construct_ngrams_dict(ngrams_list):
+  '''Construct a ngram dictionary which maps an ngram tuple to the number
+  of times it appears in the text.'''
+  counts = {}
+    
+        '''
+    # Serialize JSON data, if needed.
+    data = args.data
+    auto_json = data and not args.form
+    if (args.json or auto_json) and isinstance(data, dict):
+        if data:
+            data = json.dumps(data)
+        else:
+            # We need to set data to an empty string to prevent requests
+            # from assigning an empty list to `response.request.data`.
+            data = ''
+    
+        def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
+    
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+        def test_request_body_from_file_by_path_no_data_items_allowed(
+            self, httpbin):
+        env = MockEnvironment(stdin_isatty=False)
+        r = http('POST', httpbin.url + '/post', '@' + FILE_PATH_ARG, 'foo=bar',
+                 env=env, error_exit_ok=True)
+        assert 'cannot be mixed' in r.stderr
+
+    
+        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
+    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
+    
+    if args.dict:
+    jieba.initialize(args.dict)
+else:
+    jieba.initialize()
+if args.user_dict:
+    jieba.load_userdict(args.user_dict)
+    
+    try:
+    import pkg_resources
+    get_module_res = lambda *res: pkg_resources.resource_stream(__name__,
+                                                                os.path.join(*res))
+except ImportError:
+    get_module_res = lambda *res: open(os.path.normpath(os.path.join(
+                            os.getcwd(), os.path.dirname(__file__), *res)), 'rb')
+    
+    
+class TextRank(KeywordExtractor):
+    
+    
+def viterbi(obs, states, start_p, trans_p, emit_p):
+    V = [{}]  # tabular
+    mem_path = [{}]
+    all_states = trans_p.keys()
+    for y in states.get(obs[0], all_states):  # init
+        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
+        mem_path[0][y] = ''
+    for t in xrange(1, len(obs)):
+        V.append({})
+        mem_path.append({})
+        #prev_states = get_top_states(V[t-1])
+        prev_states = [
+            x for x in mem_path[t - 1].keys() if len(trans_p[x]) > 0]
+    
+        def testSetDictionary(self):
+        jieba.set_dictionary('foobar.txt')
+        for content in test_contents:
+            result = jieba.cut(content)
+            assert isinstance(result, types.GeneratorType), 'Test SetDictionary Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test SetDictionary error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testSetDictionary', file=sys.stderr)
+    
+        def test_del_msg_failure_with_null_msg(self):
+        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
+        message = MagicMock(spec=Message)
+        message.name = 'msg_3'
+        message.to_id = self.id
+        message.del_on_recipient = False
+    
+        def test_bool(self):
+        self.assertEquals(True, ConfigValue.bool('TrUe'))
+        self.assertEquals(False, ConfigValue.bool('fAlSe'))
+        with self.assertRaises(ValueError):
+            ConfigValue.bool('asdf')
+    
+        def test_filtered_modules_do_not_include_filtered_sources(self):
+        test_files = ['foo.js', 'bar.js']
+        filtered_files = ['baz.js', 'qux.js']
+        all_files = test_files + filtered_files
+        filter_module = TestModule('filter_module', *filtered_files)
+        test_module = TestModule('test_module', filter_module=filter_module, *all_files)
+        self.assertEqual(test_module.build(), concat_sources(test_files))
+
+    
+    class TestGetScrapeUrl(unittest.TestCase):
+    @patch('r2.lib.media.Link')
+    def test_link_post(self, Link):
+        post = Link()
+        post.url = 'https://example.com'
+        post.is_self = False
+        url = _get_scrape_url(post)
+        self.assertEqual(url, 'https://example.com')
+    
+            perm_set = TestPermissionSet()
+        perm_set['x'] = True
+        self.assertTrue(perm_set['x'])
+        self.assertFalse(perm_set['y'])
+        perm_set['x'] = False
+        self.assertFalse(perm_set['x'])
+        perm_set[perm_set.ALL] = True
+        self.assertTrue(perm_set['x'])
+        self.assertTrue(perm_set['y'])
+        self.assertFalse(perm_set['z'])
+        self.assertTrue(perm_set.get('x', False))
+        self.assertFalse(perm_set.get('z', False))
+        self.assertTrue(perm_set.get('z', True))
+    
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'https://unsplash.it/200/400')
+    
+        def test_unpad_evil_message(self):
+        from r2.lib.tracking import _unpad_message
+        evil = ('a' * 88) + chr(57)
+        result = _unpad_message(evil)
+        self.assertEquals(result, '')
+    
+        nonce = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
+    filename = topic_name.replace('/', '.') + '.' + nonce
+    filename = os.path.join(PATH_CHEAT_SHEETS_SPOOL, filename)
+    
+            if field:
+            self.field = field
+            self.size_x = len(field[0])
+            self.size_y = len(field)
+            return
+    
+        def _log_visit(self, interval, ip_address):
+        if ip_address not in self.counter[interval]:
+            self.counter[interval][ip_address] = 0
+        self.counter[interval][ip_address] += 1
+    
+    LIMITS = Limits()
