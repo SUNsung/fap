@@ -1,113 +1,105 @@
 
         
-        
-    it 'work without the FAILED_JOBS_TO_KEEP env variable' do
-      old = ENV['FAILED_JOBS_TO_KEEP']
-      ENV['FAILED_JOBS_TO_KEEP'] = nil
-      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(0)
-      ENV['FAILED_JOBS_TO_KEEP'] = old
-    end
-  end
-    
-        it 'returns nil when the path cannot be followed' do
-      expect(Utils.value_at({ :foo => { :bar => :baz }}, 'foo.bing')).to be_nil
-    end
-  end
-    
-        it 'requires an agent' do
-      @log.agent = nil
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:agent)
+            def before_all_blocks
+      @before_all ||= {}
     end
     
-      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
-  # see https://github.com/Homebrew/homebrew-cask/pull/8887
-  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
+        def suggest_ruby_reinstall(e)
+      ui = FastlaneCore::UI
+      ui.error('-----------------------------------------------------------------------')
+      ui.error(e.to_s)
+      ui.error('')
+      ui.error('SSL errors can be caused by various components on your local machine.')
+      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
+        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
+        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
+      end
+      ui.error('')
+      ui.error('The best solution is to use the self-contained fastlane version.')
+      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
+      ui.error(' - Use Homebrew')
+      ui.error('    - update brew with `brew update`')
+      ui.error('    - install fastlane using:')
+      ui.error('      - `brew cask install fastlane`')
+      ui.error(' - Use One-Click-Installer:')
+      ui.error('    - download fastlane at https://download.fastlane.tools')
+      ui.error('    - extract the archive and double click the `install`')
+      ui.error('-----------------------------------------------------------')
+      ui.error('for more details on ways to install fastlane please refer the documentation:')
+      ui.error('-----------------------------------------------------------')
+      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
+      ui.error('-----------------------------------------------------------')
+      ui.error('')
+      ui.error('You can also install a new version of Ruby')
+      ui.error('')
+      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
+      ui.error('- If you use system Ruby:')
+      ui.error('  - Run `brew update && brew install ruby`')
+      ui.error('- If you use rbenv with ruby-build:')
+      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
+      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
+      ui.error('- If you use rvm:')
+      ui.error('  - First run `rvm osx-ssl-certs update all`')
+      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
+      ui.error('')
+      ui.error('If that doesn't fix your issue, please google for the following error message:')
+      ui.error('  '#{e}'')
+      ui.error('-----------------------------------------------------------------------')
     end
-  end
-end
-
     
-          def line_class(line)
-        if line =~ /^@@/
-          'gc'
-        elsif line =~ /^\+/
-          'gi'
-        elsif line =~ /^\-/
-          'gd'
-        else
-          ''
-        end
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
       end
     
-          def partial(name)
-        if name == :author_template
-          self.class.partial('history_authors/#{@page.wiki.user_icons}')
-        else
-          super
-        end
+          def string_to_code string
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          # Wraps page formatted data to Nokogiri::HTML document.
+      #
+      def build_document(content)
+        Nokogiri::HTML::fragment(%{<div id='gollum-root'>} + content.to_s + %{</div>}, 'UTF-8')
       end
     
-    $contexts = []
+        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
+    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
+    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
+    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
+    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
     
-      test 'clean path without leading slash' do
-    assert_equal '/Mordor', clean_path('Mordor')
-  end
-    
-        @view = Precious::Views::Page.new
-    @view.instance_variable_set :@page, page
-    @view.instance_variable_set :@content, page.formatted_data
-    @view.instance_variable_set :@h1_title, true
-    
-      test 'heavy use 2' do
-    post '/create', :content => '한글 text', :page => 'k',
-         :format             => 'markdown', :message => 'def'
+        post '/edit/PG', :page => 'PG', :content => '바뀐 text', :message => 'ghi'
     follow_redirect!
     assert last_response.ok?
     
-      # replace name version and date
-  replace_header(head, :name)
-  replace_header(head, :version)
-  replace_header(head, :date)
-  #comment this out if your rubyforge_project has a different name
-  replace_header(head, :rubyforge_project)
+    begin
+  #RubyProf::exclude_threads = [ Monitoring ]
+  #RubyProf.start
+  fire_event(:startup)
+  #Sidekiq.logger.error 'Simulating 1ms of latency between Sidekiq and redis'
+  #Toxiproxy[:redis].downstream(:latency, latency: 1).apply do
+    launcher = Sidekiq::Launcher.new(Sidekiq.options)
+    launcher.run
     
-    # external
-require 'github/markup'
-require 'sanitize'
-    
-            def scope
-          if params[:product_id]
-            Spree::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Spree::Variant.find(params[:variant_id])
-          end
-        end
-      end
-    end
-  end
+    get '/' do
+  stats = Sidekiq::Stats.new
+  @failed = stats.failed
+  @processed = stats.processed
+  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
+  erb :index
 end
-
     
-              @properties = if params[:ids]
-                          @properties.where(id: params[:ids].split(',').flatten)
-                        else
-                          @properties.ransack(params[:q]).result
-                        end
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
     
-            def variant
-          @variant ||= Spree::Variant.unscoped.find(params.fetch(:variant_id))
-        end
-    
-            def products
-          # Returns the products sorted by their position with the classification
-          # Products#index does not do the sorting.
-          taxon = Spree::Taxon.find(params[:id])
-          @products = taxon.products.ransack(params[:q]).result
-          @products = @products.page(params[:page]).per(params[:per_page] || 500)
-          render 'spree/api/v1/products/index'
-        end
+          @routes[method] << WebRoute.new(method, path, block)
+      @routes[HEAD] << WebRoute.new(method, path, block) if method == GET
+    end
