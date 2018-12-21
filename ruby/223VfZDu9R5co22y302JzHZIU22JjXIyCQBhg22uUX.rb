@@ -1,20 +1,21 @@
 
         
-          UserOption.where(user_id: smoke_user.id).update_all(
-    email_direct: false,
-    email_digests: false,
-    email_private_messages: false,
-  )
+          preflight do
+    processes = system_command '/bin/launchctl', args: ['list']
     
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
-    
-        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
-      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
     end
+    
+      release = Rake.application.top_level_tasks.include?('release') || File.exist?(scope('EDGE_GEM_VERSION'))
+  if Sass.version[:rev] && !release
+    File.open(scope('REVISION'), 'w') { |f| f.puts Sass.version[:rev] }
+  elsif release
+    File.open(scope('REVISION'), 'w') { |f| f.puts '(release)' }
+  else
+    File.open(scope('REVISION'), 'w') { |f| f.puts '(unknown)' }
+  end
+end
     
       # The global load paths for Sass files. This is meant for plugins and
   # libraries to register the paths to their Sass stylesheets to that they may
@@ -41,57 +42,86 @@
                     end
   end
     
-          @options[:for_engine][:syntax] ||= :scss if input.is_a?(File) && input.path =~ /\.scss$/
-      @options[:for_engine][:syntax] ||= @default_syntax
-      engine =
-        if input.is_a?(File) && !@options[:check_syntax]
-          Sass::Engine.for_file(input.path, @options[:for_engine])
-        else
-          # We don't need to do any special handling of @options[:check_syntax] here,
-          # because the Sass syntax checking happens alongside evaluation
-          # and evaluation doesn't actually evaluate any code anyway.
-          Sass::Engine.new(input.read, @options[:for_engine])
-        end
-    
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
+          super
+      input = @options[:input]
+      if File.directory?(input)
+        raise 'Error: '#{input.path}' is a directory (did you mean to use --recursive?)'
       end
+      output = @options[:output]
+      output = input if @options[:in_place]
+      process_file(input, output)
+    end
+    
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
+      end
+    
+          private
+    
+            value_to_evaluate = block || value
+    
+    require 'bundler/cli'
+require 'bundler/friendly_errors'
+    
+        class Main < Clamp::Command
+      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
+      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
+      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
+      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
+      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
+      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
+      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
+      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
+      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
     end
   end
 end
-
     
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
+          explicit_plugins_specs = explicitly_declared_plugins_specs
     
-    Then(/^the shared path is created$/) do
-  run_vagrant_command(test_dir_exists(TestApp.shared_path))
-end
+          warn_local_gems(plugins_with_path) if plugins_with_path.size > 0
+    end
+    update_gems!
+  end
     
-          def using_default_scm?
-        return @using_default_scm if defined? @using_default_scm
-        @using_default_scm = (fetch(:scm) == DEFAULT_GIT)
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
+    
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
       end
     
-          def title
-        'Comparison of #{@page.title}'
+          # Checks whether any argument of the node is a splat
+      # argument, i.e. `*splat`.
+      #
+      # @return [Boolean] whether the node is a splat argument
+      def splat_argument?
+        arguments? &&
+          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
       end
+      alias rest_argument? splat_argument?
     
-    dir = File.dirname(File.expand_path(__FILE__))
-$LOAD_PATH.unshift(File.join(dir, '..', 'lib'))
-$LOAD_PATH.unshift(dir)
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
+    end
     
-    def version
-  line = File.read('lib/#{name}.rb')[/^\s*VERSION\s*=\s*.*/]
-  line.match(/.*VERSION\s*=\s*[''](.*)['']/)[1]
-end
+        def session
+      env[RACK_SESSION]
+    end
