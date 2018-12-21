@@ -1,65 +1,101 @@
 
         
-                include ::EachBatch
-      end
-    
-            def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
-        end
-      end
-    end
+        # define charCodeAt on String
+class String
+  def charCodeAt(k)
+    # use scan, nil check, and unpack instead of ord for 1.8
+    # 1.9 can simply use self[k].ord
+    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
+    c = self.scan(/./mu)[k]
+    return nil if c.nil?
+    c.unpack('U')[0]
   end
 end
-
     
-          # Reads a cache key.
+          # Wraps page formatted data to Nokogiri::HTML document.
       #
-      # If the key exists and has a non-empty value its TTL is refreshed
-      # automatically.
-      #
-      # raw_key - The cache key to read.
-      # timeout - The new timeout of the key if the key is to be refreshed.
-      def self.read(raw_key, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
-        value = Redis::Cache.with { |redis| redis.get(key) }
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-        def type=(value)
-      @type = value.try :strip
-    end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-        def url
-      @url ||= URL.parse request.base_url
-    end
-    
-        self.initial_paths = []
-    self.options = {}
-    self.stubs = {}
-    
-          def fetch_redirections
-        result = {}
-        with_filters 'apply_base_url', 'container', 'normalize_urls', 'internal_urls' do
-          build_pages do |page|
-            next if page[:response_effective_path] == page[:response_path]
-            result[page[:response_path].downcase] = page[:response_effective_path]
-          end
-        end
-        result
+      def build_document(content)
+        Nokogiri::HTML::fragment(%{<div id='gollum-root'>} + content.to_s + %{</div>}, 'UTF-8')
       end
     
-            css('.filetree').each do |node|
-          node.content = node.css('.file').map(&:inner_html).join('\n')
-          node.name = 'pre'
-          node.remove_attribute('class')
+    def normal(text)
+  text.gsub!(' ', '')
+  text.gsub!('\n', '')
+  text
+end
+    
+        assert_equal 'sidebar', side_2.raw_data
+    assert_equal 'def', side_2.version.message
+    assert_not_equal side_1.version.sha, side_2.version.sha
+    assert_equal commits+1, @wiki.repo.commits('master').size
+  end
+    
+        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+         :format                            => 'markdown', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+          def find_product(id)
+        @product = product_scope.friendly.distinct(false).find(id.to_s)
+      rescue ActiveRecord::RecordNotFound
+        @product = product_scope.find_by(id: id)
+        not_found unless @product
+      end
+    
+            def show
+          @inventory_unit = inventory_unit
+          respond_with(@inventory_unit)
         end
+    
+            def update
+          if @property
+            authorize! :update, @property
+            @property.update_attributes(property_params)
+            respond_with(@property, status: 200, default_template: :show)
+          else
+            invalid_resource!(@property)
+          end
+        end
+    
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
+        end
+    
+    module Jekyll
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
+    
+    desc 'Test the paperclip plugin under all supported Rails versions.'
+task :all do |t|
+  if ENV['BUNDLE_GEMFILE']
+    exec('rake spec && cucumber')
+  else
+    exec('rm -f gemfiles/*.lock')
+    Rake::Task['appraisal:gemfiles'].execute
+    Rake::Task['appraisal:install'].execute
+    exec('rake appraisal')
+  end
+end
+    
+    When /^(?:|I )choose '([^']*)'$/ do |field|
+  choose(field)
+end
+    
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
+    
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
+    end
