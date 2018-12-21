@@ -1,113 +1,84 @@
 
         
-            def suggest_ruby_reinstall(e)
-      ui = FastlaneCore::UI
-      ui.error('-----------------------------------------------------------------------')
-      ui.error(e.to_s)
-      ui.error('')
-      ui.error('SSL errors can be caused by various components on your local machine.')
-      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
-        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
-        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
-      end
-      ui.error('')
-      ui.error('The best solution is to use the self-contained fastlane version.')
-      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
-      ui.error(' - Use Homebrew')
-      ui.error('    - update brew with `brew update`')
-      ui.error('    - install fastlane using:')
-      ui.error('      - `brew cask install fastlane`')
-      ui.error(' - Use One-Click-Installer:')
-      ui.error('    - download fastlane at https://download.fastlane.tools')
-      ui.error('    - extract the archive and double click the `install`')
-      ui.error('-----------------------------------------------------------')
-      ui.error('for more details on ways to install fastlane please refer the documentation:')
-      ui.error('-----------------------------------------------------------')
-      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
-      ui.error('-----------------------------------------------------------')
-      ui.error('')
-      ui.error('You can also install a new version of Ruby')
-      ui.error('')
-      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
-      ui.error('- If you use system Ruby:')
-      ui.error('  - Run `brew update && brew install ruby`')
-      ui.error('- If you use rbenv with ruby-build:')
-      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
-      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
-      ui.error('- If you use rvm:')
-      ui.error('  - First run `rvm osx-ssl-certs update all`')
-      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
-      ui.error('')
-      ui.error('If that doesn't fix your issue, please google for the following error message:')
-      ui.error('  '#{e}'')
-      ui.error('-----------------------------------------------------------------------')
-    end
+          it 'correctly sets notification level' do
+    moderator = Fabricate(:moderator)
     
-          before :each do
-        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER] = build_number
-      end
-    
-            keychain = 'keychain with spaces.keychain'
-        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
-        require 'open3'
-    
-            describe '#keys' do
-          it 'returns all available keys' do
-            expect(@config.all_keys).to eq([:cert_name, :output, :wait_processing_interval])
-          end
-        end
-    
-    gemspec
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-      it 'sets the return value of the catch block to nil by default' do
-    res = catch :blah do
-      throw :blah
-    end
-    res.should == nil
+        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
   end
     
-      after :each do
-    Object.send :remove_method, :boom
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
   end
     
-    ```
-Executable Path: #{actual_path}
-```
-EOS
-      end
+        web_subscription = ::Web::PushSubscription.create!(
+      endpoint: subscription_params[:endpoint],
+      key_p256dh: subscription_params[:keys][:p256dh],
+      key_auth: subscription_params[:keys][:auth],
+      data: data,
+      user_id: active_session.user_id,
+      access_token_id: active_session.access_token_id
+    )
     
-    ERR
+    require 'builder'
+require 'feedbag'
+require 'json'
+require 'nokogiri'
+    
+    Sidekiq.redis {|c| c.flushdb}
+def handle_signal(launcher, sig)
+  Sidekiq.logger.debug 'Got #{sig} signal'
+  case sig
+  when 'INT'
+    # Handle Ctrl-C in JRuby like MRI
+    # http://jira.codehaus.org/browse/JRUBY-4637
+    raise Interrupt
+  when 'TERM'
+    # Heroku sends TERM and then waits 10 seconds for process to exit.
+    raise Interrupt
+  when 'TSTP'
+    Sidekiq.logger.info 'Received TSTP, no longer accepting new work'
+    launcher.quiet
+  when 'TTIN'
+    Thread.list.each do |thread|
+      Sidekiq.logger.warn 'Thread TID-#{(thread.object_id ^ ::Process.pid).to_s(36)} #{thread['label']}'
+      if thread.backtrace
+        Sidekiq.logger.warn thread.backtrace.join('\n')
+      else
+        Sidekiq.logger.warn '<no backtrace available>'
+      end
+    end
+  end
+end
+    
+    post '/msg' do
+  SinatraWorker.perform_async params[:msg]
+  redirect to('/')
+end
+    
+          middleware.invoke(worker_class, item, queue, @redis_pool) do
+        item
       end
     end
     
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
-    end
+        UnitOfWork = Struct.new(:queue, :job) do
+      def acknowledge
+        # nothing to do
+      end
     
-    module Jekyll
+          # Provide a call() method that returns the formatted message.
+      def call(severity, time, program_name, message)
+        '#{time.utc.iso8601(3)} #{::Process.pid} TID-#{Sidekiq::Logging.tid}#{context} #{severity}: #{message}\n'
+      end
+    
+          def remove(klass)
+        entries.delete_if { |entry| entry.klass == klass }
+      end
