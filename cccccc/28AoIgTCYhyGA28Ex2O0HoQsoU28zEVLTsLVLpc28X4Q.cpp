@@ -1,403 +1,559 @@
 
         
-            f32 alpha, beta, gamma;
-    float32x4_t valpha, vbeta, vgamma;
-    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
-        alpha(_alpha), beta(_beta), gamma(_gamma)
-    {
-        valpha = vdupq_n_f32(_alpha);
-        vbeta = vdupq_n_f32(_beta);
-        vgamma = vdupq_n_f32(_gamma + 0.5);
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    REGISTER_KERNEL_BUILDER(Name('Ackermann').Device(DEVICE_CPU), AckermannOp);
+    
+    namespace tensorflow {
     }
     
-        ptrdiff_t idx_l = internal::borderInterpolate(-1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
-    ptrdiff_t idx_r = internal::borderInterpolate(size.width, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    #include <map>
+    
+    #include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/lib/core/status.h'
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     
-    {        if (!m[-1])         CANNY_PUSH(m - 1);
-        if (!m[1])          CANNY_PUSH(m + 1);
-        if (!m[-mapstep-1]) CANNY_PUSH(m - mapstep - 1);
-        if (!m[-mapstep])   CANNY_PUSH(m - mapstep);
-        if (!m[-mapstep+1]) CANNY_PUSH(m - mapstep + 1);
-        if (!m[mapstep-1])  CANNY_PUSH(m + mapstep - 1);
-        if (!m[mapstep])    CANNY_PUSH(m + mapstep);
-        if (!m[mapstep+1])  CANNY_PUSH(m + mapstep + 1);
-    }
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
     
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t sj = 0u, dj = 0u;
-    }
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
     
-    #define MERGE_QUAD(sgn, bits, n) { \
-                                     vec128 v_dst; \
-                                     /*FILL_LINES##n(PREF, sgn##bits) \
-                                     FILL_LINES##n(VLD1Q, sgn##bits)*/ \
-                                     FILL_LINES##n(PRLD, sgn##bits) \
-                                     vst##n##q_##sgn##bits(dst + dj, v_dst); \
-                                 }
     
-    #include <carotene/functions.hpp>
-#include 'saturate_cast.hpp'
+    {}  // namespace nwapi
     
-    template <int shift>
-void rshiftConst(const Size2D &size,
-                 const s16 * srcBase, ptrdiff_t srcStride,
-                 u8 * dstBase, ptrdiff_t dstStride,
-                 CONVERT_POLICY cpolicy)
+    class ObjectManager;
+    
+    int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPTSTR    lpCmdLine,
+	_In_ int       nCmdShow)
 {
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(nCmdShow);
     }
     
-                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
-                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
-                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
+    #include <stdint.h>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
     
-    #include 'gtest/internal/gtest-port.h'
-    
-    #if !GTEST_OS_SYMBIAN
-# include <utility>
-#endif
-    
-    // 4-ary predicate assertion macros.
-#define EXPECT_PRED_FORMAT4(pred_format, v1, v2, v3, v4) \
-  GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, GTEST_NONFATAL_FAILURE_)
-#define EXPECT_PRED4(pred, v1, v2, v3, v4) \
-  GTEST_PRED4_(pred, v1, v2, v3, v4, GTEST_NONFATAL_FAILURE_)
-#define ASSERT_PRED_FORMAT4(pred_format, v1, v2, v3, v4) \
-  GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, GTEST_FATAL_FAILURE_)
-#define ASSERT_PRED4(pred, v1, v2, v3, v4) \
-  GTEST_PRED4_(pred, v1, v2, v3, v4, GTEST_FATAL_FAILURE_)
-    
-    // Helper macro for defining tests.
-#define GTEST_TEST_(test_case_name, test_name, parent_class, parent_id)\
-class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
- public:\
-  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {}\
- private:\
-  virtual void TestBody();\
-  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;\
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));\
-};\
-\
-::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
-  ::test_info_ =\
-    ::testing::internal::MakeAndRegisterTestInfo(\
-        #test_case_name, #test_name, NULL, NULL, \
-        (parent_id), \
-        parent_class::SetUpTestCase, \
-        parent_class::TearDownTestCase, \
-        new ::testing::internal::TestFactoryImpl<\
-            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);\
-void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
-    
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
   }
+}
+    
+    #include <ctype.h>
+#include <stdio.h>
+#include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'leveldb/env.h'
+#include 'util/logging.h'
+    
+    // If filename is a leveldb file, store the type of the file in *type.
+// The number encoded in the filename is stored in *number.  If the
+// filename was successfully parsed, returns true.  Else return false.
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type);
+    
+    namespace leveldb {
     }
-    
-    template <GTEST_7_TYPENAMES_(T)>
-inline GTEST_7_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4, const T5& f5, const T6& f6) {
-  return GTEST_7_TUPLE_(T)(f0, f1, f2, f3, f4, f5, f6);
-}
-    
-    
-// We don't want to require the users to write TemplatesN<...> directly,
-// as that would require them to count the length.  Templates<...> is much
-// easier to write, but generates horrible messages when there is a
-// compiler error, as gcc insists on printing out each template
-// argument, even if it has the default value (this means Templates<list>
-// will appear as Templates<list, NoneT, NoneT, ..., NoneT> in the compiler
-// errors).
-//
-// Our solution is to combine the best part of the two approaches: a
-// user would write Templates<T1, ..., TN>, and Google Test will translate
-// that to TemplatesN<T1, ..., TN> internally to make error messages
-// readable.  The translation is done by the 'type' member of the
-// Templates template.
-template <GTEST_TEMPLATE_ T1 = NoneT, GTEST_TEMPLATE_ T2 = NoneT,
-    GTEST_TEMPLATE_ T3 = NoneT, GTEST_TEMPLATE_ T4 = NoneT,
-    GTEST_TEMPLATE_ T5 = NoneT, GTEST_TEMPLATE_ T6 = NoneT,
-    GTEST_TEMPLATE_ T7 = NoneT, GTEST_TEMPLATE_ T8 = NoneT,
-    GTEST_TEMPLATE_ T9 = NoneT, GTEST_TEMPLATE_ T10 = NoneT,
-    GTEST_TEMPLATE_ T11 = NoneT, GTEST_TEMPLATE_ T12 = NoneT,
-    GTEST_TEMPLATE_ T13 = NoneT, GTEST_TEMPLATE_ T14 = NoneT,
-    GTEST_TEMPLATE_ T15 = NoneT, GTEST_TEMPLATE_ T16 = NoneT,
-    GTEST_TEMPLATE_ T17 = NoneT, GTEST_TEMPLATE_ T18 = NoneT,
-    GTEST_TEMPLATE_ T19 = NoneT, GTEST_TEMPLATE_ T20 = NoneT,
-    GTEST_TEMPLATE_ T21 = NoneT, GTEST_TEMPLATE_ T22 = NoneT,
-    GTEST_TEMPLATE_ T23 = NoneT, GTEST_TEMPLATE_ T24 = NoneT,
-    GTEST_TEMPLATE_ T25 = NoneT, GTEST_TEMPLATE_ T26 = NoneT,
-    GTEST_TEMPLATE_ T27 = NoneT, GTEST_TEMPLATE_ T28 = NoneT,
-    GTEST_TEMPLATE_ T29 = NoneT, GTEST_TEMPLATE_ T30 = NoneT,
-    GTEST_TEMPLATE_ T31 = NoneT, GTEST_TEMPLATE_ T32 = NoneT,
-    GTEST_TEMPLATE_ T33 = NoneT, GTEST_TEMPLATE_ T34 = NoneT,
-    GTEST_TEMPLATE_ T35 = NoneT, GTEST_TEMPLATE_ T36 = NoneT,
-    GTEST_TEMPLATE_ T37 = NoneT, GTEST_TEMPLATE_ T38 = NoneT,
-    GTEST_TEMPLATE_ T39 = NoneT, GTEST_TEMPLATE_ T40 = NoneT,
-    GTEST_TEMPLATE_ T41 = NoneT, GTEST_TEMPLATE_ T42 = NoneT,
-    GTEST_TEMPLATE_ T43 = NoneT, GTEST_TEMPLATE_ T44 = NoneT,
-    GTEST_TEMPLATE_ T45 = NoneT, GTEST_TEMPLATE_ T46 = NoneT,
-    GTEST_TEMPLATE_ T47 = NoneT, GTEST_TEMPLATE_ T48 = NoneT,
-    GTEST_TEMPLATE_ T49 = NoneT, GTEST_TEMPLATE_ T50 = NoneT>
-struct Templates {
-  typedef Templates50<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-      T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27,
-      T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41,
-      T42, T43, T44, T45, T46, T47, T48, T49, T50> type;
-};
-    
-    void ConstraintBullet::setup(btTypedConstraint *p_constraint) {
-	constraint = p_constraint;
-	constraint->setUserConstraintPtr(this);
-}
-    
-    /**
-	@author AndreaCatania
-*/
-    
-    #ifndef PIN_JOINT_BULLET_H
-#define PIN_JOINT_BULLET_H
-    
-    public:
-	_FORCE_INLINE_ void set_self(const RID &p_self) { self = p_self; }
-	_FORCE_INLINE_ RID get_self() const { return self; }
-    
-    	ClassDB::register_virtual_class<CSGShape>();
-	ClassDB::register_virtual_class<CSGPrimitive>();
-	ClassDB::register_class<CSGMesh>();
-	ClassDB::register_class<CSGSphere>();
-	ClassDB::register_class<CSGBox>();
-	ClassDB::register_class<CSGCylinder>();
-	ClassDB::register_class<CSGTorus>();
-	ClassDB::register_class<CSGPolygon>();
-	ClassDB::register_class<CSGCombiner>();
-    
-    
-    {	alloc_mutex = Mutex::create();
-}
-    
-    
-    {	ADD_SIGNAL(MethodInfo('peer_connected', PropertyInfo(Variant::INT, 'id')));
-	ADD_SIGNAL(MethodInfo('peer_disconnected', PropertyInfo(Variant::INT, 'id')));
-	ADD_SIGNAL(MethodInfo('server_disconnected'));
-	ADD_SIGNAL(MethodInfo('connection_succeeded'));
-	ADD_SIGNAL(MethodInfo('connection_failed'));
-}
-    
-    Thread::ID Thread::_main_thread_id = 0;
-    
-    uint32_t
-RuleBasedCollator::setVariableTop(const UChar *varTop, int32_t len, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return 0; }
-    if(varTop == NULL && len !=0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    if(len < 0) { len = u_strlen(varTop); }
-    if(len == 0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    UBool numeric = settings->isNumeric();
-    int64_t ce1, ce2;
-    if(settings->dontCheckFCD()) {
-        UTF16CollationIterator ci(data, numeric, varTop, varTop, varTop + len);
-        ce1 = ci.nextCE(errorCode);
-        ce2 = ci.nextCE(errorCode);
-    } else {
-        FCDUTF16CollationIterator ci(data, numeric, varTop, varTop, varTop + len);
-        ce1 = ci.nextCE(errorCode);
-        ce2 = ci.nextCE(errorCode);
-    }
-    if(ce1 == Collation::NO_CE || ce2 != Collation::NO_CE) {
-        errorCode = U_CE_NOT_FOUND_ERROR;
-        return 0;
-    }
-    setVariableTop((uint32_t)(ce1 >> 32), errorCode);
-    return settings->variableTop;
-}
-    
-    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
-        DecimalFormat *fmtToAdopt,
-        const UnicodeString &beginMarkup,
-        const UnicodeString &endMarkup,
-        UErrorCode &status) {
-    return createInstance(
-            fmtToAdopt,
-            new MarkupStyle(beginMarkup, endMarkup),
-            status);
-}
-    
-        UBool      test(UScriptCode script, UErrorCode &status) const;
-    ScriptSet &Union(const ScriptSet &other);
-    ScriptSet &set(UScriptCode script, UErrorCode &status);
-    ScriptSet &reset(UScriptCode script, UErrorCode &status);
-    ScriptSet &intersect(const ScriptSet &other);
-    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
-    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
-    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
-    
-    #include 'utypeinfo.h'  // for 'typeid' to work
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    U_NAMESPACE_BEGIN
-    
-    #endif
-
-    
-    class PluralRules;
-    
-    // -------------------------------------
-    
-    
-    {    // Always emit at least '0'
-    if (digits == 0) {
-        return appendTo.append((UChar) 0x30);
-    }
-    return appendTo.append(gDigits, ((smallPositiveValue  + 1) << 2) - digits, digits);
-}
     
     
     {
-    {        currentNumberFormat->setMinimumIntegerDigits(minDigits);
-        currentNumberFormat->setMaximumIntegerDigits(maxDigits);
-        currentNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
+    {}  // namespace log
+}  // namespace leveldb
+    
+      // If memtable contains a value for key, store it in *value and return true.
+  // If memtable contains a deletion for key, store a NotFound() error
+  // in *status and return true.
+  // Else, return false.
+  bool Get(const LookupKey& key, std::string* value, Status* s);
+    
+      std::string ManifestFileName() {
+    std::string current;
+    ASSERT_OK(ReadFileToString(env_, CurrentFileName(dbname_), &current));
+    size_t len = current.size();
+    if (len > 0 && current[len-1] == '\n') {
+      current.resize(len - 1);
     }
+    return dbname_ + '/' + current;
+  }
+    
+    static void RunConcurrent(int run) {
+  const int seed = test::RandomSeed() + (run * 100);
+  Random rnd(seed);
+  const int N = 1000;
+  const int kSize = 1000;
+  for (int i = 0; i < N; i++) {
+    if ((i % 100) == 0) {
+      fprintf(stderr, 'Run %d of %d\n', i, N);
+    }
+    TestState state(seed + 1);
+    Env::Default()->Schedule(ConcurrentReader, &state);
+    state.Wait(TestState::RUNNING);
+    for (int i = 0; i < kSize; i++) {
+      state.t_.WriteStep(&rnd);
+    }
+    state.quit_flag_.Release_Store(&state);  // Any non-null arg will do
+    state.Wait(TestState::DONE);
+  }
 }
     
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or OTHER
-     */
-    static int32_t indexOrOtherIndexFromString(const UnicodeString &keyword) {
-        int32_t i = indexOrNegativeFromString(keyword);
-        return i >= 0 ? i : OTHER;
+    #include <folly/portability/Fcntl.h>
+#include <folly/portability/Stdlib.h>
+#include <folly/portability/Unistd.h>
+    
+    template <typename F>
+void find(const std::string &root, const std::string& path, bool php,
+          const F& callback) {
+  auto spath = path.empty() || !isDirSeparator(path[0]) ?
+    path : path.substr(1);
     }
     
-    /**
- * Implement UnicodeMatcher
+      // only accept paths with the glob:// prefix
+  if (strncmp(path_str, prefix, strlen(prefix)) != 0) {
+    return nullptr;
+  }
+    
+    namespace HPHP {
+    }
+    
+    /*!
+ * \brief Whether always log console message with time.
+ *  It will display like, with timestamp appended to head of the message.
+ *  '[21:47:50] 6513x126 matrix with 143286 entries loaded from
+ * ../data/agaricus.txt.train'
  */
-UBool StringMatcher::matchesIndexValue(uint8_t v) const {
-    if (pattern.length() == 0) {
-        return TRUE;
-    }
-    UChar32 c = pattern.char32At(0);
-    const UnicodeMatcher *m = data->lookupMatcher(c);
-    return (m == 0) ? ((c & 0xFF) == v) : m->matchesIndexValue(v);
-}
-    
-        /**
-     * Implement UnicodeMatcher
-     */
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const;
-    
-    //---- Don't implement some functions to reduce linkage requirements.
-//#define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS   // [Win32] Don't implement default clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
-//#define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS         // [Win32] Don't implement default IME handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow.
-//#define IMGUI_DISABLE_WIN32_FUNCTIONS                     // [Win32] Won't use and link with any Win32 function.
-//#define IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with vsnprintf.
-//#define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself. Declare your prototypes in imconfig.h.
-//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free() to avoid linking with them. You will need to call ImGui::SetAllocatorFunctions().
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
-IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
-    
-        glfwDestroyWindow(window);
-    glfwTerminate();
-    
-    struct GLFWwindow;
-    
-    // Visual Studio warnings
-#ifdef _MSC_VER
-#pragma warning (disable: 4127) // condition expression is constant
+#ifndef XGBOOST_LOG_WITH_TIME
+#define XGBOOST_LOG_WITH_TIME 1
 #endif
     
-      uint32_t temp32;
-  uint64_t temp64;
-  // time
-  if (version == 2) {
-    READ_CHECK(fp, &temp32, sizeof(temp32));
-    serializedTime_.setTimeFromEpoch(ntohl(temp32));
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-  }
-  else {
-    READ_CHECK(fp, &temp64, sizeof(temp64));
-    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
   }
     
+    namespace xgboost {
+namespace common {
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
+ public:
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
+  }
+  /*!
+   * \brief set input stream
+   */
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
+  }
+  /*!
+   * \brief allows quick read using get char
+   */
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
+      }
+    }
+  }
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
+  }
+    }
+    }
+    }
     
-    {  void deserialize(const std::string& filename);
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
+    
+      void Save(dmlc::Stream* fo) const {
+    CHECK_EQ(param.num_trees, static_cast<int>(trees.size()));
+    fo->Write(&param, sizeof(param));
+    for (const auto & tree : trees) {
+      tree->Save(fo);
+    }
+    if (tree_info.size() != 0) {
+      fo->Write(dmlc::BeginPtr(tree_info), sizeof(int) * tree_info.size());
+    }
+  }
+    
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
 };
     
-      std::shared_ptr<DHTNode> localNode_;
+    
+    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType begin = src.data[0].rmax;
+    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
+    const size_t n = maxsize - 1;
+    data[0] = src.data[0];
+    this->size = 1;
+    // lastidx is used to avoid duplicated records
+    size_t i = 1, lastidx = 0;
+    for (size_t k = 1; k < n; ++k) {
+      RType dx2 =  2 * ((k * range) / n + begin);
+      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
+      while (i < src.size - 1
+             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+      CHECK(i != src.size - 1);
+      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+        if (i != lastidx) {
+          data[size++] = src.data[i]; lastidx = i;
+        }
+      } else {
+        if (i + 1 != lastidx) {
+          data[size++] = src.data[i + 1]; lastidx = i + 1;
+        }
+      }
+    }
+    if (lastidx != src.size - 1) {
+      data[size++] = src.data[src.size - 1];
+    }
+  }
+  /*!
+   * \brief set current summary to be merged summary of sa and sb
+   * \param sa first input summary to be merged
+   * \param sb second input summary to be merged
+   */
+  inline void SetCombine(const WQSummary &sa,
+                         const WQSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0);
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    // extended rmin value
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      // duplicated value entry
+      if (a->value == b->value) {
+        *dst = Entry(a->rmin + b->rmin,
+                     a->rmax + b->rmax,
+                     a->wmin + b->wmin, a->value);
+        aprev_rmin = a->RMinNext();
+        bprev_rmin = b->RMinNext();
+        ++dst; ++a; ++b;
+      } else if (a->value < b->value) {
+        *dst = Entry(a->rmin + bprev_rmin,
+                     a->rmax + b->RMaxPrev(),
+                     a->wmin, a->value);
+        aprev_rmin = a->RMinNext();
+        ++dst; ++a;
+      } else {
+        *dst = Entry(b->rmin + aprev_rmin,
+                     b->rmax + a->RMaxPrev(),
+                     b->wmin, b->value);
+        bprev_rmin = b->RMinNext();
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType brmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType armax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    this->size = dst - data;
+    const RType tol = 10;
+    RType err_mingap, err_maxgap, err_wgap;
+    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
+    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
+      LOG(INFO) << 'mingap=' << err_mingap
+                << ', maxgap=' << err_maxgap
+                << ', wgap=' << err_wgap;
+    }
+    CHECK(size <= sa.size + sb.size) << 'bug in combine';
+  }
+  // helper function to print the current content of sketch
+  inline void Print() const {
+    for (size_t i = 0; i < this->size; ++i) {
+      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
+                   << ', rmax=' << data[i].rmax
+                   << ', wmin=' << data[i].wmin
+                   << ', v=' << data[i].value;
+    }
+  }
+  // try to fix rounding error
+  // and re-establish invariance
+  inline void FixError(RType *err_mingap,
+                       RType *err_maxgap,
+                       RType *err_wgap) const {
+    *err_mingap = 0;
+    *err_maxgap = 0;
+    *err_wgap = 0;
+    RType prev_rmin = 0, prev_rmax = 0;
+    for (size_t i = 0; i < this->size; ++i) {
+      if (data[i].rmin < prev_rmin) {
+        data[i].rmin = prev_rmin;
+        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
+      } else {
+        prev_rmin = data[i].rmin;
+      }
+      if (data[i].rmax < prev_rmax) {
+        data[i].rmax = prev_rmax;
+        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
+      }
+      RType rmin_next = data[i].RMinNext();
+      if (data[i].rmax < rmin_next) {
+        data[i].rmax = rmin_next;
+        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
+      }
+      prev_rmax = data[i].rmax;
+    }
+  }
+  // check consistency of the summary
+  inline bool Check(const char *msg) const {
+    const float tol = 10.0f;
+    for (size_t i = 0; i < this->size; ++i) {
+      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
+          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
+        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
+        this->Print();
+        return false;
+      }
+    }
+    return true;
+  }
+};
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+        // Overrides
+    virtual void startWithTarget(Node *target) override;
+    virtual ActionCamera * reverse() const override;
+    virtual ActionCamera *clone() const override;
+    
+    /** An Array that contain control points.
+ * Used by CardinalSplineTo and (By) and CatmullRomTo (and By) actions.
+ * @ingroup Actions
+ * @js NA
+ */
+class CC_DLL PointArray : public Ref, public Clonable
+{
+public:
+    }
+    
+        //
+    // Overrides
+    //
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    virtual ActionInstant* reverse() const override;
+    virtual Show* clone() const override;
+    
+    /** @class MoveBy
+ * @brief Moves a Node object x,y pixels by modifying it's position attribute.
+ x and y are relative to the position of the object.
+ Several MoveBy actions can be concurrently called, and the resulting
+ movement will be the sum of individual movements.
+ @since v2.1beta2-custom
+ */
+class CC_DLL MoveBy : public ActionInterval
+{
+public:
+    /** 
+     * Creates the action.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaPosition The delta distance in 2d, it's a Vec2 type.
+     * @return An autoreleased MoveBy object.
+     */
+    static MoveBy* create(float duration, const Vec2& deltaPosition);
+    /**
+     * Creates the action.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaPosition The delta distance in 3d, it's a Vec3 type.
+     * @return An autoreleased MoveBy object.
+     */
+    static MoveBy* create(float duration, const Vec3& deltaPosition);
+    }
+    
+    // pause / resume
+    
+    USING_NS_CC;
+    
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
+    
+      int getNumBucket() const;
     
     #include 'common.h'
     
-    void DHTTaskExecutor::update()
+    
+    {  virtual bool finished() = 0;
+};
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
 {
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
-    }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
+  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
+  setCommonProperty(task);
+  return task;
 }
     
-    void DHTTaskFactoryImpl::setCommonProperty(
-    const std::shared_ptr<DHTAbstractTask>& task)
-{
-  task->setRoutingTable(routingTable_);
-  task->setMessageDispatcher(dispatcher_);
-  task->setMessageFactory(factory_);
-  task->setTaskQueue(taskQueue_);
-  task->setLocalNode(localNode_);
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
+    
+      virtual void process() CXX11_OVERRIDE;
+    
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
 }
     
-    namespace aria2 {
+    
+    {      delete[] errbuf;
     }
     
-    class DHTTask;
-    
-      virtual void executeTask() CXX11_OVERRIDE;
-    
-    #include <cstring>
+    #ifdef BENCHMARK_OS_WINDOWS
+#include <Windows.h>
+#endif
