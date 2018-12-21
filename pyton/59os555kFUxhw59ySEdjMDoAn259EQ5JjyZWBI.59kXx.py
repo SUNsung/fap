@@ -1,222 +1,194 @@
 
         
-              self.weights2 = tf.get_variable(
-          'W2',
-          shape=[hidden_dim, self.hparams.num_classes],
-          dtype=tf.float32)
-      self.bias2 = tf.get_variable(
-          'b2',
-          shape=[self.hparams.num_classes],
-          dtype=tf.float32)
-    
-        # This is needed to make sure that the gradients are simple.
-    # The value of the function shouldn't change.
-    if z == self.sample_bxn:
-      return gaussian_pos_log_likelihood(self.mean_bxn,
-                                         self.logvar_bxn, self.noise_bxn)
-    
-      if bidx is not None:
-    data_nxt = data_bxtxn[bidx,:,:].T
-    params_nxt = model_vals['output_dist_params'][bidx,:,:].T
-  else:
-    data_nxt = np.mean(data_bxtxn, axis=0).T
-    params_nxt = np.mean(model_vals['output_dist_params'], axis=0).T
-  if output_dist == 'poisson':
-    means_nxt = params_nxt
-  elif output_dist == 'gaussian': # (means+vars) x time
-    means_nxt = np.vsplit(params_nxt,2)[0] # get means
-  else:
-    assert 'NIY'
-    
-    flags = tf.app.flags
-flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
-                    'Directory for saving data.')
-flags.DEFINE_string('datafile_name', 'thits_data',
-                    'Name of data file for input case.')
-flags.DEFINE_string('noise_type', 'poisson', 'Noise type for data.')
-flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
-flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
-flags.DEFINE_integer('C', 100, 'Number of conditions')
-flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
-flags.DEFINE_integer('S', 50, 'Number of sampled units from RNN')
-flags.DEFINE_integer('npcs', 10, 'Number of PCS for multi-session case.')
-flags.DEFINE_float('train_percentage', 4.0/5.0,
-                   'Percentage of train vs validation trials')
-flags.DEFINE_integer('nreplications', 40,
-                     'Number of noise replications of the same underlying rates.')
-flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
-flags.DEFINE_float('x0_std', 1.0,
-                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
-flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
-flags.DEFINE_float('dt', 0.010, 'Time bin')
-flags.DEFINE_float('input_magnitude', 20.0,
-                   'For the input case, what is the value of the input?')
-flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
-FLAGS = flags.FLAGS
-    
-      dir_name = os.path.dirname(data_fname)
-  if not os.path.exists(dir_name):
-    os.makedirs(dir_name)
-    
-      if epoch_size_override:
-    epoch_size = epoch_size_override
-  else:
-    epoch_size = (batch_len - 1) // num_steps
+        # This sets a value, above which, the gradients will be clipped.  This hp
+# is extremely useful to avoid an infrequent, but highly pathological
+# problem whereby the gradient is so large that it destroys the
+# optimziation by setting parameters too large, leading to a vicious cycle
+# that ends in NaNs.  If it's too large, it's useless, if it's too small,
+# it essentially becomes the learning rate.  It's pretty insensitive, though.
+flags.DEFINE_float('max_grad_norm', MAX_GRAD_NORM,
+                   'Max norm of gradient before clipping.')
     
     
-def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_pretrain_op = optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_pretrain_op
-    
-        @property
-    def encoding(self):
-        return 'utf8'
-    
-            Return a ``requests.auth.AuthBase`` subclass instance.
-    
-        if n == 1:
-        return '1 B'
-    
-        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', httpbin.url + '/get', env=env)
-        assert 'HTTP/' not in r
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_timeout(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
-    
-    
-def test_unicode_form_item(httpbin):
-    r = http('--form', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['form'] == {'test': UNICODE}
-    
-        def _remote_target_ids_to_remove(self):
-        '''Returns a list of targets that need to be removed remotely'''
-        target_ids = [t['id'] for t in self.targets]
-        remote_targets = self.rule.list_targets()
-        return [
-            rt['id'] for rt in remote_targets if rt['id'] not in target_ids
-        ]
-    
-        return youngest_snapshot
-    
-        state = module.params.get('state')
-    group_name = module.params.get('name').lower()
-    group_description = module.params.get('description')
-    group_subnets = module.params.get('subnets') or {}
-    
-        if not HAS_BOTO3:
-        module.fail_json(msg='boto3 required for this module')
-    
-    # The Prod alias will have a fixed version based on a variable
-  - name: 'alias 'Prod' for function {{ lambda_facts.FunctionName }} '
-    lambda_alias:
-      state: '{{ state | default('present') }}'
-      function_name: '{{ lambda_facts.FunctionName }}'
-      name: Prod
-      version: '{{ production_version }}'
-      description: 'Production is version {{ production_version }}'
+def nparray_and_transpose(data_a_b_c):
+  '''Convert the list of items in data to a numpy array, and transpose it
+  Args:
+    data: data_asbsc: a nested, nested list of length a, with sublist length
+      b, with sublist length c.
+  Returns:
+    a numpy 3-tensor with dimensions a x c x b
 '''
-    
-        return [camel_dict_to_snake_dict(snapshot, ignore_list=['Tags']) for snapshot in results]
-    
-    
-def commit_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'https://github.com/scrapy/scrapy/commit/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, 'commit ' + text, refuri=ref, **options)
-    return [node], []
-    
-    # Apply monkey patches to fix issues in external libraries
-from . import _monkeypatches
-del _monkeypatches
-    
-    def _get_commands_from_module(module, inproject):
-    d = {}
-    for cmd in _iter_command_classes(module):
-        if inproject or not cmd.requires_project:
-            cmdname = cmd.__module__.split('.')[-1]
-            d[cmdname] = cmd()
-    return d
-    
-            spider_loader = self.crawler_process.spider_loader
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.item import BaseItem
-from scrapy.utils import display
-from scrapy.utils.conf import arglist_to_dict
-from scrapy.utils.spider import iterate_spider_output, spidercls_for_request
-from scrapy.exceptions import UsageError
-    
-        def __init__(self, crawler):
-        self._crawler = crawler
-        self._schemes = {}  # stores acceptable schemes on instancing
-        self._handlers = {}  # stores instanced handlers for schemes
-        self._notconfigured = {}  # remembers failed handlers
-        handlers = without_none_values(
-            crawler.settings.getwithbase('DOWNLOAD_HANDLERS'))
-        for scheme, clspath in six.iteritems(handlers):
-            self._schemes[scheme] = clspath
-    
-            for i in self.tree.iterfind('video/quality'):
-            quality = i.attrib ['value']
-            url = i[0].attrib['playurl']
-            self.stream_types.append({'id': quality,
-                                      'video_profile': i.attrib ['desp']})
-            self.streams[quality] = {'url': url,
-                                     'video_profile': i.attrib ['desp']}
-            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
+  data_axbxc = np.array([datum_b_c for datum_b_c in data_a_b_c])
+  data_axcxb = np.transpose(data_axbxc, axes=[0,2,1])
+  return data_axcxb
     
     
-def get_loop_file_path(title, output_dir):
-    return os.path.join(output_dir, get_output_filename([], title, 'txt', None, False))
+def cut_to_patches(sentences, batch_size, num_timesteps):
+  '''Cut sentences into patches of shape (batch_size, num_timesteps).
     
-        if found:
-        return True
+      Args:
+    variables: List of tf.Variable weights.
+    c_lower: Lower bound for weights.
+    c_upper: Upper bound for weights.
+  '''
+  clip_ops = []
     
-    def facebook_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
+      ## Decoder.
+  decoder_lstm_w_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  decoder_lstm_b_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  decoder_lstm_w_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  decoder_lstm_b_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
     
-            # attempt to extract images first
-        # TBD: posts with > 4 images
-        # TBD: album links
-        html = get_html(parse.unquote(url), faker=True)
-        real_urls = []
-        for src in re.findall(r'src='([^']+)'[^>]*itemprop='image'', html):
-            t = src.split('/')
-            t[0], t[-2] = t[0] or 'https:', 's0-d'
-            u = '/'.join(t)
-            real_urls.append(u)
-        if not real_urls:
-            real_urls = [r1(r'<meta property='og:image' content='([^']+)', html)]
-            real_urls = [re.sub(r'w\d+-h\d+-p', 's0', u) for u in real_urls]
-        post_date = r1(r''?(20\d\d[-/]?[01]\d[-/]?[0123]\d)'?', html)
-        post_id = r1(r'/posts/([^']+)', html)
-        title = post_date + '_' + post_id
+      def construct_fn(attention_query, attention_keys, attention_values):
+    with tf.variable_scope(name, reuse=reuse) as scope:
+      context = attention_score_fn(attention_query, attention_keys,
+                                   attention_values)
+      concat_input = tf.concat([attention_query, context], 1)
+      attention = tf.contrib.layers.linear(
+          concat_input, num_units, biases_initializer=None, scope=scope)
+      return attention
     
-    try:
-    # compatible for python2
-    from urllib2 import urlopen
-    from urllib2 import HTTPError
-    from urllib2 import URLError
-except ImportError:
-    # compatible for python3
-    from urllib.request import urlopen
-    from urllib.error import HTTPError
-    from urllib.error import URLError
+        def _sync_rule(self, enabled=True):
+        '''Syncs local rule state with AWS'''
+        if not self._rule_matches_aws():
+            self.rule.put(enabled)
+    
+    # Remove a snapshot
+- local_action:
+    module: ec2_snapshot
+    snapshot_id: snap-abcd1234
+    state: absent
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True, type='str'),
+            state=dict(required=True, type='str', choices=['present', 'absent', 'copy']),
+            replication_id=dict(type='str'),
+            cluster_id=dict(type='str'),
+            target=dict(type='str'),
+            bucket=dict(type='str'),
+        )
+    )
+    
+    - oneandone_moitoring_policy:
+    auth_token: oneandone_private_api_key
+    monitoring_policy: ansible monitoring policy updated
+    update_processes:
+     -
+       id: process_id
+       process: test_1
+       alert_if: NOT_RUNNING
+       email_notification: false
+     -
+       id: process_id
+       process: test_3
+       alert_if: NOT_RUNNING
+       email_notification: false
+    wait: true
+    state: update
+    
+        if not module.check_mode and result['changed'] is True:
+        task = gateway.save_services_configuration()
+        if task:
+            vca.block_until_completed(task)
+    
+    '''
+    
+    
+def get_role_facts(cursor, role=''):
+    facts = {}
+    cursor.execute('''
+        select r.name, r.assigned_roles
+        from roles r
+        where (? = '' or r.name ilike ?)
+    ''', role, role)
+    while True:
+        rows = cursor.fetchmany(100)
+        if not rows:
+            break
+        for row in rows:
+            role_key = row.name.lower()
+            facts[role_key] = {
+                'name': row.name,
+                'assigned_roles': []}
+            if row.assigned_roles:
+                facts[role_key]['assigned_roles'] = row.assigned_roles.replace(' ', '').split(',')
+    return facts
+    
+    
+def check(role_facts, role, assigned_roles):
+    role_key = role.lower()
+    if role_key not in role_facts:
+        return False
+    if assigned_roles and sorted(assigned_roles) != sorted(role_facts[role_key]['assigned_roles']):
+        return False
+    return True
+    
+        changed = False
+    if state in ['present', 'enabled', 'disabled']:
+        if not ipa_hbacrule:
+            changed = True
+            if not module.check_mode:
+                ipa_hbacrule = client.hbacrule_add(name=name, item=module_hbacrule)
+        else:
+            diff = get_hbcarule_diff(client, ipa_hbacrule, module_hbacrule)
+            if len(diff) > 0:
+                changed = True
+                if not module.check_mode:
+                    data = {}
+                    for key in diff:
+                        data[key] = module_hbacrule.get(key)
+                    client.hbacrule_mod(name=name, item=data)
+    
+    EXAMPLES = '''
+# Ensure role is present
+- ipa_role:
+    name: dba
+    description: Database Administrators
+    state: present
+    user:
+    - pinky
+    - brain
+    ipa_host: ipa.example.com
+    ipa_user: admin
+    ipa_pass: topsecret
+    
+    import traceback
+    
+    
+ALL_SSL_OPTIONS_HASHES = [
+    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
+    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
+    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
+    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
+    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
+    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
+]
+'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
+    
+            self.assertEqual(jws, JWS.from_json(jws.to_json()))
+    
+    # For 'manual' documents, if this is true, then toplevel headings are parts,
+# not chapters.
+#latex_use_parts = False
+    
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
