@@ -1,61 +1,54 @@
 
         
-                # doing a request
-        try:
-            res = requests.get(self._url, timeout=10, cookies={
-                'userid': self._userid
-            })
-        except requests.exceptions.Timeout:
-            _LOGGER.error(
-                'Connection to the router timed out at URL %s', self._url)
-            return False
-        if res.status_code != 200:
-            _LOGGER.error(
-                'Connection failed with http code %s', res.status_code)
-            return False
-        try:
-            result = res.json()
-        except ValueError:
-            # If json decoder could not parse the response
-            _LOGGER.error('Failed to parse response from router')
-            return False
+                    appid = random.choice(self.working_appid_list)
+            return str(appid)
+        else:
+            for _ in xrange(0, 10):
+                appid = self.public_appid.get()
+                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
+                    continue
+                else:
+                    return appid
+            return None
     
-    import voluptuous as vol
+    import OpenSSL
+from utils import check_ip_valid
+    
+    import time
+import threading
     
     
-def main(path):
+
     
-            # they can be executed later on
-        for cmd in command_stack:
-            cmd.execute()
+                    #print 'LA = %d (%r)' % (c, unichr(c) if c >= 0 else 'EOF')
+                #print 'range = %d..%d' % (self.min[s], self.max[s])
     
-    
-class BaseRegisteredClass(object):
-    __metaclass__ = RegistryHolder
-    '''
-        Any class that will inherits from BaseRegisteredClass will be included
-        inside the dict RegistryHolder.REGISTRY, the key being the name of the
-        class and the associated value, the class itself.
-    '''
-    pass
-    
-    # Create a random animal
-def random_animal():
-    '''Let's be dynamic!'''
-    return random.choice([Dog, Cat])()
-    
-    '''
-*What is this pattern about?
-It decouples the creation of a complex object and its representation,
-so that the same process can be reused to build objects from the same
-family.
-This is useful when you must separate the specification of an object
-from its actual representation (generally for abstraction).
-    
-    Below provides an example of such Dispatcher, which contains three
-copies of the prototype: 'default', 'objecta' and 'objectb'.
-    
-    ### OUTPUT ###
-# ['A', 'B', 'C', 'D']
-# [['A', 'B', 'C', 'D'], ['A', 'B', 'D'], ['A', 'C', 'D']]
-# ['A', 'B', 'D']
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
