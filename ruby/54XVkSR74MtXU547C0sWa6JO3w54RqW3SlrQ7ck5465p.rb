@@ -1,84 +1,121 @@
 
         
-              puts 'Moving #{old_path} to #{new_path}...' if $stdout.tty?
-      path.dirname.mkpath
-      FileUtils.mv old_path, new_path
+        module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class DateSelect < Base # :nodoc:
+        def initialize(object_name, method_name, template_object, options, html_options)
+          @html_options = html_options
+    
+        def initialize(paths = [])
+      @paths = typecast paths
     end
+    
+        config.eager_load_namespaces << ActionView
+    
+    # Returns whether or not the repository, or specific files,
+# has/have changed since a given revision.
+#
+# @param rev [String] The revision to check against
+# @param files [Array<String>] The files to check.
+#   If this is empty, checks the entire repository
+def changed_since?(rev, *files)
+  IO.popen('git diff --exit-code #{rev} #{files.join(' ')}') {}
+  return !$?.success?
+end
+    
+    module Sass
+  # The abstract base class for lexical environments for SassScript.
+  class BaseEnvironment
+    class << self
+      # Note: when updating this,
+      # update sass/yard/inherited_hash.rb as well.
+      def inherited_hash_accessor(name)
+        inherited_hash_reader(name)
+        inherited_hash_writer(name)
+      end
+    
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+          def _find(dir, name, options)
+        full_filename, syntax = Sass::Util.destructure(find_real_file(dir, name, options))
+        return unless full_filename && File.readable?(full_filename)
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
+    
+          * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.
+      * Neither the name of Google Inc. nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+    
+          def line_class(line)
+        if line =~ /^@@/
+          'gc'
+        elsif line =~ /^\+/
+          'gi'
+        elsif line =~ /^\-/
+          'gd'
+        else
+          ''
+        end
+      end
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+    module Gollum
+end
+Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER'] if ENV['GIT_ADAPTER']
+    
+        assert_match /Edit/, last_response.body, ''Edit' link is blocked in history template'
+    
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+      teardown do
+    FileUtils.rm_rf(@path)
   end
     
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
-    
-        def setup_filters
-      @filters = cmdline_filters
-      @filters += @custom_filters if @custom_filters
-      @filters << Filter.new(:role, ENV['ROLES']) if ENV['ROLES']
-      @filters << Filter.new(:host, ENV['HOSTS']) if ENV['HOSTS']
-      fh = fetch_for(:filter, {}) || {}
-      @filters << Filter.new(:host, fh[:hosts]) if fh[:hosts]
-      @filters << Filter.new(:role, fh[:roles]) if fh[:roles]
-      @filters << Filter.new(:host, fh[:host]) if fh[:host]
-      @filters << Filter.new(:role, fh[:role]) if fh[:role]
-    end
-    
-            # Skip validation behavior if no validators are registered for this key
-        return super unless validators.key?(key)
-    
-    Given 'I allow the attachment to be submitted' do
-  cd('.') do
-    transform_file('app/controllers/users_controller.rb') do |content|
-      content.gsub('params.require(:user).permit(:name)',
-                   'params.require(:user).permit!')
-    end
-  end
-end
-    
-    When /^(?:|I )press '([^']*)'$/ do |button|
-  click_button(button)
-end
-    
-      def migration_version
-    if Rails.version.start_with? '5'
-      '[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]'
-    end
-  end
-end
-
-    
-    # This stuff needs to be run after Paperclip is defined.
-require 'paperclip/io_adapters/registry'
-require 'paperclip/io_adapters/abstract_adapter'
-require 'paperclip/io_adapters/empty_string_adapter'
-require 'paperclip/io_adapters/identity_adapter'
-require 'paperclip/io_adapters/file_adapter'
-require 'paperclip/io_adapters/stringio_adapter'
-require 'paperclip/io_adapters/data_uri_adapter'
-require 'paperclip/io_adapters/nil_adapter'
-require 'paperclip/io_adapters/attachment_adapter'
-require 'paperclip/io_adapters/uploaded_file_adapter'
-require 'paperclip/io_adapters/uri_adapter'
-require 'paperclip/io_adapters/http_url_proxy_adapter'
-
-    
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
-    
-        # Returns an integer timestamp that is time zone-neutral, so that paths
-    # remain valid even if a server's time zone changes.
-    def updated_at attachment, style_name
-      attachment.updated_at
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
     end
