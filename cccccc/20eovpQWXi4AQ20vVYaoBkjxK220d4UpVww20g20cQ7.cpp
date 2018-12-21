@@ -1,304 +1,552 @@
-#include 'atom/app/command_line_args.h'
-    
-    bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
-    
-    using CompletionCallback = base::Callback<void(const base::FilePath&)>;
-    
-    // static
-void InAppPurchase::BuildPrototype(v8::Isolate* isolate,
-                                   v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'InAppPurchase'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('canMakePayments', &in_app_purchase::CanMakePayments)
-      .SetMethod('getReceiptURL', &in_app_purchase::GetReceiptURL)
-      .SetMethod('purchaseProduct', &InAppPurchase::PurchaseProduct)
-      .SetMethod('finishAllTransactions',
-                 &in_app_purchase::FinishAllTransactions)
-      .SetMethod('finishTransactionByDate',
-                 &in_app_purchase::FinishTransactionByDate)
-      .SetMethod('getProducts', &in_app_purchase::GetProducts);
+
+        
+        namespace Ui {
+    class TransactionDescDialog;
 }
     
-    class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
-                      public in_app_purchase::TransactionObserver {
+    #ifndef BITCOIN_RPC_MINING_H
+#define BITCOIN_RPC_MINING_H
+    
+    
+    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
+    ret &= !overflow;
+    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
+    ret &= !overflow;
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
+    } else {
+        memset(sig, 0, sizeof(*sig));
+    }
+    return ret;
+}
+    
+        // C escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\nBaz\\t\' Spam=\'\\rEggs\' Octals=\'\\1a\\11\\17\\18\\81\\377\\378\\400\\2222\' Final=Check', {
+            {'Foo', 'Bar\nBaz\t'},
+            {'Spam', '\rEggs'},
+            {'Octals', '\1a\11\17\1' '881\377\37' '8\40' '0\222' '2'},
+            {'Final', 'Check'},
+        });
+    CheckParseTorReplyMapping(
+        'Valid=Mapping Escaped=\'Escape\\\\\'', {
+            {'Valid', 'Mapping'},
+            {'Escaped', 'Escape\\'},
+        });
+    CheckParseTorReplyMapping(
+        'Valid=Mapping Bare=\'Escape\\\'', {});
+    CheckParseTorReplyMapping(
+        'OneOctal=\'OneEnd\\1\' TwoOctal=\'TwoEnd\\11\'', {
+            {'OneOctal', 'OneEnd\1'},
+            {'TwoOctal', 'TwoEnd\11'},
+        });
+    
+    const std::vector<UniValue>& UniValue::getValues() const
+{
+    if (typ != VOBJ && typ != VARR)
+        throw std::runtime_error('JSON value is not an object or array as expected');
+    return values;
+}
+    
+    /** Encode a Bech32 string. Returns the empty string in case of failure. */
+std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
+    
+        ctx->kernel_data = new CAROTENE_NS::s16[kernel_width*kernel_height];
+    if(!ctx->kernel_data)
+        return CV_HAL_ERROR_UNKNOWN;
+    switch(kernel_type)
+    {
+    case CV_8UC1:
+        convert(ctx->ksize, (CAROTENE_NS::u8*)kernel_data, kernel_step, ctx->kernel_data, kernel_width);
+        break;
+    case CV_8SC1:
+        convert(ctx->ksize, (CAROTENE_NS::s8*)kernel_data, kernel_step, ctx->kernel_data, kernel_width);
+        break;
+    case CV_16UC1:
+        for(int j = 0; j < kernel_height; ++j)
+        {
+            std::memcpy(ctx->kernel_data + kernel_width * j, kernel_data + kernel_step * j, kernel_width * sizeof(int16_t));
+        }
+    default:
+        delete[] ctx->kernel_data;
+        delete ctx;
+        return CV_HAL_ERROR_NOT_IMPLEMENTED;
+    }
+    
+    void add(const Size2D &size,
+         const u8 * src0Base, ptrdiff_t src0Stride,
+         const s16 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+    #define MERGE_ASM2(sgn, bits) __asm__ ( \
+                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
+                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
+                                          'vst2.' #bits ' {d0, d2}, [%[out0]]           \n\t' \
+                                          'vst2.' #bits ' {d1, d3}, [%[out1]]           \n\t' \
+                                          : \
+                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), \
+                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL2(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3' \
+                                      );
+#define MERGE_ASM3(sgn, bits) __asm__ ( \
+                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
+                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
+                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
+                                          'vst3.' #bits ' {d0, d2, d4}, [%[out0]]       \n\t' \
+                                          'vst3.' #bits ' {d1, d3, d5}, [%[out1]]       \n\t' \
+                                          : \
+                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), \
+                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL3(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3','d4','d5' \
+                                      );
+#define MERGE_ASM4(sgn, bits) __asm__ ( \
+                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
+                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
+                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
+                                          'vld1.' #bits ' {d6-d7}, [%[in3]]             \n\t' \
+                                          'vst4.' #bits ' {d0, d2, d4, d6}, [%[out0]]   \n\t' \
+                                          'vst4.' #bits ' {d1, d3, d5, d7}, [%[out1]]   \n\t' \
+                                          : \
+                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), [in3] 'r' (src3 + sj), \
+                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL4(8)/sizeof(sgn##bits)) \
+                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
+                                      );
+    
+             int16x8_t vline1_s16 = vmovl_s8(vget_low_s8(vline_s8));
+         int16x8_t vline2_s16 = vmovl_s8(vget_high_s8(vline_s8));
+    
+                {
+                // combine 3 'shifted' vectors
+                t0 = vext_u8(tprev[1], tcurr[1], 7);
+                t1 = tcurr[1];
+                t2 = vext_u8(tcurr[1], tnext[1], 1);
+    }
+    
+    // It is possible to accumulate up to 66051 uchar multiplication results in uint32 without overflow
+// We process 16 elements and accumulate two new elements per step. So we could handle 66051/2*16 elements
+#define DOT_UINT_BLOCKSIZE 66050*8
+    f64 result = 0.0;
+    for (size_t row = 0; row < size.height; ++row)
+    {
+        const u8 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
+        const u8 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
+    }
+    
+    
+    {                lane[colsn+k] = lane[idx_r1 + k];
+                lane[colsn+cn+k] = lane[idx_r2 + k];
+            }
+    
+      // Gets the text streamed to this object so far as an std::string.
+  // Each '\0' character in the buffer is replaced with '\\0'.
+  //
+  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+  std::string GetString() const;
+    
+    // Type-parameterized tests are abstract test patterns parameterized
+// by a type.  Compared with typed tests, type-parameterized tests
+// allow you to define the test pattern without knowing what the type
+// parameters are.  The defined pattern can be instantiated with
+// different types any number of times, in any number of translation
+// units.
+//
+// If you are designing an interface or concept, you can define a
+// suite of type-parameterized tests to verify properties that any
+// valid implementation of the interface/concept should have.  Then,
+// each implementation can easily instantiate the test suite to verify
+// that it conforms to the requirements, without having to write
+// similar tests repeatedly.  Here's an example:
+    
+    
+    {  const ParamGenerator<T1> g1_;
+  const ParamGenerator<T2> g2_;
+  const ParamGenerator<T3> g3_;
+  const ParamGenerator<T4> g4_;
+  const ParamGenerator<T5> g5_;
+  const ParamGenerator<T6> g6_;
+};  // class CartesianProductGenerator6
+    
+    
+    { private:
+  String();  // Not meant to be instantiated.
+};  // class String
+    
+      // If we are given the --check_for_leaks command line flag, installs the
+  // leak checker.
+  if (check_for_leaks) {
+    TestEventListeners& listeners = UnitTest::GetInstance()->listeners();
+    }
+    
+      // Clears the queue.
+  void Clear() {
+    if (size_ > 0) {
+      // 1. Deletes every node.
+      QueueNode<E>* node = head_;
+      QueueNode<E>* next = node->next();
+      for (; ;) {
+        delete node;
+        node = next;
+        if (node == NULL) break;
+        next = node->next();
+      }
+    }
+    }
+    
+    
+    {}  // namespace mxnet
+    
+        int n_out = this->ListOutputs().size();
+    out_type->clear();
+    for (int i = 0; i < n_out; ++i ) out_type->push_back(mshadow::default_type_flag);
+    
+    /*! \brief registry entry to register simple operators via functions. */
+class SimpleOpRegEntry {
  public:
-  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
-    }
+  /*! \brief declare self type */
+  typedef SimpleOpRegEntry TSelf;
+  /*! \brief name of the operator */
+  std::string name;
+  /*!
+   * \brief set a seperate name for symbol
+   *  This must be called before set_function.
+   *  Default: this is set to be same as the name of operator.
+   * \param symbol_name the name of symbolic operator.
+   */
+  virtual TSelf& set_symbol_op_name(char const* symbol_name) = 0;
+  /*!
+   * \brief set number of scalar arguments needed to be passed in env
+   *  A function cannot have both kwargs and scalar arguments.
+   *  Default: this is set to false
+   * \param enable_scalar whether to enable scalar argument
+   * \param type_mask the position of the scalar argument.
+   */
+  virtual TSelf& set_enable_scalar(
+      bool enable_scalar,
+      SimpleOpScalarOption type_mask = kArrayBeforeScalar) = 0;
+  /*!
+   * \brief set whether to enable kwargs
+   *  A function cannot have both kwargs and scalar arguments.
+   *  Default: this is set to false
+   * \param enable_kwargs whether to enable kwargs
+   */
+  virtual TSelf& set_enable_kwargs(bool enable_kwargs) = 0;
+  /*!
+   * \brief set resource request
+   *  By default there is no resource request.
+   *  The resource will be presented in both forward and backward.
+   * \param reqs the request.
+   */
+  virtual TSelf& set_resource_request(
+      const std::vector<ResourceRequest>& reqs) = 0;
+  /*!
+   * \brief set resource request
+   *  By default there is no resource request.
+   *  The resource will be presented in both forward and backward.
+   * \param req the request.
+   */
+  virtual TSelf& set_resource_request(ResourceRequest req) = 0;
+  /*!
+   * \brief set source inference function.
+   * \param fshapeinfer The source function that peforms the operation.
+   */
+  virtual TSelf& set_shape_function(SourceShapeFunction fshapeinfer) = 0;
+  /*!
+   * \brief set shape inference function.
+   *  Default: out_shape = in_shape
+   * \param fshapeinfer The unary function that peforms the operation.
+   */
+  virtual TSelf& set_shape_function(UnaryShapeFunction fshapeinfer) = 0;
+  /*!
+   * \brief set shape inference function to be the binary inference function
+   *  Default: out_shape = lhs_shape, and lhs_shape must equal rhs_shape.
+   * \param fshapeinfer The binary function that peforms the operation.
+   */
+  virtual TSelf& set_shape_function(BinaryShapeFunction fshapeinfer) = 0;
+  /*!
+   * \brief set function of the function to be fsource
+   * \param dev_mask The device mask of the function can act on.
+   * \param fsource The unary function that peforms the operation.
+   * \param register_symbolic Whether register a symbolic operator as well.
+   */
+  virtual TSelf& set_function(
+      int dev_mask,
+      SourceFunction fsource,
+      SimpleOpRegOption register_symbolic = kRegisterSymbolic) = 0;
+  /*!
+   * \brief set function of the function to be funary
+   * \param dev_mask The device mask of the function can act on.
+   * \param funary The unary function that peforms the operation.
+   * \param inplace_in_out Whether do inplace optimization on in and out.
+   * \param register_symbolic Whether register a symbolic operator as well.
+   */
+  virtual TSelf& set_function(
+      int dev_mask,
+      UnaryFunction funary,
+      SimpleOpInplaceOption inplace_in_out,
+      SimpleOpRegOption register_symbolic = kRegisterSymbolic) = 0;
+  /*!
+   * \brief set function of the function to be funary
+   * \param dev_mask The device mask of the function can act on.
+   * \param fbinary The binary function that peforms the operation.
+   * \param inplace_lhs_out Whether do inplace optimization on lhs and out.
+   * \param register_symbolic Whether register a symbolic operator as well.
+   */
+  virtual TSelf& set_function(
+      int dev_mask,
+      BinaryFunction fbinary,
+      SimpleOpInplaceOption inplace_lhs_out,
+      SimpleOpRegOption register_symbolic = kRegisterSymbolic) = 0;
+  /*!
+   * \brief set gradient of the function of this function.
+   * \param dev_mask The device mask of the function can act on.
+   * \param fgrad The gradient function to be set.
+   * \param inplace_out_in_grad whether out_grad and in_grad can share memory.
+   */
+  virtual TSelf& set_gradient(int dev_mask,
+                              UnaryGradFunctionT0 fgrad,
+                              SimpleOpInplaceOption inplace_out_in_grad) = 0;
+  /*!
+   * \brief set gradient of the function of this function.
+   * \param dev_mask The device mask of the function can act on.
+   * \param fgrad The gradient function to be set.
+   * \param inplace_out_in_grad whether out_grad and in_grad can share memory.
+   */
+  virtual TSelf& set_gradient(int dev_mask,
+                              UnaryGradFunctionT1 fgrad,
+                              SimpleOpInplaceOption inplace_out_in_grad) = 0;
+  /*!
+   * \brief set gradient of the function of this function.
+   * \param dev_mask The device mask of the function can act on.
+   * \param fgrad The gradient function to be set.
+   * \param inplace_out_in_grad whether out_grad and in_grad can share memory.
+   */
+  virtual TSelf& set_gradient(int dev_mask,
+                              UnaryGradFunctionT2 fgrad,
+                              SimpleOpInplaceOption inplace_out_in_grad) = 0;
+  /*!
+   * \brief set gradient of the function of this function.
+   * \param dev_mask The device mask of the function can act on.
+   * \param fgrad The gradient function to be set.
+   * \param inplace_out_lhs_grad whether out_grad and lhs_grad can share memory.
+   */
+  virtual TSelf& set_gradient(int dev_mask,
+                              BinaryGradFunctionT0 fgrad,
+                              SimpleOpInplaceOption inplace_out_lhs_grad) = 0;
+  /*!
+   * \brief set gradient of the function of this function.
+   * \param dev_mask The device mask of the function can act on.
+   * \param fgrad The gradient function to be set.
+   * \param inplace_out_lhs_grad whether out_grad and lhs_grad can share memory.
+   */
+  virtual TSelf& set_gradient(int dev_mask,
+                              BinaryGradFunctionT1 fgrad,
+                              SimpleOpInplaceOption inplace_out_lhs_grad) = 0;
+  /*!
+   * \brief Describe the function.
+   * \param description The description of the function.
+   * \return reference to self.
+   */
+  virtual TSelf& describe(const std::string &description) = 0;
+  /*!
+   * \brief Describe the function.
+   * \param args argument information.
+   *  Add additional arguments to the function.
+   * \return reference to self.
+   */
+  virtual TSelf& add_arguments(const std::vector<dmlc::ParamFieldInfo> &args) = 0;
+  /*! \brief virtual destructor */
+  virtual ~SimpleOpRegEntry() {}
+};
     
-    // static
-void PowerMonitor::BuildPrototype(v8::Isolate* isolate,
-                                  v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'PowerMonitor'));
-    }
+    #ifndef MXNET_RTC_H_
+#define MXNET_RTC_H_
+#include './base.h'
+#if MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
+#include <nvrtc.h>
+#include <cuda.h>
     
-    namespace {
-    }
-    
-    v8::Local<v8::Object> CreateEventFromFlags(v8::Isolate* isolate, int flags) {
-  mate::Dictionary obj = mate::Dictionary::CreateEmpty(isolate);
-  obj.Set('shiftKey', static_cast<bool>(flags & ui::EF_SHIFT_DOWN));
-  obj.Set('ctrlKey', static_cast<bool>(flags & ui::EF_CONTROL_DOWN));
-  obj.Set('altKey', static_cast<bool>(flags & ui::EF_ALT_DOWN));
-  obj.Set('metaKey', static_cast<bool>(flags & ui::EF_COMMAND_DOWN));
-  return obj.GetHandle();
+    template<>
+void SetDataGradToBlob<mshadow::cpu, float>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<float>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_cpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, float)->set_cpu_diff(data_ptr);
 }
     
+        // Init caffe's gradient pointer
+    if (!init_wd_) {
+      init_wd_ = true;
+      caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Grad,
+                                         wei_.begin(),
+                                         in_grad.begin() + param_.num_data,
+                                         param_.num_weight);
+    }
     
-    {}  // namespace atom
+    
+    {  Engine::Get()->PushSync([=](RunContext ctx){
+      ndout.CheckAndAlloc();
+      cv::Mat buf(ndsrc.shape()[0], ndsrc.shape()[1],
+                  dims[2] == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
+      cv::Mat dst(h, w, dims[2] == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
+      cv::resize(buf, dst, cv::Size(w, h), 0, 0, interpolation);
+      CHECK(!dst.empty());
+    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
+  NDArray *tmp = new NDArray();
+  *tmp = ndout;
+  *out = tmp;
+  API_END();
+}
+    
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
+    }
+    
+    /*
+ * Call a function on each element of `inputs', in parallel.
+ *
+ * If `func' throws an exception, some of the work will not be
+ * attempted.
+ */
+template<class Func, class Item>
+void for_each(const std::vector<Item>& inputs, Func func) {
+  std::atomic<bool> failed{false};
+  std::atomic<size_t> index{0};
+    }
+    
+          A_form_t a_formater {{
+                           rc,
+                           xop,
+                           static_cast<uint32_t>(bc),
+                           static_cast<uint32_t>(rb),
+                           static_cast<uint32_t>(ra),
+                           static_cast<uint32_t>(rt),
+                           op
+                          }};
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
 
     
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-    A common use case is with the DeconvolutionLayer acting as upsampling.
-You can upsample a feature map with shape of (B, C, H, W) by any integer factor
-using the following proto.
-\code
-layer {
-  name: 'upsample', type: 'Deconvolution'
-  bottom: '{{bottom_name}}' top: '{{top_name}}'
-  convolution_param {
-    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
-    num_output: {{C}} group: {{C}}
-    pad: {{ceil((factor - 1) / 2.)}}
-    weight_filler: { type: 'bilinear' } bias_term: false
+    void PlainDirectory::close() {
+  if (m_dir) {
+    ::closedir(m_dir);
+    m_dir = nullptr;
   }
-  param { lr_mult: 0 decay_mult: 0 }
 }
-\endcode
-Please use this by replacing `{{}}` with your values. By specifying
-`num_output: {{C}} group: {{C}}`, it behaves as
-channel-wise convolution. The filter shape of this deconvolution layer will be
-(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
-interpolation kernel for every channel of the filter identically. The resulting
-shape of the top feature map will be (B, C, factor * H, factor * W).
-Note that the learning rate and the
-weight decay are set to 0 in order to keep coefficient values of bilinear
-interpolation unchanged during training. If you apply this to an image, this
-operation is equivalent to the following call in Python with Scikit.Image.
-\code{.py}
-out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
-\endcode
+    
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
+};
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+    void logAHMSubMapWarning(folly::StringPiece mapName) {
+  StackTrace st;
+  logPerfWarning(
+    'AtomicHashMap overflow',
+    [&](StructuredLogEntry& cols) {
+      cols.setStr('map_name', mapName);
+      cols.setStackTrace('stack', st);
+    }
+  );
+}
+    
+    /*
+ * If the given AtomicHashMap has more than one submap allocated, log a perf
+ * warning with its name.
+ *
+ * A single unique done flag should exist for each map being checked, to avoid
+ * logging more than once (process, map) pair.
  */
-template <typename Dtype>
-class BilinearFiller : public Filler<Dtype> {
- public:
-  explicit BilinearFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK_EQ(blob->num_axes(), 4) << 'Blob must be 4 dim.';
-    CHECK_EQ(blob->width(), blob->height()) << 'Filter must be square';
-    Dtype* data = blob->mutable_cpu_data();
-    int f = ceil(blob->width() / 2.);
-    Dtype c = (blob->width() - 1) / (2. * f);
-    for (int i = 0; i < blob->count(); ++i) {
-      Dtype x = i % blob->width();
-      Dtype y = (i / blob->width()) % blob->height();
-      data[i] = (1 - fabs(x / f - c)) * (1 - fabs(y / f - c));
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
+template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done);
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    class DHTNode;
+class DHTRoutingTable;
+class DHTTaskQueue;
+class DHTTaskFactory;
+class DHTPeerAnnounceStorage;
+class DHTTokenTracker;
+class DHTMessageDispatcher;
+class DHTMessageReceiver;
+class DHTMessageFactory;
     
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    #include 'caffe/layers/pooling_layer.hpp'
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
-    
-    // The following macros are useful for writing death tests.
-    
-    namespace internal {
-    }
-    
-    namespace testing {
-    }
-    
-    // This helper class can be used to mock out Google Test failure reporting
-// so that we can test Google Test or code that builds on Google Test.
-//
-// An object of this class appends a TestPartResult object to the
-// TestPartResultArray object given in the constructor whenever a Google Test
-// failure is reported. It can either intercept only failures that are
-// generated in the same thread that created this object or it can intercept
-// all generated failures. The scope of this mock object can be controlled with
-// the second argument to the two arguments constructor.
-class GTEST_API_ ScopedFakeTestPartResultReporter
-    : public TestPartResultReporterInterface {
- public:
-  // The two possible mocking modes of this object.
-  enum InterceptMode {
-    INTERCEPT_ONLY_CURRENT_THREAD,  // Intercepts only thread local failures.
-    INTERCEPT_ALL_THREADS           // Intercepts all failures.
-  };
-    }
-    
-      // RemoveFileName returns the directory path with the filename removed.
-  // Example: FilePath('path/to/file').RemoveFileName() returns 'path/to/'.
-  // If the FilePath is 'a_file' or '/a_file', RemoveFileName returns
-  // FilePath('./') or, on Windows, FilePath('.\\'). If the filepath does
-  // not have a file, like 'just/a/dir/', it returns the FilePath unmodified.
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveFileName() const;
-    
-      ////////////////////////////////////////////////////////////
-  //
-  // D'tor.  MyString is intended to be a final class, so the d'tor
-  // doesn't need to be virtual.
-  ~MyString() { delete[] c_string_; }
-    
-      // Asserts that s.c_string() returns NULL.
-  //
-  // <TechnicalDetails>
-  //
-  // If we write NULL instead of
-  //
-  //   static_cast<const char *>(NULL)
-  //
-  // in this assertion, it will generate a warning on gcc 3.4.  The
-  // reason is that EXPECT_EQ needs to know the types of its
-  // arguments in order to print them when it fails.  Since NULL is
-  // #defined as 0, the compiler will use the formatter function for
-  // int to print it.  However, gcc thinks that NULL should be used as
-  // a pointer, not an int, and therefore complains.
-  //
-  // The root of the problem is C++'s lack of distinction between the
-  // integer number 0 and the null pointer constant.  Unfortunately,
-  // we have to live with this fact.
-  //
-  // </TechnicalDetails>
-  EXPECT_STREQ(NULL, s.c_string());
-    
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
 }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    
-    {
-    {    DistributedQueryResult result(
-        request, sql.rows(), sql.columns(), sql.getStatus());
-    addResult(result);
-  }
-  return flushCompleted();
-}
-    
-      // Test the matching capability.
-  {
-    auto sc = event_pub_->createSubscriptionContext();
-    sc->path = '/etc';
-    event_pub_->monitorSubscription(sc, false);
-    EXPECT_EQ(sc->path, '/etc/');
-    EXPECT_TRUE(event_pub_->isPathMonitored('/etc/'));
-    EXPECT_TRUE(event_pub_->isPathMonitored('/etc/passwd'));
-  }
-    
-        Row r;
-    r['example_text'] = 'example';
-    r['example_integer'] = INTEGER(1);
-    
-    DHTResponseMessage::~DHTResponseMessage() = default;
     
     namespace aria2 {
     }
     
-    class DHTTaskFactory {
-public:
-  virtual ~DHTTaskFactory() = default;
-    }
+    class DHTNode;
     
-      virtual ~DHTTokenUpdateCommand();
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
+    const std::shared_ptr<DHTBucket>& bucket,
+    const std::shared_ptr<DHTNode>& newNode)
+{
+  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
+}
+    
+    #include <cstring>
+    
+    void DHTTokenUpdateCommand::setTokenTracker(DHTTokenTracker* tokenTracker)
+{
+  tokenTracker_ = tokenTracker;
+}
+    
+      virtual void preProcess() CXX11_OVERRIDE;
