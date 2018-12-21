@@ -1,259 +1,246 @@
 
         
         
+    {      result->AppendString(argv[i]);
+    }
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+    v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope handle_scope(isolate);
+    }
+    
+    #include 'base/run_loop.h'
+#include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/message_loop/message_loop_current.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/render_frame_host.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/app_window/app_window.h'
+#include 'skia/ext/image_operations.h'
+#include 'ui/aura/client/screen_position_client.h'
+#include 'ui/aura/window.h'
+#include 'ui/aura/window_tree_host.h'
+#include 'ui/events/platform/platform_event_source.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+#include 'ui/views/widget/widget.h'
+#include 'ui/views/focus/focus_manager.h'
+#include 'vector'
+    
+        bool enabled;
+    if (option.GetBoolean('enabled', &enabled))
+      SetEnabled(enabled);
+    
+     protected:
+  ~NwObjCreateFunction() override;
+    
+          rect = gfx_display.work_area();
+      DisplayGeometry& work_area = displayResult->work_area;
+      work_area.x = rect.x();
+      work_area.y = rect.y();
+      work_area.width = rect.width();
+      work_area.height = rect.height();
+    
+        accumulateSquareConstFunc funcs[16] =
     {
-    {  explicit DefaultCache(CacheImpl::CallBacks CBs) : CBs(std::move(CBs)) { }
-};
-} // end anonymous namespace
+        accumulateSquareConst<0>,
+        accumulateSquareConst<1>,
+        accumulateSquareConst<2>,
+        accumulateSquareConst<3>,
+        accumulateSquareConst<4>,
+        accumulateSquareConst<5>,
+        accumulateSquareConst<6>,
+        accumulateSquareConst<7>,
+        accumulateSquareConst<8>,
+        accumulateSquareConst<9>,
+        accumulateSquareConst<10>,
+        accumulateSquareConst<11>,
+        accumulateSquareConst<12>,
+        accumulateSquareConst<13>,
+        accumulateSquareConst<14>,
+        accumulateSquareConst<15>
+    }, func = funcs[shift];
     
+    struct BitwiseAnd
+{
+    typedef u8 type;
+    }
     
-    {    RawText = RawText.drop_front(Pos);
-    unsigned NewlineBytes = measureNewline(RawText);
-    RawText = RawText.drop_front(NewlineBytes);
-  }
+    #define SPLIT_QUAD(sgn, bits, n) { \
+                                     internal::prefetch(src + sj); \
+                                     vec128 v_src = vld##n##q_##sgn##bits(src + sj); \
+                                     FILL_LINES##n(VST1Q, sgn##bits) \
+                                 }
     
-      ::UUID uuid;
-  RPC_STATUS status = UuidFromStringA(t, &uuid);
-  if (status == RPC_S_INVALID_STRING_UUID) {
-    return None;
-  }
+    #define  VROW_LINE(type, n) const type * src##n = internal::getRowPtr(src##n##Base, src##n##Stride, i);
+#define  PREF_LINE(type, n) internal::prefetch(src##n + sj);
+#define VLD1Q_LINE(type, n) v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  PRLD_LINE(type, n) internal::prefetch(src##n + sj); v_dst.val[n] = vld1q_##type(src##n + sj);
+#define  VLD1_LINE(type, n) v_dst.val[n] = vld1_##type(src##n + sj);
+#define   SLD_LINE(type, n) dst[dj + n] = src##n[sj];
     
-    #include 'ClangDiagnosticConsumer.h'
-#include 'ImporterImpl.h'
-#include 'swift/AST/ASTContext.h'
-#include 'swift/AST/DiagnosticEngine.h'
-#include 'swift/AST/DiagnosticsClangImporter.h'
-#include 'clang/AST/ASTContext.h'
-#include 'clang/Frontend/DiagnosticRenderer.h'
-#include 'clang/Frontend/FrontendDiagnostic.h'
-#include 'clang/Lex/LexDiagnostic.h'
-#include 'llvm/ADT/STLExtras.h'
+    CVT_FUNC(u8, s8, 16,
+     uint8x16_t v127 = vdupq_n_u8(127);,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         uint8x16_t vu8 = vld1q_u8(_src + i);
+         int8x16_t vu1 = vreinterpretq_s8_u8(vminq_u8(vu8, v127));
+         vst1q_s8(_dst + i, vu1);
+     }
+})
     
+                // calculate values for plain CPU part below if needed
+            if (x + 8 >= bwidth)
+            {
+                ptrdiff_t x3 = x == width ? width - 1 : x;
+                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
+    }
     
-    {  return encodePunycode(InputCodePoints, OutPunycode);
+        // the others
+    for (size_t i = 1; i < size.height ; ++i)
+    {
+        src = internal::getRowPtr(srcBase, srcStride, i);
+        f64 * prevSqSum = internal::getRowPtr(sqsumBase, sqsumStride, i - 1);
+        sqsum = internal::getRowPtr(sqsumBase, sqsumStride, i);
+    }
+    
+      static bool isInitialized6() { return data6_.initialized; }
+    
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+    void DHTTaskFactoryImpl::setMessageFactory(DHTMessageFactory* factory)
+{
+  factory_ = factory;
 }
     
-    #endif // BITCOIN_QT_OPENURIDIALOG_H
+    namespace aria2 {
+    }
+    
+      struct CacheEntry {
+    std::string hostname_;
+    uint16_t port_;
+    std::vector<AddrEntry> addrEntries_;
+    }
+    
+    void DCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
+    }
+  }
+}
+    
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    bool JPEGData::Is444() const {
+  return (components.size() == 3 &&
+          max_h_samp_factor == 1 &&
+          max_v_samp_factor == 1 &&
+          components[0].h_samp_factor == 1 &&
+          components[0].v_samp_factor == 1 &&
+          components[1].h_samp_factor == 1 &&
+          components[1].v_samp_factor == 1 &&
+          components[2].h_samp_factor == 1 &&
+          components[2].v_samp_factor == 1);
+}
+    
+    
+    {}  // namespace guetzli
+    
+    // Library to decode jpeg coefficients into an RGB image.
+    
+    #endif  // GUETZLI_JPEG_DATA_WRITER_H_
 
     
-    QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
     
-    #endif /* SECP256K1_GROUP_IMPL_H */
-
-    
-        // Special handling for null case
-    // (needed because string comparison reads the null as end-of-string)
-    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(Null=\'\\0\')'));
-    auto ret = ParseTorReplyMapping('Null=\'\\0\'');
-    BOOST_CHECK_EQUAL(ret.size(), 1U);
-    auto r_it = ret.begin();
-    BOOST_CHECK_EQUAL(r_it->first, 'Null');
-    BOOST_CHECK_EQUAL(r_it->second.size(), 1U);
-    BOOST_CHECK_EQUAL(r_it->second[0], '\0');
-    
-    /// Reference to type-opaque format list for passing to vformat()
-typedef const FormatList& FormatListRef;
+    {
+    {}  // namespace internal
+}  // namespace testing
     
     
-    {bool ParseDouble(const std::string& str, double *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
-        return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
-}
+    {  return chars;
 }
     
-      // Compact the in-memory write buffer to disk.  Switches to a new
-  // log-file/memtable and writes a new descriptor iff successful.
-  // Errors are recorded in bg_error_.
-  void CompactMemTable() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+      // Allocates an an arguments (either rest, strict or sloppy) together with the
+  // FixedArray elements for the arguments and a parameter map (for sloppy
+  // arguments only). A tuple is returned with pointers to the arguments object,
+  // the elements and parameter map in the form:
+  // <argument object, arguments FixedArray, parameter map or nullptr>
+  std::tuple<Node*, Node*, Node*> AllocateArgumentsObject(
+      Node* map, Node* arguments, Node* mapped_arguments,
+      ParameterMode param_mode, int base_size);
     
-    namespace leveldb {
-    }
+      Node* const sync_iterator =
+      LoadObjectField(iterator, JSAsyncFromSyncIterator::kSyncIteratorOffset);
     
-    TEST(DBTest, ReadWrite) {
-  do {
-    ASSERT_OK(Put('foo', 'v1'));
-    ASSERT_EQ('v1', Get('foo'));
-    ASSERT_OK(Put('bar', 'v2'));
-    ASSERT_OK(Put('foo', 'v3'));
-    ASSERT_EQ('v3', Get('foo'));
-    ASSERT_EQ('v2', Get('bar'));
-  } while (ChangeOptions());
+    void Builtins::Generate_InterpreterPushUndefinedAndArgsThenCall(
+    MacroAssembler* masm) {
+  return Generate_InterpreterPushArgsThenCallImpl(
+      masm, ConvertReceiverMode::kNullOrUndefined,
+      InterpreterPushArgsMode::kOther);
 }
     
-    // A comparator for internal keys that uses a specified comparator for
-// the user key portion and breaks ties by decreasing sequence number.
-class InternalKeyComparator : public Comparator {
- private:
-  const Comparator* user_comparator_;
- public:
-  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
-  virtual const char* Name() const;
-  virtual int Compare(const Slice& a, const Slice& b) const;
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const;
-  virtual void FindShortSuccessor(std::string* key) const;
-    }
+      CSA_ASSERT(
+      this,
+      WordNotEqual(code, HeapConstant(BUILTIN_CODE(isolate(), CompileLazy))));
     
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-    Reader::Reader(SequentialFile* file, Reporter* reporter, bool checksum,
-               uint64_t initial_offset)
-    : file_(file),
-      reporter_(reporter),
-      checksum_(checksum),
-      backing_store_(new char[kBlockSize]),
-      buffer_(),
-      eof_(false),
-      last_record_offset_(0),
-      end_of_buffer_offset_(0),
-      initial_offset_(initial_offset),
-      resyncing_(initial_offset > 0) {
+    // ES6 #sec-math.log10
+TF_BUILTIN(MathLog10, MathBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* x = Parameter(Descriptor::kX);
+  MathUnaryOperation(context, x, &CodeStubAssembler::Float64Log10);
 }
     
-      std::string Get(const std::string& k, const Snapshot* snapshot = nullptr) {
-    std::string result;
-    Status s = db_->Get(ReadOptions(), k, &result);
-    if (s.IsNotFound()) {
-      result = 'NOT_FOUND';
-    } else if (!s.ok()) {
-      result = s.ToString();
+    #include 'src/code-stub-assembler.h'
+    
+    namespace v8 {
+namespace internal {
     }
-    return result;
-  }
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    //////////////////////////////////////////////////////////////////////
-    
-         // GP Register cannot be greater than 31
-     assert(static_cast<uint32_t>(rb) < 32);
-     assert(static_cast<uint32_t>(ra) < 32);
-     assert(static_cast<uint32_t>(rt) < 32);
-    
-        /* Sets the Eye value of the Camera. 
-     * 
-     * @param eye The Eye value of the Camera.
-     * @js NA
-     */
-    void setEye(const Vec3 &eye);
-    void setEye(float x, float y, float z);
-    /* Returns the Eye value of the Camera. 
-     *
-     * @return The Eye value of the Camera.
-     * @js NA
-     */
-    const Vec3& getEye() const { return _eye; }
-    /* Sets the Center value of the Camera. 
-     *
-     * @param center The Center value of the Camera.
-     * @js NA
-     */
-    void setCenter(const Vec3 &center);
-    /* Returns the Center value of the Camera. 
-     *
-     * @return The Center value of the Camera.
-     * @js NA
-     */
-    const Vec3& getCenter() const { return _center; }
-    /* Sets the Up value of the Camera. 
-     *
-     * @param up The Up value of the Camera.
-     * @js NA
-     */
-    void setUp(const Vec3 &up);
-    /* Returns the Up value of the Camera. 
-     *
-     * @return The Up value of the Camera.
-     * @js NA
-     */
-    const Vec3& getUp() const { return _up; }
-    
-        /** Creates an action with a Cardinal Spline array of points and tension.
-     * @param duration In seconds.
-     * @param points An PointArray.
-     * @param tension Goodness of fit.
-     * @code
-     * When this function bound to js or lua,the input params are changed.
-     * In js: var create(var t,var table)
-     * In lua: local create(local t, local table)
-     * @endcode
-     */
-    static CardinalSplineTo* create(float duration, PointArray* points, float tension);
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~CardinalSplineTo();
-    /**
-     * @js ctor
-     * @lua NA
-     */
-    CardinalSplineTo();
-    
-    Show* Show::create() 
-{
-    Show* ret = new (std::nothrow) Show();
     }
-    
-    protected:
-    bool _isNeedCleanUp;
-    
-    /**
- @brief This action simulates a page turn from the bottom right hand corner of the screen.
- 
- @details It's not much use by itself but is used by the PageTurnTransition.
-         Based on an original paper by L Hong et al.
-         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
-  
- @since v0.8.2
- */
-class CC_DLL PageTurn3D : public Grid3DAction
-{
-public:
-    /**
-     * @js NA 
-     */
-    virtual GridBase* getGrid() override;
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPROGRESS_TIMER_H__
-#define __ACTION_CCPROGRESS_TIMER_H__
-    
-    
-    {    // Triangles should really use std::vector and not arrays for verts and indices. 
-    // Then the above memcpy would not be necessary
-    TrianglesCommand::Triangles triangles = { vertsBuf, indicesBuf, static_cast<int>(verts.size()), static_cast<int>(indices.size()) };
-    return triangles;
-}
-    
-        /** @deprecated Use method getTrianglesCount() instead */
-    CC_DEPRECATED_ATTRIBUTE unsigned int getTriaglesCount() const;
-    
-    /**
-     * get sum of all triangle area size
-     * @return sum of all triangle area size
-     */
-    float getArea() const;
