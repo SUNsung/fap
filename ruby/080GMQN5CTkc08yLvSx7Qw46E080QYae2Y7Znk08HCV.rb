@@ -1,140 +1,240 @@
 
         
-                      if value_came_from_user? && object.respond_to?(method_before_type_cast)
-                object.public_send(method_before_type_cast)
-              else
-                value
-              end
-            end
-          end
+        module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-            def render
-          options = @options.stringify_keys
-          options['type']     = 'checkbox'
-          options['value']    = @checked_value
-          options['checked'] = 'checked' if input_checked?(options)
-    
-                options = options.dup
-            options[:field_name]           = @method_name
-            options[:include_position]     = true
-            options[:prefix]             ||= @object_name
-            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
-    
-      protected
-    
-      prepend_before_action :assert_is_devise_resource!
-  respond_to :html if mimes_for_respond_to.empty?
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+        # Checks if this registry has any items.
+    #
+    # @return [Boolean]
+    def empty?
+      @items.keys.empty?
     end
     
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
+    =begin
+ +------+----------------+-------------------------------------------+
+   | HEX  | NAME           | DESCRIPTION                               |
+   +------+----------------+-------------------------------------------+
+   | HEX  | NAME           | DESCRIPTION                               |
+   | 0x01 | CALLED NUMBER  | Number/extension being called             |
+   | 0x02 | CALLING NUMBER | Calling number                            |
+   | 0x03 | CALLING ANI    | Calling number ANI for billing            |
+   | 0x04 | CALLING NAME   | Name of caller                            |
+   | 0x05 | CALLED CONTEXT | Context for number                        |
+   | 0x06 | USERNAME       | Username (peer or user) for               |
+   |      |                | authentication                            |
+   | 0x07 | PASSWORD       | Password for authentication               |
+   | 0x08 | CAPABILITY     | Actual CODEC capability                   |
+   | 0x09 | FORMAT         | Desired CODEC format                      |
+   | 0x0a | LANGUAGE       | Desired language                          |
+   | 0x0b | VERSION        | Protocol version                          |
+   | 0x0c | ADSICPE        | CPE ADSI capability                       |
+   | 0x0d | DNID           | Originally dialed DNID                    |
+   | 0x0e | AUTHMETHODS    | Authentication method(s)                  |
+   | 0x0f | CHALLENGE      | Challenge data for MD5/RSA                |
+   | 0x10 | MD5 RESULT     | MD5 challenge result                      |
+   | 0x11 | RSA RESULT     | RSA challenge result                      |
+   | 0x12 | APPARENT ADDR  | Apparent address of peer                  |
+   | 0x13 | REFRESH        | When to refresh registration              |
+   | 0x14 | DPSTATUS       | Dialplan status                           |
+   | 0x15 | CALLNO         | Call number of peer                       |
+   | 0x16 | CAUSE          | Cause                                     |
+   | 0x17 | IAX UNKNOWN    | Unknown IAX command                       |
+   | 0x18 | MSGCOUNT       | How many messages waiting                 |
+   | 0x19 | AUTOANSWER     | Request auto-answering                    |
+   | 0x1a | MUSICONHOLD    | Request musiconhold with QUELCH           |
+   | 0x1b | TRANSFERID     | Transfer Request Identifier               |
+   | 0x1c | RDNIS          | Referring DNIS                            |
+   | 0x1d | Reserved       | Reserved for future use                   |
+   | 0x1e | Reserved       | Reserved for future use                   |
+   | 0x1f | DATETIME       | Date/Time                                 |
+   | 0x20 | Reserved       | Reserved for future use                   |
+   | 0x21 | Reserved       | Reserved for future use                   |
+   | 0x22 | Reserved       | Reserved for future use                   |
+   | 0x23 | Reserved       | Reserved for future use                   |
+   | 0x24 | Reserved       | Reserved for future use                   |
+   | 0x25 | Reserved       | Reserved for future use                   |
+   | 0x26 | CALLINGPRES    | Calling presentation                      |
+   | 0x27 | CALLINGTON     | Calling type of number                    |
+   | 0x28 | CALLINGTNS     | Calling transit network select            |
+   | 0x29 | SAMPLINGRATE   | Supported sampling rates                  |
+   | 0x2a | CAUSECODE      | Hangup cause                              |
+   | 0x2b | ENCRYPTION     | Encryption format                         |
+   | 0x2c | ENCKEY         | Reserved for future Use                   |
+   | 0x2d | CODEC PREFS    | CODEC Negotiation                         |
+   | 0x2e | RR JITTER      | Received jitter, as in RFC 3550           |
+   | 0x2f | RR LOSS        | Received loss, as in RFC 3550             |
+   | 0x30 | RR PKTS        | Received frames                           |
+   | 0x31 | RR DELAY       | Max playout delay for received frames in  |
+   |      |                | ms                                        |
+   | 0x32 | RR DROPPED     | Dropped frames (presumably by jitter      |
+   |      |                | buffer)                                   |
+   | 0x33 | RR OOO         | Frames received Out of Order              |
+   | 0x34 | OSPTOKEN       | OSP Token Block                           |
+   +------+----------------+-------------------------------------------+
+=end
     
-        proxy = Devise::Hooks::Proxy.new(warden)
     
-          # Lock a user setting its locked_at to actual time.
-      # * +opts+: Hash options if you don't want to send email
-      #   when you lock access, you could pass the next hash
-      #   `{ send_instructions: false } as option`.
-      def lock_access!(opts = { })
-        self.locked_at = Time.now.utc
+  #
+  # Payload types were copied from xCAT-server source code (IPMI.pm)
+  #
+  RMCP_ERRORS = {
+    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
+    2 => 'Invalid Session ID', #this shouldn't occur...
+    3 => 'Invalid payload type',#shouldn't occur..
+    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
+    5 => 'Invalid integrity algorithm', #same as above
+    6 => 'No matching authentication payload',
+    7 => 'No matching integrity payload',
+    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
+    9 => 'Invalid role',
+    0xa => 'Unauthorised role or privilege level requested',
+    0xb => 'Insufficient resources to create a session at the requested role',
+    0xc => 'Invalid username length',
+    0xd => 'Unauthorized name',
+    0xe => 'Unauthorized GUID',
+    0xf => 'Invalid integrity check value',
+    0x10 => 'Invalid confidentiality algorithm',
+    0x11 => 'No cipher suite match with proposed security algorithms',
+    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
+  }
     
-      def self.source_root
-    @source_root ||= File.expand_path('../templates', __FILE__)
-  end
+    module Rex
+  module Proto
+    module Kerberos
+      # This class is a representation of a kerberos client.
+      class Client
+        # @!attribute host
+        #   @return [String] The kerberos server host
+        attr_accessor :host
+        # @!attribute port
+        #   @return [Integer] The kerberos server port
+        attr_accessor :port
+        # @!attribute timeout
+        #   @return [Integer] The connect / read timeout
+        attr_accessor :timeout
+        # @todo Support UDP
+        # @!attribute protocol
+        #   @return [String] The transport protocol used (tcp/udp)
+        attr_accessor :protocol
+        # @!attribute connection
+        #   @return [IO] The connection established through Rex sockets
+        attr_accessor :connection
+        # @!attribute context
+        #   @return [Hash] The Msf context where the connection belongs to
+        attr_accessor :context
     
-      module ClassMethods
-    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
-    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
-    # The attribute returns a Paperclip::Attachment object which handles the management of
-    # that file. The intent is to make the attachment as much like a normal attribute. The
-    # thumbnails will be created when the new file is assigned, but they will *not* be saved
-    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
-    # called on it, the attachment will *not* be deleted until +save+ is called. See the
-    # Paperclip::Attachment documentation for more specifics. There are a number of options
-    # you can set to change the behavior of a Paperclip attachment:
-    # * +url+: The full URL of where the attachment is publicly accessible. This can just
-    #   as easily point to a directory served directly through Apache as it can to an action
-    #   that can control permissions. You can specify the full domain and path, but usually
-    #   just an absolute path is sufficient. The leading slash *must* be included manually for
-    #   absolute paths. The default value is
-    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
-    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
-    #     :url => '/:class/:attachment/:id/:style_:filename'
-    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
-    #   Note: When using the +s3+ storage option, the +url+ option expects
-    #   particular values. See the Paperclip::Storage::S3#url documentation for
-    #   specifics.
-    # * +default_url+: The URL that will be returned if there is no attachment assigned.
-    #   This field is interpolated just as the url is. The default value is
-    #   '/:attachment/:style/missing.png'
-    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
-    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
-    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
-    #   geometry strings at the ImageMagick website
-    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
-    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
-    #   inside the dimensions and then crop the rest off (weighted at the center). The
-    #   default value is to generate no thumbnails.
-    # * +default_style+: The thumbnail style that will be used by default URLs.
-    #   Defaults to +original+.
-    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
-    #                       :default_style => :normal
-    #     user.avatar.url # => '/avatars/23/normal_me.png'
-    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
-    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
-    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
-    #   record is destroyed. Defaults to +false+.
-    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
-    #   to a command line error. This will override the global setting for this attachment.
-    #   Defaults to true.
-    # * +convert_options+: When creating thumbnails, use this free-form options
-    #   array to pass in various convert command options.  Typical options are '-strip' to
-    #   remove all Exif data from the image (save space for thumbnails and avatars) or
-    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
-    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
-    #   Note that this option takes a hash of options, each of which correspond to the style
-    #   of thumbnail being generated. You can also specify :all as a key, which will apply
-    #   to all of the thumbnails being generated. If you specify options for the :original,
-    #   it would be best if you did not specify destructive options, as the intent of keeping
-    #   the original around is to regenerate all the thumbnails when requirements change.
-    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
-    #                                :convert_options => {
-    #                                  :all => '-strip',
-    #                                  :negative => '-negate'
-    #                                }
-    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
-    #   It is recommended that :convert_options option be included in the hash passed to each
-    #   :styles for compatibility with future versions.
-    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
-    #   shell quoting for safety. If your options require a space, please pre-split them
-    #   and pass an array to :convert_options instead.
-    # * +storage+: Chooses the storage backend where the files will be stored. The current
-    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
-    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
-    #   for backend-specific options.
-    #
-    # It's also possible for you to dynamically define your interpolation string for :url,
-    # :default_url, and :path in your model by passing a method name as a symbol as a argument
-    # for your has_attached_file definition:
-    #
-    #   class Person
-    #     has_attached_file :avatar, :default_url => :default_url_by_gender
-    #
-    #     private
-    #
-    #     def default_url_by_gender
-    #       '/assets/avatars/default_#{gender}.png'
-    #     end
-    #   end
-    def has_attached_file(name, options = {})
-      HasAttachedFile.define_on(self, name, options)
+              # Encodes the renew_time field
+          #
+          # @return [String]
+          def encode_renew_time
+            [renew_till].pack('N')
+          end
+    
+                checksum = cipher[0, 16]
+            data = cipher[16, cipher.length - 1]
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              include Rex::Proto::Kerberos::Crypto
+          include Rex::Proto::Kerberos::Model
+    
+              # Decodes the last_req from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Rex::Proto::Kerberos::Model::LastRequest>]
+          def decode_last_req(input)
+            last_requests = []
+            input.value[0].value.each do |last_request|
+              last_requests << Rex::Proto::Kerberos::Model::LastRequest.decode(last_request)
+            end
+    
+              # Decodes the error_code field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_error_code(input)
+            input.value[0].value.to_i
+          end
+    
+            def self.options
+          [[
+            '--short', 'Only print the path relative to the cache root'
+          ]].concat(super)
+        end
+    
+          def product_scope
+        if @current_user_roles.include?('admin')
+          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+        end
+    
+            def taxonomy_params
+          if params[:taxonomy] && !params[:taxonomy].empty?
+            params.require(:taxonomy).permit(permitted_taxonomy_attributes)
+          else
+            {}
+          end
+        end
+      end
     end
   end
 end
+
+    
+            def index
+          @users = Spree.user_class.accessible_by(current_ability, :read)
+    
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
+    end
+    
+          def self.default_generator_root
+        File.dirname(__FILE__)
+      end
+    
+        def initialize(options)
+      @strictly_ordered_queues = !!options[:strict]
+      @queues = options[:queues].map { |q| 'queue:#{q}' }
+      if @strictly_ordered_queues
+        @queues = @queues.uniq
+        @queues << TIMEOUT
+      end
+    end
+    
+        class WithoutTimestamp < Pretty
+      def call(severity, time, program_name, message)
+        '#{::Process.pid} TID-#{Sidekiq::Logging.tid}#{context} #{severity}: #{message}\n'
+      end
+    end
