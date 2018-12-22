@@ -1,285 +1,296 @@
 
         
-          // An AST section consists of one or more AST modules, optionally with
-  // headers. Iterate over all AST modules.
-  while (!buf.empty()) {
-    auto info = serialization::validateSerializedAST(buf);
-    }
+        // Calls the registered C++ shape inference function for <node> (a serialized
+// NodeDef).
+// Should not be called for shape functions that access input tensors; constant
+// input tensor values are not made available, and so the inferred shapes will
+// be less precise than they could be.
+//
+// Returns an error, or OK, in <out_status> according to whether the shape
+// inference was successful.
+//
+// On success, returns a vector populated with the inferred output shapes (as
+// serialized CppShapeInferenceResult protos) followed by a serialized
+// CppShapeInferenceInputsNeeded proto.
+//
+// This is temporary code to be used during the migration
+// from python shape inference functions to C++ shape inference functions.
+std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status);
     
-    #ifndef DIRECTIONAL_PREPOSITION
-#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
-#endif
     
-    DummyTaskQueue::~DummyTaskQueue() = default;
+    { private:
+  // Original parameter name.
+  string name_;
+  // API name for this parameter.
+  string rename_to_;
+};
     
-    namespace clang {
-class Sema;
-class NamedDecl;
-class TypeDecl;
-class FunctionDecl;
-}
     
-    #include 'swift/Demangling/Demangle.h'
-#include 'swift/Demangling/Demangler.h'
-#include <cstdio>
-    
-    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsCollision(body0, body1);
-}
-    
-    class RigidBodyBullet;
-class btTypedConstraint;
-    
-    	real_t getSoftnessDirLin() const;
-	real_t getRestitutionDirLin() const;
-	real_t getDampingDirLin() const;
-	real_t getSoftnessDirAng() const;
-	real_t getRestitutionDirAng() const;
-	real_t getDampingDirAng() const;
-	real_t getSoftnessLimLin() const;
-	real_t getRestitutionLimLin() const;
-	real_t getDampingLimLin() const;
-	real_t getSoftnessLimAng() const;
-	real_t getRestitutionLimAng() const;
-	real_t getDampingLimAng() const;
-	real_t getSoftnessOrthoLin() const;
-	real_t getRestitutionOrthoLin() const;
-	real_t getDampingOrthoLin() const;
-	real_t getSoftnessOrthoAng() const;
-	real_t getRestitutionOrthoAng() const;
-	real_t getDampingOrthoAng() const;
-	void setSoftnessDirLin(real_t softnessDirLin);
-	void setRestitutionDirLin(real_t restitutionDirLin);
-	void setDampingDirLin(real_t dampingDirLin);
-	void setSoftnessDirAng(real_t softnessDirAng);
-	void setRestitutionDirAng(real_t restitutionDirAng);
-	void setDampingDirAng(real_t dampingDirAng);
-	void setSoftnessLimLin(real_t softnessLimLin);
-	void setRestitutionLimLin(real_t restitutionLimLin);
-	void setDampingLimLin(real_t dampingLimLin);
-	void setSoftnessLimAng(real_t softnessLimAng);
-	void setRestitutionLimAng(real_t restitutionLimAng);
-	void setDampingLimAng(real_t dampingLimAng);
-	void setSoftnessOrthoLin(real_t softnessOrthoLin);
-	void setRestitutionOrthoLin(real_t restitutionOrthoLin);
-	void setDampingOrthoLin(real_t dampingOrthoLin);
-	void setSoftnessOrthoAng(real_t softnessOrthoAng);
-	void setRestitutionOrthoAng(real_t restitutionOrthoAng);
-	void setDampingOrthoAng(real_t dampingOrthoAng);
-	void setPoweredLinMotor(bool onOff);
-	bool getPoweredLinMotor();
-	void setTargetLinMotorVelocity(real_t targetLinMotorVelocity);
-	real_t getTargetLinMotorVelocity();
-	void setMaxLinMotorForce(real_t maxLinMotorForce);
-	real_t getMaxLinMotorForce();
-	void setPoweredAngMotor(bool onOff);
-	bool getPoweredAngMotor();
-	void setTargetAngMotorVelocity(real_t targetAngMotorVelocity);
-	real_t getTargetAngMotorVelocity();
-	void setMaxAngMotorForce(real_t maxAngMotorForce);
-	real_t getMaxAngMotorForce();
-	real_t getLinearPos();
-    
-    MemoryPool::Alloc *MemoryPool::allocs = NULL;
-MemoryPool::Alloc *MemoryPool::free_list = NULL;
-uint32_t MemoryPool::alloc_count = 0;
-uint32_t MemoryPool::allocs_used = 0;
-Mutex *MemoryPool::alloc_mutex = NULL;
-    
-    Shell::~Shell() {
-}
-    
-    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
+    {}  // namespace tensorflow
 
     
-    /**
- * \brief The interface to convert mxnet's tensor to caffe's blob
- * \brief called in caffe_operator_inl.h
- */
-template<typename Device, typename Dtype>
-void TBlob2CaffeBlob(caffeMemoryTypes memType,
-                     typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
-                     typename std::vector<TBlob>::const_iterator tblob,
-                     int n = 1) {
-  for (int i = 0; i < n; ++i, ++blob, ++tblob) {
-    (*blob)->Reshape(TShape2Vector((*tblob).shape_));
-    SetDataGradToBlob<Device, Dtype>(memType, blob, tblob);
+    // Binary arithmetic operators on PyBfloat16 values.
+#define BFLOAT16_BINOP(name, op)                                  \
+  PyObject* PyBfloat16_##name(PyObject* a, PyObject* b) {         \
+    bfloat16 x, y;                                                \
+    if (!AsBfloat16(a, &x) || !AsBfloat16(b, &y)) return nullptr; \
+    bfloat16 z = x op y;                                          \
+    return PyBfloat16_FromBfloat16(z).release();                  \
   }
-}
+BFLOAT16_BINOP(Add, +)
+BFLOAT16_BINOP(Subtract, -)
+BFLOAT16_BINOP(Multiply, *)
+BFLOAT16_BINOP(Divide, /)
+#undef BFLOAT16_BINOP
     
-    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
-.describe('Caffe loss layer')
-.add_arguments(CaffeLossParam::__FIELDS__());
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace mxnet {
-namespace engine {
-/*!
- * \brief ThreadedEngine using global thread pool across all devices.
- * The policy of this Engine:
- *  - Execute Async operation immediately if pushed from Pusher.
- *  - Use a common thread pool for normal operations on all devices.
- *  - Use special thread pool for copy operations.
- */
-class ThreadedEnginePooled : public ThreadedEngine {
- public:
-  ThreadedEnginePooled() {
-    this->Start();
-  }
-    }
-    }
-    }
     
-    Example::
-    
-      /**
-   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
-   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
-   * ntree_limit = 0) = 0;
-   *
-   * \brief predict the leaf index of each tree, the output will be nsample *
-   * ntree vector this is only valid in gbtree predictor.
-   *
-   * \param [in,out]  dmat        The input feature matrix.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       Model to make predictions from.
-   * \param           ntree_limit (Optional) The ntree limit.
-   */
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
-  }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf_ != EOF) {
-      switch (ch_buf_) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf_ = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf_ = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf_;
-          ch_buf_ = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+    {  // Maps error codes to the corresponding Python exception type.
+  std::map<TF_Code, PyObject*> exc_types_;
 };
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin_(fin) {}
+    
+    // Called by python code on initialization.
+//
+// 'trampoline' must represent a python function which has the
+// following signature:
+//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
+//     ndarray | list(ndarray) | python scalar |
+//     EagerTensor | list(EagerTensor) | None
+//
+// The trampoline takes two arguments, the first is a string token
+// used by the python frontend's dispatching logic; the second is a
+// list of numpy ndarrays or EagerTensor objects. It can return a
+// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
+// EagerTensor, a list of EagerTensors, or None.
+//
+// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
+// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
+// of EagerTensors, or None.
+//
+// The C++ runtime converts outputs back to Tensor objects.
+//
+// This function is called by script_ops.py during its module initialization.
+//
+// TODO(zhifengc): Support distributed runtime.
+void InitializePyTrampoline(PyObject* trampoline);
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
     
     
-    {    inline size_t Size() const {
-      return end - begin;
-    }
-  };
-  /* \brief specifies how to split a rowset into two */
-  struct Split {
-    std::vector<size_t> left;
-    std::vector<size_t> right;
-  };
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
+  }
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
+}
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
   } else {
-    CHECK(qrecycle_.Pop(out_page));
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
   }
 }
-}  // namespace data
-}  // namespace xgboost
     
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
     
-        // Setup render state
-    const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
-    ctx->OMSetBlendState(g_pBlendState, blend_factor, 0xffffffff);
-    ctx->OMSetDepthStencilState(g_pDepthStencilState, 0);
-    ctx->RSSetState(g_pRasterizerState);
+    #include <map>
     
-        ImGui_ImplVulkanH_FrameData* fd = &wd->Frames[wd->FrameIndex];
+    
     {
-		err = vkWaitForFences(g_Device, 1, &fd->Fence, VK_TRUE, UINT64_MAX);	// wait indefinitely instead of periodically checking
-        check_vk_result(err);
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
     }
     
-                    // Average normals
-                ImVec2 dm = (temp_normals[i1] + temp_normals[i2]) * 0.5f;
-                float dmr2 = dm.x*dm.x + dm.y*dm.y;
-                if (dmr2 > 0.000001f)
-                {
-                    float scale = 1.0f / dmr2;
-                    if (scale > 100.0f) scale = 100.0f;
-                    dm *= scale;
-                }
-                dm *= AA_SIZE;
-                temp_points[i2*2+0] = points[i2] + dm;
-                temp_points[i2*2+1] = points[i2] - dm;
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+      keyval = GetKeycodeFromText(key);
+  if (keyval == ui::VKEY_UNKNOWN){
+    enable_shortcut_ = false;
+  } else {
+    enable_shortcut_ = true;
+    //only code for ctrl, shift, alt, super and meta modifiers
+    int modifiers_value = ui::EF_NONE;
+    modifiers = base::ToLowerASCII(modifiers);
+    if (modifiers.find('ctrl')!=std::string::npos){
+      modifiers_value |= ui::EF_CONTROL_DOWN;
+    }
+    if (modifiers.find('shift')!=std::string::npos){
+      modifiers_value |= ui::EF_SHIFT_DOWN ;
+    }
+    if (modifiers.find('alt')!=std::string::npos){
+      modifiers_value |= ui::EF_ALT_DOWN;
+    }
+    if (modifiers.find('super')!=std::string::npos
+     || modifiers.find('cmd')!=std::string::npos
+     || modifiers.find('command')!=std::string::npos){
+      modifiers_value |= ui::EF_COMMAND_DOWN;
+    }
+    if (modifiers.find('meta')!=std::string::npos){
+      meta_down_flag_ = true;
+    }
+    accelerator_ = ui::Accelerator(keyval,modifiers_value);
+  }
+    
+    
+    {}
+    
+     protected:
+  ~NwClipboardGetListSyncFunction() override;
+    
+    
+    {    DISALLOW_COPY_AND_ASSIGN(NwDesktopCaptureMonitor);
+  };
+    
+    static uint64_t PackSequenceAndType(uint64_t seq, ValueType t) {
+  assert(seq <= kMaxSequenceNumber);
+  assert(t <= kValueTypeForSeek);
+  return (seq << 8) | t;
+}
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+    // Return the name of the info log file for 'dbname'.
+std::string InfoLogFileName(const std::string& dbname);
+    
+      // Skips all blocks that are completely before 'initial_offset_'.
+  //
+  // Returns true on success. Handles reporting.
+  bool SkipToInitialBlock();
+    
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        assert(kHeaderSize == 7);
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
+      }
+      block_offset_ = 0;
+    }
+    }
+    
+      KeyComparator comparator_;
+  int refs_;
+  Arena arena_;
+  Table table_;
+    
+      static void clearData6();
+    
+    bool DHTResponseMessage::isReply() const { return true; }
+    
+    #endif // D_DHT_RESPONSE_MESSAGE_H
+
+    
+      int getNumBucket() const;
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
+    const std::shared_ptr<DHTBucket>& bucket,
+    const std::shared_ptr<DHTNode>& newNode)
+{
+  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
+}
+    
+      virtual void addPeriodicTask2(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    
+    {} // namespace aria2
+
+    
+    void DNSCache::markBad(const std::string& hostname, const std::string& ipaddr,
+                       uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.find(target);
+  if (i != entries_.end()) {
+    (*i)->markBad(ipaddr);
+  }
+}
+    
+    
+    {  return Merge(key_slice, value_slice);
+}
+    
+      // open DB with two column families
+  std::vector<ColumnFamilyDescriptor> column_families;
+  // have to open default column family
+  column_families.push_back(ColumnFamilyDescriptor(
+      kDefaultColumnFamilyName, ColumnFamilyOptions()));
+  // open the new one, too
+  column_families.push_back(ColumnFamilyDescriptor(
+      'new_cf', ColumnFamilyOptions()));
+  std::vector<ColumnFamilyHandle*> handles;
+  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
+  assert(s.ok());
+    
+    namespace rocksdb {
+namespace experimental {
+    }
+    }
+    
+    namespace rocksdb {
+    }
