@@ -1,283 +1,151 @@
 
         
-        TegraBinaryOp_Invoker(max, max)
+        TegraCvtColor_Invoker(rgb2bgr565, rgb2bgr565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                              dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgb2rgb565, rgb2rgb565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                              dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgbx2bgr565, rgbx2bgr565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+TegraCvtColor_Invoker(rgbx2rgb565, rgbx2rgb565, src_data + static_cast<size_t>(range.start) * src_step, src_step, \
+                                                dst_data + static_cast<size_t>(range.start) * dst_step, dst_step)
+#define TEGRA_CVTBGRTOBGR565(src_data, src_step, dst_data, dst_step, width, height, scn, swapBlue, greenBits) \
+( \
+    greenBits == 6 && CAROTENE_NS::isSupportedConfiguration() ? \
+        scn == 3 ? \
+            (swapBlue ? \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgb2bgr565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) : \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgb2rgb565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) ), \
+            CV_HAL_ERROR_OK : \
+        scn == 4 ? \
+            (swapBlue ? \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgbx2bgr565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) : \
+                parallel_for_(Range(0, height), \
+                TegraCvtColor_rgbx2rgb565_Invoker(src_data, src_step, dst_data, dst_step, width, height), \
+                (width * height) / static_cast<double>(1<<16)) ), \
+            CV_HAL_ERROR_OK : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    #ifdef CAROTENE_NEON
-    
-    
+        f32 alpha, beta, gamma;
+    float32x4_t valpha, vbeta, vgamma;
+    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
+        alpha(_alpha), beta(_beta), gamma(_gamma)
     {
-    {
-    {             vec128  vs = internal::vld1q( src + i);
-             vec128 vr1 = internal::vld1q(rng1 + i);
-             vec128 vr2 = internal::vld1q(rng2 + i);
-            uvec128 vd1 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-                     vs = internal::vld1q( src + i + 16/sizeof(T));
-                    vr1 = internal::vld1q(rng1 + i + 16/sizeof(T));
-                    vr2 = internal::vld1q(rng2 + i + 16/sizeof(T));
-            uvec128 vd2 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            vnst(dst + i, vd1, vd2);
-        }
-        vtail<T, sizeof(T)>::inRange(src, rng1, rng2, dst, i, size.width);
-        for( ; i < size.width; i++ )
-            dst[i] = (u8)(-(rng1[i] <= src[i] && src[i] <= rng2[i]));
+        valpha = vdupq_n_f32(_alpha);
+        vbeta = vdupq_n_f32(_beta);
+        vgamma = vdupq_n_f32(_gamma + 0.5);
     }
+    
+        size_t i = 0;
+    s32* dsta = internal::getRowPtr(dstBase, dstStride, 0);
+    for (; i < size.height-1; i+=2)
+    {
+        //vertical convolution
+        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
+    }
+    
+    #define COMBINE64(sgn,n) void combine##n(const Size2D &_size                                                \
+                                               FILL_LINES##n(FARG, sgn##64),                                \
+                                               sgn##64 * dstBase, ptrdiff_t dstStride)                      \
+{                                                                                                           \
+    internal::assertSupportedConfiguration();                                                               \
+    Size2D size(_size);                                                                                     \
+    if (CONTSRC##n                                                                                          \
+        dstStride == (ptrdiff_t)(size.width))                                                               \
+    {                                                                                                       \
+        size.width *= size.height;                                                                          \
+        size.height = 1;                                                                                    \
+    }                                                                                                       \
+    typedef internal::VecTraits<sgn##64, n>::vec64 vec64;                                                   \
+                                                                                                            \
+    for (size_t i = 0u; i < size.height; ++i)                                                               \
+    {                                                                                                       \
+        FILL_LINES##n(VROW, sgn##64)                                                                        \
+        sgn##64 * dst = internal::getRowPtr(dstBase, dstStride, i);                                         \
+        size_t sj = 0u, dj = 0u;                                                                            \
+                                                                                                            \
+        for (; sj < size.width; ++sj, dj += n)                                                              \
+        {                                                                                                   \
+            vec64 v_dst;                                                                                    \
+            FILL_LINES##n(VLD1, sgn##64)                                                                    \
+            vst##n##_##sgn##64(dst + dj, v_dst);                                                            \
+            /*FILL_LINES##n(SLD, sgn##64)*/                                                                 \
+        }                                                                                                   \
+    }                                                                                                       \
 }
     
-            // Inner state of the underlying reader.
-        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
-        // when the reader state is restored after the first StartEpoch call.
-        Internal::Optional<Dictionary> m_state;
-    
-    
-    {            // Arithmetic schedule - write at every m_frequency steps or if the update is one of the first m_firstN
-            // updates.
-            return update % m_frequency == 0 || update <= m_firstN;
-        }
-    
-        template <typename T>
-    inline void ValidateType(const Dictionary& dict, const std::wstring& typeValue, size_t currentVersion)
+    // It is possible to accumulate up to 131071 schar multiplication results in sint32 without overflow
+// We process 16 elements and accumulate two new elements per step. So we could handle 131071/2*16 elements
+#define DOT_INT_BLOCKSIZE 131070*8
+    f64 result = 0.0;
+    for (size_t row = 0; row < size.height; ++row)
     {
-        if (!dict.Contains(typeKey))
-        {
-            const auto& version = GetVersion(dict);
-            LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                       typeKey.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        } 
+        const s8 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
+        const s8 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
     }
     
-    
-    {        colStarts[numCSCCols - 1] = (SparseIndexType)(nonZeroValues.size());
-        NDArrayViewPtr deviceValueData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), valueDataShape, colStarts.data(), rowIndices.data(), nonZeroValues.data(), nonZeroValues.size(), device, readOnly);
-        return MakeSharedObject<Value>(deviceValueData, deviceValueMask);
-    }
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            ImGui_ImplDX9_InvalidateDeviceObjects();
-            g_d3dpp.BackBufferWidth  = LOWORD(lParam);
-            g_d3dpp.BackBufferHeight = HIWORD(lParam);
-            HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
-            if (hr == D3DERR_INVALIDCALL)
-                IM_ASSERT(0);
-            ImGui_ImplDX9_CreateDeviceObjects();
-        }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    }
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-    
-    int32 ImGui_Marmalade_KeyCallback(void* system_data, void* user_data)
+    inline float32x2_t vsqrt_f32(float32x2_t val)
 {
-    ImGuiIO& io = ImGui::GetIO();
-    s3eKeyboardEvent* e = (s3eKeyboardEvent*)system_data;
-    if (e->m_Pressed == 1)
-        io.KeysDown[e->m_Key] = true;
-    if (e->m_Pressed == 0)
-        io.KeysDown[e->m_Key] = false;
-    }
+    return vrecp_f32(vrsqrt_f32(val));
+}
     
-        // Upload texture to graphics system
-    GLint last_texture;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-    glGenTextures(1, &g_FontTexture);
-    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    # endif  // NDEBUG for EXPECT_DEBUG_DEATH
+#endif  // GTEST_HAS_DEATH_TEST
     
-    // Data
-static ALLEGRO_DISPLAY*         g_Display = NULL;
-static ALLEGRO_BITMAP*          g_Texture = NULL;
-static double                   g_Time = 0.0;
-static ALLEGRO_MOUSE_CURSOR*    g_MouseCursorInvisible = NULL;
-static ALLEGRO_VERTEX_DECL*     g_VertexDecl = NULL;
-static char*                    g_ClipboardTextData = NULL;
+    template <$for j, [[typename T$j]]>
+internal::ValueArray$i<$for j, [[T$j]]> Values($for j, [[T$j v$j]]) {
+  return internal::ValueArray$i<$for j, [[T$j]]>($for j, [[v$j]]);
+}
     
-        g_MouseCursors[ImGuiMouseCursor_Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-    g_MouseCursors[ImGuiMouseCursor_TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
-    g_MouseCursors[ImGuiMouseCursor_ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);   // FIXME: GLFW doesn't have this.
-    g_MouseCursors[ImGuiMouseCursor_ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
-    g_MouseCursors[ImGuiMouseCursor_ResizeEW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);  // FIXME: GLFW doesn't have this.
-    g_MouseCursors[ImGuiMouseCursor_ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);  // FIXME: GLFW doesn't have this.
-    g_MouseCursors[ImGuiMouseCursor_Hand] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
     
-    if (install_callbacks)
-        ImGui_ImplGlfw_InstallCallbacks(window);
+      // Appends the given TestPartResult to the array.
+  void Append(const TestPartResult& result);
     
-    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
+    // Finally, you are free to instantiate the pattern with the types you
+// want.  If you put the above code in a header file, you can #include
+// it in multiple C++ source files and instantiate it multiple times.
+//
+// To distinguish different instances of the pattern, the first
+// argument to the INSTANTIATE_* macro is a prefix that will be added
+// to the actual test case name.  Remember to pick unique prefixes for
+// different instances.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, MyTypes);
     
-    /**
- * Populate the vector with the current stack trace
- *
- * Note that this trace needs to be symbolicated to get the library offset even
- * if it is to be symbolicated off-line.
- *
- * Beware of a bug on some platforms, which makes the trace loop until the
- * buffer is full when it reaches a noexpr function. It seems to be fixed in
- * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
- *
- * @param stackTrace The vector that will receive the stack trace. Before
- * filling the vector it will be cleared. The vector will never grow so the
- * number of frames captured is limited by the capacity of it.
- *
- * @param skip The number of frames to skip before capturing the trace
- */
-FBEXPORT void getStackTrace(std::vector<InstructionPointer>& stackTrace,
-                            size_t skip = 0);
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
     
-        jmethodID   (*FromReflectedMethod)(JNIEnv*, jobject);
-    jfieldID    (*FromReflectedField)(JNIEnv*, jobject);
-    /* spec doesn't show jboolean parameter */
-    jobject     (*ToReflectedMethod)(JNIEnv*, jclass, jmethodID, jboolean);
-    
-    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeInsertChild(root, child1, 1);
-    }
-    
-        static void destroy(Config * config);
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
+    // Tests some trivial cases.
+TEST(IsPrimeTest, Trivial) {
+  EXPECT_FALSE(IsPrime(0));
+  EXPECT_FALSE(IsPrime(1));
+  EXPECT_TRUE(IsPrime(2));
+  EXPECT_TRUE(IsPrime(3));
 }
     
     
-    
-    #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
-namespace antlr {
-#endif
+// A simple string class.
+class MyString {
+ private:
+  const char* c_string_;
+  const MyString& operator=(const MyString& rhs);
     }
-    
-    #endif //INC_ASTFactory_hpp__
-
-    
-    #endif //INC_ASTNULLType_hpp__
-
-    
-    /** ASTPair:  utility class used for manipulating a pair of ASTs
-  * representing the current AST root and current AST sibling.
-  * This exists to compensate for the lack of pointers or 'var'
-  * arguments in Java.
-  *
-  * OK, so we can do those things in C++, but it seems easier
-  * to stick with the Java way for now.
-  */
-class ANTLR_API ASTPair {
-public:
-	RefAST root;		// current root of tree
-	RefAST child;		// current child to which siblings are added
-    }
-    
-    protected:
-	// character source
-	ANTLR_USE_NAMESPACE(std)istream& input;
-    
-    #include <antlr/config.hpp>
-#include <antlr/ANTLRException.hpp>
-    
-    class ANTLR_API CommonAST : public BaseAST {
-public:
-	CommonAST()
-	: BaseAST()
-	, ttype( Token::INVALID_TYPE )
-	, text()
-	{
-	}
-    }
-    
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/CommonHiddenStreamToken.hpp#2 $
- */
-    
-    #endif //INC_InputBuffer_hpp__
-
-    
-    	/** Mark a spot in the input and return the position.
-	 * Forwarded to TokenBuffer.
-	 */
-	virtual inline unsigned int mark()
-	{
-		return inputState->getInput().mark();
-	}
-	/// rewind to a previously marked position
-	virtual inline void rewind(unsigned int pos)
-	{
-		inputState->getInput().rewind(pos);
-	}
-	/** called by the generated parser to do error recovery, override to
-	 * customize the behaviour.
-	 */
-	virtual void recover(const RecognitionException& ex, const BitSet& tokenSet)
-	{
-        (void)ex;
-		consume();
-		consumeUntil(tokenSet);
-	}
