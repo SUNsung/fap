@@ -1,147 +1,67 @@
 
         
-            Stacks of 2 x (3 x 3) Conv2D-BN-ReLU
-    Last ReLU is after the shortcut connection.
-    At the beginning of each stage, the feature map size is halved (downsampled)
-    by a convolutional layer with strides=2, while the number of filters is
-    doubled. Within each stage, the layers have the same number filters and the
-    same number of filters.
-    Features maps sizes:
-    stage 0: 32x32, 16
-    stage 1: 16x16, 32
-    stage 2:  8x8,  64
-    The Number of parameters is approx the same as Table 6 of [a]:
-    ResNet20 0.27M
-    ResNet32 0.46M
-    ResNet44 0.66M
-    ResNet56 0.85M
-    ResNet110 1.7M
+            classifiers = proj_info['classifiers'],
+    
+            return link_list
+    
+        def prepare(self, vid = '', title = None, **kwargs):
+        assert vid
+    
+        try:
+        json_data = get_coub_data(html)
+        title, video_url, audio_url = get_title_and_urls(json_data)
+        video_file_name, video_file_path = get_file_path(merge, output_dir, title, video_url)
+        audio_file_name, audio_file_path = get_file_path(merge, output_dir, title, audio_url)
+        download_url(audio_url, merge, output_dir, title, info_only)
+        download_url(video_url, merge, output_dir, title, info_only)
+        if not info_only:
+            try:
+                fix_coub_video_file(video_file_path)
+                audio_duration = float(ffmpeg.ffprobe_get_media_duration(audio_file_path))
+                video_duration = float(ffmpeg.ffprobe_get_media_duration(video_file_path))
+                loop_file_path = get_loop_file_path(title, output_dir)
+                single_file_path = audio_file_path
+                if audio_duration > video_duration:
+                    write_loop_file(int(audio_duration / video_duration), loop_file_path, video_file_name)
+                else:
+                    single_file_path = audio_file_path
+                    write_loop_file(int(video_duration / audio_duration), loop_file_path, audio_file_name)
+    
+        mime, ext, size = url_info(real_url)
+    
+    __all__ = ['facebook_download']
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+    image = face_recognition.load_image_file('{}')
+face_locations = face_recognition.face_locations(image)
+'''
+    
+    3. Call 'predict' and pass in your trained model to recognize the people in an unknown image.
+    
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
+    
+    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
+# other example, but it includes some basic performance tweaks to make things run a lot faster:
+#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
+#   2. Only detect faces in every other frame of video.
+    
+    from setuptools import setup
+    
+    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
+# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
+# 你可以参考这个教程配制你的树莓派：
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # 看看图片中的第一张脸是不是奥巴马
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
     
     
-def load_data():
-    '''Loads CIFAR10 dataset.
-    
-    import gzip
-import os
-    
-    
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-    
-allobj = [losses.mean_squared_error,
-          losses.mean_absolute_error,
-          losses.mean_absolute_percentage_error,
-          losses.mean_squared_logarithmic_error,
-          losses.squared_hinge,
-          losses.hinge,
-          losses.categorical_crossentropy,
-          losses.binary_crossentropy,
-          losses.kullback_leibler_divergence,
-          losses.poisson,
-          losses.cosine_proximity,
-          losses.logcosh,
-          losses.categorical_hinge]
-    
-    from keras.models import Sequential, Model
-from keras.layers import Dense, Input, Average
-from keras.utils import np_utils
-from keras.utils import test_utils
-from keras import regularizers
-from keras import backend as K
-    
-            if self.unit_forget_bias:
-            def bias_initializer(shape, *args, **kwargs):
-                return K.concatenate([
-                    self.bias_initializer((self.units * 5,), *args, **kwargs),
-                    initializers.Ones()((self.units,), *args, **kwargs),
-                    self.bias_initializer((self.units * 2,), *args, **kwargs),
-                ])
-        else:
-            bias_initializer = self.bias_initializer
-        self.bias = self.add_weight(shape=(self.units * 8,),
-                                    name='bias',
-                                    initializer=bias_initializer,
-                                    regularizer=self.bias_regularizer,
-                                    constraint=self.bias_constraint)
-    
-        # Arguments
-        layers: list of layers to add to the model.
-    
-            start = datetime.now()
-        lasso = linear_model.LassoLars()
-        lasso.fit(X, Y)
-        time_lasso[i] = total_seconds(datetime.now() - start)
-    
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('==============================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('==============================')
-            print()
-            data = nr.randint(-50, 51, (n_samples, n_features))
-    
-        ###########################################################################
-    # List sampling algorithm
-    ###########################################################################
-    # We assume that sampling algorithm has the following signature:
-    #   sample(n_population, n_sample)
-    #
-    sampling_algorithm = {}
-    
-        # Plot results
-    i = 0
-    m = len(list_n_features)
-    plt.figure('scikit-learn SGD regression benchmark results',
-               figsize=(5 * 2, 4 * m))
-    for j in range(m):
-        plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 0]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 0]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 0]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 0]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('RMSE')
-        plt.title('Test error - %d features' % list_n_features[j])
-        i += 1
-    
-    ###############################################################################
-clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
-                   tol=None)
-clf.fit(X_train, y_train)
-print('model sparsity: %f' % sparsity_ratio(clf.coef_))
-    
-    import os
-import tarfile
-from contextlib import closing
-    
-    from ..common import *
-    
-        CNTV().download_by_vid(rid, **kwargs)
-    
-    site_info = 'ehow.com'
-download = ehow_download
-download_playlist = playlist_not_supported('ehow')
-
-    
-    
-def fantasy_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'fantasy.tv' not in url:
-        raise Exception('Wrong place!')
-    
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
+def main(path):
