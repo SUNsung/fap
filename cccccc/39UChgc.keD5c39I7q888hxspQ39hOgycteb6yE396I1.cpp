@@ -1,224 +1,204 @@
 
         
-        // Calls the registered C++ shape inference function for <node> (a serialized
-// NodeDef).
-// Should not be called for shape functions that access input tensors; constant
-// input tensor values are not made available, and so the inferred shapes will
-// be less precise than they could be.
-//
-// Returns an error, or OK, in <out_status> according to whether the shape
-// inference was successful.
-//
-// On success, returns a vector populated with the inferred output shapes (as
-// serialized CppShapeInferenceResult protos) followed by a serialized
-// CppShapeInferenceInputsNeeded proto.
-//
-// This is temporary code to be used during the migration
-// from python shape inference functions to C++ shape inference functions.
-std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status);
-    
-    Status CostAnalyzer::GenerateReport(std::ostream& os, bool per_node_report,
-                                    bool verbose) {
-  GatherCosts();
-  PreprocessCosts();
-  AnalyzeCosts();
-  PrintAnalysis(os, per_node_report, verbose);
-  return Status::OK();
+        namespace content {
+class RenderFrameHost;
 }
     
-    REGISTER_OP('Ackermann')
-    .Output('ackermann: string')
-    .Doc(R'doc(
-Output a fact about the ackermann function.
-)doc');
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
     
-    Safe_PyObjectPtr make_safe(PyObject* object) {
-  return Safe_PyObjectPtr(object);
+    void Clipboard::Call(const std::string& method,
+                     const base::ListValue& arguments) {
+  if (method == 'Set') {
+    std::string text, type;
+    arguments.GetString(0, &text);
+    arguments.GetString(1, &type);
+    SetText(text);
+  } else if (method == 'Clear') {
+    Clear();
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
 }
     
-      // The CUDA stream callback type signature.
-  // The data passed to AddStreamCallback is subsequently passed to this
-  // callback when it fires.
-  //
-  // Some notable things:
-  // * Callbacks must not make any CUDA API calls.
-  // * Callbacks from independent streams execute in an undefined order and may
-  //   be serialized.
-  // http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__STREAM.html#group__CUDA__STREAM_1g613d97a277d7640f4cb1c03bd51c2483
-  typedef void (*StreamCallback)(CUstream stream, CUresult status, void *data);
     
-    class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
-                      public in_app_purchase::TransactionObserver {
- public:
-  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
-    }
-    
-    
-    {}  // namespace atom
-    
-    class Screen : public mate::EventEmitter<Screen>,
-               public display::DisplayObserver {
- public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
-    }
-    
-    namespace gfx {
-class Image;
-}
-    
-    void Event::RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
-                                   content::RenderFrameHost* new_rfh) {
-  if (sender_ && sender_ == old_rfh)
-    sender_ = new_rfh;
-}
-    
-    class Event : public Wrappable<Event>, public content::WebContentsObserver {
- public:
-  static Handle<Event> Create(v8::Isolate* isolate);
-    }
-    
-    namespace atom {
-    }
-    
-    template <typename T>
-int32_t TrackableObject<T>::next_id_ = 0;
-    
-    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    }
-    
-    #ifndef CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
-#define CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
-    
-    namespace nw {
-    }
-    
-    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
-      Profile::FromBrowserContext(context_));
-    }
-    
-        std::string error() {
-      return error_;
-    }
-    
-    namespace extensions {
-    }
-    
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
-  return true;
-}
-    
-      private:
-    ~NwScreenDisplayObserver() override;
-    // gfx::DisplayObserver implementation.
-    void OnDisplayMetricsChanged(const display::Display& display, uint32_t changed_metrics) override;
-    void OnDisplayAdded(const display::Display& new_display) override;
-    void OnDisplayRemoved(const display::Display& old_display) override;
-    
-      // The ColPartitionGrid that we are processing. This pointer is passed in from
-  // the caller, so do NOT destroy it in the class.
-  ColPartitionGrid* part_grid_;
-    
-      /**
-   * Returns orientation for the block the iterator points to.
-   *   orientation, writing_direction, textline_order: see publictypes.h
-   *   deskew_angle: after rotating the block so the text orientation is
-   *                 upright, how many radians does one have to rotate the
-   *                 block anti-clockwise for it to be level?
-   *                   -Pi/4 <= deskew_angle <= Pi/4
-   */
-  void Orientation(tesseract::Orientation *orientation,
-                   tesseract::WritingDirection *writing_direction,
-                   tesseract::TextlineOrder *textline_order,
-                   float *deskew_angle) const;
-    
-    
-    {}  // namespace tesseract.
+    {} // namespace nwapi
 
     
-      // Count the # of entries starting with a specific prefix.
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
+    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
+ public:
+  MenuDelegate(ObjectManager* object_manager);
+  ~MenuDelegate() override;
     }
     
-    // Reads all boxes from the string. Otherwise, as ReadAllBoxes.
-// continue_on_failure allows reading to continue even if an invalid box is
-// encountered and will return true if it succeeds in reading some boxes.
-// It otherwise gives up and returns false on encountering an invalid box.
-bool ReadMemBoxes(int target_page, bool skip_blanks, const char* box_data,
-                  bool continue_on_failure,
-                  GenericVector<TBOX>* boxes,
-                  GenericVector<STRING>* texts,
-                  GenericVector<STRING>* box_texts,
-                  GenericVector<int>* pages);
-    
-    // Converts a streamable value to an std::string.  A NULL pointer is
-// converted to '(null)'.  When the input value is a ::string,
-// ::std::string, ::wstring, or ::std::wstring object, each NUL
-// character in it is replaced with '\\0'.
-template <typename T>
-std::string StreamableToString(const T& streamable) {
-  return (Message() << streamable).GetString();
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
 }
     
-      // Returns true iff the unit test passed (i.e. all test cases passed).
-  bool Passed() const;
+    void Menu::UpdateStates() {
+}
     
-      void depart() {
-    if (link_.depart()) delete value_;
+      keyval = GetKeycodeFromText(key);
+  if (keyval == ui::VKEY_UNKNOWN){
+    enable_shortcut_ = false;
+  } else {
+    enable_shortcut_ = true;
+    //only code for ctrl, shift, alt, super and meta modifiers
+    int modifiers_value = ui::EF_NONE;
+    modifiers = base::ToLowerASCII(modifiers);
+    if (modifiers.find('ctrl')!=std::string::npos){
+      modifiers_value |= ui::EF_CONTROL_DOWN;
+    }
+    if (modifiers.find('shift')!=std::string::npos){
+      modifiers_value |= ui::EF_SHIFT_DOWN ;
+    }
+    if (modifiers.find('alt')!=std::string::npos){
+      modifiers_value |= ui::EF_ALT_DOWN;
+    }
+    if (modifiers.find('super')!=std::string::npos
+     || modifiers.find('cmd')!=std::string::npos
+     || modifiers.find('command')!=std::string::npos){
+      modifiers_value |= ui::EF_COMMAND_DOWN;
+    }
+    if (modifiers.find('meta')!=std::string::npos){
+      meta_down_flag_ = true;
+    }
+    accelerator_ = ui::Accelerator(keyval,modifiers_value);
   }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12>
-struct Types12 {
-  typedef T1 Head;
-  typedef Types11<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Tail;
-};
     
     
     {
-    {      // Marks all multiples of i (except i itself) as non-prime.
-      for (int j = 2*i; j <= max; j += i) {
-        is_prime_[j] = false;
-      }
-    }
-  }
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+} // namespace extensions
 
     
-     public:
-  // Clones a 0-terminated C string, allocating memory using new.
-  static const char* CloneCString(const char* a_c_string);
+          // strip off data uri header if raw is set
+      if (!(data.raw.get() && *(data.raw))) {
+        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
+          content = content.substr(strlen(kPNGDataUriPrefix));
+        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
+          content = content.substr(strlen(kJPEGDataUriPrefix));
+        } else {
+          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
+          return false;
+        }
+      }
     
-    // Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
+    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardGetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+    {} // namespace caffe2
+
+    
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
+    
+    // Godot TO Bullet
+extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void G_TO_B(Transform const &inVal, btTransform &outVal);
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    
+    {	Vector3 getPivotInA();
+	Vector3 getPivotInB();
+};
+#endif
+
+    
+    class AudioDriverDummy : public AudioDriver {
+public:
+	const char *get_name() const {
+		return 'Dummy';
+	};
+    }
+    
+    struct CaffeOpParam : public dmlc::Parameter<CaffeOpParam> {
+  ::caffe::LayerParameter prototxt;
+  int num_data, num_weight, num_out;
+    }
+    
+    MXNET_DLL int MXCVImdecode(const unsigned char *img, const mx_uint len,
+                           const int flag, NDArrayHandle *out) {
+  API_BEGIN();
+  mx_uint dims[3];
+  CHECK_GE(flag, 0) << 'flag must be 0 (grayscale) or 1 (colored).';
+  dims[2] = flag == 0 ? 1 : 3;
+  if (get_jpeg_size(img, len, dims+1, dims)) {
+  } else if (get_png_size(img, len, dims+1, dims)) {
+  } else {
+    LOG(FATAL) << 'Only supports png and jpg.';
+  }
+  NDArray ndout(TShape(dims, dims+3), Context::CPU(), true, mshadow::kUint8);
+  unsigned char *img_cpy = new unsigned char[len];
+  memcpy(img_cpy, img, sizeof(unsigned char)*len);
+  Engine::Get()->PushSync([=](RunContext ctx){
+      ndout.CheckAndAlloc();
+      cv::Mat buf(1, len, CV_8U, img_cpy);
+      cv::Mat dst(dims[0], dims[1], flag == 0 ? CV_8U : CV_8UC3, ndout.data().dptr_);
+#if (CV_MAJOR_VERSION > 3 || (CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION >= 3))
+      cv::imdecode(buf, flag | cv::IMREAD_IGNORE_ORIENTATION, &dst);
+#else
+      cv::imdecode(buf, flag, &dst);
+#endif
+      CHECK(!dst.empty());
+      delete[] img_cpy;
+    }, ndout.ctx(), {}, {ndout.var()});
+  NDArray *tmp = new NDArray();
+  *tmp = ndout;
+  *out = tmp;
+  API_END();
 }
+    
+      /*!
+   * \brief Constructor takes function to run.
+   * \param size size of the thread pool.
+   * \param func the function to run on the thread pool.
+   */
+  explicit ThreadPool(size_t size, std::function<void()> func)
+      : worker_threads_(size) {
+    CHECK_GT(size, 0);
+    for (auto& i : worker_threads_) {
+      i = std::thread(func);
+    }
+  }
+  explicit ThreadPool(size_t size,
+                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
+                      const bool wait)
+      : worker_threads_(size) {
+    CHECK_GT(size, 0);
+    for (auto& i : worker_threads_) {
+      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
+      ready_events_.emplace_back(ptr);
+      i = std::thread(func, ptr);
+    }
+    if (wait) {
+      WaitForReady();
+    }
+  }
+  ~ThreadPool() noexcept(false) {
+    for (auto&& i : worker_threads_) {
+      i.join();
+    }
+  }
