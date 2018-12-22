@@ -1,110 +1,73 @@
 
         
-        
-# Is a path a directory?
-# This follows symbolic links, so both islink() and isdir()
-# can be true for the same path on systems that support symlinks
-def isdir(s):
-    '''Return true if the pathname refers to an existing directory.'''
-    try:
-        st = os.stat(s)
-    except (OSError, ValueError):
-        return False
-    return stat.S_ISDIR(st.st_mode)
+        def os_constant(key):
+    # XXX TODO: In the future, this could return different constants
+    #           based on what OS we are running under.  To see an
+    #           approach to how to handle different OSes, see the
+    #           apache version of this file.  Currently, we do not
+    #           actually have any OS-specific constants on Nginx.
+    '''
+    Get a constant value for operating system
     
-        def splitroot(self, part, sep=sep):
-        first = part[0:1]
-        second = part[1:2]
-        if (second == sep and first == sep):
-            # XXX extended paths should also disable the collapsing of '.'
-            # components (according to MSDN docs).
-            prefix, part = self._split_extended_path(part)
-            first = part[0:1]
-            second = part[1:2]
-        else:
-            prefix = ''
-        third = part[2:3]
-        if (second == sep and first == sep and third != sep):
-            # is a UNC path:
-            # vvvvvvvvvvvvvvvvvvvvv root
-            # \\machine\mountpoint\directory\etc\...
-            #            directory ^^^^^^^^^^^^^^
-            index = part.find(sep, 2)
-            if index != -1:
-                index2 = part.find(sep, index + 1)
-                # a UNC path can't have two slashes in a row
-                # (after the initial two)
-                if index2 != index + 1:
-                    if index2 == -1:
-                        index2 = len(part)
-                    if prefix:
-                        return prefix + part[1:index2], sep, part[index2+1:]
-                    else:
-                        return part[:index2], sep, part[index2+1:]
-        drv = root = ''
-        if second == ':' and first in self.drive_letters:
-            drv = part[:2]
-            part = part[2:]
-            first = third
-        if first == sep:
-            root = first
-            part = part.lstrip(sep)
-        return prefix + drv, root, part
+        def setUp(self):
+        from acme.errors import PollError
+        self.timeout = PollError(
+            exhausted=set([mock.sentinel.AR]),
+            updated={})
+        self.invalid = PollError(exhausted=set(), updated={
+            mock.sentinel.AR: mock.sentinel.AR2})
     
-    def islink(path):
-    '''Test whether a path is a symbolic link'''
-    try:
-        st = os.lstat(path)
-    except (OSError, ValueError, AttributeError):
-        return False
-    return stat.S_ISLNK(st.st_mode)
+    from acme import client
+from acme import messages
     
-            self.assertRaises(TypeError, posixpath.commonpath,
-                          [b'/usr/lib/', '/usr/lib/python3'])
-        self.assertRaises(TypeError, posixpath.commonpath,
-                          [b'/usr/lib/', 'usr/lib/python3'])
-        self.assertRaises(TypeError, posixpath.commonpath,
-                          [b'usr/lib/', '/usr/lib/python3'])
-        self.assertRaises(TypeError, posixpath.commonpath,
-                          ['/usr/lib/', b'/usr/lib/python3'])
-        self.assertRaises(TypeError, posixpath.commonpath,
-                          ['/usr/lib/', b'usr/lib/python3'])
-        self.assertRaises(TypeError, posixpath.commonpath,
-                          ['usr/lib/', b'/usr/lib/python3'])
+        def setUp(self):
+        self.base_dir = '/example_path'
+        self.vhosts = util.get_vh_truth(
+            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
     
+    #Some examples
     
-if __name__ == '__main__':
-    main()
-
+            if best_split != 0:
+            left_X = X[:best_split]
+            left_y = y[:best_split]
+            right_X = X[best_split:]
+            right_y = y[best_split:]
     
-    ans = input('View full message?')
-if ans.lower()[0] == 'n':
-    sys.exit()
+      3. find centroids and clusters using kmeans function.
+  
+        centroids, cluster_assignment = kmeans(
+            X, 
+            k, 
+            initial_centroids, 
+            maxiter=400,
+            record_heterogeneity=heterogeneity, 
+            verbose=True # whether to print logs in console or not.(default=False)
+            )
+  
+  
+  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
+        plot_heterogeneity(
+            heterogeneity, 
+            k
+        )
+  
+  5. Have fun..
+  
+'''
+from __future__ import print_function
+from sklearn.metrics import pairwise_distances
+import numpy as np
     
-    
-class Action(object):
-    def __init__(self, name):
-        self.name = name
-    
-        def tearDown(self):
-        if not self._bProblem:
-            print('Tearing down')
-            time.sleep(0.1)
-            self._tm.publishReport()
-        else:
-            print('Test not executed. No tear down required.')
-    
-    *References:
-http://stackoverflow.com/questions/1514120/python-implementation-of-the-object-pool-design-pattern
-https://sourcemaking.com/design_patterns/object_pool
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+    '''
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
+* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a ^ b
+* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
+*
+* As far as the modulo is concerned,
+* the fact : (a*b) % c = ((a%c) * (b%c)) % c
+* Now apply RULE 1 OR 2 whichever is required.
 '''
