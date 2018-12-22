@@ -1,97 +1,41 @@
 
         
-        #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
-
-    
-    static void secp256k1_sha256_finalize(secp256k1_sha256_t *hash, unsigned char *out32) {
-    static const unsigned char pad[64] = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    uint32_t sizedesc[2];
-    uint32_t out[8];
-    int i = 0;
-    sizedesc[0] = BE32(hash->bytes >> 29);
-    sizedesc[1] = BE32(hash->bytes << 3);
-    secp256k1_sha256_write(hash, pad, 1 + ((119 - (hash->bytes % 64)) % 64));
-    secp256k1_sha256_write(hash, (const unsigned char*)sizedesc, 8);
-    for (i = 0; i < 8; i++) {
-        out[i] = BE32(hash->s[i]);
-        hash->s[i] = 0;
+        
+namespace google {
+namespace protobuf {
+namespace internal {
     }
-    memcpy(out32, (const unsigned char*)out, 32);
-}
-    
-    int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *result, const secp256k1_pubkey *point, const unsigned char *scalar) {
-    int ret = 0;
-    int overflow = 0;
-    secp256k1_gej res;
-    secp256k1_ge pt;
-    secp256k1_scalar s;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(result != NULL);
-    ARG_CHECK(point != NULL);
-    ARG_CHECK(scalar != NULL);
+    }
     }
     
-    // This is initialized with a default, stub implementation.
-// If python-google.protobuf.cc is loaded, the function pointer is overridden
-// with a full implementation.
-const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
-    GetCProtoInsidePyProtoStub;
-Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
-    MutableCProtoInsidePyProtoStub;
+    bool DecodeMetadata(const string& path, GeneratedCodeInfo* info) {
+  string data;
+  GOOGLE_CHECK_OK(File::GetContents(path, &data, true));
+  io::ArrayInputStream input(data.data(), data.size());
+  return info->ParseFromZeroCopyStream(&input);
+}
     
-    template <typename DescriptorType>
-static void WriteDocCommentBody(
-    io::Printer* printer, const DescriptorType* descriptor) {
-    SourceLocation location;
-    if (descriptor->GetSourceLocation(&location)) {
-        WriteDocCommentBodyImpl(printer, location);
+    TEST(MovableMessageTest, MoveDifferentArenas) {
+  Arena arena1, arena2;
     }
-}
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
+    #include <google/protobuf/compiler/java/java_extension_lite.h>
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+    #include <google/protobuf/compiler/java/java_generator_factory.h>
     
-    std::string SourceGeneratorBase::class_access_level() {
-  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
-}
+      (*variables)['type'] =
+      name_resolver->GetImmutableClassName(descriptor->message_type());
+  const FieldDescriptor* key = KeyField(descriptor);
+  const FieldDescriptor* value = ValueField(descriptor);
+  const JavaType keyJavaType = GetJavaType(key);
+  const JavaType valueJavaType = GetJavaType(value);
     
-      printer->Print(
-    'com.google.protobuf.Descriptors.FileDescriptor.'
-    'InternalDescriptorAssigner assigner =\n'
-    '    new com.google.protobuf.Descriptors.FileDescriptor.'
-    '    InternalDescriptorAssigner() {\n'
-    '      public com.google.protobuf.ExtensionRegistry assignDescriptors(\n'
-    '          com.google.protobuf.Descriptors.FileDescriptor root) {\n'
-    '        descriptor = root;\n'
-    // Custom options will be handled when immutable messages' outer class is
-    // loaded. Here we just return null and let custom options be unknown
-    // fields.
-    '        return null;\n'
-    '      }\n'
-    '    };\n');
-    
-      printer->Print(
-      '#else\n');
-    
-      EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('a', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', 'a'),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
+      CodeGeneratorRequest request;
+  if (!request.ParseFromFileDescriptor(STDIN_FILENO)) {
+    std::cerr << argv[0] << ': protoc sent unparseable request to plugin.'
+              << std::endl;
+    return 1;
+  }
     
     // Protocol Buffers - Google's data interchange format
 // Copyright 2008 Google Inc.  All rights reserved.
@@ -123,596 +67,217 @@ static void WriteDocCommentBody(
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
+    #include <string>
+#include <vector>
     
-        case URX_SETREF:
-            if (fp->fInputIdx >= fActiveLimit) {
-                fHitEnd = TRUE;
-                fp = (REStackFrame *)fStack->popFrame(fFrameSize);
-                break;
-            } else {
-                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
+    REGISTER_CPU_OPERATOR(
+    MergeMultiMapFeatureTensorsGradient,
+    MergeMultiListOrMapFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiMapFeatureTensorsGradient)
+    .SetDoc(
+        'Explode given multi-feature tensors with map features '
+        'into many.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_values_lengths', '.values.lengths')
+    .Input(2, 'out_values_values_grad', '.values.values_grad')
+    .Output(0, 'in1_values_values_grad', '.values.values_grad');
+REGISTER_GRADIENT(
+    MergeMultiMapFeatureTensors,
+    GetMergeMultiMapFeatureTensorsGradient);
+    
+    workspace.ResetWorkspace()
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
     }
+  }
+}
     
-    #if !UCONFIG_NO_FORMATTING
+    class GetFloatToHalfGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'HalfToFloat', '', vector<string>{GO(0)}, vector<string>{GI(0)});
+  }
+};
+REGISTER_GRADIENT(FloatToHalf, GetFloatToHalfGradient);
     
-    U_NAMESPACE_BEGIN
     
-        static const int32_t gDigitCount[] = {
-        1,1,1,1,1,1,1,1,
-        1,1,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,2,2,2,2,
-        2,2,2,2,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        3,3,3,3,3,3,3,3,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4,
-        4,4,4,4,4,4,4,4};
+    {} // namespace caffe2
+
     
-    /**
- * A representation an acceptable range of digit counts for integers.
- */
-class U_I18N_API IntDigitCountRange : public UMemory {
-public:
-    /**
-     * No constraints: 0 up to INT32_MAX
-     */
-    IntDigitCountRange() : fMin(0), fMax(INT32_MAX) { }
-    IntDigitCountRange(int32_t min, int32_t max);
-    int32_t pin(int32_t digitCount) const;
-    int32_t getMax() const { return fMax; }
-    int32_t getMin() const { return fMin; }
-private:
-    int32_t fMin;
-    int32_t fMax;
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    
+    { private:
+  // no copying allowed
+  WriteControllerToken(const WriteControllerToken&) = delete;
+  void operator=(const WriteControllerToken&) = delete;
+};
+    
+      env.now_micros_ += 100u;  // sleep credit 100
+  // 1000 used, 7240 left
+  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 1000u));
+    
+    
+    {  if (close(fd_) < 0) {
+    s = IOError('While closing file after writing', filename_, errno);
+  }
+  fd_ = -1;
+  return s;
+}
+    
+    using namespace rocksdb;
+    
+    // Take a default BlockBasedTableOptions 'table_options' in addition to a
+// map 'opts_map' of option name to option value to construct the new
+// BlockBasedTableOptions 'new_table_options'.
+//
+// Below are the instructions of how to config some non-primitive-typed
+// options in BlockBasedTableOptions:
+//
+// * filter_policy:
+//   We currently only support the following FilterPolicy in the convenience
+//   functions:
+//   - BloomFilter: use 'bloomfilter:[bits_per_key]:[use_block_based_builder]'
+//     to specify BloomFilter.  The above string is equivalent to calling
+//     NewBloomFilterPolicy(bits_per_key, use_block_based_builder).
+//     [Example]:
+//     - Pass {'filter_policy', 'bloomfilter:4:true'} in
+//       GetBlockBasedTableOptionsFromMap to use a BloomFilter with 4-bits
+//       per key and use_block_based_builder enabled.
+//
+// * block_cache / block_cache_compressed:
+//   We currently only support LRU cache in the GetOptions API.  The LRU
+//   cache can be set by directly specifying its size.
+//   [Example]:
+//   - Passing {'block_cache', '1M'} in GetBlockBasedTableOptionsFromMap is
+//     equivalent to setting block_cache using NewLRUCache(1024 * 1024).
+//
+// @param table_options the default options of the output 'new_table_options'.
+// @param opts_map an option name to value map for specifying how
+//     'new_table_options' should be set.
+// @param new_table_options the resulting options based on 'table_options'
+//     with the change specified in 'opts_map'.
+// @param input_strings_escaped when set to true, each escaped characters
+//     prefixed by '\' in the values of the opts_map will be further converted
+//     back to the raw string before assigning to the associated options.
+// @param ignore_unknown_options when set to true, unknown options are ignored
+//     instead of resulting in an unknown-option error.
+// @return Status::OK() on success.  Otherwise, a non-ok status indicating
+//     error will be returned, and 'new_table_options' will be set to
+//     'table_options'.
+Status GetBlockBasedTableOptionsFromMap(
+    const BlockBasedTableOptions& table_options,
+    const std::unordered_map<std::string, std::string>& opts_map,
+    BlockBasedTableOptions* new_table_options,
+    bool input_strings_escaped = false, bool ignore_unknown_options = false);
+    
+    struct UndumpOptions {
+  // Database that we will load the dumped file into
+  std::string db_path;
+  // File location of the dumped file that will be loaded
+  std::string dump_location;
+  // Compact the db after loading the dumped file
+  bool compact_db = false;
 };
     
     
-//------------------------------------------------------------------------------
-//
-//   smpdtfmt_cleanup     Memory cleanup function, free/delete all
-//                      cached memory.  Called by ICU's u_cleanup() function.
-//
-//------------------------------------------------------------------------------
-UBool
-SimpleDateFormatStaticSets::cleanup(void)
-{
-    delete gStaticSets;
-    gStaticSets = NULL;
-    gSimpleDateFormatStaticSetsInitOnce.reset();
-    return TRUE;
+    {  virtual ~FlushBlockPolicy() { }
+};
+    
+    #include <stdint.h>
+#include <memory>
+#include <string>
+    
+      x <<= 4;
+  x |= t;
+    
+    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
+    
+    
+    {
+    {        sub_node = sub_node->NextSiblingElement('objectReference');
+      }
+    }
+    
+    TEST_F(PncMapTest, GetRouteSegments_ChangeLane) {
+  auto lane = hdmap_.GetLaneById(hdmap::MakeMapId('9_1_-2'));
+  ASSERT_TRUE(lane);
+  common::VehicleState state;
+  auto point = lane->GetSmoothPoint(35);  // larger than kMinLaneKeepingDistance
+  state.set_x(point.x());
+  state.set_y(point.y());
+  state.set_z(point.y());
+  state.set_heading(M_PI);
+  std::list<RouteSegments> segments;
+  bool result = pnc_map_->GetRouteSegments(state, 10, 30, &segments);
+  ASSERT_TRUE(result);
+  ASSERT_EQ(2, segments.size());
+  const auto& first = segments.front();
+  const auto& second = segments.back();
+  EXPECT_NEAR(40, RouteLength(first), 1e-4);
+  EXPECT_EQ(routing::LEFT, first.NextAction());
+  EXPECT_TRUE(first.IsOnSegment());
+  EXPECT_NEAR(40, RouteLength(second), 1e-4);
+  EXPECT_EQ(routing::RIGHT, second.NextAction());
+  EXPECT_FALSE(second.IsOnSegment());
 }
     
-    class  UnicodeSet;
-    
-    U_NAMESPACE_END
-    
-    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
-static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
-static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
-static const UChar gFew[] = { 0x66, 0x65, 0x77 };
-static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
-static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
-    
-    // Timer management class
-class ThreadTimer {
- public:
-  ThreadTimer() = default;
-    }
-    
-      const CPUInfo &info = context.cpu_info;
-  Out << 'Run on (' << info.num_cpus << ' X '
-      << (info.cycles_per_second / 1000000.0) << ' MHz CPU '
-      << ((info.num_cpus > 1) ? 's' : '') << ')\n';
-  if (info.caches.size() != 0) {
-    Out << 'CPU Caches:\n';
-    for (auto &CInfo : info.caches) {
-      Out << '  L' << CInfo.level << ' ' << CInfo.type << ' '
-          << (CInfo.size / 1000) << 'K';
-      if (CInfo.num_sharing != 0)
-        Out << ' (x' << (info.num_cpus / CInfo.num_sharing) << ')';
-      Out << '\n';
+    DiscretizedTrajectory BackupTrajectoryGenerator::GenerateTrajectory(
+    const std::vector<PathPoint>& discretized_ref_points) {
+  while (trajectory_pair_pqueue_.size() > 1) {
+    auto top_pair = trajectory_pair_pqueue_.top();
+    trajectory_pair_pqueue_.pop();
+    DiscretizedTrajectory trajectory = TrajectoryCombiner::Combine(
+        discretized_ref_points, *top_pair.first, *top_pair.second,
+        init_relative_time_);
+    if (!ptr_collision_checker_->InCollision(trajectory)) {
+      return trajectory;
     }
   }
+  auto top_pair = trajectory_pair_pqueue_.top();
+  return TrajectoryCombiner::Combine(
+      discretized_ref_points, *top_pair.first, *top_pair.second,
+      init_relative_time_);
+}
+    
+        double s_param = s - s0;
+    // linear extrapolation is handled internally in LatticeTrajectory1d;
+    // no worry about s_param > lat_trajectory.ParamLength() situation
+    double d = lat_trajectory.Evaluate(0, s_param);
+    double d_prime = lat_trajectory.Evaluate(1, s_param);
+    double d_pprime = lat_trajectory.Evaluate(2, s_param);
+    
+    namespace apollo {
+namespace planning {
+    }
+    }
+    
+    #endif // defined(BOOST_ATOMIC_DETAIL_X86_HAS_CMPXCHG16B)
