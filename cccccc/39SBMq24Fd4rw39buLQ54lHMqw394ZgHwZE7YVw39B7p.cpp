@@ -1,472 +1,231 @@
 
         
-        public Q_SLOTS:
-    void updateRates();
-    void setGraphRangeMins(int mins);
-    void clear();
-    
-    #ifndef BITCOIN_RPC_MINING_H
-#define BITCOIN_RPC_MINING_H
-    
-    
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-    static void secp256k1_sha256_write(secp256k1_sha256_t *hash, const unsigned char *data, size_t len) {
-    size_t bufsize = hash->bytes & 0x3F;
-    hash->bytes += len;
-    while (bufsize + len >= 64) {
-        /* Fill the buffer, and process it. */
-        memcpy(((unsigned char*)hash->buf) + bufsize, data, 64 - bufsize);
-        data += 64 - bufsize;
-        len -= 64 - bufsize;
-        secp256k1_sha256_transform(hash->s, hash->buf);
-        bufsize = 0;
-    }
-    if (len) {
-        /* Fill the buffer with what remains. */
-        memcpy(((unsigned char*)hash->buf) + bufsize, data, len);
-    }
-}
-    
-    int secp256k1_ecdsa_recoverable_signature_parse_compact(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature* sig, const unsigned char *input64, int recid) {
-    secp256k1_scalar r, s;
-    int ret = 1;
-    int overflow = 0;
-    }
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+        template <> struct wAdd<s32>
 {
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
-}
-    
-    BOOST_AUTO_TEST_CASE(util_SplitTorReplyLine)
-{
-    // Data we should receive during normal usage
-    CheckSplitTorReplyLine(
-        'PROTOCOLINFO PIVERSION',
-        'PROTOCOLINFO', 'PIVERSION');
-    CheckSplitTorReplyLine(
-        'AUTH METHODS=COOKIE,SAFECOOKIE COOKIEFILE=\'/home/x/.tor/control_auth_cookie\'',
-        'AUTH', 'METHODS=COOKIE,SAFECOOKIE COOKIEFILE=\'/home/x/.tor/control_auth_cookie\'');
-    CheckSplitTorReplyLine(
-        'AUTH METHODS=NULL',
-        'AUTH', 'METHODS=NULL');
-    CheckSplitTorReplyLine(
-        'AUTH METHODS=HASHEDPASSWORD',
-        'AUTH', 'METHODS=HASHEDPASSWORD');
-    CheckSplitTorReplyLine(
-        'VERSION Tor=\'0.2.9.8 (git-a0df013ea241b026)\'',
-        'VERSION', 'Tor=\'0.2.9.8 (git-a0df013ea241b026)\'');
-    CheckSplitTorReplyLine(
-        'AUTHCHALLENGE SERVERHASH=aaaa SERVERNONCE=bbbb',
-        'AUTHCHALLENGE', 'SERVERHASH=aaaa SERVERNONCE=bbbb');
+    typedef s32 type;
     }
     
-    int64_t UniValue::get_int64() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int64_t retval;
-    if (!ParseInt64(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
-}
-    
-    class PAGE_RES_IT;
-class ROW;
-class WERD_RES;
-    
-    /** Resets the iterator to point to the start of the page. */
-void PageIterator::Begin() {
-  it_->restart_page_with_empties();
-  BeginWord(0);
-}
-    
-    ELISTIZEH(ParamContent)
-    
-    template <typename T> class GenericVector;
-template <typename T> class GenericVector;
-    
-    #include 'allheaders.h'
-    
-            for (;;) {
-          auto start = index.fetch_add(work_chunk);
-          auto const stop = std::min(start + work_chunk, inputs.size());
-          if (start >= stop) break;
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
     }
     
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
+    #define COMBINE(sgn,bits,n) void combine##n(const Size2D &_size                                             \
+                                        FILL_LINES##n(FARG, sgn##bits),                                     \
+                                        sgn##bits * dstBase, ptrdiff_t dstStride)                           \
+{                                                                                                           \
+    internal::assertSupportedConfiguration();                                                               \
+    Size2D size(_size);                                                                                     \
+    if (CONTSRC##n                                                                                          \
+        dstStride == (ptrdiff_t)(size.width))                                                               \
+    {                                                                                                       \
+        size.width *= size.height;                                                                          \
+        size.height = 1;                                                                                    \
+    }                                                                                                       \
+    typedef internal::VecTraits<sgn##bits, n>::vec128 vec128;                                               \
+    size_t roiw16 = size.width >= (16/sizeof(sgn##bits) - 1) ? size.width - (16/sizeof(sgn##bits) - 1) : 0; \
+    typedef internal::VecTraits<sgn##bits, n>::vec64 vec64;                                                 \
+    size_t roiw8 = size.width >= (8/sizeof(sgn##bits) - 1) ? size.width - (8/sizeof(sgn##bits) - 1) : 0;    \
+                                                                                                            \
+    for (size_t i = 0u; i < size.height; ++i)                                                               \
+    {                                                                                                       \
+        FILL_LINES##n(VROW, sgn##bits)                                                                      \
+        sgn##bits * dst = internal::getRowPtr(dstBase, dstStride, i);                                       \
+        size_t sj = 0u, dj = 0u;                                                                            \
+                                                                                                            \
+        for (; sj < roiw16; sj += 16/sizeof(sgn##bits), dj += MUL##n(16)/sizeof(sgn##bits))                 \
+            MERGE_QUAD(sgn, bits, n)                                                                        \
+                                                                                                            \
+        if ( sj < roiw8 )                                                                                   \
+        {                                                                                                   \
+            vec64 v_dst;                                                                                    \
+            FILL_LINES##n(VLD1, sgn##bits)                                                                  \
+            vst##n##_##sgn##bits(dst + dj, v_dst);                                                          \
+            sj += 8/sizeof(sgn##bits); dj += MUL##n(8)/sizeof(sgn##bits);                                   \
+        }                                                                                                   \
+                                                                                                            \
+        for (; sj < size.width; ++sj, dj += n)                                                              \
+        {                                                                                                   \
+            FILL_LINES##n(SLD, sgn##bits)                                                                   \
+        }                                                                                                   \
+    }                                                                                                       \
+}
+    
+    namespace CAROTENE_NS {
+    }
+    
+    /*!
+ *  Aligns pointer by the certain number of bytes
+ *
+ *  This small inline function aligns the pointer by the certain number of bytes by shifting
+ *  it forward by 0 or a positive offset.
  */
-void print_stats(const Index&, const php::Program&);
-    
-    void Assembler::stdx(const Reg64& rt, MemoryRef m) {
-  assertx(!m.r.disp);  // doesn't support immediate displacement
-  EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 149);
+template<typename T> inline T* alignPtr(T* ptr, size_t n=sizeof(T))
+{
+    return (T*)(((size_t)ptr + n-1) & -n);
 }
     
-      /* volatile, local variables */
-  constexpr RegXMM v16(16);
-  constexpr RegXMM v17(17);
-  constexpr RegXMM v18(18);
-  constexpr RegXMM v19(19);
-  /* nonvolatile, local variables */
-  constexpr RegXMM v20(20);
-  constexpr RegXMM v21(21);
-  constexpr RegXMM v22(22);
-  constexpr RegXMM v23(23);
-  constexpr RegXMM v24(24);
-  constexpr RegXMM v25(25);
-  constexpr RegXMM v26(26);
-  constexpr RegXMM v27(27);
-  constexpr RegXMM v28(28);
-  constexpr RegXMM v29(29);
-  constexpr RegXMM v30(30);
-  constexpr RegXMM v31(31);
+                uint32x4_t vequ1 = vceqq_u32(vreinterpretq_u32_u64(vm1), vc0);
     
-    
-    {  auto const makeShared = [&] () {
-    if (isVectorCollection(obj->collectionType())) {
-      return APCArray::MakeSharedVec(const_cast<ArrayData*>(array),
-                                     level,
-                                     unserializeObj);
+    template <typename T>
+void flip(const Size2D & size,
+          const void * srcBase, ptrdiff_t srcStride,
+          void * dstBase, ptrdiff_t dstStride,
+          FLIP_MODE flipMode)
+{
+    using namespace internal;
     }
-    return APCArray::MakeSharedDict(const_cast<ArrayData*>(array),
-                                    level,
-                                    unserializeObj);
-  };
-  return WrapArray(makeShared(), obj->collectionType());
+    
+            uint16x8_t el8 = vaddq_u16(el8shr12, el8shr03);
+        uint16x4_t el4h = vadd_u16(vget_low_u16(el8), vget_high_u16(el8));
+    
+    
+    {
+    {        for( ; x < cols; x++ )
+        {
+            if (x == 0) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE) {
+                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
+                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
+                } else if (border == BORDER_MODE_REFLECT) {
+                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
+                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    pprevx = v0[2] + 2*v1[2] + 2*v2[2] + 2*v3[2] + v4[2];
+                    prevx = 2*v0[1] - 4*v2[1] + 2*v4[1];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    pprevx = 8 * borderValue;
+                    prevx = 0;
+                }
+            } else if (x == 1) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
+                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    pprevx = 8 * borderValue;
+                }
+                prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
+            } else {
+                pprevx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
+                prevx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
+            }
+            s16 currx = 2*v0[x] - 4*v1[x] - 12*v2[x] - 4*v3[x] + 2*v4[x];
+            if (x == cols-1) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE) {
+                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
+                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
+                } else if (border == BORDER_MODE_REFLECT) {
+                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
+                    nnextx = v0[x-1] + 2*v1[x-1] + 2*v2[x-1] + 2*v3[x-1] + v4[x-1];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    nextx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
+                    nnextx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    nextx = 0;
+                    nnextx = 8 * borderValue;
+                }
+            } else if (x == cols-2) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
+                    nnextx = v0[x+1] + 2*v1[x+1] + 2*v2[x+1] + 2*v3[x+1] + v4[x+1];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    nnextx = 8 * borderValue;
+                }
+                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
+            } else {
+                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
+                nnextx = v0[x+2] + 2*v1[x+2] + 2*v2[x+2] + 2*v3[x+2] + v4[x+2];
+            }
+            s16 res = pprevx + prevx + currx + nextx + nnextx;
+            *(drow+x) = 2*res;
+        }
+    }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)border;
+    (void)borderValue;
+#endif
 }
     
-    #endif
-
-    
-    void Config::ParseIniFile(const std::string &filename,
-                          const bool is_system /* = true */) {
-  IniSettingMap ini = IniSettingMap();
-  Config::ParseIniFile(filename, ini, false, is_system);
-}
-    
-    
-    {  /**
-   * Execute a debugger action.
-   */
-  virtual String debuggerVerb(const std::string& /*verb*/,
-                              const std::vector<std::string>& /*args*/) {
-    return String();
+    Carver::Carver(const std::set<std::string>& paths,
+               const std::string& guid,
+               const std::string& requestId)
+    : InternalRunnable('Carver') {
+  status_ = Status(0, 'Ok');
+  for (const auto& p : paths) {
+    carvePaths_.insert(fs::path(p));
   }
-};
+    }
     
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    #include <sys/types.h>
-    
-    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
-#define HPHP_GLOB_STREAM_WRAPPER_H
-    
-     private:
-  /*
-   * @brief A helper function to 'carve' files from disk
+      /*
+   * @brief the uri used to begin POSTing carve data
    *
-   * This function performs a 'forensic carve' of a specified path to the
-   * users tmp directory
+   * This endpoint should negotiate the details of the carve, as well
+   * as give the client a session id used to continue POSTing the data.
    */
-  Status carve(const boost::filesystem::path& path);
-    
-    Status LoggerConfigParserPlugin::update(const std::string& /* source */,
-                                        const ParserConfig& config) {
-  rj::Document& doc = data_.doc();
-    }
-    
-    #include <osquery/config.h>
-#include <osquery/database.h>
-#include <osquery/registry.h>
+  std::string startUri_;
     
     
-    {  // Any views left are views that don't exist in the new configuration file
-  // so we tear them down and remove them from the database.
-  for (const auto& old_view : erase_views) {
-    osquery::query('DROP VIEW ' + old_view, r);
-    deleteDatabaseValue(kQueries, kConfigViews + old_view);
-  }
-  return Status(0, 'OK');
+    {  auto tarPath = carveFSPath + '/' + kTestCarveNamePrefix + guid_ + '.tar';
+  PlatformFile tar(tarPath, PF_OPEN_EXISTING | PF_READ);
+  EXPECT_TRUE(tar.isValid());
+  EXPECT_GT(tar.size(), 0U);
 }
     
-    TEST_F(PacksTests, test_sharding) {
-  auto shard1 = getMachineShard('localhost.localdomain');
-  auto shard2 = getMachineShard('not.localhost.localdomain');
-  // Expect some static caching.
-  EXPECT_EQ(shard1, shard2);
+    using KeyValueMap = std::map<std::string, std::string>;
+using DecorationStore = std::map<std::string, KeyValueMap>;
+    
+    /**
+ * @brief A simple ConfigParserPlugin for an 'events' dictionary key.
+ */
+class EventsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {'events'};
+  }
     }
     
     #include <string>
+#include <vector>
     
-      // Gets the current text color.
-  CONSOLE_SCREEN_BUFFER_INFO buffer_info;
-  GetConsoleScreenBufferInfo(stdout_handle, &buffer_info);
-  const WORD old_color_attrs = buffer_info.wAttributes;
+      if (config.count('file_accesses') > 0) {
+    const auto& accesses = config.at('file_accesses').doc();
+    if (accesses.IsArray()) {
+      for (const auto& category : accesses.GetArray()) {
+        if (!category.IsString()) {
+          continue;
+        }
+        std::string path = category.GetString();
+        access_map_[source].push_back(path);
+      }
+    }
+    }
     
-    #include 'benchmark/benchmark.h'
-#include 'complexity.h'
+    #include <osquery/config/config.h>
+#include <osquery/config/parsers/kafka_topics.h>
+#include <osquery/registry_factory.h>
     
-    #endif
+    #include <string>
+#include <vector>
+    
+    #include <set>
+    
+      auto s = TLSRequestHelper::go<JSONSerializer>(
+      uri_, params, json, FLAGS_config_tls_max_attempts);
+  if (s.ok()) {
+    if (FLAGS_tls_node_api) {
+      // The node API embeds configuration data (JSON escaped).
+    }
+    }
