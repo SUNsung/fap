@@ -1,30 +1,45 @@
 
         
-                #Creating directory title page for current directory
-        with open('dir_title.html', 'w') as os_html:
-            os_html.write(header + dir_title)
-        
-        group.append(HTML('dir_title.html').render())
+        model.compile(loss='categorical_crossentropy',
+              optimizer=Adam(lr=lr_schedule(0)),
+              metrics=['accuracy'])
+model.summary()
+print(model_type)
     
-        def undo(self):
-        self.rename(self.dest, self.src)
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
+    
+        return (x_train, y_train), (x_test, y_test)
+
+    
+        with gzip.open(paths[1], 'rb') as imgpath:
+        x_train = np.frombuffer(imgpath.read(), np.uint8,
+                                offset=16).reshape(len(y_train), 28, 28)
     
     
-# Abstract Building
-class Building(object):
-    def __init__(self):
-        self.build_floor()
-        self.build_size()
+class L1L2(Regularizer):
+    '''Regularizer for L1 and L2 regularization.
     
-        def __get__(self, obj, type_):
-        if obj is None:
-            return self
-        val = self.function(obj)
-        obj.__dict__[self.function.__name__] = val
-        return val
     
-    '''
-*What is this pattern about?
-This patterns aims to reduce the number of classes required by an
-application. Instead of relying on subclasses it creates objects by
-copying a prototypical instance at run-time.
+def test_activity_regularization():
+    x_train, y_train = get_data()
+    for reg in [regularizers.l1(), regularizers.l2()]:
+        model = create_model(activity_regularizer=reg)
+        model.compile(loss='categorical_crossentropy', optimizer='sgd')
+        assert len(model.losses) == 1
+        model.train_on_batch(x_train, y_train)
+    
+        @classmethod
+    def from_config(cls, config):
+        return cls(**config)
+    
+    
+batch_size = 32
+num_classes = 10
+epochs = 100
+num_predictions = 20
+save_dir = '/tmp/saved_models'
+model_name = 'keras_cifar10_trained_model.h5'
