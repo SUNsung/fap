@@ -1,170 +1,220 @@
 
         
-        grpc::string SecureAuthContext::GetPeerIdentityPropertyName() const {
-  if (!ctx_) {
-    return '';
-  }
-  const char* name = grpc_auth_context_peer_identity_property_name(ctx_);
-  return name == nullptr ? '' : name;
-}
+        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
+
     
-    #include <grpc/support/port_platform.h>
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    void ProtoServerReflectionPlugin::Finish(grpc::ServerInitializer* si) {
-  reflection_service_->SetServiceList(si->GetServiceList());
-}
-    
-    void DynamicThreadPool::ThreadFunc() {
-  for (;;) {
-    // Wait until work is available or we are shutting down.
-    std::unique_lock<std::mutex> lock(mu_);
-    if (!shutdown_ && callbacks_.empty()) {
-      // If there are too many threads waiting, then quit this thread
-      if (threads_waiting_ >= reserve_threads_) {
-        break;
-      }
-      threads_waiting_++;
-      cv_.wait(lock);
-      threads_waiting_--;
-    }
-    // Drain callbacks before considering shutdown to ensure all work
-    // gets completed.
-    if (!callbacks_.empty()) {
-      auto cb = callbacks_.front();
-      callbacks_.pop();
-      lock.unlock();
-      cb();
-    } else if (shutdown_) {
-      break;
-    }
-  }
-}
-    
-    #include 'src/core/lib/gprpp/thd.h'
-#include 'src/cpp/server/thread_pool_interface.h'
-    
-    #if (defined(__CYGWIN__) || defined(__CYGWIN32__)) && !defined(BOOST_REGEX_NO_W32)
-#error 'Sorry, can't mix <windows.h> with STL code and gcc compiler: if you ran configure, try again with configure --disable-ms-windows'
-#define BOOST_REGEX_FI_WIN32_MAP
-#define BOOST_REGEX_FI_POSIX_DIR
-#elif (defined(__WIN32__) || defined(_WIN32) || defined(WIN32)) && !defined(BOOST_REGEX_NO_W32)
-#define BOOST_REGEX_FI_WIN32_MAP
-#define BOOST_REGEX_FI_WIN32_DIR
-#else
-#define BOOST_REGEX_FI_POSIX_MAP
-#define BOOST_REGEX_FI_POSIX_DIR
-#endif
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+
     
     
+    {}  // namespace tensorflow
+
     
-    #ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-    
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match_set()
+    void add(const Size2D &size,
+         const u8 * src0Base, ptrdiff_t src0Stride,
+         const s16 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
 {
-   if(position == last)
-      return false;
-   if(static_cast<const re_set*>(pstate)->_map[static_cast<unsigned char>(traits_inst.translate(*position, icase))])
-   {
-      pstate = pstate->next.p;
-      ++position;
-      return true;
-   }
-   return false;
-}
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
     
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_format.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Provides formatting output routines for search and replace
-  *                operations.  Note this is an internal header file included
-  *                by regex.hpp, do not include on its own.
-  */
+            const s32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
+        const s32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
+        const s32* ln2 = internal::getRowPtr(srcBase, srcStride, i + 1);
+        const s32* ln3 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
     
-    class BOOST_REGEX_DECL raw_storage
+    template <bool L2gradient, bool externalSobel>
+inline void Canny3x3(const Size2D &size, s32 cn,
+                     const u8 * srcBase, ptrdiff_t srcStride,
+                     u8 * dstBase, ptrdiff_t dstStride,
+                     s16 * dxBase, ptrdiff_t dxStride,
+                     s16 * dyBase, ptrdiff_t dyStride,
+                     f64 low_thresh, f64 high_thresh,
+                     Margin borderMargin)
 {
-public:
-   typedef std::size_t           size_type;
-   typedef unsigned char*        pointer;
-private:
-   pointer last, start, end;
-public:
+    s32 low, high;
+    prepareThresh<L2gradient>(low_thresh, high_thresh, low, high);
     }
     
-    //  D. J. Bernstein's Fast Fourier Transform algorithm on 4 elements.
-inline void FFT4(Complex* a) {
-  double t1, t2, t3, t4, t5, t6, t7, t8;
-  t5 = a[2].real;
-  t1 = a[0].real - t5;
-  t7 = a[3].real;
-  t5 += a[0].real;
-  t3 = a[1].real - t7;
-  t7 += a[1].real;
-  t8 = t5 + t7;
-  a[0].real = t8;
-  t5 -= t7;
-  a[1].real = t5;
-  t6 = a[2].imag;
-  t2 = a[0].imag - t6;
-  t6 += a[0].imag;
-  t5 = a[3].imag;
-  a[2].imag = t2 + t3;
-  t2 -= t3;
-  a[3].imag = t2;
-  t4 = a[1].imag - t5;
-  a[3].real = t1 + t4;
-  t1 -= t4;
-  a[2].real = t1;
-  t5 += a[1].imag;
-  a[0].imag = t6 + t5;
-  t6 -= t5;
-  a[1].imag = t6;
-}
-    
-    // We don't really need to round before descaling, since we
-// still have 4 bits of precision left as final scaled output.
-#define DESCALE(a)  static_cast<coeff_t>((a) >> 16)
-    
-    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
-  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
-  jpg->quant.clear();
-  int num_tables = 0;
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    JPEGComponent* comp = &jpg->components[i];
-    // Check if we have this quant table already.
-    bool found = false;
-    for (int j = 0; j < num_tables; ++j) {
-      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
-        comp->quant_idx = j;
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      JPEGQuantTable table;
-      memcpy(&table.values[0], &q[i][0], kTableSize);
-      table.precision = 0;
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        assert(table.values[k] >= 0);
-        assert(table.values[k] < (1 << 16));
-        if (table.values[k] > 0xff) {
-          table.precision = 1;
-        }
-      }
-      table.index = num_tables;
-      comp->quant_idx = num_tables;
-      jpg->quant.push_back(table);
-      ++num_tables;
-    }
-  }
-}
-    
-    
+        for (size_t y = 0; y < size.height; ++y)
     {
-    {        BOOST_DEFAULTED_FUNCTION(aligned(), {})
-        BOOST_FORCEINLINE BOOST_CONSTEXPR explicit aligned(type v) BOOST_NOEXCEPT : value(v) {}
-    };
-};
+        const type * src0 = internal::getRowPtr(src0Base, src0Stride, y);
+        const type * src1 = internal::getRowPtr(src1Base, src1Stride, y);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, y);
+        size_t x = 0;
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(f32, s16, 8,
+     register float32x4_t vhalf asm ('q0') = vdupq_n_f32(0.5f);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d2-d3}, [%[src]]                               \n\t'
+             'vadd.f32 q2, q1, q0                                     \n\t'
+             'vcvt.s32.f32 q3, q2                                     \n\t'
+             'vqmovn.s32 d8, q3                                       \n\t'
+             'vst1.16 {d8}, [%[dst]]                                  \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst] 'r' (_dst + i),
+               'w' (vhalf)
+             : 'd2','d3','d4','d5','d6','d7','d8'
+         );
+         __asm__ (
+             'vld1.32 {d2-d3}, [%[src]]                               \n\t'
+             'vadd.f32 q2, q1, q0                                     \n\t'
+             'vcvt.s32.f32 q3, q2                                     \n\t'
+             'vqmovn.s32 d8, q3                                       \n\t'
+             'vst1.16 {d8}, [%[dst]]                                  \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i + 4),
+               'w' (vhalf)
+             : 'd2','d3','d4','d5','d6','d7','d8'
+         );
+     }
+})
+#else
+CVT_FUNC(f32, s16, 8,
+     float32x4_t vhalf = vdupq_n_f32(0.5f);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         float32x4_t vline_f32 = vld1q_f32(_src + i);
+    }
+    }
+    
+                v_dst.val[0] = vcombine(vget_high(v_src.val[0]), vget_low(v_src.val[0]));
+            v_dst.val[1] = vcombine(vget_high(v_src.val[1]), vget_low(v_src.val[1]));
+            v_dst.val[2] = vcombine(vget_high(v_src.val[2]), vget_low(v_src.val[2]));
+    
+    static UBool copyAsSuperscript(
+        const UnicodeString &s,
+        int32_t beginIndex,
+        int32_t endIndex,
+        UnicodeString &result,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    for (int32_t i = beginIndex; i < endIndex;) {
+        UChar32 c = s.char32At(i);
+        int32_t digit = u_charDigitValue(c);
+        if (digit < 0) {
+            status = U_INVALID_CHAR_FOUND;
+            return FALSE;
+        }
+        result.append(kSuperscriptDigits[digit]);
+        i += U16_LENGTH(c);
+    }
+    return TRUE;
+}
+    
+    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
+    resetAll();
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    UnicodeString oneScriptName;
+    for (int32_t i=0; i<scriptString.length();) {
+        UChar32 c = scriptString.char32At(i);
+        i = scriptString.moveIndex32(i, 1);
+        if (!u_isUWhiteSpace(c)) {
+            oneScriptName.append(c);
+            if (i < scriptString.length()) {
+                continue;
+            }
+        }
+        if (oneScriptName.length() > 0) {
+            char buf[40];
+            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
+            buf[sizeof(buf)-1] = 0;
+            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
+            if (sc == UCHAR_INVALID_CODE) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+            } else {
+                this->set((UScriptCode)sc, status);
+            }
+            if (U_FAILURE(status)) {
+                return *this;
+            }
+            oneScriptName.remove();
+        }
+    }
+    return *this;
+}
+    
+        UBool      test(UScriptCode script, UErrorCode &status) const;
+    ScriptSet &Union(const ScriptSet &other);
+    ScriptSet &set(UScriptCode script, UErrorCode &status);
+    ScriptSet &reset(UScriptCode script, UErrorCode &status);
+    ScriptSet &intersect(const ScriptSet &other);
+    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
+    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
+    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
+    
+    void SearchIterator::setMatchLength(int32_t length)
+{
+    m_search_->matchedLength = length;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    switch (fieldIndex) {
+        case UDAT_YEAR_FIELD:
+        case UDAT_MONTH_FIELD:
+        case UDAT_DATE_FIELD:
+        case UDAT_STANDALONE_DAY_FIELD:
+        case UDAT_STANDALONE_MONTH_FIELD:
+            return gStaticSets->fDateIgnorables;
+            
+        case UDAT_HOUR_OF_DAY1_FIELD:
+        case UDAT_HOUR_OF_DAY0_FIELD:
+        case UDAT_MINUTE_FIELD:
+        case UDAT_SECOND_FIELD:
+        case UDAT_HOUR1_FIELD:
+        case UDAT_HOUR0_FIELD:
+            return gStaticSets->fTimeIgnorables;
+            
+        default:
+            return gStaticSets->fOtherIgnorables;
+    }
+}
+    
+    #endif  // !UCONFIG_NO_FORMATTING
+
+    
+    /**
+ * Destructor
+ */
+StringMatcher::~StringMatcher() {
+}
