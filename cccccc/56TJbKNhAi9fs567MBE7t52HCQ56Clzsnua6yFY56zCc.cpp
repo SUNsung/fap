@@ -1,223 +1,336 @@
 
         
-          void wait(int n = 1) {
-    std::unique_lock<std::mutex> lock(m_);
-    while (n_ < n) {
-      cv_.wait(lock);
+        #if GTEST_HAS_STD_WSTRING
+  // Converts the given wide string to a narrow string using the UTF-8
+  // encoding, and streams the result to this Message object.
+  Message& operator <<(const ::std::wstring& wstr);
+#endif  // GTEST_HAS_STD_WSTRING
+    
+    // Implements typed tests.
+    
+     private:
+  template <typename U>
+  friend class linked_ptr;
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_)};
+    return ValuesIn(array);
+  }
+    
+    // GetTypeName<T>() returns a human-readable name of type T.
+// NB: This function is also used in Google Mock, so don't move it inside of
+// the typed-test-only section below.
+template <typename T>
+std::string GetTypeName() {
+# if GTEST_HAS_RTTI
     }
-    n_ -= n;
-  }
     
-    Github Links:
-- https://github.com/caffe2/caffe2/blob/master/caffe2/operators/given_tensor_fill_op.h
-- https://github.com/caffe2/caffe2/blob/master/caffe2/operators/given_tensor_fill_op.cc
     
-    OPERATOR_SCHEMA(HalfToFloat)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .TensorInferenceFunction(
-        [](const OperatorDef& def, const vector<TensorShape>& in) {
-          vector<TensorShape> out;
-          const TensorShape& X = in[0];
-          out.push_back(X);
-          out[0].set_data_type(TensorProto_DataType_FLOAT);
+// Queue is a simple queue implemented as a singled-linked list.
+//
+// The element type must support copy constructor.
+template <typename E>  // E is the element type
+class Queue;
+    
+        private:
+        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
+        {
+            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
+            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
+            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
+            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
+            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
+        }
+    
+        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
+    {
+        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
+        // GPU invocations for each MaskSection call.
     }
     
-      CensusServerCallData()
-      : gc_(nullptr),
-        auth_context_(nullptr),
-        recv_initial_metadata_(nullptr),
-        initial_on_done_recv_initial_metadata_(nullptr),
-        initial_on_done_recv_message_(nullptr),
-        recv_message_(nullptr),
-        recv_message_count_(0),
-        sent_message_count_(0) {
-    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&path_, 0, sizeof(grpc_slice));
-    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
-    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
-  }
+            static const size_t s_serializationVersion = 0;
+    
+            DestType *destData = dest.data();
+        if (elementCount > dest.size())
+            RuntimeError('Copy: The output buffer size (%zu) is smaller than the number (%zu) of source elements to copy.', dest.size(), elementCount);
     
     
-    {  std::vector<const protobuf::FieldDescriptor*> extensions;
-  descriptor_pool_->FindAllExtensions(desc, &extensions);
-  for (auto it = extensions.begin(); it != extensions.end(); it++) {
-    response->add_extension_number((*it)->number());
-  }
-  response->set_base_type_name(type);
-  return Status::OK;
+    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
+            }
+            else if (!sampleDynamicAxes.empty())
+                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+    
+        assert(m_dataReaders.empty());
+    
+    class Timer
+{
+public:
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
+    }
+    
+        //release temp matrices that are only used by forward computation
+    //don't release matrices that need to be used in the gradient computation
+    virtual void ReleaseMatricesAfterForwardProp(MatrixPool& matrixPool)
+    {
+        Base::ReleaseMatricesAfterForwardProp(matrixPool);
+        ReleaseMatrixToPool(m_maxIndexes0, matrixPool);
+        ReleaseMatrixToPool(m_maxIndexes1, matrixPool);
+        ReleaseMatrixToPool(m_maxValues, matrixPool);
+    }
+    
+        if (U_FAILURE(status)) {
+        return;
+    }
+    
+    UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
+        const UnicodeString &original,
+        FieldPositionIterator &fpi,
+        const UnicodeString &preExponent,
+        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    FieldPosition fp;
+    int32_t copyFromOffset = 0;
+    while (fpi.next(fp)) {
+        switch (fp.getField()) {
+        case UNUM_EXPONENT_SYMBOL_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(preExponent);
+            appendTo.append(fBeginMarkup);
+            break;
+        case UNUM_EXPONENT_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getEndIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(fEndMarkup);
+            break;
+        default:
+            break;
+        }
+    }
+    appendTo.append(
+            original, copyFromOffset, original.length() - copyFromOffset);
+    return appendTo;
 }
     
-    #include 'src/cpp/ext/proto_server_reflection.h'
-    
-    CreateThreadPoolFunc g_ctp_impl = CreateDefaultThreadPoolImpl;
-    
-    
-    {}  // namespace grpc
+    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
     
-      // Fill database
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
+    #if !UCONFIG_NO_BREAK_ITERATION
     
-    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
-    
-    
-    {    void Add(const CompactionStats& c) {
-      this->micros += c.micros;
-      this->bytes_read += c.bytes_read;
-      this->bytes_written += c.bytes_written;
-    }
-  };
-  CompactionStats stats_[config::kNumLevels] GUARDED_BY(mutex_);
-    
-    
-    {  // Returns number of files renamed.
-  int RenameLDBToSST() {
-    std::vector<std::string> filenames;
-    ASSERT_OK(env_->GetChildren(dbname_, &filenames));
-    uint64_t number;
-    FileType type;
-    int files_renamed = 0;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      if (ParseFileName(filenames[i], &number, &type) && type == kTableFile) {
-        const std::string from = TableFileName(dbname_, number);
-        const std::string to = SSTTableFileName(dbname_, number);
-        ASSERT_OK(env_->RenameFile(from, to));
-        files_renamed++;
-      }
-    }
-    return files_renamed;
-  }
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
 };
     
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
+};
+    
+    #include 'unicode/unistr.h'
+    
+    
+    {            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
+                if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+                                      fSymbols->fStandaloneQuarters, fSymbols->fStandaloneQuartersCount, cal)) > 0)
+                    return newStart;
+            }
+            if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 3) {
+                if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
+                                          fSymbols->fStandaloneShortQuarters, fSymbols->fStandaloneShortQuartersCount, cal)) > 0)
+                    return newStart;
+            }
+            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
+                return newStart;
+            // else we allowing parsing as number, below
+            if(!getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status))
+                return -start;
+        }
+        break;
+    
+    void CollationKey::setLength(int32_t newLength) {
+    // U_ASSERT(newLength >= 0 && newLength <= getCapacity());
+    fFlagAndLength = (fFlagAndLength & 0x80000000) | newLength;
+    fHashCode = kInvalidHashCode;
 }
     
-    namespace leveldb {
+        /**
+     * Returns a string representation of this replacer.  If the
+     * result of calling this function is passed to the appropriate
+     * parser, typically TransliteratorParser, it will produce another
+     * replacer that is equal to this one.
+     * @param result the string to receive the pattern.  Previous
+     * contents will be deleted.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \\uxxxx or
+     * \\Uxxxxxxxx.  Unprintable characters are defined by
+     * Utility.isUnprintable().
+     * @return a reference to 'result'.
+     */
+    virtual UnicodeString& toReplacerPattern(UnicodeString& result,
+                                             UBool escapeUnprintable) const;
+    
+        Vec2 newPos = ccCardinalSplineAt(pp0, pp1, pp2, pp3, _tension, lt);
+    
+    //
+// NOTE: Converting these macros into Templates is desirable, but please see
+// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
+//
+#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
+CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
+{ \
+    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
+    if (ease) \
+    { \
+        if (ease->initWithAction(action, period)) \
+            ease->autorelease(); \
+        else \
+            CC_SAFE_RELEASE_NULL(ease); \
+    } \
+    return ease; \
+} \
+CLASSNAME* CLASSNAME::clone() const \
+{ \
+    if(_inner) return CLASSNAME::create(_inner->clone(), _period); \
+    return nullptr; \
+} \
+void CLASSNAME::update(float time) { \
+    _inner->update(TWEEN_FUNC(time, _period)); \
+} \
+EaseElastic* CLASSNAME::reverse() const { \
+    return REVERSE_CLASSNAME::create(_inner->reverse(), _period); \
+}
+    
+    
+    {    CC_SAFE_DELETE(ret);
+    return nullptr;
+}
+    
+    void WavesTiles3D::update(float time)
+{
+    for (int i = 0; i < _gridSize.width; i++ )
+    {
+        for (int j = 0; j < _gridSize.height; j++ )
+        {
+            Quad3 coords = getOriginalTile(Vec2(i, j));
+    }
+    }
     }
     
-    uint64_t Reader::LastRecordOffset() {
-  return last_record_offset_;
+    
+    {    _animations.erase(name);
 }
     
-      // Returns the physical offset of the last record returned by ReadRecord.
-  //
-  // Undefined before the first call to ReadRecord.
-  uint64_t LastRecordOffset();
-    
-      // Recover and check that all log files were processed.
-  Open();
-  ASSERT_LE(1, NumTables());
-  ASSERT_EQ(1, NumLogs());
-  uint64_t new_log = FirstLogFile();
-  ASSERT_LE(old_log+3, new_log);
-  ASSERT_EQ('bar2', Get('foo'));
-  ASSERT_EQ('world', Get('hello'));
-  ASSERT_EQ('there', Get('hi'));
-    
-    template<typename Key, class Comparator>
-void SkipList<Key,Comparator>::Insert(const Key& key) {
-  // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
-  // here since Insert() is externally synchronized.
-  Node* prev[kMaxHeight];
-  Node* x = FindGreaterOrEqual(key, prev);
+    @since v0.99.5
+@js cc.animationCache
+*/
+class CC_DLL AnimationCache : public Ref
+{
+public:
+    /**
+     * @js ctor
+     */
+    AnimationCache();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    ~AnimationCache();
+    /** Returns the shared instance of the Animation cache 
+	 @js NA
+	*/
+    static AnimationCache* getInstance();
     }
     
-      // SnapshotImpl is kept in a doubly-linked circular list. The SnapshotList
-  // implementation operates on the next/previous fields direcly.
-  SnapshotImpl* prev_;
-  SnapshotImpl* next_;
+        /**
+     * get vertex count
+     * @return number of vertices
+     */
+    unsigned int getVertCount() const;
     
-            // Enable debug report extension (we need additional storage, so we duplicate the user array to add our new extension to it)
-        const char** extensions_ext = (const char**)malloc(sizeof(const char*) * (extensions_count + 1));
-        memcpy(extensions_ext, extensions, extensions_count * sizeof(const char*));
-        extensions_ext[extensions_count] = 'VK_EXT_debug_report';
-        create_info.enabledExtensionCount = extensions_count + 1;
-        create_info.ppEnabledExtensionNames = extensions_ext;
+    /**
+     * get triangles count
+     * @return number of triangles
+     */
+    unsigned int getTrianglesCount() const;
     
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
-
+    namespace rocksdb {
+    }
     
-    #include 'imgui.h'
-#include 'imgui_impl_sdl.h'
-#include 'imgui_impl_opengl3.h'
-#include <stdio.h>
-#include <SDL.h>
+    #pragma once
     
-    static int const                    NUM_BACK_BUFFERS = 3;
-static ID3D12Device*                g_pd3dDevice = NULL;
-static ID3D12DescriptorHeap*        g_pd3dRtvDescHeap = NULL;
-static ID3D12DescriptorHeap*        g_pd3dSrvDescHeap = NULL;
-static ID3D12CommandQueue*          g_pd3dCommandQueue = NULL;
-static ID3D12GraphicsCommandList*   g_pd3dCommandList = NULL;
-static ID3D12Fence*                 g_fence = NULL;
-static HANDLE                       g_fenceEvent = NULL;
-static UINT64                       g_fenceLastSignaledValue = 0;
-static IDXGISwapChain3*             g_pSwapChain = NULL;
-static HANDLE                       g_hSwapChainWaitableObject = NULL;
-static ID3D12Resource*              g_mainRenderTargetResource[NUM_BACK_BUFFERS] = {};
-static D3D12_CPU_DESCRIPTOR_HANDLE  g_mainRenderTargetDescriptor[NUM_BACK_BUFFERS] = {};
+      // Read a key OUTSIDE this transaction. Does not affect txn.
+  s = txn_db->Get(read_options, 'abc', &value);
     
-        // Setup render state: fixed-pipeline, alpha-blending, no face culling, no depth testing, shade mode (for gradient)
-    g_pd3dDevice->SetPixelShader(NULL);
-    g_pd3dDevice->SetVertexShader(NULL);
-    g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-    g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, false);
-    g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
-    g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-    g_pd3dDevice->SetRenderState(D3DRS_ALPHATESTENABLE, false);
-    g_pd3dDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-    g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-    g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, true);
-    g_pd3dDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-    g_pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-    g_pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+      // Time spent on file's Append() call.
+  uint64_t file_write_nanos;
     
-    static void ImGui_ImplFreeGLUT_UpdateKeyboardMods()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    int mods = glutGetModifiers();
-    io.KeyCtrl = (mods & GLUT_ACTIVE_CTRL) != 0;
-    io.KeyShift = (mods & GLUT_ACTIVE_SHIFT) != 0;
-    io.KeyAlt = (mods & GLUT_ACTIVE_ALT) != 0;
+    struct UndumpOptions {
+  // Database that we will load the dumped file into
+  std::string db_path;
+  // File location of the dumped file that will be loaded
+  std::string dump_location;
+  // Compact the db after loading the dumped file
+  bool compact_db = false;
+};
+    
+      enum FlushPropertyType : int {
+    FLUSH_JOB_ID = 0,
+    FLUSH_BYTES_MEMTABLES,
+    FLUSH_BYTES_WRITTEN,
+    NUM_FLUSH_PROPERTIES
+  };
+    
+    //////////////////////////////////////////////////////////////////////////////
+// parse JSON from file
+//////////////////////////////////////////////////////////////////////////////
+    
+    namespace benchmark {
+namespace internal {
+// The arraysize(arr) macro returns the # of elements in an array arr.
+// The expression is a compile-time constant, and therefore can be
+// used in defining new arrays, for example.  If you use arraysize on
+// a pointer by mistake, you will get a compile-time error.
+//
+    }
+    }
+    
+    
+    {  return result;
 }
     
-    #endif // D_DHT_TASK_H
-
-    
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
-{
-}
-    
-      virtual std::shared_ptr<DHTTask>
-  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                 int numRetry = 0) CXX11_OVERRIDE;
-    
-      virtual void addPeriodicTask2(const std::shared_ptr<DHTTask>& task) = 0;
+          // regerror returns the number of bytes necessary to null terminate
+      // the string, so we move that when assigning to error.
+      CHECK_NE(needed, 0);
+      error->assign(errbuf, needed - 1);
