@@ -1,90 +1,69 @@
 
         
-        
-@bp.route('/')
-def index():
-    '''Show all the posts, most recent first.'''
-    db = get_db()
-    posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
-    return render_template('blog/index.html', posts=posts)
+            i = 0
+    for c, (label, timings) in zip('br',
+                                   sorted(six.iteritems(results_2))):
+        i += 1
+        ax = fig.add_subplot(2, 2, i + 2)
+        y = np.asarray(timings)
+        ax.plot(chunks, y, color=c, alpha=0.8)
+        ax.set_xlabel('Chunks')
+        ax.set_ylabel(label)
+    
+                gc.collect()
+            print('benchmarking orthogonal_mp (without Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=False,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp[i_f, i_s] = delta
+    
+        ###########################################################################
+    # Numpy permutation based
+    sampling_algorithm['numpy-permutation'] = \
+        lambda n_population, n_sample: \
+            np.random.permutation(n_population)[:n_sample]
+    
+        revision is a git commit reference (hash or name)
+    
+    And tree.TreeParser finally fetches its input from a tree.TreeNodeStream:
     
     
-@pytest.mark.parametrize('path', (
-    '/create',
-    '/1/update',
-    '/1/delete',
-))
-def test_login_required(client, path):
-    response = client.post(path)
-    assert response.headers['Location'] == 'http://localhost/auth/login'
+class RecognitionException(Exception):
+    '''@brief The root of the ANTLR exception hierarchy.
     
-    import os
-from warnings import warn
+                rules.append(code.co_name)
     
-        If `conditional=True` and `filename` is provided, this method will try to
-    upgrade the response stream to support range requests.  This will allow
-    the request to be answered with partial content response.
+            for i in self.tree.iterfind('video/quality'):
+            quality = i.attrib ['value']
+            url = i[0].attrib['playurl']
+            self.stream_types.append({'id': quality,
+                                      'video_profile': i.attrib ['desp']})
+            self.streams[quality] = {'url': url,
+                                     'video_profile': i.attrib ['desp']}
+            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
     
-            :param tag_class: tag class to register. Will be instantiated with this
-            serializer instance.
-        :param force: overwrite an existing tag. If false (default), a
-            :exc:`KeyError` is raised.
-        :param index: index to insert the new tag in the tag order. Useful when
-            the new tag is a special case of an existing tag. If ``None``
-            (default), the tag is appended to the end of the order.
-    
-        def get_cookie_samesite(self, app):
-        '''Return ``'Strict'`` or ``'Lax'`` if the cookie should use the
-        ``SameSite`` attribute. This currently just returns the value of
-        the :data:`SESSION_COOKIE_SAMESITE` setting.
-        '''
-        return app.config['SESSION_COOKIE_SAMESITE']
+    from ..common import *
     
     
-class ArrayMinLengthValidator(MinLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
-        'limit_value')
+def fix_coub_video_file(file_path):
+    with open(file_path, 'r+b') as file:
+        file.seek(0)
+        file.write(bytes(2))
     
-            if data is None:
-            s = self._get_session_from_db()
-            if s:
-                data = self.decode(s.session_data)
-                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
-            else:
-                data = {}
-        return data
+    #----------------------------------------------------------------------
+def dilidili_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
+    global headers
+    re_str = r'http://www.dilidili.com/watch\S+'
+    if re.match(r'http://www.dilidili.wang', url):
+        re_str = r'http://www.dilidili.wang/watch\S+'
+        headers['Referer'] = 'http://www.dilidili.wang/'
+    elif re.match(r'http://www.dilidili.mobi', url):
+        re_str = r'http://www.dilidili.mobi/watch\S+'
+        headers['Referer'] = 'http://www.dilidili.mobi/'
     
-        def create(self):
-        '''
-        To create a new key, set the modified flag so that the cookie is set
-        on the client for the current request.
-        '''
-        self.modified = True
-    
-    
-class AbstractBaseSession(models.Model):
-    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
-    session_data = models.TextField(_('session data'))
-    expire_date = models.DateTimeField(_('expire date'), db_index=True)
-    
-    
-def test_cifar():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls(url, title, ext, size, output_dir, merge=False)
