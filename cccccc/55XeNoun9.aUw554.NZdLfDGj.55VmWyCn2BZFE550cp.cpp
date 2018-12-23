@@ -1,285 +1,392 @@
 
         
-        // Generate param traits log methods.
-#include 'ipc/param_traits_log_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        
+    {
+    {    return module;
+#endif
+  }
+}
+    
+    namespace {
+string GetTypeUrl(const Descriptor* message,
+                  const string& type_url_prefix) {
+  if (!type_url_prefix.empty() &&
+      type_url_prefix[type_url_prefix.size() - 1] == '/') {
+    return type_url_prefix + message->full_name();
+  } else {
+    return type_url_prefix + '/' + message->full_name();
+  }
+}
+}  // namespace
+    
+      virtual bool Generate(const FileDescriptor* file, const string& parameter,
+                        GeneratorContext* context, string* error) const {
+    file->CopyTo(file_);
+    return true;
+  }
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/compiler/plugin.pb.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
     
-    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    #include 'content/nw/src/api/menuitem/menuitem.h'
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
     
-     protected:
-  ~NwAppClearAppCacheFunction() override;
+    int ImmutableExtensionLiteGenerator::GenerateNonNestedInitializationCode(
+    io::Printer* printer) {
+  return 0;
+}
     
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    ImmutableMapFieldGenerator::
+ImmutableMapFieldGenerator(const FieldDescriptor* descriptor,
+                                       int messageBitIndex,
+                                       int builderBitIndex,
+                                       Context* context)
+  : descriptor_(descriptor), name_resolver_(context->GetNameResolver())  {
+  SetMessageVariables(descriptor, messageBitIndex, builderBitIndex,
+                      context->GetFieldGeneratorInfo(descriptor),
+                      context, &variables_);
+}
+    
+    ClassNameResolver::~ClassNameResolver() {
+}
+    
+        extensions_descriptor_ =
+      pool_.FindMessageTypeByName('protobuf_unittest.TestAllExtensions');
+    ASSERT_TRUE(extensions_descriptor_ != NULL);
+    extensions_prototype_ = factory_.GetPrototype(extensions_descriptor_);
+    
+    
+    {
+    {        for (; j < size.width; j++)
+        {
+            dst[j] = ~src[j];
+        }
+    }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(u16, u8, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.8 {d0-d1}, [%[src1]]                             \n\t'
+             'vqmovn.u16 d4, q0                                     \n\t'
+             'vld1.8 {d2-d3}, [%[src2]]                             \n\t'
+             'vqmovn.u16 d5, q1                                     \n\t'
+             'vst1.8 {d4-d5}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src1] 'r' (_src + i),
+               [src2] 'r' (_src + i + 8),
+               [dst] 'r' (_dst + i + 0)
+             : 'd0','d1','d2','d3','d4','d5'
+         );
+     }
+})
+#else
+CVT_FUNC(u16, u8, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         uint16x8_t vline1_u16 = vld1q_u16(_src + i);
+         uint16x8_t vline2_u16 = vld1q_u16(_src + i + 8);
+    }
     }
     
-      // This random number generator facade hides boost and CUDA rng
-  // implementation from one another (for cross-platform compatibility).
-  class RNG {
-   public:
-    RNG();
-    explicit RNG(unsigned int seed);
-    explicit RNG(const RNG&);
-    RNG& operator=(const RNG&);
-    void* generator();
-   private:
-    class Generator;
-    shared_ptr<Generator> generator_;
-  };
-    
-    
-/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
-template <typename Dtype>
-class ConstantFiller : public Filler<Dtype> {
- public:
-  explicit ConstantFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    const int count = blob->count();
-    const Dtype value = this->filler_param_.value();
-    CHECK(count);
-    for (int i = 0; i < count; ++i) {
-      data[i] = value;
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
+        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
     }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
+    
+    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
+#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
+    
+      // The ColPartitions in part_grid_ maybe over-segmented, particularly in the
+  // block equation regions. So we like to identify these partitions and merge
+  // them before we do the searching.
+  void MergePartsByLocation();
+    
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
+    
+    template <>
+template <typename T>
+bool EnforceFiniteOp<CPUContext>::DoRunWithType() {
+  EnforceOnCPU<T>(Input(0));
+  return true;
+}
+    
+      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
+  const int canonical_axis_w =
+      canonical_axis_index_(axis_w, in[1].dims().size());
+  const int N = pretransposed_weight
+      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
+      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+    
+    workspace.ResetWorkspace()
+    
+    class GetIm2ColGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Col2Im',
+        '',
+        std::vector<string>{GO(0), I(0)},
+        std::vector<string>{GI(0)});
   }
 };
+REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
+    
+    AuthPropertyIterator AuthPropertyIterator::operator++(int) {
+  AuthPropertyIterator tmp(*this);
+  operator++();
+  return tmp;
+}
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+    
+    MeasureDouble RpcClientRoundtripLatency() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcClientRoundtripLatencyMeasureName,
+      'Time between first byte of request sent to last byte of response '
+      'received, or terminal error',
+      kUnitMilliseconds);
+  return measure;
+}
+    
+    	virtual void getAllContactManifolds(btManifoldArray &manifoldArray) {
+		///should we use m_ownManifold to avoid adding duplicates?
+		if (m_manifoldPtr && m_ownManifold)
+			manifoldArray.push_back(m_manifoldPtr);
+	}
+	struct CreateFunc : public btCollisionAlgorithmCreateFunc {
+    }
+    
+    	virtual PhysicsServer::JointType get_type() const { return PhysicsServer::JOINT_HINGE; }
     
     /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+	@author AndreaCatania
+*/
     
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+    public:
+	/// Reference frame is A
+	SliderJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameInA, const Transform &frameInB);
+    
+    
+    {#ifdef TOOLS_ENABLED
+	EditorPlugins::add_by_type<EditorPluginCSG>();
 #endif
-    
-    template <typename Dtype>
-class BasePrefetchingDataLayer :
-    public BaseDataLayer<Dtype>, public InternalThread {
- public:
-  explicit BasePrefetchingDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden.
-  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+#endif
+}
     
     
-    {}  // namespace caffe
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
+    {	bool operator()(const Pair<F, S> &A, const Pair<F, S> &B) const {
+		return A.first < B.first;
+	}
 };
-#endif
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
-    {
-        if ((((uint32_t)&storage) & 0x00000007) == 0)
-        {
-#if defined(__SSE2__)
-            __asm__ __volatile__
-            (
-#if defined(__AVX__)
-                'vmovq %1, %%xmm4\n\t'
-                'vmovq %%xmm4, %0\n\t'
-#else
-                'movq %1, %%xmm4\n\t'
-                'movq %%xmm4, %0\n\t'
-#endif
-                : '=m' (storage)
-                : 'm' (v)
-                : 'memory', 'xmm4'
-            );
-#else
-            __asm__ __volatile__
-            (
-                'fildll %1\n\t'
-                'fistpll %0\n\t'
-                : '=m' (storage)
-                : 'm' (v)
-                : 'memory'
-            );
-#endif
+    {    if (fAltInputText != NULL) {
+        pos = utext_getNativeIndex(fAltInputText);
+        fAltInputText = utext_clone(fAltInputText, input, FALSE, TRUE, &status);
+        if (U_FAILURE(status)) {
+            return *this;
         }
-        else
-        {
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-#if defined(__PIC__)
-            uint32_t scratch;
-            __asm__ __volatile__
-            (
-                'movl %%ebx, %[scratch]\n\t'
-                'movl %[value_lo], %%ebx\n\t'
-                'movl %[dest], %%eax\n\t'
-                'movl 4+%[dest], %%edx\n\t'
-                '.align 16\n\t'
-                '1: lock; cmpxchg8b %[dest]\n\t'
-                'jne 1b\n\t'
-                'movl %[scratch], %%ebx\n\t'
-                : [scratch] '=m' (scratch), [dest] '=o' (storage)
-                : [value_lo] 'a' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
-                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'edx', 'memory'
-            );
-#else // defined(__PIC__)
-            __asm__ __volatile__
-            (
-                'movl %[dest], %%eax\n\t'
-                'movl 4+%[dest], %%edx\n\t'
-                '.align 16\n\t'
-                '1: lock; cmpxchg8b %[dest]\n\t'
-                'jne 1b\n\t'
-                : [dest] '=o' (storage)
-                : [value_lo] 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
-                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'eax', 'edx', 'memory'
-            );
-#endif // defined(__PIC__)
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-#if defined(__PIC__)
-            uint32_t scratch;
-            __asm__ __volatile__
-            (
-                'movl %%ebx, %[scratch]\n\t'
-                'movl %[value_lo], %%ebx\n\t'
-                'movl 0(%[dest]), %%eax\n\t'
-                'movl 4(%[dest]), %%edx\n\t'
-                '.align 16\n\t'
-                '1: lock; cmpxchg8b 0(%[dest])\n\t'
-                'jne 1b\n\t'
-                'movl %[scratch], %%ebx\n\t'
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-                : [scratch] '=m,m' (scratch)
-                : [value_lo] 'a,a' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
-#else
-                : [scratch] '=m' (scratch)
-                : [value_lo] 'a' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
-#endif
-                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'edx', 'memory'
-            );
-#else // defined(__PIC__)
-            __asm__ __volatile__
-            (
-                'movl 0(%[dest]), %%eax\n\t'
-                'movl 4(%[dest]), %%edx\n\t'
-                '.align 16\n\t'
-                '1: lock; cmpxchg8b 0(%[dest])\n\t'
-                'jne 1b\n\t'
-                :
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-                : [value_lo] 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
-#else
-                : [value_lo] 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
-#endif
-                : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'eax', 'edx', 'memory'
-            );
-#endif // defined(__PIC__)
-#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        utext_setNativeIndex(fAltInputText, pos);
+    }
+    return *this;
+}
+    
+    Transliterator* RemoveTransliterator::clone(void) const {
+    Transliterator* result = new RemoveTransliterator();
+    if (result != NULL && getFilter() != 0) {
+        result->adoptFilter((UnicodeFilter*)(getFilter()->clone()));
+    }
+    return result;
+}
+    
+    static const UChar kSuperscriptDigits[] = {
+        0x2070,
+        0xB9,
+        0xB2,
+        0xB3,
+        0x2074,
+        0x2075,
+        0x2076,
+        0x2077,
+        0x2078,
+        0x2079};
+    
+    int32_t SearchIterator::preceding(int32_t position, 
+                                      UErrorCode &status)
+{
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
+    setOffset(position, status);
+    return handlePrev(position, status);
+}
+    
+    void
+SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+      return;
+    }
+    }
+    
+    U_NAMESPACE_BEGIN
+    
+    #include 'unicode/unistr.h'
+    
+    #endif // #if !UCONFIG_NO_FORMATTING
+
+    
+    
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+    int32_t StandardPlural::indexOrNegativeFromString(const UnicodeString &keyword) {
+    switch (keyword.length()) {
+    case 3:
+        if (keyword.compare(gOne, 3) == 0) {
+            return ONE;
+        } else if (keyword.compare(gTwo, 3) == 0) {
+            return TWO;
+        } else if (keyword.compare(gFew, 3) == 0) {
+            return FEW;
+        }
+        break;
+    case 4:
+        if (keyword.compare(gMany, 4) == 0) {
+            return MANY;
+        } else if (keyword.compare(gZero, 4) == 0) {
+            return ZERO;
+        }
+        break;
+    case 5:
+        if (keyword.compare(gOther, 5) == 0) {
+            return OTHER;
+        }
+        break;
+    default:
+        break;
+    }
+    return -1;
+}
+    
+    /**
+ * UnicodeReplacer API
+ */
+int32_t StringMatcher::replace(Replaceable& text,
+                               int32_t start,
+                               int32_t limit,
+                               int32_t& /*cursor*/) {
+    
+    int32_t outLen = 0;
+    
+    // Copy segment with out-of-band data
+    int32_t dest = limit;
+    // If there was no match, that means that a quantifier
+    // matched zero-length.  E.g., x (a)* y matched 'xy'.
+    if (matchStart >= 0) {
+        if (matchStart != matchLimit) {
+            text.copy(matchStart, matchLimit, dest);
+            outLen = matchLimit - matchStart;
         }
     }
     
-        static BOOST_FORCEINLINE storage_type fetch_and(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        base_type::fence_before(order);
-        int backup;
-        __asm
-        {
-            mov backup, ebx
-            xor edx, edx
-            mov edi, storage
-            movzx ebx, v
-            movzx eax, byte ptr [edi]
-            align 16
-        again:
-            mov dl, al
-            and dl, bl
-            lock cmpxchg byte ptr [edi], dl
-            jne again
-            mov v, al
-            mov ebx, backup
-        };
-        base_type::fence_after(order);
-        return v;
+    text.handleReplaceBetween(start, limit, UnicodeString()); // delete original text
+    
+    return outLen;
+}
+    
+    
+    {        UnicodeReplacer* r = data->lookupReplacer(c);
+        if (r == NULL) {
+            ICU_Utility::appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            UnicodeString buf;
+            r->toReplacerPattern(buf, escapeUnprintable);
+            buf.insert(0, (UChar)0x20);
+            buf.append((UChar)0x20);
+            ICU_Utility::appendToRule(rule, buf,
+                                      TRUE, escapeUnprintable, quoteBuf);
+        }
     }
-    
-    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
-    _mm_pause();
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-    __asm__ __volatile__('pause;');
-#endif
-}
-    
-        BOOST_FORCEINLINE bool operator== (buffer_storage const& that) const BOOST_NOEXCEPT
-    {
-        return BOOST_ATOMIC_DETAIL_MEMCMP(data, that.data, Size) == 0;
-    }
-    
-    #if BOOST_ATOMIC_SIGNAL_FENCE > 0
-BOOST_FORCEINLINE void atomic_signal_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::signal_fence(order);
-}
-#else
-BOOST_FORCEINLINE void atomic_signal_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::signal_fence();
-}
-#endif
