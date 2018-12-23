@@ -1,250 +1,480 @@
 
         
-        bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
-                     string* full_type_name) {
-  size_t pos = type_url.find_last_of('/');
-  if (pos == string::npos || pos + 1 == type_url.size()) {
-    return false;
-  }
-  if (url_prefix) {
-    *url_prefix = type_url.substr(0, pos + 1);
-  }
-  *full_type_name = type_url.substr(pos + 1);
-  return true;
-}
+        #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
+#include 'swift/Basic/Dwarf.h'
+#include 'swift/Serialization/SerializedModuleLoader.h'
+#include 'swift/Serialization/Validation.h'
+#include 'llvm/Support/Debug.h'
+#include 'llvm/Support/raw_ostream.h'
     
+      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
     
-    {  // Moving messages on the same arena should lead to swapped pointers.
-  *message2_on_arena = std::move(*message1_on_arena);
-  EXPECT_EQ(nested, &message2_on_arena->optional_nested_message());
-}
-    
-    #include <sstream>
-    
-        printer->Outdent();
-    printer->Outdent();
-    
-    #if GTEST_HAS_STD_WSTRING
-  // Converts the given wide string to a narrow string using the UTF-8
-  // encoding, and streams the result to this Message object.
-  Message& operator <<(const ::std::wstring& wstr);
-#endif  // GTEST_HAS_STD_WSTRING
-    
-    namespace testing {
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
     }
     
-    // Then, use TYPED_TEST_P() to define as many type-parameterized tests
-// for this type-parameterized test case as you want.
-TYPED_TEST_P(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
-  TypeParam n = 0;
-  ...
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
+  }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
 }
     
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
+        /** Specify model role to use as ordinal value (defaults to Qt::UserRole) */
+    void setRole(int role);
     
-    $for i [[
-$range j 1..i
-$range k 2..i
-template <$for j, [[GTEST_TEMPLATE_ T$j]]>
-struct Templates$i {
-  typedef TemplateSel<T1> Head;
-  typedef Templates$(i-1)<$for k, [[T$k]]> Tail;
+    public:
+    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
+    ~SignVerifyMessageDialog();
+    
+    #include <univalue.h>
+    
+    #define Round(a,b,c,d,e,f,g,h,k,w) do { \
+    uint32_t t1 = (h) + Sigma1(e) + Ch((e), (f), (g)) + (k) + (w); \
+    uint32_t t2 = Sigma0(a) + Maj((a), (b), (c)); \
+    (d) += t1; \
+    (h) = t1 + t2; \
+} while(0)
+    
+    void test_bad_scalar(void) {
+    unsigned char s_zero[32] = { 0 };
+    unsigned char s_overflow[32] = {
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
+        0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b,
+        0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41
+    };
+    unsigned char s_rand[32] = { 0 };
+    unsigned char output[32];
+    secp256k1_scalar rand;
+    secp256k1_pubkey point;
+    }
+    
+    static void RejectDifficultyMismatch(double difficulty, double expected_difficulty) {
+     BOOST_CHECK_MESSAGE(
+        DoubleEquals(difficulty, expected_difficulty, 0.00001),
+        'Difficulty was ' + std::to_string(difficulty)
+            + ' but was expected to be ' + std::to_string(expected_difficulty));
+}
+    
+    int64_t UniValue::get_int64() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not an integer as expected');
+    int64_t retval;
+    if (!ParseInt64(getValStr(), &retval))
+        throw std::runtime_error('JSON integer out of range');
+    return retval;
+}
+    
+    #undef cv_hal_addWeighted8u
+#define cv_hal_addWeighted8u(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::u8, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+#undef cv_hal_addWeighted8s
+#define cv_hal_addWeighted8s(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::s8, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+#undef cv_hal_addWeighted16u
+#define cv_hal_addWeighted16u(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::u16, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+#undef cv_hal_addWeighted16s
+#define cv_hal_addWeighted16s(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::s16, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+#undef cv_hal_addWeighted32s
+#define cv_hal_addWeighted32s(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::s32, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+//#undef cv_hal_addWeighted32f
+//#define cv_hal_addWeighted32f(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::f32, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+//#undef cv_hal_addWeighted64f
+//#define cv_hal_addWeighted64f(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::f64, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
+    
+        /*
+        For each point `p` within `size`, do:
+        dst[p] = src0[p] ^ src1[p]
+    */
+    void bitwiseXor(const Size2D &size,
+                    const u8 *src0Base, ptrdiff_t src0Stride,
+                    const u8 *src1Base, ptrdiff_t src1Stride,
+                    u8 *dstBase, ptrdiff_t dstStride);
+    
+    namespace CAROTENE_NS {
+    using std::size_t;
+    using std::ptrdiff_t;
+    }
+    
+        s32* laneb = internal::alignPtr(laneA + cn * (size.width + 2), 32);
+    s32* laneB = internal::alignPtr(laneb + cn * (size.width + 2), 32);
+    
+    void convolution(const Size2D &size,
+                 const u8 * srcBase, ptrdiff_t srcStride,
+                 u8 * dstBase, ptrdiff_t dstStride,
+                 BORDER_MODE border, u8 borderValue,
+                 const Size2D & ksize, s16 * kernelBase, u32 scale)
+{
+    internal::assertSupportedConfiguration(isConvolutionSupported(size, ksize, border));
+#ifdef CAROTENE_NEON
+    const uint8x8_t v_zero_u8 = vdup_n_u8(0);
+    const uint8x8_t v_border = vdup_n_u8(borderValue);
+    const int32x4_t v_zero_s32 = vdupq_n_s32(0);
+    }
+    
+                tnext3 = vreinterpretq_s16_u16(vaddq_u16(vaddl_u8(x3, x2),vaddl_u8(x2, x1)));
+            tnext3 = vshlq_n_s16(tnext3, 1);
+    
+      char label_i;
+  char label_j;
+  char* pixels = new char[2 * rows * cols];
+  std::string value;
+    
+      inline const shared_ptr<SyncedMemory>& diff() const {
+    CHECK(diff_);
+    return diff_;
+  }
+    
+    /**
+ * @brief Get a specific filler from the specification given in FillerParameter.
+ *
+ * Ideally this would be replaced by a factory pattern, but we will leave it
+ * this way for now.
+ */
+template <typename Dtype>
+Filler<Dtype>* GetFiller(const FillerParameter& param) {
+  const std::string& type = param.type();
+  if (type == 'constant') {
+    return new ConstantFiller<Dtype>(param);
+  } else if (type == 'gaussian') {
+    return new GaussianFiller<Dtype>(param);
+  } else if (type == 'positive_unitball') {
+    return new PositiveUnitballFiller<Dtype>(param);
+  } else if (type == 'uniform') {
+    return new UniformFiller<Dtype>(param);
+  } else if (type == 'xavier') {
+    return new XavierFiller<Dtype>(param);
+  } else if (type == 'msra') {
+    return new MSRAFiller<Dtype>(param);
+  } else if (type == 'bilinear') {
+    return new BilinearFiller<Dtype>(param);
+  } else {
+    CHECK(false) << 'Unknown filler name: ' << param.type();
+  }
+  return (Filler<Dtype>*)(NULL);
+}
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
-    // Tests the Set method.
-TEST(MyString, Set) {
-  MyString s;
+    /**
+ * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
+ *        'broadcast' to match the shape of the former. Equivalent to tiling
+ *        the latter Blob, then computing the elementwise sum.
+ *
+ * The second input may be omitted, in which case it's learned as a parameter
+ * of the layer. Note: in case bias and scaling are desired, both operations can
+ * be handled by `ScaleLayer` configured with `bias_term: true`.
+ */
+template <typename Dtype>
+class BiasLayer : public Layer<Dtype> {
+ public:
+  explicit BiasLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      // Adds an element to the end of the queue.  A copy of the element is
-  // created using the copy constructor, and then stored in the queue.
-  // Changes made to the element in the queue doesn't affect the source
-  // object, and vice versa.
-  void Enqueue(const E& element) {
-    QueueNode<E>* new_node = new QueueNode<E>(element);
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of DeConvolutionLayer.
+ *        Fallback to DeConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates deconvolution through forward kernels for filtering and
+ * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+*/
+template <typename Dtype>
+class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
+    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+                          const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+                       const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNDeconvolutionLayer();
     }
     
-    static int stb_compress_chunk(stb_uchar *history,
-    stb_uchar *start,
-    stb_uchar *end,
-    int length,
-    int *pending_literals,
-    stb_uchar **chash,
-    stb_uint mask)
-{
-    (void)history;
-    int window = stb__window;
-    stb_uint match_max;
-    stb_uchar *lit_start = start - *pending_literals;
-    stb_uchar *q = start;
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace leveldb {
     }
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
+    
+    {     public:
+      DataFile(SpecialEnv* env, WritableFile* base)
+          : env_(env),
+            base_(base) {
+      }
+      ~DataFile() { delete base_; }
+      Status Append(const Slice& data) {
+        if (env_->no_space_.Acquire_Load() != nullptr) {
+          // Drop writes on the floor
+          return Status::OK();
+        } else {
+          return base_->Append(data);
+        }
+      }
+      Status Close() { return base_->Close(); }
+      Status Flush() { return base_->Flush(); }
+      Status Sync() {
+        if (env_->data_sync_error_.Acquire_Load() != nullptr) {
+          return Status::IOError('simulated data sync error');
+        }
+        while (env_->delay_data_sync_.Acquire_Load() != nullptr) {
+          DelayMilliseconds(100);
+        }
+        return base_->Sync();
+      }
+    };
+    class ManifestFile : public WritableFile {
+     private:
+      SpecialEnv* env_;
+      WritableFile* base_;
+     public:
+      ManifestFile(SpecialEnv* env, WritableFile* b) : env_(env), base_(b) { }
+      ~ManifestFile() { delete base_; }
+      Status Append(const Slice& data) {
+        if (env_->manifest_write_error_.Acquire_Load() != nullptr) {
+          return Status::IOError('simulated writer error');
+        } else {
+          return base_->Append(data);
+        }
+      }
+      Status Close() { return base_->Close(); }
+      Status Flush() { return base_->Flush(); }
+      Status Sync() {
+        if (env_->manifest_sync_error_.Acquire_Load() != nullptr) {
+          return Status::IOError('simulated sync error');
+        } else {
+          return base_->Sync();
+        }
+      }
+    };
+    
+    std::string TableFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'ldb');
+}
+    
+    TEST(FileNameTest, Construction) {
+  uint64_t number;
+  FileType type;
+  std::string fname;
+    }
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
+    
+          case kFirstType:
+        if (in_fragmented_record) {
+          // Handle bug in earlier versions of log::Writer where
+          // it could emit an empty kFirstType record at the tail end
+          // of a block followed by a kFullType or kFirstType record
+          // at the beginning of the next block.
+          if (!scratch->empty()) {
+            ReportCorruption(scratch->size(), 'partial record without end(2)');
+          }
+        }
+        prospective_record_offset = physical_record_offset;
+        scratch->assign(fragment.data(), fragment.size());
+        in_fragmented_record = true;
+        break;
+    
+    class SequentialFile;
+    
+      size_t WrittenBytes() const {
+    return dest_.contents_.size();
+  }
+    
+      // Drop reference count.  Delete if no more references exist.
+  void Unref() {
+    --refs_;
+    assert(refs_ >= 0);
+    if (refs_ <= 0) {
+      delete this;
+    }
+  }
+    
+      // Removes a SnapshotImpl from this list.
+  //
+  // The snapshot must have been created by calling New() on this list.
+  //
+  // The snapshot pointer should not be const, because its memory is
+  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
+  // which is in the API, and currently takes a const Snapshot.
+  void Delete(const SnapshotImpl* snapshot) {
+#if !defined(NDEBUG)
+    assert(snapshot->list_ == this);
+#endif  // !defined(NDEBUG)
+    snapshot->prev_->next_ = snapshot->next_;
+    snapshot->next_->prev_ = snapshot->prev_;
+    delete snapshot;
+  }
+    
+    
+    {
+    {
+    {}  // namespace conti_radar
+}  // namespace drivers
+}  // namespace apollo
 
     
-        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
-    struct BACKUP_DX11_STATE
-    {
-        UINT                        ScissorRectsCount, ViewportsCount;
-        D3D11_RECT                  ScissorRects[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        D3D11_VIEWPORT              Viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        ID3D11RasterizerState*      RS;
-        ID3D11BlendState*           BlendState;
-        FLOAT                       BlendFactor[4];
-        UINT                        SampleMask;
-        UINT                        StencilRef;
-        ID3D11DepthStencilState*    DepthStencilState;
-        ID3D11ShaderResourceView*   PSShaderResource;
-        ID3D11SamplerState*         PSSampler;
-        ID3D11PixelShader*          PS;
-        ID3D11VertexShader*         VS;
-        UINT                        PSInstancesCount, VSInstancesCount;
-        ID3D11ClassInstance*        PSInstances[256], *VSInstances[256];   // 256 is max according to PSSetShader documentation
-        D3D11_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
-        ID3D11Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
-        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
-        DXGI_FORMAT                 IndexBufferFormat;
-        ID3D11InputLayout*          InputLayout;
-    };
-    BACKUP_DX11_STATE old;
-    old.ScissorRectsCount = old.ViewportsCount = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
-    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
-    ctx->RSGetState(&old.RS);
-    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
-    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
-    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
-    ctx->PSGetSamplers(0, 1, &old.PSSampler);
-    old.PSInstancesCount = old.VSInstancesCount = 256;
-    ctx->PSGetShader(&old.PS, old.PSInstances, &old.PSInstancesCount);
-    ctx->VSGetShader(&old.VS, old.VSInstances, &old.VSInstancesCount);
-    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
-    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
-    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
-    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
-    ctx->IAGetInputLayout(&old.InputLayout);
+    BaseMapMatrix::~BaseMapMatrix() {}
     
-        if (install_callbacks)
-    {
-        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
-    }
+      // coordinate frame
+  std::string from_coordinate = geo_text->Value();
+  int eastZone = GetLongZone(east);
+  int westZone = GetLongZone(west);
+  if (eastZone != westZone) {
+    std::string err_msg = 'unsupport data in more than one zones';
+    return Status(apollo::common::ErrorCode::HDMAP_DATA_ERROR, err_msg);
+  }
+  int zone = westZone;
+  std::string to_coordinate = '+proj=utm +zone=' + std::to_string(zone) +
+                              ' +ellps=WGS84 +datum=WGS84 +units=m +no_defs';
+  CoordinateConvertTool::GetInstance()->SetConvertParam(from_coordinate,
+                                                        to_coordinate);
     
-    // If you get an error please report on github. You may try different GL context version or GLSL version. See GL<>GLSL version table at the top of this file.
-static bool CheckShader(GLuint handle, const char* desc)
-{
-    GLint status = 0, log_length = 0;
-    glGetShaderiv(handle, GL_COMPILE_STATUS, &status);
-    glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_length);
-    if ((GLboolean)status == GL_FALSE)
-        fprintf(stderr, 'ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to compile %s!\n', desc);
-    if (log_length > 0)
-    {
-        ImVector<char> buf;
-        buf.resize((int)(log_length + 1));
-        glGetShaderInfoLog(handle, log_length, NULL, (GLchar*)buf.begin());
-        fprintf(stderr, '%s\n', buf.begin());
+    void SplineSegKernel::CalculateFx(const uint32_t num_params) {
+  kernel_fx_ = Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 0; r < kernel_fx_.rows(); ++r) {
+    for (int c = 0; c < kernel_fx_.cols(); ++c) {
+      kernel_fx_(r, c) = 1.0 / (r + c + 1.0);
     }
-    return (GLboolean)status == GL_TRUE;
+  }
 }
     
-        if (!g_FontSampler)
-    {
-        VkSamplerCreateInfo info = {};
-        info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        info.magFilter = VK_FILTER_LINEAR;
-        info.minFilter = VK_FILTER_LINEAR;
-        info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-        info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        info.minLod = -1000;
-        info.maxLod = 1000;
-        info.maxAnisotropy = 1.0f;
-        err = vkCreateSampler(g_Device, &info, g_Allocator, &g_FontSampler);
-        check_vk_result(err);
+      {
+    auto ka = getKeepAliveToken(exec);
+    EXPECT_TRUE(ka);
+    EXPECT_EQ(&exec, ka.get());
+    EXPECT_EQ(1, exec.refCount);
     }
     
-    // Win32 Data
-static HWND                 g_hWnd = 0;
-static INT64                g_Time = 0;
-static INT64                g_TicksPerSecond = 0;
-static ImGuiMouseCursor     g_LastMouseCursor = ImGuiMouseCursor_COUNT;
-    
-    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
-    
-    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    void ClusterGeneralInfo701::Parse(const std::uint8_t* bytes, int32_t length,
-                                  ContiRadar* conti_radar) const {
-  auto obs = conti_radar->add_contiobs();
-  obs->set_clusterortrack(true);
-  obs->set_obstacle_id(obstacle_id(bytes, length));
-  obs->set_longitude_dist(longitude_dist(bytes, length));
-  obs->set_lateral_dist(lateral_dist(bytes, length));
-  obs->set_longitude_vel(longitude_vel(bytes, length));
-  obs->set_lateral_vel(lateral_vel(bytes, length));
-  obs->set_rcs(rcs(bytes, length));
-  obs->set_dynprop(dynprop(bytes, length));
-  double timestamp = apollo::common::time::Clock::NowInSeconds();
-  auto header = obs->mutable_header();
-  header->CopyFrom(conti_radar->header());
-  header->set_timestamp_sec(timestamp);
-}
-    
-    void ObjectGeneralInfo60B::Parse(const std::uint8_t* bytes, int32_t length,
-                                 ContiRadar* conti_radar) const {
-  int obj_id = object_id(bytes, length);
-  auto conti_obs = conti_radar->add_contiobs();
-  conti_obs->set_clusterortrack(false);
-  conti_obs->set_obstacle_id(obj_id);
-  conti_obs->set_longitude_dist(longitude_dist(bytes, length));
-  conti_obs->set_lateral_dist(lateral_dist(bytes, length));
-  conti_obs->set_longitude_vel(longitude_vel(bytes, length));
-  conti_obs->set_lateral_vel(lateral_vel(bytes, length));
-  conti_obs->set_rcs(rcs(bytes, length));
-  conti_obs->set_dynprop(dynprop(bytes, length));
-  double timestamp = apollo::common::time::Clock::NowInSeconds();
-  auto header = conti_obs->mutable_header();
-  header->CopyFrom(conti_radar->header());
-  header->set_timestamp_sec(timestamp);
-}
-    
-    
-    {  int ret = x;
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
   return ret;
 }
     
-    
-    {  static routing::RoutingResponse routing_;
-  static std::unique_ptr<PncMap> pnc_map_;
-  static hdmap::HDMap hdmap_;
-};
-    
-    void BackupTrajectoryGenerator::GenerateTrajectory1dPairs(
-    const State& init_s, const State& init_d) {
-  std::vector<std::shared_ptr<Curve1d>> lon_trajectories;
-  std::array<double, 5> dds_condidates = {-0.1, -1.0, -2.0, -3.0, -4.0};
-  for (const auto dds : dds_condidates) {
-    lon_trajectories.emplace_back(
-        new ConstantDecelerationTrajectory1d(init_s[0], init_s[1], dds));
-  }
-    }
-    
-      MatrixXd offset_golden = MatrixXd::Zero(10, 1);
-  offset_golden(0, 0) = -10000.0;
-    
-    double Spline1dSeg::SecondOrderDerivative(const double x) const {
-  return second_order_derivative_(x);
+    /*
+ * Return a good seed for a random number generator.
+ * Note that this is a legacy function, as it returns a 32-bit value, which
+ * is too small to be useful as a 'real' RNG seed. Use the functions in class
+ * Random instead.
+ */
+inline uint32_t randomNumberSeed() {
+  return Random::rand32();
 }
+    
+      tv = to<struct timeval>(duration<uint32_t, std::nano>{3123});
+  EXPECT_EQ(0, tv.tv_sec);
+  EXPECT_EQ(3, tv.tv_usec);
+  tv = to<struct timeval>(duration<int32_t, std::nano>{-3123});
+  EXPECT_EQ(-1, tv.tv_sec);
+  EXPECT_EQ(999997, tv.tv_usec);
+    
+      void operator++(int) {
+    *this += 1.0;
+  }
+    
+      explicit Options(
+      Format format_ = Format::ZLIB,
+      int windowSize_ = 15,
+      int memLevel_ = 8,
+      int strategy_ = Z_DEFAULT_STRATEGY)
+      : format(format_),
+        windowSize(windowSize_),
+        memLevel(memLevel_),
+        strategy(strategy_) {}
+    
+    void* SimpleAllocator::allocateHard() {
+  // Allocate a new slab.
+  mem_ = static_cast<uint8_t*>(folly::aligned_malloc(allocSize_, allocSize_));
+  if (!mem_) {
+    throw_exception<std::bad_alloc>();
+  }
+  end_ = mem_ + allocSize_;
+  blocks_.push_back(mem_);
+    }
