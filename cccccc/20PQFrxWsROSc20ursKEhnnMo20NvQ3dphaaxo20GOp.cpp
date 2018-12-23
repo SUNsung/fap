@@ -1,182 +1,512 @@
 
         
-        namespace google {
-namespace protobuf {
-namespace compiler {
-namespace annotation_test_util {
-namespace {
-    }
-    }
-    }
-    }
+          // base::SingleThreadTaskRunner:
+  bool PostDelayedTask(const base::Location& from_here,
+                       base::OnceClosure task,
+                       base::TimeDelta delay) override;
+  bool RunsTasksInCurrentSequence() const override;
+  bool PostNonNestableDelayedTask(const base::Location& from_here,
+                                  base::OnceClosure task,
+                                  base::TimeDelta delay) override;
+    
+      // add two new params for better error handling
+  errorObject->Set(mate::StringToV8(isolate(), 'code'),
+                   v8::Integer::New(isolate(), code));
+  errorObject->Set(mate::StringToV8(isolate(), 'domain'),
+                   mate::StringToV8(isolate(), domain));
+    
+      // Delegate implementations.
+  void OnError(const std::string& error) override;
+  void OnError(const std::string& message,
+               const int code,
+               const std::string& domain) override;
+  void OnCheckingForUpdate() override;
+  void OnUpdateAvailable() override;
+  void OnUpdateNotAvailable() override;
+  void OnUpdateDownloaded(const std::string& release_notes,
+                          const std::string& release_name,
+                          const base::Time& release_date,
+                          const std::string& update_url) override;
+    
+    
+    {}  // namespace atom
+
+    
+    #include 'atom/browser/api/event_emitter.h'
+    
+     private:
+  void QuerySystemIdleState(v8::Isolate* isolate,
+                            int idle_threshold,
+                            const ui::IdleCallback& callback);
+  void QuerySystemIdleTime(const ui::IdleTimeCallback& callback);
+    
+    namespace atom {
     }
     
-    void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service) {
-  printer->Print('/**\n');
-  WriteDocCommentBody(printer, service);
-  printer->Print(
-    ' * Protobuf service {@code $fullname$}\n'
-    ' */\n',
-    'fullname', EscapeJavadoc(service->full_name()));
+    display::Display Screen::GetDisplayMatching(const gfx::Rect& match_rect) {
+  return screen_->GetDisplayMatching(match_rect);
 }
     
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/objectivec/objectivec_extension.h>
-#include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/stubs/strutil.h>
-#include <google/protobuf/io/printer.h>
-    
-    // Like ASSERT_EXIT, but continues on to successive tests in the
-// test case, if any:
-# define EXPECT_EXIT(statement, predicate, regex) \
-    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_NONFATAL_FAILURE_)
+    #include 'atom/browser/browser.h'
+#include 'base/posix/eintr_wrapper.h'
+#include 'content/public/browser/browser_thread.h'
     
     
-    {}  // namespace testing
+    {}  // namespace atom
+
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7, typename T8, typename T9>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
-}
+    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+
     
-    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5>
-AssertionResult AssertPred5Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  const char* e5,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4,
-                                  const T5& v5) {
-  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
-    }
+    #define TEGRA_BINARYOP(type, op, src1, sz1, src2, sz2, dst, sz, w, h) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    parallel_for_(Range(0, h), \
+    TegraGenOp_##op##_Invoker<const type, type>(src1, sz1, src2, sz2, dst, sz, w, h), \
+    (w * h) / static_cast<double>(1<<16)), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-      // Creates directories so that path exists. Returns true if successful or if
-  // the directories already exist; returns false if unable to create
-  // directories for any reason. Will also return false if the FilePath does
-  // not represent a directory (that is, it doesn't end with a path separator).
-  bool CreateDirectoriesRecursively() const;
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46>
-class ValueArray46 {
- public:
-  ValueArray46(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
-      T42 v42, T43 v43, T44 v44, T45 v45, T46 v46) : v1_(v1), v2_(v2), v3_(v3),
-      v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
-      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15), v16_(v16),
-      v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21), v22_(v22),
-      v23_(v23), v24_(v24), v25_(v25), v26_(v26), v27_(v27), v28_(v28),
-      v29_(v29), v30_(v30), v31_(v31), v32_(v32), v33_(v33), v34_(v34),
-      v35_(v35), v36_(v36), v37_(v37), v38_(v38), v39_(v39), v40_(v40),
-      v41_(v41), v42_(v42), v43_(v43), v44_(v44), v45_(v45), v46_(v46) {}
-    }
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-    // GetLabelMapping - Gets the label mapping from integer index to label type
-// returns - a map from numeric datatype to native label type
-const std::map<typename DataReader::LabelIdType, typename DataReader::LabelType>& DataReader::GetLabelMapping(const std::wstring&)
-{
-    NOT_IMPLEMENTED;
-}
-    
-    private:
-    // -----------------------------------------------------------------------
-    // the cloning operation itself
-    // -----------------------------------------------------------------------
-    
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+        inline _normEstimator(const Size2D &size, s32 cn, Margin,
+                          ptrdiff_t &mapstep, s32** mag_buf, u8* &map)
     {
-        Base::Validate(isFinalValidationPass);
-        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+        mapstep = size.width + 2;
+        buffer.resize( (size.width+2)*(size.height+2) + cn*mapstep*3*sizeof(s32) );
+        mag_buf[0] = (s32*)&buffer[0];
+        mag_buf[1] = mag_buf[0] + mapstep*cn;
+        mag_buf[2] = mag_buf[1] + mapstep*cn;
+        memset(mag_buf[0], 0, /* cn* */mapstep * sizeof(s32));
     }
     
-    #include <osquery/config.h>
     
-    #include <osquery/config.h>
-#include <osquery/database.h>
-#include <osquery/registry.h>
+    {            v_y = vld2q_u8(srcy + syj + 32);
+            v_dst.val[0] = vld1q_u8(srcu + sj + 16);
+            v_dst.val[1] = v_y.val[0];
+            v_dst.val[2] = vld1q_u8(srcv + sj + 16);
+            v_dst.val[3] = v_y.val[1];
+            vst4q_u8(dst + dj + 64, v_dst);
+        }
+#endif
     
-      std::shared_ptr<PlatformProcess> process;
-  int process_pid = ::fork();
-  if (process_pid == 0) {
-    // Start a Python script
-    ::execlp('sh', 'sh', '-c', argv.c_str(), nullptr);
-    ::exit(0);
-  } else if (process_pid > 0) {
-    process.reset(new PlatformProcess(process_pid));
-  }
     
-    void Initializer::platformSetup() {
-  // Initialize the COM libraries utilized by Windows WMI calls.
-  auto ret = ::CoInitializeEx(0, COINIT_MULTITHREADED);
-  if (ret != S_OK) {
-    ::CoUninitialize();
-  }
+    {    if (!parametersSupported) {
+        std::cerr << 'internal error: attempted to use a function with unsupported parameters' << std::endl;
+        std::abort();
+    }
 }
     
-    Status Distributed::pullUpdates() {
-  auto distributed_plugin = RegistryFactory::get().getActive('distributed');
-  if (!RegistryFactory::get().exists('distributed', distributed_plugin)) {
-    return Status(1, 'Missing distributed plugin: ' + distributed_plugin);
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin = 0, size_t endMargin = 0);
+    
+                for (; j < size.width; j++)
+            {
+                dst[j] = internal::saturate_cast<u8>((src[j] >> shift));
+            }
+        }
+        else // CONVERT_POLICY_WRAP
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src + j);
+                int16x8_t v_src0 = vshrq_n_s16(vld1q_s16(src + j), shift),
+                          v_src1 = vshrq_n_s16(vld1q_s16(src + j + 8), shift);
+                int8x16_t v_dst = vcombine_s8(vmovn_s16(v_src0),
+                                              vmovn_s16(v_src1));
+                vst1q_u8(dst + j, vreinterpretq_u8_s8(v_dst));
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src = vshrq_n_s16(vld1q_s16(src + j), shift);
+                vst1_u8(dst + j, vreinterpret_u8_s8(vmovn_s16(v_src)));
+            }
+    
+            u8 prevx[3] = { 0, 0, 0 },
+           currx[3] = { 0, 0, 0 },
+           nextx[3] = { 0, 0, 0 };
+        ptrdiff_t x = 0;
+        const ptrdiff_t bwidth = y + 2 < height ? width : (width - 8);
+    
+            for (; i < roiw8; i += 8 )
+        {
+            internal::prefetch(src + i + 6);
+            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
+            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
+            uint64x2_t vln3 = vld1q_u64((const u64*)(src + i + 4));
+            uint64x2_t vln4 = vld1q_u64((const u64*)(src + i + 6));
+    }
+    
+    namespace {
+    }
+    
+                uint8x8_t vsrc = vld1_u8(src + j);
+    
+    inline uint8x8_t vqtbl1_u8 (uint8x16_t a, uint8x8_t b)
+{
+#ifdef __aarch64__
+    // AArch64 supports this natively
+    return ::vqtbl1_u8(a, b);
+#else
+    union { uint8x16_t v; uint8x8x2_t w; } u = { a };
+    return vtbl2_u8(u.w, b);
+#endif
+}
+    
+    #include 'platform.h'  // for TESS_API
+    
+    // A list of all possible parameter types used.
+enum ParamType {
+  VT_INTEGER,
+  VT_BOOLEAN,
+  VT_STRING,
+  VT_DOUBLE
+};
+    
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
+    }
+    
+      void Build(int n) {
+    std::string key_space, value_space;
+    WriteBatch batch;
+    for (int i = 0; i < n; i++) {
+      //if ((i % 100) == 0) fprintf(stderr, '@ %d of %d\n', i, n);
+      Slice key = Key(i, &key_space);
+      batch.Clear();
+      batch.Put(key, Value(i, &value_space));
+      WriteOptions options;
+      // Corrupt() doesn't work without this sync on windows; stat reports 0 for
+      // the file size.
+      if (i == n - 1) {
+        options.sync = true;
+      }
+      ASSERT_OK(db_->Write(options, &batch));
+    }
   }
+    
+    
+    {}  // namespace leveldb
+    
+      kFullType = 1,
+    
+    
+    {    // Some corruption was detected.  'size' is the approximate number
+    // of bytes dropped due to the corruption.
+    virtual void Corruption(size_t bytes, const Status& status) = 0;
+  };
+    
+      // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+    
+    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
+  Slice memkey = key.memtable_key();
+  Table::Iterator iter(&table_);
+  iter.Seek(memkey.data());
+  if (iter.Valid()) {
+    // entry format is:
+    //    klength  varint32
+    //    userkey  char[klength]
+    //    tag      uint64
+    //    vlength  varint32
+    //    value    char[vlength]
+    // Check that it belongs to same user key.  We do not check the
+    // sequence number since the Seek() call above should have skipped
+    // all entries with overly large sequence numbers.
+    const char* entry = iter.key();
+    uint32_t key_length;
+    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
+    if (comparator_.comparator.user_comparator()->Compare(
+            Slice(key_ptr, key_length - 8),
+            key.user_key()) == 0) {
+      // Correct user key
+      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
+      switch (static_cast<ValueType>(tag & 0xff)) {
+        case kTypeValue: {
+          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
+          value->assign(v.data(), v.size());
+          return true;
+        }
+        case kTypeDeletion:
+          *s = Status::NotFound(Slice());
+          return true;
+      }
+    }
+  }
+  return false;
+}
+    
+    class RecoveryTest {
+ public:
+  RecoveryTest() : env_(Env::Default()), db_(nullptr) {
+    dbname_ = test::TmpDir() + '/recovery_test';
+    DestroyDB(dbname_, Options());
+    Open();
+  }
+    }
+    
+            template<typename OnWriteUpdateFunc>
+        void Update(size_t samples, const ValuePtr& accumulatedLoss, const ValuePtr& accumulatedMetric,
+                    OnWriteUpdateFunc callback)
+        {
+            if (samples == 0)
+            {
+                return;
+            }
+    }
+    
+            static bool IsUDF(const FunctionPtr& f);
+    
+            static NDShape GetUnpackedShape(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout)
+        {
+            // Determine unpacked shape
+            auto unpackedShape = sampleShape;
+            if (packedDataLayout)
+            {
+                if (sampleDynamicAxes.empty())
+                    LogicError('A PackedValue object that has a layout must have at least one dynamic axis.');
+    }
+    }
+    
+    
+    {        auto ownerFunctionPtr = m_ownerFunction.lock();
+        if (ownerFunctionPtr != nullptr)
+            return ownerFunctionPtr->shared_from_this();
+        else
+            return nullptr;
+    }
+    
+    #include 'unicode/coll.h'
+#include 'unicode/coleitr.h'
+#include 'unicode/localpointer.h'
+#include 'unicode/locid.h'
+#include 'unicode/sortkey.h'
+#include 'unicode/tblcoll.h'
+#include 'unicode/ucol.h'
+#include 'unicode/uiter.h'
+#include 'unicode/uloc.h'
+#include 'unicode/uniset.h'
+#include 'unicode/unistr.h'
+#include 'unicode/usetiter.h'
+#include 'unicode/utf8.h'
+#include 'unicode/uversion.h'
+#include 'bocsu.h'
+#include 'charstr.h'
+#include 'cmemory.h'
+#include 'collation.h'
+#include 'collationcompare.h'
+#include 'collationdata.h'
+#include 'collationdatareader.h'
+#include 'collationfastlatin.h'
+#include 'collationiterator.h'
+#include 'collationkeys.h'
+#include 'collationroot.h'
+#include 'collationsets.h'
+#include 'collationsettings.h'
+#include 'collationtailoring.h'
+#include 'cstring.h'
+#include 'uassert.h'
+#include 'ucol_imp.h'
+#include 'uhash.h'
+#include 'uitercollationiterator.h'
+#include 'ustr_imp.h'
+#include 'utf16collationiterator.h'
+#include 'utf8collationiterator.h'
+#include 'uvectr64.h'
+    
+    UBool ScriptSet::test(UScriptCode script, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
+    uint32_t index = script / 32;
+    uint32_t bit   = 1 << (script & 31);
+    return ((bits[index] & bit) != 0);
+}
+    
+    class PluralRules;
+    
+    UnicodeString &
+SmallIntFormatter::format(
+        int32_t smallPositiveValue,
+        const IntDigitCountRange &range,
+        UnicodeString &appendTo) {
+    int32_t digits = range.pin(gDigitCount[smallPositiveValue]);
+    }
+    
+            if (needWhitespace) {
+            int32_t tStart = t;
+    }
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+        /** Returns a new action that performs the exact reverse of the action. 
+     *
+     * @return A new action that performs the exact reverse of the action.
+     * @js NA
+     */
+    virtual Action* reverse() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
+    
+    // NOTE: the original code used the same class for the `reverse()` method
+EASERATE_TEMPLATE_IMPL(EaseIn, tweenfunc::easeIn);
+EASERATE_TEMPLATE_IMPL(EaseOut, tweenfunc::easeOut);
+EASERATE_TEMPLATE_IMPL(EaseInOut, tweenfunc::easeInOut);
+    
+        /**
+    @brief Get the amplitude of the effect.
+    @return Return the amplitude of the effect.
+    */
+    float getAmplitude() const { return _amplitude; }
+    /**
+    @brief Set the amplitude to the effect.
+    @param amplitude The value of amplitude will be set.
+    */
+    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+    
+    /** @class Show
+* @brief Show the node.
+**/
+class CC_DLL Show : public ActionInstant
+{
+public:
+    /** Allocates and initializes the action.
+     *
+     * @return  An autoreleased Show object.
+     */
+    static Show * create();
+    }
+    
+    void ActionManager::removeAllActionsByTag(int tag, Node *target)
+{
+    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
+    CCASSERT(target != nullptr, 'target can't be nullptr!');
+    if (target == nullptr)
+    {
+        return;
+    }
+    
+    tHashElement *element = nullptr;
+    HASH_FIND_PTR(_targets, &target, element);
+    
+    if (element)
+    {
+        auto limit = element->actions->num;
+        for (int i = 0; i < limit;)
+        {
+            Action *action = static_cast<Action*>(element->actions->arr[i]);
+    }
+    }
+    }
+    
+                p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
+    
+        // Overrides
+    virtual SplitCols* clone() const override;
+    /**
+     * @param time in seconds
+     */
+    virtual void update(float time) override;
+    virtual void startWithTarget(Node *target) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    SplitCols() {}
+    virtual ~SplitCols() {}
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    CC_CONSTRUCTOR_ACCESS:
+    AtlasNode();
+    virtual ~AtlasNode();
+    
+        // FIXME: this should be a property, not a public ivar
+    TrianglesCommand::Triangles triangles;
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+      virtual void executeTask() = 0;
+    
+    
+    {} // namespace aria2
+
+    
+    
+    {} // namespace folly
+    
+        void reset() {
+      if (Executor* executor = get()) {
+        if (exchange(executorAndDummyFlag_, 0) & kDummyFlag) {
+          return;
+        }
+        executor->keepAliveRelease();
+      }
+    }
+    
+    #include <folly/Conv.h>
+#include <folly/hash/Hash.h>
+    
+    
+    { private:
+  const KeepAlive<> executor_;
+};
+    
+    struct Options {
+  /**
+   * ZLIB: default option -- write a zlib wrapper as documented in RFC 1950.
+   *
+   * GZIP: write a simple gzip header and trailer around the compressed data
+   * instead of a zlib wrapper.
+   *
+   * RAW: deflate will generate raw deflate data with no zlib header or
+   * trailer, and will not compute a check value.
+   *
+   * AUTO: enable automatic header detection for decoding gzip or zlib data.
+   * For deflation, ZLIB will be used.
+   */
+  enum class Format { ZLIB, GZIP, RAW, AUTO };
+    }
+    
+      void reset(const std::shared_ptr<T>& p = nullptr) {
+    // Allocate each Holder in a different CoreRawAllocator stripe to
+    // prevent false sharing. Their control blocks will be adjacent
+    // thanks to allocate_shared().
+    for (auto slot : folly::enumerate(slots_)) {
+      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
+      auto holder = std::allocate_shared<Holder>(alloc, p);
+      *slot = std::shared_ptr<T>(holder, p.get());
+    }
+  }
+    
+        struct aligned
+    {
+        type value;
     }
