@@ -1,157 +1,113 @@
 
         
-              launch_event = builder.new_event(:launch)
-      post_thread = client.post_event(launch_event)
-      unless post_thread.nil?
-        @threads << post_thread
+            def rescue_connection_failed_error(e)
+      if e.message.include?('Connection reset by peer - SSL_connect')
+        handle_tls_error!(e)
+      else
+        handle_unknown_error!(e)
       end
     end
     
-        attr_accessor :collector
+            cmd << ['-am #{message.shellescape}']
+        cmd << '--force' if options[:force]
+        cmd << '-s' if options[:sign]
+        cmd << tag.shellescape
+        cmd << options[:commit].to_s if options[:commit]
     
-          context 'when specify log_path' do
-        context 'when command is archive' do
-          let(:command) { 'archive' }
-          it '--log-path option is not present' do
-            expect do
-              Fastlane::FastFile.new.parse('lane :test do
-                carthage(command: '#{command}', log_path: 'bla.log')
-              end').runner.execute(:test)
-            end.to raise_error('Log path option is available only for 'build', 'bootstrap', and 'update' command.')
-          end
-        end
+          it 'Uses pattern matching for tag name if requested' do
+        tag_match_pattern = '*1.8*'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(tag_match_pattern: '#{tag_match_pattern}')
+        end').runner.execute(:test)
     
-          context 'as string with spaces in name' do
-        let(:path) { 'my file.txt' }
-    
-            allow(FastlaneCore::Helper).to receive(:backticks).with(allowed_command, print: FastlaneCore::Globals.verbose?)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(expected_command, print: FastlaneCore::Globals.verbose?)
-    
-          def store_page?(page)
-        page[:entries].present?
+          it 'handles extension and extensions parameters correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extension: 'rb', extensions: ['m', 'h'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{rb,m,h}')
       end
     
-        def type=(value)
-      @type = value.try :strip
-    end
+          context 'default use case' do
+        it 'default use case' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint
+          end').runner.execute(:test)
     
-        def mime_type
-      headers['Content-Type'] || 'text/plain'
-    end
+    # test shellescape Windows implementation directly
+describe 'WindowsShellwords#shellescape' do
+  os = 'windows'
+  shellescape_testcases.each do |testcase|
+    it testcase['it'] + ': ' + testcase['it_result'][os] do
+      str = testcase['str']
+      escaped = WindowsShellwords.shellescape(str)
     
-        def additional_options
-      {}
-    end
+    exec_arr = ['fastlane', tool_name] + ARGV
     
-        def process_response?(response)
-      response.body.present?
-    end
+            it 'honors updates coming from the UI' do
+          scenario_import.merges = {
+            '0' => {
+              'name' => 'updated name',
+              'schedule' => '6pm',
+              'keep_events_for' => 2.days.to_i.to_s,
+              'disabled' => 'false',
+              'options' => weather_agent_options.merge('api_key' => 'foo').to_json
+            }
+          }
     
-            if at_css('.api-type-label.module')
-          at_css('h1').content = subpath.remove('api/')
+        it 'outputs control links to agents within the incoming set, but not outside it' do
+      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
+      agents(:jane_rain_notifier_agent).save!
+    
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
+  end
+    
+            private
+    
+              node.remove_attribute('path')
+          node.remove_attribute('region')
+          node.remove_attribute('linenums')
+          node.remove_attribute('title')
+          node.remove_attribute('language')
+          node.remove_attribute('hidecopy')
+          node.remove_attribute('class')
         end
     
-        # See {CapabilityHost#capability}
-    def capability(*args)
-      super
-    rescue Errors::CapabilityNotFound => e
-      raise Errors::GuestCapabilityNotFound,
-        cap: e.extra_data[:cap],
-        guest: name
-    rescue Errors::CapabilityInvalid => e
-      raise Errors::GuestCapabilityInvalid,
-        cap: e.extra_data[:cap],
-        guest: name
-    end
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-              @registered.each do |plugin|
-            result.merge!(plugin.guest.to_hash)
-          end
+              # Require that names be an array
+          names ||= []
+          names = [names] if !names.is_a?(Array)
     
-      it 'sets the return value of the catch block to nil by default' do
-    res = catch :blah do
-      throw :blah
-    end
-    res.should == nil
-  end
-    
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
-        end
-      rescue Errno::EACCES
-        # pass
-      end
-    
-        # Wraps the given string in terminal escapes
-    # causing it to have the given color.
-    # If terminal escapes aren't supported on this platform,
-    # just returns the string instead.
-    #
-    # @param color [Symbol] The name of the color to use.
-    #   Can be `:red`, `:green`, or `:yellow`.
-    # @param str [String] The string to wrap in the given color.
-    # @return [String] The wrapped string.
-    def color(color, str)
-      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
-    
-          def right_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, ri                   = *line.match(/\+(\d+)/)
-          @right_diff_line_number = ri.to_i
-          @current_line_number    = @right_diff_line_number
-          ret                     = '...'
-        elsif line[0] == ?-
-          ret = ' '
-        elsif line[0] == ?+
-          ret                     = @right_diff_line_number.to_s
-          @right_diff_line_number += 1
-          @current_line_number    = @right_diff_line_number - 1
-        else
-          ret                     = @right_diff_line_number.to_s
-          @right_diff_line_number += 1
-          @current_line_number    = @right_diff_line_number - 1
-        end
-        ret
-      end
-    end
-  end
-end
-
-    
-    
-  test 'create pages within sub-directories' do
-    post '/create', :content => 'big smelly creatures', :page => 'Orc',
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    assert_equal 'http://example.org/Mordor/Orc', last_response.headers['Location']
-    get '/Mordor/Orc'
-    assert_match /big smelly creatures/, last_response.body
-    
-    context 'Precious::Views::Page' do
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
-    
-    desc 'Update version number and gemspec'
-task :bump do
-  puts 'Updated version to #{bump_version}'
-  # Execute does not invoke dependencies.
-  # Manually invoke gemspec then validate.
-  Rake::Task[:gemspec].execute
-  Rake::Task[:validate].execute
-end
-    
-      if cfg = options[:config]
-    # If the path begins with a '/' it will be considered an absolute path,
-    # otherwise it will be relative to the CWD
-    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
-    require cfg
-  end
+    module Vagrant
+  module Plugin
+    module V2
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
