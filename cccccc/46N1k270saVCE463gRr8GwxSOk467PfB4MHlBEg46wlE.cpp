@@ -1,275 +1,223 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        struct cvhalFilter2D;
     
-    // Converts the given numpy ndarray to a (safe) TF_Tensor. The returned
-// TF_Tensor in `out_tensor` may have its own Python reference to `ndarray`s
-// data. After `out_tensor` is destroyed, this reference must (eventually) be
-// decremented via ClearDecrefCache().
-//
-// `out_tensor` must be non-null. Caller retains ownership of `ndarray`.
-Status PyArrayToTF_Tensor(PyObject* ndarray, Safe_TF_TensorPtr* out_tensor);
+    #include 'common.hpp'
+#include 'vtransform.hpp'
     
-    #include 'tensorflow/python/lib/core/numpy.h'
-    
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/platform/logging.h'
-    
-    struct TFETensorHandleDeleter {
-  void operator()(TFE_TensorHandle* p) const { TFE_DeleteTensorHandle(p); }
-};
-    
-    CudaContext* ExtractCudaContext(CUDAExecutor *cuda_exec);
-CUDAExecutor *ExtractCudaExecutor(StreamExecutor *stream_exec);
-    
-    namespace caffe2 {
+        //last line
+    if(i < size.height)
+    {
+        //vertical convolution
+        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        ptrdiff_t idx_rp1 = internal::borderInterpolate(i + 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
     }
     
-    
+            map = (u8*)(mag_buf[2] + mapstep*cn);
+        memset(map, 1, mapstep);
+        memset(map + mapstep*(size.height + 1), 1, mapstep);
+    }
+    inline void firstRow(const Size2D &size, s32 cn,
+                         const u8 *, ptrdiff_t,
+                         s16* dxBase, ptrdiff_t dxStride,
+                         s16* dyBase, ptrdiff_t dyStride,
+                         s32** mag_buf)
     {
-    {    return SingleGradientDef(
-        'MergeSingleScalarFeatureTensorsGradient',
-        '', /* name */
-        input_blob_names,
-        output_blob_names);
+        s32* _norm = mag_buf[1] + 1;
+    
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
+{
+    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
+    size_t len = _len + startMargin + endMargin;
+    if( (size_t)p < len )
+        return _p;
+    else if( borderType == BORDER_MODE_REPLICATE )
+        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
+    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
+    {
+        s32 delta = borderType == BORDER_MODE_REFLECT101;
+        if( len == 1 )
+            return 0;
+        do
+        {
+            if( p < 0 )
+                p = -p - 1 + delta;
+            else
+                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
+        }
+        while( (size_t)p >= len );
+    }
+    else if( borderType == BORDER_MODE_WRAP )
+    {
+        if( p < 0 )
+            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
+        if( p >= (ptrdiff_t)len )
+            p %= (ptrdiff_t)len;
+    }
+    else if( borderType == BORDER_MODE_CONSTANT )
+        p = -1;
+    else
+        internal::assertSupportedConfiguration(false);
+    return p - (ptrdiff_t)startMargin;
+}
+    
+    
+    {    minLocCount >>= 1;
+    maxLocCount >>= 1;
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)minVal;
+    (void)minLocPtr;
+    (void)minLocCount;
+    (void)minLocCapacity;
+    (void)maxVal;
+    (void)maxLocPtr;
+    (void)maxLocCount;
+    (void)maxLocCapacity;
+#endif
+}
+    
+    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
+inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
+inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
+    
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
+    
+    void Assembler::li64 (const Reg64& rt, int64_t imm64, bool fixedSize) {
+  // li64 always emits 5 instructions i.e. 20 bytes of instructions.
+  // Assumes that 0 bytes will be missing in the end.
+  uint8_t missing = 0;
+    }
+    
+    namespace HPHP {
+    }
+    
+    std::string Config::IniName(const std::string& config,
+                            bool prepend_hhvm /* = true */) {
+  std::string out = '';
+  if (prepend_hhvm) {
+    out += 'hhvm.';
   }
-};
-    
-    #endif // CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
-
-    
-    OPERATOR_SCHEMA(GivenTensorInt64Fill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT64>);
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
+  size_t idx = 0;
+  for (auto& c : config) {
+    // This is the first or last character
+    if (idx == 0 || idx == config.length() - 1) {
+      out += tolower(c);
+    } else if (!isalpha(c)) {
+      // Any . or _ or numeral is just output with no special behavior
+      out += c;
+    } else {
+      if (isupper(c) && isupper(config[idx - 1 ]) && islower(config[idx + 1])) {
+      // Handle something like 'SSLPort', and c = 'P', which will then put
+      // the underscore between the 'L' and 'P'
+        out += '_';
+        out += tolower(c);
+      } else if (islower(c) && isupper(config[idx + 1])) {
+      // Handle something like 'PathDebug', and c = 'h', which will then put
+      // the underscore between the 'h' and 'D'
+        out += tolower(c);
+        out += '_';
+      } else {
+      // Otherwise we just output as lower
+        out += tolower(c);
       }
     }
+    idx++;
   }
-}
+    }
     
-    	if (streqi(opt.c_str(), L'ALL'))
-	{
-		userOnly = false;
-	}
-	else if (streqi(opt.c_str(), L'USER'))
-	{
-		userOnly = true;
-	}
-	else
-	{
-		MessageBox(NULL, L'Unrecognized option for /REGISTER or /UNREGISTER. Must be either ALL or USER.', MB_TITLE, MB_OK);
-		exit(1);
-	}
+        if (!semi) {
+      // only media type (type/subtype,data)
+      ssize_t media_len = comma - data;
+      meta_len -= media_len;
+      data += media_len;
+    } else if (slash && slash < semi) {
+      // media type + param (type/subtype;param,data)
+      ssize_t media_len = semi - data;
+      meta_len -= media_len;
+      data += media_len;
+    } else {
+      // no media type (;base64,data)
+      if (semi != data // ex. foo;base64,data
+          || meta_len != sizeof(';base64') - 1 // ex. ;something,data
+          || memcmp(data, ';base64',
+                    sizeof(';base64') - 1)) { // ex. ;base65,data
+          raise_warning('rfc2397: invalid meta data');
+          return nullptr;
+        }
+    }
+    
+        UCollationResult result;
+    if(settings->dontCheckFCD()) {
+        UIterCollationIterator leftIter(data, numeric, left);
+        UIterCollationIterator rightIter(data, numeric, right);
+        result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
+    } else {
+        FCDUIterCollationIterator leftIter(data, numeric, left, equalPrefixLength);
+        FCDUIterCollationIterator rightIter(data, numeric, right, equalPrefixLength);
+        result = CollationCompare::compareUpToQuaternary(leftIter, rightIter, *settings, errorCode);
+    }
+    if(result != UCOL_EQUAL || settings->getStrength() < UCOL_IDENTICAL || U_FAILURE(errorCode)) {
+        return result;
+    }
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    U_NAMESPACE_BEGIN
+    
+    #include 'gregoimp.h'
+#include 'umutex.h'
     
     /**
- * @brief A simple ConfigParserPlugin for a 'views' dictionary key.
+ * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
+ * and return the pointer.
  */
-class ViewsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override {
-    return {'views'};
-  }
-    }
-    
-        char* const* argv = const_cast<char* const*>(&arguments[1]);
-    ::execve(arguments[0], argv, ::environ);
-    
-    
-    {  return true;
-}
-    
-    #include <osquery/events.h>
-#include <osquery/flags.h>
-#include <osquery/tables.h>
-    
-      // Once more, now deregistering all event types.
-  status = EventFactory::registerEventPublisher(pub);
-  EXPECT_TRUE(status.ok());
-    
-    
-    { protected:
-  /// The CAN client is started.
-  bool is_started_ = false;
-};
-    
-      /**
-   * @brief Receive messages
-   * @param frames The messages to receive.
-   * @param frame_num The amount of messages to receive.
-   * @return The status of the receiving action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Receive(std::vector<CanFrame> *frames,
-                                    int32_t *const frame_num) override;
-    
-    bool SocketCanClientRaw::Init(const CANCardParameter &parameter) {
-  if (!parameter.has_channel_id()) {
-    AERROR << 'Init CAN failed: parameter does not have channel id. The '
-              'parameter is '
-           << parameter.DebugString();
-    return false;
-  }
-    }
-    
-    /**
- * @class SocketCanClientRaw
- * @brief The class which defines a ESD CAN client which inherites CanClient.
- */
-class SocketCanClientRaw : public CanClient {
- public:
-  /**
-   * @brief Initialize the ESD CAN client by specified CAN card parameters.
-   * @param parameter CAN card parameters to initialize the CAN client.
-   * @return If the initialization is successful.
-   */
-  bool Init(const CANCardParameter &parameter) override;
-    }
-    
-    /**
- * @struct CheckIdArg
- *
- * @brief this struct include data for check ids.
- */
-struct CheckIdArg {
-  int64_t period = 0;
-  int64_t real_period = 0;
-  int64_t last_time = 0;
-  int32_t error_count = 0;
-};
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-    BENCHMARK(copy_long_string, iters) {
-  BenchmarkSuspender suspender;
-  auto const& longString = getLongString();
-  while (iters--) {
-    fbstring out;
-    suspender.dismissing([&] { out = longString; });
-  }
+UnicodeMatcher* StringMatcher::toMatcher() const {
+  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
+  UnicodeMatcher *nonconst_base = static_cast<UnicodeMatcher *>(nonconst_this);
+  
+  return nonconst_base;
 }
     
     
-    {} // namespace folly
-
+    {        // Delete the old text (the key)
+        text.handleReplaceBetween(start + outLen, limit + outLen, UnicodeString());
+    }        
     
     
-    {  static constexpr size_t stateSize = StateSizeT<RNG>::value;
-  std::array<uint32_t, stateSize> seedData;
-};
-    
-      ~VirtualExecutor() override {
-    joinKeepAlive();
-  }
-    
-      Format format;
-    
-      bool is_lock_free() const noexcept {
-    // lock free unless more than EXTERNAL_OFFSET threads are
-    // contending and they all get unlucky and scheduled out during
-    // load().
-    //
-    // TODO: Could use a lock-free external map to fix this
-    // corner case.
-    return true;
-  }
-    
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
-    }
-  }
-    
-      // Returns an aggregate distance or similarity value between the baseline
-  // image and the image in the last Compare() call (or the baseline image, if
-  // Compare() was not called yet).
-  // The interpretation of this aggregate value depends on the comparator used.
-  virtual float distmap_aggregate() const = 0;
-    
-    #ifndef GUETZLI_DEBUG_PRINT_H_
-#define GUETZLI_DEBUG_PRINT_H_
-    
-    
+    {    static BOOST_FORCEINLINE storage_type fetch_xor(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
     {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
+        base_type::fence_before(order);
+        int backup;
+        __asm
+        {
+            mov backup, ebx
+            xor edx, edx
+            mov edi, storage
+            movzx ebx, v
+            movzx eax, word ptr [edi]
+            align 16
+        again:
+            mov dx, ax
+            xor dx, bx
+            lock cmpxchg word ptr [edi], dx
+            jne again
+            mov v, ax
+            mov ebx, backup
+        };
+        base_type::fence_after(order);
+        return v;
     }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
-  }
-}
+};
     
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    #include <boost/atomic/detail/config.hpp>
     
-    
-    {}  // namespace guetzli
-
-    
-    void BuildSequentialHuffmanCodes(
-    const JPEGData& jpg,
-    std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
-    std::vector<HuffmanCodeTable>* ac_huffman_code_tables) {
-  JPEGOutput out(NullOut, nullptr);
-  BuildAndEncodeHuffmanCodes(jpg, out, dc_huffman_code_tables,
-                             ac_huffman_code_tables);
-}
+    #elif !defined(BOOST_NO_ALIGNMENT)
