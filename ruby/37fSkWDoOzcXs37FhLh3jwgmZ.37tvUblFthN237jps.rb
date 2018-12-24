@@ -1,248 +1,153 @@
 
         
-        module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class Base # :nodoc:
-        include Helpers::ActiveModelInstanceTag, Helpers::TagHelper, Helpers::FormTagHelper
-        include FormOptionsHelper
+            Group.refresh_automatic_groups!(:moderators)
+    gu = GroupUser.find_by(user_id: moderator.id, group_id: Group::AUTO_GROUPS[:moderators])
     
-                options = options.dup
-            options[:field_name]           = @method_name
-            options[:include_position]     = true
-            options[:prefix]             ||= @object_name
-            options[:index]                = @auto_index if @auto_index && !options.has_key?(:index)
+    Group.user_trust_level_change!(-1, TrustLevel[4])
     
-              add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
-    
-        initializer 'action_view.embed_authenticity_token_in_remote_forms' do |app|
-      ActiveSupport.on_load(:action_view) do
-        ActionView::Helpers::FormTagHelper.embed_authenticity_token_in_remote_forms =
-          app.config.action_view.delete(:embed_authenticity_token_in_remote_forms)
+            # Reset topic count because we don't count the description topic
+        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
       end
     end
-    
-        # Render but returns a valid Rack body. If fibers are defined, we return
-    # a streaming body that renders the template piece by piece.
-    #
-    # Note that partials are not supported to be rendered with streaming,
-    # so in such cases, we just wrap them in an array.
-    def render_body(context, options)
-      if options.key?(:partial)
-        [render_partial(context, options)]
-      else
-        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
-      end
-    end
-    
-        expect(gu.notification_level).to eq(NotificationLevels.all[:tracking])
-    
-            include ::EachBatch
-      end
-    
-            def collection_method
-          :pull_requests_comments
-        end
-    
-            def representation_class
-          Representation::Issue
-        end
-    
-                rows << {
-              label_id: label_id,
-              target_id: target_id,
-              target_type: issue.issuable_type,
-              created_at: time,
-              updated_at: time
-            }
-          end
-    
-            def importer_class
-          NoteImporter
-        end
-    
-            # Returns a Hash that can be used to populate `notes.st_diff`, removing
-        # the need for requesting Git data for every diff note.
-        def diff_hash
-          {
-            diff: diff_hunk,
-            new_path: file_path,
-            old_path: file_path,
-    }
-    
-            # Builds an issue from a GitHub API response.
-        #
-        # issue - An instance of `Sawyer::Resource` containing the issue
-        #         details.
-        def self.from_api_response(issue)
-          user =
-            if issue.user
-              Representation::User.from_api_response(issue.user)
-            end
-    
-      # Helper for use after calling send_*_instructions methods on a resource.
-  # If we are in paranoid mode, we always act as if the resource was valid
-  # and instructions were sent.
-  def successfully_sent?(resource)
-    notice = if Devise.paranoid
-      resource.errors.clear
-      :send_paranoid_instructions
-    elsif resource.errors.empty?
-      :send_instructions
-    end
-    
-        # Create magic predicates for verifying what module is activated by this map.
-    # Example:
-    #
-    #   def confirmable?
-    #     self.modules.include?(:confirmable)
-    #   end
-    #
-    def self.add_module(m)
-      class_eval <<-METHOD, __FILE__, __LINE__ + 1
-        def #{m}?
-          self.modules.include?(:#{m})
-        end
-      METHOD
-    end
-    
-              include mod
-        end
-    
-          def unauthenticated_message
-        # If set to paranoid mode, do not show the locked message because it
-        # leaks the existence of an account.
-        if Devise.paranoid
-          super
-        elsif access_locked? || (lock_strategy_enabled?(:failed_attempts) && attempts_exceeded?)
-          :locked
-        elsif lock_strategy_enabled?(:failed_attempts) && last_attempt? && self.class.last_attempt_warning
-          :last_attempt
-        else
-          super
-        end
-      end
-    
-        def index
-      authorize :email_domain_block, :index?
-      @email_domain_blocks = EmailDomainBlock.page(params[:page])
-    end
-    
-      def process_salmon
-    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
   end
 end
 
     
-      def update
-    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-    Then(/^the releases path is created$/) do
-  run_vagrant_command(test_dir_exists(TestApp.releases_path))
+        open_dry_run_modal(agent)
+    click_on('Dry Run')
+    expect(page).to have_text('Dry Run started')
+    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
+  end
 end
+
     
-      def test_symlink_exists(path)
-    exists?('L', path)
+      it 'imports a scenario that does not exist yet' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
+    expect(page).not_to have_text('This Scenario already exists in your system.')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
     
-          # Given a callable that provides a value, wrap the callable with another
-      # object that responds to `call`. This new object will perform validation
-      # and then return the original callable's value.
-      #
-      # If the callable is a `Question`, the object returned by this method will
-      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
-      # ensures that `is_a?(Question)` remains true even after the validation
-      # wrapper is applied. This is needed so that `Configuration#is_question?`
-      # works as expected.
-      #
-      def assert_valid_later(key, callable)
-        validation_callback = lambda do
-          value = callable.call
-          assert_valid_now(key, value)
-          value
-        end
-    
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
-    
-      it 'returns the config_hash' do
-    expect(subject.config_hash).not_to be_nil
-  end
-    
-          def has_header
-        @header = (@page.header || false) if @header.nil? && @page
-        !!@header
-      end
-    
-          def header
-        if @header.nil?
-          if page = @page.header
-            @header = page.text_data
-          else
-            @header = false
-          end
-        end
-        @header
-      end
-    
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
-        end
-      end
-    
-          attr_reader :name, :path
-    
-    # test/spec/mini 3
-# http://gist.github.com/25455
-# chris@ozmm.org
-# file:lib/test/spec/mini.rb
-def context(*args, &block)
-  return super unless (name = args.first) && block
-  require 'test/unit'
-  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
-    def self.test(name, &block)
-      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
+      describe '#nav_link' do
+    it 'returns a nav link' do
+      stub(self).current_page?('/things') { false }
+      nav = nav_link('Things', '/things')
+      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
+      expect(a.text.strip).to eq('Things')
     end
     
-    __END__
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+  end
+end
+
     
-          check_class_collision suffix: 'Worker'
+          context '#restart_dead_workers' do
+        before do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
     
-            ActiveSupport.on_load(:active_record) do
-          include Sidekiq::Extensions::ActiveRecord
+    describe AgentsExporter do
+  describe '#as_json' do
+    let(:name) { 'My set of Agents' }
+    let(:description) { 'These Agents work together nicely!' }
+    let(:guid) { 'some-guid' }
+    let(:tag_fg_color) { '#ffffff' }
+    let(:tag_bg_color) { '#000000' }
+    let(:icon) { 'Camera' }
+    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
+    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:exporter) { AgentsExporter.new(
+      agents: agent_list, name: name, description: description,
+      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
+      tag_bg_color: tag_bg_color, icon: icon) }
+    
+      it 'ignores invalid values' do
+    location2 = Location.new(
+      lat: 2,
+      lng: 3,
+      radius: -1,
+      speed: -1,
+      course: -1)
+    expect(location2.radius).to be_nil
+    expect(location2.speed).to be_nil
+    expect(location2.course).to be_nil
+  end
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
         end
-        ActiveSupport.on_load(:action_mailer) do
-          extend Sidekiq::Extensions::ActionMailer
-        end
-      end
     
-    module Sidekiq
-  module Extensions
-    ##
-    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
-    # delivery to Sidekiq.  Example:
-    #
-    #    UserMailer.delay.send_welcome_email(new_user)
-    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
-    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
-    class DelayedMailer
-      include Sidekiq::Worker
+              # Determine if we require a local Vagrant environment. There are
+          # two cases that we require a local environment:
+          #
+          #   * We're asking for ANY/EVERY VM (no names given).
+          #
+          #   * We're asking for specific VMs, at least once of which
+          #     is NOT in the local machine index.
+          #
+          requires_local_env = false
+          requires_local_env = true if names.empty?
+          requires_local_env ||= names.any? { |n|
+            !@env.machine_index.include?(n)
+          }
+          raise Errors::NoEnvironmentError if requires_local_env && !@env.root_path
     
-          def queue_name
-        queue.sub(/.*queue:/, '')
+        # Merge one registry with another and return a completely new
+    # registry. Note that the result cache is completely busted, so
+    # any gets on the new registry will result in a cache miss.
+    def merge(other)
+      self.class.new.tap do |result|
+        result.merge!(self)
+        result.merge!(other)
       end
+    end
+    
+    class ActivityPub::OutboxesController < Api::BaseController
+  LIMIT = 20
+    
+            log_action :change_email, @user
+    
+        def resource_params
+      params.require(:custom_emoji).permit(:shortcode, :image, :visible_in_picker)
+    end
+    
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
+      end
+    end
+    
+        def destroy
+      authorize @report_note, :destroy?
+      @report_note.destroy!
+      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
+    end
+    
+      def set_account
+    @account = Account.find(params[:id])
+  end
+end
+
+    
+      private
