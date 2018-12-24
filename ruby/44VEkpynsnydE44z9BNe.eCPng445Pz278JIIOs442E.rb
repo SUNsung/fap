@@ -1,55 +1,86 @@
 
         
-        end
+            # This returns whether the guest is ready to work. If this returns
+    # `false`, then {#detect!} should be called in order to detect the
+    # guest OS.
+    #
+    # @return [Boolean]
+    def ready?
+      !!capability_host_chain
+    end
+  end
+end
 
     
-      smoke_user = User.seed do |u|
-    u.id = 0
-    u.name = 'smoke_user'
-    u.username = 'smoke_user'
-    u.username_lower = 'smoke_user'
-    u.password = 'P4ssw0rd'
-    u.active = true
-    u.approved = true
-    u.approved_at = Time.now
-    u.trust_level = TrustLevel[3]
-  end.first
+              if !@machine_locks[id]
+            raise 'Unlocked write on machine: #{id}'
+          end
     
-      it 'accepts a Float' do
-    sleep(0.1).should be_close(0, 2)
-  end
+            # Defines an additionally available guest implementation with
+        # the given key.
+        #
+        # @param [String] name Name of the guest.
+        def self.guest(name=UNSET_VALUE, &block)
+          data[:guests] ||= Registry.new
     
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
-  end
+            # This is the method called to 'prepare' the provisioner. This is called
+        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
+        # This can be used to setup shared folders, forward ports, etc. Whatever is
+        # necessary on a 'meta' level.
+        #
+        # No return value is expected.
+        def prepare
+        end
     
-    When /^I try to sign in manually$/ do
-  manual_login
-end
+            # This contains all the registered host capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :host_capabilities
     
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-          it 'succeeds on mobile' do
-        eve.share_with(alice.person, eve.aspects.first)
-        get :index, format: :mobile
-        expect(response).to be_success
-      end
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
     end
     
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
-    end
-  end
-end
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
+end
+
+    
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
       end
+    
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
+    end
