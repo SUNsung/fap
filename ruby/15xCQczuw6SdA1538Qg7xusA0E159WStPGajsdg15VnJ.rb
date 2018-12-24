@@ -1,71 +1,78 @@
 
         
-              redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.change_email.changed_msg')
-    end
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
+      #
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      #
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
     
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
+            def initialize(object_name, method_name, template_object, collection, value_method, text_method, options, html_options)
+          @collection   = collection
+          @value_method = value_method
+          @text_method  = text_method
+          @html_options = html_options
+    
+              def translation
+            method_and_value = @tag_value.present? ? '#{@method_name}.#{@tag_value}' : @method_name
+    
+        delegate :_layout_conditions, to: :class
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class LabelLinksImporter
+        attr_reader :issue, :project, :client, :label_finder
+    
+            def collection_method
+          :issues_comments
         end
     
-        def form_status_batch_params
-      params.require(:form_status_batch).permit(status_ids: [])
-    end
-    
-      private
-    
-          def has_header
-        @header = (@page.header || false) if @header.nil? && @page
-        !!@header
+            retval
       end
     
-          def string_to_code string
-        # sha bytes
-        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
-        # Thanks donpark's IdenticonUtil.java for this.
-        # Match the following Java code
-        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
-        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-          def noindex
-        @version ? true : false
-      end
-    
-      s.executables = ['gollum']
-    
-      desc 'Install all spree gems'
-  task install: :build do
-    for_each_gem do |gem_path|
-      Bundler.with_clean_env do
-        sh 'gem install #{gem_path}'
+            # Executes a command and returns true if the command succeeded,
+        # and false otherwise. By default, this executes as a normal user,
+        # and it is up to the communicator implementation if they expose an
+        # option for running tests as an administrator.
+        #
+        # @see #execute
+        def test(command, opts=nil)
+        end
       end
     end
   end
+end
+
     
-            def show
-          @option_value = scope.find(params[:id])
-          respond_with(@option_value)
+              result
         end
     
-            def create
-          authorize! :create, Property
-          @property = Spree::Property.new(property_params)
-          if @property.save
-            respond_with(@property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
+            # This should return the state of the machine within this provider.
+        # The state must be an instance of {MachineState}. Please read the
+        # documentation of that class for more information.
+        #
+        # @return [MachineState]
+        def state
+          nil
         end
     
-            def index
-          @stock_items = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_items)
-        end
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+    end
     
-            def new; end
+      def show
+    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
+    
+    class Api::Web::SettingsController < Api::Web::BaseController
+  respond_to :json
