@@ -1,67 +1,88 @@
 
         
-                post_args[:topic].notify_muted!(user)
-        expect {
-          Fabricate(:post, user: user2, topic: post.topic, raw: 'hello @' + user.username)
-        }.to change(user.notifications, :count).by(0)
+              keg_only_deps.each do |dep|
+        ENV.prepend_path 'PATH', dep.opt_bin.to_s
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
+        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
+        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
+        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
+        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
       end
     end
     
-        # Add permissions and a description to the Staff category.
-    
-          it 'requires the passwords to match when changing them' do
-        visit edit_admin_user_path(users(:bob))
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Update User'
-        expect(page).to have_text('Password confirmation doesn't match')
+          # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
       end
     end
-    
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
   end
     
-              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.propagate_immediately = true
-            agent.disabled = true
-            agent.save!
-          },
-    
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-        module PsychAutoload
-      def resolve_class(klass_name)
-        return nil if !klass_name || klass_name.empty?
-        # constantize
-        names = klass_name.split('::')
-        names.shift if names.empty? || names.first.empty?
-    
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
-        end
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
       end
-    end
     
-      Sidekiq::WebAction.class_eval 'def _render\n#{ERB.new(File.read(Web::LAYOUT)).src}\nend'
+      def print_remaining_files(files, root, other = '')
+    case files.length
+    when 0
+      # noop
+    when 1
+      puts files
+    else
+      puts '#{root}/ (#{files.length} #{other}files)'
+    end
+  end
 end
+
+    
+      def search_tap(user, repo, rx)
+    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
+       user != 'Caskroom'
+      return []
+    end
+    
+      it 'ignores empty arrays' do
+    expect_no_offenses('[]')
+  end
+    
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
+    
+          # Checks whether the `if` node has an `else` clause.
+      #
+      # @note This returns `true` for nodes containing an `elsif` clause.
+      #       This is legacy behavior, and many cops rely on it.
+      #
+      # @return [Boolean] whether the node has an `else` clause
+      def else?
+        loc.respond_to?(:else) && loc.else
+      end
+    
+        # Outputs a list of categories as comma-separated <a> links. This is used
+    # to output the category list for each post on a category page.
+    #
+    #  +categories+ is the list of categories to format.
+    #
+    # Returns string
+    #
+    def category_links(categories)
+      categories.sort.map { |c| category_link c }.join(', ')
+    end
+    
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
+    
+    Liquid::Template.register_tag('video', Jekyll::VideoTag)
