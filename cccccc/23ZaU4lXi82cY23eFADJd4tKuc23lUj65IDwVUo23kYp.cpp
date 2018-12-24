@@ -1,189 +1,365 @@
 
         
-        private:
-    void paintPath(QPainterPath &path, QQueue<float> &samples);
+        #include 'tesseractclass.h'
+#ifdef _OPENMP
+#include <omp.h>
+#endif  // _OPENMP
     
-        if (len > 0) {
-        /* The z of the final point gives us the 'global Z' for the table. */
-        r[i].x = a[i].x;
-        r[i].y = a[i].y;
-        *globalz = a[i].z;
-        r[i].infinity = 0;
-        zs = zr[i];
+    
+    {  for (std::map<int, ParamContent*>::iterator iter = vcMap.begin();
+                                          iter != vcMap.end();
+                                          ++iter) {
+    ParamContent* cur = iter->second;
+    if (!changes_only || cur->HasChanged()) {
+      fprintf(fp, '%-25s   %-12s   # %s\n',
+              cur->GetName(), cur->GetValue().string(), cur->GetDescription());
+    }
+  }
+  fclose(fp);
+}
+#endif // GRAPHICS_DISABLED
+
+    
+    struct Pix;
+    
+    // Changes the box at the given index to the new box.
+// Recomputes the bounding box.
+void BoxWord::ChangeBox(int index, const TBOX& box) {
+  boxes_[index] = box;
+  ComputeBoundingBox();
+}
+    
+    #if !UCONFIG_NO_TRANSLITERATION
+    
+    int32_t ScriptSet::countMembers() const {
+    // This bit counter is good for sparse numbers of '1's, which is
+    //  very much the case that we will usually have.
+    int32_t count = 0;
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        uint32_t x = bits[i];
+        while (x > 0) {
+            count++;
+            x &= (x - 1);    // and off the least significant one bit.
+        }
+    }
+    return count;
+}
+    
+    #define LOW_A             ((UChar)0x0061)
+#define LOW_B             ((UChar)0x0062)
+#define LOW_C             ((UChar)0x0063)
+#define LOW_D             ((UChar)0x0064)
+#define LOW_E             ((UChar)0x0065)
+#define LOW_F             ((UChar)0x0066)
+#define LOW_G             ((UChar)0x0067)
+#define LOW_H             ((UChar)0x0068)
+#define LOW_I             ((UChar)0x0069)
+#define LOW_J             ((UChar)0x006a)
+#define LOW_K             ((UChar)0x006B)
+#define LOW_L             ((UChar)0x006C)
+#define LOW_M             ((UChar)0x006D)
+#define LOW_N             ((UChar)0x006E)
+#define LOW_O             ((UChar)0x006F)
+#define LOW_P             ((UChar)0x0070)
+#define LOW_Q             ((UChar)0x0071)
+#define LOW_R             ((UChar)0x0072)
+#define LOW_S             ((UChar)0x0073)
+#define LOW_T             ((UChar)0x0074)
+#define LOW_U             ((UChar)0x0075)
+#define LOW_V             ((UChar)0x0076)
+#define LOW_W             ((UChar)0x0077)
+#define LOW_X             ((UChar)0x0078)
+#define LOW_Y             ((UChar)0x0079)
+#define LOW_Z             ((UChar)0x007A)
+    
+    
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
+    
+    #ifndef __SHARED_CALENDAR_H__
+#define __SHARED_CALENDAR_H__
+    
+    // -------------------------------------
+    
+    CollationKey::CollationKey(const CollationKey& other)
+    : UObject(other), fFlagAndLength(other.getLength()),
+      fHashCode(other.fHashCode)
+{
+    if (other.isBogus())
+    {
+        setToBogus();
+        return;
+    }
     }
     
-            secp256k1_ecmult_const(&res, &pt, &s);
-        secp256k1_ge_set_gej(&pt, &res);
-        /* Compute a hash of the point in compressed form
-         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
-         * expect its output to be secret and has a timing sidechannel. */
-        secp256k1_fe_normalize(&pt.x);
-        secp256k1_fe_normalize(&pt.y);
-        secp256k1_fe_get_b32(x, &pt.x);
-        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
+        /**
+     * @return the lowercase CLDR keyword string for the plural form
+     */
+    static const char *getKeyword(Form p);
     
+        /**
+     * Implement UnicodeMatcher
+     * @param text the text to be matched
+     * @param offset on input, the index into text at which to begin
+     * matching.  On output, the limit of the matched text.  The
+     * number of matched characters is the output value of offset
+     * minus the input value.  Offset should always point to the
+     * HIGH SURROGATE (leading code unit) of a pair of surrogates,
+     * both on entry and upon return.
+     * @param limit the limit index of text to be matched.  Greater
+     * than offset for a forward direction match, less than offset for
+     * a backward direction match.  The last character to be
+     * considered for matching will be text.charAt(limit-1) in the
+     * forward direction or text.charAt(limit+1) in the backward
+     * direction.
+     * @param incremental  if TRUE, then assume further characters may
+     * be inserted at limit and check for partial matching.  Otherwise
+     * assume the text as given is complete.
+     * @return a match degree value indicating a full match, a partial
+     * match, or a mismatch.  If incremental is FALSE then
+     * U_PARTIAL_MATCH should never be returned.
+     */
+    virtual UMatchDegree matches(const Replaceable& text,
+                                 int32_t& offset,
+                                 int32_t limit,
+                                 UBool incremental);
     
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, sigin);
-    secp256k1_ecdsa_signature_save(sig, &r, &s);
-    return 1;
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
+  }
+    
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
+    }
+    
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
+ */
+class SparsePageWriter {
+ public:
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
+    }
+    
+    SEXP XGDMatrixGetInfo_R(SEXP handle, SEXP field) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const float *res;
+  CHECK_CALL(XGDMatrixGetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                 &olen,
+                                 &res));
+  ret = PROTECT(allocVector(REALSXP, olen));
+  for (size_t i = 0; i < olen; ++i) {
+    REAL(ret)[i] = res[i];
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
 }
     
-    BOOST_FIXTURE_TEST_SUITE(bech32_tests, BasicTestingSetup)
-    
-    BOOST_AUTO_TEST_CASE(get_difficulty_for_very_low_target)
-{
-    TestDifficulty(0x1f111111, 0.000001);
-}
-    
-    #ifndef BITCOIN_BECH32_H
-#define BITCOIN_BECH32_H
+    // Should GradStats be in this header, rather than param.h?
+struct GradStats;
     
     
-    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
-  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
-  y_shape.resize(canonical_axis + 1);
-  y_shape[canonical_axis] = N;
-  out[0] = CreateTensorShape(y_shape, in[0].data_type());
-  return out;
-}
-    
-    
-    {  bool RunOnDevice() override {
-    for (Blob* output : OperatorBase::Outputs()) {
-      output->Reset();
+    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType begin = src.data[0].rmax;
+    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
+    const size_t n = maxsize - 1;
+    data[0] = src.data[0];
+    this->size = 1;
+    // lastidx is used to avoid duplicated records
+    size_t i = 1, lastidx = 0;
+    for (size_t k = 1; k < n; ++k) {
+      RType dx2 =  2 * ((k * range) / n + begin);
+      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
+      while (i < src.size - 1
+             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+      CHECK(i != src.size - 1);
+      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+        if (i != lastidx) {
+          data[size++] = src.data[i]; lastidx = i;
+        }
+      } else {
+        if (i + 1 != lastidx) {
+          data[size++] = src.data[i + 1]; lastidx = i + 1;
+        }
+      }
+    }
+    if (lastidx != src.size - 1) {
+      data[size++] = src.data[src.size - 1];
+    }
+  }
+  /*!
+   * \brief set current summary to be merged summary of sa and sb
+   * \param sa first input summary to be merged
+   * \param sb second input summary to be merged
+   */
+  inline void SetCombine(const WQSummary &sa,
+                         const WQSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0);
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    // extended rmin value
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      // duplicated value entry
+      if (a->value == b->value) {
+        *dst = Entry(a->rmin + b->rmin,
+                     a->rmax + b->rmax,
+                     a->wmin + b->wmin, a->value);
+        aprev_rmin = a->RMinNext();
+        bprev_rmin = b->RMinNext();
+        ++dst; ++a; ++b;
+      } else if (a->value < b->value) {
+        *dst = Entry(a->rmin + bprev_rmin,
+                     a->rmax + b->RMaxPrev(),
+                     a->wmin, a->value);
+        aprev_rmin = a->RMinNext();
+        ++dst; ++a;
+      } else {
+        *dst = Entry(b->rmin + aprev_rmin,
+                     b->rmax + a->RMaxPrev(),
+                     b->wmin, b->value);
+        bprev_rmin = b->RMinNext();
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType brmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType armax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    this->size = dst - data;
+    const RType tol = 10;
+    RType err_mingap, err_maxgap, err_wgap;
+    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
+    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
+      LOG(INFO) << 'mingap=' << err_mingap
+                << ', maxgap=' << err_maxgap
+                << ', wgap=' << err_wgap;
+    }
+    CHECK(size <= sa.size + sb.size) << 'bug in combine';
+  }
+  // helper function to print the current content of sketch
+  inline void Print() const {
+    for (size_t i = 0; i < this->size; ++i) {
+      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
+                   << ', rmax=' << data[i].rmax
+                   << ', wmin=' << data[i].wmin
+                   << ', v=' << data[i].value;
+    }
+  }
+  // try to fix rounding error
+  // and re-establish invariance
+  inline void FixError(RType *err_mingap,
+                       RType *err_maxgap,
+                       RType *err_wgap) const {
+    *err_mingap = 0;
+    *err_maxgap = 0;
+    *err_wgap = 0;
+    RType prev_rmin = 0, prev_rmax = 0;
+    for (size_t i = 0; i < this->size; ++i) {
+      if (data[i].rmin < prev_rmin) {
+        data[i].rmin = prev_rmin;
+        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
+      } else {
+        prev_rmin = data[i].rmin;
+      }
+      if (data[i].rmax < prev_rmax) {
+        data[i].rmax = prev_rmax;
+        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
+      }
+      RType rmin_next = data[i].RMinNext();
+      if (data[i].rmax < rmin_next) {
+        data[i].rmax = rmin_next;
+        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
+      }
+      prev_rmax = data[i].rmax;
+    }
+  }
+  // check consistency of the summary
+  inline bool Check(const char *msg) const {
+    const float tol = 10.0f;
+    for (size_t i = 0; i < this->size; ++i) {
+      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
+          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
+        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
+        this->Print();
+        return false;
+      }
     }
     return true;
   }
 };
     
-    OPERATOR_SCHEMA(GivenTensorIntFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
-          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
-          CAFFE_ENFORCE(H >= dkernel_h);
-          CAFFE_ENFORCE(W >= dkernel_w);
-          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
-          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
-    
-    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
-#define STORAGE_LEVELDB_DB_BUILDER_H_
-    
-    TEST(CorruptionTest, CorruptedDescriptor) {
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-  dbi->TEST_CompactMemTable();
-  dbi->TEST_CompactRange(0, nullptr, nullptr);
-    }
-    
-    TEST(DBTest, Snapshot) {
-  do {
-    Put('foo', 'v1');
-    const Snapshot* s1 = db_->GetSnapshot();
-    Put('foo', 'v2');
-    const Snapshot* s2 = db_->GetSnapshot();
-    Put('foo', 'v3');
-    const Snapshot* s3 = db_->GetSnapshot();
-    }
-    }
-    
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-     private:
-  WritableFile* dest_;
-  int block_offset_;       // Current offset in block
-    
-    class MemTable {
- public:
-  // MemTables are reference counted.  The initial reference count
-  // is zero and the caller must call Ref() at least once.
-  explicit MemTable(const InternalKeyComparator& comparator);
-    }
-    
-      // SnapshotImpl is kept in a doubly-linked circular list. The SnapshotList
-  // implementation operates on the next/previous fields direcly.
-  SnapshotImpl* prev_;
-  SnapshotImpl* next_;
-    
-    DHTTokenTracker::~DHTTokenTracker() = default;
-    
-    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
-    
-    #include 'DHTMessage.h'
-    
-    // Helpers for generating unique variable names
-#define BENCHMARK_PRIVATE_NAME(n) \
-  BENCHMARK_PRIVATE_CONCAT(_benchmark_, BENCHMARK_PRIVATE_UNIQUE_ID, n)
-#define BENCHMARK_PRIVATE_CONCAT(a, b, c) BENCHMARK_PRIVATE_CONCAT2(a, b, c)
-#define BENCHMARK_PRIVATE_CONCAT2(a, b, c) a##b##c
-    
-    // CheckHandler is the class constructed by failing CHECK macros. CheckHandler
-// will log information about the failures and abort when it is destructed.
-class CheckHandler {
- public:
-  CheckHandler(const char* check, const char* file, const char* func, int line)
-      : log_(GetErrorLogInstance()) {
-    log_ << file << ':' << line << ': ' << func << ': Check `' << check
-         << '' failed. ';
-  }
-    }
-    
-    #include 'check.h'
-#include 'colorprint.h'
-#include 'commandlineflags.h'
-#include 'internal_macros.h'
-#include 'string_util.h'
-#include 'timers.h'
-    
-      // Field with embedded double-quote characters must be doubled and the field
-  // delimited with double-quotes.
-  std::string name = run.benchmark_name;
-  ReplaceAll(&name, '\'', '\'\'');
-  Out << ''' << name << '\',';
-  if (run.error_occurred) {
-    Out << std::string(elements.size() - 3, ',');
-    Out << 'true,';
-    std::string msg = run.error_message;
-    ReplaceAll(&msg, '\'', '\'\'');
-    Out << ''' << msg << '\'\n';
-    return;
-  }
-    
-    namespace benchmark {
-    }
+    {  // index_base_[fid]: least bin id for feature fid
+  std::vector<uint32_t> index_base_;
+};
