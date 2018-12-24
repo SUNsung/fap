@@ -1,160 +1,136 @@
 
         
-            def action_completed(completion_context: nil)
+                private
+    
+          []
     end
     
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
+          TopicUser.change(@target.id, @topic.id, notification_level: TopicUser.notification_levels[:watching])
     
-            result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            message: '#{message}'
-          })
-        end').runner.execute(:test)
+    describe ApplicationHelper do
+  describe '#icon_tag' do
+    it 'returns a Glyphicon icon element' do
+      icon = icon_tag('glyphicon-help')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
+    end
     
-            expect(result.size).to eq(3)
-        expect(result[0]).to eq('security create-keychain -p testpassword ~/Library/Keychains/test.keychain')
-    
-          it 'handles the exclude_dirs parameter with multiple  elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle', 'Packages/'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle --exclude-dir Packages/')
-      end
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
     end
   end
-end
-
     
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path.shellescape}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '#{path}')
-          end').runner.execute(:test)
-        end
+            context 'when the schema_version is less than 1' do
+          before do
+            valid_parsed_weather_agent_data[:keep_events_for] = 2
+            valid_parsed_data.delete(:schema_version)
+          end
+    
+      describe 'cleanup_failed_jobs!' do
+    before do
+      3.times do |i|
+        Delayed::Job.create(failed_at: Time.now - i.minutes)
       end
-    
-            Fastlane::FastFile.new.parse('lane :test do
-          import_certificate ({
-            keychain_name: '#{keychain}',
-            keychain_password: '#{password}',
-            certificate_path: '#{cert_name}',
-            certificate_password: '#{password}'
-          })
-        end').runner.execute(:test)
-      end
-    
-          context 'when specify mode explicitly' do
-        it 'uses lint mode as default' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint
-          end').runner.execute(:test)
-    
-          '`#{self.default_value}`'
+      @keep = Delayed::Job.order(:failed_at)[1]
     end
     
-              it 'returns the default values' do
-            @config = FastlaneCore::Configuration.create(@options, {}) # no user inputs
-            values = @config.values
-            expect(values[:cert_name]).to eq('production_default')
-            expect(values[:output]).to eq('.')
-            expect(values[:wait_processing_interval]).to eq(30)
+        it 'always succeeds in sorting even if it finds pairs of incomparable objects' do
+      time = Time.now
+      tuples = [
+        [2,   'a', time - 1],  # 0
+        [1,   'b', nil],       # 1
+        [1,   'b', time],      # 2
+        ['2', nil, time],      # 3
+        [1,   nil, time],      # 4
+        [nil, 'a', time + 1],  # 5
+        [2,   'a', time],      # 6
+      ]
+      orders = [true, false, true]
+      expected = tuples.values_at(3, 6, 0, 4, 2, 1, 5)
+    
+        self.each_key { |k|
+      if (k.downcase == key.downcase)
+        self.store(k, value)
+        stored = true
+      end
+    }
+    
+              # Encodes the name_type field
+          #
+          # @return [String]
+          def encode_name_type
+            [name_type].pack('N')
+          end
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
+          #
+          # @return [String] encoded time
+          def encode
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Crypto
+        module Rc4Hmac
+          # Decrypts the cipher using RC4-HMAC schema
+          #
+          # @param cipher [String] the data to decrypt
+          # @param key [String] the key to decrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the decrypted cipher
+          # @raise [RuntimeError] if decryption doesn't succeed
+          def decrypt_rc4_hmac(cipher, key, msg_type)
+            unless cipher && cipher.length > 16
+              raise ::RuntimeError, 'RC4-HMAC decryption failed'
+            end
+    
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
+          end
+    
+              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_pvno(input)
+            input.value[0].value.to_i
+          end
+    
+              private
+    
+      def render(context)
+    config_tag(context.registers[:site].config, @key, @tag, @classname)
+  end
+end
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
           end
         end
-    
-        describe 'fill_environment' do
-      it '#environment_variable_name uses the correct env variable' do
-        result = Match::Utils.environment_variable_name(app_identifier: 'tools.fastlane.app', type: 'appstore')
-        expect(result).to eq('sigh_tools.fastlane.app_appstore')
       end
-    
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
-    end
-    
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
-    
-    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
-# requests with `config.assets.quiet`, because the default silence method of
-# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
-Logging::Logger.send :alias_method, :local_level, :level
-Logging::Logger.send :alias_method, :local_level=, :level=
-Logging::Logger.send :include, LoggerSilence
-
-    
-      class Mention < ApplicationRecord
-  end
-    
-        it 'generates the aspects_manage fixture', :fixture => true do
-      get :index, params: {a_id: @aspect.id}
-      save_fixture(html_for('body'), 'aspects_manage')
-    end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
-    end
-  end
-end
-
-    
-    describe StatusMessagesController, :type => :controller do
-  describe '#bookmarklet' do
-    before do
-      sign_in bob, scope: :user
-    end
-    
-    LINE_SIZE = 80
-DECORATION_CHAR = '#'
-    
-        # Create a {Sass::Selector::CommaSequence} containing only a single
-    # {Sass::Selector::Sequence} which in turn contains only a single
-    # {Sass::Selector::SimpleSequence}.
-    #
-    # @param subject [Boolean] Whether this is a subject selector
-    # @param sseqs [Array<Sass::Selector::Sequence, String>]
-    # @return [Sass::Selector::CommaSequence]
-    def make_sseq(subject, *sseqs)
-      make_seq(Sass::Selector::SimpleSequence.new(sseqs, subject))
-    end
-    
-          options[:cache_store] ||= Sass::CacheStores::Chain.new(
-        Sass::CacheStores::Memory.new, Sass::CacheStores::Filesystem.new(options[:cache_location]))
-      # Support both, because the docs said one and the other actually worked
-      # for quite a long time.
-      options[:line_comments] ||= options[:line_numbers]
-    
-        # Same as `Kernel.puts`, but doesn't print anything if the `--quiet` option is set.
-    #
-    # @param args [Array] Passed on to `Kernel.puts`
-    def puts(*args)
-      return if @options[:for_engine][:quiet]
-      Kernel.puts(*args)
-    end
-    
-          # @see Base#watched_file?
-      def watched_file?(filename)
-        # Check against the root with symlinks resolved, since Listen
-        # returns fully-resolved paths.
-        filename =~ /\.s[ac]ss$/ && filename.start_with?(@real_root + File::SEPARATOR)
-      end
-    
-      end
-    
-      # Summary is used on the Archive pages to return the first block of content from a post.
-  def summary(input)
-    if input.index(/\n\n/)
-      input.split(/\n\n/)[0]
-    else
-      input
+      rtn
     end
   end
