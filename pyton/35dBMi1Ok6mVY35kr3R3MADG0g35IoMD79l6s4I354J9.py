@@ -1,191 +1,108 @@
 
         
-          # Predict the labels
-  pred = model.predict(session, instances)
+        from youtube_dl.utils import intlist_to_bytes
+from youtube_dl.aes import aes_encrypt, key_expansion
     
-    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
-            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-nreplications = FLAGS.nreplications
-E = nreplications * C
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
-    
-      Args:
-    in_size: The integer size of the non-batc input dimension. [(x),y]
-    out_size: The integer size of non-batch output dimension. [x,(y)]
-    do_bias (optional): Add a (learnable) bias vector to the operation,
-      if false, b will be None
-    mat_init_value (optional): numpy constant for matrix initialization, if None
-      , do random, with additional parameters.
-    alpha (optional): A multiplicative scaling for the weight initialization
-      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
-    identity_if_possible (optional): just return identity,
-      if x.shape[1] == out_size.
-    normalized (optional): Option to divide out by the norms of the rows of W.
-    name (optional): The name prefix to add to variables.
-    collections (optional): List of additional collections. (Placed in
-      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
-    
-    import random
+    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
     
     
-def write_unmasked_log(log, id_to_word, sequence_eval):
-  '''Helper function for logging evaluated sequences without mask.'''
-  indices_arr = np.asarray(sequence_eval)
-  samples = helper.convert_to_human_readable(id_to_word, indices_arr,
-                                             FLAGS.batch_size)
-  for sample in samples:
-    log.write(sample + '\n')
-  log.flush()
-  return samples
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
-      return variable_mapping
+        def test_facebook_matching(self):
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
     
-        def _init_github_account(self):
-        try:
-            info = netrc.netrc().authenticators(self._NETRC_MACHINE)
-            if info is not None:
-                self._username = info[0]
-                self._password = info[2]
-                compat_print('Using GitHub credentials found in .netrc...')
-                return
-            else:
-                compat_print('No GitHub credentials found in .netrc')
-        except (IOError, netrc.NetrcParseError):
-            compat_print('Unable to parse .netrc')
-        self._username = compat_input(
-            'Type your GitHub username or email address and press [Return]: ')
-        self._password = compat_getpass(
-            'Type your GitHub password and press [Return]: ')
+        # test that successful registration redirects to the login page
+    response = client.post(
+        '/auth/register', data={'username': 'a', 'password': 'a'}
+    )
+    assert 'http://localhost/auth/login' == response.headers['Location']
     
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+    from .globals import _request_ctx_stack, _app_ctx_stack
+from .signals import template_rendered, before_render_template
     
-    entries_str = textwrap.indent(''.join(entries), '\t')
-atom_template = atom_template.replace('@ENTRIES@', entries_str)
-    
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
+            assert meth is not None, 'Unimplemented method %r' % request.method
+        return meth(*args, **kwargs)
+
     
     
-from youtube_dl import YoutubeDL
+@classmethod
+def get_args(cls, dist, header=None):
+    '''
+    Yield write_script() argument tuples for a distribution's
+    console_scripts and gui_scripts entry points.
+    '''
+    if header is None:
+        header = cls.get_header()
+    spec = str(dist.as_requirement())
+    for type_ in 'console', 'gui':
+        group = type_ + '_scripts'
+        for name, ep in dist.get_entry_map(group).items():
+            # ensure_safe_name
+            if re.search(r'[\\/]', name):
+                raise ValueError('Path separators not allowed in script names')
+            script_text = TEMPLATE.format(
+                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
+                          spec, group, name)
+            args = cls._get_script_args(type_, name, header, script_text)
+            for res in args:
+                yield res
     
-                        try_num += 1
-                else:
-                    break
-    
-        # Arguments
-        label_mode: one of 'fine', 'coarse'.
-    
-        model._check_trainable_weights_consistency()
-    if hasattr(model, '_collected_trainable_weights'):
-        trainable_count = count_params(model._collected_trainable_weights)
-    else:
-        trainable_count = count_params(model.trainable_weights)
-    
-        @property
-    def bias_regularizer(self):
-        return self.cell.bias_regularizer
-    
-    This network is used to predict the next frame of an artificially
-generated movie which contains moving squares.
-'''
-from keras.models import Sequential
-from keras.layers.convolutional import Conv3D
-from keras.layers.convolutional_recurrent import ConvLSTM2D
-from keras.layers.normalization import BatchNormalization
-import numpy as np
-import pylab as plt
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
-    
-    # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
-    
-        '''
-    # Strip off /files
-    file_path = vhost_path[6:]
-    internal_path = []
-    
-    REWRITE_HTTPS_ARGS = [
-    '^', 'https://%{SERVER_NAME}%{REQUEST_URI}', '[L,NE,R=permanent]']
-'''Apache version<2.3.9 rewrite rule arguments used for redirections to
-https vhost'''
-    
-            self.vhost1b = VirtualHost(
-            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
-    
-            return addrs
+        proc.sendline(u'fuck')
+    assert proc.expect([TIMEOUT, u'echo test'])
+    assert proc.expect([TIMEOUT, u'enter'])
+    assert proc.expect_exact([TIMEOUT, u'ctrl+c'])
+    proc.send('\n')
     
     
-def main():
-    import io
-    import pprint
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-    from email.message import EmailMessage
-from email.policy import SMTP
     
-    def worker(input, output):
-    for func, args in iter(input.get, 'STOP'):
-        result = calculate(func, args)
-        output.put(result)
+@pytest.mark.parametrize('app, help_text, operations', [
+    ('apt', apt_help, apt_operations),
+    ('apt-get', apt_get_help, apt_get_operations)
+])
+def test_get_operations(set_help, app, help_text, operations):
+    set_help(help_text)
+    assert _get_operations(app) == operations
     
-    Loosely based on https://github.com/astropy/astropy/pull/347
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
 '''
     
-    _LOGGER = logging.getLogger(__name__)
     
-    REQUIREMENTS = ['datadog==0.15.0']
+def test_get_new_command():
+    new_command = get_new_command(Command('apt list --upgradable', match_output))
+    assert new_command == 'apt upgrade'
     
-    _LEASES_REGEX = re.compile(
-    r'(?P<ip>([0-9]{1,3}[\.]){3}[0-9]{1,3})' +
-    r'\smac:\s(?P<mac>([0-9a-f]{2}[:-]){5}([0-9a-f]{2}))' +
-    r'\svalid\sfor:\s(?P<timevalid>(-?\d+))' +
-    r'\ssec')
+        assert get_new_command(Command('brew install aa',
+                                   brew_no_available_formula))\
+        != 'brew install aha'
+
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/device_tracker.thomson/
-'''
-import logging
-import re
-import telnetlib
-    
-    CONF_DOWNLOAD_DIR = 'download_dir'
-    
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/dweet/
-'''
-import logging
-from datetime import timedelta
-    
-            def on_modified(self, event):
-            '''File modified.'''
-            self.process(event)
+    # encoding=utf8  
+import sys  
+try:
+    reload(sys)
+except NameError:
+    pass
+try:
+    sys.setdefaultencoding('utf8')
+except AttributeError:
+    pass
