@@ -1,206 +1,415 @@
 
         
-        Optional<PlatformKind> swift::platformFromString(StringRef Name) {
-  if (Name == '*')
-    return PlatformKind::none;
-  return llvm::StringSwitch<Optional<PlatformKind>>(Name)
-#define AVAILABILITY_PLATFORM(X, PrettyName) .Case(#X, PlatformKind::X)
-#include 'swift/AST/PlatformKinds.def'
-      .Case('macOS', PlatformKind::OSX)
-      .Case('macOSApplicationExtension', PlatformKind::OSXApplicationExtension)
-      .Default(Optional<PlatformKind>());
-}
+        using namespace swift::sys;
+using llvm::StringRef;
     
-      friend class SubstitutionMap;
     
-    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
-  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
-  llvm::sys::ScopedLock L(DCache.Mux);
+    {      unsigned ID;
+      if (auto *activeDiag = info.dyn_cast<const clang::Diagnostic *>())
+        ID = activeDiag->getID();
+      else
+        ID = info.get<const clang::StoredDiagnostic *>()->getID();
+      return ID == clang::diag::note_module_import_here ||
+             ID == clang::diag::err_module_not_built;
     }
     
-      if (!wasInline) delete[] oldBegin;
     
-        if (node->Left) {
-      IndentScope ms(this, (childKind == ChildKind::Left ||
-                            childKind == ChildKind::Root) ? '  ' : '| ');
-      print(node->Left, ChildKind::Left);
+    
+    
+    {  // let h = b = the number of basic code points in the input
+  // copy them to the output in order...
+  size_t h = 0;
+  for (auto C : InputCodePoints) {
+    if (C < 0x80) {
+      ++h;
+      OutPunycode.push_back(C);
     }
-    
-        StringRef Line = RawText.substr(0, Pos);
-    Lines.push_back(Line);
-    if (!IsFirstLine) {
-      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
-      if (NonWhitespacePos != StringRef::npos)
-        WhitespaceToTrim =
-            std::min(WhitespaceToTrim,
-                     static_cast<unsigned>(NonWhitespacePos));
-    }
-    IsFirstLine = false;
-    
-    #include 'swift/Demangling/StandardTypesMangling.def'
-    
-    #ifndef BITCOIN_REVERSELOCK_H
-#define BITCOIN_REVERSELOCK_H
-    
-    
-    {    /** In case a->infinity == 1, replace r with (b->x, b->y, 1). */
-    secp256k1_fe_cmov(&r->x, &b->x, a->infinity);
-    secp256k1_fe_cmov(&r->y, &b->y, a->infinity);
-    secp256k1_fe_cmov(&r->z, &fe_1, a->infinity);
-    r->infinity = infinity;
-}
-    
-    void test_bad_scalar(void) {
-    unsigned char s_zero[32] = { 0 };
-    unsigned char s_overflow[32] = {
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
-        0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b,
-        0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41
-    };
-    unsigned char s_rand[32] = { 0 };
-    unsigned char output[32];
-    secp256k1_scalar rand;
-    secp256k1_pubkey point;
-    }
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
-}
-    
-    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
-{
-    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
-    auto ret = SplitTorReplyLine(input);
-    BOOST_CHECK_EQUAL(ret.first, command);
-    BOOST_CHECK_EQUAL(ret.second, args);
-}
-    
-        BOOST_CHECK(!obj.exists('nyuknyuknyuk'));
-    
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
+    if (!isValidUnicodeScalar(C)) {
+      OutPunycode.clear();
+      return false;
     }
   }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
+  size_t b = h;
+  // ...followed by a delimiter if b > 0
+  if (b > 0)
+    OutPunycode.push_back(delimiter);
+  
+  while (h < InputCodePoints.size()) {
+    // let m = the minimum code point >= n in the input
+    uint32_t m = 0x10FFFF;
+    for (auto codePoint : InputCodePoints) {
+      if (codePoint >= n && codePoint < m)
+        m = codePoint;
+    }
     
-    #include <iostream>
+    delta = delta + (m - n) * (h + 1);
+    n = m;
+    for (auto c : InputCodePoints) {
+      if (c < n) ++delta;
+      if (c == n) {
+        int q = delta;
+        for (int k = base; ; k += base) {
+          int t = k <= bias ? tmin
+                : k >= bias + tmax ? tmax
+                : k - bias;
+          
+          if (q < t) break;
+          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
+          q = (q - t) / (base - t);
+        }
+        OutPunycode.push_back(digit_value(q));
+        bias = adapt(delta, h + 1, h == b);
+        delta = 0;
+        ++h;
+      }
+    }
+    ++delta; ++n;
+  }
+  return true;
+}
     
-        // Construct a config map, the typical output from `Config::genConfig`.
-    config_data_['awesome'] = content_;
-    Config::get().reset();
-    clearDecorations('awesome');
+    
+    {    auto newNode = factory.createNode(node->getKind());
+    newNode->addChild(newContext, factory);
+    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
+      newNode->addChild(node->getChild(i), factory);
+    return newNode;
+  }
+      
+  case Demangle::Node::Kind::Extension: {
+    // Strip generic arguments from the extended type.
+    if (node->getNumChildren() < 2)
+      return node;
+    
+    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
+                                                       factory);
+    if (newExtended == node->getChild(1)) return node;
+    
+    auto newNode = factory.createNode(Node::Kind::Extension);
+    newNode->addChild(node->getChild(0), factory);
+    newNode->addChild(newExtended, factory);
+    if (node->getNumChildren() == 3)
+      newNode->addChild(node->getChild(2), factory);
+    return newNode;
+  }
     
     /**
- * @brief The supported hashing algorithms in osquery
- *
- * These are usually used as a constructor argument to osquery::Hash
- */
-enum HashType {
-  HASH_TYPE_MD5 = 2,
-  HASH_TYPE_SHA1 = 4,
-  HASH_TYPE_SHA256 = 8,
+	@author AndreaCatania
+*/
+    
+    
+    {	_FORCE_INLINE_ btTypedConstraint *get_bt_constraint() { return constraint; }
+};
+#endif
+
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #include 'csg_gizmos.h'
+#include 'csg_shape.h'
+    
+    #include 'core/reference.h'
+    
+    void Thread::wait_to_finish(Thread *p_thread) {
+    }
+    
+    
+    {	Pair() {}
+	Pair(F p_first, const S &p_second) :
+			first(p_first),
+			second(p_second) {
+	}
 };
     
-      if (!::GetExitCodeProcess(process.nativeHandle(), &code)) {
-    return false;
+    
+    {template<typename IndexType, typename DType = real_t>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
+    
+    namespace xgboost {
+namespace gbm {
+/*! \brief model parameters */
+struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
+  /*! \brief number of trees */
+  int num_trees;
+  /*! \brief number of roots */
+  int num_roots;
+  /*! \brief number of features to be used by trees */
+  int num_feature;
+  /*! \brief pad this space, for backward compatibility reason.*/
+  int pad_32bit;
+  /*! \brief deprecated padding space. */
+  int64_t num_pbuffer_deprecated;
+  /*!
+   * \brief how many output group a single instance can produce
+   *  this affects the behavior of number of output we have:
+   *    suppose we have n instance and k group, output will be k * n
+   */
+  int num_output_group;
+  /*! \brief size of leaf vector needed in tree */
+  int size_leaf_vector;
+  /*! \brief reserved parameters */
+  int reserved[32];
+  /*! \brief constructor */
+  GBTreeModelParam() {
+    std::memset(this, 0, sizeof(GBTreeModelParam));
+    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
+                  '64/32 bit compatibility issue');
   }
-    
-    
-    {
-    {  // Stored query names is a factory method included alongside every query.
-  // It will include the set of query names with existing 'previous' results.
-  auto names = cf.getStoredQueryNames();
-  auto in_vector = std::find(names.begin(), names.end(), 'foobar');
-  EXPECT_NE(in_vector, names.end());
-}
-}
-
-    
-      // Now test inclusive bounds.
-  struct ConstraintList cl3;
-  constraint = Constraint(LESS_THAN_OR_EQUALS);
-  constraint.expr = '1000';
-  cl3.add(constraint);
-  constraint = Constraint(GREATER_THAN_OR_EQUALS);
-  constraint.expr = '1';
-  cl3.add(constraint);
-    
-    void Distributed::addResult(const DistributedQueryResult& result) {
-  results_.push_back(result);
-}
-    
-    
-    {  if (sc_time != file_dir_stat.st_ctime) {
-    if ((rc = addMonitor(path, isc, isc->mask, isc->recursive, add_watch))) {
-      isc->path_sc_time_[path] = file_dir_stat.st_ctime;
+  // declare parameters, only declare those that need to be set.
+  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
+    DMLC_DECLARE_FIELD(num_output_group)
+        .set_lower_bound(1)
+        .set_default(1)
+        .describe(
+            'Number of output groups to be predicted,'
+            ' used for multi-class classification.');
+    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
+        'Tree updater sequence.');
+    DMLC_DECLARE_FIELD(num_feature)
+        .set_lower_bound(0)
+        .describe('Number of features used for training and prediction.');
+    DMLC_DECLARE_FIELD(size_leaf_vector)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('Reserved option for vector tree.');
+  }
+};
     }
-  }
-  return rc;
-}
+    }
     
-    namespace fs = boost::filesystem;
+    /*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+};
+    
+    /// Prefix used for posix tar archive.
+const std::string kTestCarveNamePrefix = 'carve_';
+    
+    Schedule::Schedule() {
+  if (RegistryFactory::get().external()) {
+    // Extensions should not restore or save schedule details.
+    return;
+  }
+  // Parse the schedule's query blacklist from backing storage.
+  restoreScheduleBlacklist(blacklist_);
+    }
+    
+    FLAG(string, pack_delimiter, '_', 'Delimiter for pack and query names');
+    
+        // Remove the old table to replace with the new one
+    s = removeATCTables({table_name});
+    if (!s.ok()) {
+      LOG(WARNING) << 'ATC table overrides core table; Refusing registration';
+      continue;
+    }
+    
+    void clearDecorations(const std::string& source) {
+  WriteLock lock(DecoratorsConfigParserPlugin::kDecorationsMutex);
+  DecoratorsConfigParserPlugin::kDecorations[source].clear();
+}
     
     
     {
-    {  auto status = EventFactory::deregisterEventSubscriber(sub->getName());
-  EXPECT_TRUE(status.ok());
-}
-}
+    {  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
 
     
-      void moveBucketTail(const std::shared_ptr<DHTNode>& node);
+      if (config.count('file_accesses') > 0) {
+    const auto& accesses = config.at('file_accesses').doc();
+    if (accesses.IsArray()) {
+      for (const auto& category : accesses.GetArray()) {
+        if (!category.IsString()) {
+          continue;
+        }
+        std::string path = category.GetString();
+        access_map_[source].push_back(path);
+      }
+    }
+    }
     
-    void DHTTaskFactoryImpl::setCommonProperty(
-    const std::shared_ptr<DHTAbstractTask>& task)
+    #include <gtest/gtest.h>
+    
+    
+    {    // Construct a config map, the typical output from `Config::genConfig`.
+    config_data_['awesome'] = content_;
+    Config::get().reset();
+  }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test2.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  std::string query;
+  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
+  EXPECT_EQ(query,
+            'select hash.path as binary, version, hash.sha256 as SHA256, '
+            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
+            ''/Contents/MacOS/' as directory, name, version from '
+            'kernel_extensions) join hash using (directory)');
+    }
+    
+    #include <osquery/config/config.h>
+#include <osquery/filesystem/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/registry_factory.h>
+#include <osquery/utils/config/default_paths.h>
+    
+        // Output as Base85 encoded
+    FILE* out = stdout;
+    fprintf(out, '// File: '%s' (%d bytes)\n', filename, (int)data_sz);
+    fprintf(out, '// Exported using binary_to_compressed_c.cpp\n');
+	const char* compressed_str = use_compression ? 'compressed_' : '';
+    if (use_base85_encoding)
+    {
+        fprintf(out, 'static const char %s_%sdata_base85[%d+1] =\n    \'', symbol, compressed_str, (int)((compressed_sz+3)/4)*5);
+        char prev_c = 0;
+        for (int src_i = 0; src_i < compressed_sz; src_i += 4)
+        {
+            // This is made a little more complicated by the fact that ??X sequences are interpreted as trigraphs by old C/C++ compilers. So we need to escape pairs of ??.
+            unsigned int d = *(unsigned int*)(compressed + src_i);
+            for (unsigned int n5 = 0; n5 < 5; n5++, d /= 85)
+            {
+                char c = Encode85Byte(d);
+                fprintf(out, (c == '?' && prev_c == '?') ? '\\%c' : '%c', c);
+                prev_c = c;
+            }
+            if ((src_i % 112) == 112-4)
+                fprintf(out, '\'\n    \'');
+        }
+        fprintf(out, '\';\n\n');
+    }
+    else
+    {
+        fprintf(out, 'static const unsigned int %s_%ssize = %d;\n', symbol, compressed_str, (int)compressed_sz);
+        fprintf(out, 'static const unsigned int %s_%sdata[%d/4] =\n{', symbol, compressed_str, (int)((compressed_sz+3)/4)*4);
+        int column = 0;
+        for (int i = 0; i < compressed_sz; i += 4)
+        {
+            unsigned int d = *(unsigned int*)(compressed + i);
+            if ((column++ % 12) == 0)
+                fprintf(out, '\n    0x%08x, ', d);
+            else
+                fprintf(out, '0x%08x, ', d);
+        }
+        fprintf(out, '\n};\n\n');
+    }
+    
+    
+    {        ImGui::Render();
+    }
+    
+    //---- Use 32-bit vertex indices (default is 16-bit) to allow meshes with more than 64K vertices. Render function needs to support it.
+//#define ImDrawIdx unsigned int
+    
+    // About OpenGL function loaders: 
+// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
+// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
+// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+    
+        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
+    struct BACKUP_DX11_STATE
+    {
+        UINT                        ScissorRectsCount, ViewportsCount;
+        D3D11_RECT                  ScissorRects[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+        D3D11_VIEWPORT              Viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+        ID3D11RasterizerState*      RS;
+        ID3D11BlendState*           BlendState;
+        FLOAT                       BlendFactor[4];
+        UINT                        SampleMask;
+        UINT                        StencilRef;
+        ID3D11DepthStencilState*    DepthStencilState;
+        ID3D11ShaderResourceView*   PSShaderResource;
+        ID3D11SamplerState*         PSSampler;
+        ID3D11PixelShader*          PS;
+        ID3D11VertexShader*         VS;
+        UINT                        PSInstancesCount, VSInstancesCount;
+        ID3D11ClassInstance*        PSInstances[256], *VSInstances[256];   // 256 is max according to PSSetShader documentation
+        D3D11_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
+        ID3D11Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
+        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
+        DXGI_FORMAT                 IndexBufferFormat;
+        ID3D11InputLayout*          InputLayout;
+    };
+    BACKUP_DX11_STATE old;
+    old.ScissorRectsCount = old.ViewportsCount = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
+    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
+    ctx->RSGetState(&old.RS);
+    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
+    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
+    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
+    ctx->PSGetSamplers(0, 1, &old.PSSampler);
+    old.PSInstancesCount = old.VSInstancesCount = 256;
+    ctx->PSGetShader(&old.PS, old.PSInstances, &old.PSInstancesCount);
+    ctx->VSGetShader(&old.VS, old.VSInstances, &old.VSInstancesCount);
+    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
+    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
+    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
+    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
+    ctx->IAGetInputLayout(&old.InputLayout);
+    
+            ID3D12Resource* pTexture = NULL;
+        g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
+            D3D12_RESOURCE_STATE_COPY_DEST, NULL, IID_PPV_ARGS(&pTexture));
+    
+    void    ImGui_Marmalade_InvalidateDeviceObjects()
 {
-  task->setRoutingTable(routingTable_);
-  task->setMessageDispatcher(dispatcher_);
-  task->setMessageFactory(factory_);
-  task->setTaskQueue(taskQueue_);
-  task->setLocalNode(localNode_);
-}
+    if (g_ClipboardText)
+    {
+        delete[] g_ClipboardText;
+        g_ClipboardText = NULL;
+    }
+    }
     
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
+        static BOOST_FORCEINLINE storage_type fetch_and(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+        switch (order)
+        {
+        case memory_order_relaxed:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8_RELAXED(&storage, v));
+            break;
+        case memory_order_consume:
+        case memory_order_acquire:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8_ACQUIRE(&storage, v));
+            break;
+        case memory_order_release:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8_RELEASE(&storage, v));
+            break;
+        case memory_order_acq_rel:
+        case memory_order_seq_cst:
+        default:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8(&storage, v));
+            break;
+        }
+        return v;
+    }
     
-    
-    {} // namespace aria2
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+    struct storage128_t
 {
-}
-    
-      // do nothing; we don't use this message as outgoing message.
-  virtual bool send() CXX11_OVERRIDE;
+    mars_boost::uint64_t data[2];
+    }
