@@ -1,81 +1,180 @@
 
         
-        #include 'swift/AST/GenericSignature.h'
-#include 'swift/AST/SubstitutionMap.h'
-#include 'llvm/Support/TrailingObjects.h'
-#include 'llvm/ADT/FoldingSet.h'
+          // Offset and value for currently supported version ID.
+  static constexpr size_t kVersionIdOffset = 0;
+  static constexpr size_t kVersionId = 0;
     
-    bool CacheImpl::remove(const void *Key) {
-  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
-  return Ret == 0;
-}
-    
-    // We'd like the dump routine to be present in all builds, but it's
-// a pretty large amount of code, most of which is not sensitive to the
-// actual key and value data.  If we try to have a common implementation,
-// we're left with the problem of describing the layout of a node when
-// that's technically instantiation-specific.  Redefining the struct here
-// is technically an aliasing violation, but we can just tell the compilers
-// that actually use TBAA that this is okay.
-typedef struct _Node Node LLVM_MAY_ALIAS;
-struct _Node {
-  // If you change the layout in the header, you'll need to change it here.
-  // (This comment is repeated there.)
-  Node *Left, *Right, *Further;
-};
-    
-    
-void ClangDiagnosticConsumer::HandleDiagnostic(
-    clang::DiagnosticsEngine::Level clangDiagLevel,
-    const clang::Diagnostic &clangDiag) {
-  // Handle the module-not-found diagnostic specially if it's a top-level module
-  // we're looking for.
-  if (clangDiag.getID() == clang::diag::err_module_not_found &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    return;
-  }
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, const grpc::string& value) {
+  class StringOption final : public ServerBuilderOption {
+   public:
+    StringOption(const grpc::string& name, const grpc::string& value)
+        : name_(name), value_(value) {}
+    }
     }
     
-    #include 'swift/Demangling/StandardTypesMangling.def'
-    
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
+    Status DumpLog(Env* env, const std::string& fname, WritableFile* dst) {
+  return PrintLogContents(env, fname, WriteBatchPrinter, dst);
 }
     
-    **Result**
+    std::string SSTTableFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'sst');
+}
     
-    op = core.CreateOperator(
-    'Floor',
-    ['X'],
-    ['X'],
-)
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
     
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
+    namespace leveldb {
+namespace log {
+    }
+    }
+    
+    unsigned int Reader::ReadPhysicalRecord(Slice* result) {
+  while (true) {
+    if (buffer_.size() < kHeaderSize) {
+      if (!eof_) {
+        // Last read was a full read, so this is a trailer to skip
+        buffer_.clear();
+        Status status = file_->Read(kBlockSize, &buffer_, backing_store_);
+        end_of_buffer_offset_ += buffer_.size();
+        if (!status.ok()) {
+          buffer_.clear();
+          ReportDrop(kBlockSize, status);
+          eof_ = true;
+          return kEof;
+        } else if (buffer_.size() < kBlockSize) {
+          eof_ = true;
+        }
+        continue;
+      } else {
+        // Note that if buffer_ is non-empty, we have a truncated header at the
+        // end of the file, which can be caused by the writer crashing in the
+        // middle of writing the header. Instead of considering this an error,
+        // just report EOF.
+        buffer_.clear();
+        return kEof;
+      }
+    }
+    }
+    }
+    
+    // Encode a suitable internal key target for 'target' and return it.
+// Uses *scratch as scratch space, and the returned pointer will point
+// into this scratch space.
+static const char* EncodeKey(std::string* scratch, const Slice& target) {
+  scratch->clear();
+  PutVarint32(scratch, target.size());
+  scratch->append(target.data(), target.size());
+  return scratch->data();
+}
+    
+                trainingLoss = MakeSharedObject<NDArrayView>(0, (m_aggregatedLossFunction ? m_aggregatedLossFunction->Output().GetDataType() : DataType::Float), NDShape{}, computeDevice);
+            evalCriterion = MakeSharedObject<NDArrayView>(0, (m_aggregatedEvaluationFunction ? m_aggregatedEvaluationFunction->Output().GetDataType() : DataType::Float), NDShape{}, computeDevice);
+        }
+        else
+        {
+            // Get gradients after forward/backward pass.
+            std::unordered_map<Variable, ValuePtr> parameterGradients;
+    
+    
+    {        if (source.Mask() != nullptr)
+            Mask()->CopyFrom(*source.Mask());
+        else
+        {
+            if (Mask() != nullptr)
+            {
+                // Clear the mask
+                Mask()->Clear();
+            }
+        }
+    }
+    
+            CNTK_API void SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device);
+    
+        static void noOpAlarmHandler(int /*signum*/)
+    {
+        // this handler is intentionally NO-OP
+        // the side effect of execution this handler
+        // will be a termination of fcntl call below with EINTR
+    }
+    
+            // Iterate through all samples
+        size_t numberOfSamples = gains.GetNumCols();
+        QueryUrls aqu;
+        int previousQueryId = -1;
+        int numberOfQueries = 0;
+    
+        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
+    {
+        auto& result = this->Value();
+        if (m_isOutputSparse && result.GetMatrixType() != SPARSE)
+        {
+            result.SwitchToMatrixType(SPARSE, matrixFormatSparseCSC, false);
+        }
+        result.SetValue(static_cast<ElemType>(0.0));
+        result.SetDiagonalValue(static_cast<ElemType>(1.0));
+    }
+    
+    Status WriteBatchBase::Put(const SliceParts& key, const SliceParts& value) {
+  std::string key_buf, value_buf;
+  Slice key_slice(key, &key_buf);
+  Slice value_slice(value, &value_buf);
+    }
+    
+    class PosixWritableFile : public WritableFile {
+ protected:
+  const std::string filename_;
+  const bool use_direct_io_;
+  int fd_;
+  uint64_t filesize_;
+  size_t logical_sector_size_;
+#ifdef ROCKSDB_FALLOCATE_PRESENT
+  bool allow_fallocate_;
+  bool fallocate_with_keep_size_;
+#endif
+    }
+    
+      // Attempt to read a key using the snapshot.  This will fail since
+  // the previous write outside this txn conflicts with this read.
+  read_options.snapshot = snapshot;
+  s = txn->GetForUpdate(read_options, 'abc', &value);
+  assert(s.IsBusy());
+    
+    // Delete files in multiple ranges at once
+// Delete files in a lot of ranges one at a time can be slow, use this API for
+// better performance in that case.
+Status DeleteFilesInRanges(DB* db, ColumnFamilyHandle* column_family,
+                           const RangePtr* ranges, size_t n,
+                           bool include_end = true);
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+    // PersistentCache
+//
+// Persistent cache interface for caching IO pages on a persistent medium. The
+// cache interface is specifically designed for persistent read cache.
+class PersistentCache {
+ public:
+  typedef std::vector<std::map<std::string, double>> StatsType;
+    }
+    
+      // Instead of creating a snapshot, take ownership of the input snapshot.
+  ManagedSnapshot(DB* db, const Snapshot* _snapshot);
