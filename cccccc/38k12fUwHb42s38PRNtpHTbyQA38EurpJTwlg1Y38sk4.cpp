@@ -1,257 +1,209 @@
-#endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
 
+        
+        #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/shape_inference.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
+#include 'tensorflow/python/framework/cpp_shape_inference.pb.h'
+#include 'tensorflow/python/lib/core/py_func.h'
     
-    #include 'atom/browser/native_window_views.h'
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
-#define ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
+    // Add a _ to the end of s if necessary to avoid a Python keyword or built-in.
+string AvoidPythonReserved(const string& s);
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    // Called by python code on initialization.
+//
+// 'trampoline' must represent a python function which has the
+// following signature:
+//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
+//     ndarray | list(ndarray) | python scalar |
+//     EagerTensor | list(EagerTensor) | None
+//
+// The trampoline takes two arguments, the first is a string token
+// used by the python frontend's dispatching logic; the second is a
+// list of numpy ndarrays or EagerTensor objects. It can return a
+// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
+// EagerTensor, a list of EagerTensors, or None.
+//
+// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
+// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
+// of EagerTensors, or None.
+//
+// The C++ runtime converts outputs back to Tensor objects.
+//
+// This function is called by script_ops.py during its module initialization.
+//
+// TODO(zhifengc): Support distributed runtime.
+void InitializePyTrampoline(PyObject* trampoline);
+    
+    Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle) {
+  return Safe_TFE_TensorHandlePtr(handle);
+}
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
+  }
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      ScopedActivateExecutorContext(ScopedActivateExecutorContext&& other);
+    
+      // Logs information about the dev nodes present on this machine: their
+  // existence, permissions, accessibility from this uid/gid.
+  static void LogDevNodeDiagnosticInformation();
+    
+    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
+#include 'tensorflow/stream_executor/cuda/cuda_stream.h'
+#include 'tensorflow/stream_executor/event.h'
+#include 'tensorflow/stream_executor/lib/status.h'
+    
+    void AutoUpdater::OnUpdateNotAvailable() {
+  Emit('update-not-available');
+}
+    
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
+    
+    namespace {
+    }
+    
+    // static
+void Net::BuildPrototype(v8::Isolate* isolate,
+                         v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'Net'));
+  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
+      .SetProperty('URLRequest', &Net::URLRequest);
+}
+    
+    #include 'atom/browser/browser.h'
+#include 'atom/common/native_mate_converters/callback.h'
+#include 'base/power_monitor/power_monitor.h'
+#include 'base/power_monitor/power_monitor_device_source.h'
+#include 'native_mate/dictionary.h'
     
     
     {}  // namespace atom
     
-      bool Handle(const base::FilePath& full_path,
-              const content::SavePageType& save_type);
+    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
+#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
     
-      // Finds out the TrackableObject from its ID in weak map.
-  static T* FromWeakMapID(v8::Isolate* isolate, int32_t id) {
-    if (!weak_map_)
-      return nullptr;
-    }
+    #include 'rect.h'    // for TBOX
+#include 'strngs.h'  // for STRING
     
-      const char* tmpdir = getenv('TMPDIR');
-  if (tmpdir == nullptr) {
-    tmpdir = '/tmp';
-  }
-    
-    
-    {
-    {  uint64_t nElemX = nElemFromDim(X);
-  uint64_t nElemW = nElemFromDim(W);
-  uint64_t nElemB = nElemFromDim(b);
-  c.flops = 2 * K * M * N + M * N;
-  c.bytes_read = (nElemX + nElemW + nElemB) * sizeof(X.data_type());
-  c.bytes_written = M * N * sizeof(X.data_type());
-  c.params_bytes = (K * N + N) * sizeof(X.data_type());
-  return c;
-}
-} // namespace caffe2
-
-    
-    
-    {} // namespace caffe2
-    
-    **Result**
-    
-    #include 'caffe2/operators/glu_op.h'
-    
-    
-    {}  // namespace grpc
-
-    
-    
-    {}  // namespace grpc
-    
-    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
-  for (unsigned int i = 0; i < args_.size(); i++) {
-    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
-      return args_[i].value.string;
-    }
-  }
-  return '';
-}
-    
-    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
-    : reflection_service_(new grpc::ProtoServerReflection()) {}
-    
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
-    }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
-    
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
-}
-    
-    std::vector<std::string> PrometheusMetricsConfigParserPlugin::keys() const {
-  return {kPrometheusParserRootKey};
-}
-    
-    
-    {  // This should work.
-  ASSERT_TRUE(doc.HasMember('custom_fake'));
-  EXPECT_TRUE(doc['custom_fake'].IsNumber());
-  EXPECT_EQ(1U, doc['custom_fake'].GetUint());
-  EXPECT_FALSE(Flag::getValue('custom_fake').empty());
-}
-    
-    
-    {
-    {  c.reset();
-}
-}
-
-    
-    Status ViewsConfigParserPlugin::update(const std::string& source,
-                                       const ParserConfig& config) {
-  auto cv = config.find('views');
-  if (cv == config.end()) {
-    return Status(1);
-  }
-    }
-    
-    TEST_F(PacksTests, test_check_version) {
-  Pack zpack('fake_version_pack', getPackWithFakeVersion().doc());
-  EXPECT_FALSE(zpack.checkVersion());
-    }
-    
-    #include <boost/noncopyable.hpp>
-    
-    std::shared_ptr<PlatformProcess> PlatformProcess::getCurrentProcess() {
-  pid_t pid = ::getpid();
-  return std::make_shared<PlatformProcess>(pid);
-}
-    
-    TEST_F(QueryTests, test_get_query_results) {
-  // Grab an expected set of query data and add it as the previous result.
-  auto encoded_qd = getSerializedQueryDataJSON();
-  auto query = getOsqueryScheduledQuery();
-  auto status = setDatabaseValue(kQueries, 'foobar', encoded_qd.first);
-  EXPECT_TRUE(status.ok());
-    }
-    
-    namespace osquery {
-    }
-    
-    /// Internal audit subscriber (socket events) testable methods.
-extern void parseSockAddr(const std::string& saddr, Row& r, bool& unix_socket);
-    
-      using DBImpl::Put;
-  virtual Status Put(const WriteOptions& /*options*/,
-                     ColumnFamilyHandle* /*column_family*/,
-                     const Slice& /*key*/, const Slice& /*value*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::Merge;
-  virtual Status Merge(const WriteOptions& /*options*/,
-                       ColumnFamilyHandle* /*column_family*/,
-                       const Slice& /*key*/, const Slice& /*value*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::Delete;
-  virtual Status Delete(const WriteOptions& /*options*/,
-                        ColumnFamilyHandle* /*column_family*/,
-                        const Slice& /*key*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  virtual Status Write(const WriteOptions& /*options*/,
-                       WriteBatch* /*updates*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-  using DBImpl::CompactRange;
-  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
-                              ColumnFamilyHandle* /*column_family*/,
-                              const Slice* /*begin*/,
-                              const Slice* /*end*/) override {
-    return Status::NotSupported('Not supported in compacted db mode.');
-  }
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-      CompactionIterator(InternalIterator* input, const Comparator* cmp,
-                     MergeHelper* merge_helper, SequenceNumber last_sequence,
-                     std::vector<SequenceNumber>* snapshots,
-                     SequenceNumber earliest_write_conflict_snapshot,
-                     const SnapshotChecker* snapshot_checker, Env* env,
-                     bool report_detailed_time, bool expect_valid_internal_key,
-                     RangeDelAggregator* range_del_agg,
-                     const Compaction* compaction = nullptr,
-                     const CompactionFilter* compaction_filter = nullptr,
-                     const std::atomic<bool>* shutting_down = nullptr,
-                     const SequenceNumber preserve_deletes_seqnum = 0);
-    
-    namespace rocksdb {
-    }
-    
-      TEST_KILL_RANDOM('PosixMmapFile::Append:1', rocksdb_kill_odds);
-  void* ptr = mmap(nullptr, map_size_, PROT_READ | PROT_WRITE, MAP_SHARED, fd_,
-                   file_offset_);
-  if (ptr == MAP_FAILED) {
-    return Status::IOError('MMap failed on ' + filename_);
-  }
-  TEST_KILL_RANDOM('PosixMmapFile::Append:2', rocksdb_kill_odds);
-    
-    class PosixDirectory : public Directory {
+    // A rather hackish helper structure which can take any kind of parameter input
+// (defined by ParamType) and do a couple of common operations on them, like
+// comparisond or getting its value. It is used in the context of the
+// ParamsEditor as a bridge from the internal tesseract parameters to the
+// ones displayed by the ScrollView server.
+class ParamContent : public ELIST_LINK {
  public:
-  explicit PosixDirectory(int fd) : fd_(fd) {}
-  ~PosixDirectory();
-  virtual Status Fsync() override;
+  // Compare two VC objects by their name.
+  static int Compare(const void* v1, const void* v2);
     }
     
-      // the number of deletion entries before compaction. Deletion entries
-  // can disappear after compaction because they expired
-  uint64_t num_input_deletion_records;
-  // number of deletion records that were found obsolete and discarded
-  // because it is not possible to delete any more keys with this entry
-  // (i.e. all possible deletions resulting from it have been completed)
-  uint64_t num_expired_deletion_records;
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    
-    {// Factor method to create a new persistent cache
-Status NewPersistentCache(Env* const env, const std::string& path,
-                          const uint64_t size,
-                          const std::shared_ptr<Logger>& log,
-                          const bool optimized_for_nvm,
-                          std::shared_ptr<PersistentCache>* cache);
-}  // namespace rocksdb
-
-    
-    
-    {  std::atomic<int> refCount{0};
-};
-    
-    
-    {  std::string arguments;
-  ASSERT_TRUE(getTracepointArguments(
-      'folly', 'test_static_tracepoint_array', 0, arguments));
-  std::array<int, 3> expected{{sizeof(void*), sizeof(int), sizeof(void*)}};
-  checkTracepointArguments(arguments, expected);
+    {  // Do sanity checks and minor fixes on best_choice.
+  if (word->best_choice->length() > word_length) {
+    word->best_choice->make_bad();  // should never happen
+    tprintf('recog_word: Discarded long string \'%s\''
+            ' (%d characters vs %d blobs)\n',
+            word->best_choice->unichar_string().string(),
+            word->best_choice->length(), word_length);
+    tprintf('Word is at:');
+    word->word->bounding_box().print();
+  }
+  if (word->best_choice->length() < word_length) {
+    UNICHAR_ID space_id = unicharset.unichar_to_id(' ');
+    while (word->best_choice->length() < word_length) {
+      word->best_choice->append_unichar_id(space_id, 1, 0.0,
+                                           word->best_choice->certainty());
+    }
+  }
 }
     
-    #include <exception>
-#include <string>
-#include <type_traits>
-    
-      // Acquire a keep alive token. Should return false if keep-alive mechanism
-  // is not supported.
-  virtual bool keepAliveAcquire();
-  // Release a keep alive token previously acquired by keepAliveAcquire().
-  // Will never be called if keepAliveAcquire() returns false.
-  virtual void keepAliveRelease();
-    
-    
-    {    return newptr;
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
   }
-  void init() {
-    PackedPtr data;
-    data.init();
-    ptr_.store(data);
+    
+    // This and other putatively are the same, so call the (permanent) callback
+// for each blob index where the bounding boxes match.
+// The callback is deleted on completion.
+void BoxWord::ProcessMatchedBlobs(const TWERD& other,
+                                  TessCallback1<int>* cb) const {
+  for (int i = 0; i < length_ && i < other.NumBlobs(); ++i) {
+    TBOX blob_box = other.blobs[i]->bounding_box();
+    if (blob_box == boxes_[i])
+      cb->Run(i);
   }
+  delete cb;
+}
+    
+    #include 'bullet_utilities.h'
+#include 'rid_bullet.h'
+    
+    
+    {	Vector3 getPivotInA();
+	Vector3 getPivotInB();
+};
+#endif
+
+    
+    JNIEnv *GDAPI godot_android_get_env() {
+#ifdef __ANDROID__
+	return ThreadAndroid::get_env();
+#else
+	return NULL;
+#endif
+}
+    
+    
+    {	Pair() {}
+	Pair(F p_first, const S &p_second) :
+			first(p_first),
+			second(p_second) {
+	}
+};
